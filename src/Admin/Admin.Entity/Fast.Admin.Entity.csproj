@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Description>Fast.Admin 应用 Admin 实体库。</Description>
+	</PropertyGroup>
+
+</Project>
