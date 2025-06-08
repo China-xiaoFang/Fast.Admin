@@ -28,6 +28,7 @@ namespace Fast.FastCloud.Entity;
 /// <see cref="PasswordMapModel"/> 密码映射表Model类
 /// </summary>
 [SugarTable("PasswordMap", "密码映射表")]
+[SugarDbType(DatabaseTypeEnum.FastCloud)]
 [SugarIndex($"IX_{{table}}_{nameof(Ciphertext)}", nameof(Ciphertext), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(Plaintext)}", nameof(Plaintext), OrderByType.Asc, true)]
 public class PasswordMapModel : IdentityKeyEntity
