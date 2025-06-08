@@ -28,6 +28,7 @@ namespace Fast.Center.Entity;
 /// <see cref="AccountModel"/> 账号信息表Model类
 /// </summary>
 [SugarTable("Account", "账号信息表")]
+[SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(Mobile)}", nameof(Mobile), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(Email)}", nameof(Email), OrderByType.Asc, true)]
 public class AccountModel : SnowflakeKeyEntity

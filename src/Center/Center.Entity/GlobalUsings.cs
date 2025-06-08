@@ -21,5 +21,6 @@
 // ------------------------------------------------------------------------
 
 global using Fast.Center.Enum;
+global using Fast.Common;
 global using Fast.SqlSugar;
 global using SqlSugar;
