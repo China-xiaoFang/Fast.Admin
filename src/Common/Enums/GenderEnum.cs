@@ -22,7 +22,7 @@
 
 // ReSharper disable once CheckNamespace
 
-namespace Fast.Center.Enum;
+namespace Fast.Common;
 
 /// <summary>
 /// <see cref="GenderEnum"/> 性别枚举

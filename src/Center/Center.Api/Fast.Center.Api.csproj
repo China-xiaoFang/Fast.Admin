@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+	  <Description>Fast.Admin 应用核心应用库。</Description>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)src\Center\Center.Service\Fast.Center.Service.csproj" />
+	</ItemGroup>
+
+</Project>

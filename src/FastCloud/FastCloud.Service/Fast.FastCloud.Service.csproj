@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Description>Fast.Admin 应用 Colud 服务库。</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)src\FastCloud\FastCloud.Entity\Fast.FastCloud.Entity.csproj" />
+	</ItemGroup>
+
+</Project>

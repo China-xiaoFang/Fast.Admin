@@ -22,41 +22,30 @@
 
 // ReSharper disable once CheckNamespace
 
-namespace Fast.Center.Entity;
+namespace Fast.Common;
 
 /// <summary>
-/// <see cref="SysApplicationModel"/> 系统应用表Model类
+/// <see cref="CommonStatusEnum"/> 公共状态枚举
 /// </summary>
-[SugarTable("SysApplication", "系统应用表")]
-public class SysApplicationModel : SnowflakeKeyEntity
+[Flags]
+[FastEnum("公共状态枚举")]
+public enum CommonStatusEnum
 {
     /// <summary>
-    /// 应用名称
+    /// 正常
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用名称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
-    public string Name { get; set; }
+    [Description("正常")]
+    Enable = 1,
 
     /// <summary>
-    /// 应用类型
+    /// 停用
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用类型", IsNullable = false)]
-    public AppEnvironmentEnum AppType { get; set; }
+    [Description("停用")]
+    Disable = 2,
 
     /// <summary>
-    /// 服务开始时间
+    /// 删除
     /// </summary>
-    [SugarColumn(ColumnDescription = "服务开始时间", ColumnDataType = "datetimeoffset", IsNullable = false)]
-    public DateTime ServiceStartTime { get; set; }
-
-    /// <summary>
-    /// 服务结束时间
-    /// </summary>
-    [SugarColumn(ColumnDescription = "服务结束时间", ColumnDataType = "datetimeoffset", IsNullable = false)]
-    public DateTime ServiceEndTime { get; set; }
-
-    /// <summary>
-    /// 备注
-    /// </summary>
-    [SugarColumn(ColumnDescription = "备注", ColumnDataType = "Nvarchar(200)", IsNullable = true)]
-    public string Remark { get; set; }
+    [Description("删除")]
+    Delete = 4
 }

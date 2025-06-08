@@ -28,12 +28,14 @@ namespace Fast.Center.Entity;
 /// <see cref="TenantUserModel"/> 租户用户表Model类
 /// </summary>
 [SugarTable("TenantUser", "租户用户表")]
+[SugarDbType(DatabaseTypeEnum.Center)]
+[SugarIndex($"IX_{{table}}_{nameof(Account)}", nameof(Account), OrderByType.Asc, true)]
 public class TenantUserModel : SnowflakeKeyEntity, IBaseTEntity
 {
     /// <summary>
-    /// 账号ID
+    /// 账号Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "账号ID", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "账号Id", IsNullable = false)]
     public long AccountId { get; set; }
 
     /// <summary>

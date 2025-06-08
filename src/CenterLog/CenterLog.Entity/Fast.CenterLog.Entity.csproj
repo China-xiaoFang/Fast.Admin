@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Description>Fast.Admin 应用核心实体库。</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)src\Common\Fast.Common.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\CenterLog\CenterLog.Enum\Fast.CenterLog.Enum.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Fast.SqlSugar" Version="3.5.3" />
+	</ItemGroup>
+
+</Project>

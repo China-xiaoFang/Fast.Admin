@@ -28,8 +28,9 @@ namespace Fast.Center.Entity;
 /// <see cref="TenantModel"/> 租户信息表Model类
 /// </summary>
 [SugarTable("Tenant", "租户信息表")]
+[SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(TenantNo)}", nameof(TenantNo), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(ChName)}", nameof(ChName), OrderByType.Asc, true)]
+[SugarIndex($"IX_{{table}}_{nameof(TenantName)}", nameof(TenantName), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(Secret)}", nameof(Secret), OrderByType.Asc, true)]
 public class TenantModel : SnowflakeKeyEntity
 {
@@ -46,28 +47,23 @@ public class TenantModel : SnowflakeKeyEntity
     public CommonStatusEnum Status { get; set; }
 
     /// <summary>
-    /// 租户公司中文名称
+    /// 租户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户公司中文名称", ColumnDataType = "Nvarchar(50)", IsNullable = false)]
-    public string ChName { get; set; }
+    [SugarColumn(ColumnDescription = "租户名称", ColumnDataType = "Nvarchar(30)", IsNullable = false)]
+    public string TenantName { get; set; }
 
     /// <summary>
-    /// 租户公司英文名称（拼音）
+    /// 租户简称
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户公司英文名称", ColumnDataType = "Nvarchar(50)", IsNullable = false)]
-    public string EnName { get; set; }
+    [SugarColumn(ColumnDescription = "租户简称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    public string ShortName { get; set; }
 
     /// <summary>
-    /// 租户公司中文简称
+    /// 租户英文名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户公司中文简称", ColumnDataType = "Nvarchar(30)", IsNullable = false)]
-    public string ChShortName { get; set; }
-
-    /// <summary>
-    /// 租户公司英文简称（拼音）
-    /// </summary>
-    [SugarColumn(ColumnDescription = "租户公司英文简称", ColumnDataType = "Nvarchar(30)", IsNullable = false)]
-    public string EnShortName { get; set; }
+    /// <remarks>根据 <see cref="TenantName"/> 生成的拼音</remarks>
+    [SugarColumn(ColumnDescription = "租户英文名称", ColumnDataType = "Nvarchar(100)", IsNullable = false)]
+    public string SpellName { get; set; }
 
     /// <summary>
     /// 租户密钥
@@ -107,9 +103,9 @@ public class TenantModel : SnowflakeKeyEntity
     public string AdminEmail { get; set; }
 
     /// <summary>
-    /// 租户电话
+    /// 租户管理员电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户电话", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "租户管理员电话", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
     public string Mobile { get; set; }
 
     /// <summary>
@@ -168,27 +164,27 @@ public class TenantModel : SnowflakeKeyEntity
         CreateTableFieldSort = 998)]
     public long UpdatedVersion { get; set; }
 
-    /// <summary>
-    /// App授权信息
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(SysTenantAppInfoModel.TenantId), nameof(Id))]
-    public List<SysTenantAppInfoModel> AppList { get; set; }
+    ///// <summary>
+    ///// App授权信息
+    ///// </summary>
+    //[Navigate(NavigateType.OneToMany, nameof(SysTenantAppInfoModel.TenantId), nameof(Id))]
+    //public List<SysTenantAppInfoModel> AppList { get; set; }
 
-    /// <summary>
-    /// 数据库信息
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(SysTenantMainDatabaseModel.TenantId), nameof(Id))]
-    public List<SysTenantMainDatabaseModel> DatabaseList { get; set; }
+    ///// <summary>
+    ///// 数据库信息
+    ///// </summary>
+    //[Navigate(NavigateType.OneToMany, nameof(SysTenantMainDatabaseModel.TenantId), nameof(Id))]
+    //public List<SysTenantMainDatabaseModel> DatabaseList { get; set; }
 
-    /// <summary>
-    /// 系统管理员账号
-    /// </summary>
-    [SugarColumn(IsIgnore = true)]
-    public SysTenantAccountModel SystemAdminAccount { get; set; }
+    ///// <summary>
+    ///// 系统管理员账号
+    ///// </summary>
+    //[SugarColumn(IsIgnore = true)]
+    //public SysTenantAccountModel SystemAdminAccount { get; set; }
 
-    /// <summary>
-    /// 租户管理员账号
-    /// </summary>
-    [SugarColumn(IsIgnore = true)]
-    public SysTenantAccountModel TenantAdminAccount { get; set; }
+    ///// <summary>
+    ///// 租户管理员账号
+    ///// </summary>
+    //[SugarColumn(IsIgnore = true)]
+    //public SysTenantAccountModel TenantAdminAccount { get; set; }
 }

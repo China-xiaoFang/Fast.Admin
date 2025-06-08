@@ -20,33 +20,38 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-
-
 // ReSharper disable once CheckNamespace
-namespace Fast.Center.Enum;
+
+namespace Fast.CenterLog.Enum;
 
 /// <summary>
-/// <see cref="CommonStatusEnum"/> 公共状态枚举
+/// <see cref="VisitTypeEnum"/> 访问类型枚举
 /// </summary>
 [Flags]
-[FastEnum("公共状态枚举")]
-public enum CommonStatusEnum
+[FastEnum("访问类型枚举")]
+public enum VisitTypeEnum
 {
     /// <summary>
-    /// 正常
+    /// 登录
     /// </summary>
-    [Description("正常")]
-    Enable = 1,
+    [Description("登录")]
+    Login = 1,
 
     /// <summary>
-    /// 停用
+    /// 登出
     /// </summary>
-    [Description("停用")]
-    Disable = 2,
+    [Description("登出")]
+    Logout = 2,
 
     /// <summary>
-    /// 删除
+    /// 改密
     /// </summary>
-    [Description("删除")]
-    Delete = 4
+    [Description("改密")]
+    ChangePassword = 4,
+
+    /// <summary>
+    /// 授权登录
+    /// </summary>
+    [Description("授权登录")]
+    AuthorizedLogin = 8
 }

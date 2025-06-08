@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Description>Fast.Admin 应用核心日志服务库。</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)src\CenterLog\CenterLog.Entity\Fast.CenterLog.Entity.csproj" />
+	</ItemGroup>
+
+</Project>
