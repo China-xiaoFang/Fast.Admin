@@ -28,7 +28,7 @@ namespace Fast.Common;
 /// <see cref="YesOrNotEnum"/> 是否枚举
 /// </summary>
 [FastEnum("是否枚举")]
-public enum YesOrNotEnum
+public enum YesOrNotEnum : byte
 {
     /// <summary>
     /// 是
