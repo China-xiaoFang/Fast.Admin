@@ -29,7 +29,7 @@ namespace Fast.Common;
 /// </summary>
 [Flags]
 [FastEnum("性别枚举")]
-public enum GenderEnum
+public enum GenderEnum : byte
 {
     /// <summary>
     /// 未知

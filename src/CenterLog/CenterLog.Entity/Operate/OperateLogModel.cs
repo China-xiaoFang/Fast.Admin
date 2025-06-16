@@ -35,13 +35,13 @@ public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 应用Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用Id")]
     public long AppId { get; set; }
 
     /// <summary>
     /// 应用名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用名称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用名称", Length = 20, IsNullable = false)]
     public string AppName { get; set; }
 
     /// <summary>
@@ -53,85 +53,85 @@ public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 昵称
     /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = false)]
     public string NickName { get; set; }
 
     /// <summary>
     /// 是否执行成功
     /// </summary>
-    [SugarColumn(ColumnDescription = "是否执行成功", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "是否执行成功")]
     public YesOrNotEnum Success { get; set; }
 
     /// <summary>
     /// 操作行为
     /// </summary>
-    [SugarColumn(ColumnDescription = "操作行为", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "操作行为")]
     public HttpRequestActionEnum OperationAction { get; set; }
 
     /// <summary>
     /// 操作名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "操作名称", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "操作名称", Length = 100, IsNullable = true)]
     public string OperationName { get; set; }
 
     /// <summary>
     /// 类名
     /// </summary>
-    [SugarColumn(ColumnDescription = "类名", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "类名", Length = 200, IsNullable = true)]
     public string ClassName { get; set; }
 
     /// <summary>
     /// 方法名
     /// </summary>
-    [SugarColumn(ColumnDescription = "方法名", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "方法名", Length = 200, IsNullable = true)]
     public string MethodName { get; set; }
 
     /// <summary>
     /// 请求地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "请求地址", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "请求地址", Length = 500, IsNullable = true)]
     public string Url { get; set; }
 
     /// <summary>
     /// 请求方式
     /// </summary>
-    [SugarColumn(ColumnDescription = "请求方式", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "请求方式")]
     public HttpRequestMethodEnum ReqMethod { get; set; }
 
     /// <summary>
     /// 请求参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "请求参数", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "请求参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string Param { get; set; }
 
     /// <summary>
     /// 返回结果
     /// </summary>
-    [SugarColumn(ColumnDescription = "返回结果", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "返回结果", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string Result { get; set; }
 
     /// <summary>
     /// 地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "地址", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "地址", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string Location { get; set; }
 
     /// <summary>
     /// 耗时（毫秒）
     /// </summary>
-    [SugarColumn(ColumnDescription = "耗时（毫秒）", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "耗时（毫秒）")]
     public long? ElapsedTime { get; set; }
 
     /// <summary>
     /// 操作时间
     /// </summary>
     [SplitField]
-    [SugarColumn(ColumnDescription = "操作时间", ColumnDataType = "datetimeoffset", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "操作时间")]
     public DateTime OperateTime { get; set; }
 
     /// <summary>
     /// 租户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户Id", IsNullable = false, CreateTableFieldSort = 997)]
+    [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
     public long TenantId { get; set; }
 }

@@ -25,9 +25,9 @@
 namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="ApplicationModel"/> 菜单表Model类
+/// <see cref="MenuModel"/> 菜单表Model类
 /// </summary>
-[SugarTable("Menus", "菜单表")]
+[SugarTable("Menu", "菜单表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
 [SugarIndex($"IX_{{table}}_{nameof(MenuCode)}", nameof(MenuCode), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(MenuName)}", nameof(ModuleId), OrderByType.Asc, nameof(MenuName), OrderByType.Asc, true)]
@@ -36,123 +36,121 @@ public class MenuModel : SnowflakeKeyEntity
     /// <summary>
     /// 模块Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "模块Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "模块Id")]
     public long ModuleId { get; set; }
 
     /// <summary>
     /// 菜单编码
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单编码", ColumnDataType = "Nvarchar(100)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "菜单编码", Length = 50, IsNullable = true)]
     public string MenuCode { get; set; }
 
     /// <summary>
     /// 菜单名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单名称", ColumnDataType = "Nvarchar(50)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "菜单名称", Length = 20, IsNullable = false)]
     public string MenuName { get; set; }
 
     /// <summary>
     /// 菜单标题
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单标题", ColumnDataType = "Nvarchar(50)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "菜单标题", Length = 20, IsNullable = true)]
     public string MenuTitle { get; set; }
 
     /// <summary>
     /// 父级Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "父级Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "父级Id")]
     public long ParentId { get; set; }
 
     /// <summary>
     /// 菜单类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单类型", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "菜单类型")]
     public MenuTypeEnum MenuType { get; set; }
 
     /// <summary>
     /// 图标
     /// </summary>
-    [SugarColumn(ColumnDescription = "图标", ColumnDataType = "Nvarchar(50)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "图标", Length = 20, IsNullable = true)]
     public string Icon { get; set; }
 
     /// <summary>
     /// 路由地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "路由地址", ColumnDataType = "Nvarchar(200)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "路由地址", Length = 200, IsNullable = true)]
     public string Router { get; set; }
 
     /// <summary>
     /// 组件地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "组件地址", ColumnDataType = "Nvarchar(200)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "组件地址", Length = 200, IsNullable = true)]
     public string Component { get; set; }
 
     /// <summary>
     /// 内链/外链地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "内链/外链地址", ColumnDataType = "Nvarchar(500)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "内链/外链地址", Length = 200, IsNullable = true)]
     public string Link { get; set; }
 
     /// <summary>
     /// 是否显示
     /// </summary>
-    [SugarColumn(ColumnDescription = "是否显示", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "是否显示")]
     public YesOrNotEnum Visible { get; set; }
 
     /// <summary>
     /// 排序
     /// </summary>
-    [SugarColumn(ColumnDescription = "排序", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "排序")]
     public int Sort { get; set; }
 
     /// <summary>
     /// 状态
     /// </summary>
-    [SugarColumn(ColumnDescription = "状态", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "状态")]
     public CommonStatusEnum Status { get; set; }
 
     /// <summary>
     /// 创建者用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户Id", IsNullable = true, CreateTableFieldSort = 991)]
+    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
     public long? CreatedUserId { get; set; }
 
     /// <summary>
     /// 创建者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", ColumnDataType = "Nvarchar(20)", IsNullable = true, CreateTableFieldSort = 992)]
+    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
 
     /// <summary>
     /// 创建时间
     /// </summary>
-    [SugarSearchTime,
-     SugarColumn(ColumnDescription = "创建时间", ColumnDataType = "datetimeoffset", IsNullable = true, CreateTableFieldSort = 993)]
+    [SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>
     /// 更新者用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户Id", IsNullable = true, CreateTableFieldSort = 994)]
+    [SugarColumn(ColumnDescription = "更新者用户Id", CreateTableFieldSort = 994)]
     public long? UpdatedUserId { get; set; }
 
     /// <summary>
     /// 更新者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户名称", ColumnDataType = "Nvarchar(20)", IsNullable = true, CreateTableFieldSort = 995)]
+    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 995)]
     public string UpdatedUserName { get; set; }
 
     /// <summary>
     /// 更新时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新时间", ColumnDataType = "datetimeoffset", IsNullable = true, CreateTableFieldSort = 996)]
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
     public DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 更新版本控制字段
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, IsNullable = false,
-        CreateTableFieldSort = 998)]
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
     public long RowVersion { get; set; }
 
     /// <summary>

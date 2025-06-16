@@ -35,18 +35,18 @@ public class PasswordRecordModel : IdentityKeyEntity
     /// <summary>
     /// 账号Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "账号Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "账号Id")]
     public long AccountId { get; set; }
 
     /// <summary>
     /// 密码
     /// </summary>
-    [SugarColumn(ColumnDescription = "密码", ColumnDataType = "varchar(50)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "密码", Length = 50, IsNullable = false)]
     public string Password { get; set; }
 
     /// <summary>
     /// 创建时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建时间", ColumnDataType = "datetimeoffset", IsNullable = false, CreateTableFieldSort = 993)]
+    [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime CreatedTime { get; set; }
 }

@@ -29,7 +29,7 @@ namespace Fast.FastCloud.Enum;
 /// </summary>
 [Flags]
 [FastEnum("密码类型枚举")]
-public enum PasswordTypeEnum
+public enum PasswordTypeEnum : byte
 {
     /// <summary>
     /// MD5

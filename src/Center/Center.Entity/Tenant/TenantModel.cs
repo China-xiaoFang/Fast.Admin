@@ -37,57 +37,67 @@ public class TenantModel : SnowflakeKeyEntity
     /// <summary>
     /// 租户编号
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户编号", ColumnDataType = "Nvarchar(32)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "租户编号", ColumnDataType = "varchar(32)", IsNullable = false)]
     public string TenantNo { get; set; }
+
+    /// <summary>
+    /// 租户编码
+    /// </summary>
+    /// <remarks>
+    /// <para>登录账号前缀</para>
+    /// <para>单号生成前缀</para>
+    /// </remarks>
+    [SugarColumn(ColumnDescription = "租户编码", ColumnDataType = "varchar(5)", IsNullable = false)]
+    public string TenantCode { get; set; }
 
     /// <summary>
     /// 状态
     /// </summary>
-    [SugarColumn(ColumnDescription = "状态", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "状态")]
     public CommonStatusEnum Status { get; set; }
 
     /// <summary>
     /// 租户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户名称", ColumnDataType = "Nvarchar(30)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "租户名称", Length = 30, IsNullable = false)]
     public string TenantName { get; set; }
 
     /// <summary>
     /// 租户简称
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户简称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "租户简称", Length = 20, IsNullable = false)]
     public string ShortName { get; set; }
 
     /// <summary>
     /// 租户英文名称
     /// </summary>
     /// <remarks>根据 <see cref="TenantName"/> 生成的拼音</remarks>
-    [SugarColumn(ColumnDescription = "租户英文名称", ColumnDataType = "Nvarchar(100)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "租户英文名称", Length = 100, IsNullable = false)]
     public string SpellName { get; set; }
 
     /// <summary>
     /// 租户密钥
     /// </summary>
     /// <remarks>32位长度</remarks>
-    [SugarColumn(ColumnDescription = "租户密钥", ColumnDataType = "Nvarchar(32)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "租户密钥", ColumnDataType = "varchar(32)", IsNullable = false)]
     public string Secret { get; set; }
 
     /// <summary>
     /// 租户公钥
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户公钥", ColumnDataType = "Nvarchar(MAX)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "租户公钥", Length = 4096, IsNullable = false)]
     public string PublicKey { get; set; }
 
     /// <summary>
     /// 租户私钥
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户私钥", ColumnDataType = "Nvarchar(MAX)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "租户私钥", Length = 4096, IsNullable = false)]
     public string PrivateKey { get; set; }
 
     /// <summary>
     /// 租户管理员名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户管理员名称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "租户管理员名称", Length = 20, IsNullable = false)]
     public string AdminName { get; set; }
 
     /// <summary>
@@ -99,70 +109,68 @@ public class TenantModel : SnowflakeKeyEntity
     /// <summary>
     /// 租户管理员邮箱
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户管理员邮箱", ColumnDataType = "Nvarchar(50)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "租户管理员邮箱", Length = 50, IsNullable = false)]
     public string AdminEmail { get; set; }
 
     /// <summary>
     /// 租户管理员电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户管理员电话", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "租户管理员电话", Length = 20, IsNullable = false)]
     public string Mobile { get; set; }
 
     /// <summary>
     /// 租户类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户类型", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "租户类型")]
     public TenantTypeEnum TenantType { get; set; }
 
     /// <summary>
     /// LogoUrl
     /// </summary>
-    [SugarColumn(ColumnDescription = "LogoUrl", ColumnDataType = "Nvarchar(max)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "LogoUrl", Length = 200, IsNullable = false)]
     public string LogoUrl { get; set; }
 
     /// <summary>
     /// 创建者用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户Id", IsNullable = true, CreateTableFieldSort = 991)]
+    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
     public long? CreatedUserId { get; set; }
 
     /// <summary>
     /// 创建者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", ColumnDataType = "Nvarchar(20)", IsNullable = true, CreateTableFieldSort = 992)]
+    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
 
     /// <summary>
     /// 创建时间
     /// </summary>
-    [SugarSearchTime,
-     SugarColumn(ColumnDescription = "创建时间", ColumnDataType = "datetimeoffset", IsNullable = true, CreateTableFieldSort = 993)]
+    [SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>
     /// 更新者用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户Id", IsNullable = true, CreateTableFieldSort = 994)]
+    [SugarColumn(ColumnDescription = "更新者用户Id", CreateTableFieldSort = 994)]
     public long? UpdatedUserId { get; set; }
 
     /// <summary>
     /// 更新者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户名称", ColumnDataType = "Nvarchar(20)", IsNullable = true, CreateTableFieldSort = 995)]
+    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 995)]
     public string UpdatedUserName { get; set; }
 
     /// <summary>
     /// 更新时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新时间", ColumnDataType = "datetimeoffset", IsNullable = true, CreateTableFieldSort = 996)]
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
     public DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 更新版本控制字段
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, IsNullable = false,
-        CreateTableFieldSort = 998)]
-    public long UpdatedVersion { get; set; }
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public long RowVersion { get; set; }
 
     ///// <summary>
     ///// App授权信息

@@ -25,23 +25,17 @@
 namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="PlatformModel"/> 平台表Model类
+/// <see cref="DatabaseModel"/> 数据库表Model类
 /// </summary>
-[SugarTable("Application", "平台表")]
+[SugarTable("Database", "数据库表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
-public class MainDatabaseModel : SnowflakeKeyEntity
+public class DatabaseModel : SnowflakeKeyEntity
 {
     /// <summary>
     /// 平台Id
     /// </summary>
     [SugarColumn(ColumnDescription = "平台Id", IsNullable = false)]
     public long PlatformId { get; set; }
-
-    /// <summary>
-    /// 状态
-    /// </summary>
-    [SugarColumn(ColumnDescription = "状态", ColumnDataType = "tinyint", IsNullable = false)]
-    public CommonStatusEnum Status { get; set; }
 
     /// <summary>
     /// 数据库类型
@@ -54,6 +48,12 @@ public class MainDatabaseModel : SnowflakeKeyEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "数据库类型", ColumnDataType = "tinyint", IsNullable = false)]
     public DbType DbType { get; set; }
+
+    /// <summary>
+    /// 状态
+    /// </summary>
+    [SugarColumn(ColumnDescription = "状态", IsNullable = false)]
+    public CommonStatusEnum Status { get; set; }
 
     /// <summary>
     /// 公网Ip地址
@@ -124,8 +124,7 @@ public class MainDatabaseModel : SnowflakeKeyEntity
     /// <summary>
     /// 创建时间
     /// </summary>
-    [SugarSearchTime,
-     SugarColumn(ColumnDescription = "创建时间", ColumnDataType = "datetimeoffset", IsNullable = true, CreateTableFieldSort = 993)]
+    [SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", IsNullable = true, CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>
@@ -143,7 +142,7 @@ public class MainDatabaseModel : SnowflakeKeyEntity
     /// <summary>
     /// 更新时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新时间", ColumnDataType = "datetimeoffset", IsNullable = true, CreateTableFieldSort = 996)]
+    [SugarColumn(ColumnDescription = "更新时间", IsNullable = true, CreateTableFieldSort = 996)]
     public DateTime? UpdatedTime { get; set; }
 
     /// <summary>

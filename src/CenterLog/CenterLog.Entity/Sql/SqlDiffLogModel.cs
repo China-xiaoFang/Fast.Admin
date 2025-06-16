@@ -35,13 +35,13 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 应用Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用Id")]
     public long AppId { get; set; }
 
     /// <summary>
     /// 应用名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用名称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用名称", Length = 20, IsNullable = false)]
     public string AppName { get; set; }
 
     /// <summary>
@@ -53,79 +53,82 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 昵称
     /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", ColumnDataType = "Nvarchar(20)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = false)]
     public string NickName { get; set; }
 
     /// <summary>
     /// 差异日志类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "差异日志类型", ColumnDataType = "tinyint", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "差异日志类型")]
     public DiffLogTypeEnum DiffType { get; set; }
 
     /// <summary>
     /// 表名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "表名称", ColumnDataType = "Nvarchar(MAX)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "表名称", Length = 100, IsNullable = false)]
     public string TableName { get; set; }
 
     /// <summary>
     /// 表描述
     /// </summary>
-    [SugarColumn(ColumnDescription = "表描述", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "表描述", Length = 100, IsNullable = true)]
     public string TableDescription { get; set; }
 
     /// <summary>
     /// 差异描述
     /// </summary>
-    [SugarColumn(ColumnDescription = "差异描述", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "差异描述", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string DiffDescription { get; set; }
 
     /// <summary>
     /// 旧的列信息
     /// </summary>
-    [SugarColumn(ColumnDescription = "旧的列信息", ColumnDataType = "Nvarchar(MAX)", IsNullable = true, IsJson = true)]
+    [SugarColumn(ColumnDescription = "旧的列信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+        IsJson = true)]
     public List<List<DiffLogColumnInfo>> BeforeColumnList { get; set; }
 
     /// <summary>
     /// 新的列信息
     /// </summary>
-    [SugarColumn(ColumnDescription = "新的列信息", ColumnDataType = "Nvarchar(MAX)", IsNullable = true, IsJson = true)]
+    [SugarColumn(ColumnDescription = "新的列信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+        IsJson = true)]
     public List<List<DiffLogColumnInfo>> AfterColumnList { get; set; }
 
     /// <summary>
     /// 执行秒数
     /// </summary>
-    [SugarColumn(ColumnDescription = "执行秒数", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "执行秒数")]
     public double? ExecuteSeconds { get; set; }
 
     /// <summary>
     /// 原始Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string RawSql { get; set; }
 
     /// <summary>
     /// Sql参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = "Nvarchar(MAX)", IsNullable = true, IsJson = true)]
+    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+        IsJson = true)]
     public SugarParameter[] Parameters { get; set; }
 
     /// <summary>
     /// 纯Sql，参数化之后的Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string PureSql { get; set; }
 
     /// <summary>
     /// 差异时间
     /// </summary>
     [SplitField]
-    [SugarColumn(ColumnDescription = "差异时间", ColumnDataType = "datetimeoffset", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "差异时间")]
     public DateTime DiffTime { get; set; }
 
     /// <summary>
     /// 租户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户Id", IsNullable = false, CreateTableFieldSort = 997)]
+    [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
     public long TenantId { get; set; }
 }

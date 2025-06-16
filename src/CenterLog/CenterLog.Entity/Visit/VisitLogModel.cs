@@ -35,13 +35,13 @@ public class VisitLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 应用Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用Id")]
     public long AppId { get; set; }
 
     /// <summary>
     /// 应用名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用名称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用名称", Length = 20, IsNullable = false)]
     public string AppName { get; set; }
 
     /// <summary>
@@ -53,25 +53,25 @@ public class VisitLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 昵称
     /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", ColumnDataType = "Nvarchar(20)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = false)]
     public string NickName { get; set; }
 
     /// <summary>
     /// 访问类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "访问类型", ColumnDataType = "tinyint", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "访问类型")]
     public VisitTypeEnum VisitType { get; set; }
 
     /// <summary>
     /// 访问时间
     /// </summary>
     [SplitField]
-    [SugarColumn(ColumnDescription = "访问时间", ColumnDataType = "datetimeoffset", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "访问时间")]
     public DateTime VisitTime { get; set; }
 
     /// <summary>
     /// 租户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户Id", IsNullable = false, CreateTableFieldSort = 997)]
+    [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
     public long TenantId { get; set; }
 }

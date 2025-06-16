@@ -29,7 +29,7 @@ namespace Fast.Center.Enum;
 /// </summary>
 [Flags]
 [FastEnum("用户类型枚举")]
-public enum UserTypeEnum
+public enum UserTypeEnum : byte
 {
     /// <summary>
     /// 超级管理员

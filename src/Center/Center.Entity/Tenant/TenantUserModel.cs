@@ -35,7 +35,7 @@ public class TenantUserModel : SnowflakeKeyEntity, IBaseTEntity
     /// <summary>
     /// 账号Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "账号Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "账号Id")]
     public long AccountId { get; set; }
 
     /// <summary>
@@ -48,62 +48,60 @@ public class TenantUserModel : SnowflakeKeyEntity, IBaseTEntity
     /// <summary>
     /// 用户类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "用户类型", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "用户类型")]
     public UserTypeEnum UserType { get; set; }
 
     /// <summary>
     /// 状态
     /// </summary>
-    [SugarColumn(ColumnDescription = "状态", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "状态")]
     public CommonStatusEnum Status { get; set; }
 
     /// <summary>
     /// 创建者用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户Id", IsNullable = true, CreateTableFieldSort = 991)]
+    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
     public long? CreatedUserId { get; set; }
 
     /// <summary>
     /// 创建者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", ColumnDataType = "Nvarchar(20)", IsNullable = true, CreateTableFieldSort = 992)]
+    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
 
     /// <summary>
     /// 创建时间
     /// </summary>
-    [SugarSearchTime,
-     SugarColumn(ColumnDescription = "创建时间", ColumnDataType = "datetimeoffset", IsNullable = true, CreateTableFieldSort = 993)]
+    [SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>
     /// 更新者用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户Id", IsNullable = true, CreateTableFieldSort = 994)]
+    [SugarColumn(ColumnDescription = "更新者用户Id", CreateTableFieldSort = 994)]
     public long? UpdatedUserId { get; set; }
 
     /// <summary>
     /// 更新者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户名称", ColumnDataType = "Nvarchar(20)", IsNullable = true, CreateTableFieldSort = 995)]
+    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 995)]
     public string UpdatedUserName { get; set; }
 
     /// <summary>
     /// 更新时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新时间", ColumnDataType = "datetimeoffset", IsNullable = true, CreateTableFieldSort = 996)]
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
     public DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 租户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户Id", IsNullable = true, CreateTableFieldSort = 997)]
+    [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
     public long TenantId { get; set; }
 
     /// <summary>
     /// 更新版本控制字段
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, IsNullable = false,
-        CreateTableFieldSort = 998)]
-    public long UpdatedVersion { get; set; }
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public long RowVersion { get; set; }
 }

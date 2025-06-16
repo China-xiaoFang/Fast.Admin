@@ -27,44 +27,44 @@ namespace Fast.Logs.Entity;
 /// <summary>
 /// <see cref="SqlExceptionLogModel"/> Sql异常日志Model类
 /// </summary>
-[SugarTable("SqlTimeoutLog", "Sql异常日志表")]
+[SugarTable("SqlExceptionLog", "Sql异常日志表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
 public class SqlExceptionLogModel : BaseIdentityRecordEntity
 {
     /// <summary>
     /// 平台Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "平台Id")]
     public long PlatformId { get; set; }
 
     /// <summary>
     /// 平台名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台名称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "平台名称", Length = 20, IsNullable = false)]
     public string PlatformName { get; set; }
 
     /// <summary>
     /// 应用Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用Id")]
     public long AppId { get; set; }
 
     /// <summary>
     /// 应用名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用名称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用名称", Length = 20, IsNullable = false)]
     public string AppName { get; set; }
 
     /// <summary>
     /// 租户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户Id", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "租户Id")]
     public long? TenantId { get; set; }
 
     /// <summary>
     /// 租户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户名称", ColumnDataType = "Nvarchar(30)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "租户名称", Length = 30, IsNullable = true)]
     public string TenantName { get; set; }
 
     /// <summary>
@@ -76,48 +76,49 @@ public class SqlExceptionLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// 昵称
     /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", ColumnDataType = "Nvarchar(20)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = false)]
     public string NickName { get; set; }
 
     /// <summary>
     /// 文件名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "文件名称", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "文件名称", Length = 200, IsNullable = true)]
     public string FileName { get; set; }
 
     /// <summary>
     /// 文件行数
     /// </summary>
-    [SugarColumn(ColumnDescription = "文件行数", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "文件行数")]
     public int FileLine { get; set; }
 
     /// <summary>
     /// 方法名
     /// </summary>
-    [SugarColumn(ColumnDescription = "方法名", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "方法名", Length = 200, IsNullable = true)]
     public string MethodName { get; set; }
 
     /// <summary>
     /// 原始Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string RawSql { get; set; }
 
     /// <summary>
     /// Sql参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = "Nvarchar(MAX)", IsNullable = true, IsJson = true)]
+    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+        IsJson = true)]
     public SugarParameter[] Parameters { get; set; }
 
     /// <summary>
     /// 纯Sql，参数化之后的Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string PureSql { get; set; }
 
     /// <summary>
     /// 异常时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "异常时间", ColumnDataType = "datetimeoffset", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "异常时间")]
     public DateTime ExceptionTime { get; set; }
 }

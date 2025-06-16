@@ -29,7 +29,7 @@ namespace Fast.CenterLog.Enum;
 /// </summary>
 [Flags]
 [FastEnum("差异日志类型枚举")]
-public enum DiffLogTypeEnum
+public enum DiffLogTypeEnum : byte
 {
     /// <summary>
     /// 未知

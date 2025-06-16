@@ -29,7 +29,7 @@ namespace Fast.Common;
 /// </summary>
 [Flags]
 [FastEnum("公共状态枚举")]
-public enum CommonStatusEnum
+public enum CommonStatusEnum : byte
 {
     /// <summary>
     /// 正常
@@ -38,9 +38,9 @@ public enum CommonStatusEnum
     Enable = 1,
 
     /// <summary>
-    /// 停用
+    /// 禁用
     /// </summary>
-    [Description("停用")]
+    [Description("禁用")]
     Disable = 2,
 
     /// <summary>
