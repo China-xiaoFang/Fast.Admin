@@ -29,7 +29,7 @@ namespace Fast.FastCloud.Enum;
 /// </summary>
 [Flags]
 [FastEnum("菜单类型枚举")]
-public enum MenuTypeEnum
+public enum MenuTypeEnum : byte
 {
     /// <summary>
     /// 目录

@@ -42,7 +42,7 @@ public class AccountModel : SnowflakeKeyEntity
     /// <summary>
     /// 邮箱
     /// </summary>
-    [SugarColumn(ColumnDescription = "邮箱", ColumnDataType = "varchar(50)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "邮箱", Length = 50, IsNullable = true)]
     public string Email { get; set; }
 
     /// <summary>
@@ -54,169 +54,168 @@ public class AccountModel : SnowflakeKeyEntity
     /// <summary>
     /// 状态
     /// </summary>
-    [SugarColumn(ColumnDescription = "状态", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "状态", IsNullable = false)]
     public CommonStatusEnum Status { get; set; }
 
     /// <summary>
     /// 昵称
     /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = false)]
     public string NickName { get; set; }
 
     /// <summary>
     /// 头像
     /// </summary>
-    [SugarColumn(ColumnDescription = "头像", ColumnDataType = "Nvarchar(max)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "头像", Length = 200, IsNullable = true)]
     public string Avatar { get; set; }
 
     /// <summary>
     /// 电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "电话", ColumnDataType = "varchar(20)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "电话", Length = 20, IsNullable = true)]
     public string Tel { get; set; }
 
     /// <summary>
     /// 性别
     /// </summary>
-    [SugarColumn(ColumnDescription = "性别", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "性别")]
     public GenderEnum Sex { get; set; }
 
     /// <summary>
     /// 生日
     /// </summary>
-    [SugarColumn(ColumnDescription = "生日", ColumnDataType = "datetimeoffset", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "生日")]
     public DateTime? Birthday { get; set; }
 
     /// <summary>
     /// 初次登录租户
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录租户", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录租户")]
     public long? FirstLoginTenantId { get; set; }
 
     /// <summary>
     /// 初次登录设备
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录设备", ColumnDataType = "Nvarchar(50)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录设备", Length = 50, IsNullable = true)]
     public string FirstLoginDevice { get; set; }
 
     /// <summary>
     /// 初次登录操作系统（版本）
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录操作系统（版本）", ColumnDataType = "Nvarchar(50)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录操作系统（版本）", Length = 50, IsNullable = true)]
     public string FirstLoginOS { get; set; }
 
     /// <summary>
     /// 初次登录浏览器（版本）
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录浏览器（版本）", ColumnDataType = "Nvarchar(50)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录浏览器（版本）", Length = 50, IsNullable = true)]
     public string FirstLoginBrowser { get; set; }
 
     /// <summary>
     /// 初次登录省份
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录省份", ColumnDataType = "Nvarchar(20)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录省份", Length = 20, IsNullable = true)]
     public string FirstLoginProvince { get; set; }
 
     /// <summary>
     /// 初次登录城市
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录城市", ColumnDataType = "Nvarchar(20)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录城市", Length = 20, IsNullable = true)]
     public string FirstLoginCity { get; set; }
 
     /// <summary>
     /// 初次登录Ip
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录Ip", ColumnDataType = "Nvarchar(15)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录Ip", ColumnDataType = "varchar(15)", IsNullable = true)]
     public string FirstLoginIp { get; set; }
 
     /// <summary>
     /// 初次登录时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录时间", ColumnDataType = "datetimeoffset", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录时间")]
     public DateTime? FirstLoginTime { get; set; }
 
     /// <summary>
     /// 最后登录租户
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录租户", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录租户")]
     public long? LastLoginTenantId { get; set; }
 
     /// <summary>
     /// 最后登录设备
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录设备", ColumnDataType = "Nvarchar(50)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录设备", Length = 50, IsNullable = true)]
     public string LastLoginDevice { get; set; }
 
     /// <summary>
     /// 最后登录操作系统（版本）
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录操作系统（版本）", ColumnDataType = "Nvarchar(50)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录操作系统（版本）", Length = 50, IsNullable = true)]
     public string LastLoginOS { get; set; }
 
     /// <summary>
     /// 最后登录浏览器（版本）
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录浏览器（版本）", ColumnDataType = "Nvarchar(50)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录浏览器（版本）", Length = 50, IsNullable = true)]
     public string LastLoginBrowser { get; set; }
 
     /// <summary>
     /// 最后登录省份
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录省份", ColumnDataType = "Nvarchar(20)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录省份", Length = 20, IsNullable = true)]
     public string LastLoginProvince { get; set; }
 
     /// <summary>
     /// 最后登录城市
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录城市", ColumnDataType = "Nvarchar(20)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录城市", Length = 20, IsNullable = true)]
     public string LastLoginCity { get; set; }
 
     /// <summary>
     /// 最后登录Ip
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录Ip", ColumnDataType = "Nvarchar(15)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录Ip", ColumnDataType = "varchar(15)", IsNullable = true)]
     public string LastLoginIp { get; set; }
 
     /// <summary>
     /// 最后登录时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录时间", ColumnDataType = "datetimeoffset", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录时间")]
     public DateTime? LastLoginTime { get; set; }
 
     /// <summary>
     /// 密码错误次数
     /// </summary>
-    [SugarColumn(ColumnDescription = "密码错误次数", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "密码错误次数")]
     public int? PasswordErrorTime { get; set; }
 
     /// <summary>
     /// 锁定开始时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "锁定开始时间", ColumnDataType = "datetimeoffset", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "锁定开始时间")]
     public DateTime? LockStartTime { get; set; }
 
     /// <summary>
     /// 锁定结束时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "锁定结束时间", ColumnDataType = "datetimeoffset", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "锁定结束时间")]
     public DateTime? LockEndTime { get; set; }
 
     /// <summary>
     /// 创建时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建时间", ColumnDataType = "datetimeoffset", IsNullable = false, CreateTableFieldSort = 993)]
+    [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime CreatedTime { get; set; }
 
     /// <summary>
     /// 更新时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新时间", ColumnDataType = "datetimeoffset", IsNullable = true, CreateTableFieldSort = 996)]
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
     public DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 更新版本控制字段
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, IsNullable = false,
-        CreateTableFieldSort = 998)]
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
     public long RowVersion { get; set; }
 }

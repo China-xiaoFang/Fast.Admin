@@ -35,55 +35,56 @@ public class SqlExecutionLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 应用Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用Id")]
     public long AppId { get; set; }
 
     /// <summary>
     /// 应用名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用名称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用名称", Length = 20, IsNullable = false)]
     public string AppName { get; set; }
 
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = false)]
     public string Mobile { get; set; }
 
     /// <summary>
     /// 昵称
     /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", ColumnDataType = "Nvarchar(20)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = false)]
     public string NickName { get; set; }
 
     /// <summary>
     /// 原始Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string RawSql { get; set; }
 
     /// <summary>
     /// Sql参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = "Nvarchar(MAX)", IsNullable = true, IsJson = true)]
+    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+        IsJson = true)]
     public SugarParameter[] Parameters { get; set; }
 
     /// <summary>
     /// 纯Sql，参数化之后的Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string PureSql { get; set; }
 
     /// <summary>
     /// 执行时间
     /// </summary>
     [SplitField]
-    [SugarColumn(ColumnDescription = "执行时间", ColumnDataType = "datetimeoffset", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "执行时间")]
     public DateTime ExecuteTime { get; set; }
 
     /// <summary>
     /// 租户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户Id", IsNullable = false, CreateTableFieldSort = 997)]
+    [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
     public long TenantId { get; set; }
 }

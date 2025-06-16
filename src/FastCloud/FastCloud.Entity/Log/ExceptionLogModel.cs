@@ -34,37 +34,37 @@ public class ExceptionLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// 平台Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "平台Id")]
     public long PlatformId { get; set; }
 
     /// <summary>
     /// 平台名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台名称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "平台名称", Length = 20, IsNullable = false)]
     public string PlatformName { get; set; }
 
     /// <summary>
     /// 应用Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用Id")]
     public long AppId { get; set; }
 
     /// <summary>
     /// 应用名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用名称", ColumnDataType = "Nvarchar(20)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用名称", Length = 20, IsNullable = false)]
     public string AppName { get; set; }
 
     /// <summary>
     /// 租户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户Id", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "租户Id")]
     public long? TenantId { get; set; }
 
     /// <summary>
     /// 租户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户名称", ColumnDataType = "Nvarchar(30)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "租户名称", Length = 30, IsNullable = true)]
     public string TenantName { get; set; }
 
     /// <summary>
@@ -76,48 +76,48 @@ public class ExceptionLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// 昵称
     /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", ColumnDataType = "Nvarchar(20)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = true)]
     public string NickName { get; set; }
 
     /// <summary>
     /// 类名
     /// </summary>
-    [SugarColumn(ColumnDescription = "类名", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "类名", Length = 200, IsNullable = true)]
     public string ClassName { get; set; }
 
     /// <summary>
     /// 方法名
     /// </summary>
-    [SugarColumn(ColumnDescription = "方法名", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "方法名", Length = 200, IsNullable = true)]
     public string MethodName { get; set; }
 
     /// <summary>
     /// 异常信息
     /// </summary>
-    [SugarColumn(ColumnDescription = "异常信息", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "异常信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string Message { get; set; }
 
     /// <summary>
     /// 异常源
     /// </summary>
-    [SugarColumn(ColumnDescription = "异常源", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "异常源", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string Source { get; set; }
 
     /// <summary>
     /// 异常堆栈信息
     /// </summary>
-    [SugarColumn(ColumnDescription = "异常堆栈信息", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "异常堆栈信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string StackTrace { get; set; }
 
     /// <summary>
     /// 参数对象
     /// </summary>
-    [SugarColumn(ColumnDescription = "参数对象", ColumnDataType = "Nvarchar(MAX)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "参数对象", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string ParamsObj { get; set; }
 
     /// <summary>
     /// 异常时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "异常时间", ColumnDataType = "datetimeoffset", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "异常时间")]
     public DateTime ExceptionTime { get; set; }
 }

@@ -29,7 +29,7 @@ namespace Fast.CenterLog.Enum;
 /// </summary>
 [Flags]
 [FastEnum("访问类型枚举")]
-public enum VisitTypeEnum
+public enum VisitTypeEnum : byte
 {
     /// <summary>
     /// 登录

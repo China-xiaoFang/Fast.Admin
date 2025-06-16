@@ -29,7 +29,7 @@ namespace Fast.Common;
 /// </summary>
 [Flags]
 [FastEnum("级别枚举")]
-public enum LevelEnum
+public enum LevelEnum : byte
 {
     /// <summary>
     /// 默认级

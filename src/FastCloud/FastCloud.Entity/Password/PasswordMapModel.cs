@@ -29,25 +29,24 @@ namespace Fast.FastCloud.Entity;
 /// </summary>
 [SugarTable("PasswordMap", "密码映射表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
-[SugarIndex($"IX_{{table}}_{nameof(Ciphertext)}", nameof(Ciphertext), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(Plaintext)}", nameof(Plaintext), OrderByType.Asc, true)]
+[SugarIndex($"IX_{{table}}_{nameof(Plaintext)}", nameof(Type), OrderByType.Asc, nameof(Plaintext), OrderByType.Asc, true)]
 public class PasswordMapModel : IdentityKeyEntity
 {
     /// <summary>
     /// 类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "类型", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "类型")]
     public PasswordTypeEnum Type { get; set; }
-
-    /// <summary>
-    /// 密文
-    /// </summary>
-    [SugarColumn(ColumnDescription = "密码", ColumnDataType = "varchar(50)", IsNullable = false)]
-    public string Ciphertext { get; set; }
 
     /// <summary>
     /// 明文
     /// </summary>
-    [SugarColumn(ColumnDescription = "密码", ColumnDataType = "varchar(50)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "密码", Length = 50, IsNullable = false)]
     public string Plaintext { get; set; }
+
+    /// <summary>
+    /// 密文
+    /// </summary>
+    [SugarColumn(ColumnDescription = "密码", Length = 50, IsNullable = false)]
+    public string Ciphertext { get; set; }
 }

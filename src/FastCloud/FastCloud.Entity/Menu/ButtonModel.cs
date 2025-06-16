@@ -25,7 +25,7 @@
 namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="ApplicationModel"/> 按钮表Model类
+/// <see cref="ButtonModel"/> 按钮表Model类
 /// </summary>
 [SugarTable("Button", "按钮表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
@@ -36,75 +36,72 @@ public class ButtonModel : SnowflakeKeyEntity
     /// <summary>
     /// 菜单Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "菜单Id")]
     public long MenuId { get; set; }
 
     /// <summary>
     /// 按钮编码
     /// </summary>
-    [SugarColumn(ColumnDescription = "按钮编码", ColumnDataType = "Nvarchar(100)", IsNullable = false,
-        UniqueGroupNameList = new[] {nameof(ButtonCode)})]
+    [SugarColumn(ColumnDescription = "按钮编码", Length = 50, IsNullable = false, UniqueGroupNameList = new[] {nameof(ButtonCode)})]
     public string ButtonCode { get; set; }
 
     /// <summary>
     /// 按钮名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "按钮名称", ColumnDataType = "Nvarchar(50)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "按钮名称", Length = 20, IsNullable = false)]
     public string ButtonName { get; set; }
 
     /// <summary>
     /// 排序
     /// </summary>
-    [SugarColumn(ColumnDescription = "排序", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "排序")]
     public int Sort { get; set; }
 
     /// <summary>
     /// 状态
     /// </summary>
-    [SugarColumn(ColumnDescription = "状态", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "状态")]
     public CommonStatusEnum Status { get; set; }
 
     /// <summary>
     /// 创建者用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户Id", IsNullable = true, CreateTableFieldSort = 991)]
+    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
     public long? CreatedUserId { get; set; }
 
     /// <summary>
     /// 创建者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", ColumnDataType = "Nvarchar(20)", IsNullable = true, CreateTableFieldSort = 992)]
+    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
 
     /// <summary>
     /// 创建时间
     /// </summary>
-    [SugarSearchTime,
-     SugarColumn(ColumnDescription = "创建时间", ColumnDataType = "datetimeoffset", IsNullable = true, CreateTableFieldSort = 993)]
+    [SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>
     /// 更新者用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户Id", IsNullable = true, CreateTableFieldSort = 994)]
+    [SugarColumn(ColumnDescription = "更新者用户Id", CreateTableFieldSort = 994)]
     public long? UpdatedUserId { get; set; }
 
     /// <summary>
     /// 更新者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户名称", ColumnDataType = "Nvarchar(20)", IsNullable = true, CreateTableFieldSort = 995)]
+    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 995)]
     public string UpdatedUserName { get; set; }
 
     /// <summary>
     /// 更新时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新时间", ColumnDataType = "datetimeoffset", IsNullable = true, CreateTableFieldSort = 996)]
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
     public DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 更新版本控制字段
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, IsNullable = false,
-        CreateTableFieldSort = 998)]
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
     public long RowVersion { get; set; }
 }
