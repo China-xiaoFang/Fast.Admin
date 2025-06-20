@@ -22,7 +22,7 @@
 
 // ReSharper disable once CheckNamespace
 
-namespace Fast.Logs.Entity;
+namespace Fast.FastCloud.Entity;
 
 /// <summary>
 /// <see cref="ExceptionLogModel"/> 异常日志Model类
@@ -114,10 +114,4 @@ public class ExceptionLogModel : BaseIdentityRecordEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "参数对象", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string ParamsObj { get; set; }
-
-    /// <summary>
-    /// 异常时间
-    /// </summary>
-    [SugarColumn(ColumnDescription = "异常时间")]
-    public DateTime ExceptionTime { get; set; }
 }

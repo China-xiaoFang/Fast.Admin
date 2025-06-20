@@ -20,7 +20,6 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-global using Fast.CenterLog.Enum;
 global using Fast.Common;
 global using Fast.SqlSugar;
 global using SqlSugar;

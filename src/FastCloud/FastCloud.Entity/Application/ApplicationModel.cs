@@ -46,6 +46,12 @@ public class ApplicationModel : SnowflakeKeyEntity
     public string AppName { get; set; }
 
     /// <summary>
+    /// 开放平台Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "开放平台Id", Length = 50, IsNullable = false)]
+    public string OpenId { get; set; }
+
+    /// <summary>
     /// 应用类型
     /// </summary>
     [SugarColumn(ColumnDescription = "应用类型")]

@@ -38,28 +38,34 @@ public enum DatabaseTypeEnum
     FastCloud = 1,
 
     /// <summary>
+    /// Fast Cloud 日志库
+    /// </summary>
+    [Description("Fast Cloud 日志库")]
+    FastCloudLog = 2,
+
+    /// <summary>
     /// 部署系统库
     /// </summary>
     [Description("部署系统库")]
-    Deploy = 2,
+    Deploy = 4,
 
     /// <summary>
     /// 网关系统库
     /// </summary>
     [Description("网关系统库")]
-    Gateway = 4,
+    Gateway = 8,
 
     /// <summary>
     /// 系统核心库
     /// </summary>
     [Description("系统核心库")]
-    Center = 32,
+    Center = 64,
 
     /// <summary>
     /// 系统核心库
     /// </summary>
     [Description("系统核心库")]
-    CenterLog = 64,
+    CenterLog = 128,
 
     /// <summary>
     /// 系统Admin库

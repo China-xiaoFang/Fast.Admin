@@ -70,22 +70,64 @@ public class MenuModel : SnowflakeKeyEntity
     public MenuTypeEnum MenuType { get; set; }
 
     /// <summary>
-    /// 图标
+    /// 是否桌面端
     /// </summary>
-    [SugarColumn(ColumnDescription = "图标", Length = 20, IsNullable = true)]
-    public string Icon { get; set; }
+    [SugarColumn(ColumnDescription = "是否桌面端")]
+    public bool HasDesktop { get; set; }
 
     /// <summary>
-    /// 路由地址
+    /// 桌面端图标
     /// </summary>
-    [SugarColumn(ColumnDescription = "路由地址", Length = 200, IsNullable = true)]
-    public string Router { get; set; }
+    [SugarColumn(ColumnDescription = "桌面端图标", Length = 20, IsNullable = true)]
+    public string DesktopIcon { get; set; }
 
     /// <summary>
-    /// 组件地址
+    /// 桌面端路由地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "组件地址", Length = 200, IsNullable = true)]
-    public string Component { get; set; }
+    [SugarColumn(ColumnDescription = "桌面端路由地址", Length = 200, IsNullable = true)]
+    public string DesktopRouter { get; set; }
+
+    /// <summary>
+    /// 是否Web端
+    /// </summary>
+    [SugarColumn(ColumnDescription = "是否Web端")]
+    public bool HasWeb { get; set; }
+
+    /// <summary>
+    /// Web端图标
+    /// </summary>
+    [SugarColumn(ColumnDescription = "Web端图标", Length = 20, IsNullable = true)]
+    public string WebIcon { get; set; }
+
+    /// <summary>
+    /// Web端路由地址
+    /// </summary>
+    [SugarColumn(ColumnDescription = "Web端路由地址", Length = 200, IsNullable = true)]
+    public string WebRouter { get; set; }
+
+    /// <summary>
+    /// Web端组件地址
+    /// </summary>
+    [SugarColumn(ColumnDescription = "Web端组件地址", Length = 200, IsNullable = true)]
+    public string WebComponent { get; set; }
+
+    /// <summary>
+    /// 是否移动端
+    /// </summary>
+    [SugarColumn(ColumnDescription = "是否移动端")]
+    public bool HasMobile { get; set; }
+
+    /// <summary>
+    /// 移动端图标
+    /// </summary>
+    [SugarColumn(ColumnDescription = "移动端图标", Length = 20, IsNullable = true)]
+    public string MobileIcon { get; set; }
+
+    /// <summary>
+    /// 移动端路由地址
+    /// </summary>
+    [SugarColumn(ColumnDescription = "移动端路由地址", Length = 200, IsNullable = true)]
+    public string MobileRouter { get; set; }
 
     /// <summary>
     /// 内链/外链地址

@@ -25,12 +25,12 @@
 namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="CloudUserModel"/> 用户表Model类
+/// <see cref="UserModel"/> 用户表Model类
 /// </summary>
 [SugarTable("User", "用户表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
 [SugarIndex($"IX_{{table}}_{nameof(Mobile)}", nameof(Mobile), OrderByType.Asc, true)]
-public class CloudUserModel : SnowflakeKeyEntity
+public class UserModel : SnowflakeKeyEntity
 {
     /// <summary>
     /// 手机
@@ -43,6 +43,12 @@ public class CloudUserModel : SnowflakeKeyEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "密码", Length = 50, IsNullable = false)]
     public string Password { get; set; }
+
+    /// <summary>
+    /// 用户类型
+    /// </summary>
+    [SugarColumn(ColumnDescription = "用户类型")]
+    public UserTypeEnum UserType { get; set; }
 
     /// <summary>
     /// 状态

@@ -22,36 +22,13 @@
 
 // ReSharper disable once CheckNamespace
 
-namespace Fast.CenterLog.Enum;
+namespace Fast.Core;
 
 /// <summary>
-/// <see cref="DiffLogTypeEnum"/> 差异日志类型枚举
+/// <see cref="CenterCCL"/> Center 缓存上下文
 /// </summary>
-[Flags]
-[FastEnum("差异日志类型枚举")]
-public enum DiffLogTypeEnum : byte
+public class CenterCCL : ICacheContextLocator
 {
-    /// <summary>
-    /// 未知
-    /// </summary>
-    [Description("未知")]
-    None = 0,
-
-    /// <summary>
-    /// 添加
-    /// </summary>
-    [Description("添加")]
-    Insert = 1,
-
-    /// <summary>
-    /// 更新
-    /// </summary>
-    [Description("更新")]
-    Update = 2,
-
-    /// <summary>
-    /// 删除
-    /// </summary>
-    [Description("删除")]
-    Delete = 4
+    /// <summary>服务名称</summary>
+    public string ServiceName => "Center";
 }

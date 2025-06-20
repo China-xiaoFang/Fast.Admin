@@ -51,12 +51,6 @@ public class SqlExecutionLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     public string Mobile { get; set; }
 
     /// <summary>
-    /// 昵称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = false)]
-    public string NickName { get; set; }
-
-    /// <summary>
     /// 原始Sql
     /// </summary>
     [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
