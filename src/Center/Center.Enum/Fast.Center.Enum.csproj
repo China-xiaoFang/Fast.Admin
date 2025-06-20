@@ -5,7 +5,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Fast.Runtime" Version="3.5.3" />
+		<PackageReference Include="Fast.Runtime" Version="3.5.4" />
 	</ItemGroup>
 
 </Project>

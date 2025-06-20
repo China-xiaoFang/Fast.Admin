@@ -22,36 +22,35 @@
 
 // ReSharper disable once CheckNamespace
 
-namespace Fast.CenterLog.Enum;
+namespace Fast.Common;
 
 /// <summary>
-/// <see cref="VisitTypeEnum"/> 访问类型枚举
+/// <see cref="ElSelectorOutput{T}"/> ElementPlus ElSelect 通用输出
 /// </summary>
-[Flags]
-[FastEnum("访问类型枚举")]
-public enum VisitTypeEnum : byte
+public class ElSelectorOutput<T>
 {
     /// <summary>
-    /// 登录
+    /// 显示
     /// </summary>
-    [Description("登录")]
-    Login = 1,
+    public string Label { get; set; }
 
     /// <summary>
-    /// 登出
+    /// 值
     /// </summary>
-    [Description("登出")]
-    Logout = 2,
+    public T Value { get; set; }
 
     /// <summary>
-    /// 改密
+    /// 附加数据
     /// </summary>
-    [Description("改密")]
-    ChangePassword = 4,
+    public object Data { get; set; }
 
     /// <summary>
-    /// 授权登录
+    /// 禁用
     /// </summary>
-    [Description("授权登录")]
-    AuthorizedLogin = 8
+    public bool Disabled { get; set; }
+
+    /// <summary>
+    /// 子节点
+    /// </summary>
+    public List<ElSelectorOutput<T>> Children { get; set; }
 }
