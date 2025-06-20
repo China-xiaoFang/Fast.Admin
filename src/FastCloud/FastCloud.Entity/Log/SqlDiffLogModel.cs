@@ -22,51 +22,16 @@
 
 // ReSharper disable once CheckNamespace
 
-namespace Fast.Logs.Entity;
+namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="SqlExceptionLogModel"/> Sql异常日志Model类
+/// <see cref="SqlDiffLogModel"/> Sql差异日志Model类
 /// </summary>
-[SugarTable("SqlExceptionLog", "Sql异常日志表")]
-[SugarDbType(DatabaseTypeEnum.FastCloud)]
-public class SqlExceptionLogModel : BaseIdentityRecordEntity
+[SugarTable("SqlDiffLog{year}{month}{day}", "Sql差异日志表")]
+[SplitTable(SplitType.Month)]
+[SugarDbType(DatabaseTypeEnum.FastCloudLog)]
+public class SqlDiffLogModel : BaseSnowflakeRecordEntity
 {
-    /// <summary>
-    /// 平台Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "平台Id")]
-    public long PlatformId { get; set; }
-
-    /// <summary>
-    /// 平台名称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "平台名称", Length = 20, IsNullable = false)]
-    public string PlatformName { get; set; }
-
-    /// <summary>
-    /// 应用Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id")]
-    public long AppId { get; set; }
-
-    /// <summary>
-    /// 应用名称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "应用名称", Length = 20, IsNullable = false)]
-    public string AppName { get; set; }
-
-    /// <summary>
-    /// 租户Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "租户Id")]
-    public long? TenantId { get; set; }
-
-    /// <summary>
-    /// 租户名称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "租户名称", Length = 30, IsNullable = true)]
-    public string TenantName { get; set; }
-
     /// <summary>
     /// 手机
     /// </summary>
@@ -74,28 +39,48 @@ public class SqlExceptionLogModel : BaseIdentityRecordEntity
     public string Mobile { get; set; }
 
     /// <summary>
-    /// 昵称
+    /// 差异日志类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = false)]
-    public string NickName { get; set; }
+    [SugarColumn(ColumnDescription = "差异日志类型")]
+    public DiffLogTypeEnum DiffType { get; set; }
 
     /// <summary>
-    /// 文件名称
+    /// 表名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "文件名称", Length = 200, IsNullable = true)]
-    public string FileName { get; set; }
+    [SugarColumn(ColumnDescription = "表名称", Length = 100, IsNullable = false)]
+    public string TableName { get; set; }
 
     /// <summary>
-    /// 文件行数
+    /// 表描述
     /// </summary>
-    [SugarColumn(ColumnDescription = "文件行数")]
-    public int FileLine { get; set; }
+    [SugarColumn(ColumnDescription = "表描述", Length = 100, IsNullable = true)]
+    public string TableDescription { get; set; }
 
     /// <summary>
-    /// 方法名
+    /// 差异描述
     /// </summary>
-    [SugarColumn(ColumnDescription = "方法名", Length = 200, IsNullable = true)]
-    public string MethodName { get; set; }
+    [SugarColumn(ColumnDescription = "差异描述", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    public string DiffDescription { get; set; }
+
+    /// <summary>
+    /// 旧的列信息
+    /// </summary>
+    [SugarColumn(ColumnDescription = "旧的列信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+        IsJson = true)]
+    public List<List<DiffLogColumnInfo>> BeforeColumnList { get; set; }
+
+    /// <summary>
+    /// 新的列信息
+    /// </summary>
+    [SugarColumn(ColumnDescription = "新的列信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+        IsJson = true)]
+    public List<List<DiffLogColumnInfo>> AfterColumnList { get; set; }
+
+    /// <summary>
+    /// 执行秒数
+    /// </summary>
+    [SugarColumn(ColumnDescription = "执行秒数")]
+    public double? ExecuteSeconds { get; set; }
 
     /// <summary>
     /// 原始Sql
@@ -117,8 +102,14 @@ public class SqlExceptionLogModel : BaseIdentityRecordEntity
     public string PureSql { get; set; }
 
     /// <summary>
-    /// 异常时间
+    /// 差异时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "异常时间")]
-    public DateTime ExceptionTime { get; set; }
+    [SplitField]
+    public override DateTime? CreatedTime { get; set; }
+
+    [SugarColumn(IsIgnore = true)]
+    public override long? DepartmentId { get; set; }
+
+    [SugarColumn(IsIgnore = true)]
+    public override string DepartmentName { get; set; }
 }

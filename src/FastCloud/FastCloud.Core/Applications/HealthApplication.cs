@@ -20,40 +20,32 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
+using Fast.DynamicApplication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Fast.Center.Enum;
+// ReSharper disable once CheckNamespace
+namespace Fast.FastCloud.Core;
 
 /// <summary>
-/// <see cref="UserTypeEnum"/> 用户类型枚举
+/// <see cref="HealthApplication"/> 健康检查
 /// </summary>
-[Flags]
-[FastEnum("用户类型枚举")]
-public enum UserTypeEnum : byte
+[ApiDescriptionSettings(false)]
+public class HealthApplication : IDynamicApplication
 {
     /// <summary>
-    /// 超级管理员
+    /// 健康检查
     /// </summary>
-    [Description("超级管理员")]
-    SuperAdmin = 1,
-
-    /// <summary>
-    /// 管理员
-    /// </summary>
-    /// <remarks>每个租户只有一个管理员账号</remarks>
-    [Description("管理员")]
-    Admin = 2,
-
-    /// <summary>
-    /// 机器人
-    /// </summary>
-    /// <remarks>每个租户只有一个机器人账号</remarks>
-    [Description("机器人")]
-    Robot = 4,
-
-    /// <summary>
-    /// 普通账号
-    /// </summary>
-    [Description("普通账号")]
-    None = 64
+    /// <returns></returns>
+    [HttpGet("/health"), HttpGet("/health/index"), AllowAnonymous]
+    public IActionResult Index()
+    {
+        return new JsonResult(new
+        {
+            // 当前时间
+            CurrentTime = DateTime.Now,
+            // 运行时间
+            RunTimes = MachineUtil.GetProgramRunTimes()
+        });
+    }
 }

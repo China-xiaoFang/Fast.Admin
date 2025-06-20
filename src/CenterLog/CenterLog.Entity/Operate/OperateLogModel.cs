@@ -51,12 +51,6 @@ public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     public string Mobile { get; set; }
 
     /// <summary>
-    /// 昵称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = false)]
-    public string NickName { get; set; }
-
-    /// <summary>
     /// 是否执行成功
     /// </summary>
     [SugarColumn(ColumnDescription = "是否执行成功")]

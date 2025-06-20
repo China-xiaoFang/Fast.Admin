@@ -51,12 +51,6 @@ public class VisitLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     public string Mobile { get; set; }
 
     /// <summary>
-    /// 昵称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = false)]
-    public string NickName { get; set; }
-
-    /// <summary>
     /// 访问类型
     /// </summary>
     [SugarColumn(ColumnDescription = "访问类型")]
