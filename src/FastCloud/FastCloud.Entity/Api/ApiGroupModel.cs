@@ -25,85 +25,36 @@
 namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="AppModuleModel"/> 应用模块表Model类
+/// <see cref="ApiGroupModel"/> 接口分组表Model类
 /// </summary>
-[SugarTable("AppModule", "应用模块表")]
+[SugarTable("ApiGroup", "接口分组表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
-[SugarIndex($"IX_{{table}}_{nameof(ModuleName)}", nameof(AppId), OrderByType.Asc, nameof(ModuleName), OrderByType.Asc, true)]
-public class AppModuleModel : SnowflakeKeyEntity
+public class ApiGroupModel : SnowflakeKeyEntity
 {
     /// <summary>
-    /// 应用Id
+    /// 分组名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id")]
-    public long AppId { get; set; }
+    [SugarSearchValue]
+    [SugarColumn(ColumnDescription = "分组名称", Length = 20, IsNullable = false)]
+    public string GroupName { get; set; }
 
     /// <summary>
-    /// 模块名称
+    /// 分组标题
     /// </summary>
-    [SugarColumn(ColumnDescription = "模块名称", Length = 20, IsNullable = false)]
-    public string ModuleName { get; set; }
+    [SugarColumn(ColumnDescription = "分组标题", Length = 20)]
+    public string GroupTitle { get; set; }
 
     /// <summary>
-    /// 图标
+    /// 分组描述
     /// </summary>
-    [SugarColumn(ColumnDescription = "图标", Length = 20, IsNullable = false)]
-    public string Icon { get; set; }
-
-    /// <summary>
-    /// 颜色
-    /// </summary>
-    [SugarColumn(ColumnDescription = "颜色", Length = 20, IsNullable = false)]
-    public string Color { get; set; }
-
-    /// <summary>
-    /// 默认的
-    /// </summary>
-    /// <remarks>只能存在一个</remarks>
-    [SugarColumn(ColumnDescription = "默认的")]
-    public YesOrNotEnum IsDefault { get; set; }
-
-    /// <summary>
-    /// 排序
-    /// </summary>
-    [SugarColumn(ColumnDescription = "排序")]
-    public int Sort { get; set; }
-
-    /// <summary>
-    /// 状态
-    /// </summary>
-    [SugarColumn(ColumnDescription = "状态")]
-    public CommonStatusEnum Status { get; set; }
-
-    /// <summary>
-    /// 创建者用户Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
-    public long? CreatedUserId { get; set; }
-
-    /// <summary>
-    /// 创建者用户名称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
-    public string CreatedUserName { get; set; }
+    [SugarColumn(ColumnDescription = "分组描述", Length = 200)]
+    public string Description { get; set; }
 
     /// <summary>
     /// 创建时间
     /// </summary>
     [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
-
-    /// <summary>
-    /// 更新者用户Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户Id", CreateTableFieldSort = 994)]
-    public long? UpdatedUserId { get; set; }
-
-    /// <summary>
-    /// 更新者用户名称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 995)]
-    public string UpdatedUserName { get; set; }
 
     /// <summary>
     /// 更新时间

@@ -78,7 +78,7 @@ public class ButtonModel : SnowflakeKeyEntity
     /// <summary>
     /// 创建时间
     /// </summary>
-    [SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>

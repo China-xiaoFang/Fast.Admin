@@ -22,7 +22,7 @@
 
 // ReSharper disable once CheckNamespace
 
-namespace Fast.FastCloud.Entity;
+namespace Fast.FastCloudLog.Entity;
 
 /// <summary>
 /// <see cref="SqlDiffLogModel"/> Sql差异日志Model类
@@ -105,6 +105,7 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity
     /// 差异时间
     /// </summary>
     [SplitField]
+    [SugarSearchTime]
     public override DateTime? CreatedTime { get; set; }
 
     [SugarColumn(IsIgnore = true)]

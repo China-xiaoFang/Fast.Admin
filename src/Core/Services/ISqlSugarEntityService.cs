@@ -38,7 +38,6 @@ public interface ISqlSugarEntityService
     /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
     /// <param name="databaseType"><see cref="DatabaseTypeEnum"/> 数据库类型</param>
     /// <returns></returns>
-    /// <exception cref="ArgumentNullException"></exception>
     Task<ConnectionSettingsOptions> GetConnectionSetting(long tenantId, string tenantNo,
         DatabaseTypeEnum databaseType);
 }

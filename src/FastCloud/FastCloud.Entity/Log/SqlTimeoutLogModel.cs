@@ -25,11 +25,11 @@
 namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="ExceptionLogModel"/> 异常日志Model类
+/// <see cref="SqlTimeoutLogModel"/> Sql超时日志Model类
 /// </summary>
-[SugarTable("ExceptionLog", "异常日志表")]
+[SugarTable("SqlTimeoutLog", "Sql超时日志表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
-public class ExceptionLogModel : BaseIdentityRecordEntity
+public class SqlTimeoutLogModel : BaseIdentityRecordEntity
 {
     /// <summary>
     /// 平台Id
@@ -76,14 +76,20 @@ public class ExceptionLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// 昵称
     /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = false)]
     public string NickName { get; set; }
 
     /// <summary>
-    /// 类名
+    /// 文件名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "类名", Length = 200, IsNullable = true)]
-    public string ClassName { get; set; }
+    [SugarColumn(ColumnDescription = "文件名称", Length = 200, IsNullable = true)]
+    public string FileName { get; set; }
+
+    /// <summary>
+    /// 文件行数
+    /// </summary>
+    [SugarColumn(ColumnDescription = "文件行数")]
+    public int FileLine { get; set; }
 
     /// <summary>
     /// 方法名
@@ -92,26 +98,33 @@ public class ExceptionLogModel : BaseIdentityRecordEntity
     public string MethodName { get; set; }
 
     /// <summary>
-    /// 异常信息
+    /// 超时秒数
     /// </summary>
-    [SugarColumn(ColumnDescription = "异常信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
-    public string Message { get; set; }
+    [SugarColumn(ColumnDescription = "超时秒数")]
+    public double TimeoutSeconds { get; set; }
 
     /// <summary>
-    /// 异常源
+    /// 原始Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "异常源", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
-    public string Source { get; set; }
+    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    public string RawSql { get; set; }
 
     /// <summary>
-    /// 异常堆栈信息
+    /// Sql参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "异常堆栈信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
-    public string StackTrace { get; set; }
+    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+        IsJson = true)]
+    public SugarParameter[] Parameters { get; set; }
 
     /// <summary>
-    /// 参数对象
+    /// 纯Sql，参数化之后的Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "参数对象", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
-    public string ParamsObj { get; set; }
+    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    public string PureSql { get; set; }
+
+    /// <summary>
+    /// 超时时间
+    /// </summary>
+    [SugarSearchTime]
+    public override DateTime? CreatedTime { get; set; }
 }

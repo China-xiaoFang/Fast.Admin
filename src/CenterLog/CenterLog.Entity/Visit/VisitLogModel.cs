@@ -57,15 +57,14 @@ public class VisitLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     public VisitTypeEnum VisitType { get; set; }
 
     /// <summary>
-    /// 访问时间
-    /// </summary>
-    [SplitField]
-    [SugarColumn(ColumnDescription = "访问时间")]
-    public DateTime VisitTime { get; set; }
-
-    /// <summary>
     /// 租户Id
     /// </summary>
     [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
     public long TenantId { get; set; }
+
+    /// <summary>
+    /// 访问时间
+    /// </summary>
+    [SplitField]
+    public override DateTime? CreatedTime { get; set; }
 }

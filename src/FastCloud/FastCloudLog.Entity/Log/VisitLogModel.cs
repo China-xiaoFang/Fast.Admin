@@ -20,36 +20,40 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-
-
 // ReSharper disable once CheckNamespace
-namespace Fast.FastCloud.Core;
+
+namespace Fast.FastCloudLog.Entity;
 
 /// <summary>
-/// <see cref="CacheConst"/> 缓存常量
+/// <see cref="VisitLogModel"/> 访问日志Model类
 /// </summary>
-public class CacheConst
+[SugarTable("VisitLog{year}{month}{day}", "访问日志表")]
+[SplitTable(SplitType.Month)]
+[SugarDbType(DatabaseTypeEnum.FastCloudLog)]
+public class VisitLogModel : BaseSnowflakeRecordEntity
 {
     /// <summary>
-    /// 获取缓存Key
+    /// 手机
     /// </summary>
-    /// <param name="cacheKey"><see cref="string"/> 缓存Key</param>
-    /// <param name="args"></param>
-    /// <returns></returns>
-    public static string GetCacheKey(string cacheKey, params object[] args)
-    {
-        return string.Format(cacheKey, args);
-    }
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = true)]
+    public string Mobile { get; set; }
 
     /// <summary>
-    /// 数据库信息
+    /// 访问类型
     /// </summary>
-    /// <remarks>{0}平台编号，{1}数据库名类型</remarks>
-    public const string DatabaseInfo = "{0}:Database:{1}";
+    [SugarColumn(ColumnDescription = "访问类型")]
+    public VisitTypeEnum VisitType { get; set; }
 
     /// <summary>
-    /// 授权用户信息
+    /// 访问时间
     /// </summary>
-    /// <remarks>{1}登录环境，{2}手机号</remarks>
-    public const string AuthUserInfo = "Auth:{1}:{2}";
+    [SplitField]
+    [SugarSearchTime]
+    public override DateTime? CreatedTime { get; set; }
+
+    [SugarColumn(IsIgnore = true)]
+    public override long? DepartmentId { get; set; }
+
+    [SugarColumn(IsIgnore = true)]
+    public override string DepartmentName { get; set; }
 }

@@ -168,7 +168,7 @@ public class MenuModel : SnowflakeKeyEntity
     /// <summary>
     /// 创建时间
     /// </summary>
-    [SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>
@@ -194,10 +194,4 @@ public class MenuModel : SnowflakeKeyEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
     public long RowVersion { get; set; }
-
-    /// <summary>
-    /// 按钮集合
-    /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(ButtonModel.MenuId), nameof(Id))]
-    public List<ButtonModel> ButtonList { get; set; }
 }
