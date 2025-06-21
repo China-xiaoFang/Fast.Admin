@@ -29,126 +29,144 @@ namespace Fast.FastCloud.Entity;
 /// </summary>
 [SugarTable("Database", "数据库表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
+[SugarIndex($"IX_{{table}}_{nameof(DatabaseType)}", nameof(PlatformId), OrderByType.Asc, nameof(DatabaseType), OrderByType.Asc,
+    true)]
 public class DatabaseModel : SnowflakeKeyEntity
 {
     /// <summary>
     /// 平台Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台Id", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "平台Id")]
     public long PlatformId { get; set; }
 
     /// <summary>
     /// 数据库类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "数据库类型", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "数据库类型")]
     public DatabaseTypeEnum DatabaseType { get; set; }
 
     /// <summary>
     /// 数据库类型，用于区分使用的是那个类型的数据库
     /// </summary>
-    [SugarColumn(ColumnDescription = "数据库类型", ColumnDataType = "tinyint", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "数据库类型")]
     public DbType DbType { get; set; }
 
     /// <summary>
     /// 状态
     /// </summary>
-    [SugarColumn(ColumnDescription = "状态", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "状态")]
     public CommonStatusEnum Status { get; set; }
 
     /// <summary>
     /// 公网Ip地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "公网Ip地址", ColumnDataType = "NVARCHAR(15)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "公网Ip地址", ColumnDataType = "varchar(15)", IsNullable = true)]
     public string PublicIp { get; set; }
 
     /// <summary>
     /// 内网Ip地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "内网Ip地址", ColumnDataType = "NVARCHAR(15)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "内网Ip地址", ColumnDataType = "varchar(15)", IsNullable = true)]
     public string IntranetIp { get; set; }
 
     /// <summary>
     /// 端口号
     /// </summary>
-    [SugarColumn(ColumnDescription = "端口号", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "端口号")]
     public int? Port { get; set; }
 
     /// <summary>
     /// 数据库名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "数据库名称", ColumnDataType = "NVARCHAR(50)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "数据库名称", Length = 50, IsNullable = false)]
     public string DbName { get; set; }
 
     /// <summary>
     /// 数据库用户
     /// </summary>
-    [SugarColumn(ColumnDescription = "数据库用户", ColumnDataType = "NVARCHAR(10)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "数据库用户", Length = 10, IsNullable = true)]
     public string DbUser { get; set; }
 
     /// <summary>
     /// 数据库密码
     /// </summary>
-    [SugarColumn(ColumnDescription = "数据库密码", ColumnDataType = "NVARCHAR(20)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "数据库密码", Length = 20, IsNullable = true)]
     public string DbPwd { get; set; }
 
     /// <summary>
     /// 自定义连接字符串
     /// </summary>
-    [SugarColumn(ColumnDescription = "自定义连接字符串", ColumnDataType = "NVARCHAR(100)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "自定义连接字符串", Length = 100, IsNullable = true)]
     public string CustomConnectionStr { get; set; }
 
     /// <summary>
     /// 超时时间，单位秒
     /// </summary>
-    [SugarColumn(ColumnDescription = "超时时间，单位秒", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "超时时间，单位秒")]
     public int CommandTimeOut { get; set; }
 
     /// <summary>
     /// SqlSugar Sql执行最大秒数，如果超过记录警告日志
     /// </summary>
-    [SugarColumn(ColumnDescription = "SqlSugar Sql执行最大秒数，如果超过记录警告日志", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "SqlSugar Sql执行最大秒数，如果超过记录警告日志")]
     public double SugarSqlExecMaxSeconds { get; set; }
+
+    /// <summary>
+    /// 差异日志
+    /// </summary>
+    [SugarColumn(ColumnDescription = "差异日志")]
+    public bool DiffLog { get; set; }
+
+    /// <summary>
+    /// 禁用 SqlSugar 的 Aop
+    /// </summary>
+    /// <remarks>
+    /// 如果是通过 <see cref="ISqlSugarEntityHandler"/> 进行保存日志到数据库中
+    /// <para>必须要将相关 AOP 中涉及到的日志表，单独进行分库设置，并且禁用 AOP</para>
+    /// <para>或通过 new <see cref="SqlSugarClient"/>() 的方式进行保存。不然会导致死循环的问题</para>
+    /// </remarks>
+    [SugarColumn(ColumnDescription = "差异日志")]
+    public bool DisableAop { get; set; }
 
     /// <summary>
     /// 创建者用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户Id", IsNullable = true, CreateTableFieldSort = 991)]
+    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
     public long? CreatedUserId { get; set; }
 
     /// <summary>
     /// 创建者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", ColumnDataType = "Nvarchar(20)", IsNullable = true, CreateTableFieldSort = 992)]
+    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
 
     /// <summary>
     /// 创建时间
     /// </summary>
-    [SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", IsNullable = true, CreateTableFieldSort = 993)]
+    [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>
     /// 更新者用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户Id", IsNullable = true, CreateTableFieldSort = 994)]
+    [SugarColumn(ColumnDescription = "更新者用户Id", CreateTableFieldSort = 994)]
     public long? UpdatedUserId { get; set; }
 
     /// <summary>
     /// 更新者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户名称", ColumnDataType = "Nvarchar(20)", IsNullable = true, CreateTableFieldSort = 995)]
+    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 995)]
     public string UpdatedUserName { get; set; }
 
     /// <summary>
     /// 更新时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新时间", IsNullable = true, CreateTableFieldSort = 996)]
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
     public DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 更新版本控制字段
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, IsNullable = false,
-        CreateTableFieldSort = 998)]
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
     public long RowVersion { get; set; }
 }

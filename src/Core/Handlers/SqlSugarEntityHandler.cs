@@ -82,7 +82,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
 
         switch (databaseType)
         {
-            // 按理说这里不应该存在这四个的，如果存在则返回默认的
+            // 按理说这里不应该存在这些类型的，如果存在则返回默认的
             case DatabaseTypeEnum.FastCloud:
             case DatabaseTypeEnum.Deploy:
             case DatabaseTypeEnum.Gateway:
@@ -110,7 +110,6 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
 
         var tenantId = _user.TenantId;
         var tenantNo = _user.TenantNo;
-        var dateTime = DateTime.Now;
 
         // 组装数据
         var sqlExecutionLogModel = new SqlExecutionLogModel
@@ -121,7 +120,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             // 这里用 Center 库的
             CreatedUserId = _user.UserId,
             CreatedUserName = string.IsNullOrWhiteSpace(_user.NickName) ? _user.EmployeeName : _user.NickName,
-            CreatedTime = dateTime,
+            CreatedTime = DateTime.Now,
             TenantId = tenantId,
             AppId = _user.AppId,
             AppName = _user.AppName,
@@ -129,7 +128,6 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             RawSql = rawSql,
             Parameters = parameters,
             PureSql = handlerSql,
-            ExecuteTime = dateTime
         };
         sqlExecutionLogModel.RecordCreate(_httpContext);
 
@@ -189,7 +187,6 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
 
         var tenantId = _user.TenantId;
         var tenantNo = _user.TenantNo;
-        var dateTime = DateTime.Now;
 
         var diffLogType = diffType switch
         {
@@ -208,7 +205,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             // 这里用 Center 库的
             CreatedUserId = _user.UserId,
             CreatedUserName = string.IsNullOrWhiteSpace(_user.NickName) ? _user.EmployeeName : _user.NickName,
-            CreatedTime = dateTime,
+            CreatedTime = DateTime.Now,
             TenantId = tenantId,
             AppId = _user.AppId,
             AppName = _user.AppName,
@@ -223,7 +220,6 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             RawSql = rawSql,
             Parameters = parameters,
             PureSql = handlerSql,
-            DiffTime = dateTime
         };
         sqlDiffLogModel.RecordCreate(_httpContext);
 
@@ -293,7 +289,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     public string AssignUserName()
     {
         // 这里默认是职员信息，Center库的需要手动赋值
-        return _user?.EmployeeName;
+        return string.IsNullOrWhiteSpace(_user.NickName) ? _user.EmployeeName : _user.NickName;
     }
 
     /// <summary>是否为超级管理员</summary>

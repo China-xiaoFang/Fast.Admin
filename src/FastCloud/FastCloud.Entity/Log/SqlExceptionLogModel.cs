@@ -25,11 +25,11 @@
 namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="SqlTimeoutLogModel"/> Sql超时日志Model类
+/// <see cref="SqlExceptionLogModel"/> Sql异常日志Model类
 /// </summary>
-[SugarTable("SqlTimeoutLog", "Sql超时日志表")]
+[SugarTable("SqlExceptionLog", "Sql异常日志表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
-public class SqlTimeoutLogModel : BaseIdentityRecordEntity
+public class SqlExceptionLogModel : BaseIdentityRecordEntity
 {
     /// <summary>
     /// 平台Id
@@ -98,12 +98,6 @@ public class SqlTimeoutLogModel : BaseIdentityRecordEntity
     public string MethodName { get; set; }
 
     /// <summary>
-    /// 超时秒数
-    /// </summary>
-    [SugarColumn(ColumnDescription = "超时秒数")]
-    public double TimeoutSeconds { get; set; }
-
-    /// <summary>
     /// 原始Sql
     /// </summary>
     [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
@@ -121,4 +115,10 @@ public class SqlTimeoutLogModel : BaseIdentityRecordEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
     public string PureSql { get; set; }
+
+    /// <summary>
+    /// 异常时间
+    /// </summary>
+    [SugarSearchTime]
+    public override DateTime? CreatedTime { get; set; }
 }

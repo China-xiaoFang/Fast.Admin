@@ -153,6 +153,24 @@ public class UserModel : SnowflakeKeyEntity
     public DateTime? LastLoginTime { get; set; }
 
     /// <summary>
+    /// 密码错误次数
+    /// </summary>
+    [SugarColumn(ColumnDescription = "密码错误次数")]
+    public int? PasswordErrorTime { get; set; }
+
+    /// <summary>
+    /// 锁定开始时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "锁定开始时间")]
+    public DateTime? LockStartTime { get; set; }
+
+    /// <summary>
+    /// 锁定结束时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "锁定结束时间")]
+    public DateTime? LockEndTime { get; set; }
+
+    /// <summary>
     /// 创建时间
     /// </summary>
     [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]

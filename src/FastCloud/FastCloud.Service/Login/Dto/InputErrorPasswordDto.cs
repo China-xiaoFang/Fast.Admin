@@ -20,33 +20,25 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
-
-namespace Fast.FastCloud.Entity;
+namespace Fast.FastCloud.Service.Login.Dto;
 
 /// <summary>
-/// <see cref="VisitLogModel"/> 访问日志Model类
+/// <see cref="InputErrorPasswordDto"/> 输入错误密码次数Dto
 /// </summary>
-[SugarTable("VisitLog{year}{month}{day}", "访问日志表")]
-[SplitTable(SplitType.Month)]
-[SugarDbType(DatabaseTypeEnum.FastCloudLog)]
-public class VisitLogModel : BaseSnowflakeRecordEntity
+public class InputErrorPasswordDto
 {
     /// <summary>
-    /// 手机
+    /// 密码错误次数
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = true)]
-    public string Mobile { get; set; }
+    public int? PasswordErrorTime { get; set; }
 
     /// <summary>
-    /// 访问类型
+    /// 锁定开始时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "访问类型")]
-    public VisitTypeEnum VisitType { get; set; }
+    public DateTime? LockStartTime { get; set; }
 
     /// <summary>
-    /// 访问时间
+    /// 锁定结束时间
     /// </summary>
-    [SplitField]
-    public override DateTime? CreatedTime { get; set; }
+    public DateTime? LockEndTime { get; set; }
 }

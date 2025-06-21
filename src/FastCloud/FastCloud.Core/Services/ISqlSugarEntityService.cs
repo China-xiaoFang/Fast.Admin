@@ -20,36 +20,23 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-
+using Fast.Common;
+using Fast.SqlSugar;
 
 // ReSharper disable once CheckNamespace
 namespace Fast.FastCloud.Core;
 
 /// <summary>
-/// <see cref="CacheConst"/> 缓存常量
+/// <see cref="ISqlSugarEntityService"/> SqlSugar实体服务
 /// </summary>
-public class CacheConst
+public interface ISqlSugarEntityService
 {
     /// <summary>
-    /// 获取缓存Key
+    /// 根据类型获取连接字符串
     /// </summary>
-    /// <param name="cacheKey"><see cref="string"/> 缓存Key</param>
-    /// <param name="args"></param>
+    /// <param name="platformId"><see cref="long"/> 平台Id</param>
+    /// <param name="platformNo"><see cref="string"/> 平台编号</param>
+    /// <param name="databaseType"><see cref="DatabaseTypeEnum"/> 数据库类型</param>
     /// <returns></returns>
-    public static string GetCacheKey(string cacheKey, params object[] args)
-    {
-        return string.Format(cacheKey, args);
-    }
-
-    /// <summary>
-    /// 数据库信息
-    /// </summary>
-    /// <remarks>{0}平台编号，{1}数据库名类型</remarks>
-    public const string DatabaseInfo = "{0}:Database:{1}";
-
-    /// <summary>
-    /// 授权用户信息
-    /// </summary>
-    /// <remarks>{1}登录环境，{2}手机号</remarks>
-    public const string AuthUserInfo = "Auth:{1}:{2}";
+    Task<ConnectionSettingsOptions> GetConnectionSetting(long platformId, string platformNo, DatabaseTypeEnum databaseType);
 }

@@ -20,6 +20,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="$(SolutionDir)src\FastCloud\FastCloud.Entity\Fast.FastCloud.Entity.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\FastCloud\FastCloudLog.Entity\Fast.FastCloudLog.Entity.csproj" />
 	</ItemGroup>
 
 </Project>
