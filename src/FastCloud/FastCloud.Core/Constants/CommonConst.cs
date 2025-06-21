@@ -35,6 +35,11 @@ public class CommonConst
     public const long DefaultPlatformId = 10086;
 
     /// <summary>
+    /// 默认平台编号
+    /// </summary>
+    public const string DefaultPlatformNo = "Fast10086";
+
+    /// <summary>
     /// 默认平台名称
     /// </summary>
     public const string DefaultPlatformName = "Fast";

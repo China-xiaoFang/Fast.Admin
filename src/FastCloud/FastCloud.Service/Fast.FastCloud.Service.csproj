@@ -5,7 +5,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\FastCloud\FastCloud.Entity\Fast.FastCloud.Entity.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\FastCloud\FastCloud.Core\Fast.FastCloud.Core.csproj" />
 	</ItemGroup>
 
 </Project>

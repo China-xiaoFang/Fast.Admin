@@ -22,16 +22,27 @@
 
 // ReSharper disable once CheckNamespace
 
-namespace Fast.CenterLog.Entity;
+namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="OperateLogModel"/> 操作日志Model类
+/// <see cref="ExceptionLogModel"/> 异常日志Model类
 /// </summary>
-[SugarTable("OperateLog{year}{month}{day}", "操作日志表")]
-[SplitTable(SplitType.Month)]
-[SugarDbType(DatabaseTypeEnum.CenterLog)]
-public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
+[SugarTable("ExceptionLog", "异常日志表")]
+[SugarDbType(DatabaseTypeEnum.FastCloud)]
+public class ExceptionLogModel : BaseIdentityRecordEntity
 {
+    /// <summary>
+    /// 平台Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "平台Id")]
+    public long PlatformId { get; set; }
+
+    /// <summary>
+    /// 平台名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "平台名称", Length = 20, IsNullable = false)]
+    public string PlatformName { get; set; }
+
     /// <summary>
     /// 应用Id
     /// </summary>
@@ -45,28 +56,28 @@ public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     public string AppName { get; set; }
 
     /// <summary>
+    /// 租户Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "租户Id")]
+    public long? TenantId { get; set; }
+
+    /// <summary>
+    /// 租户名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "租户名称", Length = 30, IsNullable = true)]
+    public string TenantName { get; set; }
+
+    /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = true)]
     public string Mobile { get; set; }
 
     /// <summary>
-    /// 是否执行成功
+    /// 昵称
     /// </summary>
-    [SugarColumn(ColumnDescription = "是否执行成功")]
-    public YesOrNotEnum Success { get; set; }
-
-    /// <summary>
-    /// 操作行为
-    /// </summary>
-    [SugarColumn(ColumnDescription = "操作行为")]
-    public HttpRequestActionEnum OperationAction { get; set; }
-
-    /// <summary>
-    /// 操作名称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "操作名称", Length = 100, IsNullable = true)]
-    public string OperationName { get; set; }
+    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = true)]
+    public string NickName { get; set; }
 
     /// <summary>
     /// 类名
@@ -81,50 +92,32 @@ public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     public string MethodName { get; set; }
 
     /// <summary>
-    /// 请求地址
+    /// 异常信息
     /// </summary>
-    [SugarColumn(ColumnDescription = "请求地址", Length = 500, IsNullable = true)]
-    public string Url { get; set; }
+    [SugarColumn(ColumnDescription = "异常信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    public string Message { get; set; }
 
     /// <summary>
-    /// 请求方式
+    /// 异常源
     /// </summary>
-    [SugarColumn(ColumnDescription = "请求方式")]
-    public HttpRequestMethodEnum ReqMethod { get; set; }
+    [SugarColumn(ColumnDescription = "异常源", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    public string Source { get; set; }
 
     /// <summary>
-    /// 请求参数
+    /// 异常堆栈信息
     /// </summary>
-    [SugarColumn(ColumnDescription = "请求参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
-    public string Param { get; set; }
+    [SugarColumn(ColumnDescription = "异常堆栈信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    public string StackTrace { get; set; }
 
     /// <summary>
-    /// 返回结果
+    /// 参数对象
     /// </summary>
-    [SugarColumn(ColumnDescription = "返回结果", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
-    public string Result { get; set; }
+    [SugarColumn(ColumnDescription = "参数对象", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    public string ParamsObj { get; set; }
 
     /// <summary>
-    /// 地址
+    /// 异常时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "地址", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
-    public string Location { get; set; }
-
-    /// <summary>
-    /// 耗时（毫秒）
-    /// </summary>
-    [SugarColumn(ColumnDescription = "耗时（毫秒）")]
-    public long? ElapsedTime { get; set; }
-
-    /// <summary>
-    /// 租户Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
-    public long TenantId { get; set; }
-    
-    /// <summary>
-    /// 操作时间
-    /// </summary>
-    [SplitField]
+    [SugarSearchTime]
     public override DateTime? CreatedTime { get; set; }
 }

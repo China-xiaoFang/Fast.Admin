@@ -115,6 +115,7 @@ internal sealed class User : AuthUserInfo, IUser, IScopedDependency
                 {nameof(DeviceType), authUserInfo.DeviceType.ToString()},
                 {nameof(DeviceId), authUserInfo.DeviceId},
                 {nameof(Mobile), authUserInfo.Mobile},
+                {nameof(NickName), authUserInfo.NickName},
                 {nameof(LastLoginIp), authUserInfo.LastLoginIp},
                 {nameof(LastLoginTime), authUserInfo.LastLoginTime}
             });

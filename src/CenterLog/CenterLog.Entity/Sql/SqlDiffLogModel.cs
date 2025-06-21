@@ -114,15 +114,14 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     public string PureSql { get; set; }
 
     /// <summary>
-    /// 差异时间
-    /// </summary>
-    [SplitField]
-    [SugarColumn(ColumnDescription = "差异时间")]
-    public DateTime DiffTime { get; set; }
-
-    /// <summary>
     /// 租户Id
     /// </summary>
     [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
     public long TenantId { get; set; }
+    
+    /// <summary>
+    /// 差异时间
+    /// </summary>
+    [SplitField]
+    public override DateTime? CreatedTime { get; set; }
 }

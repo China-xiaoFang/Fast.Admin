@@ -20,8 +20,8 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Entity;
 using Fast.Common;
+using Fast.FastCloud.Entity;
 using Fast.SqlSugar;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
@@ -29,7 +29,7 @@ using Microsoft.Extensions.Logging;
 using SqlSugar;
 
 // ReSharper disable once CheckNamespace
-namespace Fast.Core;
+namespace Fast.FastCloud.Core;
 
 /// <summary>
 /// <see cref="SqlSugarEntityService"/> SqlSugar实体服务
@@ -39,7 +39,7 @@ internal class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
     /// <summary>
     /// 缓存
     /// </summary>
-    private readonly ICache<CenterCCL> _centerCache;
+    private readonly ICache _cache;
 
     /// <summary>
     /// 请求上下文
@@ -56,10 +56,10 @@ internal class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
     /// </summary>
     private readonly ILogger _logger;
 
-    public SqlSugarEntityService(ICache<CenterCCL> centerCache, IHttpContextAccessor httpContextAccessor,
-        IHostEnvironment hostEnvironment, ILogger logger)
+    public SqlSugarEntityService(ICache cache, IHttpContextAccessor httpContextAccessor, IHostEnvironment hostEnvironment,
+        ILogger logger)
     {
-        _centerCache = centerCache;
+        _cache = cache;
         _httpContext = httpContextAccessor.HttpContext;
         _hostEnvironment = hostEnvironment;
         _logger = logger;
@@ -68,14 +68,14 @@ internal class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
     /// <summary>
     /// 根据类型获取连接字符串
     /// </summary>
-    /// <param name="tenantId"><see cref="long"/> 租户Id</param>
-    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
+    /// <param name="platformId"><see cref="long"/> 平台Id</param>
+    /// <param name="platformNo"><see cref="string"/> 平台编号</param>
     /// <param name="databaseType"><see cref="DatabaseTypeEnum"/> 数据库类型</param>
     /// <returns></returns>
-    public async Task<ConnectionSettingsOptions> GetConnectionSetting(long tenantId, string tenantNo,
+    public async Task<ConnectionSettingsOptions> GetConnectionSetting(long platformId, string platformNo,
         DatabaseTypeEnum databaseType)
     {
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.DatabaseInfo, tenantNo, databaseType.ToString());
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.DatabaseInfo, platformNo, databaseType.ToString());
 
         // 优先从 HttpContext.Items 中获取
         var connectionSettingsObj =
@@ -87,36 +87,25 @@ internal class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
             return connectionSettings;
         }
 
-        return await _centerCache.GetAndSetAsync(cacheKey, async () =>
+        return await _cache.GetAndSetAsync(cacheKey, async () =>
         {
             var sqlSugarClient = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
 
-            var slaveAdaptConfig = new TypeAdapterConfig();
-            slaveAdaptConfig.NewConfig<SlaveDatabaseModel, SlaveConnectionInfo>().Map(e => e.ServiceIp, e =>
-                _hostEnvironment.IsDevelopment()
-                    // 开发环境使用公网地址
-                    ? e.PublicIp
-                    // 生产环境使用内网地址
-                    : e.IntranetIp);
-
-            var result = await sqlSugarClient.Queryable<MainDatabaseModel>()
-                .Includes(e => e.SlaveDatabaseList.Where(wh => !wh.IsDeleted).ToList())
-                .Where(wh => !wh.IsDeleted && wh.TenantId == tenantId && wh.DatabaseType == databaseType).Select(sl =>
-                    new ConnectionSettingsOptions
-                    {
-                        ServiceIp = _hostEnvironment.IsDevelopment()
-                            // 开发环境使用公网地址
-                            ? sl.PublicIp
-                            // 生产环境使用内网地址
-                            : sl.IntranetIp,
-                        SlaveConnectionList =
-                            sl.SlaveDatabaseList.Select(dSl => dSl.Adapt<SlaveConnectionInfo>(slaveAdaptConfig)).ToList()
-                    }, true).SingleAsync();
+            var result = await sqlSugarClient.Queryable<DatabaseModel>()
+                .Where(wh => wh.Status == CommonStatusEnum.Enable && wh.PlatformId == platformId &&
+                             wh.DatabaseType == databaseType).Select(sl => new ConnectionSettingsOptions
+                {
+                    ServiceIp = _hostEnvironment.IsDevelopment()
+                        // 开发环境使用公网地址
+                        ? sl.PublicIp
+                        // 生产环境使用内网地址
+                        : sl.IntranetIp
+                }, true).SingleAsync();
 
             if (result == null)
             {
                 var message = $"未能找到对应类型【{databaseType.ToString()}】所存在的 Database 信息！";
-                _logger.LogError($"TenantId：{tenantId}；TenantNo：{tenantNo}；{message}");
+                _logger.LogError($"PlatformId：{platformId}；PlatformNo：{platformNo}；{message}");
                 throw new ArgumentNullException(message);
             }
 

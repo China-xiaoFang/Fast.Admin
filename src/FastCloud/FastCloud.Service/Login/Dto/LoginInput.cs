@@ -20,36 +20,22 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-
-
-// ReSharper disable once CheckNamespace
-namespace Fast.FastCloud.Core;
+namespace Fast.FastCloud.Service.Login.Dto;
 
 /// <summary>
-/// <see cref="CacheConst"/> 缓存常量
+/// <see cref="LoginInput"/> 登录输入
 /// </summary>
-public class CacheConst
+public class LoginInput
 {
     /// <summary>
-    /// 获取缓存Key
+    /// 手机
     /// </summary>
-    /// <param name="cacheKey"><see cref="string"/> 缓存Key</param>
-    /// <param name="args"></param>
-    /// <returns></returns>
-    public static string GetCacheKey(string cacheKey, params object[] args)
-    {
-        return string.Format(cacheKey, args);
-    }
+    [StringRequired(ErrorMessage = "手机号码不能为空"), MinLength(11, ErrorMessage = "手机号码不正确")]
+    public string Mobile { get; set; }
 
     /// <summary>
-    /// 数据库信息
+    /// 密码
     /// </summary>
-    /// <remarks>{0}平台编号，{1}数据库名类型</remarks>
-    public const string DatabaseInfo = "{0}:Database:{1}";
-
-    /// <summary>
-    /// 授权用户信息
-    /// </summary>
-    /// <remarks>{1}登录环境，{2}手机号</remarks>
-    public const string AuthUserInfo = "Auth:{1}:{2}";
+    [StringRequired(ErrorMessage = "密码不能为空"), MinLength(6, ErrorMessage = "密码不能少于6位字符")]
+    public string Password { get; set; }
 }

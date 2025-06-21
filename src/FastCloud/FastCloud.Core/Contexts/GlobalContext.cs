@@ -20,6 +20,8 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.SqlSugar;
+
 // ReSharper disable once CheckNamespace
 
 namespace Fast.FastCloud.Core;
@@ -29,6 +31,11 @@ namespace Fast.FastCloud.Core;
 /// </summary>
 public class GlobalContext
 {
+    /// <summary>
+    /// CenterLog 连接字符串配置
+    /// </summary>
+    public static ConnectionSettingsOptions CenterLogConnectionSettings { get; internal set; }
+
     /// <summary>
     /// 设备类型
     /// </summary>

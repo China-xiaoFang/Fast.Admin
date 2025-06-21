@@ -22,7 +22,7 @@
 
 // ReSharper disable once CheckNamespace
 
-namespace Fast.FastCloud.Entity;
+namespace Fast.FastCloudLog.Entity;
 
 /// <summary>
 /// <see cref="OperateLogModel"/> 操作日志Model类
@@ -121,5 +121,12 @@ public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// 操作时间
     /// </summary>
     [SplitField]
+    [SugarSearchTime]
     public override DateTime? CreatedTime { get; set; }
+
+    [SugarColumn(IsIgnore = true)]
+    public override long? DepartmentId { get; set; }
+
+    [SugarColumn(IsIgnore = true)]
+    public override string DepartmentName { get; set; }
 }

@@ -20,36 +20,26 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-
-
 // ReSharper disable once CheckNamespace
-namespace Fast.FastCloud.Core;
+
+namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="CacheConst"/> 缓存常量
+/// <see cref="ApiButtonModel"/> 接口按钮表Model类
 /// </summary>
-public class CacheConst
+[SugarTable("ApiButton", "接口按钮表")]
+[SugarDbType(DatabaseTypeEnum.FastCloud)]
+public class ApiButtonModel : IDatabaseEntity
 {
     /// <summary>
-    /// 获取缓存Key
+    /// 接口Id
     /// </summary>
-    /// <param name="cacheKey"><see cref="string"/> 缓存Key</param>
-    /// <param name="args"></param>
-    /// <returns></returns>
-    public static string GetCacheKey(string cacheKey, params object[] args)
-    {
-        return string.Format(cacheKey, args);
-    }
+    [SugarColumn(ColumnDescription = "接口Id")]
+    public long ApiId { get; set; }
 
     /// <summary>
-    /// 数据库信息
+    /// 按钮Id
     /// </summary>
-    /// <remarks>{0}平台编号，{1}数据库名类型</remarks>
-    public const string DatabaseInfo = "{0}:Database:{1}";
-
-    /// <summary>
-    /// 授权用户信息
-    /// </summary>
-    /// <remarks>{1}登录环境，{2}手机号</remarks>
-    public const string AuthUserInfo = "Auth:{1}:{2}";
+    [SugarColumn(ColumnDescription = "按钮Id")]
+    public long ButtonId { get; set; }
 }

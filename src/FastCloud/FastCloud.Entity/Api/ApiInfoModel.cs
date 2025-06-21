@@ -25,47 +25,51 @@
 namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="SqlExecutionLogModel"/> Sql执行日志Model类
+/// <see cref="ApiInfoModel"/> 接口信息表Model类
 /// </summary>
-[SugarTable("SqlExecutionLog{year}{month}{day}", "Sql执行日志表")]
-[SplitTable(SplitType.Week)]
-[SugarDbType(DatabaseTypeEnum.FastCloudLog)]
-public class SqlExecutionLogModel : BaseSnowflakeRecordEntity
+[SugarTable("ApiInfo", "接口信息表")]
+[SugarDbType(DatabaseTypeEnum.FastCloud)]
+public class ApiInfoModel : SnowflakeKeyEntity
 {
     /// <summary>
-    /// 手机
+    /// 接口分组Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = false)]
-    public string Mobile { get; set; }
+    [SugarColumn(ColumnDescription = "接口分组Id")]
+    public long ApiGroupId { get; set; }
 
     /// <summary>
-    /// 原始Sql
+    /// 模块名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
-    public string RawSql { get; set; }
+    [SugarColumn(ColumnDescription = "模块名称", Length = 20, IsNullable = false)]
+    public string ModuleName { get; set; }
 
     /// <summary>
-    /// Sql参数
+    /// 接口地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
-        IsJson = true)]
-    public SugarParameter[] Parameters { get; set; }
+    [SugarColumn(ColumnDescription = "接口地址", Length = 200, IsNullable = false)]
+    public string ApiUrl { get; set; }
 
     /// <summary>
-    /// 纯Sql，参数化之后的Sql
+    /// 接口名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
-    public string PureSql { get; set; }
+    [SugarColumn(ColumnDescription = "接口名称", Length = 50)]
+    public string ApiName { get; set; }
 
     /// <summary>
-    /// 执行时间
+    /// 请求方式
     /// </summary>
-    [SplitField]
-    public override DateTime? CreatedTime { get; set; }
+    [SugarColumn(ColumnDescription = "请求方式")]
+    public HttpRequestMethodEnum Method { get; set; }
 
-    [SugarColumn(IsIgnore = true)]
-    public override long? DepartmentId { get; set; }
+    /// <summary>
+    /// 操作方式
+    /// </summary>
+    [SugarColumn(ColumnDescription = "操作方式")]
+    public HttpRequestActionEnum Action { get; set; }
 
-    [SugarColumn(IsIgnore = true)]
-    public override string DepartmentName { get; set; }
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public long RowVersion { get; set; }
 }
