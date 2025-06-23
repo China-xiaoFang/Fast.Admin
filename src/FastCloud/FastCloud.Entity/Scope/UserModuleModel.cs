@@ -27,7 +27,7 @@ namespace Fast.FastCloud.Entity;
 /// <summary>
 /// <see cref="UserModuleModel"/> 用户模块表Model类
 /// </summary>
-[SugarTable("UserModule", "用户菜单表")]
+[SugarTable("UserModule", "用户模块表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
 [SugarIndex($"IX_{{table}}_{nameof(ModuleId)}", nameof(UserId), OrderByType.Asc, nameof(ModuleId), OrderByType.Asc, true)]
 public class UserModuleModel : IDatabaseEntity

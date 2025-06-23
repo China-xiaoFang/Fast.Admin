@@ -44,7 +44,7 @@ public class InitDatabaseHostedService : IHostedService
     /// </summary>
     private readonly ILogger _logger;
 
-    public InitDatabaseHostedService(ILogger<DeleteLogHostedService> logger)
+    public InitDatabaseHostedService(ILogger<InitDatabaseHostedService> logger)
     {
         _logger = logger;
     }
@@ -111,7 +111,7 @@ public class InitDatabaseHostedService : IHostedService
             logSb1.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
             logSb1.Append(Environment.NewLine);
             logSb1.Append("\u001b[40m\u001b[37m");
-            logSb1.Append("              ");
+            logSb1.Append("               ");
             logSb1.Append("开始初始化数据库...");
             logSb1.Append("\u001b[39m\u001b[22m\u001b[49m");
             Console.WriteLine(logSb1.ToString());
@@ -1785,7 +1785,7 @@ public class InitDatabaseHostedService : IHostedService
         logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
         logSb.Append(Environment.NewLine);
         logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-        logSb.Append("              ");
+        logSb.Append("               ");
         logSb.Append("初始化数据库成功。");
         logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
         Console.WriteLine(logSb.ToString());
