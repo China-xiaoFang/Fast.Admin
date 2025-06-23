@@ -35,7 +35,7 @@ public class UserModel : SnowflakeKeyEntity
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = " varchar(11)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = false)]
     public string Mobile { get; set; }
 
     /// <summary>
