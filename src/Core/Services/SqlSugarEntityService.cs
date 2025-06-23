@@ -34,7 +34,7 @@ namespace Fast.Core;
 /// <summary>
 /// <see cref="SqlSugarEntityService"/> SqlSugar实体服务
 /// </summary>
-internal class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
+public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
 {
     /// <summary>
     /// 缓存
@@ -78,8 +78,8 @@ internal class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
         var cacheKey = CacheConst.GetCacheKey(CacheConst.DatabaseInfo, tenantNo, databaseType.ToString());
 
         // 优先从 HttpContext.Items 中获取
-        var connectionSettingsObj =
-            _httpContext?.Items[
+        var connectionSettingsObj
+            = _httpContext?.Items[
                 $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"];
 
         if (connectionSettingsObj is ConnectionSettingsOptions connectionSettings)
@@ -87,47 +87,54 @@ internal class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
             return connectionSettings;
         }
 
-        return await _centerCache.GetAndSetAsync(cacheKey, async () =>
-        {
-            var sqlSugarClient = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
+        return await _centerCache.GetAndSetAsync(cacheKey,
+            async () =>
+            {
+                var db = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
 
-            var slaveAdaptConfig = new TypeAdapterConfig();
-            slaveAdaptConfig.NewConfig<SlaveDatabaseModel, SlaveConnectionInfo>().Map(e => e.ServiceIp, e =>
-                _hostEnvironment.IsDevelopment()
-                    // 开发环境使用公网地址
-                    ? e.PublicIp
-                    // 生产环境使用内网地址
-                    : e.IntranetIp);
-
-            var result = await sqlSugarClient.Queryable<MainDatabaseModel>()
-                .Includes(e => e.SlaveDatabaseList.Where(wh => !wh.IsDeleted).ToList())
-                .Where(wh => !wh.IsDeleted && wh.TenantId == tenantId && wh.DatabaseType == databaseType).Select(sl =>
-                    new ConnectionSettingsOptions
-                    {
-                        ServiceIp = _hostEnvironment.IsDevelopment()
+                var slaveAdaptConfig = new TypeAdapterConfig();
+                slaveAdaptConfig.NewConfig<SlaveDatabaseModel, SlaveConnectionInfo>()
+                    .Map(e => e.ServiceIp,
+                        e => _hostEnvironment.IsDevelopment()
                             // 开发环境使用公网地址
-                            ? sl.PublicIp
+                            ? e.PublicIp
                             // 生产环境使用内网地址
-                            : sl.IntranetIp,
-                        SlaveConnectionList =
-                            sl.SlaveDatabaseList.Select(dSl => dSl.Adapt<SlaveConnectionInfo>(slaveAdaptConfig)).ToList()
-                    }, true).SingleAsync();
+                            : e.IntranetIp);
 
-            if (result == null)
-            {
-                var message = $"未能找到对应类型【{databaseType.ToString()}】所存在的 Database 信息！";
-                _logger.LogError($"TenantId：{tenantId}；TenantNo：{tenantNo}；{message}");
-                throw new ArgumentNullException(message);
-            }
+                var result = await db.Queryable<MainDatabaseModel>()
+                    .Includes(e => e.SlaveDatabaseList.Where(wh => !wh.IsDeleted)
+                        .ToList())
+                    .Where(wh => !wh.IsDeleted && wh.TenantId == tenantId && wh.DatabaseType == databaseType)
+                    .Select(sl => new ConnectionSettingsOptions
+                        {
+                            ServiceIp = _hostEnvironment.IsDevelopment()
+                                // 开发环境使用公网地址
+                                ? sl.PublicIp
+                                // 生产环境使用内网地址
+                                : sl.IntranetIp,
+                            SlaveConnectionList = sl.SlaveDatabaseList
+                                .Select(dSl => dSl.Adapt<SlaveConnectionInfo>(slaveAdaptConfig))
+                                .ToList()
+                        },
+                        true)
+                    .SingleAsync();
 
-            if (_httpContext != null)
-            {
-                // 放入 HttpContext.Items 中
-                _httpContext.Items[
-                    $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"] = result;
-            }
+                if (result == null)
+                {
+                    var message = $"未能找到对应类型【{databaseType.ToString()}】所存在的 Database 信息！";
+                    _logger.LogError($"TenantId：{tenantId}；TenantNo：{tenantNo}；{message}");
+                    throw new ArgumentNullException(message);
+                }
 
-            return result;
-        });
+                if (_httpContext != null)
+                {
+                    // 放入 HttpContext.Items 中
+                    _httpContext.Items[
+                        $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"]
+                    = result;
+                }
+
+                return result;
+            });
     }
 }

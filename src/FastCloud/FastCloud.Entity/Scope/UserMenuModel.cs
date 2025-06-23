@@ -25,21 +25,22 @@
 namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="ApiButtonModel"/> 接口按钮表Model类
+/// <see cref="UserMenuModel"/> 用户菜单表Model类
 /// </summary>
-[SugarTable("ApiButton", "接口按钮表")]
+[SugarTable("UserMenu", "用户菜单表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
-public class ApiButtonModel : IDatabaseEntity
+[SugarIndex($"IX_{{table}}_{nameof(MenuId)}", nameof(UserId), OrderByType.Asc, nameof(MenuId), OrderByType.Asc, true)]
+public class UserMenuModel : IDatabaseEntity
 {
     /// <summary>
-    /// 接口Id
+    /// 用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "接口Id")]
-    public long ApiId { get; set; }
+    [SugarColumn(ColumnDescription = "用户Id")]
+    public long UserId { get; set; }
 
     /// <summary>
-    /// 按钮Id
+    /// 菜单Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "按钮Id")]
-    public long ButtonId { get; set; }
+    [SugarColumn(ColumnDescription = "菜单Id")]
+    public long MenuId { get; set; }
 }

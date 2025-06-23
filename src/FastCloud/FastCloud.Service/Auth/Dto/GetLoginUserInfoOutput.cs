@@ -20,51 +20,32 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
-
-namespace Fast.FastCloud.Entity;
+namespace Fast.FastCloud.Service.Auth.Dto;
 
 /// <summary>
-/// <see cref="ApiGroupModel"/> 接口分组表Model类
+/// <see cref="GetLoginUserInfoOutput"/> 获取登录用户信息输出
 /// </summary>
-[SugarTable("ApiGroup", "接口分组表")]
-[SugarDbType(DatabaseTypeEnum.FastCloud)]
-public class ApiGroupModel : SnowflakeKeyEntity
+public class GetLoginUserInfoOutput : AuthUserInfo
 {
     /// <summary>
-    /// 分组名称
+    /// 平台编号集合
     /// </summary>
-    [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "分组名称", Length = 20, IsNullable = false)]
-    public string GroupName { get; set; }
+    [JsonIgnore]
+    public override List<string> PlatformNoList { get; set; }
 
     /// <summary>
-    /// 分组标题
+    /// 菜单编码集合
     /// </summary>
-    [SugarColumn(ColumnDescription = "分组标题", Length = 20)]
-    public string GroupTitle { get; set; }
+    [JsonIgnore]
+    public override List<string> MenuCodeList { get; set; }
 
     /// <summary>
-    /// 分组描述
+    /// 模块集合
     /// </summary>
-    [SugarColumn(ColumnDescription = "分组描述", Length = 200)]
-    public string Description { get; set; }
+    public List<AuthModuleInfoDto> ModuleList { get; set; }
 
     /// <summary>
-    /// 创建时间
+    /// 菜单集合
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
-    public DateTime? CreatedTime { get; set; }
-
-    /// <summary>
-    /// 更新时间
-    /// </summary>
-    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
-    public DateTime? UpdatedTime { get; set; }
-
-    /// <summary>
-    /// 更新版本控制字段
-    /// </summary>
-    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
-    public long RowVersion { get; set; }
+    public List<AuthMenuInfoDto> MenuList { get; set; }
 }

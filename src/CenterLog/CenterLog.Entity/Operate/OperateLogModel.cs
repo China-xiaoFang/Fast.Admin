@@ -121,7 +121,7 @@ public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
     public long TenantId { get; set; }
-    
+
     /// <summary>
     /// 操作时间
     /// </summary>

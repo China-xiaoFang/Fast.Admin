@@ -20,26 +20,20 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
+using Fast.FastCloud.Service.Login.Dto;
 
-namespace Fast.FastCloud.Entity;
+namespace Fast.FastCloud.Service.Login;
 
 /// <summary>
-/// <see cref="UserButtonModel"/> 用户按钮表Model类
+/// <see cref="ILoginService"/> 登录服务
 /// </summary>
-[SugarTable("UserButton", "用户按钮表")]
-[SugarDbType(DatabaseTypeEnum.FastCloud)]
-public class UserButtonModel : IDatabaseEntity
+public interface ILoginService
 {
     /// <summary>
-    /// 用户Id
+    /// 登录
     /// </summary>
-    [SugarColumn(ColumnDescription = "用户Id")]
-    public long UserId { get; set; }
-
-    /// <summary>
-    /// 按钮Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "菜单Id")]
-    public long ButtonId { get; set; }
+    /// <param name="deviceType"></param>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task Login(AppEnvironmentEnum deviceType, LoginInput input);
 }

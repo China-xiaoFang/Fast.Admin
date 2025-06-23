@@ -79,7 +79,7 @@ public class PlatformModel : SnowflakeKeyEntity
     /// 平台管理员电话
     /// </summary>
     [SugarColumn(ColumnDescription = "平台管理员电话", Length = 20, IsNullable = false)]
-    public string Mobile { get; set; }
+    public string AdminPhone { get; set; }
 
     /// <summary>
     /// LogoUrl
@@ -94,9 +94,22 @@ public class PlatformModel : SnowflakeKeyEntity
     public DateTime ActivationTime { get; set; }
 
     /// <summary>
+    /// 平台版本
+    /// </summary>
+    [SugarColumn(ColumnDescription = "平台版本")]
+    public EditionEnum Edition { get; set; }
+
+    /// <summary>
+    /// 自动续费
+    /// </summary>
+    [SugarColumn(ColumnDescription = "自动续费")]
+    public bool AutoRenewal { get; set; }
+
+    /// <summary>
     /// 续费到期时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "续费到期时间")]
+    /// <remarks>包含当天</remarks>
+    [SugarColumn(ColumnDescription = "续费到期时间", ColumnDataType = "date")]
     public DateTime RenewalExpiryTime { get; set; }
 
     /// <summary>

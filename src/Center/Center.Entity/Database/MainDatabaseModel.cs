@@ -20,8 +20,6 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-
-
 // ReSharper disable once CheckNamespace
 
 namespace Fast.Center.Entity;
@@ -31,7 +29,11 @@ namespace Fast.Center.Entity;
 /// </summary>
 [SugarTable("MainDatabase", "主数据库表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(DatabaseType)}", nameof(TenantId), OrderByType.Asc, nameof(DatabaseType), OrderByType.Asc,
+[SugarIndex($"IX_{{table}}_{nameof(DatabaseType)}",
+    nameof(TenantId),
+    OrderByType.Asc,
+    nameof(DatabaseType),
+    OrderByType.Asc,
     true)]
 public class MainDatabaseModel : BaseTEntity
 {

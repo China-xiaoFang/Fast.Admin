@@ -29,18 +29,16 @@ namespace Fast.FastCloud.Service.Login;
 /// <summary>
 /// <see cref="LoginService"/> 登录服务
 /// </summary>
-public class LoginService
+public class LoginService : ILoginService, ITransientDependency
 {
-    private readonly ICache _cache;
     private readonly IUser _user;
     private readonly HttpContext _httpContext;
     private readonly ISqlSugarClient _repository;
     private readonly ISqlSugarRepository<VisitLogModel> _visitLogRepository;
 
-    public LoginService(ICache cache, IUser user, IHttpContextAccessor httpContextAccessor, ISqlSugarClient repository,
+    public LoginService(IUser user, IHttpContextAccessor httpContextAccessor, ISqlSugarClient repository,
         ISqlSugarRepository<VisitLogModel> visitLogRepository)
     {
-        _cache = cache;
         _user = user;
         _httpContext = httpContextAccessor.HttpContext;
         _repository = repository;
@@ -56,11 +54,16 @@ public class LoginService
     public async Task Login(AppEnvironmentEnum deviceType, LoginInput input)
     {
         // 获取设备类型和设备Id
-        var deviceTypeStr = _httpContext.Request.Headers[HttpHeaderConst.DeviceType].ToString().UrlDecode();
-        var deviceId = _httpContext.Request.Headers[HttpHeaderConst.DeviceId].ToString().UrlDecode();
+        var deviceTypeStr = _httpContext.Request.Headers[HttpHeaderConst.DeviceType]
+            .ToString()
+            .UrlDecode();
+        var deviceId = _httpContext.Request.Headers[HttpHeaderConst.DeviceId]
+            .ToString()
+            .UrlDecode();
 
-        if (string.IsNullOrWhiteSpace(deviceTypeStr) || string.IsNullOrWhiteSpace(deviceId) ||
-            !deviceTypeStr.Equals(deviceType.ToString(), StringComparison.OrdinalIgnoreCase))
+        if (string.IsNullOrWhiteSpace(deviceTypeStr)
+            || string.IsNullOrWhiteSpace(deviceId)
+            || !deviceTypeStr.Equals(deviceType.ToString(), StringComparison.OrdinalIgnoreCase))
         {
             throw new UserFriendlyException("非法访问！");
         }
@@ -72,12 +75,20 @@ public class LoginService
             throw new UserFriendlyException("不是一个有效的手机号码！");
         }
 
-        var userModel = await _repository.Queryable<UserModel>().Where(wh => wh.Mobile == input.Mobile).SingleAsync();
+        var userModel = await _repository.Queryable<UserModel>()
+            .Where(wh => wh.Mobile == input.Mobile)
+            .SingleAsync();
 
         // 判断账号是否存在
         if (userModel == null)
         {
             throw new UserFriendlyException("账号不存在！");
+        }
+
+        // 验证是否为机器人
+        if (userModel.UserType == UserTypeEnum.Robot)
+        {
+            throw new UserFriendlyException("无效账号！");
         }
 
         // 验证账号状态
@@ -113,27 +124,27 @@ public class LoginService
                 case 3:
                     userModel.LockStartTime ??= dateTime;
                     userModel.LockEndTime = userModel.LockStartTime.Value.AddMinutes(1);
-                    userModel.UpdatedTime = dateTime;
-                    await _repository.Updateable(userModel).ExecuteCommandAsync();
+                    await _repository.Updateable(userModel)
+                        .ExecuteCommandAsync();
                     break;
                 // 错误5次，锁定5分钟
                 case 5:
                     userModel.LockStartTime ??= dateTime;
                     userModel.LockEndTime = dateTime.AddMinutes(5);
-                    userModel.UpdatedTime = dateTime;
-                    await _repository.Updateable(userModel).ExecuteCommandAsync();
+                    await _repository.Updateable(userModel)
+                        .ExecuteCommandAsync();
                     break;
                 // 判断是否连续错误10次以上
                 case >= 10:
                     // 错误10此，直接禁用账号
                     userModel.Status = CommonStatusEnum.Disable;
-                    userModel.UpdatedTime = dateTime;
-                    await _repository.Updateable(userModel).ExecuteCommandAsync();
+                    await _repository.Updateable(userModel)
+                        .ExecuteCommandAsync();
                     throw new UserFriendlyException("密码连续输入错误10次，账号已被禁用，请联系管理员！");
             }
 
-            userModel.UpdatedTime = dateTime;
-            await _repository.Updateable(userModel).ExecuteCommandAsync();
+            await _repository.Updateable(userModel)
+                .ExecuteCommandAsync();
 
             throw new UserFriendlyException("密码不正确！");
         }
@@ -171,8 +182,8 @@ public class LoginService
         userModel.LastLoginCity = wanNetIpInfo.City;
         userModel.LastLoginIp = ip;
         userModel.LastLoginTime = dateTime;
-        userModel.UpdatedTime = dateTime;
-        await _repository.Updateable(userModel).ExecuteCommandAsync();
+        await _repository.Updateable(userModel)
+            .ExecuteCommandAsync();
 
         // 登录
         await _user.Login(new AuthUserInfo

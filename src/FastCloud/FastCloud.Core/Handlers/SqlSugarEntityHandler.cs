@@ -93,7 +93,8 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
                 return SqlSugarContext.ConnectionSettings;
             case DatabaseTypeEnum.CenterLog:
                 return await _sqlSugarEntityService.GetConnectionSetting(CommonConst.DefaultPlatformId,
-                    CommonConst.DefaultPlatformNo, databaseType);
+                    CommonConst.DefaultPlatformNo,
+                    databaseType);
         }
     }
 
@@ -107,7 +108,8 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     {
         // 获取 FastCloudLog 库的连接字符串配置
         var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.DefaultPlatformId,
-            CommonConst.DefaultPlatformNo, DatabaseTypeEnum.FastCloudLog);
+            CommonConst.DefaultPlatformNo,
+            DatabaseTypeEnum.FastCloudLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
         // 组装数据
@@ -129,10 +131,12 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             try
             {
                 // 这里不能使用Aop
-                var sqlSugarClient = new SqlSugarClient(connectionConfig);
+                var db = new SqlSugarClient(connectionConfig);
 
                 // 异步不等待
-                await sqlSugarClient.Insertable(sqlExecutionLogModel).SplitTable().ExecuteCommandAsync();
+                await db.Insertable(sqlExecutionLogModel)
+                    .SplitTable()
+                    .ExecuteCommandAsync();
             }
             catch (Exception ex)
             {
@@ -186,10 +190,11 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             try
             {
                 // 这里不能使用Aop
-                var sqlSugarClient = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+                var db = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
 
                 // 异步不等待
-                await sqlSugarClient.Insertable(sqlTimeoutLogModel).ExecuteCommandAsync();
+                await db.Insertable(sqlTimeoutLogModel)
+                    .ExecuteCommandAsync();
             }
             catch (Exception ex)
             {
@@ -218,7 +223,8 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     {
         // 获取 FastCloudLog 库的连接字符串配置
         var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.DefaultPlatformId,
-            CommonConst.DefaultPlatformNo, DatabaseTypeEnum.FastCloudLog);
+            CommonConst.DefaultPlatformNo,
+            DatabaseTypeEnum.FastCloudLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
         var diffLogType = diffType switch
@@ -255,10 +261,12 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             try
             {
                 // 这里不能使用Aop
-                var sqlSugarClient = new SqlSugarClient(connectionConfig);
+                var db = new SqlSugarClient(connectionConfig);
 
                 // 异步不等待
-                await sqlSugarClient.Insertable(sqlDiffLogModel).SplitTable().ExecuteCommandAsync();
+                await db.Insertable(sqlDiffLogModel)
+                    .SplitTable()
+                    .ExecuteCommandAsync();
             }
             catch (Exception ex)
             {
@@ -310,10 +318,12 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             try
             {
                 // 这里不能使用Aop
-                var sqlSugarClient = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
+                var db = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
 
                 // 异步不等待
-                await sqlSugarClient.Insertable(sqlExceptionLogModel).SplitTable().ExecuteCommandAsync();
+                await db.Insertable(sqlExceptionLogModel)
+                    .SplitTable()
+                    .ExecuteCommandAsync();
             }
             catch (Exception ex)
             {

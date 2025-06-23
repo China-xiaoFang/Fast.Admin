@@ -32,10 +32,35 @@ namespace Fast.FastCloud.Entity;
 public class ApiInfoModel : SnowflakeKeyEntity
 {
     /// <summary>
-    /// 接口分组Id
+    /// 服务名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "接口分组Id")]
-    public long ApiGroupId { get; set; }
+    [SugarColumn(ColumnDescription = "服务名称", Length = 20, IsNullable = false)]
+    public string ServiceName { get; set; }
+
+    /// <summary>
+    /// 分组名称
+    /// </summary>
+    [SugarSearchValue]
+    [SugarColumn(ColumnDescription = "分组名称", Length = 20, IsNullable = false)]
+    public string GroupName { get; set; }
+
+    /// <summary>
+    /// 分组标题
+    /// </summary>
+    [SugarColumn(ColumnDescription = "分组标题", Length = 20)]
+    public string GroupTitle { get; set; }
+
+    /// <summary>
+    /// 版本
+    /// </summary>
+    [SugarColumn(ColumnDescription = "版本", Length = 20)]
+    public string Version { get; set; }
+
+    /// <summary>
+    /// 分组描述
+    /// </summary>
+    [SugarColumn(ColumnDescription = "分组描述", Length = 50)]
+    public string Description { get; set; }
 
     /// <summary>
     /// 模块名称
@@ -66,6 +91,43 @@ public class ApiInfoModel : SnowflakeKeyEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "操作方式")]
     public HttpRequestActionEnum Action { get; set; }
+
+    /// <summary>
+    /// 是否检测授权
+    /// </summary>
+    [SugarColumn(ColumnDescription = "是否检测授权")]
+    public bool HasAuth { get; set; }
+
+    /// <summary>
+    /// 是否检测权限
+    /// </summary>
+    [SugarColumn(ColumnDescription = "是否检测权限")]
+    public bool HasPermission { get; set; }
+
+    /// <summary>
+    /// 标签
+    /// </summary>
+    /// <remarks>,分割</remarks>
+    [SugarColumn(ColumnDescription = "标签", Length = 200)]
+    public string Tags { get; set; }
+
+    /// <summary>
+    /// 排序
+    /// </summary>
+    [SugarColumn(ColumnDescription = "排序")]
+    public int Sort { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    public DateTime? CreatedTime { get; set; }
+
+    /// <summary>
+    /// 更新时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
+    public DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 更新版本控制字段

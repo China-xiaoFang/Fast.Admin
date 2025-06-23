@@ -25,47 +25,41 @@
 namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="PlatformAppModel"/> 平台应用授权表Model类
+/// <see cref="EditionPriceModel"/> 版本价格表Model类
 /// </summary>
-[SugarTable("PlatformApp", "平台应用授权表")]
+[SugarTable("EditionPrice", "版本价格表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
-public class PlatformAppModel : SnowflakeKeyEntity
+public class EditionPriceModel : SnowflakeKeyEntity
 {
     /// <summary>
-    /// 平台Id
+    /// 版本
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台Id")]
-    public long PlatformId { get; set; }
+    [SugarColumn(ColumnDescription = "版本")]
+    public EditionEnum Edition { get; set; }
 
     /// <summary>
-    /// 应用Id
+    /// 状态
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id")]
-    public long AppId { get; set; }
+    [SugarColumn(ColumnDescription = "状态")]
+    public CommonStatusEnum Status { get; set; }
 
     /// <summary>
-    /// 续费类型
+    /// 使用时长
     /// </summary>
-    [SugarColumn(ColumnDescription = "续费类型")]
-    public RenewalTypeEnum RenewalType { get; set; }
+    [SugarColumn(ColumnDescription = "使用时长")]
+    public RenewalDurationEnum Duration { get; set; }
 
     /// <summary>
-    /// 续费/开通时间
+    /// 价格
     /// </summary>
-    [SugarColumn(ColumnDescription = "续费/开通时间")]
-    public DateTime RenewalTime { get; set; }
+    [SugarColumn(ColumnDescription = "价格", Length = 18, DecimalDigits = 2)]
+    public decimal Price { get; set; }
 
     /// <summary>
-    /// 续费到期时间
+    /// 备注
     /// </summary>
-    [SugarColumn(ColumnDescription = "续费到期时间")]
-    public DateTime RenewalExpiryTime { get; set; }
-
-    /// <summary>
-    /// 续费金额
-    /// </summary>
-    [SugarColumn(ColumnDescription = "续费金额", Length = 18, DecimalDigits = 2)]
-    public decimal Amount { get; set; }
+    [SugarColumn(ColumnDescription = "备注", Length = 50, IsNullable = true)]
+    public string Remark { get; set; }
 
     /// <summary>
     /// 创建者用户Id
@@ -78,4 +72,34 @@ public class PlatformAppModel : SnowflakeKeyEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    public DateTime? CreatedTime { get; set; }
+
+    /// <summary>
+    /// 更新者用户Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新者用户Id", CreateTableFieldSort = 994)]
+    public long? UpdatedUserId { get; set; }
+
+    /// <summary>
+    /// 更新者用户名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 995)]
+    public string UpdatedUserName { get; set; }
+
+    /// <summary>
+    /// 更新时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
+    public DateTime? UpdatedTime { get; set; }
+
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public long RowVersion { get; set; }
 }

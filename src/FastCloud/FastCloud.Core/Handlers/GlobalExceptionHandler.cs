@@ -52,11 +52,15 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
         {
             var httpContext = context.HttpContext;
 
-            var message = $"{context.Exception.Message}\r\n" +
-                          $"请求Url：{httpContext.Request.Method}, {httpContext.Request.Scheme}://{httpContext.Request.Host}{httpContext.Request.Path}\r\n";
+            var message = $"{context.Exception.Message}\r\n"
+                          + $"请求Url：{httpContext.Request.Method}, {httpContext.Request.Scheme}://{httpContext.Request.Host}{httpContext.Request.Path}\r\n";
 
-            var deviceType = httpContext.Request.Headers[HttpHeaderConst.DeviceType].ToString().UrlDecode();
-            var deviceId = httpContext.Request.Headers[HttpHeaderConst.DeviceId].ToString().UrlDecode();
+            var deviceType = httpContext.Request.Headers[HttpHeaderConst.DeviceType]
+                .ToString()
+                .UrlDecode();
+            var deviceId = httpContext.Request.Headers[HttpHeaderConst.DeviceId]
+                .ToString()
+                .UrlDecode();
 
             message += $"device: {deviceType}, {deviceId}\r\n";
 
@@ -105,7 +109,8 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
             {
                 // 只写入最深的一条堆栈信息
                 var firstLine = context.Exception.StackTrace
-                    ?.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                    ?.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
+                    .FirstOrDefault();
 
                 // 如果有匹配的堆栈信息，选择第一条（最深的那一条）
                 if (!string.IsNullOrEmpty(firstLine))

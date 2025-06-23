@@ -20,67 +20,35 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
+using Fast.FastCloud.Service.Auth;
+using Fast.FastCloud.Service.Auth.Dto;
+using Fast.JwtBearer;
 
-namespace Fast.Common;
+// ReSharper disable once CheckNamespace
+namespace Fast.FastCloud.Api;
 
 /// <summary>
-/// <see cref="PageSearchTypeEnum"/> 分页搜索类型枚举
+/// <see cref="AuthApplication"/> 授权
 /// </summary>
-[FastEnum("分页搜索类型枚举")]
-public enum PageSearchTypeEnum : byte
+[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "auth", Order = 2)]
+public class AuthApplication : IDynamicApplication
 {
-    /// <summary>
-    /// 模糊匹配
-    /// </summary>
-    [Description("模糊匹配")]
-    Like = 1,
+    private readonly IAuthService _authService;
+
+    public AuthApplication(IAuthService authService)
+    {
+        _authService = authService;
+    }
 
     /// <summary>
-    /// 等于
+    /// 获取登录用户信息
     /// </summary>
-    [Description("等于")]
-    Equal = 2,
-
-    /// <summary>
-    /// 不等于
-    /// </summary>
-    [Description("不等于")]
-    NotEqual = 3,
-
-    /// <summary>
-    /// 大于
-    /// </summary>
-    [Description("大于")]
-    GreaterThan = 4,
-
-    /// <summary>
-    /// 大于等于
-    /// </summary>
-    [Description("大于等于")]
-    GreaterThanOrEqual = 5,
-
-    /// <summary>
-    /// 小于
-    /// </summary>
-    [Description("小于")]
-    LessThan = 6,
-
-    /// <summary>
-    /// 小于等于
-    /// </summary>
-    [Description("小于等于")]
-    LessThanOrEqual = 7,
-
-    /// <summary>
-    /// 包含
-    /// </summary>
-    [Description("包含")]
-    Include = 8,
-
-    /// <summary>
-    /// 排除
-    /// </summary>
-    [Description("排除")]
-    NotInclude = 9
+    /// <returns></returns>
+    [HttpGet("/getLoginUserInfo")]
+    [ApiInfo("获取登录用户信息", HttpRequestActionEnum.Auth)]
+    [AllowForbidden]
+    public async Task<GetLoginUserInfoOutput> GetLoginUserInfo()
+    {
+        return await _authService.GetLoginUserInfo();
+    }
 }

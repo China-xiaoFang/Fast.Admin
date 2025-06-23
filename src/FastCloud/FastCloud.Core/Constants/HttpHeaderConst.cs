@@ -27,6 +27,7 @@ namespace Fast.FastCloud.Core;
 /// <summary>
 /// <see cref="HttpHeaderConst"/> Http Header 常量
 /// </summary>
+[SuppressSniffer]
 public class HttpHeaderConst
 {
     /// <summary>

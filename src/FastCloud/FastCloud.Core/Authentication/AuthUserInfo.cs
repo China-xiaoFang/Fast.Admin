@@ -27,72 +27,73 @@ namespace Fast.FastCloud.Core;
 /// <summary>
 /// <see cref="AuthUserInfo"/> 授权用户信息
 /// </summary>
+[SuppressSniffer]
 public class AuthUserInfo
 {
     /// <summary>
     /// 设备类型
     /// </summary>
-    public AppEnvironmentEnum DeviceType { get; set; }
+    public virtual AppEnvironmentEnum DeviceType { get; set; }
 
     /// <summary>
     /// 设备Id
     /// </summary>
-    public string DeviceId { get; set; }
+    public virtual string DeviceId { get; set; }
 
     /// <summary>
     /// 用户Id
     /// </summary>
-    public long UserId { get; set; }
+    public virtual long UserId { get; set; }
 
     /// <summary>
     /// 手机
     /// </summary>
-    public string Mobile { get; set; }
+    public virtual string Mobile { get; set; }
 
     /// <summary>
     /// 昵称
     /// </summary>
-    public string NickName { get; set; }
+    public virtual string NickName { get; set; }
 
     /// <summary>
     /// 是否管理员
     /// </summary>
-    public bool IsAdmin { get; set; }
+    public virtual bool IsAdmin { get; set; }
 
     /// <summary>
     /// 最后登录设备
     /// </summary>
-    public string LastLoginDevice { get; set; }
+    public virtual string LastLoginDevice { get; set; }
 
     /// <summary>
     /// 最后登录操作系统（版本）
     /// </summary>
-    public string LastLoginOS { get; set; }
+    public virtual string LastLoginOS { get; set; }
 
     /// <summary>
     /// 最后登录浏览器（版本）
     /// </summary>
-    public string LastLoginBrowser { get; set; }
+    public virtual string LastLoginBrowser { get; set; }
 
     /// <summary>
     /// 最后登录省份
     /// </summary>
-    public string LastLoginProvince { get; set; }
+    public virtual string LastLoginProvince { get; set; }
 
     /// <summary>
     /// 最后登录城市
     /// </summary>
-    public string LastLoginCity { get; set; }
+    public virtual string LastLoginCity { get; set; }
 
     /// <summary>
     /// 最后登录Ip
     /// </summary>
-    public string LastLoginIp { get; set; }
+    public virtual string LastLoginIp { get; set; }
 
     /// <summary>
     /// 最后登录时间
     /// </summary>
-    public DateTime LastLoginTime { get; set; }
+    public virtual DateTime LastLoginTime { get; set; }
 
     /// <summary>
     /// 平台编号集合

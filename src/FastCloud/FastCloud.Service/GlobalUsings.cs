@@ -21,13 +21,15 @@
 // ------------------------------------------------------------------------
 
 global using System.ComponentModel.DataAnnotations;
-global using Fast.Cache;
 global using Fast.Common;
+global using Fast.DependencyInjection;
 global using Fast.FastCloud.Core;
 global using Fast.FastCloud.Entity;
 global using Fast.FastCloudLog.Entity;
 global using Fast.IaaS;
 global using Fast.Runtime;
 global using Fast.SqlSugar;
+global using Mapster;
+global using Newtonsoft.Json;
 global using SqlSugar;
 global using Yitter.IdGenerator;

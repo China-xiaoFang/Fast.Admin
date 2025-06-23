@@ -138,8 +138,10 @@ internal sealed class User : AuthUserInfo, IUser, IScopedDependency
             var refreshToken = JwtBearerUtil.GenerateRefreshToken(accessToken);
 
             // 获取缓存Key
-            var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUserInfo, authUserInfo.TenantNo,
-                authUserInfo.DeviceType.ToString(), authUserInfo.EmployeeNo);
+            var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUserInfo,
+                authUserInfo.TenantNo,
+                authUserInfo.DeviceType.ToString(),
+                authUserInfo.EmployeeNo);
 
             // 设置缓存信息
             await _authCache.SetAsync(cacheKey, authUserInfo);
@@ -170,7 +172,9 @@ internal sealed class User : AuthUserInfo, IUser, IScopedDependency
         authUserInfo.Adapt(this);
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUserInfo, authUserInfo.TenantNo, authUserInfo.DeviceType.ToString(),
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUserInfo,
+            authUserInfo.TenantNo,
+            authUserInfo.DeviceType.ToString(),
             authUserInfo.EmployeeNo);
 
         // 设置缓存信息

@@ -34,6 +34,18 @@ namespace Fast.FastCloud.Entity;
 public class MenuModel : SnowflakeKeyEntity
 {
     /// <summary>
+    /// 版本
+    /// </summary>
+    [SugarColumn(ColumnDescription = "版本")]
+    public EditionEnum Edition { get; set; }
+
+    /// <summary>
+    /// 应用Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "应用Id")]
+    public long AppId { get; set; }
+
+    /// <summary>
     /// 模块Id
     /// </summary>
     [SugarColumn(ColumnDescription = "模块Id")]

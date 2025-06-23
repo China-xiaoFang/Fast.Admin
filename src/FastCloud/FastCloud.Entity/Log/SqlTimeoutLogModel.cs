@@ -112,7 +112,9 @@ public class SqlTimeoutLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// Sql参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+    [SugarColumn(ColumnDescription = "Sql参数",
+        ColumnDataType = StaticConfig.CodeFirst_BigString,
+        IsNullable = true,
         IsJson = true)]
     public SugarParameter[] Parameters { get; set; }
 
