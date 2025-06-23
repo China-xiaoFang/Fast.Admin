@@ -69,8 +69,11 @@ public class JwtBearerHandle : IJwtBearerHandle
     public async Task<object> AuthorizeFailHandle(AuthorizationHandlerContext context, HttpContext httpContext,
         Exception exception)
     {
-        return await Task.FromResult(UnifyContext.GetRestfulResult(StatusCodes.Status401Unauthorized, false, null,
-            exception?.Message ?? "401 未经授权", httpContext));
+        return await Task.FromResult(UnifyContext.GetRestfulResult(StatusCodes.Status401Unauthorized,
+            false,
+            null,
+            exception?.Message ?? "401 未经授权",
+            httpContext));
     }
 
     /// <summary>权限判断处理</summary>

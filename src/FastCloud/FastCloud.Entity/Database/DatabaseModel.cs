@@ -29,7 +29,11 @@ namespace Fast.FastCloud.Entity;
 /// </summary>
 [SugarTable("Database", "数据库表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
-[SugarIndex($"IX_{{table}}_{nameof(DatabaseType)}", nameof(PlatformId), OrderByType.Asc, nameof(DatabaseType), OrderByType.Asc,
+[SugarIndex($"IX_{{table}}_{nameof(DatabaseType)}",
+    nameof(PlatformId),
+    OrderByType.Asc,
+    nameof(DatabaseType),
+    OrderByType.Asc,
     true)]
 public class DatabaseModel : SnowflakeKeyEntity
 {
@@ -42,6 +46,12 @@ public class DatabaseModel : SnowflakeKeyEntity
     /// <summary>
     /// 数据库类型
     /// </summary>
+    /// <remarks>
+    /// <para>FastCloudLog</para>
+    /// <para>Deploy</para>
+    /// <para>Gateway</para>
+    /// <para>Center</para>
+    /// </remarks>
     [SugarColumn(ColumnDescription = "数据库类型")]
     public DatabaseTypeEnum DatabaseType { get; set; }
 

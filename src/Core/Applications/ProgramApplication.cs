@@ -85,8 +85,8 @@ public class ProgramApplication : IDynamicApplication
 
         var cpuUsage = await MachineUtil.GetProgramCpuUsage();
 
-        var (working, peakWorking, virtualMemory, peakVirtualMemory, pagedMemory, peakPagedMemory) =
-            MachineUtil.GetProgramMemoryInfo();
+        var (working, peakWorking, virtualMemory, peakVirtualMemory, pagedMemory, peakPagedMemory)
+            = MachineUtil.GetProgramMemoryInfo();
 
         const decimal relation = 1024;
 
@@ -99,9 +99,11 @@ public class ProgramApplication : IDynamicApplication
             // 运行时间
             RunTimes = MachineUtil.GetProgramRunTimes(),
             // 程序名称
-            ProgramName = entryAssembly?.GetName().Name,
+            ProgramName = entryAssembly?.GetName()
+                .Name,
             // 程序版本
-            ProgramVersion = entryAssembly?.GetName()?.Version,
+            ProgramVersion = entryAssembly?.GetName()
+                ?.Version,
             // ReSharper disable once RedundantNameQualifier
             // 框架版本
             FrameworkVersion = $"{nameof(NET)} {typeof(MAppContext).Assembly.GetName().Version}",
@@ -146,7 +148,8 @@ public class ProgramApplication : IDynamicApplication
                 new {csRedisCoreAssembly.Name, csRedisCoreAssembly.Version},
                 new {sqlSugarAssembly.Name, sqlSugarAssembly.Version},
                 new {yitterIdGeneratorAssembly.Name, yitterIdGeneratorAssembly.Version},
-                new {uaParserAssembly.Name, uaParserAssembly.Version}, new {mapsterAssembly.Name, mapsterAssembly.Version},
+                new {uaParserAssembly.Name, uaParserAssembly.Version},
+                new {mapsterAssembly.Name, mapsterAssembly.Version},
                 new {newtonsoftJsonAssembly.Name, newtonsoftJsonAssembly.Version},
                 new {fastRuntimeAssembly.Name, fastRuntimeAssembly.Version},
                 new {fastCacheAssembly.Name, fastCacheAssembly.Version},

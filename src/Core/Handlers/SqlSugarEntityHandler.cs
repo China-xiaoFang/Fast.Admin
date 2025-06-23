@@ -104,8 +104,8 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     public async Task ExecuteAsync(string rawSql, SugarParameter[] parameters, TimeSpan executeTime, string handlerSql)
     {
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting =
-            await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId, _user.TenantNo, DatabaseTypeEnum.CenterLog);
+        var connectionSetting
+            = await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId, _user.TenantNo, DatabaseTypeEnum.CenterLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
         var tenantId = _user.TenantId;
@@ -127,7 +127,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             Mobile = _user.Mobile,
             RawSql = rawSql,
             Parameters = parameters,
-            PureSql = handlerSql,
+            PureSql = handlerSql
         };
         sqlExecutionLogModel.RecordCreate(_httpContext);
 
@@ -136,10 +136,12 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             try
             {
                 // 这里不能使用AOP
-                var sqlSugarClient = new SqlSugarClient(connectionConfig);
+                var db = new SqlSugarClient(connectionConfig);
 
                 // 异步不等待
-                await sqlSugarClient.Insertable(sqlExecutionLogModel).SplitTable().ExecuteCommandAsync();
+                await db.Insertable(sqlExecutionLogModel)
+                    .SplitTable()
+                    .ExecuteCommandAsync();
             }
             catch (Exception ex)
             {
@@ -181,8 +183,8 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         SugarParameter[] parameters, TimeSpan? executeTime, string handlerSql)
     {
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting =
-            await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId, _user.TenantNo, DatabaseTypeEnum.CenterLog);
+        var connectionSetting
+            = await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId, _user.TenantNo, DatabaseTypeEnum.CenterLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
         var tenantId = _user.TenantId;
@@ -219,7 +221,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             ExecuteSeconds = executeTime?.TotalSeconds,
             RawSql = rawSql,
             Parameters = parameters,
-            PureSql = handlerSql,
+            PureSql = handlerSql
         };
         sqlDiffLogModel.RecordCreate(_httpContext);
 
@@ -228,10 +230,12 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             try
             {
                 // 这里不能使用AOP
-                var sqlSugarClient = new SqlSugarClient(connectionConfig);
+                var db = new SqlSugarClient(connectionConfig);
 
                 // 异步不等待
-                await sqlSugarClient.Insertable(sqlDiffLogModel).SplitTable().ExecuteCommandAsync();
+                await db.Insertable(sqlDiffLogModel)
+                    .SplitTable()
+                    .ExecuteCommandAsync();
             }
             catch (Exception ex)
             {

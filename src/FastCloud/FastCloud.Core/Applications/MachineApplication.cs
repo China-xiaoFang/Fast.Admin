@@ -66,7 +66,8 @@ public class MachineApplication : IDynamicApplication
             // CPU使用率(%)
             CpuRate = cpuRate,
             // CPU使用率(%)
-            CpuRatePercent = cpuRate.Select(sl => $"{sl} %").ToList(),
+            CpuRatePercent = cpuRate.Select(sl => $"{sl} %")
+                .ToList(),
             // 总内存(GB)
             RamTotal = Math.Round(ramTotal / relation, 2, MidpointRounding.AwayFromZero),
             // 总内存(GB)

@@ -59,7 +59,9 @@ public class SqlExecutionLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// Sql参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+    [SugarColumn(ColumnDescription = "Sql参数",
+        ColumnDataType = StaticConfig.CodeFirst_BigString,
+        IsNullable = true,
         IsJson = true)]
     public SugarParameter[] Parameters { get; set; }
 
@@ -74,7 +76,7 @@ public class SqlExecutionLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
     public long TenantId { get; set; }
-    
+
     /// <summary>
     /// 执行时间
     /// </summary>
