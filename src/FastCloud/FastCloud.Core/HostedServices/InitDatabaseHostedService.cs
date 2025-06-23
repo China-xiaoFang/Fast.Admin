@@ -93,6 +93,14 @@ public class InitDatabaseHostedService : IHostedService
         {
             // 这里不能使用Aop
             var db = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
+            // 执行超时时间
+            db.Ado.CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut;
+            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(),
+                db,
+                SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
+                false,
+                true,
+                null);
 
             // 创建核心库
             db.DbMaintenance.CreateDatabase();

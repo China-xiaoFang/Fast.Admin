@@ -70,13 +70,13 @@ public class DatabaseModel : SnowflakeKeyEntity
     /// <summary>
     /// 公网Ip地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "公网Ip地址", ColumnDataType = "varchar(15)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "公网Ip地址", ColumnDataType = "varchar(15)")]
     public string PublicIp { get; set; }
 
     /// <summary>
     /// 内网Ip地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "内网Ip地址", ColumnDataType = "varchar(15)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "内网Ip地址", ColumnDataType = "varchar(15)")]
     public string IntranetIp { get; set; }
 
     /// <summary>
@@ -94,19 +94,19 @@ public class DatabaseModel : SnowflakeKeyEntity
     /// <summary>
     /// 数据库用户
     /// </summary>
-    [SugarColumn(ColumnDescription = "数据库用户", Length = 10, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "数据库用户", Length = 10)]
     public string DbUser { get; set; }
 
     /// <summary>
     /// 数据库密码
     /// </summary>
-    [SugarColumn(ColumnDescription = "数据库密码", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "数据库密码", Length = 20)]
     public string DbPwd { get; set; }
 
     /// <summary>
     /// 自定义连接字符串
     /// </summary>
-    [SugarColumn(ColumnDescription = "自定义连接字符串", Length = 100, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "自定义连接字符串", Length = 100)]
     public string CustomConnectionStr { get; set; }
 
     /// <summary>
@@ -147,7 +147,7 @@ public class DatabaseModel : SnowflakeKeyEntity
     /// <summary>
     /// 创建者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
+    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
 
     /// <summary>
@@ -165,7 +165,7 @@ public class DatabaseModel : SnowflakeKeyEntity
     /// <summary>
     /// 更新者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 995)]
+    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, CreateTableFieldSort = 995)]
     public string UpdatedUserName { get; set; }
 
     /// <summary>
