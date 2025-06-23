@@ -42,7 +42,7 @@ public class AccountModel : SnowflakeKeyEntity
     /// <summary>
     /// 邮箱
     /// </summary>
-    [SugarColumn(ColumnDescription = "邮箱", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "邮箱", Length = 50)]
     public string Email { get; set; }
 
     /// <summary>
@@ -66,13 +66,13 @@ public class AccountModel : SnowflakeKeyEntity
     /// <summary>
     /// 头像
     /// </summary>
-    [SugarColumn(ColumnDescription = "头像", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "头像", Length = 200)]
     public string Avatar { get; set; }
 
     /// <summary>
     /// 电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "电话", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "电话", Length = 20)]
     public string Tel { get; set; }
 
     /// <summary>
@@ -96,37 +96,37 @@ public class AccountModel : SnowflakeKeyEntity
     /// <summary>
     /// 初次登录设备
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录设备", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录设备", Length = 50)]
     public string FirstLoginDevice { get; set; }
 
     /// <summary>
     /// 初次登录操作系统（版本）
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录操作系统（版本）", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录操作系统（版本）", Length = 50)]
     public string FirstLoginOS { get; set; }
 
     /// <summary>
     /// 初次登录浏览器（版本）
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录浏览器（版本）", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录浏览器（版本）", Length = 50)]
     public string FirstLoginBrowser { get; set; }
 
     /// <summary>
     /// 初次登录省份
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录省份", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录省份", Length = 20)]
     public string FirstLoginProvince { get; set; }
 
     /// <summary>
     /// 初次登录城市
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录城市", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录城市", Length = 20)]
     public string FirstLoginCity { get; set; }
 
     /// <summary>
     /// 初次登录Ip
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录Ip", ColumnDataType = "varchar(15)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录Ip", ColumnDataType = "varchar(15)")]
     public string FirstLoginIp { get; set; }
 
     /// <summary>
@@ -144,37 +144,37 @@ public class AccountModel : SnowflakeKeyEntity
     /// <summary>
     /// 最后登录设备
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录设备", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录设备", Length = 50)]
     public string LastLoginDevice { get; set; }
 
     /// <summary>
     /// 最后登录操作系统（版本）
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录操作系统（版本）", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录操作系统（版本）", Length = 50)]
     public string LastLoginOS { get; set; }
 
     /// <summary>
     /// 最后登录浏览器（版本）
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录浏览器（版本）", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录浏览器（版本）", Length = 50)]
     public string LastLoginBrowser { get; set; }
 
     /// <summary>
     /// 最后登录省份
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录省份", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录省份", Length = 20)]
     public string LastLoginProvince { get; set; }
 
     /// <summary>
     /// 最后登录城市
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录城市", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录城市", Length = 20)]
     public string LastLoginCity { get; set; }
 
     /// <summary>
     /// 最后登录Ip
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录Ip", ColumnDataType = "varchar(15)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录Ip", ColumnDataType = "varchar(15)")]
     public string LastLoginIp { get; set; }
 
     /// <summary>

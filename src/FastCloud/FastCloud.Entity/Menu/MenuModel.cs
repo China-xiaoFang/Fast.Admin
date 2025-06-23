@@ -54,7 +54,7 @@ public class MenuModel : SnowflakeKeyEntity
     /// <summary>
     /// 菜单编码
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单编码", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "菜单编码", Length = 50)]
     public string MenuCode { get; set; }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class MenuModel : SnowflakeKeyEntity
     /// <summary>
     /// 菜单标题
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单标题", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "菜单标题", Length = 20)]
     public string MenuTitle { get; set; }
 
     /// <summary>
@@ -90,13 +90,13 @@ public class MenuModel : SnowflakeKeyEntity
     /// <summary>
     /// 桌面端图标
     /// </summary>
-    [SugarColumn(ColumnDescription = "桌面端图标", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "桌面端图标", Length = 20)]
     public string DesktopIcon { get; set; }
 
     /// <summary>
     /// 桌面端路由地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "桌面端路由地址", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "桌面端路由地址", Length = 200)]
     public string DesktopRouter { get; set; }
 
     /// <summary>
@@ -108,19 +108,19 @@ public class MenuModel : SnowflakeKeyEntity
     /// <summary>
     /// Web端图标
     /// </summary>
-    [SugarColumn(ColumnDescription = "Web端图标", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "Web端图标", Length = 20)]
     public string WebIcon { get; set; }
 
     /// <summary>
     /// Web端路由地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "Web端路由地址", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "Web端路由地址", Length = 200)]
     public string WebRouter { get; set; }
 
     /// <summary>
     /// Web端组件地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "Web端组件地址", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "Web端组件地址", Length = 200)]
     public string WebComponent { get; set; }
 
     /// <summary>
@@ -132,19 +132,19 @@ public class MenuModel : SnowflakeKeyEntity
     /// <summary>
     /// 移动端图标
     /// </summary>
-    [SugarColumn(ColumnDescription = "移动端图标", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "移动端图标", Length = 20)]
     public string MobileIcon { get; set; }
 
     /// <summary>
     /// 移动端路由地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "移动端路由地址", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "移动端路由地址", Length = 200)]
     public string MobileRouter { get; set; }
 
     /// <summary>
     /// 内链/外链地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "内链/外链地址", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "内链/外链地址", Length = 200)]
     public string Link { get; set; }
 
     /// <summary>
@@ -174,7 +174,7 @@ public class MenuModel : SnowflakeKeyEntity
     /// <summary>
     /// 创建者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
+    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
 
     /// <summary>
@@ -192,7 +192,7 @@ public class MenuModel : SnowflakeKeyEntity
     /// <summary>
     /// 更新者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 995)]
+    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, CreateTableFieldSort = 995)]
     public string UpdatedUserName { get; set; }
 
     /// <summary>

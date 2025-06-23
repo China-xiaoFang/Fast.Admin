@@ -64,13 +64,13 @@ public class SqlTimeoutLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// 租户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户名称", Length = 30, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "租户名称", Length = 30)]
     public string TenantName { get; set; }
 
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
     /// <summary>
@@ -82,7 +82,7 @@ public class SqlTimeoutLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// 文件名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "文件名称", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "文件名称", Length = 200)]
     public string FileName { get; set; }
 
     /// <summary>
@@ -94,7 +94,7 @@ public class SqlTimeoutLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// 方法名
     /// </summary>
-    [SugarColumn(ColumnDescription = "方法名", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "方法名", Length = 200)]
     public string MethodName { get; set; }
 
     /// <summary>
@@ -106,7 +106,7 @@ public class SqlTimeoutLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// 原始Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string RawSql { get; set; }
 
     /// <summary>
@@ -121,7 +121,7 @@ public class SqlTimeoutLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// 纯Sql，参数化之后的Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string PureSql { get; set; }
 
     /// <summary>

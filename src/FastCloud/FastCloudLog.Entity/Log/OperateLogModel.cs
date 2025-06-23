@@ -53,25 +53,25 @@ public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 操作名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "操作名称", Length = 100, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "操作名称", Length = 100)]
     public string OperationName { get; set; }
 
     /// <summary>
     /// 类名
     /// </summary>
-    [SugarColumn(ColumnDescription = "类名", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "类名", Length = 200)]
     public string ClassName { get; set; }
 
     /// <summary>
     /// 方法名
     /// </summary>
-    [SugarColumn(ColumnDescription = "方法名", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "方法名", Length = 200)]
     public string MethodName { get; set; }
 
     /// <summary>
     /// 请求地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "请求地址", Length = 500, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "请求地址", Length = 500)]
     public string Url { get; set; }
 
     /// <summary>
@@ -83,19 +83,19 @@ public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 请求参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "请求参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "请求参数", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string Param { get; set; }
 
     /// <summary>
     /// 返回结果
     /// </summary>
-    [SugarColumn(ColumnDescription = "返回结果", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "返回结果", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string Result { get; set; }
 
     /// <summary>
     /// 地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "地址", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "地址", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string Location { get; set; }
 
     /// <summary>

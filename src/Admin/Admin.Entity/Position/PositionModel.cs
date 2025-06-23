@@ -65,6 +65,6 @@ public class PositionModel : BaseEntity
     /// <summary>
     /// 备注
     /// </summary>
-    [SugarColumn(ColumnDescription = "备注", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "备注", Length = 50)]
     public string Remark { get; set; }
 }

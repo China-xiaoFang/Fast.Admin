@@ -66,7 +66,7 @@ public class OrganizationModel : BaseEntity
     /// <summary>
     /// 电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "电话", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "电话", Length = 20)]
     public string Tel { get; set; }
 
     /// <summary>
@@ -78,6 +78,6 @@ public class OrganizationModel : BaseEntity
     /// <summary>
     /// 备注
     /// </summary>
-    [SugarColumn(ColumnDescription = "备注", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "备注", Length = 50)]
     public string Remark { get; set; }
 }
