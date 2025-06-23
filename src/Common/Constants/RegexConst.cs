@@ -27,6 +27,7 @@ namespace Fast.Common;
 /// <summary>
 /// <see cref="RegexConst"/> 正则表达式常量
 /// </summary>
+[SuppressSniffer]
 public class RegexConst
 {
     /// <summary>
@@ -59,8 +60,8 @@ public class RegexConst
     /// <summary>
     /// 邮箱地址判断
     /// </summary>
-    public const string EmailAddress =
-        "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+    public const string EmailAddress
+        = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
 
     /// <summary>
     /// 手机号码判断

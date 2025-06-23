@@ -66,7 +66,8 @@ public class MachineApplication : IDynamicApplication
             // CPU使用率(%)
             CpuRate = cpuRate,
             // CPU使用率(%)
-            CpuRatePercent = cpuRate.Select(sl => $"{sl} %").ToList(),
+            CpuRatePercent = cpuRate.Select(sl => $"{sl} %")
+                .ToList(),
             // 总内存(GB)
             RamTotal = Math.Round(ramTotal / relation, 2, MidpointRounding.AwayFromZero),
             // 总内存(GB)
@@ -84,7 +85,7 @@ public class MachineApplication : IDynamicApplication
             // 内存使用率(%)
             RamRatePercent = $"{ramUsed / ramTotal * 100:F2} %",
             // 硬盘信息
-            DiskInfos = MachineUtil.GetDiskInfos(),
+            DiskInfos = MachineUtil.GetDiskInfos()
             // TODO:主要程序集
             // 主要程序集
             //Assemblys = new[]

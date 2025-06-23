@@ -25,55 +25,72 @@
 namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="AppModuleModel"/> 应用模块表Model类
+/// <see cref="EditionDiscountModel"/> 版本折扣表Model类
 /// </summary>
-[SugarTable("AppModule", "应用模块表")]
+[SugarTable("EditionDiscount", "版本折扣表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
-[SugarIndex($"IX_{{table}}_{nameof(ModuleName)}", nameof(AppId), OrderByType.Asc, nameof(ModuleName), OrderByType.Asc, true)]
-public class AppModuleModel : SnowflakeKeyEntity
+public class EditionDiscountModel : SnowflakeKeyEntity
 {
     /// <summary>
-    /// 应用Id
+    /// 版本
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id")]
-    public long AppId { get; set; }
-
-    /// <summary>
-    /// 模块名称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "模块名称", Length = 20, IsNullable = false)]
-    public string ModuleName { get; set; }
-
-    /// <summary>
-    /// 图标
-    /// </summary>
-    [SugarColumn(ColumnDescription = "图标", Length = 20, IsNullable = false)]
-    public string Icon { get; set; }
-
-    /// <summary>
-    /// 颜色
-    /// </summary>
-    [SugarColumn(ColumnDescription = "颜色", Length = 20, IsNullable = false)]
-    public string Color { get; set; }
-
-    /// <summary>
-    /// 默认的
-    /// </summary>
-    /// <remarks>只能存在一个</remarks>
-    [SugarColumn(ColumnDescription = "默认的")]
-    public YesOrNotEnum IsDefault { get; set; }
-
-    /// <summary>
-    /// 排序
-    /// </summary>
-    [SugarColumn(ColumnDescription = "排序")]
-    public int Sort { get; set; }
+    [SugarColumn(ColumnDescription = "版本")]
+    public EditionEnum Edition { get; set; }
 
     /// <summary>
     /// 状态
     /// </summary>
     [SugarColumn(ColumnDescription = "状态")]
     public CommonStatusEnum Status { get; set; }
+
+    /// <summary>
+    /// 折扣类型
+    /// </summary>
+    [SugarColumn(ColumnDescription = "折扣类型")]
+    public DiscountTypeEnum DiscountType { get; set; }
+
+    /// <summary>
+    /// 适用时长
+    /// </summary>
+    [SugarColumn(ColumnDescription = "适用时长")]
+    public RenewalDurationEnum Duration { get; set; }
+
+    /// <summary>
+    /// 首购价格/减免价格/满减价格/秒杀价
+    /// </summary>
+    [SugarColumn(ColumnDescription = "价格", Length = 18, DecimalDigits = 2)]
+    public decimal? FixedPrice { get; set; }
+
+    /// <summary>
+    /// 折扣
+    /// </summary>
+    /// <remarks>1 ~ 99</remarks>
+    [SugarColumn(ColumnDescription = "折扣")]
+    public int? DiscountRate { get; set; }
+
+    /// <summary>
+    /// 最低满减金额
+    /// </summary>
+    [SugarColumn(ColumnDescription = "最低满减金额", Length = 18, DecimalDigits = 2)]
+    public decimal? ThresholdAmount { get; set; }
+
+    /// <summary>
+    /// 开始时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "开始时间")]
+    public DateTime StartTime { get; set; }
+
+    /// <summary>
+    /// 结束时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "结束时间")]
+    public DateTime EndTime { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    [SugarColumn(ColumnDescription = "备注", Length = 50, IsNullable = true)]
+    public string Remark { get; set; }
 
     /// <summary>
     /// 创建者用户Id

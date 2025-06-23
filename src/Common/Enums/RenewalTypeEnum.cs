@@ -72,6 +72,6 @@ public enum RenewalTypeEnum : byte
     /// 内部开通
     /// </summary>
     /// <remarks>员工/内部测试</remarks>
-    [Description("补偿赠送")]
+    [Description("内部开通")]
     Internal = 64
 }

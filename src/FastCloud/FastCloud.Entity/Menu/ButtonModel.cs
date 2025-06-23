@@ -34,6 +34,18 @@ namespace Fast.FastCloud.Entity;
 public class ButtonModel : SnowflakeKeyEntity
 {
     /// <summary>
+    /// 版本
+    /// </summary>
+    [SugarColumn(ColumnDescription = "版本")]
+    public EditionEnum Edition { get; set; }
+
+    /// <summary>
+    /// 应用Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "应用Id")]
+    public long AppId { get; set; }
+
+    /// <summary>
     /// 菜单Id
     /// </summary>
     [SugarColumn(ColumnDescription = "菜单Id")]
@@ -50,6 +62,24 @@ public class ButtonModel : SnowflakeKeyEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "按钮名称", Length = 20, IsNullable = false)]
     public string ButtonName { get; set; }
+
+    /// <summary>
+    /// 是否桌面端
+    /// </summary>
+    [SugarColumn(ColumnDescription = "是否桌面端")]
+    public bool HasDesktop { get; set; }
+
+    /// <summary>
+    /// 是否Web端
+    /// </summary>
+    [SugarColumn(ColumnDescription = "是否Web端")]
+    public bool HasWeb { get; set; }
+
+    /// <summary>
+    /// 是否移动端
+    /// </summary>
+    [SugarColumn(ColumnDescription = "是否移动端")]
+    public bool HasMobile { get; set; }
 
     /// <summary>
     /// 排序

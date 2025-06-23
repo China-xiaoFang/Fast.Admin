@@ -20,26 +20,36 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
-
-namespace Fast.FastCloud.Entity;
+namespace Fast.FastCloud.Service.Auth.Dto;
 
 /// <summary>
-/// <see cref="UserMenuModel"/> 用户菜单表Model类
+/// <see cref="AuthModuleInfoDto"/> 授权模块信息Dto
 /// </summary>
-[SugarTable("UserMenu", "用户菜单表")]
-[SugarDbType(DatabaseTypeEnum.FastCloud)]
-public class UserMenuModel : IDatabaseEntity
+public class AuthModuleInfoDto
 {
     /// <summary>
-    /// 用户Id
+    /// 模块Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "用户Id")]
-    public long UserId { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
-    /// 菜单Id
+    /// 模块名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单Id")]
-    public long MenuId { get; set; }
+    public string ModuleName { get; set; }
+
+    /// <summary>
+    /// 图标
+    /// </summary>
+    public string Icon { get; set; }
+
+    /// <summary>
+    /// 颜色
+    /// </summary>
+    public string Color { get; set; }
+
+    /// <summary>
+    /// 默认的
+    /// </summary>
+    /// <remarks>只能存在一个</remarks>
+    public YesOrNotEnum IsDefault { get; set; }
 }

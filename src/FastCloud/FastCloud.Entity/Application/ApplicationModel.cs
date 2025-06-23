@@ -34,6 +34,12 @@ namespace Fast.FastCloud.Entity;
 public class ApplicationModel : SnowflakeKeyEntity
 {
     /// <summary>
+    /// 版本
+    /// </summary>
+    [SugarColumn(ColumnDescription = "版本")]
+    public EditionEnum Edition { get; set; }
+
+    /// <summary>
     /// 应用编号
     /// </summary>
     [SugarColumn(ColumnDescription = "应用编号", ColumnDataType = "varchar(32)", IsNullable = false)]

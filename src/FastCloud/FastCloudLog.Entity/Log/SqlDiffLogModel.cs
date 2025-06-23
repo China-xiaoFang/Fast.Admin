@@ -65,14 +65,18 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// 旧的列信息
     /// </summary>
-    [SugarColumn(ColumnDescription = "旧的列信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+    [SugarColumn(ColumnDescription = "旧的列信息",
+        ColumnDataType = StaticConfig.CodeFirst_BigString,
+        IsNullable = true,
         IsJson = true)]
     public List<List<DiffLogColumnInfo>> BeforeColumnList { get; set; }
 
     /// <summary>
     /// 新的列信息
     /// </summary>
-    [SugarColumn(ColumnDescription = "新的列信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+    [SugarColumn(ColumnDescription = "新的列信息",
+        ColumnDataType = StaticConfig.CodeFirst_BigString,
+        IsNullable = true,
         IsJson = true)]
     public List<List<DiffLogColumnInfo>> AfterColumnList { get; set; }
 
@@ -91,7 +95,9 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// Sql参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true,
+    [SugarColumn(ColumnDescription = "Sql参数",
+        ColumnDataType = StaticConfig.CodeFirst_BigString,
+        IsNullable = true,
         IsJson = true)]
     public SugarParameter[] Parameters { get; set; }
 

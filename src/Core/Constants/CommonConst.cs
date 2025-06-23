@@ -27,6 +27,7 @@ namespace Fast.Core;
 /// <summary>
 /// <see cref="CommonConst"/> 公共常量
 /// </summary>
+[SuppressSniffer]
 public class CommonConst
 {
     /// <summary>

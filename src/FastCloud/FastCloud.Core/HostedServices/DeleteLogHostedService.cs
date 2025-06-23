@@ -31,6 +31,7 @@ namespace Fast.FastCloud.Core;
 /// <summary>
 /// <see cref="DeleteLogHostedService"/> 删除日志托管服务
 /// </summary>
+[SuppressSniffer]
 public class DeleteLogHostedService : IHostedService
 {
     /// <summary>
@@ -69,7 +70,8 @@ public class DeleteLogHostedService : IHostedService
             }
 
             // 检查目录是否为空
-            if (!directoryInfo.EnumerateFileSystemInfos().Any())
+            if (!directoryInfo.EnumerateFileSystemInfos()
+                    .Any())
             {
                 // 上级目录
                 var parent = directoryInfo.Parent;
@@ -105,15 +107,17 @@ public class DeleteLogHostedService : IHostedService
 
                 // 过滤符合条件的文件
                 var matchedFiles = files.Select(sl =>
-                {
-                    var relativePath = sl.Substring(logPath.Length);
-                    if (!relativePath.StartsWith("\\"))
                     {
-                        relativePath = "\\" + relativePath;
-                    }
+                        var relativePath = sl.Substring(logPath.Length);
+                        if (!relativePath.StartsWith("\\"))
+                        {
+                            relativePath = "\\" + relativePath;
+                        }
 
-                    return new {FullPath = sl, RelativePath = relativePath};
-                }).Where(wh => LogRegex.IsMatch(wh.RelativePath)).ToList();
+                        return new {FullPath = sl, RelativePath = relativePath};
+                    })
+                    .Where(wh => LogRegex.IsMatch(wh.RelativePath))
+                    .ToList();
 
                 foreach (var item in matchedFiles)
                 {
@@ -156,13 +160,13 @@ public class DeleteLogHostedService : IHostedService
 
             var logSb = new StringBuilder();
             logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-            logSb.Append("SqlSugar_warn");
+            logSb.Append("system_notify");
             logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
             logSb.Append(": ");
             logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
             logSb.Append(Environment.NewLine);
             logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-            logSb.Append("               ");
+            logSb.Append("              ");
             logSb.Append($"删除日志文件，空文件 {emptyFileNum} 个，超过最长保留{MaxRetainDay}天文件 {oldFileNum} 个。");
             logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
             Console.WriteLine(logSb.ToString());

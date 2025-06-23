@@ -20,27 +20,120 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.Cache;
+using Fast.DependencyInjection;
+using Fast.JwtBearer;
+using Fast.Logging;
+using Fast.Mapster;
+using Fast.NET.Core;
+using Fast.Serialization;
+using Fast.SqlSugar;
+using Fast.Swagger;
+using Fast.UnifyResult;
+using IGeekFan.AspNetCore.Knife4jUI;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 初始化框架
+builder.Initialize();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
+// 添加序列化服务
+builder.Services.AddSerialization();
+
+// 添加日志服务
+builder.Services.AddLoggingService(builder.Environment);
+
+// 添加跨域服务
+builder.Services.AddCorsAccessor(builder.Configuration);
+
+// 添加 Gzip 压缩服务
+builder.Services.AddGzipCompression();
+
+// 添加 Mapper  映射
+builder.Services.AddMapster();
+
+// 添加依赖注入服务
+builder.Services.AddDependencyInjection();
+
+// 添加缓存服务
+builder.Services.AddCache();
+
+var redisOptions = builder.Configuration.GetSection("RedisSettings")
+    .Get<List<RedisSettingsOptions>>()
+    .SingleOrDefault(f => f.ServiceName == "Default");
+if (redisOptions != null)
+{
+    // 添加分布式缓存
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration
+            = $"{redisOptions.ServiceIp}:{redisOptions.Port ?? 6379},password={redisOptions.DbPwd},defaultDatabase={redisOptions.DbName ?? 0},abortConnect=false";
+        options.InstanceName = $"{nameof(Fast)}:";
+    });
+}
+
+builder.Services.AddHttpClient();
+
+// 添加 JwtBearer 授权
+builder.Services.AddJwtBearer(builder.Configuration);
+
+// 添加雪花Id
+builder.Services.AddSnowflake(builder.Configuration);
+
+// 添加 SqlSugar
+builder.Services.AddSqlSugar(builder.Configuration, builder.Environment);
+
+// 添加即时通讯
+builder.Services.AddSignalR()
+    .AddNewtonsoftJsonProtocol(options => options.PayloadSerializerSettings = JsonContext.SerializerOptions);
+
+// Add Controllers.
+builder.Services.AddControllers()
+    .AddSerialization();
+
+// 添加动态Api服务
+builder.Services.AddDynamicApplication();
+
+// 添加规范化返回服务
+builder.Services.AddUnifyResult();
+
+// 添加 Swagger 服务
+builder.Services.AddSwaggerDocuments(builder.Configuration);
+
+// 添加 Swagger Newtonsoft.Json 库支持
+builder.Services.AddSwaggerGenNewtonsoftSupport();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
-
+// 强制使用 Https
 app.UseHttpsRedirection();
 
+// 启用静态文件
+app.UseStaticFiles();
+
+// 启用 Body 重复读功能
+app.EnableBuffering();
+
+app.UseRouting();
+
+app.UseAuthentication();
 app.UseAuthorization();
+
+// 启用 WebSocket
+app.UseWebSockets();
+
+// 启用 Swagger 文档
+app.UseSwaggerDocuments();
+
+// 配置 Swagger Knife4UI
+app.UseKnife4UI(options =>
+{
+    options.RoutePrefix = "knife4j";
+    foreach (var groupInfo in SwaggerDocumentBuilder.GetOpenApiGroups())
+    {
+        options.SwaggerEndpoint("/" + groupInfo.RouteTemplate, groupInfo.Title);
+    }
+});
 
 app.MapControllers();
 

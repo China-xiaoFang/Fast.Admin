@@ -27,6 +27,7 @@ namespace Fast.Common;
 /// <summary>
 /// <see cref="ElTreeOutput{T}"/> ElementPlus ElTree 通用输出
 /// </summary>
+[SuppressSniffer]
 public class ElTreeOutput<T>
 {
     /// <summary>

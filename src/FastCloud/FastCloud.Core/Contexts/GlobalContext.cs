@@ -29,6 +29,7 @@ namespace Fast.FastCloud.Core;
 /// <summary>
 /// <see cref="GlobalContext"/> 系统通用上下文
 /// </summary>
+[SuppressSniffer]
 public class GlobalContext
 {
     /// <summary>
@@ -47,11 +48,15 @@ public class GlobalContext
             var httpContext = FastContext.HttpContext;
             if (httpContext.IsWebSocketRequest())
             {
-                result = FastContext.HttpContext.Request.Query[HttpHeaderConst.DeviceType].ToString().UrlDecode();
+                result = FastContext.HttpContext.Request.Query[HttpHeaderConst.DeviceType]
+                    .ToString()
+                    .UrlDecode();
             }
             else
             {
-                result = FastContext.HttpContext.Request.Headers[HttpHeaderConst.DeviceType].ToString().UrlDecode();
+                result = FastContext.HttpContext.Request.Headers[HttpHeaderConst.DeviceType]
+                    .ToString()
+                    .UrlDecode();
             }
 
             return System.Enum.Parse<AppEnvironmentEnum>(result);
@@ -68,17 +73,16 @@ public class GlobalContext
             var httpContext = FastContext.HttpContext;
             if (httpContext.IsWebSocketRequest())
             {
-                return httpContext.Request.Query[HttpHeaderConst.DeviceId].ToString().UrlDecode();
+                return httpContext.Request.Query[HttpHeaderConst.DeviceId]
+                    .ToString()
+                    .UrlDecode();
             }
 
-            return httpContext.Request.Headers[HttpHeaderConst.DeviceId].ToString().UrlDecode();
+            return httpContext.Request.Headers[HttpHeaderConst.DeviceId]
+                .ToString()
+                .UrlDecode();
         }
     }
-
-    /// <summary>
-    /// 是否为桌面端
-    /// </summary>
-    public static bool IsDesktop = (DeviceType & AppEnvironmentEnum.Desktop) != 0;
 
     /// <summary>
     /// 是否为移动端

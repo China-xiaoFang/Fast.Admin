@@ -38,10 +38,28 @@ public class PlatformRenewalRecordModel : SnowflakeKeyEntity
     public long PlatformId { get; set; }
 
     /// <summary>
+    /// 原始版本
+    /// </summary>
+    [SugarColumn(ColumnDescription = "原始版本")]
+    public EditionEnum FromEdition { get; set; }
+
+    /// <summary>
+    /// 续费版本
+    /// </summary>
+    [SugarColumn(ColumnDescription = "续费版本")]
+    public EditionEnum ToEdition { get; set; }
+
+    /// <summary>
     /// 续费类型
     /// </summary>
     [SugarColumn(ColumnDescription = "续费类型")]
     public RenewalTypeEnum RenewalType { get; set; }
+
+    /// <summary>
+    /// 续费时长
+    /// </summary>
+    [SugarColumn(ColumnDescription = "续费时长")]
+    public RenewalDurationEnum Duration { get; set; }
 
     /// <summary>
     /// 续费时间
@@ -52,7 +70,7 @@ public class PlatformRenewalRecordModel : SnowflakeKeyEntity
     /// <summary>
     /// 本次续费到期时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "本次续费到期时间")]
+    [SugarColumn(ColumnDescription = "本次续费到期时间", ColumnDataType = "date")]
     public DateTime RenewalExpiryTime { get; set; }
 
     /// <summary>
@@ -60,6 +78,12 @@ public class PlatformRenewalRecordModel : SnowflakeKeyEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "续费金额", Length = 18, DecimalDigits = 2)]
     public decimal Amount { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    [SugarColumn(ColumnDescription = "备注", Length = 50, IsNullable = true)]
+    public string Remark { get; set; }
 
     /// <summary>
     /// 创建者用户Id
@@ -72,4 +96,10 @@ public class PlatformRenewalRecordModel : SnowflakeKeyEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    public DateTime? CreatedTime { get; set; }
 }

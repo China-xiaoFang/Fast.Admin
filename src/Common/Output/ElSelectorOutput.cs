@@ -27,6 +27,7 @@ namespace Fast.Common;
 /// <summary>
 /// <see cref="ElSelectorOutput{T}"/> ElementPlus ElSelect 通用输出
 /// </summary>
+[SuppressSniffer]
 public class ElSelectorOutput<T>
 {
     /// <summary>

@@ -1,1203 +1,1452 @@
 <?xml version="1.0"?>
+
 <doc>
     <assembly>
         <name>Fast.FastCloud.Entity</name>
     </assembly>
     <members>
-        <member name="T:Fast.FastCloud.Entity.ApiButtonModel">
-            <summary>
-            <see cref="T:Fast.FastCloud.Entity.ApiButtonModel"/> 接口按钮表Model类
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.ApiButtonModel.ApiId">
-            <summary>
-            接口Id
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.ApiButtonModel.ButtonId">
-            <summary>
-            按钮Id
-            </summary>
-        </member>
-        <member name="T:Fast.FastCloud.Entity.ApiGroupModel">
-            <summary>
-            <see cref="T:Fast.FastCloud.Entity.ApiGroupModel"/> 接口分组表Model类
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.ApiGroupModel.GroupName">
-            <summary>
-            分组名称
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.ApiGroupModel.GroupTitle">
-            <summary>
-            分组标题
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.ApiGroupModel.Description">
-            <summary>
-            分组描述
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.ApiGroupModel.CreatedTime">
-            <summary>
-            创建时间
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.ApiGroupModel.UpdatedTime">
-            <summary>
-            更新时间
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.ApiGroupModel.RowVersion">
-            <summary>
-            更新版本控制字段
-            </summary>
-        </member>
         <member name="T:Fast.FastCloud.Entity.ApiInfoModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.ApiInfoModel"/> 接口信息表Model类
+                <see cref="T:Fast.FastCloud.Entity.ApiInfoModel" /> 接口信息表Model类
             </summary>
         </member>
-        <member name="P:Fast.FastCloud.Entity.ApiInfoModel.ApiGroupId">
+        <member name="P:Fast.FastCloud.Entity.ApiInfoModel.ServiceName">
             <summary>
-            接口分组Id
+                服务名称
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ApiInfoModel.GroupName">
+            <summary>
+                分组名称
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ApiInfoModel.GroupTitle">
+            <summary>
+                分组标题
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ApiInfoModel.Version">
+            <summary>
+                版本
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ApiInfoModel.Description">
+            <summary>
+                分组描述
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApiInfoModel.ModuleName">
             <summary>
-            模块名称
+                模块名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApiInfoModel.ApiUrl">
             <summary>
-            接口地址
+                接口地址
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApiInfoModel.ApiName">
             <summary>
-            接口名称
+                接口名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApiInfoModel.Method">
             <summary>
-            请求方式
+                请求方式
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApiInfoModel.Action">
             <summary>
-            操作方式
+                操作方式
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ApiInfoModel.HasAuth">
+            <summary>
+                是否检测授权
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ApiInfoModel.HasPermission">
+            <summary>
+                是否检测权限
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ApiInfoModel.Tags">
+            <summary>
+                标签
+            </summary>
+            <remarks>,分割</remarks>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ApiInfoModel.Sort">
+            <summary>
+                排序
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ApiInfoModel.CreatedTime">
+            <summary>
+                创建时间
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ApiInfoModel.UpdatedTime">
+            <summary>
+                更新时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApiInfoModel.RowVersion">
             <summary>
-            更新版本控制字段
+                更新版本控制字段
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.ApplicationModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.ApplicationModel"/> 应用表Model类
+                <see cref="T:Fast.FastCloud.Entity.ApplicationModel" /> 应用表Model类
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ApplicationModel.Edition">
+            <summary>
+                版本
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.AppNo">
             <summary>
-            应用编号
+                应用编号
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.AppName">
             <summary>
-            应用名称
+                应用名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.OpenId">
             <summary>
-            开放平台Id
+                开放平台Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.AppType">
             <summary>
-            应用类型
+                应用类型
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.ServiceStartTime">
             <summary>
-            服务开始时间
+                服务开始时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.ServiceEndTime">
             <summary>
-            服务结束时间
+                服务结束时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.Remark">
             <summary>
-            备注
+                备注
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.CreatedUserId">
             <summary>
-            创建者用户Id
+                创建者用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.CreatedUserName">
             <summary>
-            创建者用户名称
+                创建者用户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.CreatedTime">
             <summary>
-            创建时间
+                创建时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.UpdatedUserId">
             <summary>
-            更新者用户Id
+                更新者用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.UpdatedUserName">
             <summary>
-            更新者用户名称
+                更新者用户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.UpdatedTime">
             <summary>
-            更新时间
+                更新时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ApplicationModel.RowVersion">
             <summary>
-            更新版本控制字段
-            </summary>
-        </member>
-        <member name="T:Fast.FastCloud.Entity.AppModuleModel">
-            <summary>
-            <see cref="T:Fast.FastCloud.Entity.AppModuleModel"/> 应用模块表Model类
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.AppId">
-            <summary>
-            应用Id
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.ModuleName">
-            <summary>
-            模块名称
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.Icon">
-            <summary>
-            图标
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.Color">
-            <summary>
-            颜色
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.IsDefault">
-            <summary>
-            默认的
-            </summary>
-            <remarks>只能存在一个</remarks>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.Sort">
-            <summary>
-            排序
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.Status">
-            <summary>
-            状态
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.CreatedUserId">
-            <summary>
-            创建者用户Id
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.CreatedUserName">
-            <summary>
-            创建者用户名称
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.CreatedTime">
-            <summary>
-            创建时间
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.UpdatedUserId">
-            <summary>
-            更新者用户Id
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.UpdatedUserName">
-            <summary>
-            更新者用户名称
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.UpdatedTime">
-            <summary>
-            更新时间
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.AppModuleModel.RowVersion">
-            <summary>
-            更新版本控制字段
+                更新版本控制字段
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.DatabaseModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.DatabaseModel"/> 数据库表Model类
+                <see cref="T:Fast.FastCloud.Entity.DatabaseModel" /> 数据库表Model类
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.PlatformId">
             <summary>
-            平台Id
+                平台Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.DatabaseType">
             <summary>
-            数据库类型
+                数据库类型
             </summary>
+            <remarks>
+                <para>FastCloudLog</para>
+                <para>Deploy</para>
+                <para>Gateway</para>
+                <para>Center</para>
+            </remarks>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.DbType">
             <summary>
-            数据库类型，用于区分使用的是那个类型的数据库
+                数据库类型，用于区分使用的是那个类型的数据库
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.Status">
             <summary>
-            状态
+                状态
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.PublicIp">
             <summary>
-            公网Ip地址
+                公网Ip地址
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.IntranetIp">
             <summary>
-            内网Ip地址
+                内网Ip地址
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.Port">
             <summary>
-            端口号
+                端口号
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.DbName">
             <summary>
-            数据库名称
+                数据库名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.DbUser">
             <summary>
-            数据库用户
+                数据库用户
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.DbPwd">
             <summary>
-            数据库密码
+                数据库密码
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.CustomConnectionStr">
             <summary>
-            自定义连接字符串
+                自定义连接字符串
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.CommandTimeOut">
             <summary>
-            超时时间，单位秒
+                超时时间，单位秒
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.SugarSqlExecMaxSeconds">
             <summary>
-            SqlSugar Sql执行最大秒数，如果超过记录警告日志
+                SqlSugar Sql执行最大秒数，如果超过记录警告日志
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.DiffLog">
             <summary>
-            差异日志
+                差异日志
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.DisableAop">
             <summary>
-            禁用 SqlSugar 的 Aop
+                禁用 SqlSugar 的 Aop
             </summary>
             <remarks>
-            如果是通过 <see cref="T:Fast.SqlSugar.ISqlSugarEntityHandler"/> 进行保存日志到数据库中
-            <para>必须要将相关 AOP 中涉及到的日志表，单独进行分库设置，并且禁用 AOP</para>
-            <para>或通过 new <see cref="T:SqlSugar.SqlSugarClient"/>() 的方式进行保存。不然会导致死循环的问题</para>
+                如果是通过 <see cref="T:Fast.SqlSugar.ISqlSugarEntityHandler" /> 进行保存日志到数据库中
+                <para>必须要将相关 AOP 中涉及到的日志表，单独进行分库设置，并且禁用 AOP</para>
+                <para>或通过 new <see cref="T:SqlSugar.SqlSugarClient" />() 的方式进行保存。不然会导致死循环的问题</para>
             </remarks>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.CreatedUserId">
             <summary>
-            创建者用户Id
+                创建者用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.CreatedUserName">
             <summary>
-            创建者用户名称
+                创建者用户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.CreatedTime">
             <summary>
-            创建时间
+                创建时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.UpdatedUserId">
             <summary>
-            更新者用户Id
+                更新者用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.UpdatedUserName">
             <summary>
-            更新者用户名称
+                更新者用户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.UpdatedTime">
             <summary>
-            更新时间
+                更新时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.DatabaseModel.RowVersion">
             <summary>
-            更新版本控制字段
+                更新版本控制字段
+            </summary>
+        </member>
+        <member name="T:Fast.FastCloud.Entity.EditionDiscountModel">
+            <summary>
+                <see cref="T:Fast.FastCloud.Entity.EditionDiscountModel" /> 版本折扣表Model类
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.Edition">
+            <summary>
+                版本
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.Status">
+            <summary>
+                状态
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.DiscountType">
+            <summary>
+                折扣类型
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.Duration">
+            <summary>
+                适用时长
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.FixedPrice">
+            <summary>
+                首购价格/减免价格/满减价格/秒杀价
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.DiscountRate">
+            <summary>
+                折扣
+            </summary>
+            <remarks>1 ~ 99</remarks>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.ThresholdAmount">
+            <summary>
+                最低满减金额
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.StartTime">
+            <summary>
+                开始时间
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.EndTime">
+            <summary>
+                结束时间
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.Remark">
+            <summary>
+                备注
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.CreatedUserId">
+            <summary>
+                创建者用户Id
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.CreatedUserName">
+            <summary>
+                创建者用户名称
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.CreatedTime">
+            <summary>
+                创建时间
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.UpdatedUserId">
+            <summary>
+                更新者用户Id
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.UpdatedUserName">
+            <summary>
+                更新者用户名称
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.UpdatedTime">
+            <summary>
+                更新时间
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionDiscountModel.RowVersion">
+            <summary>
+                更新版本控制字段
+            </summary>
+        </member>
+        <member name="T:Fast.FastCloud.Entity.EditionPriceModel">
+            <summary>
+                <see cref="T:Fast.FastCloud.Entity.EditionPriceModel" /> 版本价格表Model类
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionPriceModel.Edition">
+            <summary>
+                版本
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionPriceModel.Status">
+            <summary>
+                状态
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionPriceModel.Duration">
+            <summary>
+                使用时长
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionPriceModel.Price">
+            <summary>
+                价格
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionPriceModel.Remark">
+            <summary>
+                备注
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionPriceModel.CreatedUserId">
+            <summary>
+                创建者用户Id
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionPriceModel.CreatedUserName">
+            <summary>
+                创建者用户名称
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionPriceModel.CreatedTime">
+            <summary>
+                创建时间
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionPriceModel.UpdatedUserId">
+            <summary>
+                更新者用户Id
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionPriceModel.UpdatedUserName">
+            <summary>
+                更新者用户名称
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionPriceModel.UpdatedTime">
+            <summary>
+                更新时间
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.EditionPriceModel.RowVersion">
+            <summary>
+                更新版本控制字段
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.ExceptionLogModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.ExceptionLogModel"/> 异常日志Model类
+                <see cref="T:Fast.FastCloud.Entity.ExceptionLogModel" /> 异常日志Model类
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.PlatformId">
             <summary>
-            平台Id
+                平台Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.PlatformName">
             <summary>
-            平台名称
+                平台名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.AppId">
             <summary>
-            应用Id
+                应用Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.AppName">
             <summary>
-            应用名称
+                应用名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.TenantId">
             <summary>
-            租户Id
+                租户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.TenantName">
             <summary>
-            租户名称
+                租户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.Mobile">
             <summary>
-            手机
+                手机
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.NickName">
             <summary>
-            昵称
+                昵称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.ClassName">
             <summary>
-            类名
+                类名
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.MethodName">
             <summary>
-            方法名
+                方法名
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.Message">
             <summary>
-            异常信息
+                异常信息
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.Source">
             <summary>
-            异常源
+                异常源
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.StackTrace">
             <summary>
-            异常堆栈信息
+                异常堆栈信息
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.ParamsObj">
             <summary>
-            参数对象
+                参数对象
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ExceptionLogModel.CreatedTime">
             <summary>
-            异常时间
+                异常时间
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.SqlExceptionLogModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.SqlExceptionLogModel"/> Sql异常日志Model类
+                <see cref="T:Fast.FastCloud.Entity.SqlExceptionLogModel" /> Sql异常日志Model类
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.PlatformId">
             <summary>
-            平台Id
+                平台Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.PlatformName">
             <summary>
-            平台名称
+                平台名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.AppId">
             <summary>
-            应用Id
+                应用Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.AppName">
             <summary>
-            应用名称
+                应用名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.TenantId">
             <summary>
-            租户Id
+                租户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.TenantName">
             <summary>
-            租户名称
+                租户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.Mobile">
             <summary>
-            手机
+                手机
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.NickName">
             <summary>
-            昵称
+                昵称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.FileName">
             <summary>
-            文件名称
+                文件名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.FileLine">
             <summary>
-            文件行数
+                文件行数
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.MethodName">
             <summary>
-            方法名
+                方法名
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.RawSql">
             <summary>
-            原始Sql
+                原始Sql
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.Parameters">
             <summary>
-            Sql参数
+                Sql参数
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.PureSql">
             <summary>
-            纯Sql，参数化之后的Sql
+                纯Sql，参数化之后的Sql
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlExceptionLogModel.CreatedTime">
             <summary>
-            异常时间
+                异常时间
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.SqlTimeoutLogModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.SqlTimeoutLogModel"/> Sql超时日志Model类
+                <see cref="T:Fast.FastCloud.Entity.SqlTimeoutLogModel" /> Sql超时日志Model类
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.PlatformId">
             <summary>
-            平台Id
+                平台Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.PlatformName">
             <summary>
-            平台名称
+                平台名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.AppId">
             <summary>
-            应用Id
+                应用Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.AppName">
             <summary>
-            应用名称
+                应用名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.TenantId">
             <summary>
-            租户Id
+                租户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.TenantName">
             <summary>
-            租户名称
+                租户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.Mobile">
             <summary>
-            手机
+                手机
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.NickName">
             <summary>
-            昵称
+                昵称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.FileName">
             <summary>
-            文件名称
+                文件名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.FileLine">
             <summary>
-            文件行数
+                文件行数
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.MethodName">
             <summary>
-            方法名
+                方法名
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.TimeoutSeconds">
             <summary>
-            超时秒数
+                超时秒数
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.RawSql">
             <summary>
-            原始Sql
+                原始Sql
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.Parameters">
             <summary>
-            Sql参数
+                Sql参数
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.PureSql">
             <summary>
-            纯Sql，参数化之后的Sql
+                纯Sql，参数化之后的Sql
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.SqlTimeoutLogModel.CreatedTime">
             <summary>
-            超时时间
+                超时时间
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.ButtonModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.ButtonModel"/> 按钮表Model类
+                <see cref="T:Fast.FastCloud.Entity.ButtonModel" /> 按钮表Model类
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ButtonModel.Edition">
+            <summary>
+                版本
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ButtonModel.AppId">
+            <summary>
+                应用Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ButtonModel.MenuId">
             <summary>
-            菜单Id
+                菜单Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ButtonModel.ButtonCode">
             <summary>
-            按钮编码
+                按钮编码
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ButtonModel.ButtonName">
             <summary>
-            按钮名称
+                按钮名称
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ButtonModel.HasDesktop">
+            <summary>
+                是否桌面端
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ButtonModel.HasWeb">
+            <summary>
+                是否Web端
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ButtonModel.HasMobile">
+            <summary>
+                是否移动端
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ButtonModel.Sort">
             <summary>
-            排序
+                排序
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ButtonModel.Status">
             <summary>
-            状态
+                状态
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ButtonModel.CreatedUserId">
             <summary>
-            创建者用户Id
+                创建者用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ButtonModel.CreatedUserName">
             <summary>
-            创建者用户名称
+                创建者用户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ButtonModel.CreatedTime">
             <summary>
-            创建时间
+                创建时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ButtonModel.UpdatedUserId">
             <summary>
-            更新者用户Id
+                更新者用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ButtonModel.UpdatedUserName">
             <summary>
-            更新者用户名称
+                更新者用户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ButtonModel.UpdatedTime">
             <summary>
-            更新时间
+                更新时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.ButtonModel.RowVersion">
             <summary>
-            更新版本控制字段
+                更新版本控制字段
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.MenuModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.MenuModel"/> 菜单表Model类
+                <see cref="T:Fast.FastCloud.Entity.MenuModel" /> 菜单表Model类
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.MenuModel.Edition">
+            <summary>
+                版本
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.MenuModel.AppId">
+            <summary>
+                应用Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.ModuleId">
             <summary>
-            模块Id
+                模块Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.MenuCode">
             <summary>
-            菜单编码
+                菜单编码
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.MenuName">
             <summary>
-            菜单名称
+                菜单名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.MenuTitle">
             <summary>
-            菜单标题
+                菜单标题
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.ParentId">
             <summary>
-            父级Id
+                父级Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.MenuType">
             <summary>
-            菜单类型
+                菜单类型
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.HasDesktop">
             <summary>
-            是否桌面端
+                是否桌面端
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.DesktopIcon">
             <summary>
-            桌面端图标
+                桌面端图标
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.DesktopRouter">
             <summary>
-            桌面端路由地址
+                桌面端路由地址
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.HasWeb">
             <summary>
-            是否Web端
+                是否Web端
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.WebIcon">
             <summary>
-            Web端图标
+                Web端图标
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.WebRouter">
             <summary>
-            Web端路由地址
+                Web端路由地址
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.WebComponent">
             <summary>
-            Web端组件地址
+                Web端组件地址
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.HasMobile">
             <summary>
-            是否移动端
+                是否移动端
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.MobileIcon">
             <summary>
-            移动端图标
+                移动端图标
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.MobileRouter">
             <summary>
-            移动端路由地址
+                移动端路由地址
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.Link">
             <summary>
-            内链/外链地址
+                内链/外链地址
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.Visible">
             <summary>
-            是否显示
+                是否显示
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.Sort">
             <summary>
-            排序
+                排序
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.Status">
             <summary>
-            状态
+                状态
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.CreatedUserId">
             <summary>
-            创建者用户Id
+                创建者用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.CreatedUserName">
             <summary>
-            创建者用户名称
+                创建者用户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.CreatedTime">
             <summary>
-            创建时间
+                创建时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.UpdatedUserId">
             <summary>
-            更新者用户Id
+                更新者用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.UpdatedUserName">
             <summary>
-            更新者用户名称
+                更新者用户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.UpdatedTime">
             <summary>
-            更新时间
+                更新时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.MenuModel.RowVersion">
             <summary>
-            更新版本控制字段
+                更新版本控制字段
+            </summary>
+        </member>
+        <member name="T:Fast.FastCloud.Entity.ModuleModel">
+            <summary>
+                <see cref="T:Fast.FastCloud.Entity.ModuleModel" /> 应用模块表Model类
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.Edition">
+            <summary>
+                版本
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.AppId">
+            <summary>
+                应用Id
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.ModuleName">
+            <summary>
+                模块名称
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.Icon">
+            <summary>
+                图标
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.Color">
+            <summary>
+                颜色
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.ViewType">
+            <summary>
+                查看类型
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.Sort">
+            <summary>
+                排序
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.Status">
+            <summary>
+                状态
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.CreatedUserId">
+            <summary>
+                创建者用户Id
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.CreatedUserName">
+            <summary>
+                创建者用户名称
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.CreatedTime">
+            <summary>
+                创建时间
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.UpdatedUserId">
+            <summary>
+                更新者用户Id
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.UpdatedUserName">
+            <summary>
+                更新者用户名称
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.UpdatedTime">
+            <summary>
+                更新时间
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.ModuleModel.RowVersion">
+            <summary>
+                更新版本控制字段
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.PasswordMapModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.PasswordMapModel"/> 密码映射表Model类
+                <see cref="T:Fast.FastCloud.Entity.PasswordMapModel" /> 密码映射表Model类
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PasswordMapModel.Type">
             <summary>
-            类型
+                类型
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PasswordMapModel.Plaintext">
             <summary>
-            明文
+                明文
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PasswordMapModel.Ciphertext">
             <summary>
-            密文
-            </summary>
-        </member>
-        <member name="T:Fast.FastCloud.Entity.PlatformAppModel">
-            <summary>
-            <see cref="T:Fast.FastCloud.Entity.PlatformAppModel"/> 平台应用授权表Model类
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.PlatformAppModel.PlatformId">
-            <summary>
-            平台Id
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.PlatformAppModel.AppId">
-            <summary>
-            应用Id
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.PlatformAppModel.RenewalType">
-            <summary>
-            续费类型
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.PlatformAppModel.RenewalTime">
-            <summary>
-            续费/开通时间
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.PlatformAppModel.RenewalExpiryTime">
-            <summary>
-            续费到期时间
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.PlatformAppModel.Amount">
-            <summary>
-            续费金额
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.PlatformAppModel.CreatedUserId">
-            <summary>
-            创建者用户Id
-            </summary>
-        </member>
-        <member name="P:Fast.FastCloud.Entity.PlatformAppModel.CreatedUserName">
-            <summary>
-            创建者用户名称
+                密文
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.PlatformModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.PlatformModel"/> 平台表Model类
+                <see cref="T:Fast.FastCloud.Entity.PlatformModel" /> 平台表Model类
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.PlatformNo">
             <summary>
-            平台编号
+                平台编号
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.PlatformName">
             <summary>
-            平台名称
+                平台名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.ShortName">
             <summary>
-            平台简称
+                平台简称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.Status">
             <summary>
-            状态
+                状态
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.AdminName">
             <summary>
-            平台管理员名称
+                平台管理员名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.AdminMobile">
             <summary>
-            平台管理员手机
+                平台管理员手机
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.AdminEmail">
             <summary>
-            平台管理员邮箱
+                平台管理员邮箱
             </summary>
         </member>
-        <member name="P:Fast.FastCloud.Entity.PlatformModel.Mobile">
+        <member name="P:Fast.FastCloud.Entity.PlatformModel.AdminPhone">
             <summary>
-            平台管理员电话
+                平台管理员电话
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.LogoUrl">
             <summary>
-            LogoUrl
+                LogoUrl
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.ActivationTime">
             <summary>
-            开通时间
+                开通时间
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.PlatformModel.Edition">
+            <summary>
+                平台版本
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.PlatformModel.AutoRenewal">
+            <summary>
+                自动续费
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.RenewalExpiryTime">
             <summary>
-            续费到期时间
+                续费到期时间
             </summary>
+            <remarks>包含当天</remarks>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.Remark">
             <summary>
-            备注
+                备注
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.CreatedUserId">
             <summary>
-            创建者用户Id
+                创建者用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.CreatedUserName">
             <summary>
-            创建者用户名称
+                创建者用户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.CreatedTime">
             <summary>
-            创建时间
+                创建时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.UpdatedUserId">
             <summary>
-            更新者用户Id
+                更新者用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.UpdatedUserName">
             <summary>
-            更新者用户名称
+                更新者用户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.UpdatedTime">
             <summary>
-            更新时间
+                更新时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformModel.RowVersion">
             <summary>
-            更新版本控制字段
+                更新版本控制字段
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.PlatformRenewalRecordModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.PlatformRenewalRecordModel"/> 平台续费记录表Model类
+                <see cref="T:Fast.FastCloud.Entity.PlatformRenewalRecordModel" /> 平台续费记录表Model类
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformRenewalRecordModel.PlatformId">
             <summary>
-            平台Id
+                平台Id
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.PlatformRenewalRecordModel.FromEdition">
+            <summary>
+                原始版本
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.PlatformRenewalRecordModel.ToEdition">
+            <summary>
+                续费版本
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformRenewalRecordModel.RenewalType">
             <summary>
-            续费类型
+                续费类型
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.PlatformRenewalRecordModel.Duration">
+            <summary>
+                续费时长
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformRenewalRecordModel.RenewalTime">
             <summary>
-            续费时间
+                续费时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformRenewalRecordModel.RenewalExpiryTime">
             <summary>
-            本次续费到期时间
+                本次续费到期时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformRenewalRecordModel.Amount">
             <summary>
-            续费金额
+                续费金额
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.PlatformRenewalRecordModel.Remark">
+            <summary>
+                备注
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformRenewalRecordModel.CreatedUserId">
             <summary>
-            创建者用户Id
+                创建者用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.PlatformRenewalRecordModel.CreatedUserName">
             <summary>
-            创建者用户名称
+                创建者用户名称
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.PlatformRenewalRecordModel.CreatedTime">
+            <summary>
+                创建时间
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.UserButtonModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.UserButtonModel"/> 用户按钮表Model类
+                <see cref="T:Fast.FastCloud.Entity.UserButtonModel" /> 用户按钮表Model类
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserButtonModel.UserId">
             <summary>
-            用户Id
+                用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserButtonModel.ButtonId">
             <summary>
-            按钮Id
+                按钮Id
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.UserMenuModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.UserMenuModel"/> 用户菜单表Model类
+                <see cref="T:Fast.FastCloud.Entity.UserMenuModel" /> 用户菜单表Model类
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserMenuModel.UserId">
             <summary>
-            用户Id
+                用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserMenuModel.MenuId">
             <summary>
-            菜单Id
+                菜单Id
+            </summary>
+        </member>
+        <member name="T:Fast.FastCloud.Entity.UserModuleModel">
+            <summary>
+                <see cref="T:Fast.FastCloud.Entity.UserModuleModel" /> 用户模块表Model类
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.UserModuleModel.UserId">
+            <summary>
+                用户Id
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.UserModuleModel.ModuleId">
+            <summary>
+                模块Id
+            </summary>
+        </member>
+        <member name="T:Fast.FastCloud.Entity.UserPlatformModel">
+            <summary>
+                <see cref="T:Fast.FastCloud.Entity.UserPlatformModel" /> 用户平台表Model类
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.UserPlatformModel.UserId">
+            <summary>
+                用户Id
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.UserPlatformModel.PlatformId">
+            <summary>
+                平台Id
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.UserModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.UserModel"/> 用户表Model类
+                <see cref="T:Fast.FastCloud.Entity.UserModel" /> 用户表Model类
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.Mobile">
             <summary>
-            手机
+                手机
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.Password">
             <summary>
-            密码
+                密码
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.UserType">
             <summary>
-            用户类型
+                用户类型
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.Status">
             <summary>
-            状态
+                状态
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.NickName">
             <summary>
-            昵称
+                昵称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.Avatar">
             <summary>
-            头像
+                头像
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.FirstLoginDevice">
             <summary>
-            初次登录设备
+                初次登录设备
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.FirstLoginOS">
             <summary>
-            初次登录操作系统（版本）
+                初次登录操作系统（版本）
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.FirstLoginBrowser">
             <summary>
-            初次登录浏览器（版本）
+                初次登录浏览器（版本）
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.FirstLoginProvince">
             <summary>
-            初次登录省份
+                初次登录省份
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.FirstLoginCity">
             <summary>
-            初次登录城市
+                初次登录城市
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.FirstLoginIp">
             <summary>
-            初次登录Ip
+                初次登录Ip
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.FirstLoginTime">
             <summary>
-            初次登录时间
+                初次登录时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.LastLoginDevice">
             <summary>
-            最后登录设备
+                最后登录设备
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.LastLoginOS">
             <summary>
-            最后登录操作系统（版本）
+                最后登录操作系统（版本）
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.LastLoginBrowser">
             <summary>
-            最后登录浏览器（版本）
+                最后登录浏览器（版本）
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.LastLoginProvince">
             <summary>
-            最后登录省份
+                最后登录省份
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.LastLoginCity">
             <summary>
-            最后登录城市
+                最后登录城市
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.LastLoginIp">
             <summary>
-            最后登录Ip
+                最后登录Ip
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.LastLoginTime">
             <summary>
-            最后登录时间
+                最后登录时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.PasswordErrorTime">
             <summary>
-            密码错误次数
+                密码错误次数
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.LockStartTime">
             <summary>
-            锁定开始时间
+                锁定开始时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.LockEndTime">
             <summary>
-            锁定结束时间
+                锁定结束时间
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.UserModel.CreatedUserId">
+            <summary>
+                创建者用户Id
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.UserModel.CreatedUserName">
+            <summary>
+                创建者用户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.CreatedTime">
             <summary>
-            创建时间
+                创建时间
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.UserModel.UpdatedUserId">
+            <summary>
+                更新者用户Id
+            </summary>
+        </member>
+        <member name="P:Fast.FastCloud.Entity.UserModel.UpdatedUserName">
+            <summary>
+                更新者用户名称
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.UpdatedTime">
             <summary>
-            更新时间
+                更新时间
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserModel.RowVersion">
             <summary>
-            更新版本控制字段
+                更新版本控制字段
             </summary>
         </member>
         <member name="T:Fast.FastCloud.Entity.UserDataScopeModel">
             <summary>
-            <see cref="T:Fast.FastCloud.Entity.UserDataScopeModel"/> 用户数据范围表Model类
+                <see cref="T:Fast.FastCloud.Entity.UserDataScopeModel" /> 用户数据范围表Model类
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserDataScopeModel.UserId">
             <summary>
-            用户Id
+                用户Id
             </summary>
         </member>
         <member name="P:Fast.FastCloud.Entity.UserDataScopeModel.PlatformId">
             <summary>
-            平台Id
+                平台Id
             </summary>
         </member>
     </members>

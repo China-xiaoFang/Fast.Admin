@@ -65,11 +65,13 @@ public class UnifyResponseProvider : IUnifyResponseProvider
             {
                 if (userFriendlyException.OriginErrorCode != null)
                 {
-                    statusCode = userFriendlyException.OriginErrorCode.ToString().ParseToInt();
+                    statusCode = userFriendlyException.OriginErrorCode.ToString()
+                        .ParseToInt();
                 }
                 else if (userFriendlyException.ErrorCode != null)
                 {
-                    statusCode = userFriendlyException.ErrorCode.ToString().ParseToInt();
+                    statusCode = userFriendlyException.ErrorCode.ToString()
+                        .ParseToInt();
                 }
                 else
                 {

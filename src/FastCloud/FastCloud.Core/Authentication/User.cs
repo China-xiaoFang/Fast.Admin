@@ -20,6 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.Cache;
 using Fast.JwtBearer;
 using Microsoft.AspNetCore.Http;
 
@@ -125,7 +126,8 @@ internal sealed class User : AuthUserInfo, IUser, IScopedDependency
 
             // 获取缓存Key
             var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUserInfo,
-                authUserInfo.DeviceType.ToString(), authUserInfo.Mobile);
+                authUserInfo.DeviceType.ToString(),
+                authUserInfo.Mobile);
 
             // 设置缓存信息
             await _cache.SetAsync(cacheKey, authUserInfo);

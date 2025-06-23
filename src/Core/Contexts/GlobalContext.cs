@@ -27,6 +27,7 @@ namespace Fast.Core;
 /// <summary>
 /// <see cref="GlobalContext"/> 系统通用上下文
 /// </summary>
+[SuppressSniffer]
 public class GlobalContext
 {
     /// <summary>
@@ -39,10 +40,14 @@ public class GlobalContext
             var httpContext = FastContext.HttpContext;
             if (httpContext.IsWebSocketRequest())
             {
-                return httpContext.Request.Query[HttpHeaderConst.Origin].ToString().UrlDecode();
+                return httpContext.Request.Query[HttpHeaderConst.Origin]
+                    .ToString()
+                    .UrlDecode();
             }
 
-            return httpContext.Request.Headers[HttpHeaderConst.Origin].ToString().UrlDecode();
+            return httpContext.Request.Headers[HttpHeaderConst.Origin]
+                .ToString()
+                .UrlDecode();
         }
     }
 
@@ -57,11 +62,15 @@ public class GlobalContext
             var httpContext = FastContext.HttpContext;
             if (httpContext.IsWebSocketRequest())
             {
-                result = FastContext.HttpContext.Request.Query[HttpHeaderConst.DeviceType].ToString().UrlDecode();
+                result = FastContext.HttpContext.Request.Query[HttpHeaderConst.DeviceType]
+                    .ToString()
+                    .UrlDecode();
             }
             else
             {
-                result = FastContext.HttpContext.Request.Headers[HttpHeaderConst.DeviceType].ToString().UrlDecode();
+                result = FastContext.HttpContext.Request.Headers[HttpHeaderConst.DeviceType]
+                    .ToString()
+                    .UrlDecode();
             }
 
             return Enum.Parse<AppEnvironmentEnum>(result);
@@ -78,12 +87,21 @@ public class GlobalContext
             var httpContext = FastContext.HttpContext;
             if (httpContext.IsWebSocketRequest())
             {
-                return httpContext.Request.Query[HttpHeaderConst.DeviceId].ToString().UrlDecode();
+                return httpContext.Request.Query[HttpHeaderConst.DeviceId]
+                    .ToString()
+                    .UrlDecode();
             }
 
-            return httpContext.Request.Headers[HttpHeaderConst.DeviceId].ToString().UrlDecode();
+            return httpContext.Request.Headers[HttpHeaderConst.DeviceId]
+                .ToString()
+                .UrlDecode();
         }
     }
+
+    /// <summary>
+    /// 是否为Web端
+    /// </summary>
+    public static bool IsWeb = (DeviceType & AppEnvironmentEnum.Web) != 0;
 
     /// <summary>
     /// 是否为桌面端
