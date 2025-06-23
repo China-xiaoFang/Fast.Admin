@@ -65,7 +65,7 @@ public class UserModel : SnowflakeKeyEntity
     /// <summary>
     /// 头像
     /// </summary>
-    [SugarColumn(ColumnDescription = "头像", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "头像", Length = 200)]
     public string Avatar { get; set; }
 
     /// <summary>

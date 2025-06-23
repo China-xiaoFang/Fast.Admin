@@ -39,7 +39,7 @@ using Yitter.IdGenerator;
 namespace Fast.FastCloud.Core;
 
 /// <summary>
-/// <see cref="SyncApiHostedService"/> 同步Api托管服务
+/// <see cref="SyncApiHostedService"/> 同步 Api 托管服务
 /// </summary>
 [SuppressSniffer]
 public class SyncApiHostedService : IHostedService
@@ -54,7 +54,7 @@ public class SyncApiHostedService : IHostedService
     /// </summary>
     private readonly ILogger _logger;
 
-    public SyncApiHostedService(IOptions<SwaggerSettingsOptions> options, ILogger<DeleteLogHostedService> logger)
+    public SyncApiHostedService(IOptions<SwaggerSettingsOptions> options, ILogger<SyncApiHostedService> logger)
     {
         _swaggerSettings = options.Value;
         _logger = logger;
@@ -72,6 +72,19 @@ public class SyncApiHostedService : IHostedService
         var serviceName = Assembly.GetEntryAssembly()!.GetName()
             .Name;
         var addApiInfoList = new List<ApiInfoModel>();
+
+        var logSb1 = new StringBuilder();
+        logSb1.Append("\u001b[40m\u001b[1m\u001b[32m");
+        logSb1.Append("system_notify");
+        logSb1.Append("\u001b[39m\u001b[22m\u001b[49m");
+        logSb1.Append(": ");
+        logSb1.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+        logSb1.Append(Environment.NewLine);
+        logSb1.Append("\u001b[40m\u001b[37m");
+        logSb1.Append("               ");
+        logSb1.Append("开始同步接口信息...");
+        logSb1.Append("\u001b[39m\u001b[22m\u001b[49m");
+        Console.WriteLine(logSb1.ToString());
 
         try
         {
@@ -188,7 +201,7 @@ public class SyncApiHostedService : IHostedService
         logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
         logSb.Append(Environment.NewLine);
         logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-        logSb.Append("              ");
+        logSb.Append("               ");
         logSb.Append("同步接口信息成功。");
         logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
         Console.WriteLine(logSb.ToString());

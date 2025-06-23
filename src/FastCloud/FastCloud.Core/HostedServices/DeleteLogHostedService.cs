@@ -166,7 +166,7 @@ public class DeleteLogHostedService : IHostedService
             logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
             logSb.Append(Environment.NewLine);
             logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-            logSb.Append("              ");
+            logSb.Append("               ");
             logSb.Append($"删除日志文件，空文件 {emptyFileNum} 个，超过最长保留{MaxRetainDay}天文件 {oldFileNum} 个。");
             logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
             Console.WriteLine(logSb.ToString());

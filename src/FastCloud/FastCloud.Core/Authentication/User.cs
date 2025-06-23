@@ -31,7 +31,7 @@ namespace Fast.FastCloud.Core;
 /// <see cref="User"/> 授权用户信息
 /// </summary>
 /// <remarks>作用域注册，保证当前请求管道中是唯一的，并且只会加载一次</remarks>
-internal sealed class User : AuthUserInfo, IUser, IScopedDependency
+public sealed class User : AuthUserInfo, IUser, IScopedDependency
 {
     /// <summary>
     /// 是否存在用户信息

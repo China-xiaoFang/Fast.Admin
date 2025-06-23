@@ -72,16 +72,16 @@ if (redisOptions != null)
     });
 }
 
-builder.Services.AddHttpClient();
-
-// 添加 JwtBearer 授权
-builder.Services.AddJwtBearer(builder.Configuration);
-
 // 添加雪花Id
 builder.Services.AddSnowflake(builder.Configuration);
 
 // 添加 SqlSugar
 builder.Services.AddSqlSugar(builder.Configuration, builder.Environment);
+
+builder.Services.AddHttpClient();
+
+// 添加 JwtBearer 授权
+builder.Services.AddJwtBearer(builder.Configuration);
 
 // 添加即时通讯
 builder.Services.AddSignalR()
@@ -102,6 +102,13 @@ builder.Services.AddSwaggerDocuments(builder.Configuration);
 
 // 添加 Swagger Newtonsoft.Json 库支持
 builder.Services.AddSwaggerGenNewtonsoftSupport();
+
+// 删除日志托管服务
+builder.Services.AddHostedService<DeleteLogHostedService>();
+// 初始化 Database 托管服务
+builder.Services.AddHostedService<InitDatabaseHostedService>();
+// 同步 Api 托管服务
+builder.Services.AddHostedService<SyncApiHostedService>();
 
 var app = builder.Build();
 

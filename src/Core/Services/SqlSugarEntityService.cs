@@ -57,7 +57,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
     private readonly ILogger _logger;
 
     public SqlSugarEntityService(ICache<CenterCCL> centerCache, IHttpContextAccessor httpContextAccessor,
-        IHostEnvironment hostEnvironment, ILogger logger)
+        IHostEnvironment hostEnvironment, ILogger<ISqlSugarEntityService> logger)
     {
         _centerCache = centerCache;
         _httpContext = httpContextAccessor.HttpContext;
