@@ -82,7 +82,7 @@ public class PlatformRenewalRecordModel : SnowflakeKeyEntity
     /// <summary>
     /// 备注
     /// </summary>
-    [SugarColumn(ColumnDescription = "备注", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "备注", Length = 50)]
     public string Remark { get; set; }
 
     /// <summary>
@@ -94,7 +94,7 @@ public class PlatformRenewalRecordModel : SnowflakeKeyEntity
     /// <summary>
     /// 创建者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
+    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
 
     /// <summary>

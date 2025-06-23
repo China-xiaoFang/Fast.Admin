@@ -20,7 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
+// ReSharper disable once 
 
 namespace Fast.FastCloudLog.Entity;
 
@@ -35,7 +35,7 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
     /// <summary>
@@ -53,13 +53,13 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// 表描述
     /// </summary>
-    [SugarColumn(ColumnDescription = "表描述", Length = 100, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "表描述", Length = 100)]
     public string TableDescription { get; set; }
 
     /// <summary>
     /// 差异描述
     /// </summary>
-    [SugarColumn(ColumnDescription = "差异描述", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "差异描述", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string DiffDescription { get; set; }
 
     /// <summary>
@@ -89,7 +89,7 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// 原始Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string RawSql { get; set; }
 
     /// <summary>
@@ -104,7 +104,7 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// 纯Sql，参数化之后的Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string PureSql { get; set; }
 
     /// <summary>

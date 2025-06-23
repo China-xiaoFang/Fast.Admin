@@ -35,7 +35,7 @@ public class UserModel : SnowflakeKeyEntity
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = " varchar(11)", IsNullable = false)]
     public string Mobile { get; set; }
 
     /// <summary>
@@ -71,37 +71,37 @@ public class UserModel : SnowflakeKeyEntity
     /// <summary>
     /// 初次登录设备
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录设备", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录设备", Length = 50)]
     public string FirstLoginDevice { get; set; }
 
     /// <summary>
     /// 初次登录操作系统（版本）
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录操作系统（版本）", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录操作系统（版本）", Length = 50)]
     public string FirstLoginOS { get; set; }
 
     /// <summary>
     /// 初次登录浏览器（版本）
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录浏览器（版本）", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录浏览器（版本）", Length = 50)]
     public string FirstLoginBrowser { get; set; }
 
     /// <summary>
     /// 初次登录省份
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录省份", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录省份", Length = 20)]
     public string FirstLoginProvince { get; set; }
 
     /// <summary>
     /// 初次登录城市
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录城市", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录城市", Length = 20)]
     public string FirstLoginCity { get; set; }
 
     /// <summary>
     /// 初次登录Ip
     /// </summary>
-    [SugarColumn(ColumnDescription = "初次登录Ip", ColumnDataType = "varchar(15)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "初次登录Ip", ColumnDataType = "varchar(15)")]
     public string FirstLoginIp { get; set; }
 
     /// <summary>
@@ -113,37 +113,37 @@ public class UserModel : SnowflakeKeyEntity
     /// <summary>
     /// 最后登录设备
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录设备", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录设备", Length = 50)]
     public string LastLoginDevice { get; set; }
 
     /// <summary>
     /// 最后登录操作系统（版本）
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录操作系统（版本）", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录操作系统（版本）", Length = 50)]
     public string LastLoginOS { get; set; }
 
     /// <summary>
     /// 最后登录浏览器（版本）
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录浏览器（版本）", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录浏览器（版本）", Length = 50)]
     public string LastLoginBrowser { get; set; }
 
     /// <summary>
     /// 最后登录省份
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录省份", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录省份", Length = 20)]
     public string LastLoginProvince { get; set; }
 
     /// <summary>
     /// 最后登录城市
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录城市", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录城市", Length = 20)]
     public string LastLoginCity { get; set; }
 
     /// <summary>
     /// 最后登录Ip
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后登录Ip", ColumnDataType = "varchar(15)", IsNullable = true)]
+    [SugarColumn(ColumnDescription = "最后登录Ip", ColumnDataType = "varchar(15)")]
     public string LastLoginIp { get; set; }
 
     /// <summary>
@@ -179,7 +179,7 @@ public class UserModel : SnowflakeKeyEntity
     /// <summary>
     /// 创建者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
+    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
 
     /// <summary>
@@ -197,7 +197,7 @@ public class UserModel : SnowflakeKeyEntity
     /// <summary>
     /// 更新者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 995)]
+    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, CreateTableFieldSort = 995)]
     public string UpdatedUserName { get; set; }
 
     /// <summary>

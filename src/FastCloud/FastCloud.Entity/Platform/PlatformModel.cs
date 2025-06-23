@@ -78,7 +78,7 @@ public class PlatformModel : SnowflakeKeyEntity
     /// <summary>
     /// 平台管理员电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台管理员电话", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnDescription = "平台管理员电话", Length = 20)]
     public string AdminPhone { get; set; }
 
     /// <summary>
@@ -115,7 +115,7 @@ public class PlatformModel : SnowflakeKeyEntity
     /// <summary>
     /// 备注
     /// </summary>
-    [SugarColumn(ColumnDescription = "备注", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "备注", Length = 50)]
     public string Remark { get; set; }
 
     /// <summary>
@@ -127,7 +127,7 @@ public class PlatformModel : SnowflakeKeyEntity
     /// <summary>
     /// 创建者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
+    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, CreateTableFieldSort = 992)]
     public string CreatedUserName { get; set; }
 
     /// <summary>
@@ -145,7 +145,7 @@ public class PlatformModel : SnowflakeKeyEntity
     /// <summary>
     /// 更新者用户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 995)]
+    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, CreateTableFieldSort = 995)]
     public string UpdatedUserName { get; set; }
 
     /// <summary>

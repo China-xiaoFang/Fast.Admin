@@ -53,12 +53,12 @@ public class ConfigModel : BaseEntity
     /// <summary>
     /// 描述
     /// </summary>
-    [SugarColumn(ColumnDescription = "描述", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "描述", Length = 200)]
     public string Description { get; set; }
 
     /// <summary>
     /// 备注
     /// </summary>
-    [SugarColumn(ColumnDescription = "备注", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "备注", Length = 50)]
     public string Remark { get; set; }
 }

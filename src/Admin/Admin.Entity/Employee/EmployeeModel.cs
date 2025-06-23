@@ -55,7 +55,7 @@ public class EmployeeModel : BaseEntity
     /// <summary>
     /// 个人照片
     /// </summary>
-    [SugarColumn(ColumnDescription = "个人照片", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "个人照片", Length = 200)]
     public string Avatar { get; set; }
 
     /// <summary>
@@ -79,19 +79,19 @@ public class EmployeeModel : BaseEntity
     /// <summary>
     /// 籍贯
     /// </summary>
-    [SugarColumn(ColumnDescription = "籍贯", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "籍贯", Length = 50)]
     public string NativePlace { get; set; }
 
     /// <summary>
     /// 家庭地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "家庭地址", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "家庭地址", Length = 200)]
     public string FamilyAddress { get; set; }
 
     /// <summary>
     /// 通信地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "通信地址", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "通信地址", Length = 200)]
     public string MailingAddress { get; set; }
 
     /// <summary>
@@ -103,7 +103,7 @@ public class EmployeeModel : BaseEntity
     /// <summary>
     /// 证件号码
     /// </summary>
-    [SugarColumn(ColumnDescription = "证件号码", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "证件号码", Length = 50)]
     public string IdNumber { get; set; }
 
     /// <summary>
@@ -121,7 +121,7 @@ public class EmployeeModel : BaseEntity
     /// <summary>
     /// 毕业学院
     /// </summary>
-    [SugarColumn(ColumnDescription = "毕业学院", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "毕业学院", Length = 50)]
     public string GraduationCollege { get; set; }
 
     /// <summary>
@@ -145,36 +145,36 @@ public class EmployeeModel : BaseEntity
     /// <summary>
     /// 家庭电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "家庭电话", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "家庭电话", Length = 20)]
     public string FamilyMobile { get; set; }
 
     /// <summary>
     /// 办公电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "办公电话", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "办公电话", Length = 20)]
     public string OfficePhone { get; set; }
 
     /// <summary>
     /// 紧急联系人
     /// </summary>
-    [SugarColumn(ColumnDescription = "紧急联系人", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "紧急联系人", Length = 20)]
     public string EmergencyContact { get; set; }
 
     /// <summary>
     /// 紧急联系电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "紧急联系电话", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "紧急联系电话", Length = 20)]
     public string EmergencyMobile { get; set; }
 
     /// <summary>
     /// 紧急联系地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "紧急联系地址", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "紧急联系地址", Length = 200)]
     public string EmergencyAddress { get; set; }
 
     /// <summary>
     /// 备注
     /// </summary>
-    [SugarColumn(ColumnDescription = "备注", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "备注", Length = 50)]
     public string Remark { get; set; }
 }

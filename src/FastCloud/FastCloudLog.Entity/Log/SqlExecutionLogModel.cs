@@ -41,7 +41,7 @@ public class SqlExecutionLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// 原始Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string RawSql { get; set; }
 
     /// <summary>
@@ -56,7 +56,7 @@ public class SqlExecutionLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// 纯Sql，参数化之后的Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString, IsNullable = true)]
+    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]   
     public string PureSql { get; set; }
 
     /// <summary>
