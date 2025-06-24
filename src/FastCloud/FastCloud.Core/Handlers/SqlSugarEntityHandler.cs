@@ -79,7 +79,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         if (string.IsNullOrEmpty(databaseTypeStr))
             return null;
 
-        var databaseType = System.Enum.Parse<DatabaseTypeEnum>(databaseTypeStr);
+        var databaseType = System.Enum.Parse<DatabaseTypeEnum>(databaseTypeStr, ignoreCase: true);
 
         switch (databaseType)
         {

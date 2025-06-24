@@ -41,12 +41,14 @@ public class PasswordMapModel : IdentityKeyEntity
     /// <summary>
     /// 明文
     /// </summary>
-    [SugarColumn(ColumnDescription = "明文", Length = 50, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "明文", Length = 50)]
     public string Plaintext { get; set; }
 
     /// <summary>
     /// 密文
     /// </summary>
-    [SugarColumn(ColumnDescription = "密文", Length = 50, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "密文", Length = 50)]
     public string Ciphertext { get; set; }
 }

@@ -107,6 +107,8 @@ builder.Services.AddSwaggerGenNewtonsoftSupport();
 builder.Services.AddHostedService<DeleteLogHostedService>();
 // 初始化 Database 托管服务
 builder.Services.AddHostedService<InitDatabaseHostedService>();
+// 初始化日志 Database 托管服务
+builder.Services.AddHostedService<InitLogDatabaseHostedService>();
 // 同步 Api 托管服务
 builder.Services.AddHostedService<SyncApiHostedService>();
 

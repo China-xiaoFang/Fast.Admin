@@ -54,13 +54,15 @@ public class ButtonModel : SnowflakeKeyEntity
     /// <summary>
     /// 按钮编码
     /// </summary>
-    [SugarColumn(ColumnDescription = "按钮编码", Length = 50, IsNullable = false, UniqueGroupNameList = new[] {nameof(ButtonCode)})]
+    [Required]
+    [SugarColumn(ColumnDescription = "按钮编码", Length = 50)]
     public string ButtonCode { get; set; }
 
     /// <summary>
     /// 按钮名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "按钮名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "按钮名称", Length = 20)]
     public string ButtonName { get; set; }
 
     /// <summary>

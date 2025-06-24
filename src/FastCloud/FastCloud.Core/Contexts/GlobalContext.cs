@@ -59,7 +59,7 @@ public class GlobalContext
                     .UrlDecode();
             }
 
-            return System.Enum.Parse<AppEnvironmentEnum>(result);
+            return System.Enum.Parse<AppEnvironmentEnum>(result, ignoreCase: true);
         }
     }
 

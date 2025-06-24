@@ -42,13 +42,15 @@ public class RoleModel : BaseEntity
     /// <summary>
     /// 角色名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "角色名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "角色名称", Length = 20)]
     public string RoleName { get; set; }
 
     /// <summary>
     /// 角色编码
     /// </summary>
-    [SugarColumn(ColumnDescription = "角色编码", Length = 50, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "角色编码", Length = 50)]
     public string RoleCode { get; set; }
 
     /// <summary>

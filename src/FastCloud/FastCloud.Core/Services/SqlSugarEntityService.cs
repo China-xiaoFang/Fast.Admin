@@ -94,9 +94,9 @@ public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
                 var db = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
 
                 var result = await db.Queryable<DatabaseModel>()
-                    .Where(wh => wh.Status == CommonStatusEnum.Enable
-                                 && wh.PlatformId == platformId
-                                 && wh.DatabaseType == databaseType)
+                    .Where(wh => wh.Status == CommonStatusEnum.Enable)
+                    .Where(wh => wh.PlatformId == platformId)
+                    .Where(wh => wh.DatabaseType == databaseType)
                     .Select(sl => new ConnectionSettingsOptions
                         {
                             ServiceIp = _hostEnvironment.IsDevelopment()

@@ -36,19 +36,22 @@ public class PlatformModel : SnowflakeKeyEntity
     /// <summary>
     /// 平台编号
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台编号", ColumnDataType = "varchar(32)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "平台编号", ColumnDataType = "varchar(32)")]
     public string PlatformNo { get; set; }
 
     /// <summary>
     /// 平台名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "平台名称", Length = 20)]
     public string PlatformName { get; set; }
 
     /// <summary>
     /// 平台简称
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台简称", Length = 10, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "平台简称", Length = 10)]
     public string ShortName { get; set; }
 
     /// <summary>
@@ -60,19 +63,22 @@ public class PlatformModel : SnowflakeKeyEntity
     /// <summary>
     /// 平台管理员名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台管理员名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "平台管理员名称", Length = 20)]
     public string AdminName { get; set; }
 
     /// <summary>
     /// 平台管理员手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台管理员手机", ColumnDataType = "varchar(11)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "平台管理员手机", ColumnDataType = "varchar(11)")]
     public string AdminMobile { get; set; }
 
     /// <summary>
     /// 平台管理员邮箱
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台管理员邮箱", Length = 50, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "平台管理员邮箱", Length = 50)]
     public string AdminEmail { get; set; }
 
     /// <summary>
@@ -84,7 +90,8 @@ public class PlatformModel : SnowflakeKeyEntity
     /// <summary>
     /// LogoUrl
     /// </summary>
-    [SugarColumn(ColumnDescription = "LogoUrl", Length = 200, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "LogoUrl", Length = 200)]
     public string LogoUrl { get; set; }
 
     /// <summary>

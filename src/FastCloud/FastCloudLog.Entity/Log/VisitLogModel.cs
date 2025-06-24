@@ -35,7 +35,8 @@ public class VisitLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
     /// <summary>

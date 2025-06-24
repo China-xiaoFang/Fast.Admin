@@ -36,7 +36,8 @@ public class AccountModel : SnowflakeKeyEntity
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
     /// <summary>
@@ -48,7 +49,8 @@ public class AccountModel : SnowflakeKeyEntity
     /// <summary>
     /// 密码
     /// </summary>
-    [SugarColumn(ColumnDescription = "密码", ColumnDataType = "varchar(50)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "密码", Length = 50)]
     public string Password { get; set; }
 
     /// <summary>
@@ -60,7 +62,8 @@ public class AccountModel : SnowflakeKeyEntity
     /// <summary>
     /// 昵称
     /// </summary>
-    [SugarColumn(ColumnDescription = "昵称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "昵称", Length = 20)]
     public string NickName { get; set; }
 
     /// <summary>

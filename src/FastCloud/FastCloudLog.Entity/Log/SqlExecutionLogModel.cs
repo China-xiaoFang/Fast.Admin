@@ -35,7 +35,8 @@ public class SqlExecutionLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
     /// <summary>
@@ -47,16 +48,13 @@ public class SqlExecutionLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// Sql参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数",
-        ColumnDataType = StaticConfig.CodeFirst_BigString,
-        IsNullable = true,
-        IsJson = true)]
+    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
     public SugarParameter[] Parameters { get; set; }
 
     /// <summary>
     /// 纯Sql，参数化之后的Sql
     /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]   
+    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string PureSql { get; set; }
 
     /// <summary>

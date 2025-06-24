@@ -64,7 +64,8 @@ public class SlaveDatabaseModel : BaseTEntity
     /// <summary>
     /// 数据库名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "数据库名称", Length = 50, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "数据库名称", Length = 50)]
     public string DbName { get; set; }
 
     /// <summary>

@@ -50,7 +50,8 @@ public class JwtBearerHandle : IJwtBearerHandle
         var employeeNo = context.User.Claims.FirstOrDefault(f => f.Type == nameof(AuthUserInfo.EmployeeNo))!.Value;
 
         // 获取授权用户信息
-        var authUserInfo = await _user.GetAuthUserInfo(Enum.Parse<AppEnvironmentEnum>(deviceType), tenantNo, employeeNo);
+        var authUserInfo
+            = await _user.GetAuthUserInfo(Enum.Parse<AppEnvironmentEnum>(deviceType, ignoreCase: true), tenantNo, employeeNo);
 
         if (authUserInfo == null)
             return false;

@@ -35,19 +35,22 @@ public class ConfigModel : BaseEntity
     /// <summary>
     /// 编码
     /// </summary>
-    [SugarColumn(ColumnDescription = "编码", Length = 50, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "编码", Length = 50)]
     public string Code { get; set; }
 
     /// <summary>
     /// 名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "名称", Length = 50, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "名称", Length = 50)]
     public string Name { get; set; }
 
     /// <summary>
     /// 值
     /// </summary>
-    [SugarColumn(ColumnDescription = "值", Length = 200, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "值", Length = 200)]
     public string Value { get; set; }
 
     /// <summary>

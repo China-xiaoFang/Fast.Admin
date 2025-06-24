@@ -54,19 +54,22 @@ public class MenuModel : SnowflakeKeyEntity
     /// <summary>
     /// 菜单编码
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单编码", Length = 50, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "菜单编码", Length = 50)]
     public string MenuCode { get; set; }
 
     /// <summary>
     /// 菜单名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "菜单名称", Length = 20)]
     public string MenuName { get; set; }
 
     /// <summary>
     /// 菜单标题
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单标题", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "菜单标题", Length = 20)]
     public string MenuTitle { get; set; }
 
     /// <summary>

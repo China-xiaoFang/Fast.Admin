@@ -47,13 +47,15 @@ public class ModuleModel : SnowflakeKeyEntity
     /// <summary>
     /// 模块名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "模块名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "模块名称", Length = 20)]
     public string ModuleName { get; set; }
 
     /// <summary>
     /// 图标
     /// </summary>
-    [SugarColumn(ColumnDescription = "图标", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "图标", Length = 20)]
     public string Icon { get; set; }
 
     /// <summary>
