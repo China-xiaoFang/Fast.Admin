@@ -35,7 +35,7 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = false)]
     public string Mobile { get; set; }
 
     /// <summary>
@@ -47,7 +47,7 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// 表名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "表名称", Length = 100, IsNullable = false)]
+    [SugarColumn(ColumnDescription = "表名称", Length = 100)]
     public string TableName { get; set; }
 
     /// <summary>

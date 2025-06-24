@@ -60,7 +60,7 @@ public class OrganizationModel : BaseEntity
     /// <summary>
     /// 联系人
     /// </summary>
-    [SugarColumn(ColumnDescription = "联系人", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnDescription = "联系人", Length = 20)]
     public string Contacts { get; set; }
 
     /// <summary>

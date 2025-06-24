@@ -41,13 +41,13 @@ public class VisitLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 应用名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用名称", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用名称", Length = 20)]
     public string AppName { get; set; }
 
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = false)]
     public string Mobile { get; set; }
 
     /// <summary>
