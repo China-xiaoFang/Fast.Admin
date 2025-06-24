@@ -73,7 +73,7 @@ public class GlobalContext
                     .UrlDecode();
             }
 
-            return Enum.Parse<AppEnvironmentEnum>(result);
+            return Enum.Parse<AppEnvironmentEnum>(result, ignoreCase: true);
         }
     }
 

@@ -130,7 +130,8 @@ public class SyncApiHostedService : IHostedService
                         var apiInfo = apiInfoList.SingleOrDefault(s => s.ApiUrl == httpMethodAttribute.Template);
 
                         var method = System.Enum.Parse<HttpRequestMethodEnum>(httpMethodAttribute.HttpMethods.FirstOrDefault()
-                                                                              ?? "Get");
+                                                                              ?? "Get",
+                            ignoreCase: true);
                         var action = apiInfoAttribute?.Action ?? HttpRequestActionEnum.None;
                         var hasPermission = allowForbiddenAttribute == null && permissionAttribute?.TagList?.Count > 0;
 

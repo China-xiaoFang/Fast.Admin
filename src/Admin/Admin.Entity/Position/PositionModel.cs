@@ -41,7 +41,8 @@ public class PositionModel : BaseEntity
     /// <summary>
     /// 职位名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "职位名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "职位名称", Length = 20)]
     public string PositionName { get; set; }
 
     /// <summary>

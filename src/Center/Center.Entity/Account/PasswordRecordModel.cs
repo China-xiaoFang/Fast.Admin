@@ -41,7 +41,8 @@ public class PasswordRecordModel : IdentityKeyEntity
     /// <summary>
     /// 密码
     /// </summary>
-    [SugarColumn(ColumnDescription = "密码", Length = 50, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "密码", Length = 50)]
     public string Password { get; set; }
 
     /// <summary>

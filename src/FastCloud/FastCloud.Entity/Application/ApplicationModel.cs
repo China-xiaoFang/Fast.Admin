@@ -42,19 +42,22 @@ public class ApplicationModel : SnowflakeKeyEntity
     /// <summary>
     /// 应用编号
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用编号", ColumnDataType = "varchar(32)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "应用编号", ColumnDataType = "varchar(32)")]
     public string AppNo { get; set; }
 
     /// <summary>
     /// 应用名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "应用名称", Length = 20)]
     public string AppName { get; set; }
 
     /// <summary>
     /// 开放平台Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "开放平台Id", Length = 50, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "开放平台Id", Length = 50)]
     public string OpenId { get; set; }
 
     /// <summary>

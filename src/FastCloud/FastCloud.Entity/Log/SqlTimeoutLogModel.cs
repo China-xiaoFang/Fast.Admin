@@ -70,7 +70,8 @@ public class SqlTimeoutLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
     /// <summary>
@@ -112,10 +113,7 @@ public class SqlTimeoutLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// Sql参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数",
-        ColumnDataType = StaticConfig.CodeFirst_BigString,
-        IsNullable = true,
-        IsJson = true)]
+    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
     public SugarParameter[] Parameters { get; set; }
 
     /// <summary>

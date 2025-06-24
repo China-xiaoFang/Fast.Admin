@@ -35,7 +35,8 @@ public class JobLevelModel : BaseEntity
     /// <summary>
     /// 职级名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "职级名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "职级名称", Length = 20)]
     public string JobLevelName { get; set; }
 
     /// <summary>
