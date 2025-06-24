@@ -91,7 +91,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
         return await _cache.GetAndSetAsync(cacheKey,
             async () =>
             {
-                var db = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
+                var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
                 var result = await db.Queryable<DatabaseModel>()
                     .Where(wh => wh.Status == CommonStatusEnum.Enable)

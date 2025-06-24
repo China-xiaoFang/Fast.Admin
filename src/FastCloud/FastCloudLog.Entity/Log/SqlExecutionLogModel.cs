@@ -27,7 +27,7 @@ namespace Fast.FastCloudLog.Entity;
 /// <summary>
 /// <see cref="SqlExecutionLogModel"/> Sql执行日志Model类
 /// </summary>
-[SugarTable("SqlExecutionLog{year}{month}{day}", "Sql执行日志表")]
+[SugarTable("SqlExecutionLog_{year}{month}{day}", "Sql执行日志表")]
 [SplitTable(SplitType.Week)]
 [SugarDbType(DatabaseTypeEnum.FastCloudLog)]
 public class SqlExecutionLogModel : BaseSnowflakeRecordEntity

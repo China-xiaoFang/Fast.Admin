@@ -27,7 +27,7 @@ namespace Fast.FastCloudLog.Entity;
 /// <summary>
 /// <see cref="VisitLogModel"/> 访问日志Model类
 /// </summary>
-[SugarTable("VisitLog{year}{month}{day}", "访问日志表")]
+[SugarTable("VisitLog_{year}{month}{day}", "访问日志表")]
 [SplitTable(SplitType.Month)]
 [SugarDbType(DatabaseTypeEnum.FastCloudLog)]
 public class VisitLogModel : BaseSnowflakeRecordEntity

@@ -21,13 +21,14 @@
 // ------------------------------------------------------------------------
 
 // ReSharper disable once CheckNamespace
+
 namespace Fast.FastCloudLog.Entity;
 
 /// <summary>
 /// <see cref="SqlDiffLogModel"/> Sql差异日志Model类
 /// </summary>
-[SugarTable("SqlDiffLog{year}{month}{day}", "Sql差异日志表")]
-[SplitTable(SplitType.Month)]
+[SugarTable("SqlDiffLog_{year}{month}{day}", "Sql差异日志表")]
+[SplitTable(SplitType.Week)]
 [SugarDbType(DatabaseTypeEnum.FastCloudLog)]
 public class SqlDiffLogModel : BaseSnowflakeRecordEntity
 {
