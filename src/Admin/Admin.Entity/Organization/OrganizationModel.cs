@@ -31,7 +31,7 @@ namespace Fast.Admin.Entity;
 [SugarDbType(DatabaseTypeEnum.Admin)]
 [SugarIndex($"IX_{{table}}_{nameof(OrgName)}", nameof(OrgName), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(OrgCode)}", nameof(OrgCode), OrderByType.Asc, true)]
-public class OrganizationModel : BaseEntity
+public class OrganizationModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
     /// 父级Id
@@ -82,4 +82,10 @@ public class OrganizationModel : BaseEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "备注", Length = 50)]
     public string Remark { get; set; }
+
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public virtual long RowVersion { get; set; }
 }

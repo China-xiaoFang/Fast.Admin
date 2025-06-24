@@ -35,7 +35,7 @@ namespace Fast.Center.Entity;
     nameof(DatabaseType),
     OrderByType.Asc,
     true)]
-public class MainDatabaseModel : BaseTEntity
+public class MainDatabaseModel : BaseTEntity, IUpdateVersion
 {
     /// <summary>
     /// 数据库类型
@@ -120,6 +120,12 @@ public class MainDatabaseModel : BaseTEntity
     /// </remarks>
     [SugarColumn(ColumnDescription = "差异日志")]
     public bool DisableAop { get; set; }
+
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public virtual long RowVersion { get; set; }
 
     /// <summary>
     /// 从库信息

@@ -30,7 +30,7 @@ namespace Fast.Admin.Entity;
 [SugarTable("JobLevel", "职级表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
 [SugarIndex($"IX_{{table}}_{nameof(JobLevelName)}", nameof(JobLevelName), OrderByType.Asc, true)]
-public class JobLevelModel : BaseEntity
+public class JobLevelModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
     /// 职级名称
@@ -50,4 +50,10 @@ public class JobLevelModel : BaseEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "备注", Length = 50)]
     public string Remark { get; set; }
+
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public virtual long RowVersion { get; set; }
 }

@@ -31,7 +31,7 @@ namespace Fast.Center.Entity;
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(Mobile)}", nameof(Mobile), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(Email)}", nameof(Email), OrderByType.Asc, true)]
-public class AccountModel : SnowflakeKeyEntity
+public class AccountModel : SnowflakeKeyEntity, IUpdateVersion
 {
     /// <summary>
     /// 手机

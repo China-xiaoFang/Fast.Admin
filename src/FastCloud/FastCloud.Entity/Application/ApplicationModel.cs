@@ -31,7 +31,7 @@ namespace Fast.FastCloud.Entity;
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
 [SugarIndex($"IX_{{table}}_{nameof(AppNo)}", nameof(AppNo), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(AppName)}", nameof(AppName), OrderByType.Asc, true)]
-public class ApplicationModel : SnowflakeKeyEntity
+public class ApplicationModel : SnowflakeKeyEntity, IUpdateVersion
 {
     /// <summary>
     /// 版本

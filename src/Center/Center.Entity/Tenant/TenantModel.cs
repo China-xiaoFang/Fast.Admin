@@ -32,7 +32,7 @@ namespace Fast.Center.Entity;
 [SugarIndex($"IX_{{table}}_{nameof(TenantNo)}", nameof(TenantNo), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(TenantName)}", nameof(TenantName), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(Secret)}", nameof(Secret), OrderByType.Asc, true)]
-public class TenantModel : SnowflakeKeyEntity
+public class TenantModel : SnowflakeKeyEntity, IUpdateVersion
 {
     /// <summary>
     /// 租户编号

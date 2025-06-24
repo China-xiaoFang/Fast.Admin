@@ -31,7 +31,7 @@ namespace Fast.FastCloud.Entity;
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
 [SugarIndex($"IX_{{table}}_{nameof(ButtonCode)}", nameof(ButtonCode), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(ButtonName)}", nameof(MenuId), OrderByType.Asc, nameof(ButtonName), OrderByType.Asc, true)]
-public class ButtonModel : SnowflakeKeyEntity
+public class ButtonModel : SnowflakeKeyEntity, IUpdateVersion
 {
     /// <summary>
     /// 版本

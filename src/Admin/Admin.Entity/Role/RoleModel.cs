@@ -31,7 +31,7 @@ namespace Fast.Admin.Entity;
 [SugarDbType(DatabaseTypeEnum.Admin)]
 [SugarIndex($"IX_{{table}}_{nameof(RoleName)}", nameof(RoleName), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(RoleCode)}", nameof(RoleCode), OrderByType.Asc, true)]
-public class RoleModel : BaseEntity
+public class RoleModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
     /// 角色类型
@@ -70,4 +70,10 @@ public class RoleModel : BaseEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "备注", Length = 50)]
     public string Remark { get; set; }
+
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public virtual long RowVersion { get; set; }
 }
