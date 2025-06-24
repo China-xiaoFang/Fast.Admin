@@ -41,7 +41,7 @@ public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 应用名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用名称", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnDescription = "应用名称", Length = 20)]
     public string AppName { get; set; }
 
     /// <summary>
