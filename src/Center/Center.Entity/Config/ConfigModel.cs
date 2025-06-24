@@ -30,7 +30,7 @@ namespace Fast.Center.Entity;
 [SugarTable("Config", "配置表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(Code)}", nameof(Code), OrderByType.Asc, true)]
-public class ConfigModel : BaseEntity
+public class ConfigModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
     /// 编码
@@ -64,4 +64,10 @@ public class ConfigModel : BaseEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "备注", Length = 50)]
     public string Remark { get; set; }
+
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public virtual long RowVersion { get; set; }
 }

@@ -35,7 +35,7 @@ namespace Fast.FastCloud.Entity;
     nameof(DatabaseType),
     OrderByType.Asc,
     true)]
-public class DatabaseModel : SnowflakeKeyEntity
+public class DatabaseModel : SnowflakeKeyEntity, IUpdateVersion
 {
     /// <summary>
     /// 平台Id

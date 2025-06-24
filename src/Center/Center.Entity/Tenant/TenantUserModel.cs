@@ -30,7 +30,7 @@ namespace Fast.Center.Entity;
 [SugarTable("TenantUser", "租户用户表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(Account)}", nameof(Account), OrderByType.Asc, true)]
-public class TenantUserModel : SnowflakeKeyEntity, IBaseTEntity
+public class TenantUserModel : SnowflakeKeyEntity, IBaseTEntity, IUpdateVersion
 {
     /// <summary>
     /// 账号Id

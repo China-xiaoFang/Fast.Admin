@@ -29,7 +29,7 @@ namespace Fast.FastCloud.Entity;
 /// </summary>
 [SugarTable("EditionPrice", "版本价格表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
-public class EditionPriceModel : SnowflakeKeyEntity
+public class EditionPriceModel : SnowflakeKeyEntity, IUpdateVersion
 {
     /// <summary>
     /// 版本
