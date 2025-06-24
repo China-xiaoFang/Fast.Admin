@@ -41,7 +41,7 @@ builder.Initialize();
 builder.Services.AddSerialization();
 
 // 添加日志服务
-builder.Services.AddLoggingService(builder.Environment);
+builder.Services.AddLoggingService(builder.Configuration);
 
 // 添加跨域服务
 builder.Services.AddCorsAccessor(builder.Configuration);
