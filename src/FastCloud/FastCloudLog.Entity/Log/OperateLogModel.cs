@@ -27,7 +27,7 @@ namespace Fast.FastCloudLog.Entity;
 /// <summary>
 /// <see cref="OperateLogModel"/> 操作日志Model类
 /// </summary>
-[SugarTable("OperateLog{year}{month}{day}", "操作日志表")]
+[SugarTable("OperateLog_{year}{month}{day}", "操作日志表")]
 [SplitTable(SplitType.Month)]
 [SugarDbType(DatabaseTypeEnum.FastCloudLog)]
 public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity

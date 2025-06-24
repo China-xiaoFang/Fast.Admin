@@ -190,7 +190,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             try
             {
                 // 这里不能使用Aop
-                var db = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
+                var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
                 // 异步不等待
                 await db.Insertable(sqlTimeoutLogModel)
@@ -318,7 +318,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             try
             {
                 // 这里不能使用Aop
-                var db = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
+                var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
                 // 异步不等待
                 await db.Insertable(sqlExceptionLogModel)

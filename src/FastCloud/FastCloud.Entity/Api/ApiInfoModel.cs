@@ -132,4 +132,38 @@ public class ApiInfoModel : SnowflakeKeyEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
     public DateTime? UpdatedTime { get; set; }
+
+    /// <summary>Serves as the default hash function.</summary>
+    /// <returns>A hash code for the current object.</returns>
+    public override int GetHashCode()
+    {
+        // ReSharper disable once NonReadonlyMemberInGetHashCode
+        return Id.GetHashCode();
+    }
+
+    /// <summary>Determines whether the specified object is equal to the current object.</summary>
+    /// <param name="obj">The object to compare with the current object.</param>
+    /// <returns>
+    /// <see langword="true" /> if the specified object  is equal to the current object; otherwise, <see langword="false" />.</returns>
+    public override bool Equals(object obj)
+    {
+        if (obj is not ApiInfoModel oldApiModel)
+            return false;
+
+        return Id == oldApiModel.Id
+               && ServiceName == oldApiModel.ServiceName
+               && GroupName == oldApiModel.GroupName
+               && GroupTitle == oldApiModel.GroupTitle
+               && Version == oldApiModel.Version
+               && Description == oldApiModel.Description
+               && ModuleName == oldApiModel.ModuleName
+               && ApiUrl == oldApiModel.ApiUrl
+               && ApiName == oldApiModel.ApiName
+               && Method == oldApiModel.Method
+               && Action == oldApiModel.Action
+               && HasAuth == oldApiModel.HasAuth
+               && HasPermission == oldApiModel.HasPermission
+               && Tags == oldApiModel.Tags
+               && Sort == oldApiModel.Sort;
+    }
 }
