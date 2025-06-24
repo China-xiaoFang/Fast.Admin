@@ -49,7 +49,8 @@ public class JwtBearerHandle : IJwtBearerHandle
         var mobile = context.User.Claims.FirstOrDefault(f => f.Type == nameof(AuthUserInfo.Mobile))!.Value;
 
         // 获取授权用户信息
-        var authUserInfo = await _user.GetAuthUserInfo(System.Enum.Parse<AppEnvironmentEnum>(deviceType), mobile);
+        var authUserInfo
+            = await _user.GetAuthUserInfo(System.Enum.Parse<AppEnvironmentEnum>(deviceType, ignoreCase: true), mobile);
 
         if (authUserInfo == null)
             return false;

@@ -37,7 +37,8 @@ public class TenantModel : SnowflakeKeyEntity
     /// <summary>
     /// 租户编号
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户编号", ColumnDataType = "varchar(32)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "租户编号", ColumnDataType = "varchar(32)")]
     public string TenantNo { get; set; }
 
     /// <summary>
@@ -47,7 +48,8 @@ public class TenantModel : SnowflakeKeyEntity
     /// <para>登录账号前缀</para>
     /// <para>单号生成前缀</para>
     /// </remarks>
-    [SugarColumn(ColumnDescription = "租户编码", ColumnDataType = "varchar(5)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "租户编码", ColumnDataType = "varchar(5)")]
     public string TenantCode { get; set; }
 
     /// <summary>
@@ -59,64 +61,73 @@ public class TenantModel : SnowflakeKeyEntity
     /// <summary>
     /// 租户名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户名称", Length = 30, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "租户名称", Length = 30)]
     public string TenantName { get; set; }
 
     /// <summary>
     /// 租户简称
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户简称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "租户简称", Length = 20)]
     public string ShortName { get; set; }
 
     /// <summary>
     /// 租户英文名称
     /// </summary>
     /// <remarks>根据 <see cref="TenantName"/> 生成的拼音</remarks>
-    [SugarColumn(ColumnDescription = "租户英文名称", Length = 100, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "租户英文名称", Length = 100)]
     public string SpellName { get; set; }
 
     /// <summary>
     /// 租户密钥
     /// </summary>
     /// <remarks>32位长度</remarks>
-    [SugarColumn(ColumnDescription = "租户密钥", ColumnDataType = "varchar(32)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "租户密钥", ColumnDataType = "varchar(32)")]
     public string Secret { get; set; }
 
     /// <summary>
     /// 租户公钥
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户公钥", Length = 4096, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "租户公钥", Length = 4096)]
     public string PublicKey { get; set; }
 
     /// <summary>
     /// 租户私钥
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户私钥", Length = 4096, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "租户私钥", Length = 4096)]
     public string PrivateKey { get; set; }
 
     /// <summary>
     /// 租户管理员名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户管理员名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "租户管理员名称", Length = 20)]
     public string AdminName { get; set; }
 
     /// <summary>
     /// 租户管理员手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户管理员手机", ColumnDataType = "varchar(11)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "租户管理员手机", ColumnDataType = "varchar(11)")]
     public string AdminMobile { get; set; }
 
     /// <summary>
     /// 租户管理员邮箱
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户管理员邮箱", Length = 50, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "租户管理员邮箱", Length = 50)]
     public string AdminEmail { get; set; }
 
     /// <summary>
     /// 租户管理员电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户管理员电话", Length = 20, IsNullable = false)]
-    public string Mobile { get; set; }
+    [SugarColumn(ColumnDescription = "租户管理员电话", Length = 20)]
+    public string AdminPhone { get; set; }
 
     /// <summary>
     /// 租户类型
@@ -127,7 +138,8 @@ public class TenantModel : SnowflakeKeyEntity
     /// <summary>
     /// LogoUrl
     /// </summary>
-    [SugarColumn(ColumnDescription = "LogoUrl", Length = 200, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "LogoUrl", Length = 200)]
     public string LogoUrl { get; set; }
 
     /// <summary>

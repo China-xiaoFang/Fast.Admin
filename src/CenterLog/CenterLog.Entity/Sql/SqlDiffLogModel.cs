@@ -47,7 +47,8 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
     /// <summary>
@@ -77,19 +78,13 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// 旧的列信息
     /// </summary>
-    [SugarColumn(ColumnDescription = "旧的列信息",
-        ColumnDataType = StaticConfig.CodeFirst_BigString,
-        IsNullable = true,
-        IsJson = true)]
+    [SugarColumn(ColumnDescription = "旧的列信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
     public List<List<DiffLogColumnInfo>> BeforeColumnList { get; set; }
 
     /// <summary>
     /// 新的列信息
     /// </summary>
-    [SugarColumn(ColumnDescription = "新的列信息",
-        ColumnDataType = StaticConfig.CodeFirst_BigString,
-        IsNullable = true,
-        IsJson = true)]
+    [SugarColumn(ColumnDescription = "新的列信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
     public List<List<DiffLogColumnInfo>> AfterColumnList { get; set; }
 
     /// <summary>
@@ -107,10 +102,7 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// <summary>
     /// Sql参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数",
-        ColumnDataType = StaticConfig.CodeFirst_BigString,
-        IsNullable = true,
-        IsJson = true)]
+    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
     public SugarParameter[] Parameters { get; set; }
 
     /// <summary>

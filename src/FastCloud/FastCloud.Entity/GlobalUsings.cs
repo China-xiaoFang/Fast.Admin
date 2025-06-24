@@ -20,6 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+global using System.ComponentModel.DataAnnotations;
 global using Fast.Common;
 global using Fast.FastCloud.Enum;
 global using Fast.SqlSugar;

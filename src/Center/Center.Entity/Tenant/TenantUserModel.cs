@@ -42,7 +42,8 @@ public class TenantUserModel : SnowflakeKeyEntity, IBaseTEntity
     /// 账户
     /// </summary>
     /// <remarks>6-10位字母或数字，必须以字母开头，不能全为数字</remarks>
-    [SugarColumn(ColumnDescription = "账户", ColumnDataType = "varchar(10)", IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "账户", ColumnDataType = "varchar(20)")]
     public string Account { get; set; }
 
     /// <summary>

@@ -43,13 +43,15 @@ public class EmployeeModel : BaseEntity
     /// 工号
     /// </summary>
     /// <remarks>2024010101 ~ 20240101999</remarks>
-    [SugarColumn(ColumnDescription = "工号", Length = 11, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "工号", Length = 11)]
     public string EmployeeNo { get; set; }
 
     /// <summary>
     /// 名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "名称", Length = 10, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "名称", Length = 10)]
     public string EmployeeName { get; set; }
 
     /// <summary>

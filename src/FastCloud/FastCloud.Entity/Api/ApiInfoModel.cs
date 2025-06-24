@@ -34,14 +34,16 @@ public class ApiInfoModel : SnowflakeKeyEntity
     /// <summary>
     /// 服务名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "服务名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "服务名称", Length = 20)]
     public string ServiceName { get; set; }
 
     /// <summary>
     /// 分组名称
     /// </summary>
+    [Required]
     [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "分组名称", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnDescription = "分组名称", Length = 20)]
     public string GroupName { get; set; }
 
     /// <summary>
@@ -65,13 +67,15 @@ public class ApiInfoModel : SnowflakeKeyEntity
     /// <summary>
     /// 模块名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "模块名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "模块名称", Length = 20)]
     public string ModuleName { get; set; }
 
     /// <summary>
     /// 接口地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "接口地址", Length = 200, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "接口地址", Length = 200)]
     public string ApiUrl { get; set; }
 
     /// <summary>

@@ -42,19 +42,21 @@ public class OrganizationModel : BaseEntity
     /// <summary>
     /// 父级Id集合
     /// </summary>
-    [SugarColumn(ColumnDescription = "父级Id集合", IsNullable = false, IsJson = true)]
+    [SugarColumn(ColumnDescription = "父级Id集合", IsJson = true)]
     public List<long> ParentIds { get; set; }
 
     /// <summary>
     /// 组织名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "组织名称", Length = 20, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "组织名称", Length = 20)]
     public string OrgName { get; set; }
 
     /// <summary>
     /// 组织编码
     /// </summary>
-    [SugarColumn(ColumnDescription = "组织编码", Length = 50, IsNullable = false)]
+    [Required]
+    [SugarColumn(ColumnDescription = "组织编码", Length = 50)]
     public string OrgCode { get; set; }
 
     /// <summary>
