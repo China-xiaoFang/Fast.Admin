@@ -90,7 +90,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
         return await _centerCache.GetAndSetAsync(cacheKey,
             async () =>
             {
-                var db = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
+                var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
                 var slaveAdaptConfig = new TypeAdapterConfig();
                 slaveAdaptConfig.NewConfig<SlaveDatabaseModel, SlaveConnectionInfo>()

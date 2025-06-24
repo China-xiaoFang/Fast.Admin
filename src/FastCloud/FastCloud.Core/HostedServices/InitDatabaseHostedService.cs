@@ -90,10 +90,8 @@ public class InitDatabaseHostedService : IHostedService
     {
         try
         {
-            // 这里不能使用Aop
-            var db = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
-            // 执行超时时间
-            db.Ado.CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut;
+            var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+            // 加载Aop
             SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(),
                 db,
                 SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
@@ -122,6 +120,7 @@ public class InitDatabaseHostedService : IHostedService
                 .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.FastCloud)
                 .Select(sl => sl.EntityType)
                 .ToArray();
+
             // 创建表
             db.CodeFirst.InitTables(tableTypes);
             db.CodeFirst.SplitTables()
@@ -1767,13 +1766,13 @@ public class InitDatabaseHostedService : IHostedService
             #endregion
 
             #endregion
+
+            _logger.LogInformation("初始化数据库成功。");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Init database error...");
         }
-
-        _logger.LogInformation("初始化数据库成功。");
     }
 
     /// <summary>

@@ -71,6 +71,7 @@ public class SyncApiHostedService : IHostedService
         var serviceName = Assembly.GetEntryAssembly()!.GetName()
             .Name;
         var addApiInfoList = new List<ApiInfoModel>();
+        var updateApiInfoList = new List<ApiInfoModel>();
 
         _logger.LogInformation("开始同步接口信息...");
 
@@ -83,18 +84,10 @@ public class SyncApiHostedService : IHostedService
             var allApplicationTypeList = MAppContext.EffectiveTypes
                 .Where(wh => iDynamicApplicationType.IsAssignableFrom(wh) && !wh.IsInterface)
                 .Select(sl => new {ApiDescriptionSettings = sl.GetCustomAttribute<ApiDescriptionSettingsAttribute>(), Type = sl})
+                .Where(wh => !wh.ApiDescriptionSettings.IgnoreApi)
                 .ToList();
 
-            // 这里不能使用Aop
-            var db = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
-            // 执行超时时间
-            db.Ado.CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut;
-            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(),
-                db,
-                SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
-                false,
-                true,
-                null);
+            var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
             var apiInfoList = await db.Queryable<ApiInfoModel>()
                 .Where(wh => wh.ServiceName == serviceName)
@@ -137,19 +130,31 @@ public class SyncApiHostedService : IHostedService
 
                         if (apiInfo != null)
                         {
-                            apiInfo.GroupName = groupName;
-                            apiInfo.GroupTitle = groupOpenApiInfo?.Title;
-                            apiInfo.Version = groupOpenApiInfo?.Version;
-                            apiInfo.Description = groupOpenApiInfo?.Description;
-                            apiInfo.ModuleName = moduleName;
-                            apiInfo.ApiName = apiInfoAttribute?.Name;
-                            apiInfo.Method = method;
-                            apiInfo.Action = action;
-                            apiInfo.HasAuth = allowAnonymousAttribute == null;
-                            apiInfo.HasPermission = hasPermission;
-                            apiInfo.Tags = string.Join(",", permissionAttribute?.TagList ?? new List<string>());
-                            apiInfo.Sort = sort;
-                            apiInfo.UpdatedTime = dateTime;
+                            var newApiInfoModel = new ApiInfoModel
+                            {
+                                Id = apiInfo.Id,
+                                ServiceName = serviceName,
+                                GroupName = groupName,
+                                GroupTitle = groupOpenApiInfo?.Title,
+                                Version = groupOpenApiInfo?.Version,
+                                Description = groupOpenApiInfo?.Description,
+                                ModuleName = moduleName,
+                                ApiUrl = httpMethodAttribute.Template,
+                                ApiName = apiInfoAttribute?.Name,
+                                Method = method,
+                                Action = action,
+                                HasAuth = allowAnonymousAttribute == null,
+                                HasPermission = hasPermission,
+                                Tags = string.Join(",", permissionAttribute?.TagList ?? []),
+                                Sort = sort
+                            };
+                            // 不相同才修改
+                            if (!apiInfo.Equals(newApiInfoModel))
+                            {
+                                newApiInfoModel.Adapt(apiInfo);
+                                apiInfo.UpdatedTime = dateTime;
+                                updateApiInfoList.Add(apiInfo);
+                            }
                         }
                         else
                         {
@@ -168,7 +173,7 @@ public class SyncApiHostedService : IHostedService
                                 Action = action,
                                 HasAuth = allowAnonymousAttribute == null,
                                 HasPermission = hasPermission,
-                                Tags = string.Join(",", permissionAttribute?.TagList ?? new List<string>()),
+                                Tags = string.Join(",", permissionAttribute?.TagList ?? []),
                                 Sort = sort,
                                 CreatedTime = dateTime
                             });
@@ -177,20 +182,28 @@ public class SyncApiHostedService : IHostedService
                 }
             }
 
-            await db.Updateable(apiInfoList)
+            // 加载Aop
+            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(),
+                db,
+                SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
+                false,
+                true,
+                null);
+
+            await db.Updateable(updateApiInfoList)
                 .ExecuteCommandAsync(cancellationToken);
             await db.Insertable(addApiInfoList)
                 .ExecuteCommandAsync(cancellationToken);
 
             CacheContext.ApiInfoList = apiInfoList;
             CacheContext.ApiInfoList.AddRange(addApiInfoList);
+
+            _logger.LogInformation($"同步接口信息成功。新增 {addApiInfoList.Count} 个，更新 {updateApiInfoList.Count} 个。");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Sync api error...");
         }
-
-        _logger.LogInformation("同步接口信息成功。");
     }
 
     /// <summary>

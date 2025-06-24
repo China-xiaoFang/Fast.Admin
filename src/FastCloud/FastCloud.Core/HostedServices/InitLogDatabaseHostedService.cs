@@ -55,16 +55,7 @@ public class InitLogDatabaseHostedService : IHostedService
     {
         try
         {
-            // 这里不能使用Aop
-            var db = new SqlSugarClient(SqlSugarContext.DefaultConnectionConfig);
-            // 执行超时时间
-            db.Ado.CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut;
-            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(),
-                db,
-                SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
-                false,
-                true,
-                null);
+            var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
             // 查询 FastCloudLog 库连接字符串
             var logConnectionSettings = await db.Queryable<DatabaseModel>()
@@ -87,8 +78,7 @@ public class InitLogDatabaseHostedService : IHostedService
 
             // 创建日志库上下文
             var logDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(logConnectionSettings));
-            // 执行超时时间
-            logDb.Ado.CommandTimeOut = logConnectionSettings.CommandTimeOut;
+            // 加载 Aop
             SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(),
                 logDb,
                 logConnectionSettings.SugarSqlExecMaxSeconds,
@@ -100,9 +90,9 @@ public class InitLogDatabaseHostedService : IHostedService
             logDb.DbMaintenance.CreateDatabase();
 
             // 查询核心表是否存在
-            var sql
-                = $"SELECT COUNT(*) FROM [information_schema].[TABLES] WHERE [TABLE_NAME] = '{typeof(SqlExecutionLogModel).GetSugarTableName()}'";
-            if (await logDb.Ado.GetIntAsync(sql) > 0)
+            var allTableNames = logDb.SplitHelper<SqlExecutionLogModel>()
+                .GetTables();
+            if (allTableNames.Count > 0)
                 return;
 
             _logger.LogInformation("开始初始化日志数据库...");
@@ -117,17 +107,18 @@ public class InitLogDatabaseHostedService : IHostedService
                 .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.FastCloudLog)
                 .Select(sl => sl.EntityType)
                 .ToArray();
+
             // 创建表
             logDb.CodeFirst.InitTables(tableTypes);
             logDb.CodeFirst.SplitTables()
                 .InitTables(splitTableTypes);
+
+            _logger.LogInformation("初始化日志数据库成功。");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Init log database error...");
         }
-
-        _logger.LogInformation("初始化日志数据库成功。");
     }
 
     /// <summary>
