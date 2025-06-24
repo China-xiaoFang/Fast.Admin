@@ -54,7 +54,7 @@ public class AccountModel : SnowflakeKeyEntity
     /// <summary>
     /// 状态
     /// </summary>
-    [SugarColumn(ColumnDescription = "状态", IsNullable = false)]
+    [SugarColumn(ColumnDescription = "状态")]
     public CommonStatusEnum Status { get; set; }
 
     /// <summary>

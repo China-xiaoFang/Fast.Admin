@@ -54,7 +54,7 @@ public class MenuModel : SnowflakeKeyEntity
     /// <summary>
     /// 菜单编码
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单编码", Length = 50)]
+    [SugarColumn(ColumnDescription = "菜单编码", Length = 50, IsNullable = false)]
     public string MenuCode { get; set; }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class MenuModel : SnowflakeKeyEntity
     /// <summary>
     /// 菜单标题
     /// </summary>
-    [SugarColumn(ColumnDescription = "菜单标题", Length = 20)]
+    [SugarColumn(ColumnDescription = "菜单标题", Length = 20, IsNullable = false)]
     public string MenuTitle { get; set; }
 
     /// <summary>
