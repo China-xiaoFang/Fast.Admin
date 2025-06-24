@@ -111,18 +111,7 @@ public class InitDatabaseHostedService : IHostedService
             if (await db.Ado.GetIntAsync(sql) > 0)
                 return;
 
-            var logSb1 = new StringBuilder();
-            logSb1.Append("\u001b[40m\u001b[1m\u001b[32m");
-            logSb1.Append("system_notify");
-            logSb1.Append("\u001b[39m\u001b[22m\u001b[49m");
-            logSb1.Append(": ");
-            logSb1.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-            logSb1.Append(Environment.NewLine);
-            logSb1.Append("\u001b[40m\u001b[37m");
-            logSb1.Append("               ");
-            logSb1.Append("开始初始化数据库...");
-            logSb1.Append("\u001b[39m\u001b[22m\u001b[49m");
-            Console.WriteLine(logSb1.ToString());
+            _logger.LogInformation("开始初始化数据库...");
 
             // 获取所有不分表的Model类型
             var tableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => !wh.IsSplitTable)
@@ -1785,18 +1774,7 @@ public class InitDatabaseHostedService : IHostedService
             _logger.LogError(ex, "Init database error...");
         }
 
-        var logSb = new StringBuilder();
-        logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-        logSb.Append("system_notify");
-        logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-        logSb.Append(": ");
-        logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-        logSb.Append(Environment.NewLine);
-        logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-        logSb.Append("               ");
-        logSb.Append("初始化数据库成功。");
-        logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-        Console.WriteLine(logSb.ToString());
+        _logger.LogInformation("初始化数据库成功。");
     }
 
     /// <summary>
