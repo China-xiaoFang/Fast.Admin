@@ -30,7 +30,7 @@ namespace Fast.FastCloud.Entity;
 [SugarTable("Module", "模块表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
 [SugarIndex($"IX_{{table}}_{nameof(ModuleName)}", nameof(AppId), OrderByType.Asc, nameof(ModuleName), OrderByType.Asc, true)]
-public class ModuleModel : SnowflakeKeyEntity
+public class ModuleModel : SnowflakeKeyEntity, IUpdateVersion
 {
     /// <summary>
     /// 版本

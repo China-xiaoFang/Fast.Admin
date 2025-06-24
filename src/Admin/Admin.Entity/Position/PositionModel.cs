@@ -30,7 +30,7 @@ namespace Fast.Admin.Entity;
 [SugarTable("Position", "职位表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
 [SugarIndex($"IX_{{table}}_{nameof(PositionName)}", nameof(OrgId), OrderByType.Asc, nameof(PositionName), OrderByType.Asc, true)]
-public class PositionModel : BaseEntity
+public class PositionModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
     /// 机构Id
@@ -68,4 +68,10 @@ public class PositionModel : BaseEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "备注", Length = 50)]
     public string Remark { get; set; }
+
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public virtual long RowVersion { get; set; }
 }

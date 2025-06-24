@@ -30,7 +30,7 @@ namespace Fast.FastCloud.Entity;
 [SugarTable("User", "用户表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
 [SugarIndex($"IX_{{table}}_{nameof(Mobile)}", nameof(Mobile), OrderByType.Asc, true)]
-public class UserModel : SnowflakeKeyEntity
+public class UserModel : SnowflakeKeyEntity, IUpdateVersion
 {
     /// <summary>
     /// 手机
