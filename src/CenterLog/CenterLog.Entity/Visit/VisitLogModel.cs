@@ -67,5 +67,6 @@ public class VisitLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// 访问时间
     /// </summary>
     [SplitField]
-    public override DateTime? CreatedTime { get; set; }
+    [SugarSearchTime]
+    public override DateTime CreatedTime { get; set; }
 }

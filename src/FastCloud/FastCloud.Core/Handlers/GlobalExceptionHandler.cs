@@ -20,8 +20,10 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using System.Net.Sockets;
 using System.Text;
 using Fast.UnifyResult;
+using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
@@ -48,98 +50,121 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
     /// <returns></returns>
     public async Task OnExceptionAsync(ExceptionContext context, bool isUserFriendlyException, bool isValidationException)
     {
+        var message = new StringBuilder();
+
         try
         {
             var httpContext = context.HttpContext;
-
-            var message = $"{context.Exception.Message}\r\n"
-                          + $"请求Url：{httpContext.Request.Method}, {httpContext.Request.Scheme}://{httpContext.Request.Host}{httpContext.Request.Path}\r\n";
-
-            var deviceType = httpContext.Request.Headers[HttpHeaderConst.DeviceType]
-                .ToString()
-                .UrlDecode();
-            var deviceId = httpContext.Request.Headers[HttpHeaderConst.DeviceId]
-                .ToString()
-                .UrlDecode();
-
-            message += $"device: {deviceType}, {deviceId}\r\n";
-
-            switch (httpContext.Request.Method)
+            // 判断请求是否已经取消
+            if (!httpContext.RequestAborted.IsCancellationRequested)
             {
-                case "GET":
-                case "DELETE":
-                    if (httpContext.Request.Path.HasValue)
-                    {
-                        var queryParam = httpContext.Request.QueryString;
-                        message += $"请求参数: {queryParam}\r\n";
-                    }
+                message.AppendLine(context.Exception.Message);
+                message.AppendLine(
+                    $"请求Url：{httpContext.Request.Method}, {httpContext.Request.Scheme}://{httpContext.Request.Host}{httpContext.Request.Path}");
 
-                    break;
-                case "POST":
-                case "PUT":
-                    // 允许读取请求的Body
-                    httpContext.Request.EnableBuffering();
+                var deviceType = httpContext.Request.Headers[HttpHeaderConst.DeviceType]
+                    .ToString()
+                    .UrlDecode();
+                var deviceId = httpContext.Request.Headers[HttpHeaderConst.DeviceId]
+                    .ToString()
+                    .UrlDecode();
 
-                    // 重置指针
-                    httpContext.Request.Body.Position = 0;
-                    if (httpContext.Request.Path.HasValue)
-                    {
-                        if (httpContext.Request.ContentType?.Contains("multipart/form-data") == true)
-                        {
-                            // 文件上传
-                            message += "请求参数: 文件上传...\r\n";
-                        }
-                        else
-                        {
-                            // 请求参数
-                            using var streamReader = new StreamReader(httpContext.Request.Body, Encoding.UTF8);
-                            var requestParam = await streamReader.ReadToEndAsync();
-                            message += $"请求参数: {requestParam}\r\n";
+                message.AppendLine($"device: {deviceType}, {deviceId}");
 
-                            // 重置指针
-                            httpContext.Request.Body.Position = 0;
-                        }
-                    }
-
-                    break;
-            }
-
-            // 判断是否为友好异常
-            if (isUserFriendlyException)
-            {
-                // 只写入最深的一条堆栈信息
-                var firstLine = context.Exception.StackTrace
-                    ?.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
-                    .FirstOrDefault();
-
-                // 如果有匹配的堆栈信息，选择第一条（最深的那一条）
-                if (!string.IsNullOrEmpty(firstLine))
+                switch (httpContext.Request.Method)
                 {
-                    message += $"{firstLine}";
-                }
-                else
-                {
-                    message += "未找到堆栈信息...";
-                }
+                    case "GET":
+                    case "DELETE":
+                        if (httpContext.Request.Path.HasValue)
+                        {
+                            var queryParam = httpContext.Request.QueryString;
+                            message.AppendLine($"请求参数: {queryParam}");
+                        }
 
-                // 写入警告日志
-                _logger.LogWarning(message);
+                        break;
+                    case "POST":
+                    case "PUT":
+                        // 允许读取请求的Body
+                        httpContext.Request.EnableBuffering();
+
+                        // 重置指针
+                        httpContext.Request.Body.Position = 0;
+
+                        if (httpContext.Request.Path.HasValue)
+                        {
+                            if (httpContext.Request.ContentType?.Contains("multipart/form-data") == true)
+                            {
+                                // 文件上传
+                                message.AppendLine("请求参数: 文件上传...");
+                            }
+                            else
+                            {
+                                // 请求参数
+                                using var streamReader = new StreamReader(httpContext.Request.Body,
+                                    Encoding.UTF8,
+                                    leaveOpen: true);
+                                var requestParam = await streamReader.ReadToEndAsync();
+                                message.AppendLine($"请求参数: {requestParam}");
+
+                                // 重置指针
+                                httpContext.Request.Body.Position = 0;
+                            }
+                        }
+
+                        break;
+                }
             }
-            // 判断是否为验证异常
-            else if (isValidationException)
-            {
-                // 写入警告日志
-                _logger.LogWarning(message);
-            }
-            else
-            {
-                // 写入错误日志
-                _logger.LogError(message);
-            }
+        }
+        // 客户端中途断开
+        catch (ConnectionResetException)
+        {
+        }
+        catch (SocketException socketException) when (socketException.SocketErrorCode == SocketError.ConnectionReset)
+        {
+        }
+        // Kestrel 封装的管道读写抛出 IOException
+        catch (IOException ioException) when (ioException.InnerException is SocketException
+                                              {
+                                                  SocketErrorCode: SocketError.ConnectionReset
+                                              })
+        {
         }
         catch (Exception ex)
         {
+            _logger.LogError(context.Exception, "全局异常原始错误。");
             _logger.LogError(ex, "全局异常拦截失败。");
+        }
+
+        // 判断是否为友好异常
+        if (isUserFriendlyException)
+        {
+            // 只写入最深的一条堆栈信息
+            var firstLine = context.Exception.StackTrace?.Split([Environment.NewLine], StringSplitOptions.RemoveEmptyEntries)
+                .FirstOrDefault();
+
+            // 如果有匹配的堆栈信息，选择第一条（最深的那一条）
+            if (!string.IsNullOrEmpty(firstLine))
+            {
+                message.AppendLine($"{firstLine}");
+            }
+            else
+            {
+                message.AppendLine("未找到堆栈信息...");
+            }
+
+            // 写入警告日志
+            _logger.LogWarning(message.ToString());
+        }
+        // 判断是否为验证异常
+        else if (isValidationException)
+        {
+            // 写入警告日志
+            _logger.LogWarning(message.ToString());
+        }
+        else
+        {
+            // 写入错误日志
+            _logger.LogError(context.Exception, message.ToString());
         }
 
         await Task.CompletedTask;

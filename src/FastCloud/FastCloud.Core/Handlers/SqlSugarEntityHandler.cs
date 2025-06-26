@@ -88,10 +88,11 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             case DatabaseTypeEnum.Deploy:
             case DatabaseTypeEnum.Gateway:
             case DatabaseTypeEnum.Center:
+            case DatabaseTypeEnum.CenterLog:
             case DatabaseTypeEnum.Admin:
             default:
                 return SqlSugarContext.ConnectionSettings;
-            case DatabaseTypeEnum.CenterLog:
+            case DatabaseTypeEnum.FastCloudLog:
                 return await _sqlSugarEntityService.GetConnectionSetting(CommonConst.DefaultPlatformId,
                     CommonConst.DefaultPlatformNo,
                     databaseType);

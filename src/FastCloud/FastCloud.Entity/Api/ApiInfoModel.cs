@@ -61,7 +61,7 @@ public class ApiInfoModel : SnowflakeKeyEntity
     /// <summary>
     /// 分组描述
     /// </summary>
-    [SugarColumn(ColumnDescription = "分组描述", Length = 50)]
+    [SugarColumn(ColumnDescription = "分组描述", Length = 200)]
     public string Description { get; set; }
 
     /// <summary>
@@ -125,7 +125,7 @@ public class ApiInfoModel : SnowflakeKeyEntity
     /// 创建时间
     /// </summary>
     [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
-    public DateTime? CreatedTime { get; set; }
+    public DateTime CreatedTime { get; set; }
 
     /// <summary>
     /// 更新时间

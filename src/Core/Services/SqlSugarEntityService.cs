@@ -87,36 +87,15 @@ public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
             return connectionSettings;
         }
 
-        return await _centerCache.GetAndSetAsync(cacheKey,
+        var data = await _centerCache.GetAndSetAsync(cacheKey,
             async () =>
             {
                 var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
-
-                var slaveAdaptConfig = new TypeAdapterConfig();
-                slaveAdaptConfig.NewConfig<SlaveDatabaseModel, SlaveConnectionInfo>()
-                    .Map(e => e.ServiceIp,
-                        e => _hostEnvironment.IsDevelopment()
-                            // 开发环境使用公网地址
-                            ? e.PublicIp
-                            // 生产环境使用内网地址
-                            : e.IntranetIp);
 
                 var result = await db.Queryable<MainDatabaseModel>()
                     .Includes(e => e.SlaveDatabaseList.Where(wh => !wh.IsDeleted)
                         .ToList())
                     .Where(wh => !wh.IsDeleted && wh.TenantId == tenantId && wh.DatabaseType == databaseType)
-                    .Select(sl => new ConnectionSettingsOptions
-                        {
-                            ServiceIp = _hostEnvironment.IsDevelopment()
-                                // 开发环境使用公网地址
-                                ? sl.PublicIp
-                                // 生产环境使用内网地址
-                                : sl.IntranetIp,
-                            SlaveConnectionList = sl.SlaveDatabaseList
-                                .Select(dSl => dSl.Adapt<SlaveConnectionInfo>(slaveAdaptConfig))
-                                .ToList()
-                        },
-                        true)
                     .SingleAsync();
 
                 if (result == null)
@@ -126,15 +105,35 @@ public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
                     throw new ArgumentNullException(message);
                 }
 
-                if (_httpContext != null)
-                {
-                    // 放入 HttpContext.Items 中
-                    _httpContext.Items[
-                        $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"]
-                    = result;
-                }
-
                 return result;
             });
+
+        var result = data.Adapt<ConnectionSettingsOptions>();
+
+        result.ServiceIp = _hostEnvironment.IsDevelopment()
+            // 开发环境使用公网地址
+            ? data.PublicIp
+            // 生产环境使用内网地址
+            : data.IntranetIp;
+
+        var slaveAdaptConfig = new TypeAdapterConfig();
+        slaveAdaptConfig.NewConfig<SlaveDatabaseModel, SlaveConnectionInfo>()
+            .Map(e => e.ServiceIp,
+                e => _hostEnvironment.IsDevelopment()
+                    // 开发环境使用公网地址
+                    ? e.PublicIp
+                    // 生产环境使用内网地址
+                    : e.IntranetIp);
+
+        result.SlaveConnectionList = data.SlaveDatabaseList.Adapt<List<SlaveConnectionInfo>>(slaveAdaptConfig);
+
+        if (_httpContext != null)
+        {
+            // 放入 HttpContext.Items 中
+            _httpContext.Items[$"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"]
+                = result;
+        }
+
+        return result;
     }
 }
