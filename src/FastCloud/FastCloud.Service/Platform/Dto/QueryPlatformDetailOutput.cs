@@ -20,52 +20,20 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
-
-namespace Fast.FastCloudLog.Entity;
+namespace Fast.FastCloud.Service.Platform.Dto;
 
 /// <summary>
-/// <see cref="SqlExecutionLogModel"/> Sql执行日志Model类
+/// 获取平台详情输出
 /// </summary>
-[SugarTable("SqlExecutionLog_{year}{month}{day}", "Sql执行日志表")]
-[SplitTable(SplitType.Week)]
-[SugarDbType(DatabaseTypeEnum.FastCloudLog)]
-public class SqlExecutionLogModel : BaseSnowflakeRecordEntity
+public class QueryPlatformDetailOutput : QueryPlatformPagedOutput
 {
     /// <summary>
-    /// 手机
+    /// 平台管理员邮箱
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
-    public string Mobile { get; set; }
+    public string AdminEmail { get; set; }
 
     /// <summary>
-    /// 原始Sql
+    /// 平台管理员电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string RawSql { get; set; }
-
-    /// <summary>
-    /// Sql参数
-    /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
-    public SugarParameter[] Parameters { get; set; }
-
-    /// <summary>
-    /// 纯Sql，参数化之后的Sql
-    /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string PureSql { get; set; }
-
-    /// <summary>
-    /// 执行时间
-    /// </summary>
-    [SplitField]
-    [SugarSearchTime]
-    public override DateTime CreatedTime { get; set; }
-
-    [SugarColumn(IsIgnore = true)]
-    public override long? DepartmentId { get; set; }
-
-    [SugarColumn(IsIgnore = true)]
-    public override string DepartmentName { get; set; }
+    public string AdminPhone { get; set; }
 }

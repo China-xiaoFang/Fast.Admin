@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 using System.Reflection;
+using Dm.util;
 using Fast.DynamicApplication;
 using Fast.FastCloud.Entity;
 using Fast.JwtBearer;
@@ -72,6 +73,7 @@ public class SyncApiHostedService : IHostedService
             .Name;
         var addApiInfoList = new List<ApiInfoModel>();
         var updateApiInfoList = new List<ApiInfoModel>();
+        var apiUrlList = new List<string>();
 
         _logger.LogInformation("开始同步接口信息...");
 
@@ -119,8 +121,12 @@ public class SyncApiHostedService : IHostedService
                         var permissionAttribute = methodInfo.GetCustomAttribute<PermissionAttribute>();
                         var apiInfoAttribute = methodInfo.GetCustomAttribute<ApiInfoAttribute>();
 
+                        var apiUrl = httpMethodAttribute.Template.StartsWith("/")
+                            ? httpMethodAttribute.Template
+                            : $"/{moduleName}/{httpMethodAttribute.Template}";
+
                         // 判断原有的Url是否存在
-                        var apiInfo = apiInfoList.SingleOrDefault(s => s.ApiUrl == httpMethodAttribute.Template);
+                        var apiInfo = apiInfoList.SingleOrDefault(s => s.ApiUrl == apiUrl);
 
                         var method = System.Enum.Parse<HttpRequestMethodEnum>(httpMethodAttribute.HttpMethods.FirstOrDefault()
                                                                               ?? "Get",
@@ -128,55 +134,41 @@ public class SyncApiHostedService : IHostedService
                         var action = apiInfoAttribute?.Action ?? HttpRequestActionEnum.None;
                         var hasPermission = allowForbiddenAttribute == null && permissionAttribute?.TagList?.Count > 0;
 
+                        var apiInfoModel = new ApiInfoModel
+                        {
+                            ServiceName = serviceName,
+                            GroupName = groupName,
+                            GroupTitle = groupOpenApiInfo?.Title,
+                            Version = groupOpenApiInfo?.Version,
+                            Description = groupOpenApiInfo?.Description,
+                            ModuleName = moduleName,
+                            ApiUrl = apiUrl,
+                            ApiName = apiInfoAttribute?.Name,
+                            Method = method,
+                            Action = action,
+                            HasAuth = allowAnonymousAttribute == null,
+                            HasPermission = hasPermission,
+                            Tags = string.Join(",", permissionAttribute?.TagList ?? []),
+                            Sort = sort
+                        };
+                        apiUrlList.add(apiInfoModel.ApiUrl);
+
                         if (apiInfo != null)
                         {
-                            var newApiInfoModel = new ApiInfoModel
-                            {
-                                Id = apiInfo.Id,
-                                ServiceName = serviceName,
-                                GroupName = groupName,
-                                GroupTitle = groupOpenApiInfo?.Title,
-                                Version = groupOpenApiInfo?.Version,
-                                Description = groupOpenApiInfo?.Description,
-                                ModuleName = moduleName,
-                                ApiUrl = httpMethodAttribute.Template,
-                                ApiName = apiInfoAttribute?.Name,
-                                Method = method,
-                                Action = action,
-                                HasAuth = allowAnonymousAttribute == null,
-                                HasPermission = hasPermission,
-                                Tags = string.Join(",", permissionAttribute?.TagList ?? []),
-                                Sort = sort
-                            };
+                            apiInfoModel.Id = apiInfo.Id;
                             // 不相同才修改
-                            if (!apiInfo.Equals(newApiInfoModel))
+                            if (!apiInfo.Equals(apiInfoModel))
                             {
-                                newApiInfoModel.Adapt(apiInfo);
+                                apiInfoModel.Adapt(apiInfo);
                                 apiInfo.UpdatedTime = dateTime;
                                 updateApiInfoList.Add(apiInfo);
                             }
                         }
                         else
                         {
-                            addApiInfoList.Add(new ApiInfoModel
-                            {
-                                Id = YitIdHelper.NextId(),
-                                ServiceName = serviceName,
-                                GroupName = groupName,
-                                GroupTitle = groupOpenApiInfo?.Title,
-                                Version = groupOpenApiInfo?.Version,
-                                Description = groupOpenApiInfo?.Description,
-                                ModuleName = moduleName,
-                                ApiUrl = httpMethodAttribute.Template,
-                                ApiName = apiInfoAttribute?.Name,
-                                Method = method,
-                                Action = action,
-                                HasAuth = allowAnonymousAttribute == null,
-                                HasPermission = hasPermission,
-                                Tags = string.Join(",", permissionAttribute?.TagList ?? []),
-                                Sort = sort,
-                                CreatedTime = dateTime
-                            });
+                            apiInfoModel.Id = YitIdHelper.NextId();
+                            apiInfoModel.CreatedTime = dateTime;
+                            addApiInfoList.Add(apiInfoModel);
                         }
                     }
                 }
@@ -190,6 +182,15 @@ public class SyncApiHostedService : IHostedService
                 true,
                 null);
 
+            var deleteApiInfoList = apiInfoList.Where(wh => !apiUrlList.Contains(wh.ApiUrl))
+                .ToList();
+
+            if (deleteApiInfoList.Count > 0)
+            {
+                await db.Deleteable(deleteApiInfoList)
+                    .ExecuteCommandAsync(cancellationToken);
+            }
+
             await db.Updateable(updateApiInfoList)
                 .ExecuteCommandAsync(cancellationToken);
             await db.Insertable(addApiInfoList)
@@ -198,7 +199,8 @@ public class SyncApiHostedService : IHostedService
             CacheContext.ApiInfoList = apiInfoList;
             CacheContext.ApiInfoList.AddRange(addApiInfoList);
 
-            _logger.LogInformation($"同步接口信息成功。新增 {addApiInfoList.Count} 个，更新 {updateApiInfoList.Count} 个。");
+            _logger.LogInformation(
+                $"同步接口信息成功。新增 {addApiInfoList.Count} 个，更新 {updateApiInfoList.Count} 个，删除 {deleteApiInfoList.Count} 个。");
         }
         catch (Exception ex)
         {

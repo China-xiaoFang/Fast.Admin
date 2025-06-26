@@ -50,7 +50,7 @@ public class VisitLogModel : BaseSnowflakeRecordEntity
     /// </summary>
     [SplitField]
     [SugarSearchTime]
-    public override DateTime? CreatedTime { get; set; }
+    public override DateTime CreatedTime { get; set; }
 
     [SugarColumn(IsIgnore = true)]
     public override long? DepartmentId { get; set; }

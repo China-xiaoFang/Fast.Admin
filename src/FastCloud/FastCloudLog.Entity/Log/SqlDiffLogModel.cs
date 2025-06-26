@@ -35,7 +35,6 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity
     /// <summary>
     /// 手机
     /// </summary>
-    [Required]
     [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
@@ -104,7 +103,7 @@ public class SqlDiffLogModel : BaseSnowflakeRecordEntity
     /// </summary>
     [SplitField]
     [SugarSearchTime]
-    public override DateTime? CreatedTime { get; set; }
+    public override DateTime CreatedTime { get; set; }
 
     [SugarColumn(IsIgnore = true)]
     public override long? DepartmentId { get; set; }

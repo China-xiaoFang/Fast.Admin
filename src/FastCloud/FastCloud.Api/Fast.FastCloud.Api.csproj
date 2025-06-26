@@ -4,6 +4,10 @@
 		<Description>Fast.Admin 应用 Colud 应用库。</Description>
 	</PropertyGroup>
 
+    <ItemGroup>
+        <None Remove="logs\**" />
+    </ItemGroup>
+
     <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="6.0.36" />
         <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.36" />
@@ -24,6 +28,7 @@
 
     <ItemGroup>
         <PackageReference Include="IGeekFan.AspNetCore.Knife4jUI" Version="0.0.16" />
+        <PackageReference Include="SqlSugarCore" Version="5.1.4.197-preview18" />
     </ItemGroup>
 
 	<ItemGroup>

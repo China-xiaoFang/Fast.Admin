@@ -36,6 +36,7 @@ public class PlatformModel : SnowflakeKeyEntity, IUpdateVersion
     /// <summary>
     /// 平台编号
     /// </summary>
+    [SugarSearchValue]
     [Required]
     [SugarColumn(ColumnDescription = "平台编号", ColumnDataType = "varchar(32)")]
     public string PlatformNo { get; set; }
@@ -43,6 +44,7 @@ public class PlatformModel : SnowflakeKeyEntity, IUpdateVersion
     /// <summary>
     /// 平台名称
     /// </summary>
+    [SugarSearchValue]
     [Required]
     [SugarColumn(ColumnDescription = "平台名称", Length = 20)]
     public string PlatformName { get; set; }
@@ -50,6 +52,7 @@ public class PlatformModel : SnowflakeKeyEntity, IUpdateVersion
     /// <summary>
     /// 平台简称
     /// </summary>
+    [SugarSearchValue]
     [Required]
     [SugarColumn(ColumnDescription = "平台简称", Length = 10)]
     public string ShortName { get; set; }
@@ -97,6 +100,7 @@ public class PlatformModel : SnowflakeKeyEntity, IUpdateVersion
     /// <summary>
     /// 开通时间
     /// </summary>
+    [SugarSearchTime]
     [SugarColumn(ColumnDescription = "开通时间")]
     public DateTime ActivationTime { get; set; }
 
@@ -120,6 +124,19 @@ public class PlatformModel : SnowflakeKeyEntity, IUpdateVersion
     public DateTime RenewalExpiryTime { get; set; }
 
     /// <summary>
+    /// 是否试用平台（未正式上线）
+    /// </summary>
+    /// <remarks>ture表示可以删除所有数据重新初始化</remarks>
+    [SugarColumn(ColumnDescription = "是否试用平台")]
+    public bool IsTrial { get; set; }
+
+    /// <summary>
+    /// 是否已初始化
+    /// </summary>
+    [SugarColumn(ColumnDescription = "是否已初始化")]
+    public bool IsInitialized { get; set; }
+
+    /// <summary>
     /// 备注
     /// </summary>
     [SugarColumn(ColumnDescription = "备注", Length = 50)]
@@ -141,7 +158,7 @@ public class PlatformModel : SnowflakeKeyEntity, IUpdateVersion
     /// 创建时间
     /// </summary>
     [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
-    public DateTime? CreatedTime { get; set; }
+    public DateTime CreatedTime { get; set; }
 
     /// <summary>
     /// 更新者用户Id

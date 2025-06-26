@@ -288,6 +288,8 @@ public class InitDatabaseHostedService : IHostedService
                 Edition = EditionEnum.Flagship,
                 AutoRenewal = true,
                 RenewalExpiryTime = new DateTime(2028, 01, 01),
+                IsTrial = true,
+                IsInitialized = false,
                 CreatedUserId = adminUserModel.Id,
                 CreatedUserName = adminUserModel.NickName,
                 CreatedTime = new DateTime(2025, 01, 01)

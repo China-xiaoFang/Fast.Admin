@@ -70,7 +70,6 @@ public class ExceptionLogModel : BaseIdentityRecordEntity
     /// <summary>
     /// 手机
     /// </summary>
-    [Required]
     [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
@@ -120,5 +119,5 @@ public class ExceptionLogModel : BaseIdentityRecordEntity
     /// 异常时间
     /// </summary>
     [SugarSearchTime]
-    public override DateTime? CreatedTime { get; set; }
+    public override DateTime CreatedTime { get; set; }
 }

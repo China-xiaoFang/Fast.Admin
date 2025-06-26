@@ -127,5 +127,6 @@ public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// 操作时间
     /// </summary>
     [SplitField]
-    public override DateTime? CreatedTime { get; set; }
+    [SugarSearchTime]
+    public override DateTime CreatedTime { get; set; }
 }
