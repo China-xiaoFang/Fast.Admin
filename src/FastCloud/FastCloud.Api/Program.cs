@@ -59,8 +59,7 @@ builder.Services.AddDependencyInjection();
 builder.Services.AddCache();
 
 var redisOptions = builder.Configuration.GetSection("RedisSettings")
-    .Get<List<RedisSettingsOptions>>()
-    .SingleOrDefault(f => f.ServiceName == "Default");
+    .Get<RedisSettingsOptions>();
 if (redisOptions != null)
 {
     // 添加分布式缓存

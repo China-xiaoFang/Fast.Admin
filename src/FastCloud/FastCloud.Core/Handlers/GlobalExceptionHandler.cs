@@ -36,6 +36,9 @@ namespace Fast.FastCloud.Core;
 /// </summary>
 public class GlobalExceptionHandler : IGlobalExceptionHandler
 {
+    /// <summary>
+    /// 日志
+    /// </summary>
     private readonly ILogger _logger;
 
     public GlobalExceptionHandler(ILogger<IGlobalExceptionHandler> logger)
@@ -118,9 +121,17 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
         // 客户端中途断开
         catch (ConnectionResetException)
         {
+            message.AppendLine("连接被客户端强制关闭。");
+            // 写入警告日志
+            _logger.LogWarning(message.ToString());
+            return;
         }
         catch (SocketException socketException) when (socketException.SocketErrorCode == SocketError.ConnectionReset)
         {
+            message.AppendLine("连接被客户端强制关闭。");
+            // 写入警告日志
+            _logger.LogWarning(message.ToString());
+            return;
         }
         // Kestrel 封装的管道读写抛出 IOException
         catch (IOException ioException) when (ioException.InnerException is SocketException
@@ -128,6 +139,10 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
                                                   SocketErrorCode: SocketError.ConnectionReset
                                               })
         {
+            message.AppendLine("连接被客户端强制关闭。");
+            // 写入警告日志
+            _logger.LogWarning(message.ToString());
+            return;
         }
         catch (Exception ex)
         {
