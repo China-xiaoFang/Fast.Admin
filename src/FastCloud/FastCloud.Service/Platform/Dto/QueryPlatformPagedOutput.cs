@@ -20,52 +20,84 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
+using Fast.FastCloud.Enum;
 
-namespace Fast.FastCloudLog.Entity;
+namespace Fast.FastCloud.Service.Platform.Dto;
 
 /// <summary>
-/// <see cref="SqlExecutionLogModel"/> Sql执行日志Model类
+/// <see cref="QueryPlatformPagedOutput"/> 获取平台分页列表输出
 /// </summary>
-[SugarTable("SqlExecutionLog_{year}{month}{day}", "Sql执行日志表")]
-[SplitTable(SplitType.Week)]
-[SugarDbType(DatabaseTypeEnum.FastCloudLog)]
-public class SqlExecutionLogModel : BaseSnowflakeRecordEntity
+public class QueryPlatformPagedOutput : PagedOutput
 {
     /// <summary>
-    /// 手机
+    /// 平台编号
     /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
-    public string Mobile { get; set; }
+    public string PlatformNo { get; set; }
 
     /// <summary>
-    /// 原始Sql
+    /// 平台名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string RawSql { get; set; }
+    public string PlatformName { get; set; }
 
     /// <summary>
-    /// Sql参数
+    /// 平台简称
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
-    public SugarParameter[] Parameters { get; set; }
+    public string ShortName { get; set; }
 
     /// <summary>
-    /// 纯Sql，参数化之后的Sql
+    /// 状态
     /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string PureSql { get; set; }
+    public CommonStatusEnum Status { get; set; }
 
     /// <summary>
-    /// 执行时间
+    /// 平台管理员名称
     /// </summary>
-    [SplitField]
-    [SugarSearchTime]
-    public override DateTime CreatedTime { get; set; }
+    public string AdminName { get; set; }
 
-    [SugarColumn(IsIgnore = true)]
-    public override long? DepartmentId { get; set; }
+    /// <summary>
+    /// 平台管理员手机
+    /// </summary>
+    public string AdminMobile { get; set; }
 
-    [SugarColumn(IsIgnore = true)]
-    public override string DepartmentName { get; set; }
+    /// <summary>
+    /// LogoUrl
+    /// </summary>
+    public string LogoUrl { get; set; }
+
+    /// <summary>
+    /// 开通时间
+    /// </summary>
+    public DateTime ActivationTime { get; set; }
+
+    /// <summary>
+    /// 平台版本
+    /// </summary>
+    public EditionEnum Edition { get; set; }
+
+    /// <summary>
+    /// 自动续费
+    /// </summary>
+    public bool AutoRenewal { get; set; }
+
+    /// <summary>
+    /// 续费到期时间
+    /// </summary>
+    /// <remarks>包含当天</remarks>
+    public DateTime RenewalExpiryTime { get; set; }
+
+    /// <summary>
+    /// 是否试用平台（未正式上线）
+    /// </summary>
+    /// <remarks>ture表示可以删除所有数据重新初始化</remarks>
+    public bool IsTrial { get; set; }
+
+    /// <summary>
+    /// 是否已初始化
+    /// </summary>
+    public bool IsInitialized { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string Remark { get; set; }
 }

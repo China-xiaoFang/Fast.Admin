@@ -84,6 +84,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         {
             // 按理说这里不应该存在这些类型的，如果存在则返回默认的
             case DatabaseTypeEnum.FastCloud:
+            case DatabaseTypeEnum.FastCloudLog:
             case DatabaseTypeEnum.Deploy:
             case DatabaseTypeEnum.Gateway:
             case DatabaseTypeEnum.Center:

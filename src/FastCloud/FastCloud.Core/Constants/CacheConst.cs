@@ -50,6 +50,6 @@ public class CacheConst
     /// <summary>
     /// 授权用户信息
     /// </summary>
-    /// <remarks>{1}登录环境，{2}手机号</remarks>
-    public const string AuthUserInfo = "Auth:{1}:{2}";
+    /// <remarks>{0}登录环境，{1}手机号</remarks>
+    public const string AuthUserInfo = "Auth:{0}:{1}";
 }

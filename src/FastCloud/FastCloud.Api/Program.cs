@@ -114,8 +114,8 @@ builder.Services.AddHostedService<SyncApiHostedService>();
 
 var app = builder.Build();
 
-// 强制使用 Https
-app.UseHttpsRedirection();
+//// 强制使用 Https
+//app.UseHttpsRedirection();
 
 // 启用静态文件
 app.UseStaticFiles();

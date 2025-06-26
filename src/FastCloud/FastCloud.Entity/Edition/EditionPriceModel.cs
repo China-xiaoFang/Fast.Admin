@@ -77,7 +77,7 @@ public class EditionPriceModel : SnowflakeKeyEntity, IUpdateVersion
     /// 创建时间
     /// </summary>
     [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
-    public DateTime? CreatedTime { get; set; }
+    public DateTime CreatedTime { get; set; }
 
     /// <summary>
     /// 更新者用户Id

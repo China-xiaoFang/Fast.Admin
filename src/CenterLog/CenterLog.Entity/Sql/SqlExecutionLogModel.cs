@@ -79,5 +79,6 @@ public class SqlExecutionLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
     /// 执行时间
     /// </summary>
     [SplitField]
-    public override DateTime? CreatedTime { get; set; }
+    [SugarSearchTime]
+    public override DateTime CreatedTime { get; set; }
 }

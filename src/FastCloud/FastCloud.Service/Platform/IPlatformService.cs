@@ -20,26 +20,33 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
+using Fast.FastCloud.Service.Platform.Dto;
 
-namespace Fast.FastCloud.Entity;
+namespace Fast.FastCloud.Service.Platform;
 
 /// <summary>
-/// <see cref="UserDataScopeModel"/> 用户数据范围表Model类
+/// <see cref="IPlatformService"/> 平台服务
 /// </summary>
-[SugarTable("UserDataScope", "用户数据范围表")]
-[SugarDbType(DatabaseTypeEnum.FastCloud)]
-public class UserDataScopeModel : IDatabaseEntity
+public interface IPlatformService
 {
     /// <summary>
-    /// 用户Id
+    /// 平台选择器
     /// </summary>
-    [SugarColumn(ColumnDescription = "用户Id")]
-    public long UserId { get; set; }
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task<PagedResult<ElSelectorOutput<long>>> PlatformSelector(PagedInput input);
 
     /// <summary>
-    /// 平台Id
+    /// 获取平台分页列表
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台Id")]
-    public long PlatformId { get; set; }
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task<PagedResult<QueryPlatformPagedOutput>> QueryPlatformPaged(PagedInput input);
+
+    /// <summary>
+    /// 获取平台详情
+    /// </summary>
+    /// <param name="platformId"></param>
+    /// <returns></returns>
+    Task<QueryPlatformDetailOutput> QueryPlatformDetail(long platformId);
 }
