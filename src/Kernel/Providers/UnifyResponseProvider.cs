@@ -20,6 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.IaaS;
 using Fast.UnifyResult;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -28,7 +29,7 @@ using Microsoft.Extensions.Logging;
 using SqlSugar;
 
 // ReSharper disable once CheckNamespace
-namespace Fast.FastCloud.Core;
+namespace Fast.Kernel;
 
 /// <summary>
 /// <see cref="UnifyResponseProvider"/> 规范化响应数据提供器

@@ -23,6 +23,7 @@
 using Fast.Common;
 using Fast.FastCloud.Entity;
 using Fast.FastCloudLog.Entity;
+using Fast.NET.Core;
 using Fast.SqlSugar;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -34,7 +35,7 @@ namespace Fast.FastCloud.Core;
 /// <summary>
 /// <see cref="InitLogDatabaseHostedService"/> 初始化日志 Database 托管服务
 /// </summary>
-[SuppressSniffer]
+[Order(2)]
 public class InitLogDatabaseHostedService : IHostedService
 {
     /// <summary>

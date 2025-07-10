@@ -21,11 +21,12 @@
 // ------------------------------------------------------------------------
 
 using Fast.DynamicApplication;
+using Fast.NET.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // ReSharper disable once CheckNamespace
-namespace Fast.Core;
+namespace Fast.Kernel;
 
 /// <summary>
 /// <see cref="HealthApplication"/> 健康检查

@@ -21,7 +21,10 @@
 // ------------------------------------------------------------------------
 
 using Fast.Cache;
+using Fast.DependencyInjection;
 using Fast.JwtBearer;
+using Fast.Runtime;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 
 // ReSharper disable once CheckNamespace

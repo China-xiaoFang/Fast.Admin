@@ -22,47 +22,26 @@
 
 // ReSharper disable once CheckNamespace
 
-namespace Fast.Core;
+namespace Fast.Common;
 
 /// <summary>
-/// <see cref="ApiGroupConst"/> 接口分组常量
+/// <see cref="HttpHeaderConst"/> Http Header 常量
 /// </summary>
-/// <remarks>这里需要和配置文件中的“SwaggerSettings”节点对应</remarks>
 [SuppressSniffer]
-public class ApiGroupConst
+public class HttpHeaderConst
 {
     /// <summary>
-    /// Fast云
+    /// 来源
     /// </summary>
-    public const string FastCloud = "FastCloud";
+    public const string Origin = $"{nameof(Fast)}-Origin";
 
     /// <summary>
-    /// 部署
+    /// 设备类型
     /// </summary>
-    public const string Deploy = "Deploy";
+    public const string DeviceType = $"{nameof(Fast)}-DeviceType";
 
     /// <summary>
-    /// 网关
+    /// 设备Id
     /// </summary>
-    public const string Gateway = "Gateway";
-
-    /// <summary>
-    /// Center
-    /// </summary>
-    public const string Center = "Center";
-
-    /// <summary>
-    /// CenterLog
-    /// </summary>
-    public const string CenterLog = "CenterLog";
-
-    /// <summary>
-    /// Admin
-    /// </summary>
-    public const string Admin = "Admin";
-
-    /// <summary>
-    /// 鉴权
-    /// </summary>
-    public const string Auth = "Auth";
+    public const string DeviceId = $"{nameof(Fast)}-DeviceId";
 }

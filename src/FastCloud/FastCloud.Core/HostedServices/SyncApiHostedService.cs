@@ -22,11 +22,14 @@
 
 using System.Reflection;
 using Dm.util;
+using Fast.Common;
 using Fast.DynamicApplication;
 using Fast.FastCloud.Entity;
 using Fast.JwtBearer;
+using Fast.NET.Core;
 using Fast.SqlSugar;
 using Fast.Swagger;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Hosting;
@@ -41,7 +44,7 @@ namespace Fast.FastCloud.Core;
 /// <summary>
 /// <see cref="SyncApiHostedService"/> 同步 Api 托管服务
 /// </summary>
-[SuppressSniffer]
+[Order(3)]
 public class SyncApiHostedService : IHostedService
 {
     /// <summary>
@@ -128,9 +131,8 @@ public class SyncApiHostedService : IHostedService
                         // 判断原有的Url是否存在
                         var apiInfo = apiInfoList.SingleOrDefault(s => s.ApiUrl == apiUrl);
 
-                        var method = System.Enum.Parse<HttpRequestMethodEnum>(httpMethodAttribute.HttpMethods.FirstOrDefault()
-                                                                              ?? "Get",
-                            ignoreCase: true);
+                        var method = System.Enum.Parse<HttpRequestMethodEnum>(
+                            httpMethodAttribute.HttpMethods.FirstOrDefault() ?? "Get", true);
                         var action = apiInfoAttribute?.Action ?? HttpRequestActionEnum.None;
                         var hasPermission = allowForbiddenAttribute == null && permissionAttribute?.TagList?.Count > 0;
 
@@ -175,12 +177,8 @@ public class SyncApiHostedService : IHostedService
             }
 
             // 加载Aop
-            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(),
-                db,
-                SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
-                false,
-                true,
-                null);
+            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db,
+                SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds, false, true, null);
 
             var deleteApiInfoList = apiInfoList.Where(wh => !apiUrlList.Contains(wh.ApiUrl))
                 .ToList();
