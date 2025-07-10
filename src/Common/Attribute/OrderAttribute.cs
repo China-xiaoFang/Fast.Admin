@@ -20,32 +20,21 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.DynamicApplication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
 // ReSharper disable once CheckNamespace
-namespace Fast.FastCloud.Core;
+namespace Fast.Common;
 
 /// <summary>
-/// <see cref="HealthApplication"/> 健康检查
+/// <see cref="OrderAttribute"/> 顺序特性
 /// </summary>
-[ApiDescriptionSettings(false)]
-public class HealthApplication : IDynamicApplication
+public class OrderAttribute : Attribute
 {
     /// <summary>
-    /// 健康检查
+    /// 顺序
     /// </summary>
-    /// <returns></returns>
-    [HttpGet("/health"), HttpGet("/health/index"), AllowAnonymous]
-    public IActionResult Index()
+    public int Order { get; set; }
+
+    public OrderAttribute(int order)
     {
-        return new JsonResult(new
-        {
-            // 当前时间
-            CurrentTime = DateTime.Now,
-            // 运行时间
-            RunTimes = MachineUtil.GetProgramRunTimes()
-        });
+        Order = order;
     }
 }

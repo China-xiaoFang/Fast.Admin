@@ -20,10 +20,13 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.SqlSugar;
+
+using Fast.Common;
+using Fast.IaaS;
+using Fast.NET.Core;
+using Fast.Runtime;
 
 // ReSharper disable once CheckNamespace
-
 namespace Fast.FastCloud.Core;
 
 /// <summary>
@@ -33,9 +36,25 @@ namespace Fast.FastCloud.Core;
 public class GlobalContext
 {
     /// <summary>
-    /// CenterLog 连接字符串配置
+    /// 来源
     /// </summary>
-    public static ConnectionSettingsOptions CenterLogConnectionSettings { get; internal set; }
+    public static string Origin
+    {
+        get
+        {
+            var httpContext = FastContext.HttpContext;
+            if (httpContext.IsWebSocketRequest())
+            {
+                return httpContext.Request.Query[HttpHeaderConst.Origin]
+                    .ToString()
+                    .UrlDecode();
+            }
+
+            return httpContext.Request.Headers[HttpHeaderConst.Origin]
+                .ToString()
+                .UrlDecode();
+        }
+    }
 
     /// <summary>
     /// 设备类型
@@ -83,6 +102,16 @@ public class GlobalContext
                 .UrlDecode();
         }
     }
+
+    /// <summary>
+    /// 是否为Web端
+    /// </summary>
+    public static bool IsWeb = (DeviceType & AppEnvironmentEnum.Web) != 0;
+
+    /// <summary>
+    /// 是否为桌面端
+    /// </summary>
+    public static bool IsDesktop = (DeviceType & AppEnvironmentEnum.Desktop) != 0;
 
     /// <summary>
     /// 是否为移动端

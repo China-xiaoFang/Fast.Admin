@@ -20,8 +20,54 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-global using Fast.DependencyInjection;
-global using Fast.IaaS;
-global using Fast.NET.Core;
-global using Fast.Runtime;
-global using Mapster;
+// ReSharper disable once CheckNamespace
+
+namespace Fast.Common;
+
+/// <summary>
+/// <see cref="ApiGroupConst"/> 接口分组常量
+/// </summary>
+/// <remarks>这里需要和配置文件中的“SwaggerSettings”节点对应</remarks>
+[SuppressSniffer]
+public class ApiGroupConst
+{
+    /// <summary>
+    /// 鉴权
+    /// </summary>
+    public const string Auth = "Auth";
+
+    /// <summary>
+    /// Fast Cloud
+    /// </summary>
+    public const string FastCloud = "FastCloud";
+
+    /// <summary>
+    /// Fast Cloud 日志
+    /// </summary>
+    public const string FastCloudLog = "FastCloudLog";
+
+    /// <summary>
+    /// 部署
+    /// </summary>
+    public const string Deploy = "Deploy";
+
+    /// <summary>
+    /// 网关
+    /// </summary>
+    public const string Gateway = "Gateway";
+
+    /// <summary>
+    /// Center
+    /// </summary>
+    public const string Center = "Center";
+
+    /// <summary>
+    /// CenterLog
+    /// </summary>
+    public const string CenterLog = "CenterLog";
+
+    /// <summary>
+    /// Admin
+    /// </summary>
+    public const string Admin = "Admin";
+}

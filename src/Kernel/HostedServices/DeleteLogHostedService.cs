@@ -22,16 +22,17 @@
 
 using System.Text;
 using System.Text.RegularExpressions;
+using Fast.Common;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 // ReSharper disable once CheckNamespace
-namespace Fast.FastCloud.Core;
+namespace Fast.Kernel;
 
 /// <summary>
 /// <see cref="DeleteLogHostedService"/> 删除日志托管服务
 /// </summary>
-[SuppressSniffer]
+[Order(-1)]
 public class DeleteLogHostedService : IHostedService
 {
     /// <summary>
