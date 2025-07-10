@@ -41,7 +41,7 @@ using SqlSugar;
 using Swashbuckle.AspNetCore.Swagger;
 using UAParser;
 using Yitter.IdGenerator;
-using IServiceCollectionExtension = Fast.Mapster.IServiceCollectionExtension;
+using FastMapsterAssembly = Fast.Mapster.IServiceCollectionExtension;
 
 // ReSharper disable once CheckNamespace
 namespace Fast.Kernel;
@@ -82,7 +82,7 @@ public class ProgramApplication : IDynamicApplication
         var fastIaaSAssembly = typeof(GlobalConstant).Assembly.GetName();
         var fastJwtBearerAssembly = typeof(IJwtBearerHandle).Assembly.GetName();
         var fastLoggingAssembly = typeof(Log).Assembly.GetName();
-        var fastMapsterAssembly = typeof(IServiceCollectionExtension).Assembly.GetName();
+        var fastMapsterAssembly = typeof(FastMapsterAssembly).Assembly.GetName();
         var fastNetCoreAssembly = typeof(FastContext).Assembly.GetName();
         var fastSqlSugarAssembly = typeof(ISqlSugarEntityHandler).Assembly.GetName();
         var fastSwaggerAssembly = typeof(SwaggerSettingsOptions).Assembly.GetName();

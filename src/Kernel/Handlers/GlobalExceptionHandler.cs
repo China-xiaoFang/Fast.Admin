@@ -20,6 +20,8 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using System.Net.Sockets;
+using System.Text;
 using Fast.Common;
 using Fast.IaaS;
 using Fast.UnifyResult;
@@ -27,8 +29,6 @@ using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using System.Net.Sockets;
-using System.Text;
 
 // ReSharper disable once CheckNamespace
 namespace Fast.Kernel;
@@ -104,8 +104,7 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
                             {
                                 // 请求参数
                                 using var streamReader = new StreamReader(httpContext.Request.Body,
-                                    Encoding.UTF8,
-                                    leaveOpen: true);
+                                    Encoding.UTF8, leaveOpen: true);
                                 var requestParam = await streamReader.ReadToEndAsync();
                                 message.AppendLine($"请求参数: {requestParam}");
 
@@ -135,9 +134,9 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
         }
         // Kestrel 封装的管道读写抛出 IOException
         catch (IOException ioException) when (ioException.InnerException is SocketException
-        {
-            SocketErrorCode: SocketError.ConnectionReset
-        })
+                                              {
+                                                  SocketErrorCode: SocketError.ConnectionReset
+                                              })
         {
             message.AppendLine("连接被客户端强制关闭。");
             // 写入警告日志
