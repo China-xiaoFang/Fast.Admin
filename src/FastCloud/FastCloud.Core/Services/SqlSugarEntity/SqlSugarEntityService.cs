@@ -22,8 +22,10 @@
 
 using Fast.Cache;
 using Fast.Common;
+using Fast.DependencyInjection;
 using Fast.FastCloud.Entity;
 using Fast.SqlSugar;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

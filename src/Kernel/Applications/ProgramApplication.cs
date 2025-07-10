@@ -24,12 +24,16 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using CSRedis;
 using Fast.Cache;
+using Fast.DependencyInjection;
 using Fast.DynamicApplication;
+using Fast.IaaS;
 using Fast.JwtBearer;
 using Fast.Logging;
+using Fast.NET.Core;
 using Fast.SqlSugar;
 using Fast.Swagger;
 using Fast.UnifyResult;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -40,7 +44,7 @@ using Yitter.IdGenerator;
 using IServiceCollectionExtension = Fast.Mapster.IServiceCollectionExtension;
 
 // ReSharper disable once CheckNamespace
-namespace Fast.FastCloud.Core;
+namespace Fast.Kernel;
 
 /// <summary>
 /// <see cref="ProgramApplication"/> 程序信息
@@ -86,8 +90,8 @@ public class ProgramApplication : IDynamicApplication
 
         var cpuUsage = await MachineUtil.GetProgramCpuUsage();
 
-        var (working, peakWorking, virtualMemory, peakVirtualMemory, pagedMemory, peakPagedMemory)
-            = MachineUtil.GetProgramMemoryInfo();
+        var (working, peakWorking, virtualMemory, peakVirtualMemory, pagedMemory, peakPagedMemory) =
+            MachineUtil.GetProgramMemoryInfo();
 
         const decimal relation = 1024;
 
@@ -104,7 +108,7 @@ public class ProgramApplication : IDynamicApplication
                 .Name,
             // 程序版本
             ProgramVersion = entryAssembly?.GetName()
-                ?.Version,
+                .Version,
             // ReSharper disable once RedundantNameQualifier
             // 框架版本
             FrameworkVersion = $"{nameof(NET)} {typeof(MAppContext).Assembly.GetName().Version}",
@@ -149,8 +153,7 @@ public class ProgramApplication : IDynamicApplication
                 new {csRedisCoreAssembly.Name, csRedisCoreAssembly.Version},
                 new {sqlSugarAssembly.Name, sqlSugarAssembly.Version},
                 new {yitterIdGeneratorAssembly.Name, yitterIdGeneratorAssembly.Version},
-                new {uaParserAssembly.Name, uaParserAssembly.Version},
-                new {mapsterAssembly.Name, mapsterAssembly.Version},
+                new {uaParserAssembly.Name, uaParserAssembly.Version}, new {mapsterAssembly.Name, mapsterAssembly.Version},
                 new {newtonsoftJsonAssembly.Name, newtonsoftJsonAssembly.Version},
                 new {fastRuntimeAssembly.Name, fastRuntimeAssembly.Version},
                 new {fastCacheAssembly.Name, fastCacheAssembly.Version},
