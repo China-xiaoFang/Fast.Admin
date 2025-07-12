@@ -27,7 +27,7 @@ namespace Fast.FastCloud.Service.Platform;
 /// <summary>
 /// <see cref="PlatformService"/> 平台服务
 /// </summary>
-public class PlatformService : IPlatformService,ITransientDependency
+public class PlatformService : IPlatformService, ITransientDependency
 {
     private readonly ISqlSugarRepository<PlatformModel> _repository;
 
@@ -43,16 +43,30 @@ public class PlatformService : IPlatformService,ITransientDependency
     /// <returns></returns>
     public async Task<PagedResult<ElSelectorOutput<long>>> PlatformSelector(PagedInput input)
     {
-        return await _repository.Entities.PlatformScope(e => e.Id)
+        var pagedData = await _repository.Entities.PlatformScope(e => e.Id)
             .OrderBy(ob => ob.PlatformName)
-            .Select(sl => new ElSelectorOutput<long>
+            .Select(sl => new
             {
-                Label = sl.PlatformName,
-                Value = sl.Id,
-                Data = new {sl.AdminName, sl.AdminMobile, sl.LogoUrl},
+                sl.PlatformName,
+                sl.Id,
+                sl.AdminName,
+                sl.AdminMobile,
+                sl.LogoUrl,
                 Disabled = sl.Status == CommonStatusEnum.Disable
             })
             .ToPagedListAsync(input);
+
+        var result = pagedData.Adapt<PagedResult<ElSelectorOutput<long>>>();
+
+        result.Rows = pagedData.Rows.Select(sl => new ElSelectorOutput<long>
+        {
+            Label = sl.PlatformName,
+            Value = sl.Id,
+            Disabled = sl.Disabled,
+            Data = new {sl.AdminName, sl.AdminMobile, sl.LogoUrl}
+        });
+
+        return result;
     }
 
     /// <summary>
