@@ -101,11 +101,6 @@ public interface IUser
     List<string> PlatformNoList { get; set; }
 
     /// <summary>
-    /// 菜单编码集合
-    /// </summary>
-    List<string> MenuCodeList { get; set; }
-
-    /// <summary>
     /// 按钮编码集合
     /// </summary>
     List<string> ButtonCodeList { get; set; }

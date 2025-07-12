@@ -104,8 +104,6 @@ public class AuthService : IAuthService, ITransientDependency
             .OrderByDescending((t1, t2) => t2.Sort)
             .Select((t1, t2) => new AuthMenuInfoDto {Id = t1.Id.SelectAll()})
             .ToListAsync();
-        result.MenuCodeList = menuList.Select(sl => sl.MenuCode)
-            .ToList();
 
         if (!_user.IsAdmin)
         {

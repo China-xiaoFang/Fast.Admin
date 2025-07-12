@@ -102,12 +102,6 @@ public class AuthUserInfo
     public virtual List<string> PlatformNoList { get; set; } = new();
 
     /// <summary>
-    /// 菜单编码集合
-    /// </summary>
-    // TODO：这里或许可以删除
-    public virtual List<string> MenuCodeList { get; set; } = new();
-
-    /// <summary>
     /// 按钮编码集合
     /// </summary>
     public virtual List<string> ButtonCodeList { get; set; } = new();

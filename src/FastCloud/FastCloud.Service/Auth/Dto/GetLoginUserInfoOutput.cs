@@ -34,12 +34,6 @@ public class GetLoginUserInfoOutput : AuthUserInfo
     public override List<string> PlatformNoList { get; set; }
 
     /// <summary>
-    /// 菜单编码集合
-    /// </summary>
-    [JsonIgnore]
-    public override List<string> MenuCodeList { get; set; }
-
-    /// <summary>
     /// 模块集合
     /// </summary>
     public List<AuthModuleInfoDto> ModuleList { get; set; }

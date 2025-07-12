@@ -20,7 +20,6 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-
 using Fast.Common;
 using Fast.IaaS;
 using Fast.NET.Core;
@@ -42,17 +41,25 @@ public class GlobalContext
     {
         get
         {
+            string result;
             var httpContext = FastContext.HttpContext;
             if (httpContext.IsWebSocketRequest())
             {
-                return httpContext.Request.Query[HttpHeaderConst.Origin]
+                result = httpContext.Request.Query[HttpHeaderConst.Origin]
+                    .ToString()
+                    .UrlDecode();
+            }
+            else
+            {
+                result = httpContext.Request.Headers[HttpHeaderConst.Origin]
                     .ToString()
                     .UrlDecode();
             }
 
-            return httpContext.Request.Headers[HttpHeaderConst.Origin]
-                .ToString()
-                .UrlDecode();
+            if (!string.IsNullOrWhiteSpace(result))
+                return result;
+
+            throw new UserFriendlyException("未知的设备信息！");
         }
     }
 
@@ -78,7 +85,10 @@ public class GlobalContext
                     .UrlDecode();
             }
 
-            return System.Enum.Parse<AppEnvironmentEnum>(result, ignoreCase: true);
+            if (!string.IsNullOrWhiteSpace(result) && System.Enum.TryParse<AppEnvironmentEnum>(result, true, out var environment))
+                return environment;
+
+            throw new UserFriendlyException("未知的设备信息！");
         }
     }
 
@@ -89,17 +99,25 @@ public class GlobalContext
     {
         get
         {
+            string result;
             var httpContext = FastContext.HttpContext;
             if (httpContext.IsWebSocketRequest())
             {
-                return httpContext.Request.Query[HttpHeaderConst.DeviceId]
+                result = httpContext.Request.Query[HttpHeaderConst.DeviceId]
+                    .ToString()
+                    .UrlDecode();
+            }
+            else
+            {
+                result = httpContext.Request.Headers[HttpHeaderConst.DeviceId]
                     .ToString()
                     .UrlDecode();
             }
 
-            return httpContext.Request.Headers[HttpHeaderConst.DeviceId]
-                .ToString()
-                .UrlDecode();
+            if (!string.IsNullOrWhiteSpace(result))
+                return result;
+
+            throw new UserFriendlyException("未知的设备信息！");
         }
     }
 

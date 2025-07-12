@@ -49,8 +49,7 @@ public class JwtBearerHandle : IJwtBearerHandle
         var mobile = context.User.Claims.FirstOrDefault(f => f.Type == nameof(AuthUserInfo.Mobile))!.Value;
 
         // 获取授权用户信息
-        var authUserInfo
-            = await _user.GetAuthUserInfo(System.Enum.Parse<AppEnvironmentEnum>(deviceType, ignoreCase: true), mobile);
+        var authUserInfo = await _user.GetAuthUserInfo(System.Enum.Parse<AppEnvironmentEnum>(deviceType, true), mobile);
 
         if (authUserInfo == null)
             return false;
@@ -70,11 +69,8 @@ public class JwtBearerHandle : IJwtBearerHandle
     public async Task<object> AuthorizeFailHandle(AuthorizationHandlerContext context, HttpContext httpContext,
         Exception exception)
     {
-        return await Task.FromResult(UnifyContext.GetRestfulResult(StatusCodes.Status401Unauthorized,
-            false,
-            null,
-            exception?.Message ?? "401 未经授权",
-            httpContext));
+        return await Task.FromResult(UnifyContext.GetRestfulResult(StatusCodes.Status401Unauthorized, false, null,
+            exception?.Message ?? "401 未经授权", httpContext));
     }
 
     /// <summary>权限判断处理</summary>
@@ -91,15 +87,24 @@ public class JwtBearerHandle : IJwtBearerHandle
 
         // 管理员有所有的权限
         if (_user.IsAdmin)
-        {
             return true;
-        }
 
-        // TODO:一些权限判断
+        // 获取权限标识
+        var permissionAttribute = httpContext.GetEndpoint()
+            ?.Metadata.GetMetadata<PermissionAttribute>();
 
-        await Task.CompletedTask;
+        if (permissionAttribute?.TagList == null || permissionAttribute.TagList.Count == 0)
+            return true;
 
-        return false;
+        if (_user.ButtonCodeList == null || _user.ButtonCodeList?.Count == 0)
+            return false;
+
+        // 满足一个即可
+        if (_user.ButtonCodeList.Intersect(permissionAttribute.TagList)
+            .Any())
+            return true;
+
+        return await Task.FromResult(false);
     }
 
     /// <summary>权限判断失败处理</summary>
