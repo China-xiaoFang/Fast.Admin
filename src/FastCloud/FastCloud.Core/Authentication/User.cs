@@ -157,6 +157,16 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// <returns></returns>
     public async Task Refresh(AuthUserInfo authUserInfo)
     {
+        if (authUserInfo == null || string.IsNullOrWhiteSpace(authUserInfo.Mobile))
+        {
+            throw new UnauthorizedAccessException("账号信息不存在！");
+        }
+
+        if (string.IsNullOrWhiteSpace(authUserInfo.DeviceId))
+        {
+            throw new UnauthorizedAccessException("未知的设备！");
+        }
+
         // 设置授权用户信息
         authUserInfo.Adapt(this);
 

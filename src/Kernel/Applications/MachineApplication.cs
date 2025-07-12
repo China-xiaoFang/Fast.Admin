@@ -40,6 +40,7 @@ public class MachineApplication : IDynamicApplication
     /// </summary>
     /// <returns></returns>
     [HttpGet("/machine"), HttpGet("/machine/index"), AllowAnonymous]
+    [ApiInfo("服务器信息", HttpRequestActionEnum.Other)]
     public IActionResult Index()
     {
         var dateTime = DateTime.Now;

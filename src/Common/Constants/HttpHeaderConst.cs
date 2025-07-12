@@ -38,10 +38,10 @@ public class HttpHeaderConst
     /// <summary>
     /// 设备类型
     /// </summary>
-    public const string DeviceType = $"{nameof(Fast)}-DeviceType";
+    public const string DeviceType = $"{nameof(Fast)}-Device-Type";
 
     /// <summary>
     /// 设备Id
     /// </summary>
-    public const string DeviceId = $"{nameof(Fast)}-DeviceId";
+    public const string DeviceId = $"{nameof(Fast)}-Device-Id";
 }

@@ -39,6 +39,7 @@ public class HealthApplication : IDynamicApplication
     /// </summary>
     /// <returns></returns>
     [HttpGet("/health"), HttpGet("/health/index"), AllowAnonymous]
+    [ApiInfo("健康检查", HttpRequestActionEnum.Other)]
     public IActionResult Index()
     {
         return new JsonResult(new

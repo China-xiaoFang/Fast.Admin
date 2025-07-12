@@ -33,6 +33,7 @@ using Fast.Swagger;
 using Fast.UnifyResult;
 using IGeekFan.AspNetCore.Knife4jUI;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -109,7 +110,7 @@ public static class Startup
         builder.Services.AddDynamicApplication();
 
         // 添加规范化返回服务
-        builder.Services.AddUnifyResult();
+        builder.Services.AddUnifyResult(StatusCodes.Status500InternalServerError);
 
         // 添加 Swagger 服务
         builder.Services.AddSwaggerDocuments(builder.Configuration);
