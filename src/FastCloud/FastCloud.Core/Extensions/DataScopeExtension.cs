@@ -21,16 +21,18 @@
 // ------------------------------------------------------------------------
 
 using System.Linq.Expressions;
+using Fast.FastCloud.Entity;
 using Fast.NET.Core;
 using Microsoft.Extensions.DependencyInjection;
+using SqlSugar;
 
 // ReSharper disable once CheckNamespace
-namespace Fast.FastCloud.Service;
+namespace Fast.FastCloud.Core;
 
 /// <summary>
 /// <see cref="DataScopeExtension"/> 数据权限范围拓展类
 /// </summary>
-internal static class DataScopeExtension
+public static class DataScopeExtension
 {
     /// <summary>
     /// 平台权限
@@ -39,7 +41,10 @@ internal static class DataScopeExtension
     /// <param name="queryable"></param>
     /// <param name="keySelector"></param>
     /// <returns></returns>
-    /// <remarks>WHERE EXISTS 实现</remarks>
+    /// <remarks>
+    /// <para>建议统一使用 e => e.xxx</para>
+    /// <para>WHERE EXISTS 实现</para>
+    /// </remarks>
     public static ISugarQueryable<TEntity> PlatformScope<TEntity>(this ISugarQueryable<TEntity> queryable,
         Expression<Func<TEntity, long>> keySelector)
     {
@@ -59,15 +64,18 @@ internal static class DataScopeExtension
             return queryable;
         }
 
-        // 构建 EXISTS 表达式
-        var existsQueryable = SqlFunc.Subqueryable<UserPlatformModel>()
-            .Where(wh => wh.UserId == _user.UserId);
+        // 确保 keySelector 是 MemberExpression
+        if (keySelector.Body is not MemberExpression memberExpression)
+        {
+            throw new SqlSugarException("keySelector 必须是属性访问表达式。");
+        }
 
         // 构建动态表达式
-        var leftExpression = Expression.Parameter(typeof(UserPlatformModel));
+        var leftExpression = Expression.Parameter(typeof(UserPlatformModel), "up");
         var leftMemberExpression = Expression.Property(leftExpression, nameof(UserPlatformModel.PlatformId));
-        var rightExpression = Expression.Parameter(typeof(TEntity));
-        var rightMemberExpression = Expression.Invoke(keySelector, rightExpression);
+        //var rightExpression = Expression.Parameter(typeof(TEntity), "wh");
+        var rightExpression = keySelector.Parameters[0];
+        var rightMemberExpression = Expression.Property(rightExpression, memberExpression.Member.Name);
 
         // 构建 PlatformId = t1.PlatformId 表达式
         var equalExpression = Expression.Equal(leftMemberExpression, rightMemberExpression);
@@ -76,9 +84,12 @@ internal static class DataScopeExtension
         var lambdaExpression = Expression.Lambda(equalExpression, leftExpression);
 
         // 组装查询条件
-        queryable = queryable
-            .Where(wh => existsQueryable.Where(lambdaExpression)
-            .Any());
+        queryable = queryable.Where(e =>
+            // 构建 EXISTS 表达式
+            SqlFunc.Subqueryable<UserPlatformModel>()
+                .Where(up => up.UserId == _user.UserId)
+                .Where(lambdaExpression)
+                .Any());
 
         return queryable;
     }

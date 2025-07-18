@@ -44,15 +44,15 @@ public class PlatformService : IPlatformService, ITransientDependency
     public async Task<PagedResult<ElSelectorOutput<long>>> PlatformSelector(PagedInput input)
     {
         var pagedData = await _repository.Entities.PlatformScope(e => e.Id)
-            .OrderBy(ob => ob.PlatformName)
-            .Select(sl => new
+            .OrderBy(e => e.PlatformName)
+            .Select(e => new
             {
-                sl.PlatformName,
-                sl.Id,
-                sl.AdminName,
-                sl.AdminMobile,
-                sl.LogoUrl,
-                Disabled = sl.Status == CommonStatusEnum.Disable
+                e.PlatformName,
+                e.Id,
+                e.AdminName,
+                e.AdminMobile,
+                e.LogoUrl,
+                Disabled = e.Status == CommonStatusEnum.Disable
             })
             .ToPagedListAsync(input);
 
@@ -77,7 +77,7 @@ public class PlatformService : IPlatformService, ITransientDependency
     public async Task<PagedResult<QueryPlatformPagedOutput>> QueryPlatformPaged(PagedInput input)
     {
         return await _repository.Entities.PlatformScope(e => e.Id)
-            .OrderBy(ob => ob.PlatformName)
+            .OrderBy(e => e.PlatformName)
             .Select<QueryPlatformPagedOutput>()
             .ToPagedListAsync(input);
     }

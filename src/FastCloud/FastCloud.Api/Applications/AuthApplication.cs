@@ -31,7 +31,7 @@ namespace Fast.FastCloud.Api;
 /// <summary>
 /// <see cref="AuthApplication"/> 授权
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "auth", Order = 2)]
+[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "auth", Order = 998)]
 public class AuthApplication : IDynamicApplication
 {
     private readonly IAuthService _authService;

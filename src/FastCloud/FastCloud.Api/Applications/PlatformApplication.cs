@@ -47,7 +47,7 @@ public class PlatformApplication : IDynamicApplication
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    [HttpPost("platformSelector")]
+    [HttpPost]
     [ApiInfo("平台选择器", HttpRequestActionEnum.Paged)]
     public async Task<PagedResult<ElSelectorOutput<long>>> PlatformSelector(PagedInput input)
     {
@@ -59,7 +59,7 @@ public class PlatformApplication : IDynamicApplication
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    [HttpPost("queryPlatformPaged")]
+    [HttpPost]
     [ApiInfo("获取平台分页列表", HttpRequestActionEnum.Paged)]
     public async Task<PagedResult<QueryPlatformPagedOutput>> QueryPlatformPaged(PagedInput input)
     {
@@ -71,7 +71,7 @@ public class PlatformApplication : IDynamicApplication
     /// </summary>
     /// <param name="platformId"></param>
     /// <returns></returns>
-    [HttpGet("queryPlatformDetail")]
+    [HttpGet]
     [ApiInfo("获取平台详情", HttpRequestActionEnum.Query)]
     public async Task<QueryPlatformDetailOutput> QueryPlatformDetail([LongRequired(ErrorMessage = "平台Id不能为空")] long? platformId)
     {
