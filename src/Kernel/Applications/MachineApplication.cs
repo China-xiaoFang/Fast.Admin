@@ -39,8 +39,9 @@ public class MachineApplication : IDynamicApplication
     /// 服务器信息
     /// </summary>
     /// <returns></returns>
-    [HttpGet("/machine"), HttpGet("/machine/index"), AllowAnonymous]
+    [HttpGet("/machine"), HttpGet("/machine/index")]
     [ApiInfo("服务器信息", HttpRequestActionEnum.Other)]
+    [AllowAnonymous]
     public IActionResult Index()
     {
         var dateTime = DateTime.Now;
@@ -88,19 +89,6 @@ public class MachineApplication : IDynamicApplication
             RamRatePercent = $"{ramUsed / ramTotal * 100:F2} %",
             // 硬盘信息
             DiskInfos = MachineUtil.GetDiskInfos()
-            // TODO:主要程序集
-            // 主要程序集
-            //Assemblys = new[]
-            //{
-            //    new {efCoreAssembly.Name, efCoreAssembly.Version},
-            //    new {efCoreSqlServerAssembly.Name, efCoreSqlServerAssembly.Version},
-            //    new {yitterIdGeneratorAssembly.Name, yitterIdGeneratorAssembly.Version},
-            //    new {gejiaDataModelJCenterAssembly.Name, gejiaDataModelJCenterAssembly.Version},
-            //    new {gejiaDataServiceClientJCenterAssembly.Name, gejiaDataServiceClientJCenterAssembly.Version},
-            //    new {miniExcelAssembly.Name, miniExcelAssembly.Version},
-            //    new {uaParserAssembly.Name, uaParserAssembly.Version},
-            //    new {csRedisCoreAssembly.Name, csRedisCoreAssembly.Version}
-            //}
         });
     }
 }

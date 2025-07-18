@@ -50,8 +50,7 @@ public class JwtBearerHandle : IJwtBearerHandle
         var employeeNo = context.User.Claims.FirstOrDefault(f => f.Type == nameof(AuthUserInfo.EmployeeNo))!.Value;
 
         // 获取授权用户信息
-        var authUserInfo
-            = await _user.GetAuthUserInfo(Enum.Parse<AppEnvironmentEnum>(deviceType, ignoreCase: true), tenantNo, employeeNo);
+        var authUserInfo = await _user.GetAuthUserInfo(Enum.Parse<AppEnvironmentEnum>(deviceType, true), tenantNo, employeeNo);
 
         if (authUserInfo == null)
             return false;
@@ -71,11 +70,13 @@ public class JwtBearerHandle : IJwtBearerHandle
     public async Task<object> AuthorizeFailHandle(AuthorizationHandlerContext context, HttpContext httpContext,
         Exception exception)
     {
-        return await Task.FromResult(UnifyContext.GetRestfulResult(StatusCodes.Status401Unauthorized,
-            false,
-            null,
-            exception?.Message ?? "401 未经授权",
-            httpContext));
+        if (!UnifyContext.EnabledUnifyHandler)
+        {
+            return exception?.Message ?? "401 未经授权";
+        }
+
+        return await Task.FromResult(UnifyContext.GetRestfulResult(StatusCodes.Status401Unauthorized, false, null,
+            exception?.Message ?? "401 未经授权", httpContext));
     }
 
     /// <summary>权限判断处理</summary>

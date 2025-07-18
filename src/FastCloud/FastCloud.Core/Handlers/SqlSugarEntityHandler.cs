@@ -323,7 +323,6 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
 
                 // 异步不等待
                 await db.Insertable(sqlExceptionLogModel)
-                    .SplitTable()
                     .ExecuteCommandAsync();
             }
             catch (Exception ex)
