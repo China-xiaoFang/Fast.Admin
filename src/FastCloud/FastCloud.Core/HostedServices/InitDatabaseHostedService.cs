@@ -943,6 +943,112 @@ public class InitDatabaseHostedService : IHostedService
             };
             platformModuleModel = await db.Insertable(platformModuleModel)
                 .ExecuteReturnEntityAsync();
+            await db.Insertable(new List<ButtonModel>
+                {
+                    new()
+                    {
+                        Id = YitIdHelper.NextId(),
+                        Edition = EditionEnum.Internal,
+                        AppId = applicationModel.Id,
+                        MenuId = platformModuleModel.Id,
+                        ButtonCode = "platform:Page",
+                        ButtonName = "列表",
+                        HasDesktop = true,
+                        HasWeb = true,
+                        HasMobile = true,
+                        Sort = buttonSort,
+                        Status = CommonStatusEnum.Enable,
+                        CreatedUserId = adminUserModel.Id,
+                        CreatedUserName = adminUserModel.NickName,
+                        CreatedTime = new DateTime(2025, 01, 01)
+                    },
+                    new()
+                    {
+                        Id = YitIdHelper.NextId(),
+                        Edition = EditionEnum.Internal,
+                        AppId = applicationModel.Id,
+                        MenuId = platformModuleModel.Id,
+                        ButtonCode = "platform:Detail",
+                        ButtonName = "详情",
+                        HasDesktop = true,
+                        HasWeb = true,
+                        HasMobile = true,
+                        Sort = buttonSort,
+                        Status = CommonStatusEnum.Enable,
+                        CreatedUserId = adminUserModel.Id,
+                        CreatedUserName = adminUserModel.NickName,
+                        CreatedTime = new DateTime(2025, 01, 01)
+                    },
+                    new()
+                    {
+                        Id = YitIdHelper.NextId(),
+                        Edition = EditionEnum.Internal,
+                        AppId = applicationModel.Id,
+                        MenuId = platformModuleModel.Id,
+                        ButtonCode = "platform:Add",
+                        ButtonName = "新增",
+                        HasDesktop = true,
+                        HasWeb = true,
+                        HasMobile = true,
+                        Sort = buttonSort,
+                        Status = CommonStatusEnum.Enable,
+                        CreatedUserId = adminUserModel.Id,
+                        CreatedUserName = adminUserModel.NickName,
+                        CreatedTime = new DateTime(2025, 01, 01)
+                    },
+                    new()
+                    {
+                        Id = YitIdHelper.NextId(),
+                        Edition = EditionEnum.Internal,
+                        AppId = applicationModel.Id,
+                        MenuId = platformModuleModel.Id,
+                        ButtonCode = "platform:Edit",
+                        ButtonName = "编辑",
+                        HasDesktop = true,
+                        HasWeb = true,
+                        HasMobile = true,
+                        Sort = buttonSort,
+                        Status = CommonStatusEnum.Enable,
+                        CreatedUserId = adminUserModel.Id,
+                        CreatedUserName = adminUserModel.NickName,
+                        CreatedTime = new DateTime(2025, 01, 01)
+                    },
+                    new()
+                    {
+                        Id = YitIdHelper.NextId(),
+                        Edition = EditionEnum.Internal,
+                        AppId = applicationModel.Id,
+                        MenuId = platformModuleModel.Id,
+                        ButtonCode = "platform:Enable",
+                        ButtonName = "启用",
+                        HasDesktop = true,
+                        HasWeb = true,
+                        HasMobile = true,
+                        Sort = buttonSort,
+                        Status = CommonStatusEnum.Enable,
+                        CreatedUserId = adminUserModel.Id,
+                        CreatedUserName = adminUserModel.NickName,
+                        CreatedTime = new DateTime(2025, 01, 01)
+                    },
+                    new()
+                    {
+                        Id = YitIdHelper.NextId(),
+                        Edition = EditionEnum.Internal,
+                        AppId = applicationModel.Id,
+                        MenuId = platformModuleModel.Id,
+                        ButtonCode = "platform:Disable",
+                        ButtonName = "禁用",
+                        HasDesktop = true,
+                        HasWeb = true,
+                        HasMobile = true,
+                        Sort = buttonSort,
+                        Status = CommonStatusEnum.Enable,
+                        CreatedUserId = adminUserModel.Id,
+                        CreatedUserName = adminUserModel.NickName,
+                        CreatedTime = new DateTime(2025, 01, 01)
+                    }
+                })
+                .ExecuteCommandAsync(cancellationToken);
 
             #region 系统日志
 

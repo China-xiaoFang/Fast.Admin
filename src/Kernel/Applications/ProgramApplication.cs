@@ -56,8 +56,9 @@ public class ProgramApplication : IDynamicApplication
     /// 程序信息
     /// </summary>
     /// <returns></returns>
-    [HttpGet("/program"), HttpGet("/program/index"), AllowAnonymous]
+    [HttpGet("/program"), HttpGet("/program/index")]
     [ApiInfo("程序信息", HttpRequestActionEnum.Other)]
+    [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
         var dateTime = DateTime.Now;

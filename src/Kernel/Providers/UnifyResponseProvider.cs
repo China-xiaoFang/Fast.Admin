@@ -54,8 +54,8 @@ public class UnifyResponseProvider : IUnifyResponseProvider
     public async Task<(int statusCode, string message)> ResponseExceptionAsync(ExceptionContext context,
         ExceptionMetadata metadata, HttpContext httpContext)
     {
-        // 默认 400 错误
-        var statusCode = StatusCodes.Status400BadRequest;
+        // 默认 500 错误
+        var statusCode = StatusCodes.Status500InternalServerError;
 
         var message = context.Exception.Message;
 

@@ -15,7 +15,7 @@
 	  <PackageReference Include="Fast.NET.Core" Version="3.5.10" />
 	  <PackageReference Include="Fast.Serialization.Newtonsoft.Json" Version="3.5.8" />
 	  <PackageReference Include="Fast.Swagger" Version="3.5.12" />
-	  <PackageReference Include="Fast.UnifyResult" Version="3.5.8" />
+	  <PackageReference Include="Fast.UnifyResult" Version="3.5.10" />
 	</ItemGroup>
 
 	<ItemGroup>

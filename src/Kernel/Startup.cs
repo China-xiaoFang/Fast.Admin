@@ -110,7 +110,7 @@ public static class Startup
         builder.Services.AddDynamicApplication();
 
         // 添加规范化返回服务
-        builder.Services.AddUnifyResult(StatusCodes.Status500InternalServerError);
+        builder.Services.AddUnifyResult();
 
         // 添加 Swagger 服务
         builder.Services.AddSwaggerDocuments(builder.Configuration);

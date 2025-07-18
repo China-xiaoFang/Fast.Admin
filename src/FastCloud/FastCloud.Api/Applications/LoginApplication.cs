@@ -31,7 +31,7 @@ namespace Fast.FastCloud.Api;
 /// <summary>
 /// <see cref="LoginApplication"/> 登录
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "login", Order = 1)]
+[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "login", Order = 999)]
 public class LoginApplication : IDynamicApplication
 {
     private readonly ILoginService _loginService;

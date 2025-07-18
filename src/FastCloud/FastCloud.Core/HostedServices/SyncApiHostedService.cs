@@ -31,7 +31,8 @@ using Fast.SqlSugar;
 using Fast.Swagger;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -48,6 +49,11 @@ namespace Fast.FastCloud.Core;
 public class SyncApiHostedService : IHostedService
 {
     /// <summary>
+    /// 接口描述提供程序
+    /// </summary>
+    private readonly IApiDescriptionGroupCollectionProvider _apiDescriptionGroupCollectionProvider;
+
+    /// <summary>
     /// Swagger 配置
     /// </summary>
     private readonly SwaggerSettingsOptions _swaggerSettings;
@@ -57,8 +63,10 @@ public class SyncApiHostedService : IHostedService
     /// </summary>
     private readonly ILogger _logger;
 
-    public SyncApiHostedService(IOptions<SwaggerSettingsOptions> options, ILogger<SyncApiHostedService> logger)
+    public SyncApiHostedService(IApiDescriptionGroupCollectionProvider apiDescriptionGroupCollectionProvider,
+        IOptions<SwaggerSettingsOptions> options, ILogger<SyncApiHostedService> logger)
     {
+        _apiDescriptionGroupCollectionProvider = apiDescriptionGroupCollectionProvider;
         _swaggerSettings = options.Value;
         _logger = logger;
     }
@@ -82,97 +90,85 @@ public class SyncApiHostedService : IHostedService
 
         try
         {
-            var iDynamicApplicationType = typeof(IDynamicApplication);
-            var httpMethodAttributeType = typeof(HttpMethodAttribute);
-
-            // 查找所有带 IDynamicApplication 特性的类型
-            var allApplicationTypeList = MAppContext.EffectiveTypes
-                .Where(wh => iDynamicApplicationType.IsAssignableFrom(wh) && !wh.IsInterface)
-                .Select(sl => new {ApiDescriptionSettings = sl.GetCustomAttribute<ApiDescriptionSettingsAttribute>(), Type = sl})
-                .Where(wh => !wh.ApiDescriptionSettings.IgnoreApi)
-                .ToList();
-
             var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
             var apiInfoList = await db.Queryable<ApiInfoModel>()
                 .Where(wh => wh.ServiceName == serviceName)
                 .ToListAsync(cancellationToken);
 
-            // 循环所有类型
-            foreach (var applicationInfo in allApplicationTypeList)
+            // 循环所有接口
+            foreach (var apiDescriptionGroup in _apiDescriptionGroupCollectionProvider.ApiDescriptionGroups.Items.SelectMany(sl =>
+                         sl.Items))
             {
+                var apiDescriptionSettingsAttribute = apiDescriptionGroup.ActionDescriptor.EndpointMetadata
+                    .OfType<ApiDescriptionSettingsAttribute>()
+                    .FirstOrDefault();
+                if (apiDescriptionSettingsAttribute.IgnoreApi)
+                    continue;
+
+                var allowAnonymousAttribute = apiDescriptionGroup.ActionDescriptor.EndpointMetadata
+                    .OfType<AllowAnonymousAttribute>()
+                    .FirstOrDefault();
+                var allowForbiddenAttribute = apiDescriptionGroup.ActionDescriptor.EndpointMetadata
+                    .OfType<AllowForbiddenAttribute>()
+                    .FirstOrDefault();
+                var permissionAttribute = apiDescriptionGroup.ActionDescriptor.EndpointMetadata.OfType<PermissionAttribute>()
+                    .FirstOrDefault();
+                var apiInfoAttribute = apiDescriptionGroup.ActionDescriptor.EndpointMetadata.OfType<ApiInfoAttribute>()
+                    .FirstOrDefault();
+
                 // 获取分组名称
-                var groupName = applicationInfo.ApiDescriptionSettings.Groups.FirstOrDefault() ?? "Default";
-                var moduleName = applicationInfo.ApiDescriptionSettings.Name ?? applicationInfo.Type.Name;
-                var sort = applicationInfo.ApiDescriptionSettings.Order;
+                var groupName = apiDescriptionGroup.GroupName ?? "Default";
+
+                var moduleName = apiDescriptionSettingsAttribute.Name
+                                 ?? (apiDescriptionGroup.ActionDescriptor as ControllerActionDescriptor).ControllerName;
+                var sort = apiDescriptionSettingsAttribute.Order;
                 var groupOpenApiInfo = _swaggerSettings.GroupOpenApiInfos.FirstOrDefault(f => f.Group == groupName);
 
-                // 获取所有方法
-                foreach (var methodInfo in applicationInfo.Type.GetMethods()
-                             .ToList())
+                var apiUrl = $"/{apiDescriptionGroup.RelativePath}";
+
+                // 判断原有的Url是否存在
+                var apiInfo = apiInfoList.SingleOrDefault(s => s.ApiUrl == apiUrl);
+
+                var method = System.Enum.Parse<HttpRequestMethodEnum>(apiDescriptionGroup.HttpMethod, true);
+                var action = apiInfoAttribute?.Action ?? HttpRequestActionEnum.None;
+                var hasPermission = allowForbiddenAttribute == null && permissionAttribute?.TagList?.Count > 0;
+
+                var apiInfoModel = new ApiInfoModel
                 {
-                    var attributes = methodInfo.GetCustomAttributes()
-                        .Where(httpMethodAttributeType.IsInstanceOfType)
-                        .ToList();
-                    foreach (var attribute in attributes)
+                    ServiceName = serviceName,
+                    GroupName = groupName,
+                    GroupTitle = groupOpenApiInfo?.Title,
+                    Version = groupOpenApiInfo?.Version,
+                    Description = groupOpenApiInfo?.Description,
+                    ModuleName = moduleName,
+                    ApiUrl = apiUrl,
+                    ApiName = apiInfoAttribute?.Name,
+                    Method = method,
+                    Action = action,
+                    HasAuth = allowAnonymousAttribute == null,
+                    HasPermission = hasPermission,
+                    Tags = string.Join(",", permissionAttribute?.TagList ?? []),
+                    Sort = sort
+                };
+                apiUrlList.add(apiInfoModel.ApiUrl);
+
+                if (apiInfo != null)
+                {
+                    apiInfoModel.Id = apiInfo.Id;
+                    // 不相同才修改
+                    if (!apiInfo.Equals(apiInfoModel))
                     {
-                        if (attribute is not HttpMethodAttribute httpMethodAttribute)
-                            continue;
-
-                        var allowAnonymousAttribute = methodInfo.GetCustomAttribute<AllowAnonymousAttribute>();
-                        var allowForbiddenAttribute = methodInfo.GetCustomAttribute<AllowForbiddenAttribute>();
-                        var permissionAttribute = methodInfo.GetCustomAttribute<PermissionAttribute>();
-                        var apiInfoAttribute = methodInfo.GetCustomAttribute<ApiInfoAttribute>();
-
-                        var apiUrl = httpMethodAttribute.Template.StartsWith("/")
-                            ? httpMethodAttribute.Template
-                            : $"/{moduleName}/{httpMethodAttribute.Template}";
-
-                        // 判断原有的Url是否存在
-                        var apiInfo = apiInfoList.SingleOrDefault(s => s.ApiUrl == apiUrl);
-
-                        var method = System.Enum.Parse<HttpRequestMethodEnum>(
-                            httpMethodAttribute.HttpMethods.FirstOrDefault() ?? "Get", true);
-                        var action = apiInfoAttribute?.Action ?? HttpRequestActionEnum.None;
-                        var hasPermission = allowForbiddenAttribute == null && permissionAttribute?.TagList?.Count > 0;
-
-                        var apiInfoModel = new ApiInfoModel
-                        {
-                            ServiceName = serviceName,
-                            GroupName = groupName,
-                            GroupTitle = groupOpenApiInfo?.Title,
-                            Version = groupOpenApiInfo?.Version,
-                            Description = groupOpenApiInfo?.Description,
-                            ModuleName = moduleName,
-                            ApiUrl = apiUrl,
-                            ApiName = apiInfoAttribute?.Name,
-                            Method = method,
-                            Action = action,
-                            HasAuth = allowAnonymousAttribute == null,
-                            HasPermission = hasPermission,
-                            Tags = string.Join(",", permissionAttribute?.TagList ?? []),
-                            Sort = sort
-                        };
-                        apiUrlList.add(apiInfoModel.ApiUrl);
-
-                        if (apiInfo != null)
-                        {
-                            apiInfoModel.Id = apiInfo.Id;
-                            // 不相同才修改
-                            if (!apiInfo.Equals(apiInfoModel))
-                            {
-                                apiInfoModel.Adapt(apiInfo);
-                                apiInfo.UpdatedTime = dateTime;
-                                updateApiInfoList.Add(apiInfo);
-                            }
-                        }
-                        else
-                        {
-                            apiInfoModel.Id = YitIdHelper.NextId();
-                            apiInfoModel.CreatedTime = dateTime;
-                            addApiInfoList.Add(apiInfoModel);
-                        }
+                        apiInfoModel.Adapt(apiInfo);
+                        apiInfo.UpdatedTime = dateTime;
+                        updateApiInfoList.Add(apiInfo);
                     }
+                }
+                else
+                {
+                    apiInfoModel.Id = YitIdHelper.NextId();
+                    apiInfoModel.CreatedTime = dateTime;
+                    addApiInfoList.Add(apiInfoModel);
                 }
             }
 

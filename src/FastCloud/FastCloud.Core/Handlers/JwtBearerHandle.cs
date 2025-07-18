@@ -41,12 +41,15 @@ public class JwtBearerHandle : IJwtBearerHandle
     /// <returns><see cref="T:System.Boolean" /></returns>
     public async Task<bool> AuthorizeHandle(AuthorizationHandlerContext context, HttpContext httpContext)
     {
+        if (httpContext.User.Identity?.IsAuthenticated == false)
+            return false;
+
         // 获取 IUser，当前请求生命周期，只会解析一次
         var _user = httpContext.RequestServices.GetService<IUser>();
 
         // 从 AccessToken 中读取 DeviceType,Mobile
-        var deviceType = context.User.Claims.FirstOrDefault(f => f.Type == nameof(AuthUserInfo.DeviceType))!.Value;
-        var mobile = context.User.Claims.FirstOrDefault(f => f.Type == nameof(AuthUserInfo.Mobile))!.Value;
+        var deviceType = httpContext.User.Claims.FirstOrDefault(f => f.Type == nameof(AuthUserInfo.DeviceType))!.Value;
+        var mobile = httpContext.User.Claims.FirstOrDefault(f => f.Type == nameof(AuthUserInfo.Mobile))!.Value;
 
         // 获取授权用户信息
         var authUserInfo = await _user.GetAuthUserInfo(System.Enum.Parse<AppEnvironmentEnum>(deviceType, true), mobile);
