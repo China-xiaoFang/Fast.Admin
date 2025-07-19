@@ -20,45 +20,16 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
-
-namespace Fast.FastCloud.Entity;
+namespace Fast.FastCloud.Service.Platform.Dto;
 
 /// <summary>
-/// <see cref="UserModuleModel"/> 用户模块表Model类
+/// <see cref="QueryPlatformRenewalRecordInput"/> 获取平台续费记录分页列表输入
 /// </summary>
-[SugarTable("UserModule", "用户模块表")]
-[SugarDbType(DatabaseTypeEnum.FastCloud)]
-[SugarIndex($"IX_{{table}}_{nameof(ModuleId)}", nameof(UserId), OrderByType.Asc, nameof(ModuleId), OrderByType.Asc, true)]
-public class UserModuleModel : IDatabaseEntity
+public class QueryPlatformRenewalRecordInput : PagedInput
 {
     /// <summary>
-    /// 用户Id
+    /// 平台Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "用户Id")]
-    public long UserId { get; set; }
-
-    /// <summary>
-    /// 模块Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "模块Id")]
-    public long ModuleId { get; set; }
-
-    /// <summary>
-    /// 创建者用户Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
-    public long? CreatedUserId { get; set; }
-
-    /// <summary>
-    /// 创建者用户名称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, CreateTableFieldSort = 992)]
-    public string CreatedUserName { get; set; }
-
-    /// <summary>
-    /// 创建时间
-    /// </summary>
-    [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
-    public DateTime CreatedTime { get; set; }
+    [LongRequired(ErrorMessage = "平台Id不能为空")]
+    public long PlatformId { get; set; }
 }

@@ -20,25 +20,51 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.FastCloud.Service.Login.Dto;
+// ReSharper disable once CheckNamespace
+namespace Fast.FastCloud.Core;
 
 /// <summary>
-/// <see cref="InputErrorPasswordDto"/> 输入错误密码次数Dto
+/// <see cref="MenuSeedData"/> 菜单种子数据
 /// </summary>
-public class InputErrorPasswordDto
+internal static partial class MenuSeedData
 {
-    /// <summary>
-    /// 密码错误次数
-    /// </summary>
-    public int? PasswordErrorTime { get; set; }
+    private static int _moduleSort = 1000;
+    private static int _menuSort = 1000;
+    private static int _buttonSort = 1000;
 
     /// <summary>
-    /// 锁定开始时间
+    /// 模块顺序
     /// </summary>
-    public DateTime? LockStartTime { get; set; }
+    private static int moduleSort
+    {
+        get
+        {
+            _moduleSort--;
+            return _moduleSort;
+        }
+    }
 
     /// <summary>
-    /// 锁定结束时间
+    /// 菜单顺序
     /// </summary>
-    public DateTime? LockEndTime { get; set; }
+    private static int menuSort
+    {
+        get
+        {
+            _menuSort--;
+            return _menuSort;
+        }
+    }
+
+    /// <summary>
+    /// 按钮顺序
+    /// </summary>
+    private static int buttonSort
+    {
+        get
+        {
+            _buttonSort--;
+            return _buttonSort;
+        }
+    }
 }

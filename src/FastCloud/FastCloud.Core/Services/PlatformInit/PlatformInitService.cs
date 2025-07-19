@@ -81,13 +81,13 @@
 //            .Where(wh => wh.PlatformId == platformId)
 //            .Where(wh => wh.DatabaseType == DatabaseTypeEnum.Center)
 //            .Select(sl => new ConnectionSettingsOptions
-//                {
-//                    ServiceIp = _hostEnvironment.IsDevelopment()
+//            {
+//                ServiceIp = _hostEnvironment.IsDevelopment()
 //                        // 开发环境使用公网地址
 //                        ? sl.PublicIp
 //                        // 生产环境使用内网地址
 //                        : sl.IntranetIp
-//                },
+//            },
 //                true)
 //            .SingleAsync();
 

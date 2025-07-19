@@ -25,7 +25,6 @@ using Fast.Common;
 using Fast.DependencyInjection;
 using Fast.FastCloud.Entity;
 using Fast.SqlSugar;
-using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -81,8 +80,8 @@ public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
         var cacheKey = CacheConst.GetCacheKey(CacheConst.DatabaseInfo, platformNo, databaseType.ToString());
 
         // 优先从 HttpContext.Items 中获取
-        var connectionSettingsObj
-            = _httpContext?.Items[
+        var connectionSettingsObj =
+            _httpContext?.Items[
                 $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"];
 
         if (connectionSettingsObj is ConnectionSettingsOptions connectionSettings)
@@ -90,40 +89,50 @@ public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
             return connectionSettings;
         }
 
-        var data = await _cache.GetAndSetAsync(cacheKey,
-            async () =>
-            {
-                var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+        var result = await _cache.GetAndSetAsync(cacheKey, async () =>
+        {
+            var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
-                var result = await db.Queryable<DatabaseModel>()
-                    .Where(wh => wh.Status == CommonStatusEnum.Enable)
-                    .Where(wh => wh.PlatformId == platformId)
-                    .Where(wh => wh.DatabaseType == databaseType)
-                    .SingleAsync();
-
-                if (result == null)
+            var result = await db.Queryable<DatabaseModel>()
+                .Where(wh => wh.Status == CommonStatusEnum.Enable)
+                .Where(wh => wh.PlatformId == platformId)
+                .Where(wh => wh.DatabaseType == databaseType)
+                .Select(sl => new ConnectionSettingsOptions
                 {
-                    var message = $"未能找到对应类型【{databaseType.ToString()}】所存在的 Database 信息！";
-                    _logger.LogError($"PlatformId：{platformId}；PlatformNo：{platformNo}；{message}");
-                    throw new ArgumentNullException(message);
-                }
+                    ConnectionId = sl.Id.ToString(),
+                    DbType = sl.DbType,
+                    ServiceIp = _hostEnvironment.IsDevelopment()
+                        // 开发环境使用公网地址
+                        ? sl.PublicIp
+                        // 生产环境使用内网地址
+                        : sl.IntranetIp,
+                    Port = sl.Port,
+                    DbName = sl.DbName,
+                    DbUser = sl.DbUser,
+                    DbPwd = sl.DbPwd,
+                    CustomConnectionStr = sl.CustomConnectionStr,
+                    CommandTimeOut = sl.CommandTimeOut,
+                    SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
+                    DiffLog = sl.DiffLog,
+                    DisableAop = sl.DisableAop
+                })
+                .SingleAsync();
 
-                return result;
-            });
+            if (result == null)
+            {
+                var message = $"未能找到对应类型【{databaseType.ToString()}】所存在的 Database 信息！";
+                _logger.LogError($"PlatformId：{platformId}；PlatformNo：{platformNo}；{message}");
+                throw new ArgumentNullException(message);
+            }
 
-        var result = data.Adapt<ConnectionSettingsOptions>();
-
-        result.ServiceIp = _hostEnvironment.IsDevelopment()
-            // 开发环境使用公网地址
-            ? data.PublicIp
-            // 生产环境使用内网地址
-            : data.IntranetIp;
+            return result;
+        });
 
         if (_httpContext != null)
         {
             // 放入 HttpContext.Items 中
-            _httpContext.Items[$"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"]
-                = result;
+            _httpContext.Items
+                [$"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"] = result;
         }
 
         return result;

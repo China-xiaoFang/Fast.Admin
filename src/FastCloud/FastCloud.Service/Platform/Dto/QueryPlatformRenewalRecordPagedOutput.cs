@@ -20,61 +20,67 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.FastCloud.Service.Platform.Dto;
+using Fast.FastCloud.Enum;
 
-namespace Fast.FastCloud.Service.Platform;
+namespace Fast.FastCloud.Service.Platform.Dto;
 
 /// <summary>
-/// <see cref="IPlatformService"/> 平台服务
+/// <see cref="QueryPlatformRenewalRecordPagedOutput"/> 获取平台续费记录分页列表输出
 /// </summary>
-public interface IPlatformService
+public class QueryPlatformRenewalRecordPagedOutput
 {
     /// <summary>
-    /// 平台选择器
+    /// 主键Id
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<PagedResult<ElSelectorOutput<long>>> PlatformSelector(PagedInput input);
+    public long Id { get; set; }
 
     /// <summary>
-    /// 获取平台分页列表
+    /// 原始版本
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<PagedResult<QueryPlatformPagedOutput>> QueryPlatformPaged(PagedInput input);
+    public EditionEnum FromEdition { get; set; }
 
     /// <summary>
-    /// 获取平台详情
+    /// 续费版本
     /// </summary>
-    /// <param name="platformId"></param>
-    /// <returns></returns>
-    Task<QueryPlatformDetailOutput> QueryPlatformDetail(long platformId);
+    public EditionEnum ToEdition { get; set; }
 
     /// <summary>
-    /// 获取平台续费记录分页列表
+    /// 续费类型
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<PagedResult<QueryPlatformRenewalRecordPagedOutput>> QueryPlatformRenewalRecord(QueryPlatformRenewalRecordInput input);
+    public RenewalTypeEnum RenewalType { get; set; }
 
     /// <summary>
-    /// 初次开通平台
+    /// 续费时长
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task FirstActivationPlatform(FirstActivationPlatformInput input);
+    public RenewalDurationEnum Duration { get; set; }
 
     /// <summary>
-    /// 编辑平台
+    /// 续费时间
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task EditPlatform(EditPlatformInput input);
+    public DateTime RenewalTime { get; set; }
 
     /// <summary>
-    /// 启用/禁用平台
+    /// 本次续费到期时间
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task ChangePlatformStatus(ChangePlatformStatusInput input);
+    public DateTime RenewalExpiryTime { get; set; }
+
+    /// <summary>
+    /// 续费金额
+    /// </summary>
+    public decimal Amount { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string Remark { get; set; }
+
+    /// <summary>
+    /// 创建者用户名称
+    /// </summary>
+    public string CreatedUserName { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    public DateTime? CreatedTime { get; set; }
 }

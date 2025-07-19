@@ -54,19 +54,6 @@ public class ApplicationModel : SnowflakeKeyEntity, IUpdateVersion
     public string AppName { get; set; }
 
     /// <summary>
-    /// 开放平台Id
-    /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "开放平台Id", Length = 50)]
-    public string OpenId { get; set; }
-
-    /// <summary>
-    /// 应用类型
-    /// </summary>
-    [SugarColumn(ColumnDescription = "应用类型")]
-    public AppEnvironmentEnum AppType { get; set; }
-
-    /// <summary>
     /// 服务开始时间
     /// </summary>
     [SugarColumn(ColumnDescription = "服务开始时间")]

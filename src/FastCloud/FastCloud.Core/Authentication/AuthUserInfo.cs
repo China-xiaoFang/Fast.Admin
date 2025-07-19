@@ -98,7 +98,6 @@ public class AuthUserInfo
     /// <summary>
     /// 平台编号集合
     /// </summary>
-    // TODO：这里或许可以删除
     public virtual List<string> PlatformNoList { get; set; } = new();
 
     /// <summary>

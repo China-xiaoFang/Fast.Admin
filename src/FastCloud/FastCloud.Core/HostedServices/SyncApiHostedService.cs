@@ -29,7 +29,6 @@ using Fast.JwtBearer;
 using Fast.NET.Core;
 using Fast.SqlSugar;
 using Fast.Swagger;
-using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -159,7 +158,20 @@ public class SyncApiHostedService : IHostedService
                     // 不相同才修改
                     if (!apiInfo.Equals(apiInfoModel))
                     {
-                        apiInfoModel.Adapt(apiInfo);
+                        apiInfo.ServiceName = apiInfoModel.ServiceName;
+                        apiInfo.GroupName = apiInfoModel.GroupName;
+                        apiInfo.GroupTitle = apiInfoModel.GroupTitle;
+                        apiInfo.Version = apiInfoModel.Version;
+                        apiInfo.Description = apiInfoModel.Description;
+                        apiInfo.ModuleName = apiInfoModel.ModuleName;
+                        apiInfo.ApiUrl = apiInfoModel.ApiUrl;
+                        apiInfo.ApiName = apiInfoModel.ApiName;
+                        apiInfo.Method = apiInfoModel.Method;
+                        apiInfo.Action = apiInfoModel.Action;
+                        apiInfo.HasAuth = apiInfoModel.HasAuth;
+                        apiInfo.HasPermission = apiInfoModel.HasPermission;
+                        apiInfo.Tags = apiInfoModel.Tags;
+                        apiInfo.Sort = apiInfoModel.Sort;
                         apiInfo.UpdatedTime = dateTime;
                         updateApiInfoList.Add(apiInfo);
                     }
@@ -173,8 +185,7 @@ public class SyncApiHostedService : IHostedService
             }
 
             // 加载Aop
-            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db,
-                SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds, false, true, null);
+            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
             var deleteApiInfoList = apiInfoList.Where(wh => !apiUrlList.Contains(wh.ApiUrl))
                 .ToList();

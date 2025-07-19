@@ -20,61 +20,38 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.FastCloud.Service.Platform.Dto;
-
-namespace Fast.FastCloud.Service.Platform;
+namespace Fast.FastCloud.Service.Platform.Dto;
 
 /// <summary>
-/// <see cref="IPlatformService"/> 平台服务
+/// <see cref="EditPlatformInput"/> 编辑平台输入
 /// </summary>
-public interface IPlatformService
+public class EditPlatformInput
 {
     /// <summary>
-    /// 平台选择器
+    /// 平台Id
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<PagedResult<ElSelectorOutput<long>>> PlatformSelector(PagedInput input);
+    [LongRequired(ErrorMessage = "平台Id不能为空")]
+    public long PlatformId { get; set; }
 
     /// <summary>
-    /// 获取平台分页列表
+    /// 平台名称
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<PagedResult<QueryPlatformPagedOutput>> QueryPlatformPaged(PagedInput input);
+    [StringRequired(ErrorMessage = "平台名称不能为空")]
+    public string PlatformName { get; set; }
 
     /// <summary>
-    /// 获取平台详情
+    /// 平台简称
     /// </summary>
-    /// <param name="platformId"></param>
-    /// <returns></returns>
-    Task<QueryPlatformDetailOutput> QueryPlatformDetail(long platformId);
+    [StringRequired(ErrorMessage = "平台简称不能为空")]
+    public string ShortName { get; set; }
 
     /// <summary>
-    /// 获取平台续费记录分页列表
+    /// LogoUrl
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<PagedResult<QueryPlatformRenewalRecordPagedOutput>> QueryPlatformRenewalRecord(QueryPlatformRenewalRecordInput input);
+    public string LogoUrl { get; set; }
 
     /// <summary>
-    /// 初次开通平台
+    /// 备注
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task FirstActivationPlatform(FirstActivationPlatformInput input);
-
-    /// <summary>
-    /// 编辑平台
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task EditPlatform(EditPlatformInput input);
-
-    /// <summary>
-    /// 启用/禁用平台
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task ChangePlatformStatus(ChangePlatformStatusInput input);
+    public string Remark { get; set; }
 }

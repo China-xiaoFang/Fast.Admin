@@ -93,7 +93,6 @@ public class PlatformModel : SnowflakeKeyEntity, IUpdateVersion
     /// <summary>
     /// LogoUrl
     /// </summary>
-    [Required]
     [SugarColumn(ColumnDescription = "LogoUrl", Length = 200)]
     public string LogoUrl { get; set; }
 
