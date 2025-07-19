@@ -50,39 +50,6 @@ public class InitDatabaseHostedService : IHostedService
         _logger = logger;
     }
 
-    private int _moduleSort = 1000;
-
-    private int moduleSort
-    {
-        get
-        {
-            _moduleSort--;
-            return _moduleSort;
-        }
-    }
-
-    private int _menuSort = 1000;
-
-    private int menuSort
-    {
-        get
-        {
-            _menuSort--;
-            return _menuSort;
-        }
-    }
-
-    private int _buttonSort = 1000;
-
-    private int buttonSort
-    {
-        get
-        {
-            _buttonSort--;
-            return _buttonSort;
-        }
-    }
-
     /// <summary>
     /// Triggered when the application host is ready to start the service.
     /// </summary>
@@ -94,19 +61,14 @@ public class InitDatabaseHostedService : IHostedService
         {
             var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
             // 加载Aop
-            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(),
-                db,
-                SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
-                false,
-                true,
-                null);
+            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
             // 创建核心库
             db.DbMaintenance.CreateDatabase();
 
             // 查询核心表是否存在
-            var sql
-                = $"SELECT COUNT(*) FROM [information_schema].[TABLES] WHERE [TABLE_NAME] = '{typeof(UserModel).GetSugarTableName()}'";
+            var sql =
+                $"SELECT COUNT(*) FROM [information_schema].[TABLES] WHERE [TABLE_NAME] = '{typeof(UserModel).GetSugarTableName()}'";
             if (await db.Ado.GetIntAsync(sql) > 0)
                 return;
 
@@ -128,6 +90,8 @@ public class InitDatabaseHostedService : IHostedService
             db.CodeFirst.SplitTables()
                 .InitTables(splitTableTypes);
 
+            var dateTime = new DateTime(2025, 01, 01);
+
             #region User
 
             // 初始化管理员
@@ -142,7 +106,7 @@ public class InitDatabaseHostedService : IHostedService
                 Avatar = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
                 CreatedUserId = CommonConst.DefaultUserId,
                 CreatedUserName = "管理员",
-                CreatedTime = new DateTime(2025, 01, 01)
+                CreatedTime = dateTime
             };
             adminUserModel = await db.Insertable(adminUserModel)
                 .ExecuteReturnEntityAsync();
@@ -158,7 +122,7 @@ public class InitDatabaseHostedService : IHostedService
                     Avatar = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
                     CreatedUserId = adminUserModel.Id,
                     CreatedUserName = adminUserModel.NickName,
-                    CreatedTime = new DateTime(2025, 01, 01)
+                    CreatedTime = dateTime
                 })
                 .ExecuteCommandAsync(cancellationToken);
             // 初始化普通用户
@@ -173,7 +137,7 @@ public class InitDatabaseHostedService : IHostedService
                 Avatar = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
                 CreatedUserId = adminUserModel.Id,
                 CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
+                CreatedTime = dateTime
             };
             noneUserModel = await db.Insertable(noneUserModel)
                 .ExecuteReturnEntityAsync();
@@ -230,7 +194,7 @@ public class InitDatabaseHostedService : IHostedService
                         Price = price,
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
+                        CreatedTime = dateTime
                     });
                     // 首购
                     editionDiscountList.Add(new EditionDiscountModel
@@ -241,11 +205,11 @@ public class InitDatabaseHostedService : IHostedService
                         DiscountType = DiscountTypeEnum.FirstBuyFixedPrice,
                         Duration = durationItem.Value,
                         FixedPrice = price - 500,
-                        StartTime = new DateTime(2025, 01, 01),
+                        StartTime = dateTime,
                         EndTime = new DateTime(2099, 12, 31),
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
+                        CreatedTime = dateTime
                     });
                     // 打折
                     editionDiscountList.Add(new EditionDiscountModel
@@ -256,11 +220,11 @@ public class InitDatabaseHostedService : IHostedService
                         DiscountType = DiscountTypeEnum.Percentage,
                         Duration = durationItem.Value,
                         DiscountRate = 90,
-                        StartTime = new DateTime(2025, 01, 01),
+                        StartTime = dateTime,
                         EndTime = new DateTime(2099, 12, 31),
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
+                        CreatedTime = dateTime
                     });
                 }
             }
@@ -286,15 +250,15 @@ public class InitDatabaseHostedService : IHostedService
                 AdminMobile = "15580001115",
                 AdminEmail = "2875616188@qq.com",
                 LogoUrl = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
-                ActivationTime = new DateTime(2025, 01, 01),
+                ActivationTime = dateTime,
                 Edition = EditionEnum.Flagship,
                 AutoRenewal = true,
-                RenewalExpiryTime = new DateTime(2028, 01, 01),
+                RenewalExpiryTime = dateTime.AddDays(1080),
                 IsTrial = true,
                 IsInitialized = false,
                 CreatedUserId = adminUserModel.Id,
                 CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
+                CreatedTime = dateTime
             };
             platformModel = await db.Insertable(platformModel)
                 .ExecuteReturnEntityAsync();
@@ -307,24 +271,16 @@ public class InitDatabaseHostedService : IHostedService
                 ToEdition = EditionEnum.Internal,
                 RenewalType = RenewalTypeEnum.Activation,
                 Duration = RenewalDurationEnum.ThreeYear,
-                RenewalTime = new DateTime(2025, 01, 01),
-                RenewalExpiryTime = new DateTime(2028, 01, 01),
+                RenewalTime = dateTime,
+                RenewalExpiryTime = dateTime.AddDays(1080),
                 Amount = 0,
                 Remark = "内部版，不对外出售",
                 CreatedUserId = adminUserModel.Id,
                 CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
+                CreatedTime = dateTime
             };
             await db.Insertable(platformRenewalRecordModel)
                 .ExecuteReturnEntityAsync();
-
-            #endregion
-
-            #region UserPlatform
-
-            // 初始化用户平台权限
-            await db.Insertable(new UserPlatformModel {UserId = noneUserModel.Id, PlatformId = platformModel.Id})
-                .ExecuteCommandAsync(cancellationToken);
 
             #endregion
 
@@ -332,7 +288,7 @@ public class InitDatabaseHostedService : IHostedService
 
             await db.Insertable(new List<DatabaseModel>
                 {
-                    // 初始化平台日志库
+                    // 初始化日志库
                     new()
                     {
                         PlatformId = platformModel.Id,
@@ -345,15 +301,15 @@ public class InitDatabaseHostedService : IHostedService
                         DbName = "FastCloudLog",
                         DbUser = SqlSugarContext.ConnectionSettings.DbUser,
                         DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
-                        CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut,
-                        SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
+                        CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
+                        SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                         DiffLog = false,
                         DisableAop = true,
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
+                        CreatedTime = dateTime
                     },
-                    // 初始化平台部署库
+                    // 初始化部署库
                     new()
                     {
                         PlatformId = platformModel.Id,
@@ -366,15 +322,15 @@ public class InitDatabaseHostedService : IHostedService
                         DbName = "Deploy",
                         DbUser = SqlSugarContext.ConnectionSettings.DbUser,
                         DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
-                        CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut,
-                        SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
+                        CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
+                        SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                         DiffLog = true,
                         DisableAop = false,
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
+                        CreatedTime = dateTime
                     },
-                    // 初始化平台网关库
+                    // 初始化网关库
                     new()
                     {
                         PlatformId = platformModel.Id,
@@ -387,13 +343,13 @@ public class InitDatabaseHostedService : IHostedService
                         DbName = "Gateway",
                         DbUser = SqlSugarContext.ConnectionSettings.DbUser,
                         DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
-                        CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut,
-                        SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
+                        CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
+                        SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                         DiffLog = true,
                         DisableAop = false,
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
+                        CreatedTime = dateTime
                     },
                     // 初始化平台核心库
                     new()
@@ -408,20 +364,28 @@ public class InitDatabaseHostedService : IHostedService
                         DbName = "Center",
                         DbUser = SqlSugarContext.ConnectionSettings.DbUser,
                         DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
-                        CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut,
-                        SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds,
+                        CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
+                        SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                         DiffLog = true,
                         DisableAop = false,
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
+                        CreatedTime = dateTime
                     }
                 })
                 .ExecuteCommandAsync(cancellationToken);
 
             #endregion
 
-            #region Application
+            #region UserPlatform
+
+            // 初始化用户平台权限
+            await db.Insertable(new UserPlatformModel {UserId = noneUserModel.Id, PlatformId = platformModel.Id})
+                .ExecuteCommandAsync(cancellationToken);
+
+            #endregion
+
+            #region admin.fastdotnet.com
 
             // 初始化应用信息
             var applicationModel = new ApplicationModel
@@ -430,1450 +394,67 @@ public class InitDatabaseHostedService : IHostedService
                 Edition = EditionEnum.Internal,
                 AppNo = "Fast000001",
                 AppName = CommonConst.DefaultAppName,
-                OpenId = "https://admin.fastdotnet.com",
-                AppType = AppEnvironmentEnum.Web,
-                ServiceStartTime = new DateTime(2025, 01, 01),
+                ServiceStartTime = dateTime,
                 ServiceEndTime = new DateTime(2099, 12, 31),
                 CreatedUserId = adminUserModel.Id,
                 CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
+                CreatedTime = dateTime
             };
             applicationModel = await db.Insertable(applicationModel)
                 .ExecuteReturnEntityAsync();
-
-            #endregion
-
-            #region Menu
-
-            #region 系统管理
-
-            var systemModuleModel = new ModuleModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleName = "系统管理",
-                Icon = "system",
-                ViewType = ModuleViewTypeEnum.Admin,
-                Sort = moduleSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            systemModuleModel = await db.Insertable(systemModuleModel)
-                .ExecuteReturnEntityAsync();
-
-            #region 用户管理
-
-            var userMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = systemModuleModel.Id,
-                MenuCode = "User:Page",
-                MenuName = "用户管理",
-                MenuTitle = "用户管理",
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "app",
-                WebRouter = "/system/user/page",
-                WebComponent = "system/user/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            userMenuModel = await db.Insertable(userMenuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
+            await db.Insertable(new List<ApplicationOpenIdModel>
                 {
                     new()
                     {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
                         AppId = applicationModel.Id,
-                        MenuId = userMenuModel.Id,
-                        ButtonCode = "User:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
+                        OpenId = "admin.fastdotnet.com",
+                        AppType = AppEnvironmentEnum.Web,
+                        ApiUrl = "http://127.0.0.1:38081",
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
+                        CreatedTime = dateTime
                     },
                     new()
                     {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
                         AppId = applicationModel.Id,
-                        MenuId = userMenuModel.Id,
-                        ButtonCode = "User:Detail",
-                        ButtonName = "详情",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
+                        OpenId = "WeChatOpenId",
+                        AppType = AppEnvironmentEnum.WeChatMiniProgram,
+                        ApiUrl = "http://127.0.0.1:38081",
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
+                        CreatedTime = dateTime
                     },
                     new()
                     {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
                         AppId = applicationModel.Id,
-                        MenuId = userMenuModel.Id,
-                        ButtonCode = "User:Add",
-                        ButtonName = "新增",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
+                        OpenId = "AndroidOpenId",
+                        AppType = AppEnvironmentEnum.Android,
+                        ApiUrl = "http://127.0.0.1:38081",
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
+                        CreatedTime = dateTime
                     },
                     new()
                     {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
                         AppId = applicationModel.Id,
-                        MenuId = userMenuModel.Id,
-                        ButtonCode = "User:Edit",
-                        ButtonName = "编辑",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
+                        OpenId = "IOSOpenId",
+                        AppType = AppEnvironmentEnum.IOS,
+                        ApiUrl = "http://127.0.0.1:38081",
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
+                        CreatedTime = dateTime
                     }
                 })
                 .ExecuteCommandAsync(cancellationToken);
 
-            #endregion
+            // 系统模块
+            await MenuSeedData.SystemModuleSeedData(db, applicationModel, adminUserModel.Id, adminUserModel.NickName, dateTime);
 
-            #region 版本管理
+            // 平台模块
+            await MenuSeedData.PlatformModuleSeedData(db, applicationModel, adminUserModel.Id, adminUserModel.NickName, dateTime);
 
-            var editionMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = systemModuleModel.Id,
-                MenuCode = "Edition:Page",
-                MenuName = "版本管理",
-                MenuTitle = "版本管理",
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "edition",
-                WebRouter = "/system/edition/page",
-                WebComponent = "system/edition/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            editionMenuModel = await db.Insertable(editionMenuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = editionMenuModel.Id,
-                        ButtonCode = "Edition:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = editionMenuModel.Id,
-                        ButtonCode = "Edition:Detail",
-                        ButtonName = "详情",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = editionMenuModel.Id,
-                        ButtonCode = "Edition:Add",
-                        ButtonName = "新增",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = editionMenuModel.Id,
-                        ButtonCode = "Edition:Edit",
-                        ButtonName = "编辑",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = editionMenuModel.Id,
-                        ButtonCode = "Edition:Delete",
-                        ButtonName = "删除",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            #endregion
-
-            #region Database
-
-            var dbMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = systemModuleModel.Id,
-                MenuCode = "Database:Page",
-                MenuName = "数据库配置",
-                MenuTitle = "数据库配置",
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "database",
-                WebRouter = "/system/database/page",
-                WebComponent = "system/database/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            dbMenuModel = await db.Insertable(dbMenuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = dbMenuModel.Id,
-                        ButtonCode = "Database:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = dbMenuModel.Id,
-                        ButtonCode = "Database:Detail",
-                        ButtonName = "详情",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = dbMenuModel.Id,
-                        ButtonCode = "Database:Add",
-                        ButtonName = "新增",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = dbMenuModel.Id,
-                        ButtonCode = "Database:Edit",
-                        ButtonName = "编辑",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = dbMenuModel.Id,
-                        ButtonCode = "Database:Delete",
-                        ButtonName = "删除",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            #endregion
-
-            #region 应用管理
-
-            var appMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = systemModuleModel.Id,
-                MenuCode = "App:Page",
-                MenuName = "应用管理",
-                MenuTitle = "应用管理",
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "app",
-                WebRouter = "/system/app/page",
-                WebComponent = "system/app/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            appMenuModel = await db.Insertable(appMenuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = appMenuModel.Id,
-                        ButtonCode = "App:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = appMenuModel.Id,
-                        ButtonCode = "App:Detail",
-                        ButtonName = "详情",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = appMenuModel.Id,
-                        ButtonCode = "App:Add",
-                        ButtonName = "新增",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = appMenuModel.Id,
-                        ButtonCode = "App:Edit",
-                        ButtonName = "编辑",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = appMenuModel.Id,
-                        ButtonCode = "App:Delete",
-                        ButtonName = "删除",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            #endregion
-
-            #endregion
-
-            #region 平台管理
-
-            var platformModuleModel = new ModuleModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleName = "平台管理",
-                Icon = "platform",
-                ViewType = ModuleViewTypeEnum.All,
-                Sort = moduleSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            platformModuleModel = await db.Insertable(platformModuleModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = platformModuleModel.Id,
-                        ButtonCode = "platform:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = platformModuleModel.Id,
-                        ButtonCode = "platform:Detail",
-                        ButtonName = "详情",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = platformModuleModel.Id,
-                        ButtonCode = "platform:Add",
-                        ButtonName = "新增",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = platformModuleModel.Id,
-                        ButtonCode = "platform:Edit",
-                        ButtonName = "编辑",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = platformModuleModel.Id,
-                        ButtonCode = "platform:Enable",
-                        ButtonName = "启用",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = platformModuleModel.Id,
-                        ButtonCode = "platform:Disable",
-                        ButtonName = "禁用",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            #region 系统日志
-
-            var sysLogCLMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = platformModuleModel.Id,
-                MenuCode = "SystemLog:Catalog",
-                MenuName = "系统日志",
-                MenuTitle = "系统日志",
-                MenuType = MenuTypeEnum.Catalog,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "api",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            sysLogCLMenuModel = await db.Insertable(sysLogCLMenuModel)
-                .ExecuteReturnEntityAsync();
-
-            var exLogMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = platformModuleModel.Id,
-                MenuCode = "ExceptionLog:Page",
-                MenuName = "异常日志",
-                MenuTitle = "异常日志",
-                ParentId = sysLogCLMenuModel.Id,
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "api",
-                WebRouter = "/platform/log/exception/page",
-                WebComponent = "platform/log/exception/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            exLogMenuModel = await db.Insertable(exLogMenuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = exLogMenuModel.Id,
-                        ButtonCode = "ExceptionLog:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = exLogMenuModel.Id,
-                        ButtonCode = "ExceptionLog:Delete",
-                        ButtonName = "删除",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            var sqlExLogMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = platformModuleModel.Id,
-                MenuCode = "SqlExceptionLog:Page",
-                MenuName = "Sql异常",
-                MenuTitle = "Sql异常",
-                ParentId = sysLogCLMenuModel.Id,
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "api",
-                WebRouter = "/platform/log/sql/exception/page",
-                WebComponent = "platform/log/sql/exception/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            sqlExLogMenuModel = await db.Insertable(sqlExLogMenuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = sqlExLogMenuModel.Id,
-                        ButtonCode = "SqlExceptionLog:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = sqlExLogMenuModel.Id,
-                        ButtonCode = "SqlExceptionLog:Delete",
-                        ButtonName = "删除",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            var sqlTimeoutLogMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = platformModuleModel.Id,
-                MenuCode = "SqlTimeoutLog:Page",
-                MenuName = "Sql超时",
-                MenuTitle = "Sql超时",
-                ParentId = sysLogCLMenuModel.Id,
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "api",
-                WebRouter = "/platform/log/sql/timeout/page",
-                WebComponent = "platform/log/sql/timeout/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            sqlTimeoutLogMenuModel = await db.Insertable(sqlTimeoutLogMenuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = sqlTimeoutLogMenuModel.Id,
-                        ButtonCode = "SqlTimeoutLog:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = sqlTimeoutLogMenuModel.Id,
-                        ButtonCode = "SqlTimeoutLog:Delete",
-                        ButtonName = "删除",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            #endregion
-
-            #region 平台日志
-
-            var platformLogCLMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = platformModuleModel.Id,
-                MenuCode = "PlatformLog:Catalog",
-                MenuName = "平台日志",
-                MenuTitle = "平台日志",
-                MenuType = MenuTypeEnum.Catalog,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "log",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            platformLogCLMenuModel = await db.Insertable(platformLogCLMenuModel)
-                .ExecuteReturnEntityAsync();
-
-            var visitLogMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = platformModuleModel.Id,
-                MenuCode = "VisitLog:Page",
-                MenuName = "访问日志",
-                MenuTitle = "访问日志",
-                ParentId = platformLogCLMenuModel.Id,
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "api",
-                WebRouter = "/platform/log/visit/page",
-                WebComponent = "platform/log/visit/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            visitLogMenuModel = await db.Insertable(visitLogMenuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = visitLogMenuModel.Id,
-                        ButtonCode = "VisitLog:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = visitLogMenuModel.Id,
-                        ButtonCode = "VisitLog:Delete",
-                        ButtonName = "删除",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            var operateLogMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = platformModuleModel.Id,
-                MenuCode = "OperateLog:Page",
-                MenuName = "操作日志",
-                MenuTitle = "操作日志",
-                ParentId = platformLogCLMenuModel.Id,
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "api",
-                WebRouter = "/platform/log/operate/page",
-                WebComponent = "platform/log/operate/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            operateLogMenuModel = await db.Insertable(operateLogMenuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = operateLogMenuModel.Id,
-                        ButtonCode = "OperateLog:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = operateLogMenuModel.Id,
-                        ButtonCode = "OperateLog:Delete",
-                        ButtonName = "删除",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            var sqlExecLogMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = platformModuleModel.Id,
-                MenuCode = "SqlExecutionLog:Page",
-                MenuName = "Sql日志",
-                MenuTitle = "Sql日志",
-                ParentId = sysLogCLMenuModel.Id,
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "api",
-                WebRouter = "/platform/log/sql/execution/page",
-                WebComponent = "platform/log/sql/execution/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            sqlExecLogMenuModel = await db.Insertable(sqlExecLogMenuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = sqlExecLogMenuModel.Id,
-                        ButtonCode = "SqlExecutionLog:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = sqlExecLogMenuModel.Id,
-                        ButtonCode = "SqlExecutionLog:Delete",
-                        ButtonName = "删除",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            var sqlDiffLogMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = platformModuleModel.Id,
-                MenuCode = "SqlDiffLog:Page",
-                MenuName = "Sql差异",
-                MenuTitle = "Sql差异",
-                ParentId = sysLogCLMenuModel.Id,
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "api",
-                WebRouter = "/platform/log/sql/diff/page",
-                WebComponent = "platform/log/sql/diff/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            sqlDiffLogMenuModel = await db.Insertable(sqlDiffLogMenuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = sqlDiffLogMenuModel.Id,
-                        ButtonCode = "SqlDiffLog:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = sqlDiffLogMenuModel.Id,
-                        ButtonCode = "SqlDiffLog:Delete",
-                        ButtonName = "删除",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            #endregion
-
-            #endregion
-
-            #region 开发应用
-
-            var devModuleModel = new ModuleModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleName = "开发应用",
-                Icon = "dev",
-                ViewType = ModuleViewTypeEnum.All,
-                Sort = moduleSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            devModuleModel = await db.Insertable(devModuleModel)
-                .ExecuteReturnEntityAsync();
-
-            #region Api
-
-            var apiCLMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = devModuleModel.Id,
-                MenuCode = "Api:Catalog",
-                MenuName = "Api",
-                MenuTitle = "Api",
-                MenuType = MenuTypeEnum.Catalog,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "api",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            apiCLMenuModel = await db.Insertable(apiCLMenuModel)
-                .ExecuteReturnEntityAsync();
-
-            var apiMenuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = devModuleModel.Id,
-                MenuCode = "Api:Page",
-                MenuName = "接口管理",
-                MenuTitle = "接口管理",
-                ParentId = apiCLMenuModel.Id,
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "api",
-                WebRouter = "/dev/api/page",
-                WebComponent = "dev/api/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            apiMenuModel = await db.Insertable(apiMenuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new ButtonModel
-                {
-                    Id = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = apiMenuModel.Id,
-                    ButtonCode = "Api:Page",
-                    ButtonName = "列表",
-                    HasDesktop = true,
-                    HasWeb = true,
-                    HasMobile = true,
-                    Sort = buttonSort,
-                    Status = CommonStatusEnum.Enable,
-                    CreatedUserId = adminUserModel.Id,
-                    CreatedUserName = adminUserModel.NickName,
-                    CreatedTime = new DateTime(2025, 01, 01)
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            await db.Insertable(new List<MenuModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        ModuleId = devModuleModel.Id,
-                        MenuCode = "Api:Swagger",
-                        MenuName = "Swagger",
-                        MenuTitle = "Swagger",
-                        ParentId = apiCLMenuModel.Id,
-                        MenuType = MenuTypeEnum.Internal,
-                        HasDesktop = false,
-                        HasWeb = true,
-                        WebIcon = "api",
-                        HasMobile = false,
-                        Link = "http://127.0.0.1:38081",
-                        Visible = YesOrNotEnum.Y,
-                        Sort = menuSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        ModuleId = devModuleModel.Id,
-                        MenuCode = "Api:Knife4j",
-                        MenuName = "Knife4j",
-                        MenuTitle = "Knife4j",
-                        ParentId = apiCLMenuModel.Id,
-                        MenuType = MenuTypeEnum.Internal,
-                        HasDesktop = false,
-                        HasWeb = true,
-                        WebIcon = "api",
-                        HasMobile = false,
-                        Link = "http://127.0.0.1:38081/knife4j",
-                        Visible = YesOrNotEnum.Y,
-                        Sort = menuSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            #endregion
-
-            #region 菜单管理
-
-            var menuModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = devModuleModel.Id,
-                MenuCode = "Menu:Page",
-                MenuName = "菜单管理",
-                MenuTitle = "菜单管理",
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "api",
-                WebRouter = "/dev/menu/page",
-                WebComponent = "dev/menu/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            menuModel = await db.Insertable(menuModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new List<ButtonModel>
-                {
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = menuModel.Id,
-                        ButtonCode = "Menu:Page",
-                        ButtonName = "列表",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = menuModel.Id,
-                        ButtonCode = "Menu:Detail",
-                        ButtonName = "详情",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = menuModel.Id,
-                        ButtonCode = "Menu:Add",
-                        ButtonName = "新增",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = menuModel.Id,
-                        ButtonCode = "Menu:Edit",
-                        ButtonName = "编辑",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    },
-                    new()
-                    {
-                        Id = YitIdHelper.NextId(),
-                        Edition = EditionEnum.Internal,
-                        AppId = applicationModel.Id,
-                        MenuId = menuModel.Id,
-                        ButtonCode = "Menu:Delete",
-                        ButtonName = "删除",
-                        HasDesktop = true,
-                        HasWeb = true,
-                        HasMobile = true,
-                        Sort = buttonSort,
-                        Status = CommonStatusEnum.Enable,
-                        CreatedUserId = adminUserModel.Id,
-                        CreatedUserName = adminUserModel.NickName,
-                        CreatedTime = new DateTime(2025, 01, 01)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            #endregion
-
-            #region 密码映射
-
-            var passwordMapModel = new MenuModel
-            {
-                Id = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                ModuleId = devModuleModel.Id,
-                MenuCode = "PasswordMap:Page",
-                MenuName = "密码映射",
-                MenuTitle = "密码映射",
-                MenuType = MenuTypeEnum.Menu,
-                HasDesktop = false,
-                HasWeb = true,
-                WebIcon = "api",
-                WebRouter = "/dev/passwordMap/page",
-                WebComponent = "dev/passwordMap/index",
-                HasMobile = false,
-                Visible = YesOrNotEnum.Y,
-                Sort = menuSort,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = adminUserModel.Id,
-                CreatedUserName = adminUserModel.NickName,
-                CreatedTime = new DateTime(2025, 01, 01)
-            };
-            passwordMapModel = await db.Insertable(passwordMapModel)
-                .ExecuteReturnEntityAsync();
-            await db.Insertable(new ButtonModel
-                {
-                    Id = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = passwordMapModel.Id,
-                    ButtonCode = "PasswordMap:Page",
-                    ButtonName = "列表",
-                    HasDesktop = true,
-                    HasWeb = true,
-                    HasMobile = true,
-                    Sort = buttonSort,
-                    Status = CommonStatusEnum.Enable,
-                    CreatedUserId = adminUserModel.Id,
-                    CreatedUserName = adminUserModel.NickName,
-                    CreatedTime = new DateTime(2025, 01, 01)
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            #endregion
-
-            #endregion
+            // 开发模块
+            await MenuSeedData.DevModuleSeedData(db, applicationModel, adminUserModel.Id, adminUserModel.NickName, dateTime);
 
             #endregion
 

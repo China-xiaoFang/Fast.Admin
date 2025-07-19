@@ -109,8 +109,9 @@ public interface IUser
     /// 设置授权用户
     /// </summary>
     /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <param name="forceUserInfo"><see cref="bool"/> 强制覆盖用户信息，默认 <c>false</c></param>
     /// <remarks>只会赋值一次</remarks>
-    void SetAuthUser(AuthUserInfo authUserInfo);
+    void SetAuthUser(AuthUserInfo authUserInfo, bool forceUserInfo = false);
 
     /// <summary>
     /// 从缓存中获取授权用户信息

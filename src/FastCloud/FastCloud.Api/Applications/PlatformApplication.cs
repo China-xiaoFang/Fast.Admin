@@ -25,6 +25,7 @@ using Fast.Common;
 using Fast.FastCloud.Service.Platform;
 using Fast.FastCloud.Service.Platform.Dto;
 using Fast.SqlSugar;
+using Microsoft.AspNetCore.Authorization;
 
 // ReSharper disable once CheckNamespace
 namespace Fast.FastCloud.Api;
@@ -49,6 +50,7 @@ public class PlatformApplication : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("平台选择器", HttpRequestActionEnum.Paged)]
+    [Permission("Platform:Page")]
     public async Task<PagedResult<ElSelectorOutput<long>>> PlatformSelector(PagedInput input)
     {
         return await _platformService.PlatformSelector(input);
@@ -61,6 +63,7 @@ public class PlatformApplication : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取平台分页列表", HttpRequestActionEnum.Paged)]
+    [Permission("Platform:Page")]
     public async Task<PagedResult<QueryPlatformPagedOutput>> QueryPlatformPaged(PagedInput input)
     {
         return await _platformService.QueryPlatformPaged(input);
@@ -73,8 +76,62 @@ public class PlatformApplication : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取平台详情", HttpRequestActionEnum.Query)]
+    [Permission("Platform:Detail")]
     public async Task<QueryPlatformDetailOutput> QueryPlatformDetail([LongRequired(ErrorMessage = "平台Id不能为空")] long? platformId)
     {
         return await _platformService.QueryPlatformDetail(platformId!.Value);
+    }
+
+    /// <summary>
+    /// 获取平台续费记录分页列表
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("获取平台续费记录分页列表", HttpRequestActionEnum.Paged)]
+    [Permission("Platform:Detail")]
+    public async Task<PagedResult<QueryPlatformRenewalRecordPagedOutput>> QueryPlatformRenewalRecord(
+        QueryPlatformRenewalRecordInput input)
+    {
+        return await _platformService.QueryPlatformRenewalRecord(input);
+    }
+
+    /// <summary>
+    /// 初次开通平台
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("初次开通平台", HttpRequestActionEnum.Add)]
+    [Permission("Platform:Activation")]
+    public async Task FirstActivationPlatform(FirstActivationPlatformInput input)
+    {
+        await _platformService.FirstActivationPlatform(input);
+    }
+
+    /// <summary>
+    /// 编辑平台
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("编辑平台", HttpRequestActionEnum.Edit)]
+    [Permission("Platform:Edit")]
+    public async Task EditPlatform(EditPlatformInput input)
+    {
+        await _platformService.EditPlatform(input);
+    }
+
+    /// <summary>
+    /// 启用/禁用平台
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("启用/禁用平台", HttpRequestActionEnum.Edit)]
+    [Permission("Platform:ChangeStatus")]
+    public async Task ChangePlatformStatus(ChangePlatformStatusInput input)
+    {
+        await _platformService.ChangePlatformStatus(input);
     }
 }

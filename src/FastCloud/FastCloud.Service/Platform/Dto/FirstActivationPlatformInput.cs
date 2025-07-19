@@ -25,44 +25,50 @@ using Fast.FastCloud.Enum;
 namespace Fast.FastCloud.Service.Platform.Dto;
 
 /// <summary>
-/// <see cref="QueryPlatformPagedOutput"/> 获取平台分页列表输出
+/// <see cref="FirstActivationPlatformInput"/> 初次开通平台输入
 /// </summary>
-public class QueryPlatformPagedOutput
+public class FirstActivationPlatformInput
 {
-    /// <summary>
-    /// 主键Id
-    /// </summary>
-    public  long Id { get; set; }
-
     /// <summary>
     /// 平台编号
     /// </summary>
+    [StringRequired(ErrorMessage = "平台编号不能为空")]
     public string PlatformNo { get; set; }
 
     /// <summary>
     /// 平台名称
     /// </summary>
+    [StringRequired(ErrorMessage = "平台名称不能为空")]
     public string PlatformName { get; set; }
 
     /// <summary>
     /// 平台简称
     /// </summary>
+    [StringRequired(ErrorMessage = "平台简称不能为空")]
     public string ShortName { get; set; }
-
-    /// <summary>
-    /// 状态
-    /// </summary>
-    public CommonStatusEnum Status { get; set; }
 
     /// <summary>
     /// 平台管理员名称
     /// </summary>
+    [StringRequired(ErrorMessage = "平台管理员名称不能为空")]
     public string AdminName { get; set; }
 
     /// <summary>
     /// 平台管理员手机
     /// </summary>
+    [StringRequired(ErrorMessage = "平台管理员手机不能为空")]
     public string AdminMobile { get; set; }
+
+    /// <summary>
+    /// 平台管理员邮箱
+    /// </summary>
+    [StringRequired(ErrorMessage = "平台管理员邮箱不能为空")]
+    public string AdminEmail { get; set; }
+
+    /// <summary>
+    /// 平台管理员电话
+    /// </summary>
+    public string AdminPhone { get; set; }
 
     /// <summary>
     /// LogoUrl
@@ -70,59 +76,70 @@ public class QueryPlatformPagedOutput
     public string LogoUrl { get; set; }
 
     /// <summary>
-    /// 开通时间
-    /// </summary>
-    public DateTime ActivationTime { get; set; }
-
-    /// <summary>
     /// 平台版本
     /// </summary>
+    [EnumRequired(ErrorMessage = "平台版本不能为空")]
     public EditionEnum Edition { get; set; }
 
     /// <summary>
-    /// 自动续费
+    /// 续费时长
     /// </summary>
-    public bool AutoRenewal { get; set; }
+    public RenewalDurationEnum Duration { get; set; }
 
     /// <summary>
-    /// 续费到期时间
+    /// 续费金额
     /// </summary>
-    /// <remarks>包含当天</remarks>
-    public DateTime RenewalExpiryTime { get; set; }
+    public decimal Amount { get; set; }
 
     /// <summary>
-    /// 是否试用平台（未正式上线）
+    /// 数据库类型，用于区分使用的是那个类型的数据库
     /// </summary>
-    /// <remarks>ture表示可以删除所有数据重新初始化</remarks>
-    public bool IsTrial { get; set; }
+    [EnumRequired(ErrorMessage = "数据库类型不能为空")]
+    public DbType DbType { get; set; }
 
     /// <summary>
-    /// 是否已初始化
+    /// 公网Ip地址
     /// </summary>
-    public bool IsInitialized { get; set; }
+    [StringRequired(ErrorMessage = "公网Ip地址不能为空")]
+    public string PublicIp { get; set; }
+
+    /// <summary>
+    /// 内网Ip地址
+    /// </summary>
+    [StringRequired(ErrorMessage = "内网Ip地址不能为空")]
+    public string IntranetIp { get; set; }
+
+    /// <summary>
+    /// 端口号
+    /// </summary>
+    [IntRequired(ErrorMessage = "端口号不能为空")]
+    public int Port { get; set; }
+
+    /// <summary>
+    /// 数据库名称
+    /// </summary>
+    [StringRequired(ErrorMessage = "数据库名称不能为空")]
+    public string DbName { get; set; }
+
+    /// <summary>
+    /// 数据库用户
+    /// </summary>
+    [StringRequired(ErrorMessage = "数据库用户不能为空")]
+    public string DbUser { get; set; }
+
+    /// <summary>
+    /// 数据库密码
+    /// </summary>
+    [StringRequired(ErrorMessage = "数据库密码不能为空")]
+    public string DbPwd { get; set; }
+
+    /// <summary>
+    /// 自定义连接字符串
+    /// </summary>
+    public string CustomConnectionStr { get; set; }
 
     /// <summary>
     /// 备注
     /// </summary>
     public string Remark { get; set; }
-
-    /// <summary>
-    /// 创建者用户名称
-    /// </summary>
-    public  string CreatedUserName { get; set; }
-
-    /// <summary>
-    /// 创建时间
-    /// </summary>
-    public  DateTime? CreatedTime { get; set; }
-
-    /// <summary>
-    /// 更新者用户名称
-    /// </summary>
-    public  string UpdatedUserName { get; set; }
-
-    /// <summary>
-    /// 更新时间
-    /// </summary>
-    public  DateTime? UpdatedTime { get; set; }
 }

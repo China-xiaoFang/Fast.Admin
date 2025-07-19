@@ -20,61 +20,64 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.FastCloud.Service.Platform.Dto;
+// ReSharper disable once CheckNamespace
 
-namespace Fast.FastCloud.Service.Platform;
+namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="IPlatformService"/> 平台服务
+/// <see cref="ApplicationOpenIdModel"/> 应用OpenId表Model类
 /// </summary>
-public interface IPlatformService
+[SugarTable("ApplicationOpenId", "应用OpenId表")]
+[SugarDbType(DatabaseTypeEnum.FastCloud)]
+[SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(AppId), OrderByType.Asc, nameof(OpenId), OrderByType.Asc, true)]
+public class ApplicationOpenIdModel : IDatabaseEntity
 {
     /// <summary>
-    /// 平台选择器
+    /// 应用Id
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<PagedResult<ElSelectorOutput<long>>> PlatformSelector(PagedInput input);
+    [SugarColumn(ColumnDescription = "应用Id")]
+    public long AppId { get; set; }
 
     /// <summary>
-    /// 获取平台分页列表
+    /// 开放平台Id
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<PagedResult<QueryPlatformPagedOutput>> QueryPlatformPaged(PagedInput input);
+    [Required]
+    [SugarColumn(ColumnDescription = "开放平台Id", Length = 50)]
+    public string OpenId { get; set; }
 
     /// <summary>
-    /// 获取平台详情
+    /// 应用类型
     /// </summary>
-    /// <param name="platformId"></param>
-    /// <returns></returns>
-    Task<QueryPlatformDetailOutput> QueryPlatformDetail(long platformId);
+    [SugarColumn(ColumnDescription = "应用类型")]
+    public AppEnvironmentEnum AppType { get; set; }
 
     /// <summary>
-    /// 获取平台续费记录分页列表
+    /// 接口请求地址
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<PagedResult<QueryPlatformRenewalRecordPagedOutput>> QueryPlatformRenewalRecord(QueryPlatformRenewalRecordInput input);
+    [SugarColumn(ColumnDescription = "接口请求地址", Length = 50)]
+    public string ApiUrl { get; set; }
 
     /// <summary>
-    /// 初次开通平台
+    /// 备注
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task FirstActivationPlatform(FirstActivationPlatformInput input);
+    [SugarColumn(ColumnDescription = "备注", Length = 50)]
+    public string Remark { get; set; }
 
     /// <summary>
-    /// 编辑平台
+    /// 创建者用户Id
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task EditPlatform(EditPlatformInput input);
+    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
+    public long? CreatedUserId { get; set; }
 
     /// <summary>
-    /// 启用/禁用平台
+    /// 创建者用户名称
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task ChangePlatformStatus(ChangePlatformStatusInput input);
+    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, CreateTableFieldSort = 992)]
+    public string CreatedUserName { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    public DateTime CreatedTime { get; set; }
 }

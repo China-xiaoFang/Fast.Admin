@@ -20,6 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.FastCloud.Enum;
 using Fast.FastCloud.Service.Platform.Dto;
 
 namespace Fast.FastCloud.Service.Platform;
@@ -56,17 +57,22 @@ public class PlatformService : IPlatformService, ITransientDependency
             })
             .ToPagedListAsync(input);
 
-        var result = pagedData.Adapt<PagedResult<ElSelectorOutput<long>>>();
-
-        result.Rows = pagedData.Rows.Select(sl => new ElSelectorOutput<long>
+        return new PagedResult<ElSelectorOutput<long>>
         {
-            Label = sl.PlatformName,
-            Value = sl.Id,
-            Disabled = sl.Disabled,
-            Data = new {sl.AdminName, sl.AdminMobile, sl.LogoUrl}
-        });
-
-        return result;
+            PageIndex = pagedData.PageIndex,
+            PageSize = pagedData.PageSize,
+            TotalPage = pagedData.TotalPage,
+            TotalRows = pagedData.TotalRows,
+            HasPrevPages = pagedData.HasPrevPages,
+            HasNextPages = pagedData.HasNextPages,
+            Rows = pagedData.Rows.Select(sl => new ElSelectorOutput<long>
+            {
+                Label = sl.PlatformName,
+                Value = sl.Id,
+                Disabled = sl.Disabled,
+                Data = new {sl.AdminName, sl.AdminMobile, sl.LogoUrl}
+            })
+        };
     }
 
     /// <summary>
@@ -78,7 +84,28 @@ public class PlatformService : IPlatformService, ITransientDependency
     {
         return await _repository.Entities.PlatformScope(e => e.Id)
             .OrderBy(e => e.PlatformName)
-            .Select<QueryPlatformPagedOutput>()
+            .Select(e => new QueryPlatformPagedOutput
+            {
+                Id = e.Id,
+                PlatformNo = e.PlatformNo,
+                PlatformName = e.PlatformName,
+                ShortName = e.ShortName,
+                Status = e.Status,
+                AdminName = e.AdminName,
+                AdminMobile = e.AdminMobile,
+                LogoUrl = e.LogoUrl,
+                ActivationTime = e.ActivationTime,
+                Edition = e.Edition,
+                AutoRenewal = e.AutoRenewal,
+                RenewalExpiryTime = e.RenewalExpiryTime,
+                IsTrial = e.IsTrial,
+                IsInitialized = e.IsInitialized,
+                Remark = e.Remark,
+                CreatedUserName = e.CreatedUserName,
+                CreatedTime = e.CreatedTime,
+                UpdatedUserName = e.UpdatedUserName,
+                UpdatedTime = e.UpdatedTime
+            })
             .ToPagedListAsync(input);
     }
 
@@ -90,7 +117,30 @@ public class PlatformService : IPlatformService, ITransientDependency
     public async Task<QueryPlatformDetailOutput> QueryPlatformDetail(long platformId)
     {
         var result = await _repository.Entities.Where(wh => wh.Id == platformId)
-            .Select<QueryPlatformDetailOutput>()
+            .Select(sl => new QueryPlatformDetailOutput
+            {
+                Id = sl.Id,
+                PlatformNo = sl.PlatformNo,
+                PlatformName = sl.PlatformName,
+                ShortName = sl.ShortName,
+                Status = sl.Status,
+                AdminName = sl.AdminName,
+                AdminMobile = sl.AdminMobile,
+                AdminEmail = sl.AdminEmail,
+                AdminPhone = sl.AdminPhone,
+                LogoUrl = sl.LogoUrl,
+                ActivationTime = sl.ActivationTime,
+                Edition = sl.Edition,
+                AutoRenewal = sl.AutoRenewal,
+                RenewalExpiryTime = sl.RenewalExpiryTime,
+                IsTrial = sl.IsTrial,
+                IsInitialized = sl.IsInitialized,
+                Remark = sl.Remark,
+                CreatedUserName = sl.CreatedUserName,
+                CreatedTime = sl.CreatedTime,
+                UpdatedUserName = sl.UpdatedUserName,
+                UpdatedTime = sl.UpdatedTime
+            })
             .SingleAsync();
 
         if (result == null)
@@ -99,5 +149,206 @@ public class PlatformService : IPlatformService, ITransientDependency
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// 获取平台续费记录分页列表
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    public async Task<PagedResult<QueryPlatformRenewalRecordPagedOutput>> QueryPlatformRenewalRecord(
+        QueryPlatformRenewalRecordInput input)
+    {
+        return await _repository.Queryable<PlatformRenewalRecordModel>()
+            .Where(wh => wh.PlatformId == input.PlatformId)
+            .OrderBy(ob => ob.RenewalTime)
+            .Select(sl => new QueryPlatformRenewalRecordPagedOutput
+            {
+                Id = sl.Id,
+                FromEdition = sl.FromEdition,
+                ToEdition = sl.ToEdition,
+                RenewalType = sl.RenewalType,
+                Duration = sl.Duration,
+                RenewalTime = sl.RenewalTime,
+                RenewalExpiryTime = sl.RenewalExpiryTime,
+                Amount = sl.Amount,
+                Remark = sl.Remark,
+                CreatedUserName = sl.CreatedUserName,
+                CreatedTime = sl.CreatedTime
+            })
+            .ToPagedListAsync(input);
+    }
+
+    /// <summary>
+    /// 初次开通平台
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    public async Task FirstActivationPlatform(FirstActivationPlatformInput input)
+    {
+        if (await _repository.Entities.AnyAsync(a => a.PlatformNo == input.PlatformNo))
+        {
+            throw new UserFriendlyException("平台编号重复！");
+        }
+
+        if (await _repository.Entities.AnyAsync(a => a.PlatformName == input.PlatformName))
+        {
+            throw new UserFriendlyException("平台名称重复！");
+        }
+
+        var dateTime = DateTime.Now;
+
+        // 计算续费到期时间
+        var renewalExpiryTime = dateTime.AddDays(input.Duration switch
+        {
+            RenewalDurationEnum.SevenDays => 7,
+            RenewalDurationEnum.FifteenDays => 15,
+            RenewalDurationEnum.OneMonth => 30,
+            RenewalDurationEnum.FortyFiveDays => 45,
+            RenewalDurationEnum.ThreeMonth => 90,
+            RenewalDurationEnum.SixMonth => 180,
+            RenewalDurationEnum.OneYear => 360,
+            RenewalDurationEnum.TwoYear => 720,
+            RenewalDurationEnum.ThreeYear => 1080,
+            _ => 0
+        });
+
+        // 创建平台
+        var platformModel = new PlatformModel
+        {
+            Id = YitIdHelper.NextId(),
+            PlatformNo = input.PlatformNo,
+            PlatformName = input.PlatformName,
+            ShortName = input.ShortName,
+            Status = CommonStatusEnum.Enable,
+            AdminName = input.AdminName,
+            AdminMobile = input.AdminMobile,
+            AdminEmail = input.AdminEmail,
+            AdminPhone = input.AdminPhone,
+            LogoUrl = input.LogoUrl,
+            ActivationTime = dateTime,
+            Edition = input.Edition,
+            AutoRenewal = true,
+            RenewalExpiryTime = renewalExpiryTime,
+            IsTrial = true,
+            IsInitialized = false,
+            Remark = input.Remark,
+            CreatedTime = dateTime
+        };
+        // 创建平台续费记录
+        var platformRenewalRecordModel = new PlatformRenewalRecordModel
+        {
+            PlatformId = platformModel.Id,
+            FromEdition = EditionEnum.None,
+            ToEdition = input.Edition,
+            RenewalType = RenewalTypeEnum.Activation,
+            Duration = input.Duration,
+            RenewalTime = dateTime,
+            RenewalExpiryTime = renewalExpiryTime,
+            Amount = input.Amount,
+            Remark = input.Remark,
+            CreatedTime = dateTime
+        };
+        // 初始化平台核心库
+        var databaseModel = new DatabaseModel
+        {
+            PlatformId = platformModel.Id,
+            DatabaseType = DatabaseTypeEnum.Center,
+            DbType = input.DbType,
+            Status = CommonStatusEnum.Enable,
+            PublicIp = input.PublicIp,
+            IntranetIp = input.IntranetIp,
+            Port = input.Port,
+            DbName = input.DbName,
+            DbUser = input.DbUser,
+            DbPwd = input.DbPwd,
+            CustomConnectionStr = input.CustomConnectionStr,
+            CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
+            SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
+            DiffLog = true,
+            DisableAop = false,
+            CreatedTime = dateTime
+        };
+
+        try
+        {
+            // 开启事务
+            await _repository.Ado.BeginTranAsync();
+
+            await _repository.InsertAsync(platformModel);
+            await _repository.Insertable(platformRenewalRecordModel)
+                .ExecuteCommandAsync();
+            await _repository.Insertable(databaseModel)
+                .ExecuteCommandAsync();
+
+            // 提交事务
+            await _repository.Ado.CommitTranAsync();
+        }
+        catch
+        {
+            // 回滚事务
+            await _repository.Ado.RollbackTranAsync();
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// 编辑平台
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    public async Task EditPlatform(EditPlatformInput input)
+    {
+        // 查询平台详情
+        var platformModel = await _repository.SingleAsync(s => s.Id == input.PlatformId);
+
+        if (platformModel == null)
+        {
+            throw new UserFriendlyException("平台信息不存在！");
+        }
+
+        if (platformModel.Status == CommonStatusEnum.Delete)
+        {
+            throw new UserFriendlyException("平台已删除，禁止操作！");
+        }
+
+        if (await _repository.Entities.AnyAsync(a => a.PlatformName == input.PlatformName && a.Id != input.PlatformId))
+        {
+            throw new UserFriendlyException("平台名称重复！");
+        }
+
+        platformModel.PlatformName = input.PlatformName;
+        platformModel.ShortName = input.ShortName;
+        platformModel.LogoUrl = input.LogoUrl;
+        platformModel.Remark = input.Remark;
+
+        // 更新数据
+        await _repository.UpdateAsync(platformModel);
+    }
+
+    /// <summary>
+    /// 启用/禁用平台
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    public async Task ChangePlatformStatus(ChangePlatformStatusInput input)
+    {
+        // 查询平台详情
+        var platformModel = await _repository.SingleAsync(s => s.Id == input.PlatformId);
+
+        if (platformModel == null)
+        {
+            throw new UserFriendlyException("平台信息不存在！");
+        }
+
+        platformModel.Status = platformModel.Status switch
+        {
+            CommonStatusEnum.Delete => throw new UserFriendlyException("平台已删除，禁止操作！"),
+            CommonStatusEnum.Enable => CommonStatusEnum.Disable,
+            _ => CommonStatusEnum.Enable
+        };
+
+        // 更新数据
+        await _repository.UpdateAsync(platformModel);
     }
 }

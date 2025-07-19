@@ -33,7 +33,6 @@ using Fast.NET.Core;
 using Fast.SqlSugar;
 using Fast.Swagger;
 using Fast.UnifyResult;
-using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -41,7 +40,6 @@ using SqlSugar;
 using Swashbuckle.AspNetCore.Swagger;
 using UAParser;
 using Yitter.IdGenerator;
-using FastMapsterAssembly = Fast.Mapster.IServiceCollectionExtension;
 
 // ReSharper disable once CheckNamespace
 namespace Fast.Kernel;
@@ -73,8 +71,6 @@ public class ProgramApplication : IDynamicApplication
         var yitterIdGeneratorAssembly = typeof(YitIdHelper).Assembly.GetName();
         var uaParserAssembly = typeof(UserAgent).Assembly.GetName();
 
-        var mapsterAssembly = typeof(TypeAdapterConfig).Assembly.GetName();
-
         var newtonsoftJsonAssembly = typeof(JsonConvert).Assembly.GetName();
 
         var fastRuntimeAssembly = typeof(MAppContext).Assembly.GetName();
@@ -84,7 +80,6 @@ public class ProgramApplication : IDynamicApplication
         var fastIaaSAssembly = typeof(GlobalConstant).Assembly.GetName();
         var fastJwtBearerAssembly = typeof(IJwtBearerHandle).Assembly.GetName();
         var fastLoggingAssembly = typeof(Log).Assembly.GetName();
-        var fastMapsterAssembly = typeof(FastMapsterAssembly).Assembly.GetName();
         var fastNetCoreAssembly = typeof(FastContext).Assembly.GetName();
         var fastSqlSugarAssembly = typeof(ISqlSugarEntityHandler).Assembly.GetName();
         var fastSwaggerAssembly = typeof(SwaggerSettingsOptions).Assembly.GetName();
@@ -155,7 +150,7 @@ public class ProgramApplication : IDynamicApplication
                 new {csRedisCoreAssembly.Name, csRedisCoreAssembly.Version},
                 new {sqlSugarAssembly.Name, sqlSugarAssembly.Version},
                 new {yitterIdGeneratorAssembly.Name, yitterIdGeneratorAssembly.Version},
-                new {uaParserAssembly.Name, uaParserAssembly.Version}, new {mapsterAssembly.Name, mapsterAssembly.Version},
+                new {uaParserAssembly.Name, uaParserAssembly.Version}, 
                 new {newtonsoftJsonAssembly.Name, newtonsoftJsonAssembly.Version},
                 new {fastRuntimeAssembly.Name, fastRuntimeAssembly.Version},
                 new {fastCacheAssembly.Name, fastCacheAssembly.Version},
@@ -164,7 +159,6 @@ public class ProgramApplication : IDynamicApplication
                 new {fastIaaSAssembly.Name, fastIaaSAssembly.Version},
                 new {fastJwtBearerAssembly.Name, fastJwtBearerAssembly.Version},
                 new {fastLoggingAssembly.Name, fastLoggingAssembly.Version},
-                new {fastMapsterAssembly.Name, fastMapsterAssembly.Version},
                 new {fastNetCoreAssembly.Name, fastNetCoreAssembly.Version},
                 new {fastSqlSugarAssembly.Name, fastSqlSugarAssembly.Version},
                 new {fastSwaggerAssembly.Name, fastSwaggerAssembly.Version},

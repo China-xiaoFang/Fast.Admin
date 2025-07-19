@@ -24,7 +24,6 @@ using Fast.Cache;
 using Fast.DependencyInjection;
 using Fast.JwtBearer;
 using Fast.Runtime;
-using Mapster;
 using Microsoft.AspNetCore.Http;
 
 // ReSharper disable once CheckNamespace
@@ -61,10 +60,11 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// 设置授权用户
     /// </summary>
     /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <param name="forceUserInfo"><see cref="bool"/> 强制覆盖用户信息，默认 <c>false</c></param>
     /// <remarks>只会赋值一次</remarks>
-    public void SetAuthUser(AuthUserInfo authUserInfo)
+    public void SetAuthUser(AuthUserInfo authUserInfo,bool forceUserInfo = false)
     {
-        if (_hasUserInfo)
+        if (_hasUserInfo && !forceUserInfo)
             return;
 
         if (authUserInfo == null)
@@ -73,7 +73,21 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         }
 
         // 设置授权用户信息
-        authUserInfo.Adapt(this);
+        DeviceType = authUserInfo.DeviceType;
+        DeviceId = authUserInfo.DeviceId;
+        UserId = authUserInfo.UserId;
+        Mobile = authUserInfo.Mobile;
+        NickName = authUserInfo.NickName;
+        IsAdmin = authUserInfo.IsAdmin;
+        LastLoginDevice = authUserInfo.LastLoginDevice;
+        LastLoginOS = authUserInfo.LastLoginOS;
+        LastLoginBrowser = authUserInfo.LastLoginBrowser;
+        LastLoginProvince = authUserInfo.LastLoginProvince;
+        LastLoginCity = authUserInfo.LastLoginCity;
+        LastLoginIp = authUserInfo.LastLoginIp;
+        LastLoginTime = authUserInfo.LastLoginTime;
+        PlatformNoList = authUserInfo.PlatformNoList;
+        ButtonCodeList = authUserInfo.ButtonCodeList;
         _hasUserInfo = true;
     }
 
@@ -111,7 +125,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         try
         {
             // 设置授权用户信息
-            authUserInfo.Adapt(this);
+            SetAuthUser(authUserInfo, true);
 
             // 生成 AccessToken
             var accessToken = JwtBearerUtil.GenerateToken(new Dictionary<string, object>
@@ -168,7 +182,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         }
 
         // 设置授权用户信息
-        authUserInfo.Adapt(this);
+        SetAuthUser(authUserInfo, true);
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUserInfo, authUserInfo.DeviceType.ToString(), authUserInfo.Mobile);
