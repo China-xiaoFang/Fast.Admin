@@ -51,7 +51,24 @@ public class AuthService : IAuthService, ITransientDependency
         var hasWeb = (GlobalContext.DeviceType & AppEnvironmentEnum.Web) != 0;
         var hasMobile = GlobalContext.IsMobile;
 
-        var result = _user.Adapt<GetLoginUserInfoOutput>();
+        var result = new GetLoginUserInfoOutput
+        {
+            DeviceType = _user.DeviceType,
+            DeviceId = _user.DeviceId,
+            UserId = _user.UserId,
+            Mobile = _user.Mobile,
+            NickName = _user.NickName,
+            IsAdmin = _user.IsAdmin,
+            LastLoginDevice = _user.LastLoginDevice,
+            LastLoginOS = _user.LastLoginOS,
+            LastLoginBrowser = _user.LastLoginBrowser,
+            LastLoginProvince = _user.LastLoginProvince,
+            LastLoginCity = _user.LastLoginCity,
+            LastLoginIp = _user.LastLoginIp,
+            LastLoginTime = _user.LastLoginTime,
+            PlatformNoList = _user.PlatformNoList,
+            ButtonCodeList = _user.ButtonCodeList
+        };
 
         var moduleQueryable = _repository.Queryable<ModuleModel>()
             .Where(wh => wh.AppId == CommonConst.DefaultAppId)
@@ -65,8 +82,8 @@ public class AuthService : IAuthService, ITransientDependency
 
         if (_user.IsAdmin)
         {
-            moduleQueryable
-                = moduleQueryable.Where(wh => (wh.ViewType & (ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
+            moduleQueryable =
+                moduleQueryable.Where(wh => (wh.ViewType & (ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
         }
         else
         {
@@ -94,7 +111,7 @@ public class AuthService : IAuthService, ITransientDependency
         // 查询所有模块
         var moduleList = await moduleQueryable.Clone()
             .OrderByDescending(ob => ob.Sort)
-            .Select<AuthModuleInfoDto>()
+            .Select(sl => new AuthModuleInfoDto {Id = sl.Id, ModuleName = sl.ModuleName, Icon = sl.Icon, Color = sl.Color})
             .ToListAsync();
         result.ModuleList = moduleList;
 
@@ -102,7 +119,26 @@ public class AuthService : IAuthService, ITransientDependency
         var menuList = await menuQueryable.Clone()
             .InnerJoin(moduleQueryable.Clone(), (t1, t2) => t1.ModuleId == t2.Id)
             .OrderByDescending((t1, t2) => t2.Sort)
-            .Select((t1, t2) => new AuthMenuInfoDto {Id = t1.Id.SelectAll()})
+            .Select((t1, t2) => new AuthMenuInfoDto
+            {
+                Id = t1.Id,
+                ModuleId = t1.ModuleId,
+                MenuCode = t1.MenuCode,
+                MenuName = t1.MenuName,
+                MenuTitle = t1.MenuTitle,
+                ParentId = t1.ParentId,
+                MenuType = t1.MenuType,
+                Icon = hasDesktop ? t1.DesktopIcon :
+                    hasWeb ? t1.WebIcon :
+                    hasMobile ? t1.MobileIcon : null,
+                Router = hasDesktop ? t1.DesktopRouter :
+                    hasWeb ? t1.WebRouter :
+                    hasMobile ? t1.MobileRouter : null,
+                Component = hasWeb ? t1.WebComponent : null,
+                Link = t1.Link,
+                Visible = t1.Visible,
+                Sort = t1.Sort
+            })
             .ToListAsync();
 
         if (!_user.IsAdmin)

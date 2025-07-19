@@ -25,7 +25,6 @@ using Fast.DependencyInjection;
 using Fast.DynamicApplication;
 using Fast.JwtBearer;
 using Fast.Logging;
-using Fast.Mapster;
 using Fast.NET.Core;
 using Fast.Serialization;
 using Fast.SqlSugar;
@@ -33,7 +32,6 @@ using Fast.Swagger;
 using Fast.UnifyResult;
 using IGeekFan.AspNetCore.Knife4jUI;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -64,9 +62,6 @@ public static class Startup
 
         // 添加 Gzip 压缩服务
         builder.Services.AddGzipCompression();
-
-        // 添加 Mapper  映射
-        builder.Services.AddMapster();
 
         // 添加依赖注入服务
         builder.Services.AddDependencyInjection();

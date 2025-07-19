@@ -29,7 +29,6 @@ global using Fast.FastCloudLog.Entity;
 global using Fast.IaaS;
 global using Fast.Runtime;
 global using Fast.SqlSugar;
-global using Mapster;
 global using Newtonsoft.Json;
 global using SqlSugar;
 global using Yitter.IdGenerator;

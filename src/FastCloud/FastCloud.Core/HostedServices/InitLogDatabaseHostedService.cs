@@ -39,12 +39,19 @@ namespace Fast.FastCloud.Core;
 public class InitLogDatabaseHostedService : IHostedService
 {
     /// <summary>
+    /// SqlSugar实体服务
+    /// </summary>
+    private readonly ISqlSugarEntityService _sqlSugarEntityService;
+
+    /// <summary>
     /// 日志
     /// </summary>
     private readonly ILogger _logger;
 
-    public InitLogDatabaseHostedService(ILogger<InitLogDatabaseHostedService> logger)
+    public InitLogDatabaseHostedService(ISqlSugarEntityService sqlSugarEntityService,
+        ILogger<InitLogDatabaseHostedService> logger)
     {
+        _sqlSugarEntityService = sqlSugarEntityService;
         _logger = logger;
     }
 
@@ -56,42 +63,23 @@ public class InitLogDatabaseHostedService : IHostedService
     {
         try
         {
-            var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
-
             // 查询 FastCloudLog 库连接字符串
-            var logConnectionSettings = await db.Queryable<DatabaseModel>()
-                .Where(wh => wh.Status == CommonStatusEnum.Enable)
-                .Where(wh => wh.PlatformId == CommonConst.DefaultPlatformId)
-                .Where(wh => wh.DatabaseType == DatabaseTypeEnum.FastCloudLog)
-                .Select(sl => new ConnectionSettingsOptions
-                    {
-                        ServiceIp = FastContext.HostEnvironment.IsDevelopment()
-                            // 开发环境使用公网地址
-                            ? sl.PublicIp
-                            // 生产环境使用内网地址
-                            : sl.IntranetIp
-                    },
-                    true)
-                .SingleAsync();
+            var connectionSettings = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.DefaultPlatformId,
+                CommonConst.DefaultPlatformNo, DatabaseTypeEnum.FastCloudLog);
 
-            if (logConnectionSettings == null)
+            if (connectionSettings == null)
                 return;
 
             // 创建日志库上下文
-            var logDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(logConnectionSettings));
+            var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(connectionSettings));
             // 加载 Aop
-            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(),
-                logDb,
-                logConnectionSettings.SugarSqlExecMaxSeconds,
-                false,
-                true,
-                null);
+            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
             // 创建核心库
-            logDb.DbMaintenance.CreateDatabase();
+            db.DbMaintenance.CreateDatabase();
 
             // 查询核心表是否存在
-            var allTableNames = logDb.SplitHelper<SqlExecutionLogModel>()
+            var allTableNames = db.SplitHelper<SqlExecutionLogModel>()
                 .GetTables();
             if (allTableNames.Count > 0)
                 return;
@@ -110,8 +98,8 @@ public class InitLogDatabaseHostedService : IHostedService
                 .ToArray();
 
             // 创建表
-            logDb.CodeFirst.InitTables(tableTypes);
-            logDb.CodeFirst.SplitTables()
+            db.CodeFirst.InitTables(tableTypes);
+            db.CodeFirst.SplitTables()
                 .InitTables(splitTableTypes);
 
             _logger.LogInformation("初始化日志数据库成功。");

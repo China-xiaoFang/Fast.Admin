@@ -93,7 +93,7 @@ public class MenuModel : SnowflakeKeyEntity, IUpdateVersion
     /// <summary>
     /// 桌面端图标
     /// </summary>
-    [SugarColumn(ColumnDescription = "桌面端图标", Length = 20)]
+    [SugarColumn(ColumnDescription = "桌面端图标", Length = 200)]
     public string DesktopIcon { get; set; }
 
     /// <summary>
@@ -135,7 +135,7 @@ public class MenuModel : SnowflakeKeyEntity, IUpdateVersion
     /// <summary>
     /// 移动端图标
     /// </summary>
-    [SugarColumn(ColumnDescription = "移动端图标", Length = 20)]
+    [SugarColumn(ColumnDescription = "移动端图标", Length = 200)]
     public string MobileIcon { get; set; }
 
     /// <summary>

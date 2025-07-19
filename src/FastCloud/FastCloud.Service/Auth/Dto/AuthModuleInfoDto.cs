@@ -46,10 +46,4 @@ public class AuthModuleInfoDto
     /// 颜色
     /// </summary>
     public string Color { get; set; }
-
-    /// <summary>
-    /// 默认的
-    /// </summary>
-    /// <remarks>只能存在一个</remarks>
-    public YesOrNotEnum IsDefault { get; set; }
 }
