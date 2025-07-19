@@ -32,7 +32,7 @@ public class QueryPlatformPagedOutput
     /// <summary>
     /// 主键Id
     /// </summary>
-    public  long Id { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// 平台编号
@@ -109,20 +109,20 @@ public class QueryPlatformPagedOutput
     /// <summary>
     /// 创建者用户名称
     /// </summary>
-    public  string CreatedUserName { get; set; }
+    public string CreatedUserName { get; set; }
 
     /// <summary>
     /// 创建时间
     /// </summary>
-    public  DateTime? CreatedTime { get; set; }
+    public DateTime? CreatedTime { get; set; }
 
     /// <summary>
     /// 更新者用户名称
     /// </summary>
-    public  string UpdatedUserName { get; set; }
+    public string UpdatedUserName { get; set; }
 
     /// <summary>
     /// 更新时间
     /// </summary>
-    public  DateTime? UpdatedTime { get; set; }
+    public DateTime? UpdatedTime { get; set; }
 }

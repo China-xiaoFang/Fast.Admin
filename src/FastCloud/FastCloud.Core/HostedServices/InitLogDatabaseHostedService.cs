@@ -21,7 +21,6 @@
 // ------------------------------------------------------------------------
 
 using Fast.Common;
-using Fast.FastCloud.Entity;
 using Fast.FastCloudLog.Entity;
 using Fast.NET.Core;
 using Fast.SqlSugar;

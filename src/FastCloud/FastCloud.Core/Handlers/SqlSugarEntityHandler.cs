@@ -79,7 +79,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         if (string.IsNullOrEmpty(databaseTypeStr))
             return null;
 
-        var databaseType = System.Enum.Parse<DatabaseTypeEnum>(databaseTypeStr, ignoreCase: true);
+        var databaseType = System.Enum.Parse<DatabaseTypeEnum>(databaseTypeStr, true);
 
         switch (databaseType)
         {
@@ -94,8 +94,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
                 return SqlSugarContext.ConnectionSettings;
             case DatabaseTypeEnum.FastCloudLog:
                 return await _sqlSugarEntityService.GetConnectionSetting(CommonConst.DefaultPlatformId,
-                    CommonConst.DefaultPlatformNo,
-                    databaseType);
+                    CommonConst.DefaultPlatformNo, databaseType);
         }
     }
 
@@ -109,8 +108,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     {
         // 获取 FastCloudLog 库的连接字符串配置
         var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.DefaultPlatformId,
-            CommonConst.DefaultPlatformNo,
-            DatabaseTypeEnum.FastCloudLog);
+            CommonConst.DefaultPlatformNo, DatabaseTypeEnum.FastCloudLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
         // 组装数据
@@ -224,8 +222,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     {
         // 获取 FastCloudLog 库的连接字符串配置
         var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.DefaultPlatformId,
-            CommonConst.DefaultPlatformNo,
-            DatabaseTypeEnum.FastCloudLog);
+            CommonConst.DefaultPlatformNo, DatabaseTypeEnum.FastCloudLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
         var diffLogType = diffType switch

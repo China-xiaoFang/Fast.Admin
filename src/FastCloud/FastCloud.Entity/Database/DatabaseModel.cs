@@ -29,11 +29,7 @@ namespace Fast.FastCloud.Entity;
 /// </summary>
 [SugarTable("Database", "数据库表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
-[SugarIndex($"IX_{{table}}_{nameof(DatabaseType)}",
-    nameof(PlatformId),
-    OrderByType.Asc,
-    nameof(DatabaseType),
-    OrderByType.Asc,
+[SugarIndex($"IX_{{table}}_{nameof(DatabaseType)}", nameof(PlatformId), OrderByType.Asc, nameof(DatabaseType), OrderByType.Asc,
     true)]
 public class DatabaseModel : SnowflakeKeyEntity, IUpdateVersion
 {

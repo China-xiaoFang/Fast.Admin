@@ -78,7 +78,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         if (string.IsNullOrEmpty(databaseTypeStr))
             return null;
 
-        var databaseType = Enum.Parse<DatabaseTypeEnum>(databaseTypeStr, ignoreCase: true);
+        var databaseType = Enum.Parse<DatabaseTypeEnum>(databaseTypeStr, true);
 
         switch (databaseType)
         {
@@ -105,8 +105,8 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     public async Task ExecuteAsync(string rawSql, SugarParameter[] parameters, TimeSpan executeTime, string handlerSql)
     {
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting
-            = await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId, _user.TenantNo, DatabaseTypeEnum.CenterLog);
+        var connectionSetting =
+            await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId, _user.TenantNo, DatabaseTypeEnum.CenterLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
         var tenantId = _user.TenantId;
@@ -184,8 +184,8 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         SugarParameter[] parameters, TimeSpan? executeTime, string handlerSql)
     {
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting
-            = await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId, _user.TenantNo, DatabaseTypeEnum.CenterLog);
+        var connectionSetting =
+            await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId, _user.TenantNo, DatabaseTypeEnum.CenterLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
         var tenantId = _user.TenantId;
