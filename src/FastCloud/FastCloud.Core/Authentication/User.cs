@@ -62,7 +62,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
     /// <param name="forceUserInfo"><see cref="bool"/> 强制覆盖用户信息，默认 <c>false</c></param>
     /// <remarks>只会赋值一次</remarks>
-    public void SetAuthUser(AuthUserInfo authUserInfo,bool forceUserInfo = false)
+    public void SetAuthUser(AuthUserInfo authUserInfo, bool forceUserInfo = false)
     {
         if (_hasUserInfo && !forceUserInfo)
             return;
@@ -143,8 +143,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
 
             // 获取缓存Key
             var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUserInfo,
-                authUserInfo.DeviceType.ToString(),
-                authUserInfo.Mobile);
+                authUserInfo.DeviceType.ToString(), authUserInfo.Mobile);
 
             // 设置缓存信息
             await _cache.SetAsync(cacheKey, authUserInfo);

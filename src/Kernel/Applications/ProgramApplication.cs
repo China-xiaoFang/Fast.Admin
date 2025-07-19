@@ -150,7 +150,7 @@ public class ProgramApplication : IDynamicApplication
                 new {csRedisCoreAssembly.Name, csRedisCoreAssembly.Version},
                 new {sqlSugarAssembly.Name, sqlSugarAssembly.Version},
                 new {yitterIdGeneratorAssembly.Name, yitterIdGeneratorAssembly.Version},
-                new {uaParserAssembly.Name, uaParserAssembly.Version}, 
+                new {uaParserAssembly.Name, uaParserAssembly.Version},
                 new {newtonsoftJsonAssembly.Name, newtonsoftJsonAssembly.Version},
                 new {fastRuntimeAssembly.Name, fastRuntimeAssembly.Version},
                 new {fastCacheAssembly.Name, fastCacheAssembly.Version},
