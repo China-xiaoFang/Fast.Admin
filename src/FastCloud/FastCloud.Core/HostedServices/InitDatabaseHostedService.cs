@@ -60,8 +60,6 @@ public class InitDatabaseHostedService : IHostedService
         try
         {
             var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
-            // 加载Aop
-            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
             // 创建核心库
             db.DbMaintenance.CreateDatabase();
@@ -71,6 +69,9 @@ public class InitDatabaseHostedService : IHostedService
                 $"SELECT COUNT(*) FROM [information_schema].[TABLES] WHERE [TABLE_NAME] = '{typeof(UserModel).GetSugarTableName()}'";
             if (await db.Ado.GetIntAsync(sql) > 0)
                 return;
+
+            // 加载Aop
+            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
             _logger.LogInformation("开始初始化数据库...");
 

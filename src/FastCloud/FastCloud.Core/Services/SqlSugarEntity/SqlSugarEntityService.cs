@@ -24,8 +24,8 @@ using Fast.Cache;
 using Fast.Common;
 using Fast.DependencyInjection;
 using Fast.FastCloud.Entity;
+using Fast.NET.Core;
 using Fast.SqlSugar;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SqlSugar;
@@ -36,17 +36,12 @@ namespace Fast.FastCloud.Core;
 /// <summary>
 /// <see cref="SqlSugarEntityService"/> SqlSugar实体服务
 /// </summary>
-public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
+public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependency
 {
     /// <summary>
     /// 缓存
     /// </summary>
     private readonly ICache _cache;
-
-    /// <summary>
-    /// 请求上下文
-    /// </summary>
-    private readonly HttpContext _httpContext;
 
     /// <summary>
     /// 运行环境
@@ -58,11 +53,9 @@ public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
     /// </summary>
     private readonly ILogger _logger;
 
-    public SqlSugarEntityService(ICache cache, IHttpContextAccessor httpContextAccessor, IHostEnvironment hostEnvironment,
-        ILogger<ISqlSugarEntityService> logger)
+    public SqlSugarEntityService(ICache cache, IHostEnvironment hostEnvironment, ILogger<ISqlSugarEntityService> logger)
     {
         _cache = cache;
-        _httpContext = httpContextAccessor.HttpContext;
         _hostEnvironment = hostEnvironment;
         _logger = logger;
     }
@@ -81,7 +74,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
 
         // 优先从 HttpContext.Items 中获取
         var connectionSettingsObj =
-            _httpContext?.Items[
+            FastContext.HttpContext?.Items[
                 $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"];
 
         if (connectionSettingsObj is ConnectionSettingsOptions connectionSettings)
@@ -128,11 +121,11 @@ public class SqlSugarEntityService : ISqlSugarEntityService, IScopedDependency
             return result;
         });
 
-        if (_httpContext != null)
+        if (FastContext.HttpContext != null)
         {
             // 放入 HttpContext.Items 中
-            _httpContext.Items
-                [$"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"] = result;
+            FastContext.HttpContext.Items[
+                $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"] = result;
         }
 
         return result;
