@@ -71,8 +71,6 @@ public class InitLogDatabaseHostedService : IHostedService
 
             // 创建日志库上下文
             var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(connectionSettings));
-            // 加载 Aop
-            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
             // 创建核心库
             db.DbMaintenance.CreateDatabase();
@@ -82,6 +80,9 @@ public class InitLogDatabaseHostedService : IHostedService
                 .GetTables();
             if (allTableNames.Count > 0)
                 return;
+
+            // 加载 Aop
+            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
             _logger.LogInformation("开始初始化日志数据库...");
 
