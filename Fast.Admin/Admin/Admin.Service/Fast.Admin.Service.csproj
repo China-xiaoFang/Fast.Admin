@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Description>Fast.Admin 应用 Admin 服务库。</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="$(SolutionDir)Admin\Admin.Entity\Fast.Admin.Entity.csproj" />
+	</ItemGroup>
+
+</Project>
