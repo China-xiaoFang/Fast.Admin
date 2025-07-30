@@ -70,17 +70,15 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
     public async Task<ConnectionSettingsOptions> GetConnectionSetting(long platformId, string platformNo,
         DatabaseTypeEnum databaseType)
     {
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.DatabaseInfo, platformNo, databaseType.ToString());
-
         // 优先从 HttpContext.Items 中获取
         var connectionSettingsObj =
             FastContext.HttpContext?.Items[
                 $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"];
 
         if (connectionSettingsObj is ConnectionSettingsOptions connectionSettings)
-        {
             return connectionSettings;
-        }
+
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.DatabaseInfo, platformNo, databaseType.ToString());
 
         var result = await _cache.GetAndSetAsync(cacheKey, async () =>
         {

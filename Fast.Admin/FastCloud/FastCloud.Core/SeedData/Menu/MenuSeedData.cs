@@ -20,8 +20,10 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
+using Fast.FastCloud.Entity;
+using SqlSugar;
 
+// ReSharper disable once CheckNamespace
 namespace Fast.FastCloud.Core;
 
 /// <summary>
@@ -67,5 +69,27 @@ internal static partial class MenuSeedData
             _buttonSort--;
             return _buttonSort;
         }
+    }
+
+    /// <summary>
+    /// 平台菜单种子数据
+    /// </summary>
+    /// <param name="db"></param>
+    /// <param name="applicationModel"><see cref="ApplicationModel"/> 应用</param>
+    /// <param name="userId"><see cref="long"/> 用户Id</param>
+    /// <param name="userName"><see cref="string"/> 用户名称</param>
+    /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
+    /// <returns></returns>
+    public static async Task PlatformMenuSeedData(ISqlSugarClient db, ApplicationModel applicationModel, long userId,
+        string userName, DateTime dateTime)
+    {
+        // 系统模块
+        await SystemModuleSeedData(db, applicationModel, userId, userName, dateTime);
+
+        // 平台模块
+        await PlatformModuleSeedData(db, applicationModel, userId, userName, dateTime);
+
+        // 开发模块
+        await DevModuleSeedData(db, applicationModel, userId, userName, dateTime);
     }
 }

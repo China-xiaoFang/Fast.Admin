@@ -20,26 +20,18 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.FastCloud.Service.Login.Dto;
+using Fast.FastCloud.Service.App.Dto;
 
-namespace Fast.FastCloud.Service.Login;
+namespace Fast.FastCloud.Service.App;
 
 /// <summary>
-/// <see cref="ILoginService"/> 登录服务
+/// <see cref="IAppService"/> App服务
 /// </summary>
-public interface ILoginService
+public interface IAppService
 {
     /// <summary>
-    /// 登录
-    /// </summary>
-    /// <param name="deviceType"></param>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task Login(AppEnvironmentEnum deviceType, LoginInput input);
-
-    /// <summary>
-    /// 退出登录
+    /// Launch
     /// </summary>
     /// <returns></returns>
-    Task Logout();
+    Task<LaunchOutput> Launch();
 }

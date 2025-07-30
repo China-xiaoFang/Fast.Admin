@@ -20,26 +20,23 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.FastCloud.Service.Login.Dto;
+// ReSharper disable once CheckNamespace
 
-namespace Fast.FastCloud.Service.Login;
+namespace Fast.Common;
 
 /// <summary>
-/// <see cref="ILoginService"/> 登录服务
+/// <see cref="HubRouteAttribute"/> 集线器路由特性
 /// </summary>
-public interface ILoginService
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class HubRouteAttribute : Attribute
 {
     /// <summary>
-    /// 登录
+    /// 路由
     /// </summary>
-    /// <param name="deviceType"></param>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task Login(AppEnvironmentEnum deviceType, LoginInput input);
+    public string Route { get; set; }
 
-    /// <summary>
-    /// 退出登录
-    /// </summary>
-    /// <returns></returns>
-    Task Logout();
+    public HubRouteAttribute(string route)
+    {
+        Route = route;
+    }
 }

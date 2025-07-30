@@ -52,4 +52,16 @@ public class CacheConst
     /// </summary>
     /// <remarks>{0}登录环境，{1}手机号</remarks>
     public const string AuthUserInfo = "Auth:{0}:{1}";
+
+    /// <summary>
+    /// 配置信息
+    /// </summary>
+    /// <remarks>{0}配置编码</remarks>
+    public const string ConfigInfo = "Config:{0}";
+
+    /// <summary>
+    /// App信息
+    /// </summary>
+    /// <remarks>{0}开放平台Id</remarks>
+    public const string AppInfo = "App:{0}";
 }

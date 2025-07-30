@@ -48,7 +48,7 @@ public class CommonConst
     /// <summary>
     /// 默认应用Id
     /// </summary>
-    public const long DefaultAppId = 12222;
+    public const long DefaultAppId = 12001;
 
     /// <summary>
     /// 默认应用名称
