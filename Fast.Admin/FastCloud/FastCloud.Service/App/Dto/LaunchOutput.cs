@@ -20,70 +20,64 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
+using Fast.FastCloud.Enum;
 
-namespace Fast.FastCloud.Entity;
+namespace Fast.FastCloud.Service.App.Dto;
 
 /// <summary>
-/// <see cref="ApplicationOpenIdModel"/> 应用OpenId表Model类
+/// <see cref="LaunchOutput"/> Launch 输出
 /// </summary>
-[SugarTable("ApplicationOpenId", "应用OpenId表")]
-[SugarDbType(DatabaseTypeEnum.FastCloud)]
-[SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(AppId), OrderByType.Asc, nameof(OpenId), OrderByType.Asc, true)]
-public class ApplicationOpenIdModel : IDatabaseEntity
+public class LaunchOutput
 {
     /// <summary>
-    /// 应用Id
+    /// 版本
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id")]
-    public long AppId { get; set; }
+    public EditionEnum Edition { get; set; }
+
+    /// <summary>
+    /// 应用编号
+    /// </summary>
+    [Required]
+    public string AppNo { get; set; }
+
+    /// <summary>
+    /// 应用名称
+    /// </summary>
+    [Required]
+    public string AppName { get; set; }
+
+    /// <summary>
+    /// 服务开始时间
+    /// </summary>
+    public DateTime ServiceStartTime { get; set; }
+
+    /// <summary>
+    /// 服务结束时间
+    /// </summary>
+    public DateTime ServiceEndTime { get; set; }
 
     /// <summary>
     /// 开放平台Id
     /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "开放平台Id", Length = 50)]
     public string OpenId { get; set; }
-
-    /// <summary>
-    /// 应用类型
-    /// </summary>
-    [SugarColumn(ColumnDescription = "应用类型")]
-    public AppEnvironmentEnum AppType { get; set; }
 
     /// <summary>
     /// 接口请求地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "接口请求地址", Length = 50)]
     public string ApiUrl { get; set; }
 
     /// <summary>
     /// 接口请求基础地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "接口请求基础地址", Length = 50)]
     public string ApiBaseUrl { get; set; }
 
     /// <summary>
-    /// 备注
+    /// 接口请求超时时间（毫秒）
     /// </summary>
-    [SugarColumn(ColumnDescription = "备注", Length = 50)]
-    public string Remark { get; set; }
+    public int RequestTimeout { get; set; }
 
     /// <summary>
-    /// 创建者用户Id
+    /// 接口请求加密
     /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
-    public long? CreatedUserId { get; set; }
-
-    /// <summary>
-    /// 创建者用户名称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, CreateTableFieldSort = 992)]
-    public string CreatedUserName { get; set; }
-
-    /// <summary>
-    /// 创建时间
-    /// </summary>
-    [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
-    public DateTime CreatedTime { get; set; }
+    public bool RequestEncipher { get; set; }
 }

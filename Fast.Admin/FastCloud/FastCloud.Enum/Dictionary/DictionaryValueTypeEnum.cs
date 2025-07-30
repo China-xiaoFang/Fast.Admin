@@ -20,26 +20,38 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.FastCloud.Service.Login.Dto;
+// ReSharper disable once CheckNamespace
 
-namespace Fast.FastCloud.Service.Login;
+namespace Fast.FastCloud.Enum;
 
 /// <summary>
-/// <see cref="ILoginService"/> 登录服务
+/// <see cref="DictionaryValueTypeEnum"/> 字典值类型枚举
 /// </summary>
-public interface ILoginService
+[Flags]
+[FastEnum("字典值类型枚举")]
+public enum DictionaryValueTypeEnum : byte
 {
     /// <summary>
-    /// 登录
+    /// 字符串
     /// </summary>
-    /// <param name="deviceType"></param>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task Login(AppEnvironmentEnum deviceType, LoginInput input);
+    [Description("字符串")]
+    String = 1,
 
     /// <summary>
-    /// 退出登录
+    /// Int
     /// </summary>
-    /// <returns></returns>
-    Task Logout();
+    [Description("Int")]
+    Int = 2,
+
+    /// <summary>
+    /// Long
+    /// </summary>
+    [Description("Long")]
+    Long = 4,
+
+    /// <summary>
+    /// Boolean
+    /// </summary>
+    [Description("Boolean")]
+    Boolean = 8
 }

@@ -20,26 +20,15 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.FastCloud.Service.Login.Dto;
+using Fast.Common;
 
-namespace Fast.FastCloud.Service.Login;
+// ReSharper disable once CheckNamespace
+namespace Fast.FastCloud.Api;
 
 /// <summary>
-/// <see cref="ILoginService"/> 登录服务
+/// <see cref="ChatHubApplication"/> 集线器
 /// </summary>
-public interface ILoginService
+[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "chatHub", Order = 997)]
+public class ChatHubApplication : IDynamicApplication
 {
-    /// <summary>
-    /// 登录
-    /// </summary>
-    /// <param name="deviceType"></param>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task Login(AppEnvironmentEnum deviceType, LoginInput input);
-
-    /// <summary>
-    /// 退出登录
-    /// </summary>
-    /// <returns></returns>
-    Task Logout();
 }

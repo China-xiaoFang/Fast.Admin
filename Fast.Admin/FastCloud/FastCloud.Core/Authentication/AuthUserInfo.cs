@@ -41,6 +41,11 @@ public class AuthUserInfo
     public virtual string DeviceId { get; set; }
 
     /// <summary>
+    /// WebStock 连接Id
+    /// </summary>
+    public virtual string ConnectionId { get; set; }
+
+    /// <summary>
     /// 用户Id
     /// </summary>
     public virtual long UserId { get; set; }

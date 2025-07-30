@@ -41,6 +41,11 @@ public interface IUser
     string DeviceId { get; set; }
 
     /// <summary>
+    /// WebStock 连接Id
+    /// </summary>
+    string ConnectionId { get; set; }
+
+    /// <summary>
     /// 用户Id
     /// </summary>
     long UserId { get; set; }

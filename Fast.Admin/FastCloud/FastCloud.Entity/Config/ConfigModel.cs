@@ -25,43 +25,37 @@
 namespace Fast.FastCloud.Entity;
 
 /// <summary>
-/// <see cref="ApplicationOpenIdModel"/> 应用OpenId表Model类
+/// <see cref="ConfigModel"/> 配置表Model类
 /// </summary>
-[SugarTable("ApplicationOpenId", "应用OpenId表")]
+[SugarTable("Config", "应用表")]
 [SugarDbType(DatabaseTypeEnum.FastCloud)]
-[SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(AppId), OrderByType.Asc, nameof(OpenId), OrderByType.Asc, true)]
-public class ApplicationOpenIdModel : IDatabaseEntity
+[SugarIndex($"IX_{{table}}_{nameof(ConfigCode)}", nameof(ConfigCode), OrderByType.Asc, true)]
+[SugarIndex($"IX_{{table}}_{nameof(ConfigName)}", nameof(ConfigName), OrderByType.Asc, true)]
+public class ConfigModel : SnowflakeKeyEntity, IUpdateVersion
 {
     /// <summary>
-    /// 应用Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id")]
-    public long AppId { get; set; }
-
-    /// <summary>
-    /// 开放平台Id
+    /// 配置编码
     /// </summary>
     [Required]
-    [SugarColumn(ColumnDescription = "开放平台Id", Length = 50)]
-    public string OpenId { get; set; }
+    [SugarColumn(ColumnDescription = "配置编码", Length = 64)]
+    public string ConfigCode { get; set; }
 
     /// <summary>
-    /// 应用类型
+    /// 配置名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用类型")]
-    public AppEnvironmentEnum AppType { get; set; }
+    [Required]
+    [SugarColumn(ColumnDescription = "配置名称", Length = 20)]
+    public string ConfigName { get; set; }
 
     /// <summary>
-    /// 接口请求地址
+    /// 配置值
     /// </summary>
-    [SugarColumn(ColumnDescription = "接口请求地址", Length = 50)]
-    public string ApiUrl { get; set; }
-
-    /// <summary>
-    /// 接口请求基础地址
-    /// </summary>
-    [SugarColumn(ColumnDescription = "接口请求基础地址", Length = 50)]
-    public string ApiBaseUrl { get; set; }
+    /// <remarks>
+    /// <para>Boolean：[True, False]</para>
+    /// </remarks>
+    [Required]
+    [SugarColumn(ColumnDescription = "配置名称", Length = 50)]
+    public string ConfigValue { get; set; }
 
     /// <summary>
     /// 备注
@@ -86,4 +80,28 @@ public class ApplicationOpenIdModel : IDatabaseEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime CreatedTime { get; set; }
+
+    /// <summary>
+    /// 更新者用户Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新者用户Id", CreateTableFieldSort = 994)]
+    public long? UpdatedUserId { get; set; }
+
+    /// <summary>
+    /// 更新者用户名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, CreateTableFieldSort = 995)]
+    public string UpdatedUserName { get; set; }
+
+    /// <summary>
+    /// 更新时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
+    public DateTime? UpdatedTime { get; set; }
+
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
+    public long RowVersion { get; set; }
 }
