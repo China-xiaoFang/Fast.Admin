@@ -20,26 +20,36 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.FastCloud.Service.Login.Dto;
+using Fast.Common;
+using Fast.FastCloud.Service.App;
+using Fast.FastCloud.Service.App.Dto;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Fast.FastCloud.Service.Login;
+// ReSharper disable once CheckNamespace
+namespace Fast.FastCloud.Api;
 
 /// <summary>
-/// <see cref="ILoginService"/> 登录服务
+/// <see cref="AppApplication"/> App
 /// </summary>
-public interface ILoginService
+[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "app", Order = 998)]
+public class AppApplication : IDynamicApplication
 {
-    /// <summary>
-    /// 登录
-    /// </summary>
-    /// <param name="deviceType"></param>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task Login(AppEnvironmentEnum deviceType, LoginInput input);
+    private readonly IAppService _appService;
+
+    public AppApplication(IAppService appService)
+    {
+        _appService = appService;
+    }
 
     /// <summary>
-    /// 退出登录
+    /// Launch
     /// </summary>
     /// <returns></returns>
-    Task Logout();
+    [HttpGet]
+    [ApiInfo("Launch", HttpRequestActionEnum.Auth)]
+    [AllowAnonymous]
+    public async Task<LaunchOutput> Launch()
+    {
+        return await _appService.Launch();
+    }
 }

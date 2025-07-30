@@ -78,14 +78,14 @@ internal class SwaggerCommon
             Url = "{0}/swagger/Auth/swagger.json",
             ModuleName = "Auth",
             BaseApi = "",
-            Assemblies = new List<string> { "Fast.Runtime", "Fast.Common", "Fast.FastCloud.Enum"}
+            Assemblies = new List<string> {"Fast.Runtime", "Fast.Common", "SqlSugarCore", "Fast.FastCloud.Enum"}
         },
         //new()
         //{
         //    Url = "{0}/swagger/FastCloud/swagger.json",
         //    ModuleName = "FastCloud",
         //    BaseApi = "",
-        //    Assemblies = new List<string> { "Fast.Runtime", "Fast.Common", "Fast.FastCloud.Enum"}
+        //    Assemblies = new List<string> {"Fast.Runtime", "Fast.Common", "SqlSugarCore", "Fast.FastCloud.Enum"}
         //}
     ];
 

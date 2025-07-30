@@ -20,12 +20,12 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
 using Fast.Common;
 using Fast.FastCloud.Service.Platform;
 using Fast.FastCloud.Service.Platform.Dto;
 using Fast.SqlSugar;
 using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
 
 // ReSharper disable once CheckNamespace
 namespace Fast.FastCloud.Api;

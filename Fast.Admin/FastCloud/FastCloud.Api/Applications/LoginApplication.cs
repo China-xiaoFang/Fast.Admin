@@ -53,4 +53,16 @@ public class LoginApplication : IDynamicApplication
     {
         await _loginService.Login(AppEnvironmentEnum.Web, input);
     }
+
+    /// <summary>
+    /// 退出登录
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost("/logout")]
+    [ApiInfo("退出登录", HttpRequestActionEnum.Auth)]
+    [AllowAnonymous]
+    public async Task Logout()
+    {
+        await _loginService.Logout();
+    }
 }

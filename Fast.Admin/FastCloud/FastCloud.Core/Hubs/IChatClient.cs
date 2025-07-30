@@ -20,26 +20,25 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.FastCloud.Service.Login.Dto;
+// ReSharper disable once CheckNamespace
 
-namespace Fast.FastCloud.Service.Login;
+namespace Fast.FastCloud.Core;
 
 /// <summary>
-/// <see cref="ILoginService"/> 登录服务
+/// <see cref="IChatClient"/> 集线器客户端接口
 /// </summary>
-public interface ILoginService
+public interface IChatClient
 {
     /// <summary>
-    /// 登录
+    /// 连接成功
     /// </summary>
-    /// <param name="deviceType"></param>
-    /// <param name="input"></param>
     /// <returns></returns>
-    Task Login(AppEnvironmentEnum deviceType, LoginInput input);
+    Task ConnectSuccess();
 
     /// <summary>
-    /// 退出登录
+    /// 登录失败
     /// </summary>
+    /// <param name="message"></param>
     /// <returns></returns>
-    Task Logout();
+    Task LoginFull(string message);
 }

@@ -135,6 +135,9 @@ public static class Startup
         // 启用 WebSocket
         app.UseWebSockets();
 
+        // 启用集线器
+        app.UseHubs();
+
         // 启用 Swagger 文档
         app.UseSwaggerDocuments();
 

@@ -43,7 +43,7 @@ internal static partial class MenuSeedData
     /// <param name="userName"><see cref="string"/> 用户名称</param>
     /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
     /// <returns></returns>
-    public static async Task DevModuleSeedData(ISqlSugarClient db, ApplicationModel applicationModel, long userId,
+    private static async Task DevModuleSeedData(ISqlSugarClient db, ApplicationModel applicationModel, long userId,
         string userName, DateTime dateTime)
     {
         var devModuleModel = new ModuleModel

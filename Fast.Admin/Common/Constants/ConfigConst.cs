@@ -20,26 +20,31 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.FastCloud.Service.Login.Dto;
-
-namespace Fast.FastCloud.Service.Login;
+namespace Fast.Common.Constants;
 
 /// <summary>
-/// <see cref="ILoginService"/> 登录服务
+/// <see cref="ApiGroupConst"/> 配置常量
 /// </summary>
-public interface ILoginService
+[SuppressSniffer]
+public class ConfigConst
 {
     /// <summary>
-    /// 登录
+    /// 请求超时时间（毫秒）
     /// </summary>
-    /// <param name="deviceType"></param>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task Login(AppEnvironmentEnum deviceType, LoginInput input);
+    public const string RequestTimeout = "REQUEST_TIMEOUT";
 
     /// <summary>
-    /// 退出登录
+    /// 请求加密
     /// </summary>
-    /// <returns></returns>
-    Task Logout();
+    public const string RequestEncipher = "REQUEST_ENCIPHER";
+
+    /// <summary>
+    /// 单点登录
+    /// </summary>
+    public const string SingleLogin = "SINGLE_LOGIN";
+
+    /// <summary>
+    /// 登录验证码开关
+    /// </summary>
+    public const string LoginCaptchaOpen = "LOGIN_CAPTCHA_OPEN";
 }

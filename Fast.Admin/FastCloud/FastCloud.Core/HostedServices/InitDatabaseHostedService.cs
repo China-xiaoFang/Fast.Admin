@@ -285,6 +285,14 @@ public class InitDatabaseHostedService : IHostedService
 
             #endregion
 
+            #region UserPlatform
+
+            // 初始化用户平台权限
+            await db.Insertable(new UserPlatformModel {UserId = noneUserModel.Id, PlatformId = platformModel.Id})
+                .ExecuteCommandAsync(cancellationToken);
+
+            #endregion
+
             #region Database
 
             await db.Insertable(new List<DatabaseModel>
@@ -378,18 +386,16 @@ public class InitDatabaseHostedService : IHostedService
 
             #endregion
 
-            #region UserPlatform
+            #region Config
 
-            // 初始化用户平台权限
-            await db.Insertable(new UserPlatformModel {UserId = noneUserModel.Id, PlatformId = platformModel.Id})
-                .ExecuteCommandAsync(cancellationToken);
+            // 系统配置
+            await ConfigSeedData.SystemConfigSeedData(db, adminUserModel.Id, adminUserModel.NickName, dateTime);
 
             #endregion
 
-            #region admin.fastdotnet.com
+            #region platform.fastdotnet.com
 
-            // 初始化应用信息
-            var applicationModel = new ApplicationModel
+            var platformApplicationModel = new ApplicationModel
             {
                 Id = CommonConst.DefaultAppId,
                 Edition = EditionEnum.Internal,
@@ -401,46 +407,61 @@ public class InitDatabaseHostedService : IHostedService
                 CreatedUserName = adminUserModel.NickName,
                 CreatedTime = dateTime
             };
-            applicationModel = await db.Insertable(applicationModel)
+            platformApplicationModel = await db.Insertable(platformApplicationModel)
                 .ExecuteReturnEntityAsync();
             await db.Insertable(new List<ApplicationOpenIdModel>
                 {
                     new()
                     {
-                        AppId = applicationModel.Id,
-                        OpenId = "admin.fastdotnet.com",
+                        AppId = platformApplicationModel.Id,
+                        OpenId = "platform.fastdotnet.com",
                         AppType = AppEnvironmentEnum.Web,
-                        ApiUrl = "http://127.0.0.1:38081",
+                        ApiUrl = "https://api.fastdotnet.com",
+                        ApiBaseUrl = "",
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
                         CreatedTime = dateTime
                     },
                     new()
                     {
-                        AppId = applicationModel.Id,
+                        AppId = platformApplicationModel.Id,
+                        OpenId = "DesktopOpenId",
+                        AppType = AppEnvironmentEnum.Desktop,
+                        ApiUrl = "https://api.fastdotnet.com",
+                        ApiBaseUrl = "",
+                        CreatedUserId = adminUserModel.Id,
+                        CreatedUserName = adminUserModel.NickName,
+                        CreatedTime = dateTime
+                    },
+                    new()
+                    {
+                        AppId = platformApplicationModel.Id,
                         OpenId = "WeChatOpenId",
                         AppType = AppEnvironmentEnum.WeChatMiniProgram,
-                        ApiUrl = "http://127.0.0.1:38081",
+                        ApiUrl = "https://api.fastdotnet.com",
+                        ApiBaseUrl = "",
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
                         CreatedTime = dateTime
                     },
                     new()
                     {
-                        AppId = applicationModel.Id,
+                        AppId = platformApplicationModel.Id,
                         OpenId = "AndroidOpenId",
                         AppType = AppEnvironmentEnum.Android,
-                        ApiUrl = "http://127.0.0.1:38081",
+                        ApiUrl = "https://api.fastdotnet.com",
+                        ApiBaseUrl = "",
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
                         CreatedTime = dateTime
                     },
                     new()
                     {
-                        AppId = applicationModel.Id,
+                        AppId = platformApplicationModel.Id,
                         OpenId = "IOSOpenId",
                         AppType = AppEnvironmentEnum.IOS,
-                        ApiUrl = "http://127.0.0.1:38081",
+                        ApiUrl = "https://api.fastdotnet.com",
+                        ApiBaseUrl = "",
                         CreatedUserId = adminUserModel.Id,
                         CreatedUserName = adminUserModel.NickName,
                         CreatedTime = dateTime
@@ -448,14 +469,86 @@ public class InitDatabaseHostedService : IHostedService
                 })
                 .ExecuteCommandAsync(cancellationToken);
 
-            // 系统模块
-            await MenuSeedData.SystemModuleSeedData(db, applicationModel, adminUserModel.Id, adminUserModel.NickName, dateTime);
+            // 菜单
+            await MenuSeedData.PlatformMenuSeedData(db, platformApplicationModel, adminUserModel.Id, adminUserModel.NickName, dateTime);
 
-            // 平台模块
-            await MenuSeedData.PlatformModuleSeedData(db, applicationModel, adminUserModel.Id, adminUserModel.NickName, dateTime);
+            #endregion
 
-            // 开发模块
-            await MenuSeedData.DevModuleSeedData(db, applicationModel, adminUserModel.Id, adminUserModel.NickName, dateTime);
+            #region admin.fastdotnet.com
+
+            var adminApplicationModel = new ApplicationModel
+            {
+                Id = YitIdHelper.NextId(),
+                Edition = EditionEnum.Flagship,
+                AppNo = "Fast000002",
+                AppName = "Fast.Admin",
+                ServiceStartTime = dateTime,
+                ServiceEndTime = new DateTime(2099, 12, 31),
+                CreatedUserId = adminUserModel.Id,
+                CreatedUserName = adminUserModel.NickName,
+                CreatedTime = dateTime
+            };
+            adminApplicationModel = await db.Insertable(adminApplicationModel)
+                .ExecuteReturnEntityAsync();
+            await db.Insertable(new List<ApplicationOpenIdModel>
+                {
+                    new()
+                    {
+                        AppId = adminApplicationModel.Id,
+                        OpenId = "admin.fastdotnet.com",
+                        AppType = AppEnvironmentEnum.Web,
+                        ApiUrl = "https://api.fastdotnet.com",
+                        ApiBaseUrl = "",
+                        CreatedUserId = adminUserModel.Id,
+                        CreatedUserName = adminUserModel.NickName,
+                        CreatedTime = dateTime
+                    },
+                    new()
+                    {
+                        AppId = adminApplicationModel.Id,
+                        OpenId = "DesktopOpenId",
+                        AppType = AppEnvironmentEnum.Desktop,
+                        ApiUrl = "https://api.fastdotnet.com",
+                        ApiBaseUrl = "",
+                        CreatedUserId = adminUserModel.Id,
+                        CreatedUserName = adminUserModel.NickName,
+                        CreatedTime = dateTime
+                    },
+                    new()
+                    {
+                        AppId = adminApplicationModel.Id,
+                        OpenId = "WeChatOpenId",
+                        AppType = AppEnvironmentEnum.WeChatMiniProgram,
+                        ApiUrl = "https://api.fastdotnet.com",
+                        ApiBaseUrl = "",
+                        CreatedUserId = adminUserModel.Id,
+                        CreatedUserName = adminUserModel.NickName,
+                        CreatedTime = dateTime
+                    },
+                    new()
+                    {
+                        AppId = adminApplicationModel.Id,
+                        OpenId = "AndroidOpenId",
+                        AppType = AppEnvironmentEnum.Android,
+                        ApiUrl = "https://api.fastdotnet.com",
+                        ApiBaseUrl = "",
+                        CreatedUserId = adminUserModel.Id,
+                        CreatedUserName = adminUserModel.NickName,
+                        CreatedTime = dateTime
+                    },
+                    new()
+                    {
+                        AppId = adminApplicationModel.Id,
+                        OpenId = "IOSOpenId",
+                        AppType = AppEnvironmentEnum.IOS,
+                        ApiUrl = "https://api.fastdotnet.com",
+                        ApiBaseUrl = "",
+                        CreatedUserId = adminUserModel.Id,
+                        CreatedUserName = adminUserModel.NickName,
+                        CreatedTime = dateTime
+                    }
+                })
+                .ExecuteCommandAsync(cancellationToken);
 
             #endregion
 

@@ -22,52 +22,55 @@
 
 using System.Reflection;
 using Fast.Common;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 // ReSharper disable once CheckNamespace
 namespace Fast.Kernel;
 
 /// <summary>
-/// <see cref="IServiceCollection"/> 拓展类
+/// <see cref="WebApplication"/> 拓展类
 /// </summary>
-internal static class IServiceCollectionExtension
+internal static class WebApplicationExtension
 {
     /// <summary>
-    /// 添加托管服务
+    /// 注册集线器
     /// </summary>
-    /// <param name="services"><see cref="IServiceCollection"/></param>
-    /// <returns><see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddHostedService(this IServiceCollection services)
+    /// <param name="app"><see cref="WebApplication"/></param>
+    /// <returns><see cref="WebApplication"/></returns>
+    public static WebApplication UseHubs(this WebApplication app)
     {
-        var IHostedServiceType = typeof(IHostedService);
+        var hubTypes = typeof(Hub);
 
-        var hostedServiceTypes = MAppContext.EffectiveTypes.Where(wh => IHostedServiceType.IsAssignableFrom(wh))
+        var hubsTypes = MAppContext.EffectiveTypes.Where(wh => hubTypes.IsAssignableFrom(wh))
             .Select(sl => new
             {
                 Type = sl,
-                Order = sl.GetCustomAttribute<OrderAttribute>()
-                            ?.Order
-                        ?? 0
+                HubRoutes = sl.GetCustomAttributes<HubRouteAttribute>()
+                    .Select(h => h.Route)
+                    .ToList()
             })
-            .OrderBy(ob => ob.Order)
-            .Select(sl => sl.Type)
             .ToList();
 
-        var addHostedService = typeof(ServiceCollectionHostedServiceExtensions).GetMethods()
-            .Where(wh => wh.Name == nameof(ServiceCollectionHostedServiceExtensions.AddHostedService))
+        var mapHub = typeof(HubEndpointRouteBuilderExtensions).GetMethods()
+            .Where(wh => wh.Name == nameof(HubEndpointRouteBuilderExtensions.MapHub))
             .Where(wh => wh.IsGenericMethodDefinition)
             .First(wh => wh.GetParameters()
                              .Length
-                         == 1);
+                         == 2);
 
-        foreach (var hostedServiceType in hostedServiceTypes)
+        app.UseEndpoints(endpoints =>
         {
-            addHostedService.MakeGenericMethod(hostedServiceType)
-                .Invoke(null, [services]);
-        }
+            foreach (var hubsType in hubsTypes)
+            {
+                foreach (var hubRoute in hubsType.HubRoutes)
+                {
+                    mapHub.MakeGenericMethod(hubsType.Type)
+                        .Invoke(null, [endpoints, hubRoute]);
+                }
+            }
+        });
 
-        return services;
+        return app;
     }
 }

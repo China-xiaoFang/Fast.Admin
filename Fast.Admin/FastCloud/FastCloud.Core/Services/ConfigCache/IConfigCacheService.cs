@@ -20,26 +20,26 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.FastCloud.Service.Login.Dto;
+// ReSharper disable once CheckNamespace
 
-namespace Fast.FastCloud.Service.Login;
+namespace Fast.FastCloud.Core;
 
 /// <summary>
-/// <see cref="ILoginService"/> 登录服务
+/// <see cref="ConfigCacheService"/> 配置缓存服务
 /// </summary>
-public interface ILoginService
+public interface IConfigCacheService
 {
     /// <summary>
-    /// 登录
+    /// 获取配置
     /// </summary>
-    /// <param name="deviceType"></param>
-    /// <param name="input"></param>
+    /// <param name="configCode"><see cref="string"/> 配置编码</param>
     /// <returns></returns>
-    Task Login(AppEnvironmentEnum deviceType, LoginInput input);
+    Task<string> GetConfig(string configCode);
 
     /// <summary>
-    /// 退出登录
+    /// 删除配置
     /// </summary>
+    /// <param name="configCode"><see cref="string"/> 配置编码</param>
     /// <returns></returns>
-    Task Logout();
+    Task DeleteConfig(string configCode);
 }

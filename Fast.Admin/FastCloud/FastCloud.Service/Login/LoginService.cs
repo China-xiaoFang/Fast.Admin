@@ -216,4 +216,13 @@ public class LoginService : ILoginService, ITransientDependency
         visitLogModel.RecordCreate(_httpContext);
         await _visitLogRepository.InsertAsync(visitLogModel);
     }
+
+    /// <summary>
+    /// 退出登录
+    /// </summary>
+    /// <returns></returns>
+    public async Task Logout()
+    {
+        await _user.Logout();
+    }
 }
