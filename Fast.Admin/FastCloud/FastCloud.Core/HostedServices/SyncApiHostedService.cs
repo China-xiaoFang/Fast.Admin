@@ -20,7 +20,6 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using System.Reflection;
 using Dm.util;
 using Fast.Common;
 using Fast.DynamicApplication;
@@ -36,6 +35,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SqlSugar;
+using System.Reflection;
+using System.Text;
 using Yitter.IdGenerator;
 
 // ReSharper disable once CheckNamespace
@@ -44,7 +45,7 @@ namespace Fast.FastCloud.Core;
 /// <summary>
 /// <see cref="SyncApiHostedService"/> 同步 Api 托管服务
 /// </summary>
-[Order(3)]
+[Order(103)]
 public class SyncApiHostedService : IHostedService
 {
     /// <summary>
@@ -85,7 +86,20 @@ public class SyncApiHostedService : IHostedService
         var updateApiInfoList = new List<ApiInfoModel>();
         var apiUrlList = new List<string>();
 
-        _logger.LogInformation("开始同步接口信息...");
+        {
+            var logSb = new StringBuilder();
+            logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
+            logSb.Append("info");
+            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+            logSb.Append(": ");
+            logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+            logSb.Append(Environment.NewLine);
+            logSb.Append("\u001b[40m\u001b[90m");
+            logSb.Append("      ");
+            logSb.Append("开始同步接口信息...");
+            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+            Console.WriteLine(logSb.ToString());
+        }
 
         try
         {
@@ -204,8 +218,20 @@ public class SyncApiHostedService : IHostedService
             CacheContext.ApiInfoList = apiInfoList;
             CacheContext.ApiInfoList.AddRange(addApiInfoList);
 
-            _logger.LogInformation(
-                $"同步接口信息成功。新增 {addApiInfoList.Count} 个，更新 {updateApiInfoList.Count} 个，删除 {deleteApiInfoList.Count} 个。");
+            {
+                var logSb = new StringBuilder();
+                logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
+                logSb.Append("info");
+                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                logSb.Append(": ");
+                logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+                logSb.Append(Environment.NewLine);
+                logSb.Append("\u001b[40m\u001b[90m");
+                logSb.Append("      ");
+                logSb.Append($"同步接口信息成功。新增 {addApiInfoList.Count} 个，更新 {updateApiInfoList.Count} 个，删除 {deleteApiInfoList.Count} 个。");
+                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                Console.WriteLine(logSb.ToString());
+            }
         }
         catch (Exception ex)
         {

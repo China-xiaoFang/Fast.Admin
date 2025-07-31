@@ -27,6 +27,7 @@ using Fast.SqlSugar;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SqlSugar;
+using System.Text;
 
 // ReSharper disable once CheckNamespace
 namespace Fast.FastCloud.Core;
@@ -34,7 +35,7 @@ namespace Fast.FastCloud.Core;
 /// <summary>
 /// <see cref="InitLogDatabaseHostedService"/> 初始化日志 Database 托管服务
 /// </summary>
-[Order(2)]
+[Order(102)]
 public class InitLogDatabaseHostedService : IHostedService
 {
     /// <summary>
@@ -84,7 +85,20 @@ public class InitLogDatabaseHostedService : IHostedService
             // 加载 Aop
             SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
-            _logger.LogInformation("开始初始化日志数据库...");
+            {
+                var logSb = new StringBuilder();
+                logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
+                logSb.Append("info");
+                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                logSb.Append(": ");
+                logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+                logSb.Append(Environment.NewLine);
+                logSb.Append("\u001b[40m\u001b[90m");
+                logSb.Append("      ");
+                logSb.Append("开始初始化日志数据库...");
+                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                Console.WriteLine(logSb.ToString());
+            }
 
             // 获取所有不分表的Model类型
             var tableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => !wh.IsSplitTable)
@@ -102,7 +116,20 @@ public class InitLogDatabaseHostedService : IHostedService
             db.CodeFirst.SplitTables()
                 .InitTables(splitTableTypes);
 
-            _logger.LogInformation("初始化日志数据库成功。");
+            {
+                var logSb = new StringBuilder();
+                logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
+                logSb.Append("info");
+                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                logSb.Append(": ");
+                logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+                logSb.Append(Environment.NewLine);
+                logSb.Append("\u001b[40m\u001b[90m");
+                logSb.Append("      ");
+                logSb.Append("初始化日志数据库成功。");
+                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                Console.WriteLine(logSb.ToString());
+            }
         }
         catch (Exception ex)
         {
