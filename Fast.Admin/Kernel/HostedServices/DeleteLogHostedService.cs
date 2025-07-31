@@ -32,7 +32,7 @@ namespace Fast.Kernel;
 /// <summary>
 /// <see cref="DeleteLogHostedService"/> 删除日志托管服务
 /// </summary>
-[Order(-1)]
+[Order(1)]
 public class DeleteLogHostedService : IHostedService
 {
     /// <summary>
