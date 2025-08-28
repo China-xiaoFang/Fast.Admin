@@ -38,4 +38,60 @@ public class OpenApiDocumentPathDto
     /// Post 请求
     /// </summary>
     public OpenApiDocumentPathMethodDto Post { get; set; }
+
+    /// <summary>
+    /// 请求方法
+    /// </summary>
+    public OpenApiDocumentPathMethodDto Method
+    {
+        get
+        {
+            if (Get != null)
+                return Get;
+            if (Post != null)
+                return Post;
+            return Get;
+        }
+    }
+
+    /// <summary>
+    /// 请求方式
+    /// </summary>
+    public HttpRequestMethodEnum RequestMethod
+    {
+        get
+        {
+            if (Get != null)
+                return HttpRequestMethodEnum.Get;
+            if (Post != null)
+                return HttpRequestMethodEnum.Post;
+            return HttpRequestMethodEnum.Get;
+        }
+    }
+
+    /// <summary>
+    /// 模块
+    /// </summary>
+    public string Tag
+    {
+        get
+        {
+            switch (RequestMethod)
+            {
+                case HttpRequestMethodEnum.Get:
+                    return Get.Tags?.FirstOrDefault();
+                case HttpRequestMethodEnum.Post:
+                    return Post.Tags?.FirstOrDefault();
+                case HttpRequestMethodEnum.Put:
+                case HttpRequestMethodEnum.Delete:
+                case HttpRequestMethodEnum.Patch:
+                case HttpRequestMethodEnum.Head:
+                case HttpRequestMethodEnum.Options:
+                case HttpRequestMethodEnum.Connect:
+                case HttpRequestMethodEnum.Trace:
+                default:
+                    return null;
+            }
+        }
+    }
 }
