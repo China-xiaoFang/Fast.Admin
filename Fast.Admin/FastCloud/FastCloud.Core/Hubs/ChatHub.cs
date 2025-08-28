@@ -33,7 +33,7 @@ namespace Fast.FastCloud.Core;
 /// <summary>
 /// <see cref="ChatHub"/> 集线器客户端
 /// </summary>
-[HubRoute("/hubs/chatHub")]
+[MapHub("/hubs/chatHub")]
 public class ChatHub : Hub<IChatClient>
 {
     /// <summary>

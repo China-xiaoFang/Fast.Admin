@@ -22,11 +22,14 @@
 
 using Fast.Common;
 using Fast.NET.Core;
+using Fast.OpenApi;
+using Fast.Swagger;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System.Text;
+using Microsoft.Extensions.Options;
 
 // ReSharper disable once CheckNamespace
 namespace Fast.Kernel;
@@ -48,14 +51,28 @@ public class GenerateApiFileHostedService : IHostedService
     private readonly IServer _server;
 
     /// <summary>
+    /// 接口描述提供程序
+    /// </summary>
+    private readonly IApiDescriptionGroupCollectionProvider _apiDescriptionGroupCollectionProvider;
+
+    /// <summary>
+    /// Swagger 配置
+    /// </summary>
+    private readonly SwaggerSettingsOptions _swaggerSettings;
+
+    /// <summary>
     /// 日志
     /// </summary>
     private readonly ILogger _logger;
 
-    public GenerateApiFileHostedService(IHostApplicationLifetime hostApplicationLifetime,IServer server, ILogger<DeleteLogHostedService> logger)
+    public GenerateApiFileHostedService(IHostApplicationLifetime hostApplicationLifetime, IServer server,
+        IApiDescriptionGroupCollectionProvider apiDescriptionGroupCollectionProvider, IOptions<SwaggerSettingsOptions> options,
+        ILogger<DeleteLogHostedService> logger)
     {
         _hostApplicationLifetime = hostApplicationLifetime;
         _server = server;
+        _apiDescriptionGroupCollectionProvider = apiDescriptionGroupCollectionProvider;
+        _swaggerSettings = options.Value;
         _logger = logger;
     }
 
@@ -66,8 +83,16 @@ public class GenerateApiFileHostedService : IHostedService
     /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous Start operation.</returns>
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        // 只有开发环境才会生成
+        if (!FastContext.HostEnvironment.IsDevelopment())
+            return;
+
+        // 只有启用了 Swagger 才会生成
+        if (_swaggerSettings.Enable != true)
+            return;
+
         // 订阅 ApplicationStarted 事件
-        _hostApplicationLifetime?.ApplicationStarted.Register(async () =>
+        _hostApplicationLifetime?.ApplicationStarted.Register(() =>
         {
             try
             {
@@ -78,38 +103,13 @@ public class GenerateApiFileHostedService : IHostedService
                 if (string.IsNullOrWhiteSpace(address))
                     return;
 
-                {
-                    var logSb = new StringBuilder();
-                    logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-                    logSb.Append("info");
-                    logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                    logSb.Append(": ");
-                    logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-                    logSb.Append(Environment.NewLine);
-                    logSb.Append("\u001b[40m\u001b[90m");
-                    logSb.Append("      ");
-                    logSb.Append("开始生成Api文件...");
-                    logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                    Console.WriteLine(logSb.ToString());
-                }
+                // 获取 Swagger 分组
+                var groupList = _swaggerSettings.GroupOpenApiInfos?.Select(sl => sl.Group)
+                    .ToList();
 
-                // 组装 Swagger Json 地址
-                var swaggerJsonUrl = $"{address}//swagger/All Groups/swagger.json";
-
-                {
-                    var logSb = new StringBuilder();
-                    logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-                    logSb.Append("info");
-                    logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                    logSb.Append(": ");
-                    logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-                    logSb.Append(Environment.NewLine);
-                    logSb.Append("\u001b[40m\u001b[90m");
-                    logSb.Append("      ");
-                    logSb.Append("生成Api文件成功。");
-                    logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                    Console.WriteLine(logSb.ToString());
-                }
+                // 生成Api
+                OpenApiUtil.GenerateOpenApi(address, _apiDescriptionGroupCollectionProvider, groupList)
+                    .Wait(cancellationToken);
             }
             catch (Exception ex)
             {

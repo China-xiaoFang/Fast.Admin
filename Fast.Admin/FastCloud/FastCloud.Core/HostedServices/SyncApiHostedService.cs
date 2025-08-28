@@ -111,7 +111,7 @@ public class SyncApiHostedService : IHostedService
 
             // 循环所有接口
             foreach (var apiDescriptionGroup in _apiDescriptionGroupCollectionProvider.ApiDescriptionGroups.Items.SelectMany(sl =>
-                         sl.Items))
+                         sl.Items).ToList())
             {
                 var apiDescriptionSettingsAttribute = apiDescriptionGroup.ActionDescriptor.EndpointMetadata
                     .OfType<ApiDescriptionSettingsAttribute>()
