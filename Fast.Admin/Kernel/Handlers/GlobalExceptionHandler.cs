@@ -157,7 +157,7 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
                 .FirstOrDefault();
 
             // 如果有匹配的堆栈信息，选择第一条（最深的那一条）
-            if (!string.IsNullOrEmpty(firstLine))
+            if (!string.IsNullOrWhiteSpace(firstLine))
             {
                 message.AppendLine($"{firstLine}");
             }

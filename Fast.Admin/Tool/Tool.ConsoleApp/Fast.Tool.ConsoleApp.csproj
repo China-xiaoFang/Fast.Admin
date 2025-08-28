@@ -7,7 +7,7 @@
 
     <ItemGroup>
         <PackageReference Include="Fast.IaaS" Version="3.5.8" />
-        <PackageReference Include="Fast.Serialization.Newtonsoft.Json" Version="3.5.8" />
+        <PackageReference Include="Fast.Serialization.Newtonsoft.Json" Version="3.5.9" />
         <PackageReference Include="SqlSugarCore" Version="5.1.4.198" />
     </ItemGroup>
 
