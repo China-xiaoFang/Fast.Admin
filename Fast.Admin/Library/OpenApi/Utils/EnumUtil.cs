@@ -42,20 +42,8 @@ public static partial class OpenApiUtil
     internal static async Task<List<ComponentSchemaDto>> WriteOpenApiDocumentEnumFile(string rootDir,
         OpenApiDocumentDto openApiDocument, ScriptLanguageEnum scriptLanguage)
     {
-        {
-            var logSb = new StringBuilder();
-            logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-            logSb.Append("info");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            logSb.Append(": ");
-            logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-            logSb.Append(Environment.NewLine);
-            logSb.Append("\u001b[40m\u001b[90m");
-            logSb.Append("      ");
-            logSb.Append($"开始写入 {openApiDocument.Url} {scriptLanguage.ToString()}枚举文件...");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            Console.WriteLine(logSb.ToString());
-        }
+        if (openApiDocument.Components.Schemas == null)
+            return null;
 
         var result = new List<ComponentSchemaDto>();
 
@@ -138,8 +126,8 @@ public static partial class OpenApiUtil
 
                 // 获取声明描述
                 var schemaDescription = enumSchema.Value.Description?.Replace("\r\n", "\r\n * ")
-                                        ?? enumType.GetCustomAttribute<FastEnumAttribute>()?
-                                            .ChName;
+                                        ?? enumType.GetCustomAttribute<FastEnumAttribute>()
+                                            ?.ChName;
 
                 // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
                 switch (scriptLanguage)
@@ -170,6 +158,7 @@ public static partial class OpenApiUtil
                               export enum {{enumType.Name}} {
                               {{enumDetail}}
                               }
+                              
                               """.Replace("\r\n", "\n"));
 
                         result.Add(new ComponentSchemaDto
@@ -179,21 +168,6 @@ public static partial class OpenApiUtil
                         });
                         break;
                 }
-            }
-
-            {
-                var logSb = new StringBuilder();
-                logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-                logSb.Append("info");
-                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                logSb.Append(": ");
-                logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-                logSb.Append(Environment.NewLine);
-                logSb.Append("\u001b[40m\u001b[90m");
-                logSb.Append("      ");
-                logSb.Append($"写入 {openApiDocument.Url} {scriptLanguage.ToString()}枚举文件成功。");
-                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                Console.WriteLine(logSb.ToString());
             }
         }
         catch (Exception ex)
@@ -207,7 +181,7 @@ public static partial class OpenApiUtil
             logSb.Append(Environment.NewLine);
             logSb.Append("\u001b[41m\u001b[30m");
             logSb.Append("      ");
-            logSb.Append($"写入 {openApiDocument.Url} {scriptLanguage.ToString()}枚举文件失败...");
+            logSb.Append($"写入 {openApiDocument.Url} {scriptLanguage.ToString()} 枚举文件失败...");
             logSb.Append(Environment.NewLine);
             logSb.Append("      ");
             logSb.Append($"{ex}");

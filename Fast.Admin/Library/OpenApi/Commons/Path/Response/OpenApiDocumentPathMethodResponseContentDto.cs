@@ -35,7 +35,7 @@ public class OpenApiDocumentPathMethodResponseContentDto
     public string Description { get; set; }
 
     /// <summary>
-    /// 响应码200内容
+    /// 内容
     /// </summary>
-    public OpenApiDocumentPathMethodContentDto Code200 { get; set; }
+    public OpenApiDocumentPathMethodContentDto Content { get; set; }
 }

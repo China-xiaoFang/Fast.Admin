@@ -20,10 +20,10 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
-
 using System.Text;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
+// ReSharper disable once CheckNamespace
 namespace Fast.OpenApi;
 
 /// <summary>
@@ -34,79 +34,131 @@ public static partial class OpenApiUtil
     /// <summary>
     /// 生成 OpenApi 文档资源
     /// </summary>
-    /// <param name="url"><see cref="string"/> 文档地址</param>
+    /// <param name="address"><see cref="string"/> 文档地址；<see href="http://127.0.0.1:38080"/></param>
+    /// <param name="apiDescriptionGroupCollectionProvider"><see cref="IApiDescriptionGroupCollectionProvider"/> 接口描述提供程序</param>
+    /// <param name="groupList"><see cref="List{T}"/> 分组集合；默认使用 ["All Groups"]</param>
     /// <returns></returns>
-    public static async Task GenerateOpenApi(string url)
+    public static async Task GenerateOpenApi(string address,
+        IApiDescriptionGroupCollectionProvider apiDescriptionGroupCollectionProvider, List<string> groupList = null)
     {
+        try
+        {
+            {
+                var logSb = new StringBuilder();
+                logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
+                logSb.Append("info");
+                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                logSb.Append(": ");
+                logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+                logSb.Append(Environment.NewLine);
+                logSb.Append("\u001b[40m\u001b[90m");
+                logSb.Append("      ");
+                logSb.Append("开始生成 Open Api 文件...");
+                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                Console.WriteLine(logSb.ToString());
+            }
+
+            if (groupList == null)
+            {
+                // 为空则使用全部分组
+                groupList = ["All Groups"];
+            }
+            // 增加默认分组
+            else if (groupList.All(a => a != "Default"))
+            {
+                groupList.Add("Default");
+            }
+
+            // 根目录
+            var rootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Fast.OpenApi");
+            if (Directory.Exists(rootDir))
+            {
+                // 每次确保都是最新的
+                Directory.Delete(rootDir, true);
+            }
+
+            Directory.CreateDirectory(rootDir);
+
+            foreach (var group in groupList)
+            {
+                // 获取主机和端口信息
+                var uri = new Uri(address);
+
+                // 获取文档地址
+                var url = $"{address.TrimEnd('/')}/swagger/{group}/swagger.json";
+
+                // 获取文档信息
+                var openApiDocument = await GetOpenApiDocument(url);
+                if (openApiDocument == null)
+                    continue;
+
+                // JavaScript
+                //await GenerateOpenApi(apiDescriptionGroupCollectionProvider, openApiDocument, rootDir, group, uri, true,
+                //    ScriptLanguageEnum.JavaScript);
+                //await GenerateOpenApi(apiDescriptionGroupCollectionProvider, openApiDocument, rootDir, group, uri, false,
+                //    ScriptLanguageEnum.JavaScript);
+
+                // TypeScript
+                await GenerateOpenApi(apiDescriptionGroupCollectionProvider, openApiDocument, rootDir, group, uri, true,
+                    ScriptLanguageEnum.TypeScript);
+                //await GenerateOpenApi(apiDescriptionGroupCollectionProvider, openApiDocument, rootDir, group, uri, false,
+                //    ScriptLanguageEnum.TypeScript);
+            }
+
+            {
+                var logSb = new StringBuilder();
+                logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
+                logSb.Append("info");
+                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                logSb.Append(": ");
+                logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+                logSb.Append(Environment.NewLine);
+                logSb.Append("\u001b[40m\u001b[90m");
+                logSb.Append("      ");
+                logSb.Append("生成 Open Api 文件成功。");
+                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                Console.WriteLine(logSb.ToString());
+            }
+        }
+        catch (Exception ex)
         {
             var logSb = new StringBuilder();
-            logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-            logSb.Append("info");
+            logSb.Append("\u001b[41m\u001b[30m");
+            logSb.Append("fail");
             logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
             logSb.Append(": ");
             logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
             logSb.Append(Environment.NewLine);
-            logSb.Append("\u001b[40m\u001b[90m");
+            logSb.Append("\u001b[41m\u001b[30m");
             logSb.Append("      ");
-            logSb.Append("开始生成Api文件...");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            Console.WriteLine(logSb.ToString());
-        }
-
-        // 根目录
-        var rootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Fast.OpenApi");
-        if (Directory.Exists(rootDir))
-        {
-            // 每次确保都是最新的
-            Directory.Delete(rootDir, true);
-        }
-
-        Directory.CreateDirectory(rootDir);
-
-        // 获取主机和端口
-        var uri = new Uri(url);
-
-        // 获取文档信息
-        var openApiDocument = await GetOpenApiDocument(url);
-        if(openApiDocument == null)
-            return;
-
-        // JavaScript
-        await GenerateOpenApi(openApiDocument, rootDir, uri, true, ScriptLanguageEnum.JavaScript);
-        await GenerateOpenApi(openApiDocument, rootDir, uri, false, ScriptLanguageEnum.JavaScript);
-
-        // TypeScript
-        await GenerateOpenApi(openApiDocument, rootDir, uri, true, ScriptLanguageEnum.TypeScript);
-        await GenerateOpenApi(openApiDocument, rootDir, uri, false, ScriptLanguageEnum.TypeScript);
-
-        {
-            var logSb = new StringBuilder();
-            logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-            logSb.Append("info");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            logSb.Append(": ");
-            logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+            logSb.Append("生成 Open Api 文件失败...");
             logSb.Append(Environment.NewLine);
-            logSb.Append("\u001b[40m\u001b[90m");
             logSb.Append("      ");
-            logSb.Append("生成Api文件成功。");
+            logSb.Append($"{ex}");
             logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
             Console.WriteLine(logSb.ToString());
+            throw;
         }
     }
 
     /// <summary>
     /// 生成 OpenApi 文档资源
     /// </summary>
+    /// <param name="apiDescriptionGroupCollectionProvider"><see cref="IApiDescriptionGroupCollectionProvider"/> 接口描述提供程序</param>
     /// <param name="openApiDocument"><see cref="OpenApiDocumentDto"/> 文档信息</param>
     /// <param name="rootDir"><see cref="string"/> 根目录</param>
+    /// <param name="group"><see cref="string"/> 分组</param>
     /// <param name="uri"><see cref="Uri"/> 地址</param>
     /// <param name="hasWeb"><see cref="bool"/> 是否为Web端</param>
     /// <param name="scriptLanguage"><see cref="ScriptLanguageEnum"/> 脚本语言</param>
     /// <returns></returns>
-    internal static async Task GenerateOpenApi(OpenApiDocumentDto openApiDocument, string rootDir, Uri uri, bool hasWeb,
-        ScriptLanguageEnum scriptLanguage)
+    internal static async Task GenerateOpenApi(IApiDescriptionGroupCollectionProvider apiDescriptionGroupCollectionProvider,
+        OpenApiDocumentDto openApiDocument, string rootDir, string group, Uri uri, bool hasWeb, ScriptLanguageEnum scriptLanguage)
     {
+        // 判断是否存在路由
+        if (openApiDocument.Paths.Count == 0)
+            return;
+
         // 当前文档地址
         var curRootDir = Path.Combine(rootDir,
             $"{uri.Host}_{uri.Port}_{(hasWeb ? "Web" : "Mobile")}_{scriptLanguage.ToString()}");
@@ -117,7 +169,7 @@ public static partial class OpenApiUtil
         Directory.CreateDirectory(enumRootDir);
 
         // Api文件
-        var apiRootDir = Path.Combine(curRootDir, "services");
+        var apiRootDir = Path.Combine(curRootDir, "services", group);
         Directory.CreateDirectory(apiRootDir);
 
         // 写入枚举
@@ -127,5 +179,7 @@ public static partial class OpenApiUtil
         var dtoSchemas = await GenerateOpenApiDocumentSchemaFile(openApiDocument, scriptLanguage);
 
         // 写入Api
+        await WriteOpenApiDocumentApiFile(apiRootDir, apiDescriptionGroupCollectionProvider, openApiDocument, dtoSchemas,
+            enumSchemas, scriptLanguage);
     }
 }
