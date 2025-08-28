@@ -20,6 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -40,21 +41,6 @@ public static partial class OpenApiUtil
     /// <returns></returns>
     internal static async Task<OpenApiDocumentDto> GetOpenApiDocument(string documentUrl)
     {
-        {
-            var logSb = new StringBuilder();
-            logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-            logSb.Append("info");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            logSb.Append(": ");
-            logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-            logSb.Append(Environment.NewLine);
-            logSb.Append("\u001b[40m\u001b[90m");
-            logSb.Append("      ");
-            logSb.Append($"开始读取 {documentUrl} 文档信息...");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            Console.WriteLine(logSb.ToString());
-        }
-
         try
         {
             using var httpClient = new HttpClient();
@@ -77,24 +63,14 @@ public static partial class OpenApiUtil
                 PropertyNameCaseInsensitive = true
             });
 
-            {
-                var logSb = new StringBuilder();
-                logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-                logSb.Append("info");
-                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                logSb.Append(": ");
-                logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-                logSb.Append(Environment.NewLine);
-                logSb.Append("\u001b[40m\u001b[90m");
-                logSb.Append("      ");
-                logSb.Append($"读取 {documentUrl} 文档信息成功。");
-                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                Console.WriteLine(logSb.ToString());
-            }
-
             result.Url = documentUrl;
 
             return result;
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+        {
+            // 404，Swagger 文档不存在
+            return null;
         }
         catch (Exception ex)
         {

@@ -74,7 +74,7 @@ public class OpenApiSettingsOptions : IPostConfigure
             },
             new OpenApiImportSchemaMappingSettingsOptions
             {
-                Name = "PageInput", WebImportPath = "fast-element-plus", MobileImportPath = "fast-element-app"
+                Name = "PagedInput", WebImportPath = "fast-element-plus", MobileImportPath = "fast-element-app"
             },
             new OpenApiImportSchemaMappingSettingsOptions
             {

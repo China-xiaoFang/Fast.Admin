@@ -20,45 +20,22 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using System.Text.Json.Serialization;
-
 // ReSharper disable once CheckNamespace
+
 namespace Fast.OpenApi;
 
 /// <summary>
-/// <see cref="OpenApiDocumentDto"/> OpenApi 文档Dto
+/// <see cref="OpenApiDocumentTagDto"/> OpenApi 文档模块Dto
 /// </summary>
-public class OpenApiDocumentDto
+public class OpenApiDocumentTagDto
 {
     /// <summary>
-    /// 地址
+    /// 模块名称
     /// </summary>
-    /// <remarks><see href="http://127.0.0.1:38080/swagger/All Groups/swagger.json"/></remarks>
-    public string Url { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
-    /// OpenApi 版本
+    /// 描述
     /// </summary>
-    [JsonPropertyName("openapi")]
-    public string OpenApi { get; set; }
-
-    /// <summary>
-    /// 文档信息
-    /// </summary>
-    public OpenApiDocumentInfoDto Info { get; set; }
-
-    /// <summary>
-    /// 路由
-    /// </summary>
-    public IDictionary<string, OpenApiDocumentPathDto> Paths { get; set; }
-
-    /// <summary>
-    /// 组件
-    /// </summary>
-    public OpenApiDocumentComponentDto Components { get; set; }
-
-    /// <summary>
-    /// 模块
-    /// </summary>
-    public List<OpenApiDocumentTagDto> Tags { get; set; }
+    public string Description { get; set; }
 }
