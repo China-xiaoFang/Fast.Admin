@@ -26,6 +26,7 @@ using Fast.DynamicApplication;
 using Fast.JwtBearer;
 using Fast.Logging;
 using Fast.NET.Core;
+using Fast.OpenApi;
 using Fast.Serialization;
 using Fast.SqlSugar;
 using Fast.Swagger;
@@ -110,6 +111,9 @@ public static class Startup
         // 添加 Swagger 服务
         builder.Services.AddSwaggerDocuments(builder.Configuration);
 
+        // 添加 OpenApi 服务
+        builder.Services.AddOpenApi(builder.Configuration);
+
         // 添加 Swagger Newtonsoft.Json 库支持
         builder.Services.AddSwaggerGenNewtonsoftSupport();
 
@@ -136,7 +140,7 @@ public static class Startup
         app.UseWebSockets();
 
         // 启用集线器
-        app.UseHubs();
+        app.UseMapHub();
 
         // 启用 Swagger 文档
         app.UseSwaggerDocuments();

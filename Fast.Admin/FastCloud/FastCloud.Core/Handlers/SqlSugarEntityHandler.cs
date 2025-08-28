@@ -76,7 +76,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         SugarDbTypeAttribute sugarDbType, Type entityType)
     {
         var databaseTypeStr = sugarDbType.Type?.ToString();
-        if (string.IsNullOrEmpty(databaseTypeStr))
+        if (string.IsNullOrWhiteSpace(databaseTypeStr))
             return null;
 
         var databaseType = System.Enum.Parse<DatabaseTypeEnum>(databaseTypeStr, true);
