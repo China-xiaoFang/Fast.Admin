@@ -160,16 +160,26 @@ public static partial class OpenApiUtil
                         {
                             var parameter = methodInfo.Parameters[j];
 
-                            // 判断是否为引用类型
-                            if (parameter?.Schema?.Ref != null)
+                            // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
+                            switch (scriptLanguage)
                             {
-                                var schemaRefKey = DisposeSchemaRefKey(parameter.Schema.Ref, refSchemas);
-                                requestParam += $"{parameter.Name}: {schemaRefKey}, ";
-                            }
-                            else
-                            {
-                                var baseType = DisposeBaseType(parameter?.Schema?.Type);
-                                requestParam += $"{parameter.Name}: {baseType}, ";
+                                case ScriptLanguageEnum.JavaScript:
+                                    requestParam += $"{parameter.Name}, ";
+                                    break;
+                                case ScriptLanguageEnum.TypeScript:
+                                    // 判断是否为引用类型
+                                    if (parameter?.Schema?.Ref != null)
+                                    {
+                                        var schemaRefKey = DisposeSchemaRefKey(parameter.Schema.Ref, refSchemas);
+                                        requestParam += $"{parameter.Name}: {schemaRefKey}, ";
+                                    }
+                                    else
+                                    {
+                                        var baseType = DisposeBaseType(parameter?.Schema?.Type);
+                                        requestParam += $"{parameter.Name}: {baseType}, ";
+                                    }
+
+                                    break;
                             }
 
                             requestParamSb.Append($"        {parameter.Name},");
@@ -207,12 +217,22 @@ public static partial class OpenApiUtil
 
                     if (!string.IsNullOrWhiteSpace(requestDataType))
                     {
-                        contentSb.Append($"data: {requestDataType}");
-
-                        // 判断是否为数组
-                        if (methodInfo?.RequestBody?.Content?.Json?.Schema?.Type == "array")
+                        // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
+                        switch (scriptLanguage)
                         {
-                            contentSb.Append("[]");
+                            case ScriptLanguageEnum.JavaScript:
+                                contentSb.Append("data");
+                                break;
+                            case ScriptLanguageEnum.TypeScript:
+                                contentSb.Append($"data: {requestDataType}");
+
+                                // 判断是否为数组
+                                if (methodInfo?.RequestBody?.Content?.Json?.Schema?.Type == "array")
+                                {
+                                    contentSb.Append("[]");
+                                }
+
+                                break;
                         }
                     }
 
@@ -221,7 +241,7 @@ public static partial class OpenApiUtil
                                          return axiosUtil.request
                                      """);
 
-                    if (!string.IsNullOrWhiteSpace(responseType))
+                    if (!string.IsNullOrWhiteSpace(responseType) && scriptLanguage == ScriptLanguageEnum.TypeScript)
                     {
                         contentSb.Append($"<{responseType}>");
                     }
