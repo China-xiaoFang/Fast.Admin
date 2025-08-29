@@ -93,16 +93,16 @@ public static partial class OpenApiUtil
                     continue;
 
                 // JavaScript
-                //await GenerateOpenApi(apiDescriptionGroupCollectionProvider, openApiDocument, rootDir, group, uri, true,
-                //    ScriptLanguageEnum.JavaScript);
-                //await GenerateOpenApi(apiDescriptionGroupCollectionProvider, openApiDocument, rootDir, group, uri, false,
-                //    ScriptLanguageEnum.JavaScript);
+                await GenerateOpenApi(apiDescriptionGroupCollectionProvider, openApiDocument, rootDir, group, uri, true,
+                    ScriptLanguageEnum.JavaScript);
+                await GenerateOpenApi(apiDescriptionGroupCollectionProvider, openApiDocument, rootDir, group, uri, false,
+                    ScriptLanguageEnum.JavaScript);
 
                 // TypeScript
                 await GenerateOpenApi(apiDescriptionGroupCollectionProvider, openApiDocument, rootDir, group, uri, true,
                     ScriptLanguageEnum.TypeScript);
-                //await GenerateOpenApi(apiDescriptionGroupCollectionProvider, openApiDocument, rootDir, group, uri, false,
-                //    ScriptLanguageEnum.TypeScript);
+                await GenerateOpenApi(apiDescriptionGroupCollectionProvider, openApiDocument, rootDir, group, uri, false,
+                    ScriptLanguageEnum.TypeScript);
             }
 
             {
