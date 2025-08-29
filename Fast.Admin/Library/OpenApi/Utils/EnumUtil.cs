@@ -158,7 +158,7 @@ public static partial class OpenApiUtil
                               export enum {{enumType.Name}} {
                               {{enumDetail}}
                               }
-                              
+
                               """.Replace("\r\n", "\n"));
 
                         result.Add(new ComponentSchemaDto
