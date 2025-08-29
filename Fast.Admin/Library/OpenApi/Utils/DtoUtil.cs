@@ -36,7 +36,7 @@ public static partial class OpenApiUtil
     /// <param name="refKey"></param>
     /// <param name="refSchemas"></param>
     /// <returns></returns>
-    internal static string DisposeSchemaRefKey(string refKey, List<string> refSchemas = null)
+    internal static string DisposeSchemaRefKey(string refKey, HashSet<string> refSchemas = null)
     {
         // 获取 $ref 最后一个/后的Name
         refKey = refKey?.Split("/")
@@ -45,24 +45,35 @@ public static partial class OpenApiUtil
         if (string.IsNullOrWhiteSpace(refKey))
             return null;
 
-        // 导入声明类型
-        foreach (var typeMapping in Penetrates.OpenApiSettings.ImportTypeMappings.Where(wh => refKey.StartsWith(wh.Name)))
+        // 判断是否存在导入声明类型
+        if (Penetrates.OpenApiSettings.ImportTypeMappings.Any(a => refKey.StartsWith(a.Name)))
         {
-            // 截取字符串
-            refKey = refKey[typeMapping.Name.Length..];
+            // 导入声明类型
+            foreach (var typeMapping in Penetrates.OpenApiSettings.ImportTypeMappings.Where(wh => refKey.StartsWith(wh.Name)))
+            {
+                // 截取字符串
+                refKey = refKey[typeMapping.Name.Length..];
 
-            // 判断是否为基础类型
-            var baseTypeMapping = Penetrates.OpenApiSettings.BaseTypeMappings.FirstOrDefault(f => f.Key == refKey);
-            if (baseTypeMapping.Value != null)
-                refKey = baseTypeMapping.Value;
+                // 判断是否为基础类型
+                var baseTypeMapping = Penetrates.OpenApiSettings.BaseTypeMappings.FirstOrDefault(f => f.Key == refKey);
+                if (baseTypeMapping.Value != null)
+                    refKey = baseTypeMapping.Value;
+                else if (!Penetrates.OpenApiSettings.ImportTypeMappings.Any(a => refKey.StartsWith(a.Name)))
+                    // 最后一个不是基类则添加引用
+                    refSchemas?.Add(refKey);
 
-            // 填充字符串
-            refKey = string.Format(typeMapping.MappingName, refKey);
+                // 填充字符串
+                refKey = string.Format(typeMapping.MappingName, refKey);
 
-            // 判断是否存在引用声明
-            if (typeMapping.RefSchema?.Count > 0)
-                refSchemas = refSchemas?.Union(typeMapping.RefSchema)
-                    .ToList();
+                // 判断是否存在引用声明
+                if (typeMapping.RefSchema?.Count > 0)
+                    refSchemas?.UnionWith(typeMapping.RefSchema);
+            }
+        }
+        else
+        {
+            // 不存在，直接添加引用
+            refSchemas?.Add(refKey);
         }
 
         return refKey;
@@ -83,17 +94,18 @@ public static partial class OpenApiUtil
     /// 生成声明导入
     /// </summary>
     /// <param name="hasWeb"><see cref="bool"/> 是否Web端</param>
-    /// <param name="rootDir"><see cref="string"/> 根目录</param>
+    /// <param name="dirName"><see cref="string"/> 文件夹名称</param>
     /// <param name="refSchemas"><see cref="List{String}"/>引用声明</param>
     /// <param name="enumSchemas"><see cref="List{ComponentSchemaDto}"/> 枚举声明</param>
     /// <returns></returns>
-    internal static string GenerateSchemaImport(bool hasWeb, string rootDir, List<string> refSchemas,
-        List<ComponentSchemaDto> enumSchemas)
+    internal static (StringBuilder importSb, HashSet<string> refSchemas) GenerateSchemaImport(bool hasWeb, string dirName,
+        HashSet<string> refSchemas, List<ComponentSchemaDto> enumSchemas)
     {
         if (refSchemas == null || refSchemas.Count == 0)
-            return null;
+            return (null, []);
 
-        var result = new StringBuilder();
+        var schemaImport = new StringBuilder();
+        var newRefSchemas = new HashSet<string>();
 
         // 导入声明映射
         var schemaMapping = Penetrates.OpenApiSettings.ImportSchemaMappings.Where(wh => refSchemas.Contains(wh.Name))
@@ -104,28 +116,33 @@ public static partial class OpenApiUtil
                 .ToList();
             foreach (var item in schemaMappingGroup)
             {
-                result.AppendLine($$"""
-                                    import { {{string.Join(", ", item.Select(sl => sl.Name))}} } from "{{item.Key}}";
-                                    """);
+                schemaImport.AppendLine($$"""
+                                          import { {{string.Join(", ", item.Select(sl => sl.Name))}} } from "{{item.Key}}";
+                                          """);
             }
         }
 
         foreach (var refSchema in refSchemas)
         {
+            // 判断是否为导入声明映射
+            if (schemaMapping.Any(a => a.Name == refSchema))
+                continue;
+
             // 判断是否为枚举
             var enumSchema = enumSchemas.SingleOrDefault(s => s.Name == refSchema);
             if (enumSchema != null)
             {
-                result.AppendLine(enumSchema.ImportPath);
+                schemaImport.AppendLine(enumSchema.ImportPath);
                 continue;
             }
 
-            result.AppendLine($$"""
-                                import { {{refSchema}} } from "./{{rootDir}}{{refSchema}}";
-                                """);
+            schemaImport.AppendLine($$"""
+                                      import { {{refSchema}} } from "./{{dirName}}/{{refSchema}}";
+                                      """);
+            newRefSchemas.Add(refSchema);
         }
 
-        return result.ToString();
+        return (schemaImport, newRefSchemas);
     }
 
     /// <summary>
@@ -194,8 +211,8 @@ public static partial class OpenApiUtil
                     Penetrates.OpenApiSettings.PagedSchemaProperties.All(a => dtoSchema.Value.Properties.ContainsKey(a));
                 if (hasPaged)
                 {
-                    schemaDto.Content.Append(" extends PageInput ");
-                    schemaDto.RefSchemas.Add("PageInput");
+                    schemaDto.Content.Append(" extends PagedInput ");
+                    schemaDto.RefSchemas.Add("PagedInput");
                 }
 
                 schemaDto.Content.Append(" {");
@@ -317,6 +334,10 @@ public static partial class OpenApiUtil
 
             foreach (var refSchema in refSchemas)
             {
+                // 判断是否为导入声明映射
+                if (schemaMapping.Any(a => a.Name == refSchema))
+                    continue;
+
                 // 判断是否为枚举
                 var enumSchema = enumSchemas.SingleOrDefault(s => s.Name == refSchema);
                 if (enumSchema != null)
@@ -330,13 +351,24 @@ public static partial class OpenApiUtil
                                           """);
             }
 
-            // 写入文件
-            await File.WriteAllTextAsync(Path.Combine(rootDir, $"models/{schemaDto.Name}.ts"),
-                $"{schemaImport}{schemaDto.Content}");
+            if (schemaImport.Length > 0)
+                // 写入文件
+                await File.WriteAllTextAsync(Path.Combine(rootDir, $"{schemaDto.Name}.ts"), $"""
+                     {schemaImport}
+                     {schemaDto.Content}
+                     """);
+            else
+                // 写入文件
+                await File.WriteAllTextAsync(Path.Combine(rootDir, $"{schemaDto.Name}.ts"), $"{schemaDto.Content}");
+
 
             // 处理引用文件
-            foreach (var refSchema in schemaDto.RefSchemas)
+            foreach (var refSchema in refSchemas)
             {
+                // 判断是否为导入声明映射
+                if (schemaMapping.Any(a => a.Name == refSchema))
+                    continue;
+
                 // 判断是否为枚举声明
                 if (enumSchemas.Any(a => a.Name == refSchema))
                     continue;
