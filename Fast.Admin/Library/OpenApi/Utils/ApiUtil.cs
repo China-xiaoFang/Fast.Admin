@@ -75,13 +75,14 @@ public static partial class OpenApiUtil
     /// 写入 OpenApi 文档 Api 文件
     /// </summary>
     /// <param name="rootDir"><see cref="string"/> 根目录</param>
+    /// <param name="hasWeb"><see cref="bool"/> 是否为Web端</param>
     /// <param name="apiDescriptionGroupCollectionProvider"><see cref="IApiDescriptionGroupCollectionProvider"/> 接口描述提供程序</param>
     /// <param name="openApiDocument"><see cref="OpenApiDocumentDto"/> 文档Dto</param>
     /// <param name="dtoSchemas"><see cref="List{ComponentSchemaDto}"/> Dto声明</param>
     /// <param name="enumSchemas"><see cref="List{ComponentSchemaDto}"/> 枚举声明</param>
     /// <param name="scriptLanguage"><see cref="ScriptLanguageEnum"/> 脚本语言</param>
     /// <returns></returns>
-    internal static async Task WriteOpenApiDocumentApiFile(string rootDir,
+    internal static async Task WriteOpenApiDocumentApiFile(string rootDir, bool hasWeb,
         IApiDescriptionGroupCollectionProvider apiDescriptionGroupCollectionProvider, OpenApiDocumentDto openApiDocument,
         List<ComponentSchemaDto> dtoSchemas, List<ComponentSchemaDto> enumSchemas, ScriptLanguageEnum scriptLanguage)
     {
@@ -113,7 +114,7 @@ public static partial class OpenApiUtil
 
                 var contentSb = new StringBuilder();
                 // 引用声明
-                var refSchemas = new List<string>();
+                var refSchemas = new HashSet<string>();
 
                 for (var i = 0; i < curPaths.Count; i++)
                 {
@@ -284,22 +285,58 @@ public static partial class OpenApiUtil
                               export const {{tag}}Api = {
                               {{contentSb}}
                               };
-                              
+
                               """.Replace("\r\n", "\n"));
                         break;
                     case ScriptLanguageEnum.TypeScript:
-                        // 写入文件
-                        await File.WriteAllTextAsync(Path.Combine(apiFileDir, "index.ts"), $$"""
-                              import { axiosUtil } from "@fast-china/axios";
+                        // 生成 import
+                        var (schemaImport, newRefSchemas) = GenerateSchemaImport(hasWeb, "models", refSchemas, enumSchemas);
+                        if (newRefSchemas.Count > 0)
+                        {
+                            // 创建 model 文件
+                            var importFileDir = Path.Combine(apiFileDir, "models");
+                            Directory.CreateDirectory(importFileDir);
 
-                              /**
-                               * {{tagDescription}}Api
-                               */
-                              export const {{tag}}Api = {
-                              {{contentSb}}
-                              };
-                              
-                              """.Replace("\r\n", "\n"));
+                            foreach (var dtoSchema in dtoSchemas.Where(wh => newRefSchemas.Contains(wh.Name))
+                                         .ToList())
+                            {
+                                // 写入 import 文件
+                                await WriteOpenApiDocumentSchemaFile(hasWeb, importFileDir, openApiDocument, dtoSchema,
+                                    dtoSchemas, enumSchemas, ScriptLanguageEnum.TypeScript);
+                            }
+                        }
+
+                        if (schemaImport.Length > 0)
+                        {
+                            // 写入文件
+                            await File.WriteAllTextAsync(Path.Combine(apiFileDir, "index.ts"), $$"""
+                                  import { axiosUtil } from "@fast-china/axios";
+                                  {{schemaImport}}
+                                  /**
+                                   * {{tagDescription}}Api
+                                   */
+                                  export const {{tag}}Api = {
+                                  {{contentSb}}
+                                  };
+
+                                  """.Replace("\r\n", "\n"));
+                        }
+                        else
+                        {
+                            // 写入文件
+                            await File.WriteAllTextAsync(Path.Combine(apiFileDir, "index.ts"), $$"""
+                                  import { axiosUtil } from "@fast-china/axios";
+
+                                  /**
+                                   * {{tagDescription}}Api
+                                   */
+                                  export const {{tag}}Api = {
+                                  {{contentSb}}
+                                  };
+
+                                  """.Replace("\r\n", "\n"));
+                        }
+
                         break;
                 }
             }

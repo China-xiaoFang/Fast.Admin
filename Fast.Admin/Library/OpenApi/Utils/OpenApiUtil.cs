@@ -179,7 +179,7 @@ public static partial class OpenApiUtil
         var dtoSchemas = await GenerateOpenApiDocumentSchemaFile(openApiDocument, scriptLanguage);
 
         // 写入Api
-        await WriteOpenApiDocumentApiFile(apiRootDir, apiDescriptionGroupCollectionProvider, openApiDocument, dtoSchemas,
+        await WriteOpenApiDocumentApiFile(apiRootDir, hasWeb, apiDescriptionGroupCollectionProvider, openApiDocument, dtoSchemas,
             enumSchemas, scriptLanguage);
     }
 }
