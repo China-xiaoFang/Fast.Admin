@@ -51,5 +51,5 @@ internal class ComponentSchemaDto
     /// 引用声明
     /// </summary>
     /// <remarks>Dto专用</remarks>
-    public List<string> RefSchemas { get; set; }
+    public HashSet<string> RefSchemas { get; set; }
 }

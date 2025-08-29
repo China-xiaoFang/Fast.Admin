@@ -45,12 +45,12 @@ public class OpenApiSettingsOptions : IPostConfigure
     /// <summary>
     /// 忽略声明
     /// </summary>
-    public List<string> IgnoreSchemas { get; set; }
+    public HashSet<string> IgnoreSchemas { get; set; }
 
     /// <summary>
     /// 分页声明属性
     /// </summary>
-    public List<string> PagedSchemaProperties { get; set; }
+    public HashSet<string> PagedSchemaProperties { get; set; }
 
     /// <summary>
     /// 基础类型映射
@@ -295,5 +295,5 @@ public class OpenApiImportTypeMappingSettingsOptions
     /// <summary>
     /// 引用声明
     /// </summary>
-    public List<string> RefSchema { get; set; }
+    public HashSet<string> RefSchema { get; set; }
 }
