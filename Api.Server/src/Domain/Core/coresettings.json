@@ -1,0 +1,148 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Error"
+    },
+    "Fast": {
+      // 文件格式
+      "FileFormat": "_{0:yyyy}-{0:MM}",
+      // 最小日志级别
+      "MiniLogLevel": "Error",
+      // 文件大小限制
+      "FileSizeLimit": 10485760,
+      // 启用 Critical
+      "EnableCritical": false
+    }
+  },
+  "AllowedHosts": "*",
+  // 跨域配置
+  "CorsAccessorSettings": {
+    // 允许来源域名
+    "WithOrigins": [
+      "http://127.0.0.1:2001"
+    ],
+    // 客户端可获取的响应标头
+    "WithExposedHeaders": [ "Fast-Response-Encipher" ]
+  },
+  // 上传文件配置
+  "UploadFileSettings": {
+    // 头像
+    "Avatar": {
+      "Path": "Upload/Avatar",
+      "MaxSize": 2048,
+      "ContentType": [ "image/jpg", "image/jpeg", "image/png", "image/gif", "image/bmp" ]
+    },
+    // 证件照
+    "IdPhoto": {
+      "Path": "Upload/IdPhoto",
+      "MaxSize": 5120,
+      "ContentType": [ "image/jpg", "image/jpeg", "image/png" ]
+    },
+    // 富文本
+    "Editor": {
+      "Path": "Upload/Editor",
+      "MaxSize": 10240,
+      "ContentType": [
+        // 图片类
+        "image/jpg",
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/bmp",
+        // 视频类
+        "video/mp4",
+        "video/mpeg",
+        "video/quicktime",
+        "video/x-msvideo",
+        "video/x-ms-wmv",
+        "video/webm",
+        "video/ogg"
+      ]
+    },
+    // 默认
+    "Default": {
+      "Path": "Upload/Default",
+      "MaxSize": 102400,
+      // 使用类型文件夹
+      "UseTypeFolder": true,
+      // 使用日期文件夹
+      "UseDateFolder": true,
+      "ContentType": [
+        // 图片类
+        "image/jpg",
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/bmp",
+        // 视频类
+        "video/mp4",
+        "video/mpeg",
+        "video/quicktime",
+        "video/x-msvideo",
+        "video/x-ms-wmv",
+        "video/webm",
+        "video/ogg",
+        // 音频类
+        "audio/mpeg",
+        "audio/wav",
+        "audio/ogg",
+        "audio/mp4",
+        "audio/flac",
+        // 文本类
+        "text/plain",
+        "text/csv",
+        "text/html",
+        "text/markdown",
+        // PDF
+        "application/pdf",
+        // Word
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        // Excel
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        // PowerPoint
+        "application/vnd.ms-powerpoint",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        // 压缩包
+        "application/zip",
+        "application/x-rar-compressed",
+        "application/x-7z-compressed",
+        "application/gzip"
+      ]
+    }
+  },
+  // JWT Token 配置
+  "JWTSettings": {
+    // 启用
+    "Enable": true,
+    // 是否验证密钥
+    "ValidateIssuerSigningKey": true,
+    // 签名密钥，string 类型，必须是复杂密钥，长度等于32
+    "IssuerSigningKey": "Xh6<>-L*d%/Qg)cktH[]t3tk{tFZ%=9R",
+    // 是否验证签发方
+    "ValidateIssuer": true,
+    // 签发方，string 类型
+    "ValidIssuer": "Fast.Admin",
+    // 是否验证签收方
+    "ValidateAudience": true,
+    // 签收方，string 类型
+    "ValidAudience": "Fast.Apply",
+    // 是否验证过期时间
+    "ValidateLifetime": true,
+    // 是否验证 AssessToken
+    "ValidateAccessToken": true,
+    // Token 过期时间，单位分钟
+    "TokenExpiredTime": 30,
+    // 刷新Token 过期时间，单位分钟
+    "RefreshTokenExpireTime": 1440,
+    // 过期时间容错值，单位秒
+    "ClockSkew": 5
+  },
+  // Swagger 配置
+  "SwaggerSettings": {
+    // 禁用
+    "Enable": false
+  }
+}

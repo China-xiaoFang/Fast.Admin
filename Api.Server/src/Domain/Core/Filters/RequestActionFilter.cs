@@ -1,0 +1,137 @@
+﻿// ------------------------------------------------------------------------
+// 版权所有 © 2018-Now 小方
+// 
+// 许可授权：
+// 本软件及其相关文档（以下简称“软件”）为项目定制，仅供获得授权的个人或组织使用。
+// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发软件副本的权利。
+// 但不得用于违反法律或侵犯他人合法权益的行为。
+// 
+// 特别声明：
+// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
+// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
+// - 包括但不限于数据丢失、业务中断等情况。
+// 
+// 免责条款：
+// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
+// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
+// ------------------------------------------------------------------------
+
+using System.Diagnostics;
+using System.Reflection;
+using Fast.CenterLog.Entity;
+using Fast.SqlSugar;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using SqlSugar;
+using Yitter.IdGenerator;
+
+// ReSharper disable once CheckNamespace
+namespace Fast.Core;
+
+/// <summary>
+/// <see cref="RequestActionFilter"/> 请求日志拦截
+/// </summary>
+public class RequestActionFilter : IAsyncActionFilter
+{
+    /// <summary>
+    /// SqlSugar实体服务
+    /// </summary>
+    private readonly ISqlSugarEntityService _sqlSugarEntityService;
+
+    /// <summary>
+    /// 日志
+    /// </summary>
+    private readonly ILogger _logger;
+
+    /// <summary>
+    /// <see cref="RequestActionFilter"/> 请求日志拦截
+    /// </summary>
+    /// <param name="sqlSugarEntityService"><see cref="ISqlSugarEntityService"/> SqlSugar实体服务</param>
+    /// <param name="logger"><see cref="ILogger"/> 日志</param>
+    public RequestActionFilter(ISqlSugarEntityService sqlSugarEntityService, ILogger<IAsyncActionFilter> logger)
+    {
+        _sqlSugarEntityService = sqlSugarEntityService;
+        _logger = logger;
+    }
+
+    /// <summary>
+    /// Called asynchronously before the action, after model binding is complete.
+    /// </summary>
+    /// <param name="context">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext" />.</param>
+    /// <param name="next">
+    /// The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate" />. Invoked to execute the next action filter or the action itself.
+    /// </param>
+    /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that on completion indicates the filter has executed.</returns>
+    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+    {
+        var dateTime = DateTime.Now;
+        var httpContext = context.HttpContext;
+        var httpRequest = httpContext.Request;
+        var _user = httpContext.RequestServices.GetService<IUser>();
+
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        var actionContext = await next();
+        stopwatch.Stop();
+
+        var actionDescriptor = actionContext.ActionDescriptor as ControllerActionDescriptor;
+        var apiInfoAttribute = actionDescriptor?.MethodInfo.GetCustomAttribute<ApiInfoAttribute>();
+        if (!Enum.TryParse(httpRequest.Method, true, out HttpRequestMethodEnum requestMethod))
+        {
+            // 默认 Get 请求
+            requestMethod = HttpRequestMethodEnum.Get;
+        }
+
+        // 获取 CenterLog 库的连接字符串配置
+        var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
+            CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
+        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+
+        var operateLogModel = new OperateLogModel
+        {
+            Id = YitIdHelper.NextId(),
+            AccountId = _user?.AccountId,
+            Account = _user?.Account,
+            Mobile = _user?.Mobile,
+            NickName = _user?.NickName,
+            Success = actionContext.Exception == null ? YesOrNotEnum.Y : YesOrNotEnum.N,
+            OperationAction = apiInfoAttribute?.Action ?? HttpRequestActionEnum.None,
+            OperationName = apiInfoAttribute?.Name,
+            ClassName = context.Controller.ToString(),
+            MethodName = actionDescriptor?.ActionName,
+            Location = httpRequest.Path,
+            RequestMethod = requestMethod,
+            Param = context.ActionArguments.Count < 1 ? "" : context.ActionArguments.ToJsonString(),
+            Result = actionContext.Result?.GetType() == typeof(JsonResult) ? actionContext.Result.ToJsonString() : "",
+            ElapsedTime = stopwatch.ElapsedMilliseconds,
+            DepartmentId = _user?.DepartmentId,
+            DepartmentName = _user?.DepartmentName,
+            CreatedUserId = _user?.UserId,
+            CreatedUserName = _user?.EmployeeName,
+            CreatedTime = dateTime,
+            TenantId = _user?.TenantId ?? 0,
+        };
+        operateLogModel.RecordCreate(httpContext);
+
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                // 这里不能使用Aop
+                var db = new SqlSugarClient(connectionConfig);
+
+                // 异步不等待
+                await db.Insertable(operateLogModel)
+                    .SplitTable()
+                    .ExecuteCommandAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Request Action 执行Sql，保存失败；{ex.Message}");
+            }
+        });
+    }
+}
