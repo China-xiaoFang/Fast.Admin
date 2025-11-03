@@ -1,0 +1,38 @@
+diff --git a/es/components/form/src/form-label-wrap.mjs b/es/components/form/src/form-label-wrap.mjs
+index f935213461c0a47d03b57a66a8b576b64de303f7..c95ccae2fcd34600185d67f7f5f2bdba74ecc990 100644
+--- a/es/components/form/src/form-label-wrap.mjs
++++ b/es/components/form/src/form-label-wrap.mjs
+@@ -27,6 +27,14 @@ var FormLabelWrap = defineComponent({
+       var _a;
+       if ((_a = el.value) == null ? void 0 : _a.firstElementChild) {
+         const width = window.getComputedStyle(el.value.firstElementChild).width;
++        /**
++         * 修复因 el-from 设置了 label-width="auto" 并且该组件处于隐藏状态，导致切换页面时引发报错：“ElementPlusError：[ElForm] unexpected width NaN”
++         * Issues：https://github.com/element-plus/element-plus/issues/9870
++         * https://blog.csdn.net/lt5227/article/details/141936958
++         */
++        if(width === "auto"){
++          return "auto";
++        }
+         return Math.ceil(Number.parseFloat(width));
+       } else {
+         return 0;
+diff --git a/lib/components/form/src/form-label-wrap.js b/lib/components/form/src/form-label-wrap.js
+index afd4007a334eb9925c3c0bba4ef7535f51bbf534..2aa47c9ed045fe6e52e4d56850a943c3c1299bb4 100644
+--- a/lib/components/form/src/form-label-wrap.js
++++ b/lib/components/form/src/form-label-wrap.js
+@@ -31,6 +31,14 @@ var FormLabelWrap = vue.defineComponent({
+       var _a;
+       if ((_a = el.value) == null ? void 0 : _a.firstElementChild) {
+         const width = window.getComputedStyle(el.value.firstElementChild).width;
++        /**
++         * 修复因 el-from 设置了 label-width="auto" 并且该组件处于隐藏状态，导致切换页面时引发报错：“ElementPlusError：[ElForm] unexpected width NaN”
++         * Issues：https://github.com/element-plus/element-plus/issues/9870
++         * https://blog.csdn.net/lt5227/article/details/141936958
++         */
++        if(width === "auto"){
++          return "auto";
++        }
+         return Math.ceil(Number.parseFloat(width));
+       } else {
+         return 0;
