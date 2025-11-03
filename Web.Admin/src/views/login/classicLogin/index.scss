@@ -1,0 +1,268 @@
+.el-container {
+	width: 100%;
+	height: 100%;
+	.el-main {
+		color: var(--el-text-color-primary);
+		font-size: var(--el-font-size-base);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		.login-card {
+			width: 800px;
+			height: 430px;
+			margin-bottom: 10%;
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			padding: 30px;
+			background-size: cover;
+			background-position: center;
+			background-image: url("@/assets/images/login_card.png");
+			background-repeat: no-repeat;
+			border-radius: 50px 10px 50px 10px;
+			box-shadow: var(--el-box-shadow);
+			.login-card__left {
+				.left__title {
+					display: flex;
+					align-items: center;
+					font-weight: var(--el-font-weight-primary);
+					img {
+						width: 25px;
+						height: 25px;
+						margin-right: 7px;
+					}
+				}
+				.left__ikon {
+					height: 100%;
+					display: flex;
+					align-items: center;
+					img {
+						width: 290px;
+						height: 200px;
+					}
+				}
+			}
+			.login-card__right {
+				padding-left: 50px;
+				display: flex;
+				flex-direction: column;
+				overflow: hidden;
+				.right__title {
+					font-size: 26px;
+					margin-right: 8px;
+				}
+				.bold {
+					font-weight: var(--el-font-weight-primary);
+				}
+				.right__button-back {
+					padding-bottom: 5px;
+					margin-bottom: 10px;
+					border-bottom: 1px solid var(--el-border-color);
+					:deep() {
+						.el-button {
+							span {
+								margin-left: 0;
+							}
+						}
+					}
+				}
+				.tenant__select {
+					.el-select-dropdown__wrap {
+						max-height: 200px;
+						.el-select-dropdown__list {
+							li {
+								height: 100%;
+								padding: 0 15px 0 10px;
+								display: flex;
+								flex-direction: row;
+								justify-content: space-between;
+								align-items: center;
+								gap: 10px;
+								&:not(:last-child) {
+									border-bottom: var(--el-border);
+								}
+								.tenant__warp {
+									flex: 1;
+									display: flex;
+									flex-direction: column;
+									.tenant__top {
+										display: flex;
+										align-items: center;
+										justify-content: space-between;
+										.top__name {
+											display: flex;
+											align-items: center;
+											color: var(--el-text-color-regular);
+											font-weight: var(--el-font-weight-primary);
+										}
+										img {
+											width: 25px;
+											height: 25px;
+											margin-right: 5px;
+											border-radius: 50%;
+										}
+									}
+									.tenant__center {
+										margin-left: 30px;
+										margin-top: -15px;
+										color: var(--el-text-color-disabled);
+										display: flex;
+										justify-content: space-between;
+										font-size: var(--el-font-size-small);
+									}
+									.tenant__bottom {
+										margin-left: 15px;
+										margin-top: -15px;
+										color: var(--el-text-color-disabled);
+										display: flex;
+										justify-content: space-between;
+										align-items: center;
+										font-size: var(--el-font-size-small);
+										.bottom__name {
+											display: flex;
+											align-items: center;
+											font-weight: var(--el-font-weight-primary);
+										}
+										.el-tag {
+											margin-right: 5px;
+										}
+										img {
+											width: 20px;
+											height: 20px;
+											margin-left: 5px;
+											border-radius: 50%;
+										}
+									}
+								}
+								.el-icon {
+									transition:
+										background-color var(--el-transition-duration) ease,
+										color var(--el-transition-duration) ease,
+										transform var(--el-transition-duration) ease;
+									&:hover {
+										border-radius: 50%;
+										background-color: var(--el-color-primary);
+										color: var(--el-color-white);
+									}
+								}
+							}
+						}
+					}
+					:deep() {
+						.el-select-dropdown__footer {
+							padding: 5px 0;
+							.el-button {
+								width: 100%;
+							}
+						}
+					}
+				}
+				.tenant__list {
+					flex: 1;
+					overflow: hidden;
+					.el-scrollbar {
+						padding: 0 10px 0 5px;
+						li {
+							padding: 5px 0;
+							display: flex;
+							flex-direction: row;
+							align-items: center;
+							justify-content: space-between;
+							gap: 20px;
+							&:not(:last-child) {
+								border-bottom: var(--el-border);
+							}
+							.tenant__warp {
+								flex: 1;
+								display: flex;
+								flex-direction: column;
+								line-height: 20px;
+								.tenant__top {
+									display: flex;
+									align-items: center;
+									justify-content: space-between;
+									.top__name {
+										display: flex;
+										align-items: center;
+										color: var(--el-text-color-regular);
+										font-weight: var(--el-font-weight-primary);
+									}
+									img {
+										width: 25px;
+										height: 25px;
+										margin-right: 5px;
+										border-radius: 50%;
+									}
+								}
+								.tenant__center {
+									margin-left: 30px;
+									color: var(--el-text-color-disabled);
+									display: flex;
+									justify-content: space-between;
+									font-size: var(--el-font-size-small);
+								}
+								.tenant__bottom {
+									margin-left: 15px;
+									color: var(--el-text-color-disabled);
+									display: flex;
+									justify-content: space-between;
+									align-items: center;
+									font-size: var(--el-font-size-small);
+									.bottom__name {
+										display: flex;
+										align-items: center;
+										font-weight: var(--el-font-weight-primary);
+									}
+									.el-tag {
+										margin-right: 5px;
+									}
+									img {
+										width: 20px;
+										height: 20px;
+										margin-left: 5px;
+										border-radius: 50%;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+html.dark {
+	.el-container {
+		.el-main {
+			.login-card {
+				background-image: url("@/assets/images/login_card_dark.png");
+			}
+		}
+	}
+}
+
+@media (max-width: 800px) {
+	.el-container {
+		min-width: 500px;
+		.el-main {
+			.login-card {
+				max-width: 450px;
+				width: 90%;
+				height: 470px;
+				background-position: right center;
+				background-size: 300% 100%;
+				display: inline;
+				border-radius: 50px;
+				.login-card__left {
+					.left__ikon {
+						display: none;
+					}
+				}
+				.login-card__right {
+					padding-left: 0;
+					padding-top: 20px;
+				}
+			}
+		}
+	}
+}
