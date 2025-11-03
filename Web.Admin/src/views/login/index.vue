@@ -6,7 +6,7 @@
 		:formRules="state.formRules"
 	>
 		<template #help>
-			<el-dropdown ref="helpDropdownRef" trigger="click" @command="handleDropdownClick">
+			<el-dropdown ref="helpDropdownRef" size="default" trigger="click" @command="handleDropdownClick">
 				<div>
 					<el-icon :size="20" title="主题">
 						<ChromeFilled />
