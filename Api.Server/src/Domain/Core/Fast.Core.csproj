@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Description>Fast.Admin 应用核心模块库。</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="$(SolutionDir)Library\Cache\Fast.Cache.csproj" />
+        <ProjectReference Include="$(SolutionDir)Library\DependencyInjection\Fast.DependencyInjection.csproj" />
+        <ProjectReference Include="$(SolutionDir)Library\DynamicApplication\Fast.DynamicApplication.csproj" />
+        <ProjectReference Include="$(SolutionDir)Library\IaaS\Fast.IaaS.csproj" />
+        <ProjectReference Include="$(SolutionDir)Library\JwtBearer\Fast.JwtBearer.csproj" />
+        <PackageReference Include="Fast.Logging" Version="3.5.12" />
+        <ProjectReference Include="$(SolutionDir)Library\OpenApi\Fast.OpenApi.csproj" />
+        <ProjectReference Include="$(SolutionDir)Library\Core\Fast.NET.Core.csproj" />
+        <ProjectReference Include="$(SolutionDir)Library\Serialization.Newtonsoft.Json\Fast.Serialization.Newtonsoft.Json.csproj" />
+        <ProjectReference Include="$(SolutionDir)Library\Swagger\Fast.Swagger.csproj" />
+        <ProjectReference Include="$(SolutionDir)Library\UnifyResult\Fast.UnifyResult.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="DocumentFormat.OpenXml" Version="3.3.0" />
+        <PackageReference Include="MiniExcel" Version="1.41.4" />
+        <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="$(SolutionDir)src\Domain\Center\Entity\Fast.Center.Entity.csproj" />
+        <ProjectReference Include="$(SolutionDir)src\Domain\CenterLog\Entity\Fast.CenterLog.Entity.csproj" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <None Update="coresettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="coresettings.Development.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="dbsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="dbsettings.Development.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>

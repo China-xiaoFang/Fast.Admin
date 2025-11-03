@@ -1,0 +1,56 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    },
+    "Fast": {
+      // 文件格式
+      "FileFormat": "/{0:yyyy}-{0:MM}_{0:dd}",
+      // 最小日志级别
+      "MiniLogLevel": "Information"
+    }
+  },
+  // Swagger 配置
+  "SwaggerSettings": {
+    // 启用
+    "Enable": true,
+    "DocumentTitle": "Fast",
+    "RoutePrefix": "",
+    "DocExpansionState": "None",
+    "EnableAllGroups": true,
+    "HideServers": true,
+    // 生成Json文件枚举配置
+    "EnumToNumber": true,
+    "GroupOpenApiInfos": [
+      {
+        "Group": "Auth",
+        "Title": "鉴权",
+        "Description": "Fast.Api 鉴权接口",
+        "Version": "3.0.0",
+        "Order": 999
+      },
+      {
+        "Group": "File",
+        "Title": "文件",
+        "Description": "Fast.File 文件接口",
+        "Version": "3.0.0",
+        "Order": 998
+      },
+      {
+        "Group": "Center",
+        "Title": "管理后台",
+        "Description": "一个持续集百家所长 众多黑科技的 .NET Web应用框架。<br/>前后端分离架构，开箱即用，紧随前沿技术。<br/>作者By 小方<br/><a href='https://gitee.com/China-xiaoFang/Fast.Admin'>https://gitee.com/China-xiaoFang/Fast.Admin</a>",
+        "Version": "3.0.0",
+        "Order": 998
+      },
+      {
+        "Group": "Admin",
+        "Title": "业务后台",
+        "Description": "一个持续集百家所长 众多黑科技的 .NET Web应用框架。<br/>前后端分离架构，开箱即用，紧随前沿技术。<br/>作者By 小方<br/><a href='https://gitee.com/China-xiaoFang/Fast.Admin'>https://gitee.com/China-xiaoFang/Fast.Admin</a>",
+        "Version": "3.0.0",
+        "Order": 997
+      }
+    ]
+  }
+}

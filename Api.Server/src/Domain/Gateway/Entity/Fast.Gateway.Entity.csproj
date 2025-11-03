@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Description>Fast.Admin 应用核心日志实体库。</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="$(SolutionDir)Library\SqlSugar\Fast.SqlSugar.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="$(SolutionDir)src\Domain\Gateway\Enum\Fast.Gateway.Enum.csproj" />
+    </ItemGroup>
+
+</Project>
