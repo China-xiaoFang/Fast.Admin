@@ -1,46 +1,53 @@
 <template>
 	<el-container
 		:class="[
-			'layout',
 			{
 				contentFull: navTabsStore.state.contentFull,
 				contentLarge: navTabsStore.state.contentLarge,
 			},
 		]"
 	>
-		<el-aside :style="{ '--el-aside-width': configStore.layout.menuWidth }">
+		<el-aside :style="{ '--el-aside-width': addUnit(configStore.layout.menuWidth) }">
 			<LayoutLogo />
 			<LayoutMenu />
 		</el-aside>
 		<el-container>
 			<el-header>
-				<div class="nav-bar" :style="{ '--height': configStore.layout.navBarHeight }">
-					<LayoutBreadcrumb />
+				<div class="nav-bar" :style="{ '--height': addUnit(configStore.layout.navBarHeight) }">
+					<div class="left">
+						<LayoutBreadcrumb />
+					</div>
 					<div class="right">
 						<LayoutScreenFull />
-						<div class="setting g__hover__twinkle" title="高级配置" @click="layoutConfigRef.open()">
-							<el-icon>
-								<Setting />
-							</el-icon>
-						</div>
-						<el-dropdown class="avatar" placement="bottom" trigger="click" hideOnClick>
+						<el-dropdown
+							class="avatar"
+							placement="bottom"
+							trigger="click"
+							hideOnClick
+							:title="userInfoStore.employeeName || userInfoStore.nickName"
+						>
 							<div class="user-info">
-								<FaAvatar original :size="25" :src="userInfoStore.userInfo.avatar" :icon="UserFilled" />
-								<span class="clerk-name">{{ userInfoStore.userInfo.nickName }}</span>
+								<FaAvatar original :size="24" :src="userInfoStore.avatar" :icon="UserFilled" />
+								<span class="nick-name">{{ userInfoStore.employeeName || userInfoStore.nickName }}</span>
 							</div>
 							<template #dropdown>
 								<el-dropdown-menu>
-									<el-dropdown-item @click="changePasswordRef.open()">修改密码</el-dropdown-item>
-									<el-dropdown-item @click="handleRefreshSystem">刷新系统</el-dropdown-item>
-									<el-dropdown-item divided @click="handleLogout">退出系统</el-dropdown-item>
+									<el-dropdown-item :icon="User" @click="routerUtil.routePushSafe(router, { path: '/settings/account' })">
+										个人信息
+									</el-dropdown-item>
+									<!-- <el-dropdown-item @click="changePasswordRef.open()">修改密码</el-dropdown-item> -->
+									<el-dropdown-item :icon="Refresh" @click="handleRefreshSystem">刷新系统</el-dropdown-item>
+									<el-dropdown-item divided :icon="Lock" @click="handleScreenLock">锁定屏幕</el-dropdown-item>
+									<el-dropdown-item :icon="SwitchButton" @click="handleLogout">退出系统</el-dropdown-item>
 								</el-dropdown-menu>
 							</template>
 						</el-dropdown>
+						<el-icon class="setting fa__hover__twinkle" title="高级配置" @click="layoutConfigRef.open()"><Setting /></el-icon>
 					</div>
 				</div>
 				<LayoutNavBarTab />
 			</el-header>
-			<el-main :style="{ '--el-main-padding': configStore.layout.mainPadding }">
+			<el-main :style="{ '--el-main-padding': addUnit(configStore.layout.mainPadding) }">
 				<el-scrollbar>
 					<router-view v-slot="{ Component, route }">
 						<transition mode="out-in" :name="configStore.layout.mainAnimation">
@@ -51,37 +58,45 @@
 					</router-view>
 				</el-scrollbar>
 			</el-main>
-			<el-footer :style="{ '--el-footer-height': configStore.layout.footer ? configStore.layout.footerHeight : 0 }">
+			<el-footer :style="{ '--el-footer-height': configStore.layout.footer ? addUnit(configStore.layout.footerHeight) : 0 }">
 				<Footer />
 			</el-footer>
 		</el-container>
+		<teleport to="body">
+			<transition name="slide-bottom" mode="out-in">
+				<LayoutScreenLock v-if="configStore.screen.screenLock" />
+			</transition>
+		</teleport>
 	</el-container>
 </template>
 
 <script setup lang="ts">
 import { inject } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { Setting, UserFilled } from "@element-plus/icons-vue";
-import { Local } from "@fast-china/utils";
-import { changePasswordKey, layoutConfigKey } from "@/layouts";
+import { Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
+import { Local, addUnit } from "@fast-china/utils";
+import { useRouter } from "vue-router";
+import LayoutMenu from "./components/Menu/index.vue";
+import LayoutNavBarTab from "./components/NavBarTab/index.vue";
+import { layoutConfigKey } from "@/layouts";
 import LayoutBreadcrumb from "@/layouts/components/Breadcrumb/index.vue";
 import LayoutLogo from "@/layouts/components/Logo/index.vue";
-import LayoutMenu from "@/layouts/components/Menu/index.vue";
-import LayoutNavBarTab from "@/layouts/components/NavBarTab/index.vue";
 import LayoutScreenFull from "@/layouts/components/ScreenFull/index.vue";
+import LayoutScreenLock from "@/layouts/components/ScreenLock/index.vue";
 import { refreshApp } from "@/main";
+import { routerUtil } from "@/router";
 import { useConfig, useNavTabs, useUserInfo } from "@/stores";
 
 defineOptions({
 	name: "LayoutClassic",
 });
 
+const router = useRouter();
 const configStore = useConfig();
 const navTabsStore = useNavTabs();
 const userInfoStore = useUserInfo();
 
 const layoutConfigRef = inject(layoutConfigKey);
-const changePasswordRef = inject(changePasswordKey);
 
 const handleRefreshSystem = () => {
 	ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {
@@ -89,6 +104,25 @@ const handleRefreshSystem = () => {
 	}).then(() => {
 		Local.removeByPrefix("HTTP_CACHE_");
 		refreshApp();
+	});
+};
+
+const handleScreenLock = () => {
+	ElMessageBox.prompt("请输入锁屏密码", {
+		showClose: false,
+		confirmButtonText: "锁定",
+		closeOnPressEscape: true,
+		inputType: "password",
+		inputPlaceholder: "请输入锁屏密码",
+		inputValidator(value) {
+			if (!value || !value.trim()) {
+				return "锁屏密码不能为空";
+			}
+			return true;
+		},
+	}).then(({ value }) => {
+		configStore.screen.password = value;
+		configStore.screen.screenLock = true;
 	});
 };
 

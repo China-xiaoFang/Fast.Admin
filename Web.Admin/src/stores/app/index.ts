@@ -29,6 +29,7 @@ export const useApp = defineStore(
 			edition: EditionEnum.None,
 			appNo: "",
 			appName: "Fast.Admin",
+			logoUrl: "",
 			themeColor: "#409EFF",
 			icpSecurityCode: "",
 			publicSecurityCode: "",

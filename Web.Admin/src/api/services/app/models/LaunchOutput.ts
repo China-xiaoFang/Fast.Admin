@@ -19,6 +19,10 @@ export interface LaunchOutput {
    */
   appName?: string;
   /**
+   * LogoUrl
+   */
+  logoUrl?: string;
+  /**
    * 主题色
    */
   themeColor?: string;

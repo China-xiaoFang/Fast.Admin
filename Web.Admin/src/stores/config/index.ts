@@ -2,6 +2,7 @@ import { reactive } from "vue";
 import { ElMessage } from "element-plus";
 import { colorUtil, withDefineType } from "@fast-china/utils";
 import { defineStore } from "pinia";
+import type { componentSizes } from "element-plus";
 import type { FaTableDataRange } from "fast-element-plus";
 
 export type IModeName = "Classic";
@@ -9,34 +10,35 @@ export type IModeName = "Classic";
 export type IAnimationName =
 	| "slide-right"
 	| "slide-left"
+	| "slide-bottom"
+	| "slide-top"
 	| "el-fade-in-linear"
 	| "el-fade-in"
 	| "el-zoom-in-center"
 	| "el-zoom-in-top"
 	| "el-zoom-in-bottom";
 
+const defaultSize: (typeof componentSizes)[number] = "default";
 const defaultMode: IModeName = "Classic";
 const defaultAnimation: IAnimationName = "slide-right";
 export const defaultThemeColor = "#409EFF";
 
 const defaultLayoutSize = {
-	navBarHeight: "35px",
-	navBarTabHeight: "30px",
-	headerHeight: "calc(65px + var(--el-border-width))",
-	menuWidth: "150px",
-	menuHeight: "55px",
-	mainPadding: "5px",
-	footerHeight: "30px",
+	navBarHeight: 45,
+	navBarTabHeight: 35,
+	menuWidth: 210,
+	menuHeight: 55,
+	mainPadding: 5,
+	footerHeight: 30,
 };
 
 const smallLayoutSize = {
-	navBarHeight: "30px",
-	navBarTabHeight: "25px",
-	headerHeight: "calc(55px + var(--el-border-width))",
-	menuWidth: "130px",
-	menuHeight: "45px",
-	mainPadding: "3px",
-	footerHeight: "25px",
+	navBarHeight: 40,
+	navBarTabHeight: 30,
+	menuWidth: 180,
+	menuHeight: 45,
+	mainPadding: 3,
+	footerHeight: 25,
 };
 
 export const useConfig = defineStore(
@@ -44,28 +46,28 @@ export const useConfig = defineStore(
 	() => {
 		/** 布局配置 */
 		const layout = reactive({
-			/** 头部通知栏高度 */
-			noticeBarHeight: "20px",
+			/** 跟随分辨率自动切换大小 */
+			autoSize: true,
+			/** 布局大小 */
+			layoutSize: withDefineType<(typeof componentSizes)[number]>(defaultSize),
 			/** 头部导航栏高度 */
-			navBarHeight: "35px",
-			/** 头部导航栏高度 */
-			navBarTabHeight: "30px",
-			/** 头部高度（头部导航高度 + 头部导航栏高度 + 边框高度） */
-			headerHeight: "calc(65px + var(--el-border-width))",
+			navBarHeight: 45,
+			/** 头部导航栏标签高度 */
+			navBarTabHeight: 35,
 			/** 菜单宽度 */
-			menuWidth: "150px",
+			menuWidth: 210,
 			/** 菜单高度 */
-			menuHeight: "55px",
+			menuHeight: 55,
 			/** 主页面内容 padding */
-			mainPadding: "5px",
+			mainPadding: 5,
 			/** 页脚高度 */
-			footerHeight: "30px",
+			footerHeight: 30,
 			/** 布局方式 */
-			layoutMode: defaultMode,
+			layoutMode: withDefineType<IModeName>(defaultMode),
 			/** 切换动画 */
-			mainAnimation: defaultAnimation,
+			mainAnimation: withDefineType<IAnimationName>(defaultAnimation),
 			/** 主题颜色 */
-			themeColor: defaultThemeColor,
+			themeColor: withDefineType<string>(defaultThemeColor),
 			/** 跟随系统设置，自动切换浅色/深色模式 */
 			autoThemMode: true,
 			/** 是否深色模式 */
@@ -92,6 +94,14 @@ export const useConfig = defineStore(
 			hideImage: true,
 			/** Table默认时间搜索范围 */
 			dataSearchRange: withDefineType<FaTableDataRange>("Past3D"),
+		});
+
+		/** 屏幕 */
+		const screen = reactive({
+			/** 锁屏密码 */
+			password: "",
+			/** 屏幕锁定 */
+			screenLock: false,
 		});
 
 		/** 设置布局方式 */
@@ -177,6 +187,10 @@ export const useConfig = defineStore(
 
 		/** 重置 */
 		const reset = (): void => {
+			layout.autoSize = true;
+			layout.layoutSize = defaultSize;
+			layout.menuWidth = 210;
+			layout.menuHeight = 55;
 			layout.mainAnimation = defaultAnimation;
 			layout.themeColor = defaultThemeColor;
 			layout.autoThemMode = true;
@@ -208,6 +222,7 @@ export const useConfig = defineStore(
 		return {
 			layout,
 			tableLayout,
+			screen,
 			setLayoutMode,
 			setTheme,
 			switchAutoThemMode,
