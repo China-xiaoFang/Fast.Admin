@@ -1,4 +1,4 @@
-import { DictionaryItemTypeEnum } from "@/api/enums/DictionaryItemTypeEnum";
+import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
 import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 
 /**
@@ -16,7 +16,7 @@ export interface AddDictionaryItemInput {
   /**
    * 
    */
-  type?: DictionaryItemTypeEnum;
+  type?: TagTypeEnum;
   /**
    * 排序
    */

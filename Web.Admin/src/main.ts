@@ -35,7 +35,7 @@ async function start(): Promise<void> {
 	checkVersionUpdate(`v${import.meta.env.VITE_APP_VERSION}`);
 }
 
-start();
+await start();
 
 /** 刷新应用 */
 export const refreshApp = (): void => {

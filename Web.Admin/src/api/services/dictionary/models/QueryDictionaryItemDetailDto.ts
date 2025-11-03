@@ -1,4 +1,4 @@
-import { DictionaryItemTypeEnum } from "@/api/enums/DictionaryItemTypeEnum";
+import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
 import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
@@ -21,7 +21,7 @@ export interface QueryDictionaryItemDetailDto {
   /**
    * 
    */
-  type?: DictionaryItemTypeEnum;
+  type?: TagTypeEnum;
   /**
    * 排序
    */

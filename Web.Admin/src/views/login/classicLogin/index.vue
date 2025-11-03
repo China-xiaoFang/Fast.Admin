@@ -257,7 +257,7 @@
 				</transition>
 			</div>
 		</el-main>
-		<el-footer :style="{ '--el-footer-height': props.footerHeight }">
+		<el-footer :style="{ '--el-footer-height': addUnit(props.footerHeight) }">
 			<Footer />
 		</el-footer>
 	</el-container>
@@ -268,7 +268,7 @@ import { computed, inject, reactive, ref } from "vue";
 import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from "element-plus";
 import { ArrowLeftBold, Close, Lock, User } from "@element-plus/icons-vue";
 import { type FaButtonInstance, formUtil } from "fast-element-plus";
-import { Local, cryptoUtil, definePropType, withDefineType } from "@fast-china/utils";
+import { Local, addUnit, cryptoUtil, definePropType, withDefineType } from "@fast-china/utils";
 import type { IFormData, IFormStep, ITenantData } from "../index.vue";
 import type { LoginOutput } from "@/api/services/login/models/LoginOutput";
 import type { LoginTenantOutput } from "@/api/services/login/models/LoginTenantOutput";
