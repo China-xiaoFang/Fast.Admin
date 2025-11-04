@@ -33,7 +33,13 @@
 		<el-icon class="icon-arrow right fa__hover__twinkle" title="刷新" @click="navTabsStore.refreshTab(navTabsStore.activeTab)">
 			<Refresh />
 		</el-icon>
-		<el-dropdown size="small" trigger="click" @command="handleCommand">
+		<el-dropdown
+			size="small"
+			trigger="click"
+			title="操作"
+			@command="handleCommand"
+			@visible-change="(val: boolean) => val && handleContextMenuList(navTabsStore.activeTab, navTabsStore.activeIndex)"
+		>
 			<el-icon class="icon-arrow right fa__hover__twinkle">
 				<ArrowDown />
 			</el-icon>
@@ -309,7 +315,7 @@ const handleTabClick = (event: MouseEvent, tag: INavTab): void => {
 	routerUtil.routePushSafe(router, { path: tag.path, query: tag.query });
 };
 
-const handleContextmenuClick = (event: MouseEvent, tag: INavTab, index: number): void => {
+const handleContextMenuList = (tag: INavTab, index: number) => {
 	// 禁用重新加载
 	contextMenuList[0].disabled = tag.path !== route.path;
 	// 禁用关闭
@@ -324,6 +330,10 @@ const handleContextmenuClick = (event: MouseEvent, tag: INavTab, index: number):
 	contextMenuList.forEach((item) => {
 		item.data = tag;
 	});
+};
+
+const handleContextmenuClick = (event: MouseEvent, tag: INavTab, index: number): void => {
+	handleContextMenuList(tag, index);
 
 	const { clientX, clientY } = event;
 	state.dropdownPosition = DOMRect.fromRect({

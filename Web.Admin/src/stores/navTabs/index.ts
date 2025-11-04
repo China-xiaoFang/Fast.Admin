@@ -11,7 +11,7 @@ export const useNavTabs = defineStore(
 	() => {
 		const state = reactive({
 			/** 激活模块Id */
-			activeModuleId: withDefineType<number>(),
+			activeModuleId: withDefineType<string | number>(),
 			/** 激活tab的index */
 			activeIndex: -1,
 			/** 最后一个激活tab的index */
