@@ -29,7 +29,13 @@
 				<div class="box-item">
 					<span>切换动画</span>
 					<el-select v-model="configStore.layout.mainAnimation" style="width: 120px">
-						<el-option v-for="(item, index) in animationList" :key="index" :label="item.title" :value="item.name" />
+						<el-option v-for="(item, index) in animationList" :key="index" :label="item.label" :value="item.value" />
+					</el-select>
+				</div>
+				<div class="box-item">
+					<span>页签风格</span>
+					<el-select v-model="configStore.layout.navTabMode" style="width: 80px">
+						<el-option v-for="(item, index) in natTabModeList" :key="index" :label="item.label" :value="item.value" />
 					</el-select>
 				</div>
 			</div>
@@ -89,6 +95,10 @@
 					<el-select v-model="configStore.layout.layoutSize" style="width: 80px" :disabled="configStore.layout.autoSize">
 						<el-option v-for="(item, index) in layoutSizeList" :key="index" :label="item.label" :value="item.value" />
 					</el-select>
+				</div>
+				<div class="box-item">
+					<span>页签</span>
+					<el-switch v-model="configStore.layout.navTab" :activeActionIcon="View" :inactiveActionIcon="Hide" />
 				</div>
 				<div class="box-item">
 					<span>页脚</span>
@@ -197,7 +207,7 @@
 import { ref } from "vue";
 import { Grid, Hide, MagicStick, Moon, Notification, QuestionFilled, Refresh, Sunny, View } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
-import type { IAnimationName } from "@/stores";
+import type { IAnimationName, INavTabModeName } from "@/stores";
 import type { componentSizes } from "element-plus";
 import type { ElSelectorOutput, FaDrawerInstance, FaTableDataRange } from "fast-element-plus";
 import { defaultThemeColor, useConfig } from "@/stores";
@@ -210,42 +220,57 @@ const faDrawerRef = ref<FaDrawerInstance>();
 
 const configStore = useConfig();
 
-const animationList: Readonly<{ title: string; name: IAnimationName }[]> = [
+const animationList: Readonly<ElSelectorOutput<IAnimationName>> = [
 	{
-		title: "左到右滑动",
-		name: "slide-right",
+		label: "左到右滑动",
+		value: "slide-right",
 	},
 	{
-		title: "右到左滑动",
-		name: "slide-left",
+		label: "右到左滑动",
+		value: "slide-left",
 	},
 	{
-		title: "上到下滑动",
-		name: "slide-bottom",
+		label: "上到下滑动",
+		value: "slide-bottom",
 	},
 	{
-		title: "下到上滑动",
-		name: "slide-top",
+		label: "下到上滑动",
+		value: "slide-top",
 	},
 	{
-		title: "线性淡入",
-		name: "el-fade-in-linear",
+		label: "线性淡入",
+		value: "el-fade-in-linear",
 	},
 	{
-		title: "淡入显示",
-		name: "el-fade-in",
+		label: "淡入显示",
+		value: "el-fade-in",
 	},
 	{
-		title: "中心放大",
-		name: "el-zoom-in-center",
+		label: "中心放大",
+		value: "el-zoom-in-center",
 	},
 	{
-		title: "顶部放大",
-		name: "el-zoom-in-top",
+		label: "顶部放大",
+		value: "el-zoom-in-top",
 	},
 	{
-		title: "底部放大",
-		name: "el-zoom-in-bottom",
+		label: "底部放大",
+		value: "el-zoom-in-bottom",
+	},
+];
+
+const natTabModeList: Readonly<ElSelectorOutput<INavTabModeName>> = [
+	{
+		label: "经典",
+		value: "Classic",
+	},
+	{
+		label: "灵动",
+		value: "Smart",
+	},
+	{
+		label: "谷歌",
+		value: "Google",
 	},
 ];
 

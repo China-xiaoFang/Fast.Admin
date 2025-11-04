@@ -153,6 +153,7 @@ tryOnUnmounted(() => {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	-webkit-user-select: none;
 	user-select: none;
 	.top {
 		font-size: 24px;
