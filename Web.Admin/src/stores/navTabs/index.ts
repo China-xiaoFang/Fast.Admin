@@ -4,7 +4,7 @@ import { defineStore } from "pinia";
 import type { RouteLocationNormalized, Router } from "vue-router";
 import router, { routerUtil } from "@/router";
 
-export type INavBarTab = Partial<Pick<RouteLocationNormalized, "name" | "path" | "query" | "fullPath" | "meta" | "params">>;
+export type INavTab = Partial<Pick<RouteLocationNormalized, "name" | "path" | "query" | "fullPath" | "meta" | "params">>;
 
 export const useNavTabs = defineStore(
 	"navTabs",
@@ -15,9 +15,9 @@ export const useNavTabs = defineStore(
 			/** 最后一个激活tab的index */
 			lastActiveIndex: -1,
 			/** 激活的tab */
-			activeTab: withDefineType<INavBarTab>(null),
+			activeTab: withDefineType<INavTab>(null),
 			/** 导航栏tab列表 */
-			navBarTabs: withDefineType<INavBarTab[]>([]),
+			navTabs: withDefineType<INavTab[]>([]),
 			/** keep-alive缓存组件名称集合 */
 			keepAliveComponentNameList: withDefineType<string[]>([]),
 			/** 内容区放大 */
@@ -33,7 +33,7 @@ export const useNavTabs = defineStore(
 			state.activeIndex = -1;
 			state.lastActiveIndex = -1;
 			state.activeTab = null;
-			state.navBarTabs = [];
+			state.navTabs = [];
 			state.keepAliveComponentNameList = [];
 			state.contentLarge = false;
 			state.contentFull = false;
@@ -42,7 +42,7 @@ export const useNavTabs = defineStore(
 		/**
 		 * 刷新 Tab
 		 */
-		const refreshTab = (route: INavBarTab): void => {
+		const refreshTab = (route: INavTab): void => {
 			const fIdx = state.keepAliveComponentNameList.findIndex((f) => f === route.name.toString());
 			if (fIdx >= 0) {
 				state.keepAliveComponentNameList.splice(fIdx, 1);
@@ -53,11 +53,11 @@ export const useNavTabs = defineStore(
 		/**
 		 * 添加 Tab
 		 */
-		const addTab = (route: INavBarTab): void => {
-			const fRouteIdx = state.navBarTabs.findIndex((f) => f.path == route.path);
+		const addTab = (route: INavTab): void => {
+			const fRouteIdx = state.navTabs.findIndex((f) => f.path == route.path);
 			//  判断警告页面数量
 			if (fRouteIdx === -1) {
-				state.navBarTabs.push(routerUtil.pickByRoute(route));
+				state.navTabs.push(routerUtil.pickByRoute(route));
 				if (route.meta.keepAlive != false) {
 					if (!state.keepAliveComponentNameList.includes(route.name.toString())) {
 						state.keepAliveComponentNameList.push(route.name.toString());
@@ -70,7 +70,7 @@ export const useNavTabs = defineStore(
 				}
 			} else {
 				// 存在更新
-				state.navBarTabs[fRouteIdx] = routerUtil.pickByRoute(route);
+				state.navTabs[fRouteIdx] = routerUtil.pickByRoute(route);
 				if (route.meta.keepAlive !== false) {
 					if (!state.keepAliveComponentNameList.includes(route.name.toString())) {
 						state.keepAliveComponentNameList.push(route.name.toString());
@@ -88,7 +88,7 @@ export const useNavTabs = defineStore(
 		 * 前往最后一个 Tab
 		 */
 		const toLastTab = (): void => {
-			const lastTab = state.navBarTabs.slice(-1)[0];
+			const lastTab = state.navTabs.slice(-1)[0];
 			if (lastTab) {
 				router.push(lastTab?.fullPath ?? lastTab?.path);
 			} else {
@@ -99,18 +99,18 @@ export const useNavTabs = defineStore(
 		/**
 		 * 关闭 Tab
 		 */
-		const closeTab = (route: INavBarTab): void => {
+		const closeTab = (route: INavTab): void => {
 			if (route?.meta?.affix === true) return;
-			const findIndex = state.navBarTabs.findIndex((f) => f.path === route.path);
+			const findIndex = state.navTabs.findIndex((f) => f.path === route.path);
 			if (findIndex >= 0) {
-				state.navBarTabs.splice(findIndex, 1);
+				state.navTabs.splice(findIndex, 1);
 			}
 			const fIdx = state.keepAliveComponentNameList.findIndex((f) => f === route.name.toString());
 			if (fIdx >= 0) {
 				state.keepAliveComponentNameList.splice(fIdx, 1);
 			}
-			if (state.lastActiveIndex !== -1 && state.lastActiveIndex !== state.activeIndex && state.lastActiveIndex < state.navBarTabs.length) {
-				const lastTab = state.navBarTabs[state.lastActiveIndex];
+			if (state.lastActiveIndex !== -1 && state.lastActiveIndex !== state.activeIndex && state.lastActiveIndex < state.navTabs.length) {
+				const lastTab = state.navTabs[state.lastActiveIndex];
 				router.push(lastTab?.fullPath ?? lastTab?.path);
 			} else {
 				toLastTab();
@@ -120,17 +120,30 @@ export const useNavTabs = defineStore(
 		/**
 		 * 关闭多个 Tab
 		 * @param retainRoute 保留的路由，否则关闭全部标签
+		 * @param direction 方向，可选：'left' | 'right' | false
 		 */
-		const closeTabs = (retainRoute: INavBarTab | false = false): void => {
-			const affixNavBarTabs = state.navBarTabs.filter((f) => f?.meta?.affix === true);
-			state.keepAliveComponentNameList = affixNavBarTabs.filter((f) => f?.meta?.keepAlive !== false).map((m) => m.name.toString());
+		const closeTabs = (retainRoute: INavTab | false = false, direction: "left" | "right" | false = false): void => {
+			const affixNavTabs = state.navTabs.filter((f) => f?.meta?.affix === true);
 			if (retainRoute) {
-				state.navBarTabs = [...affixNavBarTabs, retainRoute];
-				if (retainRoute.meta.keepAlive != false) {
-					state.keepAliveComponentNameList.push(retainRoute.name.toString());
+				const retainRouteIndex = state.navTabs.findIndex((f) => f.path === retainRoute.path);
+				let newTabs: INavTab[] = [];
+				if (retainRouteIndex === -1) {
+					state.navTabs = [...affixNavTabs];
+					state.keepAliveComponentNameList = affixNavTabs.filter((f) => f?.meta?.keepAlive !== false).map((m) => m.name.toString());
+				} else if (direction === "left") {
+					newTabs = [...affixNavTabs, ...state.navTabs.slice(retainRouteIndex)];
+				} else if (direction === "right") {
+					newTabs = [...affixNavTabs, ...state.navTabs.slice(0, retainRouteIndex + 1)];
+				} else {
+					newTabs = [...affixNavTabs, retainRoute];
 				}
+
+				const _newTabs = newTabs.filter((item, idx, arr) => arr.findIndex((f) => f.path === item.path) === idx);
+				state.navTabs = _newTabs;
+				state.keepAliveComponentNameList = _newTabs.filter((f) => f?.meta?.keepAlive !== false).map((m) => m.name.toString());
 			} else {
-				state.navBarTabs = [...affixNavBarTabs];
+				state.navTabs = [...affixNavTabs];
+				state.keepAliveComponentNameList = affixNavTabs.filter((f) => f?.meta?.keepAlive !== false).map((m) => m.name.toString());
 			}
 			toLastTab();
 		};
@@ -138,8 +151,8 @@ export const useNavTabs = defineStore(
 		/**
 		 * 设置活动路由
 		 */
-		const setActiveRoute = (route: INavBarTab): void => {
-			const fIdx = state.navBarTabs.findIndex((f) => f.path == route.path);
+		const setActiveRoute = (route: INavTab): void => {
+			const fIdx = state.navTabs.findIndex((f) => f.path == route.path);
 			if (fIdx === -1) return;
 			state.activeTab = routerUtil.pickByRoute(route);
 			state.lastActiveIndex = state.activeIndex;
@@ -163,7 +176,7 @@ export const useNavTabs = defineStore(
 		/**
 		 * 初始化
 		 */
-		const initNavBarTabs = (router: Router): void => {
+		const initNavTabs = (router: Router): void => {
 			// 直接默认查找 layout 下的路由，其余的直接忽略
 			const allRoutes = router
 				.getRoutes()
@@ -173,24 +186,35 @@ export const useNavTabs = defineStore(
 			// 扁平化获取固定的标签
 			const flRoutes = routerUtil.flattenRoutes(allRoutes);
 
-			const affixNavBarTabs = flRoutes.filter((f) => f.meta?.affix);
-			affixNavBarTabs.forEach((item) => {
+			const affixNavTabs = flRoutes.filter((f) => f.meta?.affix);
+			affixNavTabs.forEach((item) => {
 				if (!state.keepAliveComponentNameList.includes(item.name.toString())) {
 					state.keepAliveComponentNameList.push(item.name.toString());
 				}
 			});
 
-			const oldNavBarTabs = state.navBarTabs.filter((f) => !f.meta?.affix);
-			oldNavBarTabs.forEach((item) => {
+			const oldNavTabs = state.navTabs.filter((f) => !f.meta?.affix);
+			oldNavTabs.forEach((item) => {
 				if (!state.keepAliveComponentNameList.includes(item.name.toString())) {
 					state.keepAliveComponentNameList.push(item.name.toString());
 				}
 			});
 
-			state.navBarTabs = [...affixNavBarTabs, ...oldNavBarTabs];
+			state.navTabs = [...affixNavTabs, ...oldNavTabs];
 		};
 
-		return { state, $reset, refreshTab, addTab, closeTab, closeTabs, setActiveRoute, setContentLarge, setContentFull, initNavBarTabs };
+		return {
+			state,
+			$reset,
+			refreshTab,
+			addTab,
+			closeTab,
+			closeTabs,
+			setActiveRoute,
+			setContentLarge,
+			setContentFull,
+			initNavTabs,
+		};
 	},
 	{
 		persist: {

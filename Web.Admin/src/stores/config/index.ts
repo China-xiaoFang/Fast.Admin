@@ -6,6 +6,7 @@ import type { componentSizes } from "element-plus";
 import type { FaTableDataRange } from "fast-element-plus";
 
 export type IModeName = "Classic";
+export type INavTabModeName = "Classic" | "Smart" | "Google";
 
 export type IAnimationName =
 	| "slide-right"
@@ -20,12 +21,13 @@ export type IAnimationName =
 
 const defaultSize: (typeof componentSizes)[number] = "default";
 const defaultMode: IModeName = "Classic";
+const defaultNavTabMode: INavTabModeName = "Classic";
 const defaultAnimation: IAnimationName = "slide-right";
 export const defaultThemeColor = "#409EFF";
 
 const defaultLayoutSize = {
 	navBarHeight: 45,
-	navBarTabHeight: 35,
+	navTabHeight: 35,
 	menuWidth: 210,
 	menuHeight: 55,
 	mainPadding: 5,
@@ -34,7 +36,7 @@ const defaultLayoutSize = {
 
 const smallLayoutSize = {
 	navBarHeight: 40,
-	navBarTabHeight: 30,
+	navTabHeight: 30,
 	menuWidth: 180,
 	menuHeight: 45,
 	mainPadding: 3,
@@ -50,10 +52,10 @@ export const useConfig = defineStore(
 			autoSize: true,
 			/** 布局大小 */
 			layoutSize: withDefineType<(typeof componentSizes)[number]>(defaultSize),
-			/** 头部导航栏高度 */
+			/** 导航栏高度 */
 			navBarHeight: 45,
-			/** 头部导航栏标签高度 */
-			navBarTabHeight: 35,
+			/** 页签高度 */
+			navTabHeight: 35,
 			/** 菜单宽度 */
 			menuWidth: 210,
 			/** 菜单高度 */
@@ -64,6 +66,8 @@ export const useConfig = defineStore(
 			footerHeight: 30,
 			/** 布局方式 */
 			layoutMode: withDefineType<IModeName>(defaultMode),
+			/** 页签风格 */
+			navTabMode: withDefineType<INavTabModeName>(defaultNavTabMode),
 			/** 切换动画 */
 			mainAnimation: withDefineType<IAnimationName>(defaultAnimation),
 			/** 主题颜色 */
@@ -76,6 +80,8 @@ export const useConfig = defineStore(
 			isGrey: false,
 			/** 是否色弱模式 */
 			isWeak: false,
+			/** 是否显示页签 */
+			navTab: true,
 			/** 是否显示页脚 */
 			footer: true,
 			/** 是否显示水印 */
@@ -185,26 +191,6 @@ export const useConfig = defineStore(
 			if (layout.isWeak) switchGreyOrWeak("weak", true);
 		};
 
-		/** 重置 */
-		const reset = (): void => {
-			layout.autoSize = true;
-			layout.layoutSize = defaultSize;
-			layout.menuWidth = 210;
-			layout.menuHeight = 55;
-			layout.mainAnimation = defaultAnimation;
-			layout.themeColor = defaultThemeColor;
-			layout.autoThemMode = true;
-			layout.isDark = false;
-			layout.isGrey = false;
-			layout.isWeak = false;
-			initTheme();
-			tableLayout.showSearch = true;
-			tableLayout.advancedSearchDrawer = false;
-			tableLayout.defaultCollapsedSearch = true;
-			tableLayout.hideImage = true;
-			tableLayout.dataSearchRange = "Past3D";
-		};
-
 		/** 设置默认布局大小 */
 		const setDefaultLayoutSize = (): void => {
 			Object.keys(defaultLayoutSize).forEach((key) => {
@@ -219,6 +205,30 @@ export const useConfig = defineStore(
 			});
 		};
 
+		/** 重置 */
+		const reset = (): void => {
+			layout.autoSize = true;
+			layout.layoutSize = defaultSize;
+			layout.layoutMode = defaultMode;
+			layout.navTabMode = defaultNavTabMode;
+			layout.mainAnimation = defaultAnimation;
+			layout.themeColor = defaultThemeColor;
+			layout.autoThemMode = true;
+			layout.isDark = false;
+			layout.isGrey = false;
+			layout.isWeak = false;
+			layout.navTab = true;
+			layout.footer = true;
+			layout.watermark = true;
+			setDefaultLayoutSize();
+			initTheme();
+			tableLayout.showSearch = true;
+			tableLayout.advancedSearchDrawer = false;
+			tableLayout.defaultCollapsedSearch = true;
+			tableLayout.hideImage = true;
+			tableLayout.dataSearchRange = "Past3D";
+		};
+
 		return {
 			layout,
 			tableLayout,
@@ -229,9 +239,9 @@ export const useConfig = defineStore(
 			switchDark,
 			switchGreyOrWeak,
 			initTheme,
-			reset,
 			setDefaultLayoutSize,
 			setSmallLayoutSize,
+			reset,
 		};
 	},
 	{
