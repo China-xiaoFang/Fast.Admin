@@ -123,7 +123,7 @@
 				</div>
 				<div class="box-item">
 					<span>菜单高度</span>
-					<el-input-number v-model="configStore.layout.menuHeight" :max="60" :min="40" style="width: 80px">
+					<el-input-number v-model="configStore.layout.menuHeight" :max="55" :min="40" style="width: 80px">
 						<template #suffix>
 							<span>px</span>
 						</template>

@@ -3,6 +3,11 @@ html.small {
 		.el-container {
 			.el-header {
 				.nav-bar {
+					.left {
+						.menu-collapse {
+							width: 30px;
+						}
+					}
 					.right {
 						.screen-full {
 							width: 30px;
@@ -28,10 +33,13 @@ html.small {
 
 .layout {
 	.el-aside {
+		display: flex;
+		flex-direction: column;
 		overflow: hidden;
 		transition: width var(--el-transition-duration);
 		background-color: var(--el-bg-color);
 		border-right: var(--el-border);
+		overflow: hidden;
 	}
 	.el-container {
 		.el-header {
@@ -39,7 +47,6 @@ html.small {
 			--el-header-height: auto;
 			transition: height var(--el-transition-duration);
 			background-color: var(--el-bg-color);
-			border-bottom: var(--el-border);
 			.nav-bar {
 				transition: height var(--el-transition-duration);
 				height: var(--height);
@@ -48,6 +55,23 @@ html.small {
 				align-items: center;
 				justify-content: space-between;
 				border-bottom: var(--el-border);
+				box-sizing: border-box;
+				overflow: hidden;
+				.left {
+					height: 100%;
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					.menu-collapse {
+						height: 100%;
+						width: 35px;
+						font-size: var(--el-font-size-large);
+						cursor: pointer;
+						&:hover {
+							background-color: var(--el-text-color-disabled);
+						}
+					}
+				}
 				.right {
 					height: 100%;
 					display: flex;
@@ -117,18 +141,15 @@ html.small {
 	.el-aside {
 		--el-aside-width: 0 !important;
 		border-right-width: 0;
-		overflow: hidden;
 	}
 	.el-container {
 		.el-header {
 			.nav-bar {
 				--height: 0 !important;
-				overflow: hidden;
 			}
 		}
 		.el-footer {
 			--el-footer-height: 0 !important;
-			overflow: hidden;
 		}
 	}
 }
@@ -138,7 +159,6 @@ html.small {
 		.el-header {
 			.nav-tab {
 				--height: 0 !important;
-				overflow: hidden;
 			}
 		}
 	}

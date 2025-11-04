@@ -2,12 +2,12 @@
 	<el-container
 		:class="[
 			{
-				contentFull: navTabsStore.state.contentFull,
-				contentLarge: navTabsStore.state.contentLarge,
+				contentFull: navTabsStore.contentFull,
+				contentLarge: navTabsStore.contentLarge,
 			},
 		]"
 	>
-		<el-aside :style="{ '--el-aside-width': addUnit(configStore.layout.menuWidth) }">
+		<el-aside :style="{ '--el-aside-width': addUnit(configStore.layout.menuCollapse ? 'auto' : configStore.layout.menuWidth) }">
 			<LayoutLogo />
 			<LayoutMenu />
 		</el-aside>
@@ -15,6 +15,14 @@
 			<el-header>
 				<div class="nav-bar" :style="{ '--height': addUnit(configStore.layout.navBarHeight) }">
 					<div class="left">
+						<el-icon
+							class="menu-collapse fa__hover__twinkle"
+							:title="configStore.layout.menuCollapse ? '展开' : '折叠'"
+							@click="configStore.layout.menuCollapse = !configStore.layout.menuCollapse"
+						>
+							<Expand v-if="configStore.layout.menuCollapse" />
+							<Fold v-else />
+						</el-icon>
 						<LayoutBreadcrumb />
 					</div>
 					<div class="right">
@@ -51,7 +59,7 @@
 				<el-scrollbar>
 					<router-view v-slot="{ Component, route }">
 						<transition mode="out-in" :name="configStore.layout.mainAnimation">
-							<keep-alive :include="navTabsStore.state.keepAliveComponentNameList">
+							<keep-alive :include="navTabsStore.keepAliveComponentNameList">
 								<component :is="Component" :key="route.name" class="layout-main" />
 							</keep-alive>
 						</transition>
@@ -73,7 +81,7 @@
 <script setup lang="ts">
 import { inject } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
+import { Expand, Fold, Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
 import { Local, addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
 import LayoutMenu from "./components/Menu/index.vue";

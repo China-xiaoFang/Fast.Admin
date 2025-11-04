@@ -1,7 +1,7 @@
 <template>
 	<div class="logo" :style="{ '--height': addUnit(configStore.layout.navBarHeight) }" title="首页" @click="router.push('/')">
 		<img :src="logo" alt="Logo" @error="setFallBack" />
-		<span :title="appStore.appName">
+		<span v-if="!configStore.layout.menuCollapse" :title="appStore.appName">
 			{{ appStore.appName }}
 		</span>
 	</div>
@@ -34,7 +34,7 @@ const setFallBack = (event: Event) => {
 html.small {
 	.logo {
 		span {
-			font-size: calc(var(--el-font-size-extra-small) - 1px);
+			font-size: var(--el-font-size-medium);
 		}
 	}
 }
@@ -43,9 +43,11 @@ html.small {
 	height: var(--height);
 	display: flex;
 	align-items: center;
-	// justify-content: center;
+	justify-content: center;
 	gap: 10px;
 	padding: 0 10px;
+	// border-bottom: var(--el-border);
+	box-sizing: border-box;
 	cursor: pointer;
 	img {
 		height: 80%;

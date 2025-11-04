@@ -39,6 +39,9 @@ html.small {
 	-webkit-user-select: none;
 	user-select: none;
 	transition: height var(--el-transition-duration);
+	border-bottom: var(--el-border);
+	box-sizing: border-box;
+	overflow: hidden;
 	.icon-arrow {
 		height: 100%;
 		width: 35px;
