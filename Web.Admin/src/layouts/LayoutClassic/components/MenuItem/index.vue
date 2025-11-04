@@ -1,15 +1,13 @@
 <template>
 	<el-sub-menu v-if="props.menu.children?.length > 0" :index="props.menu.children[0].router" :title="props.menu.menuTitle || props.menu.menuName">
 		<template #title>
-			<!-- <FaIcon :name="props.menu.icon || 'el-icon-Menu'" :title="props.menu.menuTitle || props.menu.menuName" /> -->
-			<FaIcon :name="'el-icon-Menu'" :title="props.menu.menuTitle || props.menu.menuName" />
+			<FaIcon :name="props.menu.icon || 'el-icon-Menu'" />
 			<span>{{ props.menu.menuName }}</span>
 		</template>
 		<MenuItem v-for="(item, idx) in props.menu.children" :key="idx" :menu="item" />
 	</el-sub-menu>
 	<el-menu-item v-else :index="props.menu.router">
-		<!-- <FaIcon :name="props.menu.icon || 'el-icon-Menu'" :title="props.menu.menuTitle || props.menu.menuName" /> -->
-		<FaIcon :name="'el-icon-Menu'" :title="props.menu.menuTitle || props.menu.menuName" />
+		<FaIcon :name="props.menu.icon || 'el-icon-Menu'" />
 		<template #title>
 			<span>{{ props.menu.menuName }}</span>
 		</template>
