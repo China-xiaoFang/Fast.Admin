@@ -9,6 +9,9 @@ html.small {
 						}
 					}
 					.right {
+						.el-menu--horizontal {
+							--el-menu-item-font-size: var(--el-font-size-small);
+						}
 						.screen-full {
 							width: 30px;
 						}
@@ -77,6 +80,11 @@ html.small {
 					display: flex;
 					flex-direction: row;
 					align-items: center;
+					gap: 5px;
+					.el-menu--horizontal {
+						--el-menu-horizontal-height: 100%;
+						border: none;
+					}
 					.screen-full {
 						width: 35px;
 						&:hover {

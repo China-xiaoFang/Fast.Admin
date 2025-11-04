@@ -26,6 +26,19 @@
 						<LayoutBreadcrumb />
 					</div>
 					<div class="right">
+						<el-menu
+							:defaultActive="navTabsStore.activeModuleId.toString()"
+							mode="horizontal"
+							:ellipsis="false"
+							@select="handleModuleSelect"
+						>
+							<el-menu-item v-for="(item, idx) in userInfoStore.menuList" :key="idx" :index="item.id.toString()">
+								<FaIcon :name="item.icon || 'el-icon-Menu'" />
+								<template #title>
+									{{ item.moduleName }}
+								</template>
+							</el-menu-item>
+						</el-menu>
 						<LayoutScreenFull />
 						<el-dropdown
 							class="avatar"
@@ -113,6 +126,13 @@ const handleRefreshSystem = () => {
 		Local.removeByPrefix("HTTP_CACHE_");
 		refreshApp();
 	});
+};
+
+const handleModuleSelect = (moduleId: string) => {
+	const fInfo = userInfoStore.menuList.find((f) => f.id.toString() === moduleId);
+	if (fInfo) {
+		navTabsStore.activeModuleId = moduleId;
+	}
 };
 
 const handleScreenLock = () => {
