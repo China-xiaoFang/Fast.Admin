@@ -1,9 +1,12 @@
 <template>
 	<el-breadcrumb separator="/">
-		<el-breadcrumb-item to="/">首页</el-breadcrumb-item>
-		<el-breadcrumb-item v-for="(item, index) in breadcrumbs" :key="index">
-			{{ item }}
-		</el-breadcrumb-item>
+		<transition-group appear name="slide-left" leaveActiveClass="">
+			<el-breadcrumb-item key="/" to="/">首页</el-breadcrumb-item>
+			<el-breadcrumb-item v-for="item in breadcrumbs" :key="item.path" :to="item.redirect ? item.redirect.toString() : undefined">
+				<FaIcon v-if="item.meta?.icon" :name="item.meta.icon" />
+				{{ item.meta.title }}
+			</el-breadcrumb-item>
+		</transition-group>
 	</el-breadcrumb>
 </template>
 
@@ -17,7 +20,7 @@ defineOptions({
 
 const route = useRoute();
 
-const breadcrumbs = computed(() => route.matched.filter((f) => !f.meta?.hide && f.meta?.title).map((m) => m.meta?.title));
+const breadcrumbs = computed(() => route.matched.filter((f) => !f.meta?.hide && f.meta?.title));
 </script>
 
 <style scoped lang="scss">
@@ -27,6 +30,8 @@ const breadcrumbs = computed(() => route.matched.filter((f) => !f.meta?.hide && 
 	.el-breadcrumb__item {
 		:deep() {
 			.el-breadcrumb__inner {
+				display: inline-flex;
+				gap: 5px;
 				transition: var(--el-transition-color);
 			}
 		}
