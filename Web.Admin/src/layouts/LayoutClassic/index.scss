@@ -70,6 +70,7 @@ html.small {
 					}
 					.avatar {
 						height: 100%;
+						-webkit-user-select: none;
 						user-select: none;
 						padding: 0 5px;
 						cursor: pointer;
@@ -135,8 +136,9 @@ html.small {
 .layout.contentFull {
 	.el-container {
 		.el-header {
-			.nav-bar-tab {
+			.nav-tab {
 				--height: 0 !important;
+				overflow: hidden;
 			}
 		}
 	}

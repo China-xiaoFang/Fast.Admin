@@ -45,7 +45,7 @@
 						<el-icon class="setting fa__hover__twinkle" title="高级配置" @click="layoutConfigRef.open()"><Setting /></el-icon>
 					</div>
 				</div>
-				<LayoutNavBarTab />
+				<LayoutNavTab />
 			</el-header>
 			<el-main :style="{ '--el-main-padding': addUnit(configStore.layout.mainPadding) }">
 				<el-scrollbar>
@@ -77,10 +77,10 @@ import { Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element
 import { Local, addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
 import LayoutMenu from "./components/Menu/index.vue";
-import LayoutNavBarTab from "./components/NavBarTab/index.vue";
 import { layoutConfigKey } from "@/layouts";
 import LayoutBreadcrumb from "@/layouts/components/Breadcrumb/index.vue";
 import LayoutLogo from "@/layouts/components/Logo/index.vue";
+import LayoutNavTab from "@/layouts/components/NavTab/index.vue";
 import LayoutScreenFull from "@/layouts/components/ScreenFull/index.vue";
 import LayoutScreenLock from "@/layouts/components/ScreenLock/index.vue";
 import { refreshApp } from "@/main";

@@ -272,6 +272,7 @@ body,
 }
 
 .el-menu {
+	-webkit-user-select: none;
 	user-select: none;
 	.el-sub-menu__title:hover {
 		background-color: var(--el-color-primary-light-9) !important;

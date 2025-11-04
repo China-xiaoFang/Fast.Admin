@@ -287,7 +287,7 @@ const props = defineProps({
 	/** 背景 */
 	background: String,
 	/** 页脚高度 */
-	footerHeight: String,
+	footerHeight: Number,
 	/** 表单规则 */
 	formRules: definePropType<FormRules>(Object),
 });
