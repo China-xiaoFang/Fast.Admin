@@ -6,7 +6,7 @@
 		<el-scrollbar ref="scrollbarRef" @wheel.passive="handleWheelScroll" @scroll="handleScroll">
 			<transition-group name="el-fade-in" tag="div" class="nav-tab__warp">
 				<div
-					v-for="(tag, idx) in navTabsStore.state.navTabs"
+					v-for="(tag, idx) in navTabsStore.navTabs"
 					:key="tag.path"
 					ref="tagRefs"
 					:class="['nav-tab__item', { 'is-active': route.path === tag.path }]"
@@ -30,7 +30,7 @@
 		<el-icon v-show="state.isShowArrow" class="icon-arrow right fa__hover__twinkle" title="向右滚动" @click="handleScrollTo('right')">
 			<ArrowRight />
 		</el-icon>
-		<el-icon class="icon-arrow right fa__hover__twinkle" title="刷新" @click="navTabsStore.refreshTab(navTabsStore.state.activeTab)">
+		<el-icon class="icon-arrow right fa__hover__twinkle" title="刷新" @click="navTabsStore.refreshTab(navTabsStore.activeTab)">
 			<Refresh />
 		</el-icon>
 		<el-dropdown size="small" trigger="click" @command="handleCommand">
@@ -52,12 +52,12 @@
 					<el-dropdown-item
 						command=""
 						divided
-						:icon="navTabsStore.state.contentLarge ? FullScreenExit : FullScreen"
-						@click="navTabsStore.setContentLarge(!navTabsStore.state.contentLarge)"
+						:icon="navTabsStore.contentLarge ? FullScreenExit : FullScreen"
+						@click="navTabsStore.setContentLarge(!navTabsStore.contentLarge)"
 					>
-						{{ navTabsStore.state.contentLarge ? "内容区复原" : "内容区放大" }}
+						{{ navTabsStore.contentLarge ? "内容区复原" : "内容区放大" }}
 					</el-dropdown-item>
-					<el-dropdown-item command="" :icon="Monitor" @click="navTabsStore.setContentFull(!navTabsStore.state.contentFull)">
+					<el-dropdown-item command="" :icon="Monitor" @click="navTabsStore.setContentFull(!navTabsStore.contentFull)">
 						内容区全屏
 					</el-dropdown-item>
 				</el-dropdown-menu>
@@ -92,10 +92,10 @@
 			</template>
 		</el-dropdown>
 		<div
-			v-if="navTabsStore.state.contentFull"
+			v-if="navTabsStore.contentFull"
 			class="screen-full__close fa__hover__twinkle"
 			title="关闭内容区全屏"
-			@click="navTabsStore.setContentFull(!navTabsStore.state.contentFull)"
+			@click="navTabsStore.setContentFull(!navTabsStore.contentFull)"
 		>
 			<el-icon>
 				<Exit />
@@ -317,9 +317,9 @@ const handleContextmenuClick = (event: MouseEvent, tag: INavTab, index: number):
 	// 禁用关闭左侧
 	contextMenuList[2].disabled = index <= 0;
 	// 禁用关闭右侧
-	contextMenuList[3].disabled = index >= navTabsStore.state.navTabs.length - 1;
+	contextMenuList[3].disabled = index >= navTabsStore.navTabs.length - 1;
 	// 禁用关闭其他和关闭全部
-	contextMenuList[4].disabled = contextMenuList[5].disabled = navTabsStore.state.navTabs.length === 1 ? true : false;
+	contextMenuList[4].disabled = contextMenuList[5].disabled = navTabsStore.navTabs.length === 1 ? true : false;
 
 	contextMenuList.forEach((item) => {
 		item.data = tag;

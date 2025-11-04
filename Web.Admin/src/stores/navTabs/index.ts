@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, toRefs } from "vue";
 import { withDefineType } from "@fast-china/utils";
 import { defineStore } from "pinia";
 import type { RouteLocationNormalized, Router } from "vue-router";
@@ -10,6 +10,8 @@ export const useNavTabs = defineStore(
 	"navTabs",
 	() => {
 		const state = reactive({
+			/** 激活模块Id */
+			activeModuleId: withDefineType<number>(),
 			/** 激活tab的index */
 			activeIndex: -1,
 			/** 最后一个激活tab的index */
@@ -201,10 +203,12 @@ export const useNavTabs = defineStore(
 			});
 
 			state.navTabs = [...affixNavTabs, ...oldNavTabs];
+
+			state.activeModuleId = router.currentRoute.value.meta?.moduleId;
 		};
 
 		return {
-			state,
+			...toRefs(state),
 			$reset,
 			refreshTab,
 			addTab,

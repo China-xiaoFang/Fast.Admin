@@ -58,7 +58,8 @@ const packageMenu = (menuList: AuthMenuInfoDto[]): RouteRecordRaw[] => {
 			component: loadComponent(item.component),
 			redirect: undefined,
 			meta: {
-				title: item.menuName,
+				moduleId: item.moduleId,
+				title: item.menuTitle || item.menuName,
 				icon: item.icon,
 				hide: item.visible == YesOrNotEnum.N,
 				keepAlive: true,

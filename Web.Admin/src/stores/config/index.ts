@@ -29,7 +29,7 @@ const defaultLayoutSize = {
 	navBarHeight: 45,
 	navTabHeight: 35,
 	menuWidth: 210,
-	menuHeight: 55,
+	menuHeight: 50,
 	mainPadding: 5,
 	footerHeight: 30,
 };
@@ -56,10 +56,12 @@ export const useConfig = defineStore(
 			navBarHeight: 45,
 			/** 页签高度 */
 			navTabHeight: 35,
+			/** 菜单折叠 */
+			menuCollapse: false,
 			/** 菜单宽度 */
 			menuWidth: 210,
 			/** 菜单高度 */
-			menuHeight: 55,
+			menuHeight: 50,
 			/** 主页面内容 padding */
 			mainPadding: 5,
 			/** 页脚高度 */
@@ -209,6 +211,7 @@ export const useConfig = defineStore(
 		const reset = (): void => {
 			layout.autoSize = true;
 			layout.layoutSize = defaultSize;
+			layout.menuCollapse = false;
 			layout.layoutMode = defaultMode;
 			layout.navTabMode = defaultNavTabMode;
 			layout.mainAnimation = defaultAnimation;
