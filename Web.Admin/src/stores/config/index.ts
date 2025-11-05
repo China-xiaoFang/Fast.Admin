@@ -6,7 +6,6 @@ import type { componentSizes } from "element-plus";
 import type { FaTableDataRange } from "fast-element-plus";
 
 export type IModeName = "Classic";
-export type INavTabModeName = "Classic" | "Smart" | "Google";
 
 export type IAnimationName =
 	| "slide-right"
@@ -21,7 +20,6 @@ export type IAnimationName =
 
 const defaultSize: (typeof componentSizes)[number] = "default";
 const defaultMode: IModeName = "Classic";
-const defaultNavTabMode: INavTabModeName = "Classic";
 const defaultAnimation: IAnimationName = "slide-right";
 export const defaultThemeColor = "#409EFF";
 
@@ -68,8 +66,6 @@ export const useConfig = defineStore(
 			footerHeight: 30,
 			/** 布局方式 */
 			layoutMode: withDefineType<IModeName>(defaultMode),
-			/** 页签风格 */
-			navTabMode: withDefineType<INavTabModeName>(defaultNavTabMode),
 			/** 切换动画 */
 			mainAnimation: withDefineType<IAnimationName>(defaultAnimation),
 			/** 主题颜色 */
@@ -213,7 +209,6 @@ export const useConfig = defineStore(
 			layout.layoutSize = defaultSize;
 			layout.menuCollapse = false;
 			layout.layoutMode = defaultMode;
-			layout.navTabMode = defaultNavTabMode;
 			layout.mainAnimation = defaultAnimation;
 			layout.themeColor = defaultThemeColor;
 			layout.autoThemMode = true;

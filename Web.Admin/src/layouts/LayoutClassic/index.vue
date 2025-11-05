@@ -27,7 +27,7 @@
 					</div>
 					<div class="right">
 						<el-menu
-							:defaultActive="navTabsStore.activeModuleId.toString()"
+							:defaultActive="navTabsStore.activeModuleId?.toString()"
 							mode="horizontal"
 							:ellipsis="false"
 							@select="handleModuleSelect"
