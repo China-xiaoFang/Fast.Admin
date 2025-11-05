@@ -28,9 +28,7 @@ export const useNavTabs = defineStore(
 			contentFull: false,
 		});
 
-		/**
-		 * 重置
-		 */
+		/** 重置 */
 		const $reset = (): void => {
 			state.activeIndex = -1;
 			state.lastActiveIndex = -1;
@@ -41,9 +39,7 @@ export const useNavTabs = defineStore(
 			state.contentFull = false;
 		};
 
-		/**
-		 * 刷新 Tab
-		 */
+		/** 刷新 Tab */
 		const refreshTab = (route: INavTab): void => {
 			const fIdx = state.keepAliveComponentNameList.findIndex((f) => f === route.name.toString());
 			if (fIdx >= 0) {
@@ -52,9 +48,7 @@ export const useNavTabs = defineStore(
 			routerUtil.routePushSafe(router, { path: `/redirect${route.path}`, query: route.query });
 		};
 
-		/**
-		 * 添加 Tab
-		 */
+		/** 添加 Tab */
 		const addTab = (route: INavTab): void => {
 			const fRouteIdx = state.navTabs.findIndex((f) => f.path == route.path);
 			//  判断警告页面数量
@@ -86,9 +80,7 @@ export const useNavTabs = defineStore(
 			}
 		};
 
-		/**
-		 * 前往最后一个 Tab
-		 */
+		/** 前往最后一个 Tab */
 		const toLastTab = (): void => {
 			const lastTab = state.navTabs.slice(-1)[0];
 			if (lastTab) {
@@ -98,9 +90,7 @@ export const useNavTabs = defineStore(
 			}
 		};
 
-		/**
-		 * 关闭 Tab
-		 */
+		/** 关闭 Tab */
 		const closeTab = (route: INavTab): void => {
 			if (route?.meta?.affix === true) return;
 			const findIndex = state.navTabs.findIndex((f) => f.path === route.path);
@@ -150,9 +140,7 @@ export const useNavTabs = defineStore(
 			toLastTab();
 		};
 
-		/**
-		 * 设置活动路由
-		 */
+		/** 设置活动路由 */
 		const setActiveRoute = (route: INavTab): void => {
 			const fIdx = state.navTabs.findIndex((f) => f.path == route.path);
 			if (fIdx === -1) return;
@@ -161,23 +149,17 @@ export const useNavTabs = defineStore(
 			state.activeIndex = fIdx;
 		};
 
-		/**
-		 * 设置放大
-		 */
+		/** 设置放大 */
 		const setContentLarge = (contentLarge: boolean): void => {
 			state.contentLarge = contentLarge;
 		};
 
-		/**
-		 * 设置全屏
-		 */
+		/** 设置全屏 */
 		const setContentFull = (contentFull: boolean): void => {
 			state.contentFull = contentFull;
 		};
 
-		/**
-		 * 初始化
-		 */
+		/** 初始化 */
 		const initNavTabs = (router: Router): void => {
 			// 直接默认查找 layout 下的路由，其余的直接忽略
 			const allRoutes = router

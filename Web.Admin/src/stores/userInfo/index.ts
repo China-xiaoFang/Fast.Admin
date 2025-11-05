@@ -47,26 +47,20 @@ export const useUserInfo = defineStore(
 		/** WebSocket 是否连接 */
 		const hasWebSocket = ref(false);
 
-		/**
-		 * 设置用户信息
-		 */
+		/** 设置用户信息 */
 		const setUserInfo = (uInfo: GetLoginUserInfoOutput): void => {
 			Object.keys(uInfo).forEach((key) => {
 				state[key] = uInfo[key];
 			});
 		};
 
-		/**
-		 * 删除 Token
-		 */
+		/** 删除 Token */
 		const removeToken = (): void => {
 			state.token = "";
 			state.refreshToken = "";
 		};
 
-		/**
-		 * 设置 Token
-		 */
+		/** 设置 Token */
 		const setToken = (axiosResponse: AxiosResponse): void => {
 			if (!axiosResponse) return;
 			// 从请求头部中获取 Token
@@ -114,9 +108,7 @@ export const useUserInfo = defineStore(
 			return { token: null, refreshToken: null, tokenData: null };
 		};
 
-		/**
-		 * 登录
-		 */
+		/** 登录 */
 		const login = (): void => {
 			ElMessage.success("登录成功");
 			// 确保 getLoginUser 获取用户信息
@@ -137,9 +129,7 @@ export const useUserInfo = defineStore(
 			}
 		};
 
-		/**
-		 * 退出登录
-		 */
+		/** 退出登录 */
 		const logout = async (
 			data: {
 				/**
@@ -183,9 +173,7 @@ export const useUserInfo = defineStore(
 			}
 		};
 
-		/**
-		 * 刷新用户信息
-		 */
+		/** 刷新用户信息 */
 		const refreshUserInfo = async (): Promise<void> => {
 			const apiRes = await authApi.getLoginUserInfo();
 			setUserInfo(apiRes);
@@ -200,10 +188,10 @@ export const useUserInfo = defineStore(
 			setToken,
 			getToken,
 			resolveToken,
-			refreshUserInfo,
 			login,
 			logout,
 			logoutClear,
+			refreshUserInfo,
 		};
 	},
 	{

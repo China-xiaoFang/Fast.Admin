@@ -83,15 +83,6 @@ router.beforeEach(async (to, from, next) => {
 					});
 				}, 500);
 
-				// 判断是否存在重定向路径，如果有则跳转
-				const redirect = decodeURIComponent((from.query.redirect as string) || "");
-				if (redirect && redirect != to.fullPath) {
-					const _query = stringUtil.getUrlParams(redirect);
-					// 设置 replace: true, 因此导航将不会留下历史记录
-					next({ path: redirect, replace: true, query: _query });
-					return;
-				}
-
 				// 由于新添加的路由在本次不存在，所以进行重定向
 				next({ ...(to.redirectedFrom ?? to), replace: true });
 				return;
@@ -102,6 +93,15 @@ router.beforeEach(async (to, from, next) => {
 				userInfoStore.logout();
 				return;
 			}
+		}
+
+		// 判断是否存在重定向路径，如果有则跳转
+		const redirect = decodeURIComponent((from.query.redirect as string) || "");
+		if (redirect && redirect != to.fullPath) {
+			const _query = stringUtil.getUrlParams(redirect);
+			// 设置 replace: true, 因此导航将不会留下历史记录
+			next({ path: redirect, replace: true, query: _query });
+			return;
 		}
 
 		// 判断登录后是否禁止查看该页面
