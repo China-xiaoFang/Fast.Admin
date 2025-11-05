@@ -1,0 +1,93 @@
+@use "./components/wd-button.scss";
+@use "./components/wd-popup.scss";
+@use "./components/wd-radio.scss";
+
+.wot-theme-light,
+.wot-theme-dark {
+	--wot-color-white: #ffffff;
+	--wot-color-black: #000000;
+
+	/* 超大文字 */
+	--wot-font-size-extra-large: 40rpx;
+	/* 大文字 */
+	--wot-font-size-large: 36rpx;
+	/* 中文字 */
+	--wot-font-size-medium: 32rpx;
+	/* 基础文字 */
+	--wot-font-size-base: 28rpx;
+	/* 小文字 */
+	--wot-font-size-small: 26rpx;
+	/* 超小文字 */
+	--wot-font-size-extra-small: 24rpx;
+
+	/* 文字宽度文字 */
+	--wot-font-weight-primary: 500;
+	--wot-font-weight-semibold: 700;
+
+	/* 大型标题 */
+	--wot-fs-big: var(--wot-font-size-extra-large);
+	/* 重要数据 */
+	--wot-fs-important: var(--wot-font-size-large);
+	/* 标题字号/重要正文字号 */
+	--wot-fs-title: (--wot-font-size-medium);
+	/* 普通正文 */
+	--wot-fs-content: var(--wot-font-size-base);
+	/* 次要信息，注释/补充/正文 */
+	--wot-fs-secondary: var(--wot-font-size-small);
+	/* 辅助文字字号，弱化信息，引导性/不可点文字 */
+	--wot-fs-aid: var(--wot-font-size-extra-small);
+
+	/* 文字字重 */
+	--wot-fw-medium: var(--wot-font-weight-primary);
+	--wot-fw-semibold: var(--wot-font-weight-semibold);
+
+	/* 背景色、禁用填充色 */
+	--wot-color-bg: var(--wot-bg-color-page);
+
+	/* 模块标题/重要正文 */
+	--wot-color-title: var(--wot-text-color-primary);
+	/* 普通正文 */
+	--wot-color-content: var(--wot-text-color-regular);
+	/* 次要信息，注释/补充/正文 */
+	--wot-color-secondary: var(--wot-text-color-secondary);
+	/* 辅助文字字号，弱化信息，引导性/不可点文字 */
+	--wot-color-aid: var(--wot-text-color-placeholder);
+	/* 失效、默认提示文字 */
+	--wot-color-tip: var(--wot-text-color-disabled);
+
+	/* 禁用颜色 */
+	--wot-disabled-bg-color: var(--wot-fill-color-light);
+	--wot-disabled-text-color: var(--wot-text-color-placeholder);
+	--wot-disabled-border-color: var(--wot-border-color-light);
+
+	/* 控件边框线 */
+	--wot-border-width: 2rpx;
+	--wot-border-style: solid;
+	--wot-border-radius-base: 8rpx;
+	--wot-border-radius-small: 4rpx;
+	--wot-border-radius-round: 40rpx;
+	--wot-border-radius-circle: 100%;
+	--wot-border-color-hover: var(--wot-text-color-disabled);
+	--wot-border: var(--wot-border-width) var(--wot-border-style) var(--wot-border-color);
+	--wot-color-border: var(--wot-border-color);
+	--wot-dark-border-color: var(--wot-border-color);
+	--wot-svg-monochrome-grey: var(--wot-border-color);
+
+	/* 分割线颜色 */
+	--wot-color-border-light: var(--wot-border-color-light);
+
+	/* 动画 */
+	--wot-transition-duration: 0.3s;
+	--wot-transition-duration-fast: 0.2s;
+	--wot-transition-function-ease-in-out-bezier: cubic-bezier(0.645, 0.045, 0.355, 1);
+	--wot-transition-function-fast-bezier: cubic-bezier(0.23, 1, 0.32, 1);
+	--wot-transition-all: all var(--wot-transition-duration) var(--wot-transition-function-ease-in-out-bezier);
+	--wot-transition-fade: opacity var(--wot-transition-duration) var(--wot-transition-function-fast-bezier);
+	--wot-transition-md-fade:
+		transform var(--wot-transition-duration) var(--wot-transition-function-fast-bezier),
+		opacity var(--wot-transition-duration) var(--wot-transition-function-fast-bezier);
+	--wot-transition-fade-linear: opacity var(--wot-transition-duration-fast) linear;
+	--wot-transition-border: border-color var(--wot-transition-duration-fast) var(--wot-transition-function-ease-in-out-bezier);
+	--wot-transition-box-shadow: box-shadow var(--wot-transition-duration-fast) var(--wot-transition-function-ease-in-out-bezier);
+	--wot-transition-color: color var(--wot-transition-duration-fast) var(--wot-transition-function-ease-in-out-bezier);
+}
