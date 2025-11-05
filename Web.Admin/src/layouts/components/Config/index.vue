@@ -32,12 +32,6 @@
 						<el-option v-for="(item, index) in animationList" :key="index" :label="item.label" :value="item.value" />
 					</el-select>
 				</div>
-				<div class="box-item">
-					<span>页签风格</span>
-					<el-select v-model="configStore.layout.navTabMode" style="width: 80px">
-						<el-option v-for="(item, index) in natTabModeList" :key="index" :label="item.label" :value="item.value" />
-					</el-select>
-				</div>
 			</div>
 			<el-divider contentPosition="center">
 				<el-icon><MagicStick /></el-icon>
@@ -207,7 +201,7 @@
 import { ref } from "vue";
 import { Grid, Hide, MagicStick, Moon, Notification, QuestionFilled, Refresh, Sunny, View } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
-import type { IAnimationName, INavTabModeName } from "@/stores";
+import type { IAnimationName } from "@/stores";
 import type { componentSizes } from "element-plus";
 import type { ElSelectorOutput, FaDrawerInstance, FaTableDataRange } from "fast-element-plus";
 import { defaultThemeColor, useConfig } from "@/stores";
@@ -256,21 +250,6 @@ const animationList: Readonly<ElSelectorOutput<IAnimationName>> = [
 	{
 		label: "底部放大",
 		value: "el-zoom-in-bottom",
-	},
-];
-
-const natTabModeList: Readonly<ElSelectorOutput<INavTabModeName>> = [
-	{
-		label: "经典",
-		value: "Classic",
-	},
-	{
-		label: "灵动",
-		value: "Smart",
-	},
-	{
-		label: "谷歌",
-		value: "Google",
 	},
 ];
 

@@ -50,6 +50,9 @@ const menuList = computed(() => {
 	border: none;
 	height: 100%;
 }
+.el-menu--collapse {
+	--el-menu-base-level-padding: 10px;
+}
 html.small {
 	.el-menu {
 		--el-menu-item-font-size: var(--el-font-size-small);
