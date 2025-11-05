@@ -1,0 +1,36 @@
+html.small {
+	.el-scrollbar {
+		.el-scrollbar__bar {
+			&.is-horizontal {
+				height: 3px;
+			}
+			&.is-vertical {
+				width: 3px;
+			}
+		}
+	}
+
+	.el-tabs {
+		--el-tabs-header-height: 30px;
+		.el-tabs__content {
+			padding: 5px;
+		}
+	}
+
+	.el-select-dropdown {
+		.el-select-dropdown__item {
+			padding: 0 15px;
+			height: 30px;
+			line-height: 30px;
+		}
+	}
+	.el-tree-select__popper {
+		.el-select-dropdown__item {
+			padding: 0 15px 0 0;
+		}
+	}
+
+	.el-dropdown {
+		font-size: var(--el-font-size-extra-small);
+	}
+}

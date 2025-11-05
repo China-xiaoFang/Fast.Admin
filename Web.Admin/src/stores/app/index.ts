@@ -1,4 +1,4 @@
-import { reactive, toRefs } from "vue";
+import { reactive, ref, toRefs } from "vue";
 import { ElMessageBox } from "element-plus";
 import { useFastAxios } from "@fast-china/axios";
 import { consoleError } from "@fast-china/utils";
@@ -18,8 +18,6 @@ export type ILoginComponent = "ClassicLogin";
 type IState = {
 	/** 是否存在 Launch 数据 */
 	hasLaunch: boolean;
-	/** 字典 */
-	dictionary: Map<string, FaTableEnumColumnCtx[]>;
 };
 
 export const useApp = defineStore(
@@ -43,26 +41,17 @@ export const useApp = defineStore(
 			requestTimeout: 6000,
 			requestEncipher: false,
 			hasLaunch: false,
-			dictionary: new Map<string, FaTableEnumColumnCtx[]>(),
 		});
+
+		/** 字典 */
+		const dictionary = ref<Map<string, FaTableEnumColumnCtx[]>>(new Map());
 
 		/** Launch */
 		const launch = async (): Promise<void> => {
 			try {
 				const apiRes = await appApi.launch();
 				Object.assign(state, apiRes);
-				if (!state.loginComponent) {
-					state.loginComponent = "ClassicLogin";
-				}
 				state.hasLaunch = true;
-				const configStore = useConfig();
-				configStore.setTheme(state.themeColor);
-
-				// 处理数据字典
-				const dictionary = await dictionaryApi.queryDictionary();
-				Object.entries(dictionary).forEach(([key, value]) => {
-					state.dictionary.set(key, value);
-				});
 			} catch (error) {
 				consoleError("App", error);
 				// 避免 Launch 接口出现问题，如果存在缓存，也正常进入
@@ -71,10 +60,13 @@ export const useApp = defineStore(
 						title: "系统错误",
 						type: "error",
 						showClose: false,
-						confirmButtonText: "重试",
 					});
 				}
 			} finally {
+				if (!state.loginComponent) {
+					state.loginComponent = "ClassicLogin";
+				}
+
 				// 判断是否存在 Launch 数据
 				if (state.hasLaunch) {
 					/** 刷新页面标题 */
@@ -87,22 +79,37 @@ export const useApp = defineStore(
 						requestCipher: state.requestEncipher,
 					});
 				}
+
+				try {
+					// 处理数据字典
+					dictionary.value.clear();
+					const _dictionary = await dictionaryApi.queryDictionary();
+					Object.entries(_dictionary).forEach(([key, value]) => {
+						dictionary.value.set(key, value);
+					});
+				} catch {
+					consoleError("App", "字典加载失败");
+				}
+
+				const configStore = useConfig();
+				configStore.setTheme(state.themeColor);
 			}
 		};
 
 		/** 获取字典 */
 		const getDictionary = (key: string, throwError = true): FaTableEnumColumnCtx[] => {
-			if (!state.dictionary.has(key)) {
+			if (!dictionary.value.has(key)) {
 				if (throwError) {
 					consoleError("app", `字典 [${key}] 不存在`);
 				}
 				return;
 			}
-			return state.dictionary.get(key);
+			return dictionary.value.get(key);
 		};
 
 		return {
 			...toRefs(state),
+			dictionary,
 			launch,
 			getDictionary,
 		};
@@ -110,8 +117,8 @@ export const useApp = defineStore(
 	{
 		persist: {
 			key: "store-app",
-			// 这里是配置 pinia 不需要持久化 dictionary
-			omit: ["dictionary"],
+			// 这里是配置 pinia 只需要持久化 state 即可，而不是整个 store
+			pick: ["state"],
 		},
 	}
 );
