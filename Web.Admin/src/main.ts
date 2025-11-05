@@ -1,11 +1,11 @@
 import { createApp } from "vue";
-import "./styles/index.scss";
 import App from "./App.vue";
 import { loadDirectives } from "./directives";
 import { loadPlugins } from "./plugins";
 import router from "./router";
 import { loadPinia, useApp } from "./stores";
 import { checkVersionUpdate } from "./updateVersion";
+import "./styles/index.scss";
 if (import.meta.env.DEV) {
 	await import("element-plus/dist/index.css");
 	await import("element-plus/theme-chalk/dark/css-vars.css");
