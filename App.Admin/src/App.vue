@@ -18,6 +18,8 @@ onLaunch(() => {
 	appStore.setAppName(appStore.appBaseInfo.appName);
 	// 处理未经过 Launcher 页面导致 axios 配置不存在的问题
 	appStore.setFastAxios();
+	// 处理未经过 Launcher 页面导致字典不存在的问题
+	appStore.setDictionary();
 
 	// 初始化主题
 	configStore.initTheme();

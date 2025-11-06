@@ -94,6 +94,8 @@ export const useApp = defineStore(
 
 		/** 设置字典 */
 		const setDictionary = async (): Promise<void> => {
+			// 判断是否存在 Launch 数据
+			if (!state.hasLaunch) return;
 			try {
 				dictionary.value.clear();
 				// 处理数据字典
@@ -166,8 +168,6 @@ export const useApp = defineStore(
 	{
 		persist: {
 			key: "store-app",
-			// 这里是配置 pinia 只需要持久化 state 即可，而不是整个 store
-			paths: ["state"],
 		},
 	}
 );

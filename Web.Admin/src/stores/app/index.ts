@@ -109,7 +109,6 @@ export const useApp = defineStore(
 
 		return {
 			...toRefs(state),
-			dictionary,
 			launch,
 			getDictionary,
 		};
@@ -117,8 +116,6 @@ export const useApp = defineStore(
 	{
 		persist: {
 			key: "store-app",
-			// 这里是配置 pinia 只需要持久化 state 即可，而不是整个 store
-			pick: ["state"],
 		},
 	}
 );

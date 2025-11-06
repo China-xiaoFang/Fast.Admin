@@ -114,9 +114,9 @@ const openStartPage = async () => {
 		// #endif
 	}
 
-	// router.replaceAll({
-	// 	path: CommonRoute.Login,
-	// });
+	router.replaceAll({
+		path: CommonRoute.Login,
+	});
 };
 
 /**
