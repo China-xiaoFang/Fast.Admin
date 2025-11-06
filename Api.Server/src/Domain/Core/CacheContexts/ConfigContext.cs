@@ -45,11 +45,6 @@ public class ConfigContext
     internal static ILogger logger = FastContext.GetService<ILogger<ConfigContext>>();
 
     /// <summary>
-    /// 配置内存缓存
-    /// </summary>
-    internal static readonly ConcurrentDictionary<string, ConfigModel> ConfigCache = new();
-
-    /// <summary>
     /// 获取配置
     /// </summary>
     /// <param name="configCode"><see cref="string"/> 配置编码</param>
@@ -68,15 +63,9 @@ public class ConfigContext
         if (!string.IsNullOrWhiteSpace(configValue))
             return configValue;
 
-        // 从内存缓存中查找
-        if (ConfigCache.TryGetValue(configCode, out var configModel))
-        {
-            return configModel.ConfigValue;
-        }
-
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, configCode);
 
-        configModel = centerCache.GetAndSet(cacheKey, () =>
+        var configModel = centerCache.GetAndSet(cacheKey, () =>
         {
             var repository = FastContext.GetService<ISqlSugarRepository<ConfigModel>>();
 
@@ -87,7 +76,7 @@ public class ConfigContext
             {
                 var message = $"未能找到对应配置【{configCode}】信息！";
                 logger.LogError($"ConfigCode：{configCode}；{message}");
-                throw new ArgumentNullException(message);
+                throw new UserFriendlyException(message);
             }
 
             return result;
@@ -100,14 +89,11 @@ public class ConfigContext
                 configModel.ConfigValue;
         }
 
-        // 写入内存缓存
-        ConfigCache.AddOrUpdate(configCode, configModel, (_, _) => configModel);
-
         if (string.IsNullOrWhiteSpace(configModel.ConfigValue))
         {
             var message = $"配置【{configCode}】信息值为空！";
             logger.LogError($"ConfigCode：{configCode}；{message}");
-            throw new ArgumentNullException(message);
+            throw new UserFriendlyException(message);
         }
 
         return configModel.ConfigValue;
@@ -132,15 +118,9 @@ public class ConfigContext
         if (!string.IsNullOrWhiteSpace(configValue))
             return configValue;
 
-        // 从内存缓存中查找
-        if (ConfigCache.TryGetValue(configCode, out var configModel))
-        {
-            return configModel.ConfigValue;
-        }
-
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, configCode);
 
-        configModel = await centerCache.GetAndSetAsync(cacheKey, async () =>
+        var configModel = await centerCache.GetAndSetAsync(cacheKey, async () =>
         {
             var repository = FastContext.GetService<ISqlSugarRepository<ConfigModel>>();
 
@@ -151,7 +131,7 @@ public class ConfigContext
             {
                 var message = $"未能找到对应配置【{configCode}】信息！";
                 logger.LogError($"ConfigCode：{configCode}；{message}");
-                throw new ArgumentNullException(message);
+                throw new UserFriendlyException(message);
             }
 
             return result;
@@ -164,14 +144,11 @@ public class ConfigContext
                 configModel.ConfigValue;
         }
 
-        // 写入内存缓存
-        ConfigCache.AddOrUpdate(configCode, configModel, (_, _) => configModel);
-
         if (string.IsNullOrWhiteSpace(configModel.ConfigValue))
         {
             var message = $"配置【{configCode}】信息值为空！";
             logger.LogError($"ConfigCode：{configCode}；{message}");
-            throw new ArgumentNullException(message);
+            throw new UserFriendlyException(message);
         }
 
         return configModel.ConfigValue;
@@ -198,9 +175,6 @@ public class ConfigContext
             }
         }
 
-        // 删除内存缓存
-        ConfigCache.TryRemove(configCode, out _);
-
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, configCode);
 
         await centerCache.DelAsync(cacheKey);
@@ -223,9 +197,6 @@ public class ConfigContext
                 FastContext.HttpContext.Items.Remove(key);
             }
         }
-
-        // 清空内存缓存
-        ConfigCache.Clear();
 
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, "*");
         await centerCache.DelByPatternAsync(cacheKey);

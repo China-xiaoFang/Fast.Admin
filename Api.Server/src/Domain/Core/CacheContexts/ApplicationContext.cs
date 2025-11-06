@@ -45,11 +45,6 @@ public class ApplicationContext
     internal static ILogger logger = FastContext.GetService<ILogger<ApplicationContext>>();
 
     /// <summary>
-    /// 应用内存缓存
-    /// </summary>
-    internal static readonly ConcurrentDictionary<string, ApplicationOpenIdModel> ApplicationOpenIdCache = new();
-
-    /// <summary>
     /// 获取应用
     /// </summary>
     /// <param name="openId"><see cref="string"/> 开放平台Id</param>
@@ -70,12 +65,6 @@ public class ApplicationContext
             return applicationOpenIdModel;
         }
 
-        // 从内存缓存中查找
-        if (ApplicationOpenIdCache.TryGetValue(openId, out applicationOpenIdModel))
-        {
-            return applicationOpenIdModel;
-        }
-
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.App, openId);
 
         applicationOpenIdModel = centerCache.GetAndSet(cacheKey, () =>
@@ -91,7 +80,7 @@ public class ApplicationContext
             {
                 var message = $"未能找到对应应用【{openId}】信息！";
                 logger.LogError($"OpenId：{openId}；{message}");
-                throw new ArgumentNullException(message);
+                throw new UserFriendlyException(message);
             }
 
             return result;
@@ -103,9 +92,6 @@ public class ApplicationContext
             FastContext.HttpContext.Items[$"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}"] =
                 applicationOpenIdModel;
         }
-
-        // 写入内存缓存
-        ApplicationOpenIdCache.AddOrUpdate(openId, applicationOpenIdModel, (_, _) => applicationOpenIdModel);
 
         return applicationOpenIdModel;
     }
@@ -131,12 +117,6 @@ public class ApplicationContext
             return applicationOpenIdModel;
         }
 
-        // 从内存缓存中查找
-        if (ApplicationOpenIdCache.TryGetValue(openId, out applicationOpenIdModel))
-        {
-            return applicationOpenIdModel;
-        }
-
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.App, openId);
 
         applicationOpenIdModel = await centerCache.GetAndSetAsync(cacheKey, async () =>
@@ -152,7 +132,7 @@ public class ApplicationContext
             {
                 var message = $"未能找到对应应用【{openId}】信息！";
                 logger.LogError($"OpenId：{openId}；{message}");
-                throw new ArgumentNullException(message);
+                throw new UserFriendlyException(message);
             }
 
             return result;
@@ -164,9 +144,6 @@ public class ApplicationContext
             FastContext.HttpContext.Items[$"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}"] =
                 applicationOpenIdModel;
         }
-
-        // 写入内存缓存
-        ApplicationOpenIdCache.AddOrUpdate(openId, applicationOpenIdModel, (_, _) => applicationOpenIdModel);
 
         return applicationOpenIdModel;
     }
@@ -192,9 +169,6 @@ public class ApplicationContext
             }
         }
 
-        // 删除内存缓存
-        ApplicationOpenIdCache.TryRemove(openId, out _);
-
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.App, openId);
 
         await centerCache.DelAsync(cacheKey);
@@ -217,9 +191,6 @@ public class ApplicationContext
                 FastContext.HttpContext.Items.Remove(key);
             }
         }
-
-        // 清空内存缓存
-        ApplicationOpenIdCache.Clear();
 
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.App, "*");
         await centerCache.DelByPatternAsync(cacheKey);

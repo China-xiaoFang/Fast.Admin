@@ -98,7 +98,7 @@ internal static class ApplicationSeedData
                 new()
                 {
                     AppId = applicationModel.Id,
-                    OpenId = "WeChatOpenId",
+                    OpenId = "wx1e4b5c59fb34d91f",
                     AppType = AppEnvironmentEnum.WeChatMiniProgram,
                     EnvironmentType = EnvironmentTypeEnum.Production,
                     LoginComponent = "",
