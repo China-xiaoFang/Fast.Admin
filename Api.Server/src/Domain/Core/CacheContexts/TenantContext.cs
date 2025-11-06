@@ -45,11 +45,6 @@ public class TenantContext
     internal static ILogger logger = FastContext.GetService<ILogger<TenantContext>>();
 
     /// <summary>
-    /// 租户内存缓存
-    /// </summary>
-    internal static readonly ConcurrentDictionary<string, TenantModel> TenantCache = new();
-
-    /// <summary>
     /// 获取租户
     /// </summary>
     /// <param name="tenantNo"><see cref="string"/> 租户编码</param>
@@ -69,12 +64,6 @@ public class TenantContext
             return tenantModel;
         }
 
-        // 从内存缓存中查找
-        if (TenantCache.TryGetValue(tenantNo, out tenantModel))
-        {
-            return tenantModel;
-        }
-
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Tenant, tenantNo);
 
         tenantModel = centerCache.GetAndSet(cacheKey, () =>
@@ -89,7 +78,7 @@ public class TenantContext
             {
                 var message = $"未能找到对应租户【{tenantNo}】信息！";
                 logger.LogError($"TenantNo：{tenantNo}；{message}");
-                throw new ArgumentNullException(message);
+                throw new UserFriendlyException(message);
             }
 
             return result;
@@ -100,9 +89,6 @@ public class TenantContext
             // 放入 HttpContext.Items 中
             FastContext.HttpContext.Items[$"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}"] = tenantModel;
         }
-
-        // 写入内存缓存
-        TenantCache.AddOrUpdate(tenantNo, tenantModel, (_, _) => tenantModel);
 
         return tenantModel;
     }
@@ -127,12 +113,6 @@ public class TenantContext
             return tenantModel;
         }
 
-        // 从内存缓存中查找
-        if (TenantCache.TryGetValue(tenantNo, out tenantModel))
-        {
-            return tenantModel;
-        }
-
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Tenant, tenantNo);
 
         tenantModel = await centerCache.GetAndSetAsync(cacheKey, async () =>
@@ -147,7 +127,7 @@ public class TenantContext
             {
                 var message = $"未能找到对应租户【{tenantNo}】信息！";
                 logger.LogError($"TenantNo：{tenantNo}；{message}");
-                throw new ArgumentNullException(message);
+                throw new UserFriendlyException(message);
             }
 
             return result;
@@ -158,9 +138,6 @@ public class TenantContext
             // 放入 HttpContext.Items 中
             FastContext.HttpContext.Items[$"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}"] = tenantModel;
         }
-
-        // 写入内存缓存
-        TenantCache.AddOrUpdate(tenantNo, tenantModel, (_, _) => tenantModel);
 
         return tenantModel;
     }
@@ -186,9 +163,6 @@ public class TenantContext
             }
         }
 
-        // 删除内存缓存
-        TenantCache.TryRemove(tenantNo, out _);
-
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Tenant, tenantNo);
 
         await centerCache.DelAsync(cacheKey);
@@ -211,9 +185,6 @@ public class TenantContext
                 FastContext.HttpContext.Items.Remove(key);
             }
         }
-
-        // 清空内存缓存
-        TenantCache.Clear();
 
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, "*");
         await centerCache.DelByPatternAsync(cacheKey);

@@ -136,7 +136,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
             {
                 var message = $"未能找到对应类型【{databaseType.ToString()}】所存在的 Database 信息！";
                 _logger.LogError($"TenantId：{tenantId}；TenantNo：{tenantNo}；{message}");
-                throw new ArgumentNullException(message);
+                throw new UserFriendlyException(message);
             }
 
             return result;

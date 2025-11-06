@@ -53,6 +53,9 @@ internal partial class DatabaseUtil
                 {
                     entityInfo.DbTableName = tableAttribute.Name;
                 }
+                
+                // 禁用 CodeFirst 列删除功能
+                entityInfo.IsDisabledDelete = true;
             },
             EntityService = (propertyInfo, columnInfo) =>
             {
