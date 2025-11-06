@@ -28,7 +28,7 @@
 			"type": "page",
 			"name": "Login",
 			"layout": "layout",
-			"backgroundColor": "var(--wot-bg-color)",
+			"backgroundColor": "var(--wot-dark-background2)",
 			"footer": false,
 			"watermark": false,
 			"pageScroll": false,
@@ -56,6 +56,42 @@
 			"type": "page",
 			"name": "WebView",
 			"noLogin": true
+		},
+		{
+			"path": "pages/agreement/privacy/index",
+			"type": "page",
+			"name": "PrivacyAgreement",
+			"layout": "layout",
+			"footer": false,
+			"watermark": false,
+			"noLogin": true,
+			"style": {
+				"navigationBarTitleText": "隐私协议"
+			}
+		},
+		{
+			"path": "pages/agreement/service/index",
+			"type": "page",
+			"name": "ServiceAgreement",
+			"layout": "layout",
+			"footer": false,
+			"watermark": false,
+			"noLogin": true,
+			"style": {
+				"navigationBarTitleText": "服务协议"
+			}
+		},
+		{
+			"path": "pages/agreement/user/index",
+			"type": "page",
+			"name": "UserAgreement",
+			"layout": "layout",
+			"footer": false,
+			"watermark": false,
+			"noLogin": true,
+			"style": {
+				"navigationBarTitleText": "用户协议"
+			}
 		},
 		{
 			"path": "pages/tabBar/home/index",

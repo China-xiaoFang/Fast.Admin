@@ -8,6 +8,9 @@ type _LocationUrl =
   "/pages/login/index" |
   "/pages/selectTenant/index" |
   "/pages/webView/index" |
+  "/pages/agreement/privacy/index" |
+  "/pages/agreement/service/index" |
+  "/pages/agreement/user/index" |
   "/pages/tabBar/home/index" |
   "/pages/tabBar/my/index" |
   "/pages/tabBar/workbench/index";

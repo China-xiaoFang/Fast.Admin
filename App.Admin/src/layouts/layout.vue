@@ -72,11 +72,7 @@ const showWatermark = computed(() => configStore.layout.watermark && state.water
 
 /** 主页面样式 */
 const mainStyle = computed(() => {
-	const style = {
-		"--main-height": undefined,
-		"background-color": undefined,
-		"background-image": undefined,
-	};
+	const style = {};
 	let height = "var(--wot-window-height)";
 	if (showFooter.value) {
 		height += " - var(--wot-footer-height)";
