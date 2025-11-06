@@ -1,26 +1,4 @@
-﻿// ------------------------------------------------------------------------
-// Apache开源许可证
-// 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
-
-using System.Text;
+﻿using System.Text;
 
 // ReSharper disable once CheckNamespace
 namespace Fast.OpenApi;
@@ -49,7 +27,8 @@ public static partial class OpenApiUtil
         if (Penetrates.OpenApiSettings.ImportTypeMappings.Any(a => refKey.StartsWith(a.Name)))
         {
             // 导入声明类型
-            foreach (var typeMapping in Penetrates.OpenApiSettings.ImportTypeMappings.Where(wh => refKey.StartsWith(wh.Name)))
+            foreach (var typeMapping in Penetrates.OpenApiSettings.ImportTypeMappings.Where(wh =>
+                         refKey.StartsWith(wh.Name)))
             {
                 // 截取字符串
                 refKey = refKey[typeMapping.Name.Length..];
@@ -59,8 +38,13 @@ public static partial class OpenApiUtil
                 if (baseTypeMapping.Value != null)
                     refKey = baseTypeMapping.Value;
                 else if (!Penetrates.OpenApiSettings.ImportTypeMappings.Any(a => refKey.StartsWith(a.Name)))
-                    // 最后一个不是基类则添加引用
-                    refSchemas?.Add(refKey);
+                {
+                    if (!string.IsNullOrWhiteSpace(refKey))
+                    {
+                        // 最后一个不是基类则添加引用
+                        refSchemas?.Add(refKey);
+                    }
+                }
 
                 // 填充字符串
                 refKey = string.Format(typeMapping.MappingName, refKey);
@@ -76,7 +60,7 @@ public static partial class OpenApiUtil
             refSchemas?.Add(refKey);
         }
 
-        return refKey;
+        return string.IsNullOrWhiteSpace(refKey) ? null : refKey;
     }
 
     /// <summary>
@@ -98,7 +82,8 @@ public static partial class OpenApiUtil
     /// <param name="refSchemas"><see cref="List{String}"/>引用声明</param>
     /// <param name="enumSchemas"><see cref="List{ComponentSchemaDto}"/> 枚举声明</param>
     /// <returns></returns>
-    internal static (StringBuilder importSb, HashSet<string> refSchemas) GenerateSchemaImport(bool hasWeb, string dirName,
+    internal static (StringBuilder importSb, HashSet<string> refSchemas) GenerateSchemaImport(bool hasWeb,
+        string dirName,
         HashSet<string> refSchemas, List<ComponentSchemaDto> enumSchemas)
     {
         if (refSchemas == null || refSchemas.Count == 0)
@@ -116,9 +101,12 @@ public static partial class OpenApiUtil
                 .ToList();
             foreach (var item in schemaMappingGroup)
             {
-                schemaImport.AppendLine($$"""
-                                          import { {{string.Join(", ", item.Select(sl => sl.Name))}} } from "{{item.Key}}";
-                                          """);
+                if (!string.IsNullOrWhiteSpace(item.Key))
+                {
+                    schemaImport.AppendLine($$"""
+                                              import { {{string.Join(", ", item.Select(sl => sl.Name))}} } from "{{item.Key}}";
+                                              """);
+                }
             }
         }
 
@@ -151,7 +139,8 @@ public static partial class OpenApiUtil
     /// <param name="openApiDocument"><see cref="OpenApiDocumentDto"/> 文档Dto</param>
     /// <param name="scriptLanguage"><see cref="ScriptLanguageEnum"/> 脚本语言</param>
     /// <returns></returns>
-    internal static async Task<List<ComponentSchemaDto>> GenerateOpenApiDocumentSchemaFile(OpenApiDocumentDto openApiDocument,
+    internal static async Task<List<ComponentSchemaDto>> GenerateOpenApiDocumentSchemaFile(
+        OpenApiDocumentDto openApiDocument,
         ScriptLanguageEnum scriptLanguage)
     {
         if (openApiDocument.Components.Schemas == null)
@@ -194,7 +183,8 @@ public static partial class OpenApiUtil
                 if (Penetrates.OpenApiSettings.BaseTypeMappings.Any(a => a.Key == dtoSchema.Key))
                     continue;
 
-                var schemaDto = new ComponentSchemaDto {Name = dtoSchema.Key, Content = new StringBuilder(), RefSchemas = []};
+                var schemaDto = new ComponentSchemaDto
+                    { Name = dtoSchema.Key, Content = new StringBuilder(), RefSchemas = [] };
 
                 // 获取声明描述
                 var schemaDescription = dtoSchema.Value.Description?.Replace("\r\n", "\r\n * ");
@@ -208,7 +198,8 @@ public static partial class OpenApiUtil
 
                 // 判断是否存在分页
                 var hasPaged =
-                    Penetrates.OpenApiSettings.PagedSchemaProperties.All(a => dtoSchema.Value.Properties.ContainsKey(a));
+                    Penetrates.OpenApiSettings.PagedSchemaProperties.All(a =>
+                        dtoSchema.Value.Properties.ContainsKey(a));
                 if (hasPaged)
                 {
                     schemaDto.Content.Append(" extends PagedInput ");
@@ -301,7 +292,8 @@ public static partial class OpenApiUtil
     /// <param name="enumSchemas"><see cref="List{ComponentSchemaDto}"/> 枚举声明</param>
     /// <param name="scriptLanguage"><see cref="ScriptLanguageEnum"/> 脚本语言</param>
     /// <returns></returns>
-    internal static async Task WriteOpenApiDocumentSchemaFile(bool hasWeb, string rootDir, OpenApiDocumentDto openApiDocument,
+    internal static async Task WriteOpenApiDocumentSchemaFile(bool hasWeb, string rootDir,
+        OpenApiDocumentDto openApiDocument,
         ComponentSchemaDto schemaDto, List<ComponentSchemaDto> dtoSchemas, List<ComponentSchemaDto> enumSchemas,
         ScriptLanguageEnum scriptLanguage)
     {
@@ -318,7 +310,8 @@ public static partial class OpenApiUtil
             var schemaImport = new StringBuilder();
 
             // 导入声明映射
-            var schemaMapping = Penetrates.OpenApiSettings.ImportSchemaMappings.Where(wh => refSchemas.Contains(wh.Name))
+            var schemaMapping = Penetrates.OpenApiSettings.ImportSchemaMappings
+                .Where(wh => refSchemas.Contains(wh.Name))
                 .ToList();
             if (schemaMapping.Count != 0)
             {
@@ -326,9 +319,12 @@ public static partial class OpenApiUtil
                     .ToList();
                 foreach (var item in schemaMappingGroup)
                 {
-                    schemaImport.AppendLine($$"""
-                                              import { {{string.Join(", ", item.Select(sl => sl.Name))}} } from "{{item.Key}}";
-                                              """);
+                    if (!string.IsNullOrWhiteSpace(item.Key))
+                    {
+                        schemaImport.AppendLine($$"""
+                                                  import { {{string.Join(", ", item.Select(sl => sl.Name))}} } from "{{item.Key}}";
+                                                  """);
+                    }
                 }
             }
 
@@ -375,7 +371,8 @@ public static partial class OpenApiUtil
 
                 // 从声明集合中查找
                 var childrenSchemaDto = dtoSchemas.Single(s => s.Name == refSchema);
-                await WriteOpenApiDocumentSchemaFile(hasWeb, rootDir, openApiDocument, childrenSchemaDto, dtoSchemas, enumSchemas,
+                await WriteOpenApiDocumentSchemaFile(hasWeb, rootDir, openApiDocument, childrenSchemaDto, dtoSchemas,
+                    enumSchemas,
                     scriptLanguage);
             }
         }
