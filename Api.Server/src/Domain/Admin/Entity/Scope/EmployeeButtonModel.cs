@@ -49,17 +49,17 @@ public class EmployeeButtonModel : IDatabaseEntity
     /// 创建者用户Id
     /// </summary>
     [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
-    public  long? CreatedUserId { get; set; }
+    public long? CreatedUserId { get; set; }
 
     /// <summary>
     /// 创建者用户名称
     /// </summary>
     [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
-    public  string CreatedUserName { get; set; }
+    public string CreatedUserName { get; set; }
 
     /// <summary>
     /// 创建时间
     /// </summary>
     [Required, SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
-    public  DateTime? CreatedTime { get; set; }
+    public DateTime? CreatedTime { get; set; }
 }

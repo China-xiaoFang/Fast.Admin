@@ -21,8 +21,6 @@
 // ------------------------------------------------------------------------
 
 using Fast.Center.Service.Login.Dto;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Fast.Center.Service.Login;
 

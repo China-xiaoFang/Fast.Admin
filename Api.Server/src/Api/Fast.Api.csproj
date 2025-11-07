@@ -4,10 +4,6 @@
         <Description>Fast.Admin 应用入口启动层。</Description>
     </PropertyGroup>
 
-    <PropertyGroup>
-        <NoWarn>1591;</NoWarn>
-    </PropertyGroup>
-
     <ItemGroup>
         <None Remove="logs\**" />
     </ItemGroup>

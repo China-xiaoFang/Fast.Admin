@@ -71,6 +71,12 @@ public class CacheConst
         public const string Tenant = "Tenant:{0}";
 
         /// <summary>
+        /// 机器人
+        /// </summary>
+        /// <remarks>{0}租户编码</remarks>
+        public const string Rabot = "Rabot:{0}";
+
+        /// <summary>
         /// 应用
         /// </summary>
         /// <remarks>{0}开放平台Id</remarks>
