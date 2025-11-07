@@ -39,6 +39,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MiniExcelLibs;
 using Newtonsoft.Json;
+using SKIT.FlurlHttpClient.Wechat.Api;
 using SqlSugar;
 using Swashbuckle.AspNetCore.Swagger;
 using UAParser;
@@ -91,6 +92,7 @@ public class ProgramApplication : IDynamicApplication
         var openXmlAssembly = typeof(DocumentFormat.OpenXml.OpenXmlElement).Assembly.GetName();
         var mailKitAssembly = typeof(MailKit.Net.Smtp.SmtpClient).Assembly.GetName();
         var miniExcelAssembly = typeof(MiniExcel).Assembly.GetName();
+        var skitWechatApiAssembly = typeof(WechatApiClient).Assembly.GetName();
         var knife4jUIAssembly = typeof(Knife4UIOptions).Assembly.GetName();
         var imageSharpAssembly = typeof(SixLabors.ImageSharp.Image).Assembly.GetName();
 
@@ -175,6 +177,7 @@ public class ProgramApplication : IDynamicApplication
                 new {fastUnifyResultAssembly.Name, fastUnifyResultAssembly.Version},
                 new {openXmlAssembly.Name, openXmlAssembly.Version}, new {mailKitAssembly.Name, mailKitAssembly.Version},
                 new {miniExcelAssembly.Name, miniExcelAssembly.Version},
+                new {skitWechatApiAssembly.Name, skitWechatApiAssembly.Version},
                 new {knife4jUIAssembly.Name, knife4jUIAssembly.Version},
                 new {imageSharpAssembly.Name, imageSharpAssembly.Version}
             }
