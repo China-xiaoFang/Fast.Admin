@@ -65,7 +65,7 @@ public class RequestMiddleware
         var httpRequest = httpContext.Request;
 
         // 排除 WebSocket
-        if(httpContext.IsWebSocketRequest())
+        if (httpContext.IsWebSocketRequest())
         {
             await _next(httpContext);
             return;

@@ -23,7 +23,6 @@
 using Fast.Center.Entity;
 using Microsoft.Extensions.Logging;
 using SqlSugar;
-using System.Collections.Concurrent;
 
 // ReSharper disable once CheckNamespace
 namespace Fast.Core;

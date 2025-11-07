@@ -266,6 +266,11 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
     /// <returns></returns>
     private async Task VerifyPassword(AccountModel accountModel, string password, DateTime dateTime)
     {
+        if (string.IsNullOrWhiteSpace(accountModel.Password))
+        {
+            throw new UserFriendlyException("未设定密码，请重置密码后重试！");
+        }
+
         /*
          * 连续错误3次，锁定1分钟
          * 连续错误5次，锁定5分钟
@@ -460,7 +465,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             Message = "登录成功",
             TenantList =
             [
-                new LoginOutput.LoginTenantOutput()
+                new LoginOutput.LoginTenantOutput
                 {
                     UserKey = tenantUserModel.UserKey,
                     TenantName = tenantModel.TenantName,
