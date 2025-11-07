@@ -49,6 +49,12 @@ public class AccountModel : BaseEntity, IUpdateVersion
     public string Email { get; set; }
 
     /// <summary>
+    /// 微信用户Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "微信用户Id")]
+    public long? WeChatId { get; set; }
+
+    /// <summary>
     /// 密码
     /// </summary>
     [Required]

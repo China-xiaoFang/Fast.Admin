@@ -185,7 +185,7 @@ public class InitDatabaseHostedService : IHostedService
                 {
                     Id = YitIdHelper.NextId(),
                     UserKey = "",
-                    AccountId = 0,
+                    AccountId = -99,
                     Account = $"{systemTenantModel.TenantCode}_Robot",
                     LoginEmployeeNo = "",
                     EmployeeNo = "",

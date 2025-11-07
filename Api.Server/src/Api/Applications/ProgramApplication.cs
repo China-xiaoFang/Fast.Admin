@@ -89,6 +89,7 @@ public class ProgramApplication : IDynamicApplication
         var fastUnifyResultAssembly = typeof(IGlobalExceptionHandler).Assembly.GetName();
 
         var openXmlAssembly = typeof(DocumentFormat.OpenXml.OpenXmlElement).Assembly.GetName();
+        var mailKitAssembly = typeof(MailKit.Net.Smtp.SmtpClient).Assembly.GetName();
         var miniExcelAssembly = typeof(MiniExcel).Assembly.GetName();
         var knife4jUIAssembly = typeof(Knife4UIOptions).Assembly.GetName();
         var imageSharpAssembly = typeof(SixLabors.ImageSharp.Image).Assembly.GetName();
@@ -172,7 +173,7 @@ public class ProgramApplication : IDynamicApplication
                 new {fastSqlSugarAssembly.Name, fastSqlSugarAssembly.Version},
                 new {fastSwaggerAssembly.Name, fastSwaggerAssembly.Version},
                 new {fastUnifyResultAssembly.Name, fastUnifyResultAssembly.Version},
-                new {openXmlAssembly.Name, openXmlAssembly.Version},
+                new {openXmlAssembly.Name, openXmlAssembly.Version}, new {mailKitAssembly.Name, mailKitAssembly.Version},
                 new {miniExcelAssembly.Name, miniExcelAssembly.Version},
                 new {knife4jUIAssembly.Name, knife4jUIAssembly.Version},
                 new {imageSharpAssembly.Name, imageSharpAssembly.Version}

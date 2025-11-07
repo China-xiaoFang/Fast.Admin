@@ -42,7 +42,7 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
     private readonly ISqlSugarClient _repository;
     private readonly ISqlSugarEntityService _sqlSugarEntityService;
 
-    public DatabaseService(IUser user,ISqlSugarClient repository, ISqlSugarEntityService sqlSugarEntityService)
+    public DatabaseService(IUser user, ISqlSugarClient repository, ISqlSugarEntityService sqlSugarEntityService)
     {
         _user = user;
         _repository = repository;

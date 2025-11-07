@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 // ReSharper disable once CheckNamespace
+
 namespace Fast.Shared;
 
 /// <summary>

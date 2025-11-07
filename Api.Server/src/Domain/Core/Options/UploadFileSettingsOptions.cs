@@ -94,7 +94,7 @@ public class UploadFileSettingsOptions : IPostConfigure
                 // 视频类
                 "video/mp4", "video/mpeg", "video/quicktime", "video/x-msvideo", "video/x-ms-wmv", "video/webm", "video/ogg",
                 // 音频类
-                "audio/mpeg", "audio/wav", "audio/ogg", "audio/mp4","audio/flac",
+                "audio/mpeg", "audio/wav", "audio/ogg", "audio/mp4", "audio/flac",
                 // 文本类
                 "text/plain",
                 "text/csv",

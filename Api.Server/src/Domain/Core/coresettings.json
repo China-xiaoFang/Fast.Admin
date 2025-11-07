@@ -25,6 +25,15 @@
     // 客户端可获取的响应标头
     "WithExposedHeaders": [ "Fast-Response-Encipher" ]
   },
+  // 邮件配置
+  "MailSettingsOptions": {
+    "Smtp": "smtp.qq.com",
+    "Port": 465,
+    "Email": "",
+    "AuthCode": "",
+    "DisplayName": "FastDotNet",
+    "ReceiveEmails": []
+  },
   // 上传文件配置
   "UploadFileSettings": {
     // 头像

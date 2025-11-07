@@ -50,4 +50,9 @@ public class ApiGroupConst
     /// 业务后台
     /// </summary>
     public const string Admin = "Admin";
+
+    /// <summary>
+    /// 调度作业
+    /// </summary>
+    public const string Scheduler = "Scheduler";
 }

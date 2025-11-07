@@ -206,6 +206,39 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     }
 
     /// <summary>
+    /// 机器人登录
+    /// </summary>
+    /// <remarks>非调度作业请勿使用</remarks>
+    /// <returns></returns>
+    public async Task<string> RobotLogin()
+    {
+        var payload = new Dictionary<string, string>
+        {
+            {nameof(DeviceType), DeviceType.ToString()},
+            {nameof(DeviceId), DeviceId},
+            {nameof(AppNo), "Scheduler"},
+            {nameof(TenantNo), TenantNo},
+            {nameof(EmployeeNo), EmployeeNo},
+            {nameof(LastLoginIp), LastLoginIp},
+            {nameof(LastLoginTime), LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")}
+        };
+
+        var data = payload.ToJsonString()
+            .ToBase64();
+
+        // 生成 AccessToken，机器人使用默认1分钟过期
+        var accessToken = JwtBearerUtil.GenerateToken(new Dictionary<string, object> {{"Data", data}}, 1);
+
+        // 获取缓存Key
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, AppNo, TenantNo, DeviceType.ToString(), EmployeeNo);
+
+        // 设置缓存信息
+        await _authCache.SetAsync(cacheKey, this);
+
+        return accessToken;
+    }
+
+    /// <summary>
     /// 刷新登录信息
     /// </summary>
     /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>

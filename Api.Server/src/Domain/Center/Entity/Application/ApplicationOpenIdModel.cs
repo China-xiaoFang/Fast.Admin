@@ -83,6 +83,48 @@ public class ApplicationOpenIdModel : BaseEntity, IUpdateVersion
     public bool RequestEncipher { get; set; }
 
     /// <summary>
+    /// 开放平台密钥
+    /// </summary>
+    [SugarColumn(ColumnDescription = "开放平台密钥", Length = 32)]
+    public string OpenSecret { get; set; }
+
+    /// <summary>
+    /// 微信商户号Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "微信商户号Id")]
+    public long? WeChatMerchantId { get; set; }
+
+    /// <summary>
+    /// 支付宝商户号Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "支付宝商户号Id")]
+    public long? AlipayMerchantId { get; set; }
+
+    /// <summary>
+    /// AccessToken
+    /// </summary>
+    [SugarColumn(ColumnDescription = "AccessToken")]
+    public string AccessToken { get; set; }
+
+    /// <summary>
+    /// 微信 JsApi Ticket
+    /// </summary>
+    [SugarColumn(ColumnDescription = "微信 JsApi Ticket")]
+    public string WeChatJsApiTicket { get; set; }
+
+    /// <summary>
+    /// AccessToken 过期时间，单位秒
+    /// </summary>
+    [SugarColumn(ColumnDescription = "AccessToken 过期时间，单位秒")]
+    public int? TokenExpiresIn { get; set; }
+
+    /// <summary>
+    /// AccessToken 刷新时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "AccessToken 刷新时间")]
+    public DateTime? AccessTokenRefreshTime { get; set; }
+
+    /// <summary>
     /// 备注
     /// </summary>
     [SugarColumn(ColumnDescription = "备注", Length = 200)]

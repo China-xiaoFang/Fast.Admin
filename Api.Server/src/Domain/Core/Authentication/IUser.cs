@@ -222,6 +222,13 @@ public interface IUser
     Task Login(AuthUserInfo authUserInfo);
 
     /// <summary>
+    /// 机器人登录
+    /// </summary>
+    /// <remarks>非调度作业请勿使用</remarks>
+    /// <returns></returns>
+    Task<string> RobotLogin();
+
+    /// <summary>
     /// 刷新授权信息
     /// </summary>
     /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>

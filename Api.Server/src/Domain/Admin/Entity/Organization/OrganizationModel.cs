@@ -90,5 +90,5 @@ public class OrganizationModel : BaseEntity, IUpdateVersion
     /// 更新版本控制字段
     /// </summary>
     [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
-    public  long RowVersion { get; set; }
+    public long RowVersion { get; set; }
 }
