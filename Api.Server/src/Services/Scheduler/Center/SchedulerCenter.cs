@@ -324,7 +324,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 break;
             case TriggerTypeEnum.Simple:
                 // 判断执行次数是否存在
-                if (jobInfo.RunTimes == null || jobInfo.RunTimes == 0)
+                if (jobInfo.RunTimes == null || jobInfo.RunTimes <= 0)
                 {
                     // 设置 Simple 类型的触发器（无限循环）
                     triggerBuilder.WithSimpleSchedule(builder =>

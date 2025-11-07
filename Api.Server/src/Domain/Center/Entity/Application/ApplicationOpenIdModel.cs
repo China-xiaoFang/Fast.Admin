@@ -101,28 +101,40 @@ public class ApplicationOpenIdModel : BaseEntity, IUpdateVersion
     public long? AlipayMerchantId { get; set; }
 
     /// <summary>
-    /// AccessToken
+    /// 微信 AccessToken
     /// </summary>
-    [SugarColumn(ColumnDescription = "AccessToken")]
-    public string AccessToken { get; set; }
+    [SugarColumn(ColumnDescription = "微信 AccessToken", Length = 512)]
+    public string WeChatAccessToken { get; set; }
+
+    /// <summary>
+    /// 微信 AccessToken 过期时间，单位秒
+    /// </summary>
+    [SugarColumn(ColumnDescription = "微信 AccessToken 过期时间，单位秒")]
+    public int? WeChatAccessTokenExpiresIn { get; set; }
+
+    /// <summary>
+    /// 微信 AccessToken 刷新时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "微信 AccessToken 刷新时间")]
+    public DateTime? WeChatAccessTokenRefreshTime { get; set; }
 
     /// <summary>
     /// 微信 JsApi Ticket
     /// </summary>
-    [SugarColumn(ColumnDescription = "微信 JsApi Ticket")]
+    [SugarColumn(ColumnDescription = "微信 JsApi Ticket", Length = 200)]
     public string WeChatJsApiTicket { get; set; }
 
     /// <summary>
-    /// AccessToken 过期时间，单位秒
+    /// 微信 JsApi Ticket 过期时间，单位秒
     /// </summary>
-    [SugarColumn(ColumnDescription = "AccessToken 过期时间，单位秒")]
-    public int? TokenExpiresIn { get; set; }
+    [SugarColumn(ColumnDescription = "微信 JsApi Ticket 过期时间，单位秒")]
+    public int? WeChatJsApiTicketExpiresIn { get; set; }
 
     /// <summary>
-    /// AccessToken 刷新时间
+    /// 微信 JsApi Ticket 刷新时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "AccessToken 刷新时间")]
-    public DateTime? AccessTokenRefreshTime { get; set; }
+    [SugarColumn(ColumnDescription = "微信 JsApi Ticket 刷新时间")]
+    public DateTime? WeChatJsApiTicketRefreshTime { get; set; }
 
     /// <summary>
     /// 备注
