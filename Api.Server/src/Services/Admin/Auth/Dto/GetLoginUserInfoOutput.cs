@@ -30,12 +30,12 @@ public class GetLoginUserInfoOutput
     /// <summary>
     /// 手机
     /// </summary>
-    public virtual string Mobile { get; set; }
+    public string Mobile { get; set; }
 
     /// <summary>
     /// 昵称
     /// </summary>
-    public virtual string NickName { get; set; }
+    public string NickName { get; set; }
 
     /// <summary>
     /// 头像
@@ -45,22 +45,22 @@ public class GetLoginUserInfoOutput
     /// <summary>
     /// 租户编号
     /// </summary>
-    public virtual string TenantNo { get; set; }
+    public string TenantNo { get; set; }
 
     /// <summary>
     /// 租户名称
     /// </summary>
-    public virtual string TenantName { get; set; }
+    public string TenantName { get; set; }
 
     /// <summary>
     /// 用户Key
     /// </summary>
-    public virtual string UserKey { get; set; }
+    public string UserKey { get; set; }
 
     /// <summary>
     /// 账户
     /// </summary>
-    public virtual string Account { get; set; }
+    public string Account { get; set; }
 
     /// <summary>
     /// 登录工号（带租户编码）
@@ -71,32 +71,32 @@ public class GetLoginUserInfoOutput
     /// <summary>
     /// 工号
     /// </summary>
-    public virtual string EmployeeNo { get; set; }
+    public string EmployeeNo { get; set; }
 
     /// <summary>
     /// 姓名
     /// </summary>
-    public virtual string EmployeeName { get; set; }
+    public string EmployeeName { get; set; }
 
     /// <summary>
     /// 部门Id
     /// </summary>
-    public virtual long? DepartmentId { get; set; }
+    public long? DepartmentId { get; set; }
 
     /// <summary>
     /// 部门名称
     /// </summary>
-    public virtual string DepartmentName { get; set; }
+    public string DepartmentName { get; set; }
 
     /// <summary>
     /// 是否超级管理员
     /// </summary>
-    public virtual bool IsSuperAdmin { get; set; }
+    public bool IsSuperAdmin { get; set; }
 
     /// <summary>
     /// 是否管理员
     /// </summary>
-    public virtual bool IsAdmin { get; set; }
+    public bool IsAdmin { get; set; }
 
     /// <summary>
     /// 角色名称集合
@@ -106,7 +106,7 @@ public class GetLoginUserInfoOutput
     /// <summary>
     /// 按钮编码集合
     /// </summary>
-    public virtual List<string> ButtonCodeList { get; set; } = [];
+    public List<string> ButtonCodeList { get; set; } = [];
 
     /// <summary>
     /// 菜单集合

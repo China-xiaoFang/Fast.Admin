@@ -20,51 +20,58 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Service.Login.Dto;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
-namespace Fast.Center.Service.Login;
+// ReSharper disable once CheckNamespace
+namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ILoginService"/> 登录服务
+/// <see cref="DecryptWeChatUserInfo"/> 解密微信用户信息
 /// </summary>
-public interface ILoginService
+/// <remarks>解密数据返回</remarks>
+public class DecryptWeChatUserInfo
 {
     /// <summary>
-    /// 登录
+    /// 微信昵称
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<LoginOutput> Login(LoginInput input);
+    [JsonPropertyName("nickName")]
+    [JsonProperty("nickName")]
+    public string NickName { get; set; }
 
     /// <summary>
-    /// 租户登录
+    /// 性别
     /// </summary>
-    /// <param name="input"></param>
-    Task<LoginOutput> TenantLogin(TenantLoginInput input);
+    [JsonPropertyName("gender")]
+    [JsonProperty("gender")]
+    public GenderEnum Gender { get; set; }
 
     /// <summary>
-    /// 微信登录
+    /// 国家
     /// </summary>
-    /// <param name="input"></param>
-    Task<LoginOutput> WeChatLogin(WeChatLoginInput input);
+    [JsonPropertyName("country")]
+    [JsonProperty("country")]
+
+    public string Country { get; set; }
 
     /// <summary>
-    /// 微信授权登录
+    /// 省份
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<LoginOutput> WeChatAuthLogin(WeChatAuthLoginInput input);
+    [JsonPropertyName("province")]
+    [JsonProperty("province")]
+    public string Province { get; set; }
 
     /// <summary>
-    /// 退出登录
+    /// 城市
     /// </summary>
-    /// <returns></returns>
-    Task Logout();
+    [JsonPropertyName("city")]
+    [JsonProperty("city")]
+    public string City { get; set; }
 
     /// <summary>
-    /// 微信客户端登录
+    /// 语言
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<WeChatClientLoginOutput> WeChatClientLogin(WeChatLoginInput input);
+    [JsonPropertyName("language")]
+    [JsonProperty("language")]
+    public string Language { get; set; }
 }

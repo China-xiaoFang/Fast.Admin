@@ -30,14 +30,13 @@ namespace Fast.Center.Entity;
 [SugarTable("WeChatUser", "微信用户表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(AppId), OrderByType.Asc, nameof(OpenId), OrderByType.Asc, true)]
-public class WeChatUserModel : BaseEntity, IUpdateVersion
+public class WeChatUserModel : SnowflakeKeyEntity, IUpdateVersion
 {
     /// <summary>
     /// 应用Id
     /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "应用Id", Length = 18)]
-    public string AppId { get; set; }
+    [SugarColumn(ColumnDescription = "应用Id")]
+    public long AppId { get; set; }
 
     /// <summary>
     /// 用户类型
@@ -61,17 +60,17 @@ public class WeChatUserModel : BaseEntity, IUpdateVersion
     public string UnionId { get; set; }
 
     /// <summary>
+    /// 用户纯手机号码
+    /// </summary>
+    [SugarColumn(ColumnDescription = "用户纯手机号码", Length = 11)]
+    public string PurePhoneNumber { get; set; }
+
+    /// <summary>
     /// 用户手机号码
     /// </summary>
     [SugarSearchValue]
     [SugarColumn(ColumnDescription = "用户手机号码", Length = 20)]
     public string PhoneNumber { get; set; }
-
-    /// <summary>
-    /// 用户纯手机号码
-    /// </summary>
-    [SugarColumn(ColumnDescription = "用户纯手机号码", Length = 11)]
-    public string PurePhoneNumber { get; set; }
 
     /// <summary>
     /// 用户手机号码区号
@@ -173,6 +172,18 @@ public class WeChatUserModel : BaseEntity, IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "最后登录时间")]
     public DateTime? LastLoginTime { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    [Required, SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    public virtual DateTime? CreatedTime { get; set; }
+
+    /// <summary>
+    /// 更新时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
+    public virtual DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 更新版本控制字段
