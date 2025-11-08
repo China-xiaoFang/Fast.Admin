@@ -112,7 +112,7 @@ public class AuthUserInfo
     public string LoginEmployeeNo { get; set; }
 
     /// <summary>
-    /// 工号
+    /// 工号/客户端为OpenId
     /// </summary>
     public virtual string EmployeeNo { get; set; }
 

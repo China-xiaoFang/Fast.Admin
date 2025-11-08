@@ -112,7 +112,7 @@ public interface IUser
     string LoginEmployeeNo { get; set; }
 
     /// <summary>
-    /// 工号
+    /// 工号/客户端为OpenId
     /// </summary>
     string EmployeeNo { get; set; }
 
@@ -220,6 +220,13 @@ public interface IUser
     /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
     /// <returns></returns>
     Task Login(AuthUserInfo authUserInfo);
+
+    /// <summary>
+    /// 客户端统一登录
+    /// </summary>
+    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <returns></returns>
+    Task ClientLogin(AuthUserInfo authUserInfo);
 
     /// <summary>
     /// 机器人登录

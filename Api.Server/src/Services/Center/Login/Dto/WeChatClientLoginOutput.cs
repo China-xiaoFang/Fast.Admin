@@ -20,51 +20,35 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Service.Login.Dto;
-
-namespace Fast.Center.Service.Login;
+namespace Fast.Center.Service.Login.Dto;
 
 /// <summary>
-/// <see cref="ILoginService"/> 登录服务
+/// <see cref="WeChatClientLoginOutput"/> 微信客户端登录输出
 /// </summary>
-public interface ILoginService
+public class WeChatClientLoginOutput
 {
     /// <summary>
-    /// 登录
+    /// 唯一用户标识
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<LoginOutput> Login(LoginInput input);
+    public string OpenId { get; set; }
 
     /// <summary>
-    /// 租户登录
+    /// 统一用户标识
     /// </summary>
-    /// <param name="input"></param>
-    Task<LoginOutput> TenantLogin(TenantLoginInput input);
+    public string UnionId { get; set; }
 
     /// <summary>
-    /// 微信登录
+    /// 手机
     /// </summary>
-    /// <param name="input"></param>
-    Task<LoginOutput> WeChatLogin(WeChatLoginInput input);
+    public string Mobile { get; set; }
 
     /// <summary>
-    /// 微信授权登录
+    /// 昵称
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<LoginOutput> WeChatAuthLogin(WeChatAuthLoginInput input);
+    public string NickName { get; set; }
 
     /// <summary>
-    /// 退出登录
+    /// 头像
     /// </summary>
-    /// <returns></returns>
-    Task Logout();
-
-    /// <summary>
-    /// 微信客户端登录
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<WeChatClientLoginOutput> WeChatClientLogin(WeChatLoginInput input);
+    public string Avatar { get; set; }
 }

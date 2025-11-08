@@ -206,6 +206,80 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     }
 
     /// <summary>
+    /// 客户端统一登录
+    /// </summary>
+    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <returns></returns>
+    public async Task ClientLogin(AuthUserInfo authUserInfo)
+    {
+        if (authUserInfo == null || string.IsNullOrWhiteSpace(authUserInfo.Mobile))
+        {
+            throw new UnauthorizedAccessException("用户信息不存在！");
+        }
+
+        if (string.IsNullOrWhiteSpace(authUserInfo.DeviceId))
+        {
+            throw new UnauthorizedAccessException("未知的设备！");
+        }
+
+        if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
+        {
+            throw new UnauthorizedAccessException("租户信息不存在！");
+        }
+
+        if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
+        {
+            throw new UnauthorizedAccessException("用户信息不存在！");
+        }
+
+        try
+        {
+            // 设置授权用户信息
+            SetAuthUser(authUserInfo, true);
+
+            var payload = new Dictionary<string, string>
+            {
+                {nameof(DeviceType), authUserInfo.DeviceType.ToString()},
+                {nameof(DeviceId), authUserInfo.DeviceId},
+                {nameof(AppNo), authUserInfo.AppNo},
+                {nameof(TenantNo), authUserInfo.TenantNo},
+                {nameof(EmployeeNo), authUserInfo.EmployeeNo},
+                {nameof(LastLoginIp), authUserInfo.LastLoginIp},
+                {nameof(LastLoginTime), authUserInfo.LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")}
+            };
+
+            var data = payload.ToJsonString()
+                .ToBase64();
+
+            // 生成 AccessToken
+            var accessToken = JwtBearerUtil.GenerateToken(new Dictionary<string, object> {{"Data", data}});
+
+            // 生成 RefreshToken
+            var refreshToken = JwtBearerUtil.GenerateRefreshToken(accessToken);
+
+            // 获取缓存Key
+            var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
+                authUserInfo.DeviceType.ToString(), authUserInfo.EmployeeNo);
+
+            // 设置缓存信息
+            await _authCache.SetAsync(cacheKey, authUserInfo);
+
+            // 设置 AccessToken
+            _httpContext.Response.Headers["access-token"] = accessToken;
+
+            // 设置 RefreshToken
+            _httpContext.Response.Headers["x-access-token"] = refreshToken;
+
+            // 设置Swagger自动登录
+            _httpContext.SignInToSwagger(accessToken);
+        }
+        catch (Exception ex)
+        {
+            throw new UnauthorizedAccessException($"401 登录鉴权失败：{ex.Message}");
+        }
+    }
+
+    /// <summary>
     /// 机器人登录
     /// </summary>
     /// <remarks>非调度作业请勿使用</remarks>

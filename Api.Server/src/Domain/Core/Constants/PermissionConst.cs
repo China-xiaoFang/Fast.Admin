@@ -20,51 +20,18 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Service.Login.Dto;
+// ReSharper disable once CheckNamespace
 
-namespace Fast.Center.Service.Login;
+namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ILoginService"/> 登录服务
+/// <see cref="PermissionConst"/> 权限常量
 /// </summary>
-public interface ILoginService
+[SuppressSniffer]
+public class PermissionConst
 {
     /// <summary>
-    /// 登录
+    /// 客户端服务
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<LoginOutput> Login(LoginInput input);
-
-    /// <summary>
-    /// 租户登录
-    /// </summary>
-    /// <param name="input"></param>
-    Task<LoginOutput> TenantLogin(TenantLoginInput input);
-
-    /// <summary>
-    /// 微信登录
-    /// </summary>
-    /// <param name="input"></param>
-    Task<LoginOutput> WeChatLogin(WeChatLoginInput input);
-
-    /// <summary>
-    /// 微信授权登录
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<LoginOutput> WeChatAuthLogin(WeChatAuthLoginInput input);
-
-    /// <summary>
-    /// 退出登录
-    /// </summary>
-    /// <returns></returns>
-    Task Logout();
-
-    /// <summary>
-    /// 微信客户端登录
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<WeChatClientLoginOutput> WeChatClientLogin(WeChatLoginInput input);
+    public const string ClientService = "ClientService";
 }
