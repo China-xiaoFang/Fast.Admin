@@ -46,5 +46,11 @@ public enum LoginStatusEnum
     /// 授权过期
     /// </summary>
     [Description("授权过期")]
-    AuthExpired = 4
+    AuthExpired = 4,
+
+    /// <summary>
+    /// 无账号
+    /// </summary>
+    [Description("无账号")]
+    NotAccount = 4
 }

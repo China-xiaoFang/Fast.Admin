@@ -82,7 +82,6 @@ public class RefreshWeChatAccessTokenLocalJob : ISchedulerJob
         foreach (var item in applicationOpenIdList)
         {
             var options = new WechatApiClientOptions {AppId = item.OpenId, AppSecret = item.OpenSecret};
-
             var client = WechatApiClientBuilder.Create(options)
                 .Build();
             var response = await client.ExecuteCgibinStableTokenAsync(new CgibinStableTokenRequest {ForceRefresh = true});

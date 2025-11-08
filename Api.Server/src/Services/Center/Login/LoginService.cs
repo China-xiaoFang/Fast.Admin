@@ -20,15 +20,21 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using System.Text;
 using System.Text.RegularExpressions;
 using Fast.Center.Entity;
+using Fast.Center.Enum;
 using Fast.Center.Service.Login.Dto;
 using Fast.CenterLog.Entity;
 using Fast.CenterLog.Enum;
+using Fast.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using SKIT.FlurlHttpClient.Wechat.Api;
+using SKIT.FlurlHttpClient.Wechat.Api.Models;
+using SKIT.FlurlHttpClient.Wechat.Api.Utilities;
 using Yitter.IdGenerator;
 
 namespace Fast.Center.Service.Login;
@@ -48,213 +54,6 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         _user = user;
         _httpContext = httpContextAccessor.HttpContext;
         _repository = repository;
-    }
-
-    /// <summary>
-    /// 登录
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    [HttpPost("/login")]
-    [ApiInfo("登录", HttpRequestActionEnum.Auth)]
-    [AllowAnonymous]
-    public async Task<LoginOutput> Login(LoginInput input)
-    {
-        // 查询应用信息
-        var applicationModel = await _repository.Queryable<ApplicationOpenIdModel>()
-            .Includes(e => e.Application)
-            .Where(wh => wh.OpenId == GlobalContext.Origin)
-            .SingleAsync();
-
-        if (applicationModel == null)
-        {
-            throw new UserFriendlyException("未知的应用！");
-        }
-
-        if (applicationModel.AppType != GlobalContext.DeviceType)
-        {
-            throw new UserFriendlyException("应用类型不匹配！");
-        }
-
-        // 判断账号是否为手机号
-        var isMobile = new Regex(RegexConst.Mobile).IsMatch(input.Account);
-
-        AccountModel accountModel = null;
-        TenantUserModel tenantUserModel = null;
-
-        if (isMobile)
-        {
-            // 根据手机号，查询账号
-            accountModel = await _repository.Queryable<AccountModel>()
-                .Where(wh => wh.Mobile == input.Account)
-                .SingleAsync();
-        }
-        else
-        {
-            // 根据账号或登录工号查询租户用户信息
-            tenantUserModel = await _repository.Queryable<TenantUserModel>()
-                .ClearFilter<IBaseTEntity>()
-                .Where(wh => wh.Account == input.Account || wh.LoginEmployeeNo == input.Account)
-                .SingleAsync();
-            if (tenantUserModel != null)
-            {
-                // 查询账号
-                accountModel = await _repository.Queryable<AccountModel>()
-                    .Where(wh => wh.Id == tenantUserModel.AccountId)
-                    .SingleAsync();
-            }
-        }
-
-        if (accountModel == null)
-        {
-            throw new UserFriendlyException("账号不存在！");
-        }
-
-        // 验证账号状态
-        if (accountModel.Status == CommonStatusEnum.Disable)
-        {
-            throw new UserFriendlyException("账号已被平台禁用！");
-        }
-
-        var dateTime = DateTime.Now;
-
-        // 验证密码
-        await VerifyPassword(accountModel, input.Password, dateTime);
-
-        // 单租户自动登录
-        var autoLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleTenantWhenAutoLogin));
-
-        var tenantUserList = new List<LoginOutput.LoginTenantOutput>();
-        if (tenantUserModel != null)
-        {
-            // 只有一个账号
-            var tenantModel = await _repository.Queryable<TenantModel>()
-                .Where(wh => wh.Id == tenantUserModel.TenantId)
-                .SingleAsync();
-
-            // 单租户自动登录
-            if (autoLogin)
-            {
-                // 处理登录
-                return await HandleLogin(applicationModel.Application, accountModel, tenantModel, tenantUserModel, dateTime);
-            }
-
-            tenantUserList.Add(new LoginOutput.LoginTenantOutput
-            {
-                UserKey = tenantUserModel.UserKey,
-                TenantName = tenantModel.TenantName,
-                ShortName = tenantModel.ShortName,
-                SpellName = tenantModel.SpellName,
-                Edition = tenantModel.Edition,
-                LogoUrl = tenantModel.LogoUrl,
-                EmployeeNo = tenantUserModel.EmployeeNo,
-                EmployeeName = tenantUserModel.EmployeeName,
-                IdPhoto = tenantUserModel.IdPhoto,
-                DeptId = tenantUserModel.DeptId,
-                DeptName = tenantUserModel.DeptName,
-                UserType = tenantUserModel.UserType,
-                Status = tenantUserModel.Status
-            });
-        }
-        else
-        {
-            tenantUserList = await _repository.Queryable<TenantUserModel>()
-                .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.Id)
-                .ClearFilter<IBaseTEntity>()
-                .Where(t1 => t1.AccountId == accountModel.Id)
-                .Select((t1, t2) => new LoginOutput.LoginTenantOutput
-                {
-                    UserKey = t1.UserKey,
-                    TenantName = t2.TenantName,
-                    ShortName = t2.ShortName,
-                    SpellName = t2.SpellName,
-                    Edition = t2.Edition,
-                    LogoUrl = t2.LogoUrl,
-                    EmployeeNo = t1.EmployeeNo,
-                    EmployeeName = t1.EmployeeName,
-                    IdPhoto = t1.IdPhoto,
-                    DeptId = t1.DeptId,
-                    DeptName = t1.DeptName,
-                    UserType = t1.UserType,
-                    Status = t1.Status
-                })
-                .ToListAsync();
-        }
-
-        if (tenantUserList.Count == 0)
-        {
-            throw new UserFriendlyException("账号未绑定任何租户！");
-        }
-
-        // 多个账号，或未开启单租户自动登录
-        return new LoginOutput {Status = LoginStatusEnum.SelectTenant, Message = "请选择租户登录", TenantList = tenantUserList};
-    }
-
-    /// <summary>
-    /// 租户登录
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    [HttpPost("/tenantLogin")]
-    [ApiInfo("租户登录", HttpRequestActionEnum.Auth)]
-    [AllowAnonymous]
-    public async Task<LoginOutput> TenantLogin(TenantLoginInput input)
-    {
-        // 查询应用信息
-        var applicationModel = await _repository.Queryable<ApplicationOpenIdModel>()
-            .Includes(e => e.Application)
-            .Where(wh => wh.OpenId == GlobalContext.Origin)
-            .SingleAsync();
-
-        if (applicationModel == null)
-        {
-            throw new UserFriendlyException("未知的应用！");
-        }
-
-        if (applicationModel.AppType != GlobalContext.DeviceType)
-        {
-            throw new UserFriendlyException("应用类型不匹配！");
-        }
-
-        // 查询租户用户
-        var tenantUserModel = await _repository.Queryable<TenantUserModel>()
-            .ClearFilter<IBaseTEntity>()
-            .Where(wh => wh.UserKey == input.UserKey)
-            .SingleAsync();
-
-        if (tenantUserModel == null)
-        {
-            throw new UserFriendlyException("用户不存在！");
-        }
-
-        // 查询账号
-        var accountModel = await _repository.Queryable<AccountModel>()
-            .Where(wh => wh.Id == tenantUserModel.AccountId)
-            .SingleAsync();
-
-        if (accountModel == null)
-        {
-            throw new UserFriendlyException("账号不存在！");
-        }
-
-        // 验证账号状态
-        if (accountModel.Status == CommonStatusEnum.Disable)
-        {
-            throw new UserFriendlyException("账号已被平台禁用！");
-        }
-
-        var dateTime = DateTime.Now;
-
-        // 验证密码
-        await VerifyPassword(accountModel, input.Password, dateTime);
-
-        // 查询租户
-        var tenantModel = await _repository.Queryable<TenantModel>()
-            .Where(wh => wh.Id == tenantUserModel.TenantId)
-            .SingleAsync();
-
-        // 处理登录
-        return await HandleLogin(applicationModel.Application, accountModel, tenantModel, tenantUserModel, dateTime);
     }
 
     /// <summary>
@@ -335,23 +134,12 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
     /// </summary>
     /// <param name="applicationModel"></param>
     /// <param name="accountModel"></param>
-    /// <param name="tenantModel"></param>
     /// <param name="tenantUserModel"></param>
     /// <param name="dateTime"></param>
     /// <returns></returns>
     private async Task<LoginOutput> HandleLogin(ApplicationModel applicationModel, AccountModel accountModel,
-        TenantModel tenantModel, TenantUserModel tenantUserModel, DateTime dateTime)
+        TenantUserModel tenantUserModel, DateTime dateTime)
     {
-        if (tenantModel == null)
-        {
-            throw new UserFriendlyException("租户不存在！");
-        }
-
-        if (tenantModel.Status == CommonStatusEnum.Disable)
-        {
-            throw new UserFriendlyException("租户已被禁用！");
-        }
-
         if (tenantUserModel == null)
         {
             throw new UserFriendlyException("用户不存在！");
@@ -367,6 +155,21 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         if (tenantUserModel.UserType == UserTypeEnum.Robot)
         {
             throw new UserFriendlyException("无效用户！");
+        }
+
+        // 查询租户
+        var tenantModel = await _repository.Queryable<TenantModel>()
+            .Where(wh => wh.Id == tenantUserModel.TenantId)
+            .SingleAsync();
+
+        if (tenantModel == null)
+        {
+            throw new UserFriendlyException("租户不存在！");
+        }
+
+        if (tenantModel.Status == CommonStatusEnum.Disable)
+        {
+            throw new UserFriendlyException("租户已被禁用！");
         }
 
         // 验证版本
@@ -486,6 +289,480 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
     }
 
     /// <summary>
+    /// 登录
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost("/login")]
+    [ApiInfo("登录", HttpRequestActionEnum.Auth)]
+    [AllowAnonymous]
+    public async Task<LoginOutput> Login(LoginInput input)
+    {
+        // 查询应用信息
+        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+
+        if (applicationModel == null)
+        {
+            throw new UserFriendlyException("未知的应用！");
+        }
+
+        if (applicationModel.AppType != GlobalContext.DeviceType)
+        {
+            throw new UserFriendlyException("应用类型不匹配！");
+        }
+
+        // 判断账号是否为手机号
+        var isMobile = new Regex(RegexConst.Mobile).IsMatch(input.Account);
+
+        AccountModel accountModel = null;
+        TenantUserModel tenantUserModel = null;
+
+        if (isMobile)
+        {
+            // 根据手机号，查询账号
+            accountModel = await _repository.Queryable<AccountModel>()
+                .Where(wh => wh.Mobile == input.Account)
+                .SingleAsync();
+        }
+        else
+        {
+            // 根据账号或登录工号查询租户用户信息
+            tenantUserModel = await _repository.Queryable<TenantUserModel>()
+                .ClearFilter<IBaseTEntity>()
+                .Where(wh => wh.Account == input.Account || wh.LoginEmployeeNo == input.Account)
+                .SingleAsync();
+            if (tenantUserModel != null)
+            {
+                // 查询账号
+                accountModel = await _repository.Queryable<AccountModel>()
+                    .Where(wh => wh.Id == tenantUserModel.AccountId)
+                    .SingleAsync();
+            }
+        }
+
+        if (accountModel == null)
+        {
+            throw new UserFriendlyException("账号不存在！");
+        }
+
+        // 验证账号状态
+        if (accountModel.Status == CommonStatusEnum.Disable)
+        {
+            throw new UserFriendlyException("账号已被平台禁用！");
+        }
+
+        var dateTime = DateTime.Now;
+
+        // 验证密码
+        await VerifyPassword(accountModel, input.Password, dateTime);
+
+        // 单租户自动登录
+        var autoLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleTenantWhenAutoLogin));
+
+        var tenantUserList = new List<LoginOutput.LoginTenantOutput>();
+        if (tenantUserModel != null)
+        {
+            // 单租户自动登录
+            if (autoLogin)
+            {
+                // 处理登录
+                return await HandleLogin(applicationModel.Application, accountModel, tenantUserModel, dateTime);
+            }
+
+            // 查询租户
+            var tenantModel = await _repository.Queryable<TenantModel>()
+                .Where(wh => wh.Id == tenantUserModel.TenantId)
+                .SingleAsync();
+            tenantUserList.Add(new LoginOutput.LoginTenantOutput
+            {
+                UserKey = tenantUserModel.UserKey,
+                TenantName = tenantModel.TenantName,
+                ShortName = tenantModel.ShortName,
+                SpellName = tenantModel.SpellName,
+                Edition = tenantModel.Edition,
+                LogoUrl = tenantModel.LogoUrl,
+                EmployeeNo = tenantUserModel.EmployeeNo,
+                EmployeeName = tenantUserModel.EmployeeName,
+                IdPhoto = tenantUserModel.IdPhoto,
+                DeptId = tenantUserModel.DeptId,
+                DeptName = tenantUserModel.DeptName,
+                UserType = tenantUserModel.UserType,
+                Status = tenantUserModel.Status
+            });
+        }
+        else
+        {
+            tenantUserList = await _repository.Queryable<TenantUserModel>()
+                .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.Id)
+                .ClearFilter<IBaseTEntity>()
+                .Where(t1 => t1.AccountId == accountModel.Id)
+                .Select((t1, t2) => new LoginOutput.LoginTenantOutput
+                {
+                    UserKey = t1.UserKey,
+                    TenantName = t2.TenantName,
+                    ShortName = t2.ShortName,
+                    SpellName = t2.SpellName,
+                    Edition = t2.Edition,
+                    LogoUrl = t2.LogoUrl,
+                    EmployeeNo = t1.EmployeeNo,
+                    EmployeeName = t1.EmployeeName,
+                    IdPhoto = t1.IdPhoto,
+                    DeptId = t1.DeptId,
+                    DeptName = t1.DeptName,
+                    UserType = t1.UserType,
+                    Status = t1.Status
+                })
+                .ToListAsync();
+        }
+
+        if (tenantUserList.Count == 0)
+        {
+            throw new UserFriendlyException("账号未绑定任何租户！");
+        }
+
+        // 多个账号，或未开启单租户自动登录
+        return new LoginOutput {Status = LoginStatusEnum.SelectTenant, Message = "请选择租户登录", TenantList = tenantUserList};
+    }
+
+    /// <summary>
+    /// 租户登录
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost("/tenantLogin")]
+    [ApiInfo("租户登录", HttpRequestActionEnum.Auth)]
+    [AllowAnonymous]
+    public async Task<LoginOutput> TenantLogin(TenantLoginInput input)
+    {
+        // 查询应用信息
+        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+
+        if (applicationModel == null)
+        {
+            throw new UserFriendlyException("未知的应用！");
+        }
+
+        if (applicationModel.AppType != GlobalContext.DeviceType)
+        {
+            throw new UserFriendlyException("应用类型不匹配！");
+        }
+
+        // 查询租户用户
+        var tenantUserModel = await _repository.Queryable<TenantUserModel>()
+            .ClearFilter<IBaseTEntity>()
+            .Where(wh => wh.UserKey == input.UserKey)
+            .SingleAsync();
+
+        if (tenantUserModel == null)
+        {
+            throw new UserFriendlyException("用户不存在！");
+        }
+
+        // 查询账号
+        var accountModel = await _repository.Queryable<AccountModel>()
+            .Where(wh => wh.Id == tenantUserModel.AccountId)
+            .SingleAsync();
+
+        if (accountModel == null)
+        {
+            throw new UserFriendlyException("账号不存在！");
+        }
+
+        // 验证账号状态
+        if (accountModel.Status == CommonStatusEnum.Disable)
+        {
+            throw new UserFriendlyException("账号已被平台禁用！");
+        }
+
+        var dateTime = DateTime.Now;
+
+        // 验证密码
+        await VerifyPassword(accountModel, input.Password, dateTime);
+
+        // 处理登录
+        return await HandleLogin(applicationModel.Application, accountModel, tenantUserModel, dateTime);
+    }
+
+    /// <summary>
+    /// 处理微信登录
+    /// </summary>
+    /// <param name="applicationModel"></param>
+    /// <param name="weChatUserModel"></param>
+    /// <returns></returns>
+    /// <exception cref="UserFriendlyException"></exception>
+    private async Task<LoginOutput> HandleWeChatLogin(ApplicationModel applicationModel, WeChatUserModel weChatUserModel)
+    {
+        var dateTime = DateTime.Now;
+
+        // 获取设备信息
+        var userAgentInfo = _httpContext.RequestUserAgentInfo();
+        // 获取Ip信息
+        var ip = _httpContext.RemoteIpv4();
+        // 获取万网信息
+        var wanNetIpInfo = await _httpContext.RemoteIpv4InfoAsync();
+
+        weChatUserModel.LastLoginDevice = userAgentInfo.Device;
+        weChatUserModel.LastLoginOS = userAgentInfo.OS;
+        weChatUserModel.LastLoginBrowser = userAgentInfo.Browser;
+        weChatUserModel.LastLoginProvince = wanNetIpInfo.Province;
+        weChatUserModel.LastLoginCity = wanNetIpInfo.City;
+        weChatUserModel.LastLoginIp = ip;
+        weChatUserModel.LastLoginTime = dateTime;
+        await _repository.Updateable(weChatUserModel)
+            .ExecuteCommandAsync();
+
+        // 判断微信用户是否授权手机号码
+        if (string.IsNullOrWhiteSpace(weChatUserModel.PurePhoneNumber))
+        {
+            return new LoginOutput {Status = LoginStatusEnum.NotAccount, Message = "未找到微信用户信息，请先授权登录！"};
+        }
+
+        var accountModel = await _repository.Queryable<AccountModel>()
+            .Where(wh => wh.Mobile == weChatUserModel.PurePhoneNumber)
+            .SingleAsync();
+
+        if (accountModel == null)
+        {
+            throw new UserFriendlyException("账号不存在！");
+        }
+
+        // 处理账号绑定的问题
+        accountModel.WeChatId ??= weChatUserModel.Id;
+        if (accountModel.WeChatId != weChatUserModel.Id)
+        {
+            // 删除旧账号绑定
+            await _repository.Updateable<AccountModel>()
+                .SetColumns(e => e.WeChatId == null)
+                .Where(wh => wh.WeChatId == weChatUserModel.Id)
+                .ExecuteCommandAsync();
+            // 更新账号绑定
+            accountModel.WeChatId = weChatUserModel.Id;
+            await _repository.Updateable(accountModel)
+                .ExecuteCommandAsync();
+        }
+
+        // 验证账号状态
+        if (accountModel.Status == CommonStatusEnum.Disable)
+        {
+            throw new UserFriendlyException("账号已被平台禁用！");
+        }
+
+        var tenantUserList = await _repository.Queryable<TenantUserModel>()
+            .ClearFilter<IBaseTEntity>()
+            .Where(t1 => t1.AccountId == accountModel.Id)
+            .ToListAsync();
+        if (tenantUserList.Count == 0)
+        {
+            throw new UserFriendlyException("账号未绑定任何租户！");
+        }
+
+        if (tenantUserList.Count == 1)
+        {
+            // 单租户自动登录
+            var autoLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleTenantWhenAutoLogin));
+
+            // 单租户自动登录
+            if (autoLogin)
+            {
+                var tenantUserModel = tenantUserList.First();
+                // 处理登录
+                return await HandleLogin(applicationModel, accountModel, tenantUserModel, dateTime);
+            }
+        }
+
+        // 微信登录自动选择最后一次登录租户
+        if (accountModel.LastLoginTenantId != null)
+        {
+            var tenantUserModel = tenantUserList.FirstOrDefault(f => f.TenantId == accountModel.LastLoginTenantId);
+            if (tenantUserModel != null)
+            {
+                // 处理登录
+                return await HandleLogin(applicationModel, accountModel, tenantUserModel, dateTime);
+            }
+        }
+
+        // 多个账号，或未开启单租户自动登录
+        return new LoginOutput
+        {
+            Status = LoginStatusEnum.SelectTenant,
+            Message = "请选择租户登录",
+            TenantList = await _repository.Queryable<TenantUserModel>()
+                .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.Id)
+                .ClearFilter<IBaseTEntity>()
+                .Where(t1 => t1.AccountId == accountModel.Id)
+                .Select((t1, t2) => new LoginOutput.LoginTenantOutput
+                {
+                    UserKey = t1.UserKey,
+                    TenantName = t2.TenantName,
+                    ShortName = t2.ShortName,
+                    SpellName = t2.SpellName,
+                    Edition = t2.Edition,
+                    LogoUrl = t2.LogoUrl,
+                    EmployeeNo = t1.EmployeeNo,
+                    EmployeeName = t1.EmployeeName,
+                    IdPhoto = t1.IdPhoto,
+                    DeptId = t1.DeptId,
+                    DeptName = t1.DeptName,
+                    UserType = t1.UserType,
+                    Status = t1.Status
+                })
+                .ToListAsync()
+        };
+    }
+
+    /// <summary>
+    /// 微信登录
+    /// </summary>
+    /// <param name="input"></param>
+    [HttpPost("/weChatLogin")]
+    [ApiInfo("微信登录", HttpRequestActionEnum.Auth)]
+    [AllowAnonymous]
+    public async Task<LoginOutput> WeChatLogin(WeChatLoginInput input)
+    {
+        // 查询应用信息
+        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+
+        if (applicationModel == null)
+        {
+            throw new UserFriendlyException("未知的应用！");
+        }
+
+        if (applicationModel.AppType != GlobalContext.DeviceType)
+        {
+            throw new UserFriendlyException("应用类型不匹配！");
+        }
+
+        // 解析微信Code，获取OpenId
+        var options = new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret};
+        var client = WechatApiClientBuilder.Create(options)
+            .Build();
+        var response = await client.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.WeChatCode});
+        if (!response.IsSuccessful())
+        {
+            throw new UserFriendlyException(
+                $"解析Code失败，获取微信登录信息失败：ErrorCode：{response.ErrorCode}。ErrorMessage：{response.ErrorMessage}");
+        }
+
+        // 根据 OpenId 获取微信用户信息
+        var weChatUserModel = await _repository.Queryable<WeChatUserModel>()
+            .Where(wh => wh.AppId == applicationModel.AppId)
+            .Where(wh => wh.OpenId == response.OpenId)
+            .SingleAsync();
+        if (weChatUserModel == null)
+        {
+            // 这里的 IV 和 EncryptedData 在没有授权的情况下是为空的
+            if (input.IV.IsEmpty() || input.EncryptedData.IsEmpty())
+            {
+                return new LoginOutput {Status = LoginStatusEnum.AuthExpired, Message = "授权已过期，请重新授权登录！"};
+            }
+
+            // 尝试解析加密数据
+            var decryptBytes = AESUtility.DecryptWithCBC(Convert.FromBase64String(response.SessionKey),
+                Convert.FromBase64String(input.IV), Convert.FromBase64String(input.EncryptedData));
+            var decryptStr = Encoding.Default.GetString(decryptBytes);
+            var decryptData = decryptStr.ToObject<DecryptWeChatUserInfo>();
+            if (decryptData == null)
+            {
+                throw new UserFriendlyException("解析加密用户信息失败！");
+            }
+
+            // 保存微信用户
+            weChatUserModel = new WeChatUserModel
+            {
+                Id = YitIdHelper.NextId(),
+                AppId = applicationModel.AppId,
+                UserType = GlobalContext.DeviceType switch
+                {
+                    AppEnvironmentEnum.WeChatMiniProgram => WeChatUserTypeEnum.MiniProgram,
+                    AppEnvironmentEnum.WeChatOfficialAccount => WeChatUserTypeEnum.OfficialAccount,
+                    AppEnvironmentEnum.WeChatServiceAccount => WeChatUserTypeEnum.ServiceAccount,
+                    AppEnvironmentEnum.WeChatOpenPlatform => WeChatUserTypeEnum.OpenPlatform,
+                    AppEnvironmentEnum.WorkWeChat => WeChatUserTypeEnum.WorkWeChat,
+                    _ => WeChatUserTypeEnum.MiniProgram
+                },
+                OpenId = response.OpenId,
+                UnionId = response.UnionId,
+                SessionKey = response.SessionKey,
+                NickName = decryptData.NickName,
+                Sex = decryptData.Gender,
+                Country = decryptData.Country,
+                Province = decryptData.Province,
+                City = decryptData.City,
+                Language = decryptData.Language
+            };
+            await _repository.Insertable(weChatUserModel)
+                .ExecuteCommandAsync();
+        }
+
+        return await HandleWeChatLogin(applicationModel.Application, weChatUserModel);
+    }
+
+    /// <summary>
+    /// 微信授权登录
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost("/weChatAuthLogin")]
+    [ApiInfo("微信授权登录", HttpRequestActionEnum.Auth)]
+    [AllowAnonymous]
+    public async Task<LoginOutput> WeChatAuthLogin(WeChatAuthLoginInput input)
+    {
+        // 查询应用信息
+        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+
+        if (applicationModel == null)
+        {
+            throw new UserFriendlyException("未知的应用！");
+        }
+
+        if (applicationModel.AppType != GlobalContext.DeviceType)
+        {
+            throw new UserFriendlyException("应用类型不匹配！");
+        }
+
+        // 解析微信Code，获取OpenId
+        var options = new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret};
+        var client = WechatApiClientBuilder.Create(options)
+            .Build();
+        var response = await client.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.WeChatCode});
+        if (!response.IsSuccessful())
+        {
+            throw new UserFriendlyException(
+                $"解析Code失败，获取微信登录信息失败：ErrorCode：{response.ErrorCode}。ErrorMessage：{response.ErrorMessage}");
+        }
+
+        // 根据 OpenId 获取微信用户信息
+        var weChatUserModel = await _repository.Queryable<WeChatUserModel>()
+            .Where(wh => wh.AppId == applicationModel.AppId)
+            .Where(wh => wh.OpenId == response.OpenId)
+            .SingleAsync();
+        if (weChatUserModel == null)
+        {
+            return new LoginOutput {Status = LoginStatusEnum.NotAccount, Message = "未找到微信用户信息，请先授权登录！"};
+        }
+
+        // 换取用户手机号
+        var phoneNumberResponse = await client.ExecuteWxaBusinessGetUserPhoneNumberAsync(new WxaBusinessGetUserPhoneNumberRequest
+        {
+            AccessToken = applicationModel.WeChatAccessToken, Code = input.Code
+        });
+        if (!phoneNumberResponse.IsSuccessful())
+        {
+            throw new UserFriendlyException(
+                $"解析Code失败，获取用户手机号失败：ErrorCode：{response.ErrorCode}。ErrorMessage：{response.ErrorMessage}");
+        }
+
+        if (weChatUserModel.PurePhoneNumber != phoneNumberResponse.PhoneInfo.PurePhoneNumber)
+        {
+            weChatUserModel.PurePhoneNumber = phoneNumberResponse.PhoneInfo.PurePhoneNumber;
+            weChatUserModel.PhoneNumber = phoneNumberResponse.PhoneInfo.PhoneNumber;
+            weChatUserModel.CountryCode = phoneNumberResponse.PhoneInfo.CountryCode;
+        }
+
+        return await HandleWeChatLogin(applicationModel.Application, weChatUserModel);
+    }
+
+    /// <summary>
     /// 退出登录
     /// </summary>
     /// <returns></returns>
@@ -518,5 +795,153 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         }
 
         await _user.Logout();
+    }
+
+    /// <summary>
+    /// 微信客户端登录
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost("/weChatClientLogin")]
+    [ApiInfo("微信客户端登录", HttpRequestActionEnum.Auth)]
+    [AllowAnonymous]
+    public async Task<WeChatClientLoginOutput> WeChatClientLogin(WeChatLoginInput input)
+    {
+        // 查询应用信息
+        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+
+        if (applicationModel == null)
+        {
+            throw new UserFriendlyException("未知的应用！");
+        }
+
+        if (applicationModel.AppType != GlobalContext.DeviceType)
+        {
+            throw new UserFriendlyException("应用类型不匹配！");
+        }
+
+        // 解析微信Code，获取OpenId
+        var options = new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret};
+        var client = WechatApiClientBuilder.Create(options)
+            .Build();
+        var response = await client.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.WeChatCode});
+        if (!response.IsSuccessful())
+        {
+            throw new UserFriendlyException(
+                $"解析Code失败，获取微信登录信息失败：ErrorCode：{response.ErrorCode}。ErrorMessage：{response.ErrorMessage}");
+        }
+
+        // 根据 OpenId 获取微信用户信息
+        var weChatUserModel = await _repository.Queryable<WeChatUserModel>()
+            .Where(wh => wh.AppId == applicationModel.AppId)
+            .Where(wh => wh.OpenId == response.OpenId)
+            .SingleAsync();
+        if (weChatUserModel == null)
+        {
+            // 这里的 IV 和 EncryptedData 在没有授权的情况下是为空的
+            if (input.IV.IsEmpty() || input.EncryptedData.IsEmpty())
+            {
+                throw new UserFriendlyException("授权已过期，请重新授权登录！");
+            }
+
+            // 尝试解析加密数据
+            var decryptBytes = AESUtility.DecryptWithCBC(Convert.FromBase64String(response.SessionKey),
+                Convert.FromBase64String(input.IV), Convert.FromBase64String(input.EncryptedData));
+            var decryptStr = Encoding.Default.GetString(decryptBytes);
+            var decryptData = decryptStr.ToObject<DecryptWeChatUserInfo>();
+            if (decryptData == null)
+            {
+                throw new UserFriendlyException("解析加密用户信息失败！");
+            }
+
+            // 保存微信用户
+            weChatUserModel = new WeChatUserModel
+            {
+                Id = YitIdHelper.NextId(),
+                AppId = applicationModel.AppId,
+                UserType = GlobalContext.DeviceType switch
+                {
+                    AppEnvironmentEnum.WeChatMiniProgram => WeChatUserTypeEnum.MiniProgram,
+                    AppEnvironmentEnum.WeChatOfficialAccount => WeChatUserTypeEnum.OfficialAccount,
+                    AppEnvironmentEnum.WeChatServiceAccount => WeChatUserTypeEnum.ServiceAccount,
+                    AppEnvironmentEnum.WeChatOpenPlatform => WeChatUserTypeEnum.OpenPlatform,
+                    AppEnvironmentEnum.WorkWeChat => WeChatUserTypeEnum.WorkWeChat,
+                    _ => WeChatUserTypeEnum.MiniProgram
+                },
+                OpenId = response.OpenId,
+                UnionId = response.UnionId,
+                SessionKey = response.SessionKey,
+                NickName = decryptData.NickName,
+                Sex = decryptData.Gender,
+                Country = decryptData.Country,
+                Province = decryptData.Province,
+                City = decryptData.City,
+                Language = decryptData.Language
+            };
+            await _repository.Insertable(weChatUserModel)
+                .ExecuteCommandAsync();
+        }
+
+        var dateTime = DateTime.Now;
+
+        // 获取设备信息
+        var userAgentInfo = _httpContext.RequestUserAgentInfo();
+        // 获取Ip信息
+        var ip = _httpContext.RemoteIpv4();
+        // 获取万网信息
+        var wanNetIpInfo = await _httpContext.RemoteIpv4InfoAsync();
+
+        weChatUserModel.LastLoginDevice = userAgentInfo.Device;
+        weChatUserModel.LastLoginOS = userAgentInfo.OS;
+        weChatUserModel.LastLoginBrowser = userAgentInfo.Browser;
+        weChatUserModel.LastLoginProvince = wanNetIpInfo.Province;
+        weChatUserModel.LastLoginCity = wanNetIpInfo.City;
+        weChatUserModel.LastLoginIp = ip;
+        weChatUserModel.LastLoginTime = dateTime;
+        await _repository.Updateable(weChatUserModel)
+            .ExecuteCommandAsync();
+
+        // 判断微信用户是否授权手机号码，只有存在手机号码才返回 AccessToken
+        if (!string.IsNullOrWhiteSpace(weChatUserModel.PurePhoneNumber))
+        {
+            // 客户端登录
+            await _user.ClientLogin(new AuthUserInfo
+            {
+                DeviceType = GlobalContext.DeviceType,
+                DeviceId = GlobalContext.DeviceId,
+                AppNo = applicationModel.Application.AppNo,
+                AppName = applicationModel.Application.AppName,
+                AccountId = weChatUserModel.Id,
+                Mobile = weChatUserModel.PurePhoneNumber,
+                NickName = weChatUserModel.NickName,
+                Avatar = weChatUserModel.Avatar,
+                TenantNo = applicationModel.Application.AppNo,
+                UserId = weChatUserModel.Id,
+                Account = weChatUserModel.PurePhoneNumber,
+                EmployeeNo = weChatUserModel.OpenId,
+                EmployeeName = weChatUserModel.NickName,
+                IsSuperAdmin = false,
+                IsAdmin = false,
+                LastLoginDevice = weChatUserModel.LastLoginDevice,
+                LastLoginOS = weChatUserModel.LastLoginOS,
+                LastLoginBrowser = weChatUserModel.LastLoginBrowser,
+                LastLoginProvince = weChatUserModel.LastLoginProvince,
+                LastLoginCity = weChatUserModel.LastLoginCity,
+                LastLoginIp = weChatUserModel.LastLoginIp,
+                LastLoginTime = weChatUserModel.LastLoginTime.Value,
+                ButtonCodeList = [PermissionConst.ClientService]
+            });
+
+            return new WeChatClientLoginOutput
+            {
+                OpenId = weChatUserModel.OpenId,
+                UnionId = weChatUserModel.UnionId,
+                Mobile = weChatUserModel.PurePhoneNumber,
+                NickName = weChatUserModel.NickName,
+                Avatar = weChatUserModel.Avatar
+            };
+        }
+
+        return null;
     }
 }
