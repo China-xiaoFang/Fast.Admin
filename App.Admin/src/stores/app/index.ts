@@ -1,6 +1,6 @@
 import { reactive, ref, toRefs } from "vue";
 import { useFastAxios } from "@fast-china/axios";
-import { consoleError } from "@fast-china/utils";
+import { consoleError, consoleLog } from "@fast-china/utils";
 import { defineStore } from "pinia";
 import { useConfig } from "../config";
 import type { LaunchOutput } from "@/api/services/app/models/LaunchOutput";
@@ -67,7 +67,7 @@ export const useApp = defineStore(
 			loginComponent: "",
 			webSocketUrl: "",
 			requestTimeout: 6000,
-			requestEncipher: false,
+			requestEncipher: true,
 			env: "production",
 			deviceType: AppEnvironmentEnum.MobileThree,
 			appId: "",
@@ -110,6 +110,8 @@ export const useApp = defineStore(
 
 		/** 设置 FastAxios */
 		const setFastAxios = (): void => {
+			// 判断是否存在 Launch 数据
+			if (!state.hasLaunch) return;
 			const fastAxios = useFastAxios();
 			fastAxios.setOptions({
 				timeout: state.requestTimeout,
@@ -121,6 +123,7 @@ export const useApp = defineStore(
 		const launch = async (): Promise<void> => {
 			try {
 				const apiRes = await appApi.launch();
+				consoleLog("App", "Launch", apiRes);
 				Object.assign(state, apiRes);
 				state.hasLaunch = true;
 			} finally {
