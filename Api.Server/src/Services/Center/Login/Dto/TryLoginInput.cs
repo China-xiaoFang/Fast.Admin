@@ -20,37 +20,16 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using System.ComponentModel;
-
 namespace Fast.Center.Service.Login.Dto;
 
 /// <summary>
-/// <see cref="LoginStatusEnum"/> 登录状态枚举
+/// <see cref="TryLoginInput"/> 尝试登录输入
 /// </summary>
-[FastEnum("登录状态枚举")]
-public enum LoginStatusEnum
+public class TryLoginInput
 {
     /// <summary>
-    /// 登录成功
+    /// 用户Key
     /// </summary>
-    [Description("登录成功")]
-    Success = 1,
-
-    /// <summary>
-    /// 选择租户
-    /// </summary>
-    [Description("选择租户")]
-    SelectTenant = 2,
-
-    /// <summary>
-    /// 授权过期
-    /// </summary>
-    [Description("授权过期")]
-    AuthExpired = 4,
-
-    /// <summary>
-    /// 无账号
-    /// </summary>
-    [Description("无账号")]
-    NotAccount = 8
+    [StringRequired(ErrorMessage = "用户Key不能为空")]
+    public string UserKey { get; set; }
 }

@@ -28,6 +28,11 @@ namespace Fast.Admin.Service.Auth.Dto;
 public class GetLoginUserInfoOutput
 {
     /// <summary>
+    /// 账号Key
+    /// </summary>
+    public string AccountKey { get; set; }
+
+    /// <summary>
     /// 手机
     /// </summary>
     public string Mobile { get; set; }

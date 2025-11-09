@@ -81,6 +81,7 @@ public class AuthService : IAuthService, ITransientDependency, IDynamicApplicati
 
         var result = new GetLoginUserInfoOutput
         {
+            AccountKey = _user.AccountKey,
             Mobile = _user.Mobile,
             NickName = _user.NickName,
             Avatar = _user.Avatar,

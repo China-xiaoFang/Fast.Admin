@@ -246,6 +246,7 @@ public class ChatHub : Hub<IChatClient>
                 AppNo = authUserInfo.AppNo,
                 AppName = authUserInfo.AppName,
                 AccountId = authUserInfo.AccountId,
+                AccountKey = authUserInfo.AccountKey,
                 Mobile = authUserInfo.Mobile,
                 NickName = authUserInfo.NickName,
                 Avatar = authUserInfo.Avatar,

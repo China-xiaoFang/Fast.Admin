@@ -140,6 +140,12 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
     private async Task<LoginOutput> HandleLogin(ApplicationModel applicationModel, AccountModel accountModel,
         TenantUserModel tenantUserModel, DateTime dateTime)
     {
+        // 验证账号状态
+        if (accountModel.Status == CommonStatusEnum.Disable)
+        {
+            throw new UserFriendlyException("账号已被平台禁用！");
+        }
+
         if (tenantUserModel == null)
         {
             throw new UserFriendlyException("用户不存在！");
@@ -217,6 +223,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             AppNo = applicationModel.AppNo,
             AppName = applicationModel.AppName,
             AccountId = accountModel.Id,
+            AccountKey = accountModel.AccountKey,
             Mobile = accountModel.Mobile,
             NickName = accountModel.NickName,
             Avatar = accountModel.Avatar,
@@ -266,6 +273,9 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         {
             Status = LoginStatusEnum.Success,
             Message = "登录成功",
+            AccountKey = accountModel.AccountKey,
+            NickName = accountModel.NickName,
+            Avatar = accountModel.Avatar,
             TenantList =
             [
                 new LoginOutput.LoginTenantOutput
@@ -345,12 +355,6 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             throw new UserFriendlyException("账号不存在！");
         }
 
-        // 验证账号状态
-        if (accountModel.Status == CommonStatusEnum.Disable)
-        {
-            throw new UserFriendlyException("账号已被平台禁用！");
-        }
-
         var dateTime = DateTime.Now;
 
         // 验证密码
@@ -421,7 +425,50 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         }
 
         // 多个账号，或未开启单租户自动登录
-        return new LoginOutput {Status = LoginStatusEnum.SelectTenant, Message = "请选择租户登录", TenantList = tenantUserList};
+        return new LoginOutput
+        {
+            Status = LoginStatusEnum.SelectTenant,
+            Message = "请选择租户登录",
+            AccountKey = accountModel.AccountKey,
+            NickName = accountModel.NickName,
+            Avatar = accountModel.Avatar,
+            TenantList = tenantUserList
+        };
+    }
+
+    /// <summary>
+    /// 获取登录用户根据账号
+    /// </summary>
+    /// <param name="accountKey"></param>
+    /// <returns></returns>
+    [HttpGet("/queryLoginUserByAccount")]
+    [ApiInfo("获取登录用户根据账号", HttpRequestActionEnum.Query)]
+    [AllowAnonymous]
+    public async Task<List<LoginOutput.LoginTenantOutput>> QueryLoginUserByAccount(
+        [Required(ErrorMessage = "账号Key不能为空")] string accountKey)
+    {
+        return await _repository.Queryable<AccountModel>()
+            .InnerJoin<TenantUserModel>((t1, t2) => t1.Id == t2.AccountId)
+            .InnerJoin<TenantModel>((t1, t2, t3) => t2.TenantId == t3.Id)
+            .ClearFilter<IBaseTEntity>()
+            .Where(t1 => t1.AccountKey == accountKey)
+            .Select((t1, t2, t3) => new LoginOutput.LoginTenantOutput
+            {
+                UserKey = t2.UserKey,
+                TenantName = t3.TenantName,
+                ShortName = t3.ShortName,
+                SpellName = t3.SpellName,
+                Edition = t3.Edition,
+                LogoUrl = t3.LogoUrl,
+                EmployeeNo = t2.EmployeeNo,
+                EmployeeName = t2.EmployeeName,
+                IdPhoto = t2.IdPhoto,
+                DeptId = t2.DeptId,
+                DeptName = t2.DeptName,
+                UserType = t2.UserType,
+                Status = t2.Status
+            })
+            .ToListAsync();
     }
 
     /// <summary>
@@ -434,6 +481,11 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
     [AllowAnonymous]
     public async Task<LoginOutput> TenantLogin(TenantLoginInput input)
     {
+        if (string.IsNullOrWhiteSpace(input.AccountKey) && string.IsNullOrWhiteSpace(input.Password))
+        {
+            throw new UserFriendlyException("账号Key和密码必须二选一！");
+        }
+
         // 查询应用信息
         var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
 
@@ -468,16 +520,20 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             throw new UserFriendlyException("账号不存在！");
         }
 
-        // 验证账号状态
-        if (accountModel.Status == CommonStatusEnum.Disable)
-        {
-            throw new UserFriendlyException("账号已被平台禁用！");
-        }
-
         var dateTime = DateTime.Now;
 
-        // 验证密码
-        await VerifyPassword(accountModel, input.Password, dateTime);
+        if (!string.IsNullOrWhiteSpace(input.AccountKey))
+        {
+            if (accountModel.AccountKey != input.AccountKey)
+            {
+                throw new UserFriendlyException("账号不存在！");
+            }
+        }
+        else
+        {
+            // 验证密码
+            await VerifyPassword(accountModel, input.Password, dateTime);
+        }
 
         // 处理登录
         return await HandleLogin(applicationModel.Application, accountModel, tenantUserModel, dateTime);
@@ -541,12 +597,6 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
                 .ExecuteCommandAsync();
         }
 
-        // 验证账号状态
-        if (accountModel.Status == CommonStatusEnum.Disable)
-        {
-            throw new UserFriendlyException("账号已被平台禁用！");
-        }
-
         var tenantUserList = await _repository.Queryable<TenantUserModel>()
             .ClearFilter<IBaseTEntity>()
             .Where(t1 => t1.AccountId == accountModel.Id)
@@ -586,6 +636,9 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         {
             Status = LoginStatusEnum.SelectTenant,
             Message = "请选择租户登录",
+            AccountKey = accountModel.AccountKey,
+            NickName = accountModel.NickName,
+            Avatar = accountModel.Avatar,
             TenantList = await _repository.Queryable<TenantUserModel>()
                 .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.Id)
                 .ClearFilter<IBaseTEntity>()
@@ -684,6 +737,8 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
                 UnionId = response.UnionId,
                 SessionKey = response.SessionKey,
                 NickName = decryptData.NickName,
+                Avatar =
+                    "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132",
                 Sex = decryptData.Gender,
                 Country = decryptData.Country,
                 Province = decryptData.Province,
@@ -749,7 +804,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         if (!phoneNumberResponse.IsSuccessful())
         {
             throw new UserFriendlyException(
-                $"解析Code失败，获取用户手机号失败：ErrorCode：{response.ErrorCode}。ErrorMessage：{response.ErrorMessage}");
+                $"解析Code失败，获取用户手机号失败：ErrorCode：{phoneNumberResponse.ErrorCode}。ErrorMessage：{phoneNumberResponse.ErrorMessage}");
         }
 
         if (weChatUserModel.PurePhoneNumber != phoneNumberResponse.PhoneInfo.PurePhoneNumber)
@@ -760,6 +815,51 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         }
 
         return await HandleWeChatLogin(applicationModel.Application, weChatUserModel);
+    }
+
+    /// <summary>
+    /// 尝试登录
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost("/tryLogin")]
+    [ApiInfo("尝试登录", HttpRequestActionEnum.Auth)]
+    [AllowAnonymous]
+    public async Task<LoginOutput> TryLogin(TryLoginInput input)
+    {
+        // 查询应用信息
+        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+
+        if (applicationModel == null)
+        {
+            throw new UserFriendlyException("未知的应用！");
+        }
+
+        if (applicationModel.AppType != GlobalContext.DeviceType)
+        {
+            throw new UserFriendlyException("应用类型不匹配！");
+        }
+
+        var tenantUserModel = await _repository.Queryable<TenantUserModel>()
+            .ClearFilter<IBaseTEntity>()
+            .Where(wh => wh.UserKey == input.UserKey)
+            .SingleAsync();
+
+        if (tenantUserModel == null)
+        {
+            return new LoginOutput {Status = LoginStatusEnum.NotAccount, Message = "未找到用户信息，请先授权登录！"};
+        }
+
+        var accountModel = await _repository.Queryable<AccountModel>()
+            .Where(wh => wh.Id == tenantUserModel.AccountId)
+            .SingleAsync();
+
+        if (accountModel == null)
+        {
+            throw new UserFriendlyException("账号不存在！");
+        }
+
+        // 处理登录
+        return await HandleLogin(applicationModel.Application, accountModel, tenantUserModel, DateTime.Now);
     }
 
     /// <summary>

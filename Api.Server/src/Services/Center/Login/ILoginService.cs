@@ -37,6 +37,13 @@ public interface ILoginService
     Task<LoginOutput> Login(LoginInput input);
 
     /// <summary>
+    /// 获取登录用户根据账号
+    /// </summary>
+    /// <param name="accountKey"></param>
+    /// <returns></returns>
+    Task<List<LoginOutput.LoginTenantOutput>> QueryLoginUserByAccount(string accountKey);
+
+    /// <summary>
     /// 租户登录
     /// </summary>
     /// <param name="input"></param>
@@ -54,6 +61,12 @@ public interface ILoginService
     /// <param name="input"></param>
     /// <returns></returns>
     Task<LoginOutput> WeChatAuthLogin(WeChatAuthLoginInput input);
+
+    /// <summary>
+    /// 尝试登录
+    /// </summary>
+    /// <returns></returns>
+    Task<LoginOutput> TryLogin(TryLoginInput input);
 
     /// <summary>
     /// 退出登录

@@ -81,21 +81,27 @@ public class RequestMiddleware
             return;
         }
 
+        var isReadBody = !(httpRequest.Method == HttpMethod.Get.Method || httpRequest.Method == HttpMethod.Delete.Method);
+
         // Url请求参数
-        var queryParam = "";
+        IDictionary<string, string> queryParamDic = null;
         // Body请求参数
         var bodyParam = "";
+        // 解密数据
+        var decryptedData = "";
 
-        if (httpRequest.Method == HttpMethod.Get.Method || httpRequest.Method == HttpMethod.Delete.Method)
+        if (!isReadBody)
         {
-            queryParam = httpRequest.QueryString.ToString();
+            queryParamDic = httpRequest.Query.ToDictionary(e => e.Key, e => e.Value.ToString());
         }
-        else if (httpRequest.Method == HttpMethod.Post.Method || httpRequest.Method == HttpMethod.Put.Method)
+        else
         {
             // 允许读取请求的Body
             httpContext.Request.EnableBuffering();
             using var streamReader = new StreamReader(httpContext.Request.Body, Encoding.UTF8, leaveOpen: true);
             bodyParam = await streamReader.ReadToEndAsync();
+            // 重置指针
+            httpContext.Request.Body.Position = 0;
         }
 
         // 请求解密
@@ -111,41 +117,32 @@ public class RequestMiddleware
         {
             if (requestEncipher)
             {
-                if (httpRequest.Method == HttpMethod.Get.Method || httpRequest.Method == HttpMethod.Delete.Method)
+                if (!isReadBody && queryParamDic?.Count > 0)
                 {
-                    if (!string.IsNullOrWhiteSpace(queryParam))
-                    {
-                        // 解析Json，取出 data 和 timestamp 字段
-                        var encryptedData = queryParam.ToObject<RestfulResult<string>>();
+                    // 解密数据
+                    decryptedData = CryptoUtil.AESDecrypt(queryParamDic["data"], queryParamDic["timestamp"],
+                        $"FIV{queryParamDic["timestamp"]}");
 
-                        // 解密数据
-                        queryParam = CryptoUtil.AESDecrypt(encryptedData.Data, encryptedData.Timestamp.ToString(),
-                            $"FIV{encryptedData.Timestamp}");
+                    // 反序列化成键值对
+                    var model = decryptedData.ToObject<Dictionary<string, string>>();
 
-                        // 反序列化成键值对
-                        var model = queryParam.ToObject<Dictionary<string, string>>();
-
-                        // 替换 QueryString
-                        httpRequest.QueryString = QueryString.Create(model);
-                    }
+                    // 替换 QueryString
+                    httpRequest.QueryString = QueryString.Create(model);
                 }
-                else if (httpRequest.Method == HttpMethod.Post.Method || httpRequest.Method == HttpMethod.Put.Method)
+                else if (isReadBody && !string.IsNullOrWhiteSpace(bodyParam))
                 {
-                    if (!string.IsNullOrWhiteSpace(bodyParam))
-                    {
-                        // 解析Json，取出 data 和 timestamp 字段
-                        var encryptedData = bodyParam.ToObject<RestfulResult<string>>();
+                    // 解析Json，取出 data 和 timestamp 字段
+                    var encryptedData = bodyParam.ToObject<RestfulResult<string>>();
 
-                        // 解密数据
-                        bodyParam = CryptoUtil.AESDecrypt(encryptedData.Data, encryptedData.Timestamp.ToString(),
-                            $"FIV{encryptedData.Timestamp}");
+                    // 解密数据
+                    decryptedData = CryptoUtil.AESDecrypt(encryptedData.Data, encryptedData.Timestamp.ToString(),
+                        $"FIV{encryptedData.Timestamp}");
 
-                        // 写入 Body
-                        httpRequest.Body = new MemoryStream(Encoding.UTF8.GetBytes(bodyParam));
+                    // 写入 Body
+                    httpRequest.Body = new MemoryStream(Encoding.UTF8.GetBytes(decryptedData));
 
-                        // 重置指针
-                        httpContext.Request.Body.Position = 0;
-                    }
+                    // 重置指针
+                    httpContext.Request.Body.Position = 0;
                 }
             }
         }
@@ -157,7 +154,7 @@ public class RequestMiddleware
         finally
         {
             // 写入 HttpContext.Items
-            httpContext.Items[$"{nameof(Fast)}.RequestParams"] = string.IsNullOrWhiteSpace(queryParam) ? bodyParam : queryParam;
+            httpContext.Items[$"{nameof(Fast)}.RequestParams"] = decryptedData;
         }
 
         await _next(httpContext);

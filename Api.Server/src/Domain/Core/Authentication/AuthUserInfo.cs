@@ -61,6 +61,11 @@ public class AuthUserInfo
     public virtual long AccountId { get; set; }
 
     /// <summary>
+    /// 账号Key
+    /// </summary>
+    public virtual string AccountKey { get; set; }
+
+    /// <summary>
     /// 手机
     /// </summary>
     public virtual string Mobile { get; set; }

@@ -75,6 +75,12 @@ public class TenantOnlineUserModel : IBaseTEntity
     public long AccountId { get; set; }
 
     /// <summary>
+    /// 账号Key
+    /// </summary>
+    [SugarColumn(ColumnDescription = "账号Key", ColumnDataType = "varchar(12)")]
+    public string AccountKey { get; set; }
+
+    /// <summary>
     /// 手机
     /// </summary>
     [Required]

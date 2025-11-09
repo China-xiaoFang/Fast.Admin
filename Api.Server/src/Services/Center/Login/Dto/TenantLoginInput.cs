@@ -28,6 +28,11 @@ namespace Fast.Center.Service.Login.Dto;
 public class TenantLoginInput
 {
     /// <summary>
+    /// 账号Key
+    /// </summary>
+    public string AccountKey { get; set; }
+
+    /// <summary>
     /// 用户Key
     /// </summary>
     [StringRequired(ErrorMessage = "用户Key不能为空")]
@@ -36,6 +41,5 @@ public class TenantLoginInput
     /// <summary>
     /// 密码
     /// </summary>
-    [StringRequired(ErrorMessage = "密码不能为空"), MinLength(6, ErrorMessage = "密码不能少于6位字符")]
     public string Password { get; set; }
 }
