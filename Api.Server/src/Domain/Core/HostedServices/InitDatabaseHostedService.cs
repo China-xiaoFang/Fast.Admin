@@ -113,6 +113,7 @@ public class InitDatabaseHostedService : IHostedService
             var superAdminAccountModel = new AccountModel
             {
                 Id = CommonConst.Default.SuperAdminAccountId,
+                AccountKey = VerificationUtil.IdToCodeByLong(CommonConst.Default.SuperAdminAccountId),
                 Mobile = "15580001115",
                 Email = "2875616188@qq.com",
                 Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)

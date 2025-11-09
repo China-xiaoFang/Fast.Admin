@@ -38,6 +38,21 @@ public class LoginOutput
     public string Message { get; set; }
 
     /// <summary>
+    /// 账号Key
+    /// </summary>
+    public string AccountKey { get; set; }
+
+    /// <summary>
+    /// 昵称
+    /// </summary>
+    public string NickName { get; set; }
+
+    /// <summary>
+    /// 头像
+    /// </summary>
+    public string Avatar { get; set; }
+
+    /// <summary>
     /// 租户集合
     /// </summary>
     public List<LoginTenantOutput> TenantList { get; set; }
