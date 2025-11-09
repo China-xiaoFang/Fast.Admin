@@ -28,7 +28,7 @@
 			"type": "page",
 			"name": "Login",
 			"layout": "layout",
-			"backgroundColor": "var(--wot-dark-background2)",
+			"backgroundColor": "var(--wot-bg-color)",
 			"footer": false,
 			"watermark": false,
 			"pageScroll": false,

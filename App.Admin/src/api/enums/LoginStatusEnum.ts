@@ -14,4 +14,8 @@ export enum LoginStatusEnum {
    * 授权过期
    */
   AuthExpired = 4,
+  /**
+   * 无账号
+   */
+  NotAccount = 8,
 }

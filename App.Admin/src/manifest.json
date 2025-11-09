@@ -124,7 +124,7 @@
 	},
 	"mp-weixin": {
 		"usingComponents": true,
-		"appid": "wx1e4b5c59fb34d91f",
+		"appid": "wx070c83a0a792b5f4",
 		"libVersion": "latest",
 		"mergeVirtualHostAttributes": true,
 		"darkmode": true,

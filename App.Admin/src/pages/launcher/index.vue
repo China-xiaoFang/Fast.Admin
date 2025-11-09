@@ -17,6 +17,8 @@ import { reactive } from "vue";
 import { axiosUtil } from "@fast-china/axios";
 import { consoleError, consoleLog, consoleWarn } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
+import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
+import { loginApi } from "@/api/services/login";
 import { CommonRoute } from "@/common";
 import { useLoading, useMessageBox, useToast } from "@/hooks";
 import defaultLogo from "@/static/logo.png";
@@ -54,22 +56,21 @@ const state = reactive({
 const openStartPage = async () => {
 	state.btnText = "进入页面";
 	state.loading = false;
-	// 判断是否存在 token,unionKey,clerkKey
+	// 判断是否存在 token, userKey
 	const { token, userKey } = userInfoStore;
 	if (token && userKey) {
 		useLoading.show("尝试自动登录中...");
 		try {
-			// // 验证登录
-			// const loginRes = await loginApi.tryLogin({
-			// 	unionKey,
-			// 	clerkKey,
-			// });
-			// if (loginRes.loginResult === LoginResultType.Success) {
-			// 	userInfoStore.login(loginRes);
-			// 	return;
-			// } else {
-			// 	consoleWarn("Launcher", "尝试缓存登录失败", loginRes);
-			// }
+			// 验证登录
+			const loginRes = await loginApi.tryLogin({
+				userKey,
+			});
+			if (loginRes.status === LoginStatusEnum.Success) {
+				userInfoStore.login(loginRes);
+				return;
+			} else {
+				consoleWarn("Launcher", "尝试缓存登录失败", loginRes);
+			}
 		} catch (error) {
 			consoleError("Launcher", "尝试缓存登录失败");
 			consoleError("Launcher", error);
@@ -83,20 +84,20 @@ const openStartPage = async () => {
 		try {
 			const weChatCode = await userInfoStore.getWeChatCode();
 			if (weChatCode) {
-				// const loginRes = await loginApi.loginByWechat({
-				// 	code: weChatCode,
-				// });
-				// if (loginRes.loginResult === LoginResultType.Success) {
-				// 	userInfoStore.login(loginRes);
-				// 	return;
-				// } else {
-				// 	useMessageBox.alert(loginRes.loginMessage).then(() => {
-				// 		router.replaceAll({
-				// 			path: CommonRoute.Login,
-				// 		});
-				// 	});
-				// 	return;
-				// }
+				const loginRes = await loginApi.weChatLogin({
+					weChatCode,
+				});
+				if (loginRes.status === LoginStatusEnum.Success) {
+					userInfoStore.login(loginRes);
+					return;
+				} else {
+					useMessageBox.alert(loginRes.message).then(() => {
+						router.replaceAll({
+							path: CommonRoute.Login,
+						});
+					});
+					return;
+				}
 			} else {
 				consoleWarn("Launcher", "授权失败，无法获取您的信息。请手动授权以继续使用我们的服务。");
 				router.replaceAll({
