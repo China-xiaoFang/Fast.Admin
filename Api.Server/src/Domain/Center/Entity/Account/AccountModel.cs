@@ -34,6 +34,13 @@ namespace Fast.Center.Entity;
 public class AccountModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 账号Key
+    /// </summary>
+    [Required]
+    [SugarColumn(ColumnDescription = "账号Key", ColumnDataType = "varchar(12)")]
+    public string AccountKey { get; set; }
+
+    /// <summary>
     /// 手机
     /// </summary>
     [Required]

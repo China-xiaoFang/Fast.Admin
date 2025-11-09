@@ -61,6 +61,11 @@ public interface IUser
     long AccountId { get; set; }
 
     /// <summary>
+    /// 账号Key
+    /// </summary>
+    string AccountKey { get; set; }
+
+    /// <summary>
     /// 手机
     /// </summary>
     string Mobile { get; set; }
