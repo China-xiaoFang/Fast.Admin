@@ -14,6 +14,18 @@ export interface LoginOutput {
    */
   message?: string;
   /**
+   * 账号Key
+   */
+  accountKey?: string;
+  /**
+   * 昵称
+   */
+  nickName?: string;
+  /**
+   * 头像
+   */
+  avatar?: string;
+  /**
    * 租户集合
    */
   tenantList?: Array<LoginTenantOutput>;

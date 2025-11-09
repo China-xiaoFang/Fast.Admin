@@ -1,7 +1,7 @@
 import { reactive, ref, toRefs } from "vue";
 import { ElMessageBox } from "element-plus";
 import { useFastAxios } from "@fast-china/axios";
-import { consoleError } from "@fast-china/utils";
+import { consoleError, consoleLog } from "@fast-china/utils";
 import { useTitle } from "@vueuse/core";
 import { defineStore } from "pinia";
 import { useConfig } from "../config";
@@ -50,6 +50,7 @@ export const useApp = defineStore(
 		const launch = async (): Promise<void> => {
 			try {
 				const apiRes = await appApi.launch();
+				consoleLog("App", "Launch", apiRes);
 				Object.assign(state, apiRes);
 				state.hasLaunch = true;
 			} catch (error) {

@@ -3,7 +3,9 @@ import { Local, base64Util, consoleError } from "@fast-china/utils";
 import { defineStore } from "pinia";
 import { useApp } from "../app";
 import type { GetLoginUserInfoOutput } from "@/api/services/auth/models/GetLoginUserInfoOutput";
+import type { LoginOutput } from "@/api/services/login/models/LoginOutput";
 import type { AxiosResponse } from "axios";
+import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { authApi } from "@/api/services/auth";
 import { loginApi } from "@/api/services/login";
 import { CommonRoute } from "@/common";
@@ -27,6 +29,7 @@ export const useUserInfo = defineStore(
 			token: "",
 			refreshToken: "",
 			activeTabBar: "",
+			accountKey: "",
 			mobile: "",
 			nickName: "",
 			avatar: "",
@@ -133,8 +136,26 @@ export const useUserInfo = defineStore(
 			return { token: null, refreshToken: null, tokenData: null };
 		};
 
+		/** 假登录 @description 缓存 Account 相关信息 */
+		const fakeLogin = (loginRes: LoginOutput): void => {
+			if (!loginRes) return;
+			state.accountKey = loginRes.accountKey;
+			state.nickName = loginRes.nickName;
+			state.avatar = loginRes.avatar;
+		};
+
 		/** 登录 */
-		const login = (): void => {
+		const login = (loginRes: LoginOutput): void => {
+			if (!loginRes && loginRes.status !== LoginStatusEnum.Success) return;
+			// 优先缓存一些数据
+			state.accountKey = loginRes.accountKey;
+			state.nickName = loginRes.nickName;
+			state.avatar = loginRes.avatar;
+			const userRes = loginRes.tenantList[0];
+			state.userKey = userRes.userKey;
+			state.tenantName = userRes.tenantName;
+			state.employeeNo = userRes.employeeNo;
+			state.employeeName = userRes.employeeName;
 			useToast.success("登录成功");
 			// 确保 getLoginUser 获取用户信息
 			hasUserInfo.value = false;
@@ -214,6 +235,16 @@ export const useUserInfo = defineStore(
 			await appStore.setDictionary();
 		};
 
+		/** 切换登录 @description 调用此方法下次才不会 tryLogin */
+		const switchLogin = (): void => {
+			// 确保下次会自动刷新用户信息
+			hasUserInfo.value = false;
+			Object.keys(state).forEach((key) => {
+				delete state[key];
+			});
+			logoutClear();
+		};
+
 		/** 获取微信Code */
 		const getWeChatCode = (): Promise<string> => {
 			return new Promise((resolve) => {
@@ -251,11 +282,13 @@ export const useUserInfo = defineStore(
 			setToken,
 			getToken,
 			resolveToken,
+			fakeLogin,
 			login,
 			logout,
 			logoutClear,
 			refreshUserInfo,
 			refreshApp,
+			switchLogin,
 			getWeChatCode,
 			delWeChatCode,
 		};
@@ -267,6 +300,7 @@ export const useUserInfo = defineStore(
 			paths: [
 				"token",
 				"refreshToken",
+				"accountKey",
 				"nickName",
 				"avatar",
 				"tenantName",

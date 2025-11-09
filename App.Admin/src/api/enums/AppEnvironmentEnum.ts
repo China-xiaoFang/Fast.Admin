@@ -5,93 +5,109 @@ export enum AppEnvironmentEnum {
   /**
    * Web
    */
-  Web = 1,
+  Web = "1",
   /**
    * Windows
    */
-  Windows = 2,
+  Windows = "2",
   /**
    * Mac
    */
-  Mac = 4,
+  Mac = "4",
   /**
    * Linux
    */
-  Linux = 8,
+  Linux = "8",
   /**
    * 桌面端
    */
-  Desktop = 14,
+  Desktop = "14",
   /**
    * Android
    */
-  Android = 32,
+  Android = "32",
   /**
    * IOS
    */
-  IOS = 64,
+  IOS = "64",
   /**
    * 移动端
    */
-  Mobile = 96,
+  Mobile = "96",
   /**
    * 快应用
    */
-  QuickApp = 128,
+  QuickApp = "128",
   /**
    * 微信小程序
    */
-  WeChatMiniProgram = 256,
+  WeChatMiniProgram = "256",
   /**
-   * QQ小程序
+   * 微信公众号
    */
-  QQMiniProgram = 512,
+  WeChatOfficialAccount = "512",
   /**
-   * 抖音小程序
+   * 微信服务号
    */
-  TiktokMiniProgram = 1024,
+  WeChatServiceAccount = "1024",
   /**
-   * 百度小程序
+   * 微信开放平台
    */
-  BaiduMiniProgram = 2048,
+  WeChatOpenPlatform = "2048",
+  /**
+   * 企业微信
+   */
+  WorkWeChat = "4096",
   /**
    * 支付宝小程序
    */
-  AlipayMiniProgram = 4096,
+  AlipayMiniProgram = "8192",
   /**
-   * 快手小程序
+   * 抖音小程序
    */
-  KuaishouMiniProgram = 8192,
-  /**
-   * 飞书小程序
-   */
-  FeishuMiniProgram = 16384,
+  TiktokMiniProgram = "16384",
   /**
    * 钉钉小程序
    */
-  DingTalkMiniProgram = 32768,
+  DingTalkMiniProgram = "32768",
   /**
-   * 京东小程序
+   * 飞书小程序
    */
-  JDMiniProgram = 65536,
+  FeiShuMiniProgram = "65536",
+  /**
+   * QQ小程序
+   */
+  QQMiniProgram = "131072",
+  /**
+   * 百度小程序
+   */
+  BaiduMiniProgram = "262144",
+  /**
+   * 快手小程序
+   */
+  KuaiShouMiniProgram = "524288",
   /**
    * 小红书小程序
    */
-  XiaohongshuMiniProgram = 131072,
+  XiaoHongShuMiniProgram = "1048576",
+  /**
+   * 京东小程序
+   */
+  JDMiniProgram = "2097152",
   /**
    * 小程序
    */
-  MiniProgram = 262016,
+  MiniProgram = "4186496",
   /**
    * 移动端（三端）
    */
-  MobileThree = 262112,
+  MobileThree = "4186592",
   /**
    * Api
    */
-  Api = 16777216,
+  Api = "2147483648",
   /**
    * 其他
    */
-  Other = 1073741824,
+  Other = "4294967296",
 }

@@ -2,7 +2,7 @@ import { ElLoading, ElMessage, ElMessageBox } from "element-plus";
 import { createFastAxios } from "@fast-china/axios";
 import { Local, consoleDebug, cryptoUtil, useIdentity, withDefineType } from "@fast-china/utils";
 import type { ApiResponse } from "@fast-china/axios";
-import type { AxiosResponse } from "axios";
+import type { AxiosHeaders, AxiosResponse } from "axios";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { useUserInfo } from "@/stores";
 
@@ -89,7 +89,7 @@ export function loadFastAxios(): void {
 	fastAxios.cache.set.use((key, value) => Local.set(`HTTP_CACHE_${key}`, value, null, null));
 
 	fastAxios.crypto.encrypt.use((config, timestamp) => {
-		let requestData = config.params || config.data;
+		let requestData = config.data || config.params;
 		const dataStr = JSON.stringify(requestData);
 		if (dataStr != null && dataStr != "" && dataStr != "{}") {
 			consoleDebug("Axios", `HTTP request data("${config.url}")`, requestData);
@@ -120,17 +120,18 @@ export function loadFastAxios(): void {
 		}
 	});
 
-	fastAxios.crypto.decrypt.use(<Output>(response, options) => {
+	fastAxios.crypto.decrypt.use((response, options) => {
 		const restfulData = response.data as ApiResponse;
+		const responseHeader = response.headers as AxiosHeaders;
 		// 判断响应头部是否有加密标识
-		if (response.headers["fast-response-encipher"]?.toLowerCase() === "true") {
+		if (responseHeader.get("Fast-Response-Encipher")?.toString()?.toLowerCase() === "true") {
 			if (!restfulData?.data) {
 				return restfulData;
 			}
-			restfulData.data = cryptoUtil.aes.decrypt<Output>(restfulData.data as string, `${restfulData.timestamp}`, `FIV${restfulData.timestamp}`);
+			restfulData.data = cryptoUtil.aes.decrypt(restfulData.data as string, `${restfulData.timestamp}`, `FIV${restfulData.timestamp}`);
 			// 处理 ""xxx"" 这种数据
 			if (typeof restfulData.data === "string" && restfulData.data.startsWith('"') && restfulData.data.endsWith('"')) {
-				restfulData.data = restfulData.data.replace(/"/g, "") as Output;
+				restfulData.data = restfulData.data.replace(/"/g, "");
 			}
 			consoleDebug("axiosUtil", `HTTP response data("${response.config.url}")`, restfulData.data);
 		}

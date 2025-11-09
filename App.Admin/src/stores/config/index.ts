@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import { colorUtil, consoleLog, styleToString, withDefineType } from "@fast-china/utils";
+import { addUnit, colorUtil, consoleLog, styleToString, withDefineType } from "@fast-china/utils";
 import { defineStore } from "pinia";
 import { useApp } from "../app";
 import { CommonUniApp } from "@/common";
@@ -85,7 +85,7 @@ export const useConfig = defineStore(
 				// 头部 navbar 背景颜色
 				"--wot-navbar-bg-color": navbarBgColor,
 				// 头部 navbar 高度
-				"--wot-navbar-height": layout.navBarHeight,
+				"--wot-navbar-height": addUnit(layout.navBarHeight),
 				// 头部胶囊按钮边距
 				"--wot-navbar-capsule-padding": `${navbarCapsulePadding}px`,
 				// 头部胶囊按钮宽度
@@ -95,9 +95,9 @@ export const useConfig = defineStore(
 				/* 导航栏文字颜色 */
 				"--wot-navbar-color": "#ffffff",
 				// 底部 tabbar 高度
-				"--wot-tabbar-height": layout.tabBarHeight,
+				"--wot-tabbar-height": addUnit(layout.tabBarHeight),
 				// 页脚高度，如果不存在底部安全区域，则默认 + 10px
-				"--wot-footer-height": `calc(${layout.footerHeight} + ${appStore.windowInfo.safeAreaInsets.bottom > 0 ? "0px" : "10px"})`,
+				"--wot-footer-height": `calc(${addUnit(layout.footerHeight)} + ${appStore.windowInfo.safeAreaInsets.bottom > 0 ? "0px" : "10px"})`,
 				// 安全距离
 				"--wot-area-inset-left": `${appStore.windowInfo.safeAreaInsets.left}px`,
 				"--wot-area-inset-right": `${appStore.windowInfo.safeAreaInsets.right}px`,

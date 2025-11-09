@@ -11,7 +11,16 @@
 					<text class="nick-name">{{ userInfoStore.employeeName }}</text>
 				</view>
 			</view>
-			<wd-input v-else prefixIcon="user" prop="account" v-model="state.formData.account" clearable placeholder="请输入账号" />
+			<wd-input
+				v-else
+				prefixIcon="user"
+				prop="account"
+				v-model="state.formData.account"
+				clearable
+				placeholder="请输入账号"
+				:maxlength="20"
+				showWordLimit
+			/>
 			<wd-input
 				prefixIcon="lock-off"
 				prop="password"
@@ -72,13 +81,16 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import { clickUtil, consoleLog, withDefineType } from "@fast-china/utils";
+import { clickUtil, consoleLog, cryptoUtil, withDefineType } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
 import { useMessage } from "wot-design-uni";
+import type { LoginOutput } from "@/api/services/login/models/LoginOutput";
 import type { FaPopupInstance } from "@/components/popup";
 import type { FormInstance, FormRules } from "wot-design-uni/components/wd-form/types";
+import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
+import { loginApi } from "@/api/services/login";
 import { CommonRoute } from "@/common";
-import { useToast } from "@/hooks";
+import { useMessageBox, useToast } from "@/hooks";
 import defaultLogo from "@/static/logo.png";
 import { useApp, useUserInfo } from "@/stores";
 
@@ -143,29 +155,56 @@ const agreementCheck = async () => {
 	}
 };
 
+/** 登录成功 */
+const loginSuccess = (loginRes: LoginOutput) => {
+	consoleLog("Login", "LoginRes", loginRes);
+	userInfoStore.fakeLogin(loginRes);
+	switch (loginRes.status) {
+		case LoginStatusEnum.Success:
+			userInfoStore.login(loginRes);
+			break;
+		case LoginStatusEnum.SelectTenant:
+			router.push({
+				path: CommonRoute.SelectTenant,
+			});
+			break;
+		case LoginStatusEnum.AuthExpired:
+			useMessageBox.alert(loginRes.message);
+			break;
+		case LoginStatusEnum.NotAccount:
+			// #ifdef MP-WEIXIN
+			authLoginPopupRef.value.open();
+			// #endif
+			// #ifndef MP-WEIXIN
+			useMessageBox.alert(loginRes.message);
+			// #endif
+			break;
+	}
+};
+
 /** 登录 */
 const handleLogin = async () => {
 	await clickUtil.throttleAsync(async () => {
-		authLoginPopupRef.value.open();
 		const { valid } = await formRef.value.validate();
 		if (valid) {
 			if (await agreementCheck()) {
-				// let loginRes: LoginResultDataModel = null;
-				// if (state.hasUserInfo) {
-				// 	// 商户Key登录
-				// 	loginRes = await loginApi.loginByShopClerk({
-				// 		shopKey: userInfoStore.userInfo.unionKey,
-				// 		clerkKey: userInfoStore.userInfo.clerkKey,
-				// 		password: state.formData.password,
-				// 	});
-				// } else {
-				// 	// 账号密码登录
-				// 	loginRes = await loginApi.loginByAccount({
-				// 		account: state.formData.account,
-				// 		password: state.formData.password,
-				// 	});
-				// }
-				// loginSuccess(loginRes);
+				const { account, password } = state.formData;
+				let loginRes: LoginOutput = null;
+				if (state.hasUserInfo) {
+					const { userKey } = userInfoStore;
+					// 租户登录
+					loginRes = await loginApi.tenantLogin({
+						userKey,
+						password: cryptoUtil.sha1.encrypt(password),
+					});
+				} else {
+					// 账号密码登录
+					loginRes = await loginApi.login({
+						account,
+						password: cryptoUtil.sha1.encrypt(password),
+					});
+				}
+				loginSuccess(loginRes);
 			}
 		}
 	});
@@ -181,12 +220,12 @@ const handleWeChatLogin = async (detail: UniNamespace.GetUserInfoRes) => {
 				try {
 					const weChatCode = await userInfoStore.getWeChatCode();
 					if (weChatCode) {
-						// const loginRes = await loginApi.loginByWechat({
-						// 	code: weChatCode,
-						// 	iv,
-						// 	encryptedData,
-						// });
-						// loginSuccess(loginRes);
+						const loginRes = await loginApi.weChatLogin({
+							weChatCode,
+							iv,
+							encryptedData,
+						});
+						loginSuccess(loginRes);
 					} else {
 						useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
 					}
@@ -203,25 +242,30 @@ const handleWeChatLogin = async (detail: UniNamespace.GetUserInfoRes) => {
 /** 手机登录 */
 const handlePhoneLogin = async (detail: UniHelper.ButtonOnGetphonenumberDetail) => {
 	await clickUtil.throttleAsync(async () => {
-		consoleLog("Login", "GetPhoneNumber", detail);
-		const { iv, encryptedData } = detail;
-		if (iv && encryptedData) {
-			// 手动同意
-			state.formData.agreementSelect = true;
-			const weChatCode = await userInfoStore.getWeChatCode();
-			if (weChatCode) {
-				// const loginRes = await loginApi.loginByWechatAuth({
-				// 	code: weChatCode,
-				// 	iv,
-				// 	encryptedData,
-				// });
-				// loginSuccess(loginRes);
+		authLoginPopupRef.value.close(async () => {
+			consoleLog("Login", "GetPhoneNumber", detail);
+			const { code } = detail;
+			if (code) {
+				// 手动同意
+				state.formData.agreementSelect = true;
+				try {
+					const weChatCode = await userInfoStore.getWeChatCode();
+					if (weChatCode) {
+						const loginRes = await loginApi.weChatAuthLogin({
+							weChatCode,
+							code,
+						});
+						loginSuccess(loginRes);
+					} else {
+						useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
+					}
+				} finally {
+					userInfoStore.delWeChatCode();
+				}
 			} else {
 				useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
 			}
-		} else {
-			useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
-		}
+		});
 	});
 };
 </script>

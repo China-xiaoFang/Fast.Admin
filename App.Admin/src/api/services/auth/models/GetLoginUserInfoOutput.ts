@@ -5,6 +5,10 @@ import { AuthModuleInfoDto } from "./AuthModuleInfoDto";
  */
 export interface GetLoginUserInfoOutput {
   /**
+   * 账号Key
+   */
+  accountKey?: string;
+  /**
    * 手机
    */
   mobile?: string;
