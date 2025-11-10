@@ -1,0 +1,22 @@
+<template>
+	<view class="page">
+		<rich-text :nodes="appStore.serviceAgreement" />
+	</view>
+</template>
+
+<script setup lang="ts">
+import { useApp } from "@/stores";
+
+definePage({
+	name: "ServiceAgreement",
+	layout: "layout",
+	footer: false,
+	watermark: false,
+	noLogin: true,
+	style: {
+		navigationBarTitleText: "服务协议",
+	},
+});
+
+const appStore = useApp();
+</script>
