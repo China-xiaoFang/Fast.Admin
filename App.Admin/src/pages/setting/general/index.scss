@@ -1,0 +1,25 @@
+.page {
+	padding-top: 20rpx;
+}
+
+:deep() {
+	.wd-picker {
+		--wot-cell-value-color: var(--wot-text-color-placeholder);
+	}
+	.wd-cell {
+		.wd-cell__right {
+			flex: unset;
+			.wd-cell__value {
+				display: flex;
+			}
+		}
+		.wd-switch {
+			--wot-switch-size: 40rpx;
+		}
+	}
+	.btn__reset {
+		margin-top: 20rpx;
+		width: 80%;
+		margin-left: 10%;
+	}
+}

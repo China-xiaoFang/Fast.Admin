@@ -76,7 +76,6 @@ router.beforeEach(async (to, from, next) => {
 						duration: 1500,
 					});
 				}, 500);
-				return;
 			} catch (error) {
 				next(false);
 				consoleError("InitRoute", error);

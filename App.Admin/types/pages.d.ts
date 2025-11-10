@@ -7,10 +7,14 @@ type _LocationUrl =
   "/pages/launcher/index" |
   "/pages/login/index" |
   "/pages/selectTenant/index" |
+  "/pages/setting/index" |
   "/pages/webView/index" |
   "/pages/agreement/privacy/index" |
   "/pages/agreement/service/index" |
   "/pages/agreement/user/index" |
+  "/pages/setting/account/index" |
+  "/pages/setting/general/index" |
+  "/pages/setting/userInfo/index" |
   "/pages/tabBar/home/index" |
   "/pages/tabBar/my/index" |
   "/pages/tabBar/workbench/index";
