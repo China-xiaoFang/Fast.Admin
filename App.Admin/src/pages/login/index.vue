@@ -217,20 +217,16 @@ const handleWeChatLogin = async (detail: UniNamespace.GetUserInfoRes) => {
 			const { iv, encryptedData, userInfo } = detail;
 			if (userInfo) {
 				consoleLog("Login", "GetUserInfo", userInfo);
-				try {
-					const weChatCode = await userInfoStore.getWeChatCode();
-					if (weChatCode) {
-						const loginRes = await loginApi.weChatLogin({
-							weChatCode,
-							iv,
-							encryptedData,
-						});
-						loginSuccess(loginRes);
-					} else {
-						useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
-					}
-				} finally {
-					userInfoStore.delWeChatCode();
+				const weChatCode = await userInfoStore.getWeChatCode();
+				if (weChatCode) {
+					const loginRes = await loginApi.weChatLogin({
+						weChatCode,
+						iv,
+						encryptedData,
+					});
+					loginSuccess(loginRes);
+				} else {
+					useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
 				}
 			} else {
 				useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
@@ -248,19 +244,15 @@ const handlePhoneLogin = async (detail: UniHelper.ButtonOnGetphonenumberDetail) 
 			if (code) {
 				// 手动同意
 				state.formData.agreementSelect = true;
-				try {
-					const weChatCode = await userInfoStore.getWeChatCode();
-					if (weChatCode) {
-						const loginRes = await loginApi.weChatAuthLogin({
-							weChatCode,
-							code,
-						});
-						loginSuccess(loginRes);
-					} else {
-						useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
-					}
-				} finally {
-					userInfoStore.delWeChatCode();
+				const weChatCode = await userInfoStore.getWeChatCode();
+				if (weChatCode) {
+					const loginRes = await loginApi.weChatAuthLogin({
+						weChatCode,
+						code,
+					});
+					loginSuccess(loginRes);
+				} else {
+					useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
 				}
 			} else {
 				useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");

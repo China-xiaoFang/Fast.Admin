@@ -80,38 +80,33 @@ const openStartPage = async () => {
 
 		// 尝试微信自动登录
 		// #ifdef MP-WEIXIN
-		useLoading.show("微信授权自动登录中...");
-		try {
-			const weChatCode = await userInfoStore.getWeChatCode();
-			if (weChatCode) {
-				const loginRes = await loginApi.weChatLogin({
+		const weChatCode = await userInfoStore.getWeChatCode();
+		if (weChatCode) {
+			useLoading.show("微信授权自动登录中...");
+			const loginRes = await loginApi
+				.weChatLogin({
 					weChatCode,
-				});
-				if (loginRes.status === LoginStatusEnum.Success) {
-					userInfoStore.login(loginRes);
-					return;
-				} else {
-					useMessageBox.alert(loginRes.message).then(() => {
-						router.replaceAll({
-							path: CommonRoute.Login,
-						});
-					});
-					return;
-				}
+				})
+				.finally(() => useLoading.hide());
+			if (loginRes.status === LoginStatusEnum.Success) {
+				userInfoStore.login(loginRes);
+				return;
 			} else {
-				consoleWarn("Launcher", "授权失败，无法获取您的信息。请手动授权以继续使用我们的服务。");
-				router.replaceAll({
-					path: CommonRoute.Login,
+				useMessageBox.alert(loginRes.message).then(() => {
+					router.replaceAll({
+						path: CommonRoute.Login,
+					});
 				});
 				return;
 			}
-		} catch (error) {
-			consoleError("Launcher", "微信授权自动登录失败");
-			consoleError("Launcher", error);
-		} finally {
-			useLoading.hide();
-			userInfoStore.delWeChatCode();
+		} else {
+			consoleWarn("Launcher", "授权失败，无法获取您的信息。请手动授权以继续使用我们的服务。");
+			router.replaceAll({
+				path: CommonRoute.Login,
+			});
+			return;
 		}
+
 		// #endif
 	}
 

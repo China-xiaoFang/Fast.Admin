@@ -12,7 +12,7 @@
 			<wd-cell title="主题色导航栏" label="开启后导航栏颜色随主题色变换" center>
 				<wd-switch v-model="configStore.layout.autoThemeNavBar" @change="configStore.setTheme(configStore.layout.themeColor)" />
 			</wd-cell>
-			<wd-cell title="跟随系统" center>
+			<wd-cell title="跟随系统" label="开启后自动跟随系统主题" center>
 				<wd-switch v-model="configStore.layout.autoThemMode" @change="configStore.switchAutoThemMode" />
 			</wd-cell>
 			<wd-cell title="深色模式" center>

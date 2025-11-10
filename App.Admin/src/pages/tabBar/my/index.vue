@@ -168,11 +168,9 @@ const state = reactive({
 
 const handleLogout = async () => {
 	await clickUtil.throttleAsync(async () => {
-		try {
-			await useMessageBox.confirm("确定要退出登录？");
-			await userInfoStore.logout();
-			useToast.success("退出登录成功");
-		} catch {}
+		await useMessageBox.confirm("确定要退出登录？");
+		await userInfoStore.logout();
+		useToast.success("退出登录成功");
 	});
 };
 
