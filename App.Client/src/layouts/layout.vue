@@ -1,5 +1,5 @@
 <template>
-	<FaWatermark v-if="configStore.layout.watermark" />
+	<FaWatermark v-if="showWatermark" />
 	<wd-config-provider :customClass="`fa-layout fa-layout__${theme}`" :theme="theme" :customStyle="configStore.layout.themeStyle">
 		<view :class="['fa-main', { 'fa-main__tabBar': state.isTabBar, 'fa-main__page-scroll': state.pageScroll === false }]" :style="mainStyle">
 			<slot />
@@ -49,6 +49,8 @@ const state = reactive({
 	pageScroll: true,
 	/** 显示页脚 */
 	footer: true,
+	/** 显示水印 */
+	watermark: true,
 	/** 导航页 */
 	isTabBar: false,
 	/** 背景颜色 */
@@ -64,6 +66,9 @@ const theme = computed(() => (configStore.layout.isDark ? "dark" : "light"));
 
 /** 显示页脚 */
 const showFooter = computed(() => configStore.layout.footer && state.footer !== false);
+
+/** 显示水印 */
+const showWatermark = computed(() => configStore.layout.watermark && state.watermark !== false);
 
 /** 主页面样式 */
 const mainStyle = computed(() => {
@@ -151,9 +156,10 @@ onHide(() => {
 });
 
 onBeforeMount(() => {
-	const { pageScroll, footer, isTabBar, backgroundColor, lightBackgroundImage, darkBackgroundImage } = useRoute();
+	const { pageScroll, footer, watermark, isTabBar, backgroundColor, lightBackgroundImage, darkBackgroundImage } = useRoute();
 	state.pageScroll = pageScroll;
 	state.footer = footer;
+	state.watermark = watermark;
 	state.isTabBar = isTabBar;
 	state.backgroundColor = backgroundColor;
 	state.lightBackgroundImage = lightBackgroundImage;

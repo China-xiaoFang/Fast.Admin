@@ -101,8 +101,6 @@ definePage({
 	footer: false,
 	watermark: false,
 	pageScroll: false,
-	authForbidView: true,
-	noLogin: true,
 	style: {
 		navigationBarTitleText: "登录",
 	},
