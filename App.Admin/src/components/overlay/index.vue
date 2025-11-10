@@ -23,7 +23,7 @@ const props = defineProps({
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .fa-overlay {
 	width: 100%;
 	height: 100%;

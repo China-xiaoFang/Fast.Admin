@@ -1,6 +1,6 @@
 import { reactive, ref, toRefs } from "vue";
 import { useFastAxios } from "@fast-china/axios";
-import { consoleError, consoleLog } from "@fast-china/utils";
+import { Local, consoleError, consoleLog, useIdentity } from "@fast-china/utils";
 import { defineStore } from "pinia";
 import { useConfig } from "../config";
 import type { LaunchOutput } from "@/api/services/app/models/LaunchOutput";
@@ -159,6 +159,16 @@ export const useApp = defineStore(
 			return dictionary.value.get(key);
 		};
 
+		/** 清除 App 缓存 */
+		const clearAppCache = (): void => {
+			// 获取设备Id，这里按理来说不应该不存在的
+			const uIdentity = useIdentity();
+			// 清空 Local 缓存
+			Local.clear();
+			// 重新设置设备Id
+			uIdentity.makeIdentity(uIdentity.deviceId);
+		};
+
 		return {
 			...toRefs(state),
 			setAppName,
@@ -166,6 +176,7 @@ export const useApp = defineStore(
 			setFastAxios,
 			launch,
 			getDictionary,
+			clearAppCache,
 		};
 	},
 	{
