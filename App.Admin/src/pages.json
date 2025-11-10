@@ -52,6 +52,15 @@
 			}
 		},
 		{
+			"path": "pages/setting/index",
+			"type": "page",
+			"name": "Setting",
+			"layout": "layout",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		},
+		{
 			"path": "pages/webView/index",
 			"type": "page",
 			"name": "WebView",
@@ -91,6 +100,33 @@
 			"noLogin": true,
 			"style": {
 				"navigationBarTitleText": "用户协议"
+			}
+		},
+		{
+			"path": "pages/setting/account/index",
+			"type": "page",
+			"name": "SettingAccount",
+			"layout": "layout",
+			"style": {
+				"navigationBarTitleText": "账号安全"
+			}
+		},
+		{
+			"path": "pages/setting/general/index",
+			"type": "page",
+			"name": "SettingGeneral",
+			"layout": "layout",
+			"style": {
+				"navigationBarTitleText": "通用"
+			}
+		},
+		{
+			"path": "pages/setting/userInfo/index",
+			"type": "page",
+			"name": "SettingUserInfo",
+			"layout": "layout",
+			"style": {
+				"navigationBarTitleText": "个人资料"
 			}
 		},
 		{

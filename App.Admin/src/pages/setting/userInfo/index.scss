@@ -1,0 +1,30 @@
+.page {
+	padding-top: 20rpx;
+}
+
+.btn_avatar {
+	display: inline-flex;
+	padding: 0;
+	background: transparent;
+	border: 0;
+	border-radius: 50%;
+}
+.avatar {
+	width: 80rpx;
+	height: 80rpx;
+	border-radius: 50%;
+}
+:deep() {
+	.wd-cell {
+		--wot-cell-value-color: var(--wot-text-color-placeholder);
+		.wd-cell__right {
+			flex: unset;
+			.wd-cell__body {
+				align-items: center;
+				.wd-cell__value {
+					display: flex;
+				}
+			}
+		}
+	}
+}

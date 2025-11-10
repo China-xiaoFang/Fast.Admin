@@ -58,7 +58,7 @@ export const useUserInfo = defineStore(
 		const tabBars = reactive<ITabBar[]>([
 			{
 				path: CommonRoute.Home,
-				icon: "tabBarHome",
+				icon: "home",
 				title: "首页",
 				disable: true,
 			},
@@ -70,7 +70,7 @@ export const useUserInfo = defineStore(
 			},
 			{
 				path: CommonRoute.My,
-				icon: "tabBarUser",
+				icon: "my",
 				title: "我的",
 			},
 		]);

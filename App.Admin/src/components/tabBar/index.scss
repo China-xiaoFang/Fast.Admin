@@ -109,7 +109,6 @@
 			border-radius: 50%;
 			background: var(--wot-bg-color);
 			border: solid var(--wot-color-border-light);
-			// border: solid red;
 			border-width: 1px 1px 0;
 			z-index: 1;
 		}
@@ -123,7 +122,6 @@
 			height: 30px;
 			border-radius: 0 0 50% 50%;
 			background: var(--wot-bg-color);
-			// background: black;
 			z-index: 2;
 		}
 		&.is-active {

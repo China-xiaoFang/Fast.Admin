@@ -1,2 +1,209 @@
 .page {
+	padding-top: var(--wot-status-bar-height);
+	background-size: contain;
+	background-position: top;
+	background-repeat: no-repeat;
+	// background-position: center calc(var(--wot-status-bar-height));
+}
+
+.status-bar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: var(--wot-status-bar-height);
+	// background-color: var(--wot-navbar-bg-color);
+	z-index: 1001;
+}
+.navbar {
+	padding-bottom: 40rpx;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	.navbar__title {
+		height: var(--wot-navbar-height);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--wot-navbar-color);
+		font-size: 13px;
+		font-weight: var(--wot-navbar-title-font-weight, 600);
+	}
+	.navbar__warp {
+		position: relative;
+		margin: 0 60rpx;
+		border-radius: 20rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		color: var(--wot-text-color-primary);
+		box-shadow: var(--wot-box-shadow);
+		background-color: var(--wot-bg-color);
+		.top_bg {
+			position: absolute;
+			z-index: 1;
+			width: 118px;
+			height: 53px;
+			right: 20px;
+		}
+		.bottom_bg {
+			position: absolute;
+			z-index: 1;
+			width: 118px;
+			height: 53px;
+			bottom: 0;
+			left: 20px;
+		}
+		.navbar__warp__top {
+			z-index: 2;
+			width: 100%;
+			height: 80px;
+			box-sizing: border-box;
+			padding: 10rpx 30rpx 10rpx 40rpx;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 20rpx;
+			border-bottom: 1px solid var(--wot-border-color);
+			.top__left {
+				height: 100%;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				gap: 15rpx;
+				.avatar {
+					width: 80rpx;
+					height: 80rpx;
+					border-radius: 50%;
+					border: var(--wot-border);
+				}
+				.account-info {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					.tenant-name {
+						font-size: var(--wot-font-size-base);
+						font-weight: var(--wot-font-weight-primary);
+					}
+					.nick-name {
+						font-size: var(--wot-font-size-small);
+						color: var(--wot-text-color-secondary);
+					}
+				}
+			}
+			.top__right {
+				.switch-btn {
+					display: flex;
+					align-items: center;
+					gap: 2px;
+					padding: 2px 5px;
+					font-size: var(--wot-font-size-small);
+					border: 1px solid var(--wot-border-color);
+					:deep() {
+						.wd-icon {
+							font-size: var(--wot-font-size-small);
+						}
+					}
+				}
+			}
+		}
+		.navbar__warp__bottom {
+			z-index: 2;
+			width: 100%;
+			height: 60px;
+			box-sizing: border-box;
+			padding: 0 20rpx;
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+			.bottom-item {
+				position: relative;
+				height: 100%;
+				width: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				&:nth-of-type(n + 2)::after {
+					content: "";
+					display: block;
+					position: absolute;
+					top: 50%;
+					left: 0;
+					transform: translateY(-50%);
+					width: 1px;
+					height: 25px;
+					background: var(--wot-border-color);
+				}
+				.item_txt1 {
+					color: var(--wot-text-color-primary);
+					font-weight: var(--wot-font-weight-primary);
+				}
+				.item_txt2 {
+					color: var(--wot-text-color-placeholder);
+					font-size: var(--wot-font-size-extra-small);
+				}
+			}
+		}
+	}
+}
+
+.data-card {
+	padding-bottom: 20rpx;
+	:deep() {
+		.wd-cell-border::after {
+			position: absolute;
+			display: block;
+			content: "";
+			width: 94%;
+			height: 1px;
+			left: 3%;
+			bottom: 0;
+			transform: scaleY(0.5);
+			background: var(--wot-border-color);
+		}
+	}
+	.data-card__content {
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		background-color: var(--wot-bg-color);
+		padding: 10rpx 20rpx;
+		.cell-item {
+			// height: 80rpx;
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 15rpx;
+			padding: 20rpx 0;
+			:deep() {
+				.wd-icon,
+				.fa-icon {
+					font-size: 50rpx;
+					color: var(--wot-color-primary);
+				}
+			}
+			.item_txt {
+				color: var(--wot-text-color-secondary);
+				font-size: var(--wot-font-size-extra-small);
+			}
+		}
+	}
+}
+
+:deep() {
+	.wd-cell {
+		--wot-cell-value-color: var(--wot-text-color-placeholder);
+		.wd-cell__icon {
+			min-width: 24px;
+			text-align: center;
+		}
+	}
+	.btn__exit-login {
+		--wot-button-medium-fs: var(--wot-font-size-base);
+		--wot-button-medium-height: 80rpx;
+		margin: 30rpx 50rpx !important;
+	}
 }
