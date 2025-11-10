@@ -85,7 +85,7 @@ import { clickUtil, consoleLog, cryptoUtil, withDefineType } from "@fast-china/u
 import { useRouter } from "uni-mini-router";
 import { useMessage } from "wot-design-uni";
 import type { LoginOutput } from "@/api/services/login/models/LoginOutput";
-import type { FaPopupInstance } from "@/components";
+import type { FaPopupInstance } from "@/components/popup";
 import type { FormInstance, FormRules } from "wot-design-uni/components/wd-form/types";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/login";
