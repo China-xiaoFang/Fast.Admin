@@ -2,9 +2,9 @@
 import { onLaunch } from "@dcloudio/uni-app";
 import { axiosUtil } from "@fast-china/axios";
 import { consoleError, consoleLog } from "@fast-china/utils";
-import { CommonRoute } from "@/common";
 import { useMessageBox, useToast } from "@/hooks";
-import { useApp, useConfig } from "@/stores";
+import { initWebSocket } from "@/signalR";
+import { useApp, useConfig, useUserInfo } from "@/stores";
 
 /** 检查小程序版本 */
 const checkMiniAppVersion = () => {
@@ -155,9 +155,10 @@ const checkAppVersion = () => {
 	});
 };
 
-onLaunch((options) => {
+onLaunch(async (options) => {
 	const appStore = useApp();
 	const configStore = useConfig();
+	const userInfoStore = useUserInfo();
 
 	consoleLog("App", `成功加载【${appStore.appBaseInfo.appName}】`, new Date());
 
@@ -173,20 +174,23 @@ onLaunch((options) => {
 	configStore.initTheme();
 
 	// Launch
-	appStore
-		.launch()
-		.then(() => {
-			// #ifdef MP-WEIXIN
-			checkMiniAppVersion();
-			// #endif
+	await appStore.launch().catch((error) => {
+		consoleError("Launcher", "launch接口异常");
+		consoleError("Launcher", error);
+	});
 
-			// #ifdef APP-PLUS
-			checkAppVersion();
-			// #endif
-		})
-		.catch((error) => {
-			consoleError("Launcher", "launch接口异常");
-			consoleError("Launcher", error);
-		});
+	// #ifdef MP-WEIXIN
+	checkMiniAppVersion();
+	// #endif
+
+	// #ifdef APP-PLUS
+	checkAppVersion();
+	// #endif
+
+	// 登录
+	await userInfoStore.login();
+
+	// 初始化 WebSocket
+	initWebSocket();
 });
 </script>

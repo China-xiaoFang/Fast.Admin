@@ -35,7 +35,7 @@ export const useConfig = defineStore(
 			/** 是否显示页脚 */
 			footer: true,
 			/** 是否显示水印 */
-			watermark: true,
+			watermark: false,
 		});
 
 		/** 表格配置 */

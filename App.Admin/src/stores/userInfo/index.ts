@@ -249,27 +249,15 @@ export const useUserInfo = defineStore(
 		const getWeChatCode = (): Promise<string> => {
 			return new Promise((resolve) => {
 				// #ifdef MP-WEIXIN
-				const code = Local.get("WeChat_Code");
-				if (code) {
-					return resolve(code);
-				} else {
-					return uni.login({
-						success: (res) => {
-							// 缓存5分钟
-							Local.set("WeChat_Code", res.code, 5);
-							return resolve(res.code);
-						},
-					});
-				}
+				return uni.login({
+					success: (res) => {
+						return resolve(res.code);
+					},
+				});
 				// #endif
 
 				return resolve("");
 			});
-		};
-
-		/** 删除微信Code */
-		const delWeChatCode = (): void => {
-			Local.remove("WeChat_Code");
 		};
 
 		return {
@@ -290,7 +278,6 @@ export const useUserInfo = defineStore(
 			refreshApp,
 			switchLogin,
 			getWeChatCode,
-			delWeChatCode,
 		};
 	},
 	{

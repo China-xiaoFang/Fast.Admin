@@ -12,7 +12,7 @@ export const CommonRoute = {
 	ServiceAgreement: "/pages/agreement/service/index",
 	/** 首页 */
 	Home: "/pages/tabBar/home/index",
-	/** 我的 */
+	/** 个人中心 */
 	My: "/pages/tabBar/my/index",
 };
 

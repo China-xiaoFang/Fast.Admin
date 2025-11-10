@@ -4,10 +4,7 @@ import { isNil } from "lodash-unified";
 import { createRouter } from "uni-mini-router";
 import { pages, subPackages } from "virtual:uni-pages";
 import type { PageMetaDatum } from "@uni-helper/vite-plugin-uni-pages";
-import { loginApi } from "@/api/services/login";
 import { TabBarRoute } from "@/common";
-import { useToast } from "@/hooks";
-import { initWebSocket } from "@/signalR";
 import { useUserInfo } from "@/stores";
 
 const generateRoutes = (): PageMetaDatum[] => {
@@ -39,23 +36,6 @@ router.beforeEach(async (to, from, next) => {
 	if (TabBarRoute.some((item) => to.path.startsWith(item))) {
 		userInfoStore.activeTabBar = to.path;
 	}
-
-	// 判断是否存在Token
-	if (!userInfoStore.token) {
-		try {
-			const weChatCode = await userInfoStore.getWeChatCode();
-			if (weChatCode) {
-				await loginApi.weChatClientLogin({ weChatCode });
-			} else {
-				useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
-			}
-		} finally {
-			userInfoStore.delWeChatCode();
-		}
-	}
-
-	// 初始化 WebSocket
-	initWebSocket();
 
 	// 判断是否存在重定向路径，如果有则跳转
 	const redirect = stringUtil.deepDecodeURIComponent((from.query.redirect as string) || "");

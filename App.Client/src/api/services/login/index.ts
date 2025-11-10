@@ -109,6 +109,8 @@ export const loginApi = {
       method: "post",
       data,
       requestType: "auth",
+			loading: true,
+			loadingText: "登录中...",
     });
   },
 };
