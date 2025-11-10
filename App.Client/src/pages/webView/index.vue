@@ -8,7 +8,6 @@ import { ref } from "vue";
 
 definePage({
 	name: "WebView",
-	noLogin: true,
 });
 
 const webUrl = ref("");

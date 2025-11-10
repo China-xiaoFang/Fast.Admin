@@ -168,12 +168,6 @@ onLaunch((options) => {
 
 	// 设置应用名称
 	appStore.setAppName(appStore.appBaseInfo.appName);
-	if (`/${options.path}` != CommonRoute.Launcher) {
-		// 处理未经过 Launcher 页面导致 axios 配置不存在的问题
-		appStore.setFastAxios();
-		// 处理未经过 Launcher 页面导致字典不存在的问题
-		appStore.setDictionary();
-	}
 
 	// 初始化主题
 	configStore.initTheme();
