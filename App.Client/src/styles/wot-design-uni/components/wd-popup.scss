@@ -1,0 +1,26 @@
+.fa-popup {
+	padding-top: 20rpx !important;
+	padding-bottom: 40rpx !important;
+	// padding-left: 15rpx;
+	// padding-right: 15rpx;
+
+	&.wd-popup--center {
+		border-radius: 20rpx;
+	}
+
+	&.wd-popup--top {
+		border-radius: 0 0 20rpx 20rpx;
+	}
+
+	&.wd-popup--right {
+		border-radius: 20rpx 0 0 20rpx;
+	}
+
+	&.wd-popup--bottom {
+		border-radius: 20rpx 20rpx 0 0;
+	}
+
+	&.wd-popup--left {
+		border-radius: 0 20rpx 20rpx 0;
+	}
+}

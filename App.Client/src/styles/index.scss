@@ -1,0 +1,107 @@
+@use "./common/mixin.scss";
+@use "./theme/light.scss";
+@use "./theme/dark.scss";
+@use "./wot-design-uni/index.scss";
+
+@font-face {
+	font-family: NotoSansSC;
+	src: url(//cdn.fastdotnet.com/fonts/NotoSansSC/NotoSansSC-Thin-Chinese.ttf);
+	font-weight: 200;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: NotoSansSC;
+	src: url(//cdn.fastdotnet.com/fonts/NotoSansSC/NotoSansSC-Thin-Latin.ttf);
+	font-weight: 200;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: NotoSansSC;
+	src: url(//cdn.fastdotnet.com/fonts/NotoSansSC/NotoSansSC-Light-Chinese.ttf);
+	font-weight: 300;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: NotoSansSC;
+	src: url(//cdn.fastdotnet.com/fonts/NotoSansSC/NotoSansSC-Light-Latin.ttf);
+	font-weight: 300;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: NotoSansSC;
+	src: url(//cdn.fastdotnet.com/fonts/NotoSansSC/NotoSansSC-Regular-Chinese.ttf);
+	font-weight: 400;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: NotoSansSC;
+	src: url(//cdn.fastdotnet.com/fonts/NotoSansSC/NotoSansSC-Regular-Latin.ttf);
+	font-weight: 400;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: NotoSansSC;
+	src: url(//cdn.fastdotnet.com/fonts/NotoSansSC/NotoSansSC-Medium-Chinese.ttf);
+	font-weight: 500;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: NotoSansSC;
+	src: url(//cdn.fastdotnet.com/fonts/NotoSansSC/NotoSansSC-Medium-Latin.ttf);
+	font-weight: 500;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: NotoSansSC;
+	src: url(//cdn.fastdotnet.com/fonts/NotoSansSC/NotoSansSC-Bold-Chinese.ttf);
+	font-weight: 700;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: NotoSansSC;
+	src: url(//cdn.fastdotnet.com/fonts/NotoSansSC/NotoSansSC-Bold-Latin.ttf);
+	font-weight: 700;
+	font-display: swap;
+}
+
+:root,
+page {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	min-height: 100vh;
+	overflow-x: hidden;
+	font-size: var(--wot-font-size-base);
+	font-weight: 400;
+	-webkit-font-smoothing: antialiased;
+	-webkit-tap-highlight-color: transparent;
+	font-family:
+		NotoSansSC,
+		-apple-system,
+		BlinkMacSystemFont,
+		"Segoe UI",
+		"Helvetica Neue",
+		Helvetica,
+		Arial,
+		sans-serif,
+		"Apple Color Emoji",
+		"Segoe UI Emoji",
+		"Segoe UI Symbol";
+}
+
+.w100 {
+	width: 100%;
+}
+
+.h100 {
+	height: 100%;
+}
