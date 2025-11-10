@@ -63,7 +63,7 @@ router.beforeEach(async (to, from, next) => {
 			try {
 				// 刷新用户信息
 				await userInfoStore.refreshUserInfo();
-				// 确保路由添加完成
+				// 确保用户添加完成
 				userInfoStore.hasUserInfo = true;
 
 				// 初始化 WebSocket

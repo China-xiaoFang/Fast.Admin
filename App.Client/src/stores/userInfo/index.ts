@@ -6,8 +6,6 @@ import type { WeChatClientLoginOutput } from "@/api/services/login/models/WeChat
 import type { AxiosResponse } from "axios";
 import { loginApi } from "@/api/services/login";
 import { CommonRoute } from "@/common";
-import { useToast } from "@/hooks";
-import router from "@/router";
 import { closeWebSocket } from "@/signalR";
 
 type IState = {
@@ -27,7 +25,7 @@ export const useUserInfo = defineStore(
 		const state = reactive<IState & WeChatClientLoginOutput>({
 			token: "",
 			refreshToken: "",
-			activeTabBar: "",
+			activeTabBar: CommonRoute.Home,
 			authLoginPopup: false,
 			openId: "",
 			unionId: "",
@@ -51,7 +49,7 @@ export const useUserInfo = defineStore(
 			{
 				path: CommonRoute.My,
 				icon: "my",
-				title: "我的",
+				title: "个人中心",
 			},
 		]);
 
@@ -117,12 +115,24 @@ export const useUserInfo = defineStore(
 		};
 
 		/** 登录 */
-		const login = (): void => {
-			useToast.success("登录成功");
-			// 确保 getLoginUser 获取用户信息
-			hasUserInfo.value = false;
-			// 跳转到首页
-			router.pushTab(CommonRoute.Home);
+		const login = async (): Promise<void> => {
+			return new Promise((resolve) => {
+				// #ifdef MP-WEIXIN
+				uni.login({
+					success: async (res) => {
+						const apiRes = await loginApi.weChatClientLogin({
+							weChatCode: res.code,
+						});
+						setUserInfo(apiRes);
+						// 确保用户添加完成
+						hasUserInfo.value = true;
+						return resolve();
+					},
+				});
+				// #endif
+
+				return resolve();
+			});
 		};
 
 		const logoutClear = (): void => {
@@ -144,6 +154,7 @@ export const useUserInfo = defineStore(
 			} catch (error) {
 				consoleError("Logout", error);
 			} finally {
+				hasUserInfo.value = false;
 				logoutClear();
 			}
 		};
@@ -156,33 +167,6 @@ export const useUserInfo = defineStore(
 			// 刷新字典
 			const appStore = useApp();
 			await appStore.setDictionary();
-		};
-
-		/** 获取微信Code */
-		const getWeChatCode = (): Promise<string> => {
-			return new Promise((resolve) => {
-				// #ifdef MP-WEIXIN
-				const code = Local.get("WeChat_Code");
-				if (code) {
-					return resolve(code);
-				} else {
-					return uni.login({
-						success: (res) => {
-							// 缓存5分钟
-							Local.set("WeChat_Code", res.code, 5);
-							return resolve(res.code);
-						},
-					});
-				}
-				// #endif
-
-				return resolve("");
-			});
-		};
-
-		/** 删除微信Code */
-		const delWeChatCode = (): void => {
-			Local.remove("WeChat_Code");
 		};
 
 		return {
@@ -199,8 +183,6 @@ export const useUserInfo = defineStore(
 			logout,
 			logoutClear,
 			refreshApp,
-			getWeChatCode,
-			delWeChatCode,
 		};
 	},
 	{

@@ -1,5 +1,6 @@
 .page {
 	padding-top: 20rpx;
+	padding-bottom: 20rpx;
 }
 
 :deep() {
@@ -18,8 +19,8 @@
 		}
 	}
 	.btn__reset {
-		margin-top: 20rpx;
 		width: 80%;
-		margin-left: 10%;
+		margin-top: 20rpx !important;
+		margin-left: 10% !important;
 	}
 }
