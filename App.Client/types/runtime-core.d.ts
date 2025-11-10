@@ -19,6 +19,11 @@ declare module "uni-mini-router" {
 		 */
 		footer?: boolean;
 		/**
+		 * 显示水印
+		 * - 默认是 false，为 true 是代表显示水印，优先级最高
+		 */
+		watermark?: boolean;
+		/**
 		 * 导航页
 		 * - 默认是 false，为 true 是显示底部导航栏
 		 */

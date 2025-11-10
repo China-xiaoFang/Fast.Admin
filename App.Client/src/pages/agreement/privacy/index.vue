@@ -12,7 +12,6 @@ definePage({
 	layout: "layout",
 	footer: false,
 	watermark: false,
-	noLogin: true,
 	style: {
 		navigationBarTitleText: "隐私协议",
 	},
