@@ -20,64 +20,31 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Service.Login.Dto;
-
-namespace Fast.Center.Service.Login;
+namespace Fast.Center.Service.Login.Dto;
 
 /// <summary>
-/// <see cref="ILoginService"/> 登录服务
+/// <see cref="WeChatClientLoginInput"/> 微信客户端登录输入
 /// </summary>
-public interface ILoginService
+public class WeChatClientLoginInput
 {
     /// <summary>
-    /// 登录
+    /// wx.login 获取到的Code
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<LoginOutput> Login(LoginInput input);
+    [StringRequired(ErrorMessage = "微信Code不能为空")]
+    public string WeChatCode { get; set; }
 
     /// <summary>
-    /// 获取登录用户根据账号
+    /// 加密算法的初始向量
     /// </summary>
-    /// <param name="accountKey"></param>
-    /// <returns></returns>
-    Task<List<LoginOutput.LoginTenantOutput>> QueryLoginUserByAccount(string accountKey);
+    public string IV { get; set; }
 
     /// <summary>
-    /// 租户登录
+    /// 包括敏感数据在内的完整用户信息的加密数据
     /// </summary>
-    /// <param name="input"></param>
-    Task<LoginOutput> TenantLogin(TenantLoginInput input);
+    public string EncryptedData { get; set; }
 
     /// <summary>
-    /// 微信登录
+    /// 动态令牌
     /// </summary>
-    /// <param name="input"></param>
-    Task<LoginOutput> WeChatLogin(WeChatLoginInput input);
-
-    /// <summary>
-    /// 微信授权登录
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<LoginOutput> WeChatAuthLogin(WeChatAuthLoginInput input);
-
-    /// <summary>
-    /// 尝试登录
-    /// </summary>
-    /// <returns></returns>
-    Task<LoginOutput> TryLogin(TryLoginInput input);
-
-    /// <summary>
-    /// 退出登录
-    /// </summary>
-    /// <returns></returns>
-    Task Logout();
-
-    /// <summary>
-    /// 微信客户端登录
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    Task<WeChatClientLoginOutput> WeChatClientLogin(WeChatClientLoginInput input);
+    public string Code { get; set; }
 }
