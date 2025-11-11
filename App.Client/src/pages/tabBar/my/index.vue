@@ -37,7 +37,9 @@
 							</template>
 						</view>
 					</view>
-					<wd-button v-if="!userInfoStore.hasUserInfo" size="small" type="primary" @tap="handleLogin">登录</wd-button>
+					<wd-button v-if="!userInfoStore.hasUserInfo" size="small" openType="getUserInfo" type="primary" @getuserinfo="handleWeChatLogin">
+						登录
+					</wd-button>
 				</view>
 			</view>
 		</view>
@@ -85,15 +87,26 @@
 			<text @tap.stop="router.push({ path: CommonRoute.ServiceAgreement })">《服务协议》</text>
 		</view>
 
-		<wd-button customClass="btn__exit-login" type="primary" block :round="false" icon="exit" @tap="handleLogout">退出登录</wd-button>
+		<wd-button v-if="userInfoStore.hasUserInfo" customClass="btn__exit-login" type="primary" block :round="false" icon="exit" @tap="handleLogout">
+			退出登录
+		</wd-button>
+		<wd-message-box selector="confirm-agreement-box">
+			<view class="agreement__warp">
+				我已阅读并同意
+				<text @tap.stop="router.push({ path: CommonRoute.UserAgreement })">《用户协议》</text>
+				<text @tap.stop="router.push({ path: CommonRoute.PrivacyAgreement })">《隐私协议》</text>
+				<text @tap.stop="router.push({ path: CommonRoute.ServiceAgreement })">《服务协议》</text>
+			</view>
+		</wd-message-box>
 	</view>
 </template>
 
 <script setup lang="ts">
 import { onPageScroll, onPullDownRefresh, onShow } from "@dcloudio/uni-app";
 import { computed, reactive, ref } from "vue";
-import { clickUtil } from "@fast-china/utils";
+import { clickUtil, consoleLog } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
+import { useMessage } from "wot-design-uni";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { CommonRoute } from "@/common";
 import { useMessageBox, useToast } from "@/hooks";
@@ -115,6 +128,8 @@ const appStore = useApp();
 const configStore = useConfig();
 const userInfoStore = useUserInfo();
 const router = useRouter();
+
+const confirmAgreementBox = useMessage("confirm-agreement-box");
 
 const state = reactive({
 	/** 是否滚动 */
@@ -168,6 +183,34 @@ const limitSize = computed(() => {
 		return `${storageInfo.value.limitSize}KB`;
 	}
 });
+
+/** 微信登录 */
+const handleWeChatLogin = async (detail: UniNamespace.GetUserInfoRes) => {
+	await clickUtil.throttleAsync(async () => {
+		try {
+			await confirmAgreementBox.confirm({
+				confirmButtonText: "同意",
+				cancelButtonText: "取消",
+				closeOnClickModal: false,
+			});
+		} catch {
+			useToast.warning(`登录前需确认您已阅读并同意《用户协议》、《隐私协议》、《服务协议》，以便为您提供更优质的服务。`);
+		}
+		const { iv, encryptedData, userInfo } = detail;
+		if (userInfo) {
+			consoleLog("Login", "GetUserInfo", userInfo);
+			await userInfoStore.login(
+				{
+					iv,
+					encryptedData,
+				},
+				true
+			);
+		} else {
+			useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
+		}
+	});
+};
 
 const handleClearCache = async () => {
 	await clickUtil.throttleAsync(async () => {

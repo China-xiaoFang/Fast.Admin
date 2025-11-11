@@ -7,6 +7,7 @@ import { WeChatLoginInput } from "./models/WeChatLoginInput";
 import { WeChatAuthLoginInput } from "./models/WeChatAuthLoginInput";
 import { TryLoginInput } from "./models/TryLoginInput";
 import { WeChatClientLoginOutput } from "./models/WeChatClientLoginOutput";
+import { WeChatClientLoginInput } from "./models/WeChatClientLoginInput";
 
 /**
  * Fast.Center.Service.Login.LoginService 登录服务Api
@@ -103,7 +104,7 @@ export const loginApi = {
   /**
    * 微信客户端登录
    */
-  weChatClientLogin(data: WeChatLoginInput) {
+  weChatClientLogin(data: WeChatClientLoginInput) {
     return axiosUtil.request<WeChatClientLoginOutput>({
       url: "/weChatClientLogin",
       method: "post",

@@ -52,6 +52,7 @@
 			<text @tap.stop="router.push({ path: CommonRoute.ServiceAgreement })">《服务协议》</text>
 		</view>
 	</wd-message-box>
+	<!-- #ifdef MP-WEIXIN -->
 	<FaPopup ref="authLoginPopupRef" width="80%" :closeOnClickModal="false">
 		<view class="pop__auth-warp">
 			<view class="auth-body">
@@ -77,6 +78,7 @@
 			</view>
 		</view>
 	</FaPopup>
+	<!-- #endif -->
 </template>
 
 <script setup lang="ts">

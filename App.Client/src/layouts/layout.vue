@@ -20,18 +20,48 @@
 		<FaLoadingPage :loading="wdHookState.loading?.fullscreen && wdHookState.loading?.state" :text="wdHookState.loading?.text" />
 		<!-- 遮罩层 -->
 		<FaOverlay :visible="wdHookState.overlay?.state" :transparent="wdHookState.overlay?.transparent" />
+		<!-- 手机号弹窗 -->
+		<!-- #ifdef MP-WEIXIN -->
+		<FaPopup ref="authLoginPopupRef" width="80%" :closeOnClickModal="false">
+			<view class="pop__auth-warp">
+				<view class="auth-body">
+					<view class="auth-title">
+						<image v-if="appStore.logoUrl" class="auth-logo" :src="appStore.logoUrl" @error="state.logoUrl = defaultLogo" />
+						<image v-else class="auth-logo" :src="defaultLogo" />
+						<view>手机号授权</view>
+					</view>
+					<view class="auth-content">
+						<text>为继续使用相关服务，请授权获取您的手机号</text>
+						<view class="agreement">
+							登录即表示您已阅读并同意
+							<text @tap.stop="router.push({ path: CommonRoute.UserAgreement })">《用户协议》</text>
+							<text @tap.stop="router.push({ path: CommonRoute.PrivacyAgreement })">《隐私协议》</text>
+							<text @tap.stop="router.push({ path: CommonRoute.ServiceAgreement })">《服务协议》</text>
+						</view>
+					</view>
+				</view>
+				<view class="auth-actions">
+					<wd-button type="info" plain block @click="authLoginPopupRef.close()">暂不授权</wd-button>
+					<wd-button openType="getPhoneNumber" type="primary" block @getphonenumber="handlePhoneLogin">一键授权</wd-button>
+				</view>
+			</view>
+		</FaPopup>
+		<!-- #endif -->
 	</wd-config-provider>
 </template>
 
 <script setup lang="ts">
 import { onHide, onShow } from "@dcloudio/uni-app";
-import { computed, onBeforeMount, reactive, watch } from "vue";
-import { withDefineType } from "@fast-china/utils";
-import { useRoute } from "uni-mini-router";
+import { computed, onBeforeMount, reactive, ref, watch } from "vue";
+import { clickUtil, consoleLog, withDefineType } from "@fast-china/utils";
+import { useRoute, useRouter } from "uni-mini-router";
 import { useMessage, useNotify, useToast } from "wot-design-uni";
+import type { FaPopupInstance } from "@/components";
 import type { WatchHandle } from "vue";
+import { CommonRoute } from "@/common";
 import { wdHookState } from "@/hooks";
-import { useConfig } from "@/stores";
+import defaultLogo from "@/static/logo.png";
+import { useApp, useConfig, useUserInfo } from "@/stores";
 
 defineOptions({
 	name: "Layout",
@@ -42,7 +72,12 @@ defineOptions({
 	},
 });
 
+const appStore = useApp();
 const configStore = useConfig();
+const userInfoStore = useUserInfo();
+const router = useRouter();
+
+const authLoginPopupRef = ref<FaPopupInstance>();
 
 const state = reactive({
 	/** 页面滚动 */
@@ -59,6 +94,8 @@ const state = reactive({
 	lightBackgroundImage: withDefineType<string>(),
 	/** 深色背景图片 */
 	darkBackgroundImage: withDefineType<string>(),
+	/** Logo 图片 */
+	logoUrl: appStore.logoUrl,
 });
 
 /** 主题 */
@@ -96,12 +133,26 @@ const mainStyle = computed(() => {
 	return style;
 });
 
+/** 手机登录 */
+const handlePhoneLogin = async (detail: UniHelper.ButtonOnGetphonenumberDetail) => {
+	await clickUtil.throttleAsync(async () => {
+		authLoginPopupRef.value.close(async () => {
+			consoleLog("Layout", "GetPhoneNumber", detail);
+			const { code } = detail;
+			await userInfoStore.login({
+				code,
+			});
+		});
+	});
+};
+
 let wdNotifyWatch: WatchHandle;
 const uNotify = useNotify("#fast_notify");
 let wdToastWatch: WatchHandle;
 const uToast = useToast("#fast_toast");
 let wdMessageBoxWatch: WatchHandle;
 const uMessage = useMessage("#fast_message_box");
+let authLoginPopupWatch: WatchHandle;
 
 onShow(() => {
 	wdNotifyWatch = watch(
@@ -146,6 +197,13 @@ onShow(() => {
 			wdHookState.wdMessageBox = undefined;
 		}
 	);
+	authLoginPopupWatch = watch(
+		() => userInfoStore.authLoginPopup,
+		(newValue) => {
+			if (!newValue) return;
+			authLoginPopupRef.value.open();
+		}
+	);
 });
 
 onHide(() => {
@@ -153,6 +211,7 @@ onHide(() => {
 	wdNotifyWatch && wdNotifyWatch();
 	wdToastWatch && wdToastWatch();
 	wdMessageBoxWatch && wdMessageBoxWatch();
+	authLoginPopupWatch && authLoginPopupWatch();
 });
 
 onBeforeMount(() => {

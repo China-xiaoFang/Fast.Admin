@@ -181,3 +181,10 @@
 		margin: 30rpx 50rpx !important;
 	}
 }
+
+.agreement__warp {
+	word-break: keep-all;
+	text {
+		color: var(--wot-color-primary);
+	}
+}
