@@ -37,3 +37,46 @@
 		padding-bottom: 15px;
 	}
 }
+
+.pop__auth-warp {
+	.auth-body {
+		background-color: var(--wot-color-white);
+		padding: 40rpx 48rpx 0;
+		.auth-title {
+			text-align: center;
+			font-size: var(--wot-font-size-medium);
+			color: var(--wot-text-color-primary);
+			padding-bottom: 10rpx;
+			.auth-logo {
+				width: 100rpx;
+				height: 100rpx;
+				border-radius: 50%;
+			}
+		}
+		.auth-content {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			color: var(--wot-text-color-regular);
+			.agreement {
+				padding-top: 20rpx;
+				color: var(--wot-text-color-secondary);
+				font-size: var(--wot-font-size-small);
+				text {
+					color: var(--wot-color-primary);
+				}
+			}
+		}
+	}
+	.auth-actions {
+		display: flex;
+		flex-direction: row;
+		gap: 30rpx;
+		padding: 15rpx 40rpx 0;
+		:deep() {
+			.wd-button {
+				width: 100%;
+			}
+		}
+	}
+}
