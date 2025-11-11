@@ -704,7 +704,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         if (weChatUserModel == null)
         {
             // 这里的 IV 和 EncryptedData 在没有授权的情况下是为空的
-            if (input.IV.IsEmpty() || input.EncryptedData.IsEmpty())
+            if (string.IsNullOrWhiteSpace(input.IV) || string.IsNullOrWhiteSpace(input.EncryptedData))
             {
                 return new LoginOutput {Status = LoginStatusEnum.AuthExpired, Message = "授权已过期，请重新授权登录！"};
             }
@@ -905,7 +905,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
     [HttpPost("/weChatClientLogin")]
     [ApiInfo("微信客户端登录", HttpRequestActionEnum.Auth)]
     [AllowAnonymous]
-    public async Task<WeChatClientLoginOutput> WeChatClientLogin(WeChatLoginInput input)
+    public async Task<WeChatClientLoginOutput> WeChatClientLogin(WeChatClientLoginInput input)
     {
         // 查询应用信息
         var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
@@ -938,22 +938,6 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             .SingleAsync();
         if (weChatUserModel == null)
         {
-            // 这里的 IV 和 EncryptedData 在没有授权的情况下是为空的
-            if (input.IV.IsEmpty() || input.EncryptedData.IsEmpty())
-            {
-                throw new UserFriendlyException("授权已过期，请重新授权登录！");
-            }
-
-            // 尝试解析加密数据
-            var decryptBytes = AESUtility.DecryptWithCBC(Convert.FromBase64String(response.SessionKey),
-                Convert.FromBase64String(input.IV), Convert.FromBase64String(input.EncryptedData));
-            var decryptStr = Encoding.Default.GetString(decryptBytes);
-            var decryptData = decryptStr.ToObject<DecryptWeChatUserInfo>();
-            if (decryptData == null)
-            {
-                throw new UserFriendlyException("解析加密用户信息失败！");
-            }
-
             // 保存微信用户
             weChatUserModel = new WeChatUserModel
             {
@@ -971,15 +955,54 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
                 OpenId = response.OpenId,
                 UnionId = response.UnionId,
                 SessionKey = response.SessionKey,
-                NickName = decryptData.NickName,
-                Sex = decryptData.Gender,
-                Country = decryptData.Country,
-                Province = decryptData.Province,
-                City = decryptData.City,
-                Language = decryptData.Language
+                NickName = "微信用户",
+                Avatar =
+                    "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132",
+                Sex = GenderEnum.Unknown
             };
             await _repository.Insertable(weChatUserModel)
                 .ExecuteCommandAsync();
+        }
+
+        // 这里的 IV 和 EncryptedData 在没有授权的情况下是为空的
+        if (!string.IsNullOrWhiteSpace(input.IV) || !string.IsNullOrWhiteSpace(input.EncryptedData))
+        {
+            // 尝试解析加密数据
+            var decryptBytes = AESUtility.DecryptWithCBC(Convert.FromBase64String(response.SessionKey),
+                Convert.FromBase64String(input.IV), Convert.FromBase64String(input.EncryptedData));
+            var decryptStr = Encoding.Default.GetString(decryptBytes);
+            var decryptData = decryptStr.ToObject<DecryptWeChatUserInfo>();
+            if (decryptData == null)
+            {
+                throw new UserFriendlyException("解析加密用户信息失败！");
+            }
+
+            weChatUserModel.NickName = decryptData.NickName;
+            weChatUserModel.Sex = decryptData.Gender;
+            weChatUserModel.Country = decryptData.Country;
+            weChatUserModel.Province = decryptData.Province;
+            weChatUserModel.City = decryptData.City;
+            weChatUserModel.Language = decryptData.Language;
+        }
+
+        if (!string.IsNullOrWhiteSpace(input.Code))
+        {
+            // 换取用户手机号
+            var phoneNumberResponse = await client.ExecuteWxaBusinessGetUserPhoneNumberAsync(
+                new WxaBusinessGetUserPhoneNumberRequest {AccessToken = applicationModel.WeChatAccessToken, Code = input.Code});
+
+            if (!phoneNumberResponse.IsSuccessful())
+            {
+                throw new UserFriendlyException(
+                    $"解析Code失败，获取用户手机号失败：ErrorCode：{phoneNumberResponse.ErrorCode}。ErrorMessage：{phoneNumberResponse.ErrorMessage}");
+            }
+
+            if (weChatUserModel.PurePhoneNumber != phoneNumberResponse.PhoneInfo.PurePhoneNumber)
+            {
+                weChatUserModel.PurePhoneNumber = phoneNumberResponse.PhoneInfo.PurePhoneNumber;
+                weChatUserModel.PhoneNumber = phoneNumberResponse.PhoneInfo.PhoneNumber;
+                weChatUserModel.CountryCode = phoneNumberResponse.PhoneInfo.CountryCode;
+            }
         }
 
         var dateTime = DateTime.Now;
@@ -1031,17 +1054,15 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
                 LastLoginTime = weChatUserModel.LastLoginTime.Value,
                 ButtonCodeList = [PermissionConst.ClientService]
             });
-
-            return new WeChatClientLoginOutput
-            {
-                OpenId = weChatUserModel.OpenId,
-                UnionId = weChatUserModel.UnionId,
-                Mobile = weChatUserModel.PurePhoneNumber,
-                NickName = weChatUserModel.NickName,
-                Avatar = weChatUserModel.Avatar
-            };
         }
 
-        return null;
+        return new WeChatClientLoginOutput
+        {
+            OpenId = weChatUserModel.OpenId,
+            UnionId = weChatUserModel.UnionId,
+            Mobile = weChatUserModel.PurePhoneNumber,
+            NickName = weChatUserModel.NickName,
+            Avatar = weChatUserModel.Avatar
+        };
     }
 }
