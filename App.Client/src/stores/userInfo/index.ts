@@ -1,11 +1,14 @@
 import { reactive, ref, toRefs } from "vue";
 import { Local, base64Util, consoleError } from "@fast-china/utils";
+import { isNil } from "lodash-unified";
 import { defineStore } from "pinia";
 import { useApp } from "../app";
+import type { WeChatClientLoginInput } from "@/api/services/login/models/WeChatClientLoginInput";
 import type { WeChatClientLoginOutput } from "@/api/services/login/models/WeChatClientLoginOutput";
 import type { AxiosResponse } from "axios";
 import { loginApi } from "@/api/services/login";
 import { CommonRoute } from "@/common";
+import { useToast } from "@/hooks";
 import { closeWebSocket } from "@/signalR";
 
 type IState = {
@@ -115,18 +118,25 @@ export const useUserInfo = defineStore(
 		};
 
 		/** 登录 */
-		const login = async (): Promise<void> => {
+		const login = async (input: WeChatClientLoginInput, checkMobile = false): Promise<void> => {
 			return new Promise((resolve) => {
 				// #ifdef MP-WEIXIN
 				uni.login({
 					success: async (res) => {
 						const apiRes = await loginApi.weChatClientLogin({
+							...input,
 							weChatCode: res.code,
 						});
 						setUserInfo(apiRes);
 						// 确保用户添加完成
 						hasUserInfo.value = true;
+						if (checkMobile && isNil(apiRes.mobile)) {
+							state.authLoginPopup = true;
+						}
 						return resolve();
+					},
+					fail: (error) => {
+						useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
 					},
 				});
 				// #endif
