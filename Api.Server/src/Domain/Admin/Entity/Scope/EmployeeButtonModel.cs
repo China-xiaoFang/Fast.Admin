@@ -34,15 +34,13 @@ public class EmployeeButtonModel : IDatabaseEntity
     /// <summary>
     /// 职员Id
     /// </summary>
-    [Key]
-    [SugarColumn(ColumnDescription = "职员Id")]
+    [SugarColumn(ColumnDescription = "职员Id", IsPrimaryKey = true)]
     public long EmployeeId { get; set; }
 
     /// <summary>
     /// 按钮Id
     /// </summary>
-    [Key]
-    [SugarColumn(ColumnDescription = "按钮Id")]
+    [SugarColumn(ColumnDescription = "按钮Id", IsPrimaryKey = true)]
     public long ButtonId { get; set; }
 
     /// <summary>

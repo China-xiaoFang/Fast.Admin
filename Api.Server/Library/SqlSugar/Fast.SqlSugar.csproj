@@ -7,10 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)Library\Runtime\Fast.Runtime.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="SqlSugarCore" Version="5.1.4.*" />
 		<PackageReference Include="UAParser" Version="3.1.47" />
 		<PackageReference Include="Yitter.IdGenerator" Version="1.0.14" />

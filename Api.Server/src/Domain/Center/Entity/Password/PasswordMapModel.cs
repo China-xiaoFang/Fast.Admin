@@ -34,17 +34,15 @@ public class PasswordMapModel : IDatabaseEntity
     /// <summary>
     /// 类型
     /// </summary>
-    [Key]
-    [SugarColumn(ColumnDescription = "类型")]
+    [SugarColumn(ColumnDescription = "类型", IsPrimaryKey = true)]
     public PasswordTypeEnum Type { get; set; }
 
     /// <summary>
     /// 明文
     /// </summary>
-    [Key]
     [SugarSearchValue]
     [Required]
-    [SugarColumn(ColumnDescription = "明文", Length = 50)]
+    [SugarColumn(ColumnDescription = "明文", Length = 50, IsPrimaryKey = true)]
     public string Plaintext { get; set; }
 
     /// <summary>
