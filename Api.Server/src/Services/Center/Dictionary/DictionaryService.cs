@@ -84,7 +84,7 @@ public class DictionaryService : IDynamicApplication
 
         return dictionaryTypeList.ToDictionary(sl => sl.DictionaryKey, sl => sl.DictionaryItemList.Select(iSl =>
             {
-                dynamic localValue = sl.ValueType switch
+                object localValue = sl.ValueType switch
                 {
                     DictionaryValueTypeEnum.Int => int.Parse(iSl.Value),
                     DictionaryValueTypeEnum.Long => long.Parse(iSl.Value),

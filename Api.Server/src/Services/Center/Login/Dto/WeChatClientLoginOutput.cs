@@ -28,6 +28,16 @@ namespace Fast.Center.Service.Login.Dto;
 public class WeChatClientLoginOutput
 {
     /// <summary>
+    /// 登录状态
+    /// </summary>
+    public LoginStatusEnum Status { get; set; }
+
+    /// <summary>
+    /// 消息
+    /// </summary>
+    public string Message { get; set; }
+
+    /// <summary>
     /// 唯一用户标识
     /// </summary>
     public string OpenId { get; set; }
