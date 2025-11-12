@@ -42,7 +42,7 @@ public class FaTableEnumColumnCtx
     /// <para>number</para>
     /// <para>boolean</para>
     /// </remarks>
-    public dynamic Value { get; set; }
+    public object Value { get; set; }
 
     /// <summary>
     /// 是否显示

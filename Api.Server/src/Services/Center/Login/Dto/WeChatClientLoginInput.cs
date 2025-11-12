@@ -28,7 +28,7 @@ namespace Fast.Center.Service.Login.Dto;
 public class WeChatClientLoginInput
 {
     /// <summary>
-    /// wx.login 获取到的Code
+    /// 微信Code
     /// </summary>
     [StringRequired(ErrorMessage = "微信Code不能为空")]
     public string WeChatCode { get; set; }
