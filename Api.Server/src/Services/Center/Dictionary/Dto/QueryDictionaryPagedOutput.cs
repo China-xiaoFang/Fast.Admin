@@ -32,7 +32,7 @@ public class QueryDictionaryPagedOutput
     /// <summary>
     /// 字典Id
     /// </summary>
-    public long DictionaryId { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// 字典Key

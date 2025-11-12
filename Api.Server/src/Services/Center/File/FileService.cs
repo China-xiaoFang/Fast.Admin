@@ -133,7 +133,7 @@ public class FileService : IFileService, ITransientDependency, IDynamicApplicati
             .ToPagedListAsync(input,
                 sl => new QueryFilePagedOutput
                 {
-                    FileId = sl.Id,
+                    Id = sl.Id,
                     FileObjectName = sl.FileObjectName,
                     FileOriginName = sl.FileOriginName,
                     FileSuffix = sl.FileSuffix,

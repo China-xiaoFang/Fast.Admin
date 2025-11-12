@@ -66,7 +66,7 @@ public class TableService : IDynamicApplication
         return await _tableRepository.Entities.OrderBy(ob => ob.TableName)
             .Select(sl => new QueryTableConfigPagedOutput
             {
-                TableId = sl.Id,
+                Id = sl.Id,
                 TableKey = sl.TableKey,
                 TableName = sl.TableName,
                 Remark = sl.Remark,
