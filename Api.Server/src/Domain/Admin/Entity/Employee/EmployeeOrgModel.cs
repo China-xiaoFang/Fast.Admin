@@ -34,7 +34,7 @@ public class EmployeeOrgModel : IDatabaseEntity
     /// <summary>
     /// 职员Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "职员Id")]
+    [SugarColumn(ColumnDescription = "职员Id", IsPrimaryKey = true)]
     public long EmployeeId { get; set; }
 
     /// <summary>
@@ -46,7 +46,7 @@ public class EmployeeOrgModel : IDatabaseEntity
     /// <summary>
     /// 部门Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "部门Id")]
+    [SugarColumn(ColumnDescription = "部门Id", IsPrimaryKey = true)]
     public long DepartmentId { get; set; }
 
     /// <summary>
@@ -58,7 +58,7 @@ public class EmployeeOrgModel : IDatabaseEntity
     /// <summary>
     /// 职位Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "职位Id")]
+    [SugarColumn(ColumnDescription = "职位Id", IsPrimaryKey = true)]
     public long PositionId { get; set; }
 
     /// <summary>

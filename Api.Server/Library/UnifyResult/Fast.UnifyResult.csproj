@@ -10,8 +10,4 @@
 		<EmbeddedResource Include="Assets\**" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)Library\Runtime\Fast.Runtime.csproj" />
-	</ItemGroup>
-
 </Project>

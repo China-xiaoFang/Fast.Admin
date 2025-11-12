@@ -34,15 +34,13 @@ public class RoleButtonModel : IDatabaseEntity
     /// <summary>
     /// 角色Id
     /// </summary>
-    [Key]
-    [SugarColumn(ColumnDescription = "角色Id")]
+    [SugarColumn(ColumnDescription = "角色Id", IsPrimaryKey = true)]
     public long RoleId { get; set; }
 
     /// <summary>
     /// 按钮Id
     /// </summary>
-    [Key]
-    [SugarColumn(ColumnDescription = "按钮Id")]
+    [SugarColumn(ColumnDescription = "按钮Id", IsPrimaryKey = true)]
     public long ButtonId { get; set; }
 
     /// <summary>

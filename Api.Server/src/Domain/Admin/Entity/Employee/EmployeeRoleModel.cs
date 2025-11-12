@@ -34,13 +34,13 @@ public class EmployeeRoleModel : IDatabaseEntity
     /// <summary>
     /// 职员Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "职员Id")]
+    [SugarColumn(ColumnDescription = "职员Id", IsPrimaryKey = true)]
     public long EmployeeId { get; set; }
 
     /// <summary>
     /// 角色Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "角色Id")]
+    [SugarColumn(ColumnDescription = "角色Id", IsPrimaryKey = true)]
     public long RoleId { get; set; }
 
     /// <summary>
