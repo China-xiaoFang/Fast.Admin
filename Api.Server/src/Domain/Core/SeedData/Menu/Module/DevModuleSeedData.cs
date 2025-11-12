@@ -47,8 +47,8 @@ internal static partial class MenuSeedData
     {
         var devModuleModel = new ModuleModel
         {
-            Id = YitIdHelper.NextId(),
-            AppId = applicationModel.Id,
+            ModuleId = YitIdHelper.NextId(),
+            AppId = applicationModel.AppId,
             ModuleName = "开发应用",
             Icon = "dev",
             Color = "#409EFF",
@@ -66,10 +66,10 @@ internal static partial class MenuSeedData
 
         var apiCLMenuModel = new MenuModel
         {
-            Id = YitIdHelper.NextId(),
+            MenuId = YitIdHelper.NextId(),
             Edition = EditionEnum.Internal,
-            AppId = applicationModel.Id,
-            ModuleId = devModuleModel.Id,
+            AppId = applicationModel.AppId,
+            ModuleId = devModuleModel.ModuleId,
             MenuCode = "Api:Catalog",
             MenuName = "Api",
             MenuTitle = "Api",
@@ -97,15 +97,15 @@ internal static partial class MenuSeedData
 
         var apiMenuModel = new MenuModel
         {
-            Id = YitIdHelper.NextId(),
+            MenuId = YitIdHelper.NextId(),
             Edition = EditionEnum.Internal,
-            AppId = applicationModel.Id,
-            ModuleId = devModuleModel.Id,
-            MenuCode = "Api:Paged",
+            AppId = applicationModel.AppId,
+            ModuleId = devModuleModel.ModuleId,
+            MenuCode = PermissionConst.ApiPaged,
             MenuName = "接口管理",
             MenuTitle = "接口管理",
-            ParentId = apiCLMenuModel.Id,
-            ParentIds = [apiCLMenuModel.Id],
+            ParentId = apiCLMenuModel.ParentId,
+            ParentIds = [0, apiCLMenuModel.MenuId],
             MenuType = MenuTypeEnum.Menu,
             HasDesktop = true,
             DesktopRouter = null,
@@ -128,11 +128,11 @@ internal static partial class MenuSeedData
             .ExecuteReturnEntityAsync();
         await db.Insertable(new ButtonModel
             {
-                Id = YitIdHelper.NextId(),
+                ButtonId = YitIdHelper.NextId(),
                 Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                MenuId = apiMenuModel.Id,
-                ButtonCode = "Api:Paged",
+                AppId = applicationModel.AppId,
+                MenuId = apiMenuModel.MenuId,
+                ButtonCode = PermissionConst.ApiPaged,
                 ButtonName = "列表",
                 HasDesktop = true,
                 HasWeb = true,
@@ -149,15 +149,15 @@ internal static partial class MenuSeedData
             {
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    MenuId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    ModuleId = devModuleModel.Id,
-                    MenuCode = "Api:Swagger",
+                    AppId = applicationModel.AppId,
+                    ModuleId = devModuleModel.ModuleId,
+                    MenuCode = PermissionConst.ApiSwagger,
                     MenuName = "Swagger",
                     MenuTitle = "Swagger",
-                    ParentId = apiCLMenuModel.Id,
-                    ParentIds = [apiCLMenuModel.Id],
+                    ParentId = apiCLMenuModel.ParentId,
+                    ParentIds = [0, apiCLMenuModel.MenuId],
                     MenuType = MenuTypeEnum.Internal,
                     HasDesktop = true,
                     DesktopIcon = "api",
@@ -179,15 +179,15 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    MenuId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    ModuleId = devModuleModel.Id,
-                    MenuCode = "Api:Knife4j",
+                    AppId = applicationModel.AppId,
+                    ModuleId = devModuleModel.ModuleId,
+                    MenuCode = PermissionConst.ApiKnife4j,
                     MenuName = "Knife4j",
                     MenuTitle = "Knife4j",
-                    ParentId = apiCLMenuModel.Id,
-                    ParentIds = [apiCLMenuModel.Id],
+                    ParentId = apiCLMenuModel.ParentId,
+                    ParentIds = [0, apiCLMenuModel.MenuId],
                     MenuType = MenuTypeEnum.Internal,
                     HasDesktop = true,
                     DesktopIcon = "api",
@@ -216,11 +216,11 @@ internal static partial class MenuSeedData
 
         var menuModel = new MenuModel
         {
-            Id = YitIdHelper.NextId(),
+            MenuId = YitIdHelper.NextId(),
             Edition = EditionEnum.Internal,
-            AppId = applicationModel.Id,
-            ModuleId = devModuleModel.Id,
-            MenuCode = "Menu:Paged",
+            AppId = applicationModel.AppId,
+            ModuleId = devModuleModel.ModuleId,
+            MenuCode = PermissionConst.Menu.Paged,
             MenuName = "菜单管理",
             MenuTitle = "菜单管理",
             ParentId = 0,
@@ -248,11 +248,11 @@ internal static partial class MenuSeedData
             {
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = menuModel.Id,
-                    ButtonCode = "Menu:Paged",
+                    AppId = applicationModel.AppId,
+                    MenuId = menuModel.MenuId,
+                    ButtonCode = PermissionConst.Menu.Paged,
                     ButtonName = "列表",
                     HasDesktop = true,
                     HasWeb = true,
@@ -265,11 +265,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = menuModel.Id,
-                    ButtonCode = "Menu:Detail",
+                    AppId = applicationModel.AppId,
+                    MenuId = menuModel.MenuId,
+                    ButtonCode = PermissionConst.Menu.Detail,
                     ButtonName = "详情",
                     HasDesktop = true,
                     HasWeb = true,
@@ -282,11 +282,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = menuModel.Id,
-                    ButtonCode = "Menu:Add",
+                    AppId = applicationModel.AppId,
+                    MenuId = menuModel.MenuId,
+                    ButtonCode = PermissionConst.Menu.Add,
                     ButtonName = "新增",
                     HasDesktop = true,
                     HasWeb = true,
@@ -299,11 +299,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = menuModel.Id,
-                    ButtonCode = "Menu:Edit",
+                    AppId = applicationModel.AppId,
+                    MenuId = menuModel.MenuId,
+                    ButtonCode = PermissionConst.Menu.Edit,
                     ButtonName = "编辑",
                     HasDesktop = true,
                     HasWeb = true,
@@ -316,11 +316,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = menuModel.Id,
-                    ButtonCode = "Menu:Delete",
+                    AppId = applicationModel.AppId,
+                    MenuId = menuModel.MenuId,
+                    ButtonCode = PermissionConst.Menu.Delete,
                     ButtonName = "删除",
                     HasDesktop = true,
                     HasWeb = true,
@@ -333,11 +333,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = menuModel.Id,
-                    ButtonCode = "Menu:Status",
+                    AppId = applicationModel.AppId,
+                    MenuId = menuModel.MenuId,
+                    ButtonCode = PermissionConst.Menu.Status,
                     ButtonName = "状态更改",
                     HasDesktop = true,
                     HasWeb = true,
@@ -357,11 +357,11 @@ internal static partial class MenuSeedData
 
         var tableConfigMenuModel = new MenuModel
         {
-            Id = YitIdHelper.NextId(),
+            MenuId = YitIdHelper.NextId(),
             Edition = EditionEnum.Internal,
-            AppId = applicationModel.Id,
-            ModuleId = devModuleModel.Id,
-            MenuCode = "Table:Paged",
+            AppId = applicationModel.AppId,
+            ModuleId = devModuleModel.ModuleId,
+            MenuCode = PermissionConst.Table.Paged,
             MenuName = "表格配置",
             MenuTitle = "表格配置",
             ParentId = 0,
@@ -389,11 +389,11 @@ internal static partial class MenuSeedData
             {
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = tableConfigMenuModel.Id,
-                    ButtonCode = "Table:Paged",
+                    AppId = applicationModel.AppId,
+                    MenuId = tableConfigMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Table.Paged,
                     ButtonName = "列表",
                     HasDesktop = true,
                     HasWeb = true,
@@ -406,11 +406,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = tableConfigMenuModel.Id,
-                    ButtonCode = "Table:Detail",
+                    AppId = applicationModel.AppId,
+                    MenuId = tableConfigMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Table.Detail,
                     ButtonName = "详情",
                     HasDesktop = true,
                     HasWeb = true,
@@ -423,11 +423,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = tableConfigMenuModel.Id,
-                    ButtonCode = "Table:Add",
+                    AppId = applicationModel.AppId,
+                    MenuId = tableConfigMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Table.Add,
                     ButtonName = "新增",
                     HasDesktop = true,
                     HasWeb = true,
@@ -440,11 +440,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = tableConfigMenuModel.Id,
-                    ButtonCode = "Table:Edit",
+                    AppId = applicationModel.AppId,
+                    MenuId = tableConfigMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Table.Edit,
                     ButtonName = "编辑",
                     HasDesktop = true,
                     HasWeb = true,
@@ -457,11 +457,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = tableConfigMenuModel.Id,
-                    ButtonCode = "Table:Delete",
+                    AppId = applicationModel.AppId,
+                    MenuId = tableConfigMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Table.Delete,
                     ButtonName = "删除",
                     HasDesktop = true,
                     HasWeb = true,
@@ -481,11 +481,11 @@ internal static partial class MenuSeedData
 
         var dictionaryMenuModel = new MenuModel
         {
-            Id = YitIdHelper.NextId(),
+            MenuId = YitIdHelper.NextId(),
             Edition = EditionEnum.Internal,
-            AppId = applicationModel.Id,
-            ModuleId = devModuleModel.Id,
-            MenuCode = "Dictionary:Paged",
+            AppId = applicationModel.AppId,
+            ModuleId = devModuleModel.ModuleId,
+            MenuCode = PermissionConst.Dictionary.Paged,
             MenuName = "数据字典",
             MenuTitle = "数据字典",
             ParentId = 0,
@@ -513,11 +513,11 @@ internal static partial class MenuSeedData
             {
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = dictionaryMenuModel.Id,
-                    ButtonCode = "Dictionary:Paged",
+                    AppId = applicationModel.AppId,
+                    MenuId = dictionaryMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Dictionary.Paged,
                     ButtonName = "列表",
                     HasDesktop = true,
                     HasWeb = true,
@@ -530,11 +530,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = dictionaryMenuModel.Id,
-                    ButtonCode = "Dictionary:Detail",
+                    AppId = applicationModel.AppId,
+                    MenuId = dictionaryMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Dictionary.Detail,
                     ButtonName = "详情",
                     HasDesktop = true,
                     HasWeb = true,
@@ -547,11 +547,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = dictionaryMenuModel.Id,
-                    ButtonCode = "Dictionary:Add",
+                    AppId = applicationModel.AppId,
+                    MenuId = dictionaryMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Dictionary.Add,
                     ButtonName = "新增",
                     HasDesktop = true,
                     HasWeb = true,
@@ -564,11 +564,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = dictionaryMenuModel.Id,
-                    ButtonCode = "Dictionary:Edit",
+                    AppId = applicationModel.AppId,
+                    MenuId = dictionaryMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Dictionary.Edit,
                     ButtonName = "编辑",
                     HasDesktop = true,
                     HasWeb = true,
@@ -581,11 +581,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = dictionaryMenuModel.Id,
-                    ButtonCode = "Dictionary:Delete",
+                    AppId = applicationModel.AppId,
+                    MenuId = dictionaryMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Dictionary.Delete,
                     ButtonName = "删除",
                     HasDesktop = true,
                     HasWeb = true,
@@ -598,11 +598,11 @@ internal static partial class MenuSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Internal,
-                    AppId = applicationModel.Id,
-                    MenuId = dictionaryMenuModel.Id,
-                    ButtonCode = "Dictionary:Status",
+                    AppId = applicationModel.AppId,
+                    MenuId = dictionaryMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Dictionary.Status,
                     ButtonName = "状态更改",
                     HasDesktop = true,
                     HasWeb = true,
@@ -622,11 +622,11 @@ internal static partial class MenuSeedData
 
         var passwordMapModel = new MenuModel
         {
-            Id = YitIdHelper.NextId(),
+            MenuId = YitIdHelper.NextId(),
             Edition = EditionEnum.Internal,
-            AppId = applicationModel.Id,
-            ModuleId = devModuleModel.Id,
-            MenuCode = "PasswordMap:Paged",
+            AppId = applicationModel.AppId,
+            ModuleId = devModuleModel.ModuleId,
+            MenuCode = PermissionConst.PasswordMapPaged,
             MenuName = "密码映射",
             MenuTitle = "密码映射",
             ParentId = 0,
@@ -652,11 +652,11 @@ internal static partial class MenuSeedData
             .ExecuteReturnEntityAsync();
         await db.Insertable(new ButtonModel
             {
-                Id = YitIdHelper.NextId(),
+                ButtonId = YitIdHelper.NextId(),
                 Edition = EditionEnum.Internal,
-                AppId = applicationModel.Id,
-                MenuId = passwordMapModel.Id,
-                ButtonCode = "PasswordMap:Paged",
+                AppId = applicationModel.AppId,
+                MenuId = passwordMapModel.MenuId,
+                ButtonCode = PermissionConst.PasswordMapPaged,
                 ButtonName = "列表",
                 HasDesktop = true,
                 HasWeb = true,

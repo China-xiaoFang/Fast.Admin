@@ -35,6 +35,12 @@ namespace Fast.Admin.Entity;
 public class EmployeeModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 职员Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "职员Id", IsPrimaryKey = true)]
+    public long EmployeeId { get; set; }
+
+    /// <summary>
     /// 登录用户Id
     /// </summary>
     /// <remarks>绑定 Center 库 TenantUser 表主键Id</remarks>

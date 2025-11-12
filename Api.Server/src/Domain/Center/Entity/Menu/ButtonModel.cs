@@ -34,6 +34,12 @@ namespace Fast.Center.Entity;
 public class ButtonModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 按钮Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "按钮Id", IsPrimaryKey = true)]
+    public long ButtonId { get; set; }
+
+    /// <summary>
     /// 版本
     /// </summary>
     [SugarColumn(ColumnDescription = "版本")]

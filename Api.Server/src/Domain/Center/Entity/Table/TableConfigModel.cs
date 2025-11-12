@@ -33,6 +33,12 @@ namespace Fast.Center.Entity;
 public class TableConfigModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 表格Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "表格Id", IsPrimaryKey = true)]
+    public long TableId { get; set; }
+
+    /// <summary>
     /// 表格Key
     /// </summary>
     [SugarSearchValue]
@@ -63,6 +69,6 @@ public class TableConfigModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 表格列配置信息
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TableColumnConfigModel.TableId), nameof(Id))]
+    [Navigate(NavigateType.OneToMany, nameof(TableColumnConfigModel.TableId), nameof(TableId))]
     public List<TableColumnConfigModel> TableColumnConfigList { get; set; }
 }

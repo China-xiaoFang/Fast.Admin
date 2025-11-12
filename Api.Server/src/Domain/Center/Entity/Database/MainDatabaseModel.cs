@@ -34,6 +34,12 @@ namespace Fast.Center.Entity;
 public class MainDatabaseModel : BaseTEntity, IUpdateVersion
 {
     /// <summary>
+    /// 主库Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "主库Id", IsPrimaryKey = true)]
+    public long MainId { get; set; }
+
+    /// <summary>
     /// 数据库类型
     /// </summary>
     [SugarColumn(ColumnDescription = "数据库类型")]
@@ -132,6 +138,6 @@ public class MainDatabaseModel : BaseTEntity, IUpdateVersion
     /// <summary>
     /// 从库信息
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(SlaveDatabaseModel.MainId), nameof(Id))]
+    [Navigate(NavigateType.OneToMany, nameof(SlaveDatabaseModel.MainId), nameof(MainId))]
     public List<SlaveDatabaseModel> SlaveDatabaseList { get; set; }
 }

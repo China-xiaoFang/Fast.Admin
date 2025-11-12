@@ -23,6 +23,7 @@
 using Fast.Center.Entity;
 using Fast.Center.Enum;
 using SqlSugar;
+using Yitter.IdGenerator;
 
 // ReSharper disable once CheckNamespace
 namespace Fast.Core;
@@ -43,6 +44,7 @@ internal static class SysSerialSeedData
             {
                 new()
                 {
+                    SerialRuleId = YitIdHelper.NextId(),
                     RuleType = SysSerialRuleTypeEnum.AppNo,
                     Prefix = "App",
                     DateType = SysSerialDateTypeEnum.Year,
@@ -51,6 +53,7 @@ internal static class SysSerialSeedData
                 },
                 new()
                 {
+                    SerialRuleId = YitIdHelper.NextId(),
                     RuleType = SysSerialRuleTypeEnum.TenantNo,
                     Prefix = "Tnt",
                     DateType = SysSerialDateTypeEnum.Month,

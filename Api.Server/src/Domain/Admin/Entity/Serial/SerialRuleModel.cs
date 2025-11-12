@@ -33,6 +33,12 @@ namespace Fast.Admin.Entity;
 public class SerialRuleModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 序号规则Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "序号规则Id", IsPrimaryKey = true)]
+    public long SerialRuleId { get; set; }
+
+    /// <summary>
     /// 规则类型
     /// </summary>
     [SugarColumn(ColumnDescription = "规则类型")]

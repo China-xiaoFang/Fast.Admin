@@ -33,7 +33,7 @@ public class AuthMenuInfoDto : ITreeNode<long>
     /// <summary>
     /// 菜单Id
     /// </summary>
-    public long Id { get; set; }
+    public long MenuId { get; set; }
 
     /// <summary>
     /// 模块Id
@@ -105,7 +105,7 @@ public class AuthMenuInfoDto : ITreeNode<long>
     /// <returns></returns>
     public long GetId()
     {
-        return Id;
+        return MenuId;
     }
 
     /// <summary>获取节点父id</summary>

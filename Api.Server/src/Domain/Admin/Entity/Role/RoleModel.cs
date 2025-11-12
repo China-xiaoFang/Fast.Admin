@@ -34,6 +34,12 @@ namespace Fast.Admin.Entity;
 public class RoleModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 角色Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "角色Id", IsPrimaryKey = true)]
+    public long RoleId { get; set; }
+
+    /// <summary>
     /// 角色类型
     /// </summary>
     [SugarColumn(ColumnDescription = "角色类型")]

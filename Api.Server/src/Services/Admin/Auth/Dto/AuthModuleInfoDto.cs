@@ -30,7 +30,7 @@ public class AuthModuleInfoDto
     /// <summary>
     /// 模块Id
     /// </summary>
-    public long Id { get; set; }
+    public long ModuleId { get; set; }
 
     /// <summary>
     /// 模块名称

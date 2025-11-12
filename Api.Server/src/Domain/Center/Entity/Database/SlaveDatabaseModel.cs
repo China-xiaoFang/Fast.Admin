@@ -32,6 +32,12 @@ namespace Fast.Center.Entity;
 public class SlaveDatabaseModel : BaseTEntity, IUpdateVersion
 {
     /// <summary>
+    /// 从库Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "从库Id", IsPrimaryKey = true)]
+    public long SlaveId { get; set; }
+
+    /// <summary>
     /// 主库Id
     /// </summary>
     [SugarColumn(ColumnDescription = "主库Id")]

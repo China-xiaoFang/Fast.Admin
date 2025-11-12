@@ -60,13 +60,13 @@ public class TableService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取表格配置分页列表", HttpRequestActionEnum.Paged)]
-    [Permission("TableConfig:Paged")]
+    [Permission(PermissionConst.Table.Paged)]
     public async Task<PagedResult<QueryTableConfigPagedOutput>> QueryTableConfigPaged(PagedInput input)
     {
         return await _tableRepository.Entities.OrderBy(ob => ob.TableName)
             .Select(sl => new QueryTableConfigPagedOutput
             {
-                Id = sl.Id,
+                TableId = sl.TableId,
                 TableKey = sl.TableKey,
                 TableName = sl.TableName,
                 Remark = sl.Remark,
@@ -85,13 +85,13 @@ public class TableService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取表格配置详情", HttpRequestActionEnum.Query)]
-    [Permission("TableConfig:Detail")]
+    [Permission(PermissionConst.Table.Detail)]
     public async Task<QueryTableConfigDetailOutput> QueryTableConfigDetail([Required(ErrorMessage = "表格Id不能为空")] long? tableId)
     {
-        var result = await _tableRepository.Entities.Where(wh => wh.Id == tableId)
+        var result = await _tableRepository.Entities.Where(wh => wh.TableId == tableId)
             .Select(sl => new QueryTableConfigDetailOutput
             {
-                TableId = sl.Id,
+                TableId = sl.TableId,
                 TableKey = sl.TableKey,
                 TableName = sl.TableName,
                 Remark = sl.Remark,
@@ -118,7 +118,7 @@ public class TableService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加表格配置", HttpRequestActionEnum.Add)]
-    [Permission("TableConfig:Add")]
+    [Permission(PermissionConst.Table.Add)]
     public async Task AddTableConfig(AddTableConfigInput input)
     {
         // 判断表格名称是否重复
@@ -130,7 +130,7 @@ public class TableService : IDynamicApplication
         var tableId = YitIdHelper.NextId();
         var tableConfigModel = new TableConfigModel
         {
-            Id = tableId,
+            TableId = tableId,
             TableKey = VerificationUtil.IdToCodeByLong(tableId),
             TableName = input.TableName,
             Remark = input.Remark
@@ -146,11 +146,11 @@ public class TableService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑表格配置", HttpRequestActionEnum.Edit)]
-    [Permission("TableConfig:Edit")]
+    [Permission(PermissionConst.Table.Edit)]
     public async Task EditTableConfig(EditTableConfigInput input)
     {
         // 判断表格名称是否重复
-        if (await _tableRepository.AnyAsync(a => a.TableName == input.TableName && a.Id != input.TableId))
+        if (await _tableRepository.AnyAsync(a => a.TableName == input.TableName && a.TableId != input.TableId))
         {
             throw new UserFriendlyException("表格名称不能重复！");
         }
@@ -175,7 +175,7 @@ public class TableService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除表格配置", HttpRequestActionEnum.Delete)]
-    [Permission("TableConfig:Delete")]
+    [Permission(PermissionConst.Table.Delete)]
     public async Task DeleteTableConfig(TableIdInput input)
     {
         var tableConfigModel = await _tableRepository.SingleOrDefaultAsync(input.TableId);
@@ -186,7 +186,7 @@ public class TableService : IDynamicApplication
 
         await _tableRepository.Ado.UseTranAsync(async () =>
         {
-            await _columnCacheRepository.DeleteAsync(wh => wh.TableId == tableConfigModel.Id);
+            await _columnCacheRepository.DeleteAsync(wh => wh.TableId == tableConfigModel.TableId);
             await _tableRepository.DeleteAsync(tableConfigModel);
         });
 
@@ -202,7 +202,7 @@ public class TableService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("复制表格配置", HttpRequestActionEnum.Edit)]
-    [Permission("TableConfig:Edit")]
+    [Permission(PermissionConst.Table.Edit)]
     public async Task CopyTableConfig(CopyTableConfigInput input)
     {
         // 判断表格名称是否重复
@@ -211,7 +211,7 @@ public class TableService : IDynamicApplication
             throw new UserFriendlyException("表格名称不能重复！");
         }
 
-        if (!await _tableRepository.AnyAsync(a => a.Id == input.TableId))
+        if (!await _tableRepository.AnyAsync(a => a.TableId == input.TableId))
         {
             throw new UserFriendlyException("数据不存在！");
         }
@@ -219,7 +219,7 @@ public class TableService : IDynamicApplication
         var tableId = YitIdHelper.NextId();
         var tableConfigModel = new TableConfigModel
         {
-            Id = tableId,
+            TableId = tableId,
             TableKey = VerificationUtil.IdToCodeByLong(tableId),
             TableName = input.TableName,
             Remark = input.Remark
@@ -232,8 +232,8 @@ public class TableService : IDynamicApplication
         // 重置列Id和表格Id
         columnConfigList.ForEach(item =>
         {
-            item.Id = YitIdHelper.NextId();
-            item.TableId = tableConfigModel.Id;
+            item.ColumnId = YitIdHelper.NextId();
+            item.TableId = tableConfigModel.TableId;
         });
 
         await _tableRepository.Ado.UseTranAsync(async () =>
@@ -250,13 +250,13 @@ public class TableService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取表格列配置详情", HttpRequestActionEnum.Query)]
-    [Permission("TableConfig:Detail")]
+    [Permission(PermissionConst.Table.Detail)]
     public async Task<List<FaTableColumnCtx>> QueryTableColumnConfigDetail([Required(ErrorMessage = "表格Id不能为空")] long? tableId)
     {
         return await _columnRepository.Entities.Where(wh => wh.TableId == tableId)
             .Select(sl => new FaTableColumnCtx
             {
-                ColumnId = sl.Id,
+                ColumnId = sl.ColumnId,
                 Prop = sl.Prop,
                 Label = sl.Label,
                 Fixed = sl.Fixed,
@@ -297,7 +297,7 @@ public class TableService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑表格列配置", HttpRequestActionEnum.Edit)]
-    [Permission("TableConfig:Edit")]
+    [Permission(PermissionConst.Table.Edit)]
     public async Task EditTableColumnConfig(EditTableColumnConfigInput input)
     {
         var columnIds = input.Columns.Where(wh => wh.ColumnId != null)
@@ -324,7 +324,7 @@ public class TableService : IDynamicApplication
         var updateTableColumnList = input.Columns.Where(wh => wh.ColumnId != null)
             .Select(sl =>
             {
-                var tableColumnModel = tableColumnList.SingleOrDefault(s => s.Id == sl.ColumnId);
+                var tableColumnModel = tableColumnList.SingleOrDefault(s => s.ColumnId == sl.ColumnId);
                 if (tableColumnModel == null)
                 {
                     throw new UserFriendlyException("数据不存在！");
@@ -368,7 +368,7 @@ public class TableService : IDynamicApplication
         var addTableColumnList = input.Columns.Where(wh => wh.ColumnId == null)
             .Select(sl => new TableColumnConfigModel
             {
-                TableId = tableConfigModel.Id,
+                TableId = tableConfigModel.TableId,
                 Prop = sl.Prop,
                 Label = sl.Label,
                 Fixed = sl.Fixed,
@@ -402,7 +402,7 @@ public class TableService : IDynamicApplication
             .ToList();
 
         // 删除的
-        var deleteTableColumnList = tableColumnList.Where(wh => !columnIds.Contains(wh.Id))
+        var deleteTableColumnList = tableColumnList.Where(wh => !columnIds.Contains(wh.ColumnId))
             .ToList();
 
         tableConfigModel.RowVersion = input.RowVersion;
@@ -449,7 +449,7 @@ public class TableService : IDynamicApplication
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableKey, _user.TenantNo, _user.EmployeeNo);
         return await _centerCache.GetAndSetAsync(cacheKey, async () =>
         {
-            return await _columnCacheRepository.Entities.Where(wh => wh.TableId == tableId && wh.CreatedUserId == _user.UserId)
+            return await _columnCacheRepository.Entities.Where(wh => wh.UserId == _user.UserId && wh.TableId == tableId)
                 .OrderBy(ob => ob.Order)
                 .ToListAsync();
         });
@@ -494,7 +494,7 @@ public class TableService : IDynamicApplication
 
             var column = new Dictionary<string, object>
             {
-                {"columnId", item.Id},
+                {"columnId", item.ColumnId},
                 {"prop", item.Prop},
                 {"label", string.IsNullOrWhiteSpace(item.Label) ? null : item.Label},
                 {"fixed", columnFixed},
@@ -613,7 +613,7 @@ public class TableService : IDynamicApplication
         }
 
         // 尝试获取缓存
-        var tableColumnCacheList = await QueryUserTableColumnConfigCache(tableConfigModel.Id, tableConfigModel.TableKey);
+        var tableColumnCacheList = await QueryUserTableColumnConfigCache(tableConfigModel.TableId, tableConfigModel.TableKey);
 
         // 判断是否存在缓存
         if (tableColumnCacheList?.Any() == true)
@@ -629,7 +629,7 @@ public class TableService : IDynamicApplication
             // 循环缓存数据
             foreach (var item in tableColumnCacheList)
             {
-                var columnIdx = result.CacheColumns.FindIndex(f => $"{f["columnId"]}" == item.Id.ToString());
+                var columnIdx = result.CacheColumns.FindIndex(f => $"{f["columnId"]}" == item.ColumnId.ToString());
 
                 if (columnIdx == -1)
                     continue;
@@ -686,19 +686,20 @@ public class TableService : IDynamicApplication
         }
 
         // 获取缓存
-        var tableColumnCacheList = await QueryUserTableColumnConfigCache(tableConfigModel.Id, tableConfigModel.TableKey);
+        var tableColumnCacheList = await QueryUserTableColumnConfigCache(tableConfigModel.TableId, tableConfigModel.TableKey);
 
-        var columnIds = tableColumnCacheList.Select(sl => sl.Id)
+        var columnIds = tableColumnCacheList.Select(sl => sl.ColumnId)
             .ToList();
 
         var dateTime = DateTime.Now;
 
         // 添加的
-        var addTableColumnCacheList = tableConfigModel.TableColumnConfigList.Where(wh => !columnIds.Contains(wh.Id))
+        var addTableColumnCacheList = tableConfigModel.TableColumnConfigList.Where(wh => !columnIds.Contains(wh.ColumnId))
             .Select(sl => new TableColumnConfigCacheModel
             {
-                Id = sl.Id,
+                UserId = _user.UserId,
                 TableId = sl.TableId,
+                ColumnId = sl.ColumnId,
                 Label = sl.Label,
                 Fixed = sl.Fixed,
                 AutoWidth = sl.AutoWidth,
@@ -710,14 +711,13 @@ public class TableService : IDynamicApplication
                 Sortable = sl.Sortable,
                 SearchLabel = sl.SearchLabel,
                 SearchOrder = sl.SearchOrder,
-                CreatedUserId = _user.UserId,
                 CreatedTime = dateTime,
                 TenantId = _user.TenantId
             })
             .ToList();
 
         // 删除的
-        var deleteTableColumnCacheList = tableColumnCacheList.Where(wh => !columnIds.Contains(wh.Id))
+        var deleteTableColumnCacheList = tableColumnCacheList.Where(wh => !columnIds.Contains(wh.ColumnId))
             .ToList();
 
         await _columnCacheRepository.Ado.UseTranAsync(async () =>
@@ -748,26 +748,27 @@ public class TableService : IDynamicApplication
         }
 
         // 获取缓存
-        var tableColumnCacheList = await QueryUserTableColumnConfigCache(tableConfigModel.Id, tableConfigModel.TableKey);
+        var tableColumnCacheList = await QueryUserTableColumnConfigCache(tableConfigModel.TableId, tableConfigModel.TableKey);
         var addTableColumnCacheList = new List<TableColumnConfigCacheModel>();
         var dateTime = DateTime.Now;
 
         // 保存的时候没有删除的
         foreach (var item in input.Columns)
         {
-            var tableColumnModel = tableConfigModel.TableColumnConfigList.SingleOrDefault(s => s.Id == item.ColumnId);
+            var tableColumnModel = tableConfigModel.TableColumnConfigList.SingleOrDefault(s => s.ColumnId == item.ColumnId);
             if (tableColumnModel == null)
             {
                 throw new UserFriendlyException("数据不存在！");
             }
 
-            var tableColumnCacheModel = tableColumnCacheList.SingleOrDefault(s => s.Id == item.ColumnId);
+            var tableColumnCacheModel = tableColumnCacheList.SingleOrDefault(s => s.ColumnId == item.ColumnId);
             if (tableColumnCacheModel == null)
             {
                 tableColumnCacheModel = new TableColumnConfigCacheModel
                 {
-                    Id = tableColumnModel.Id,
+                    UserId = _user.UserId,
                     TableId = tableColumnModel.TableId,
+                    ColumnId = tableColumnModel.ColumnId,
                     Label = string.IsNullOrWhiteSpace(item.Label) ? tableColumnModel.Label : item.Label,
                     Fixed = string.IsNullOrWhiteSpace(item.Fixed) ? tableColumnModel.Fixed : item.Fixed,
                     AutoWidth = item.AutoWidth,
@@ -780,7 +781,6 @@ public class TableService : IDynamicApplication
                     SearchLabel =
                         string.IsNullOrWhiteSpace(item.SearchLabel) ? tableColumnModel.SearchLabel : item.SearchLabel,
                     SearchOrder = item.SearchOrder ?? tableColumnModel.SearchOrder,
-                    CreatedUserId = _user.UserId,
                     CreatedTime = dateTime,
                     TenantId = _user.TenantId
                 };
@@ -831,7 +831,7 @@ public class TableService : IDynamicApplication
             throw new UserFriendlyException("表格列配置不存在！");
         }
 
-        await _columnCacheRepository.DeleteAsync(wh => wh.TableId == tableConfigModel.Id);
+        await _columnCacheRepository.DeleteAsync(wh => wh.TableId == tableConfigModel.TableId);
 
         // 删除缓存
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableConfigModel.TableKey, _user.TenantNo,

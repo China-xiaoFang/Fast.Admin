@@ -139,7 +139,7 @@ public class SysSerialContext
             {
                 sysSerialSettingModel = new SysSerialSettingModel
                 {
-                    Id = YitIdHelper.NextId(),
+                    SerialSettingId = YitIdHelper.NextId(),
                     RuleType = ruleType,
                     LastSerial = null,
                     LastSerialNo = null,

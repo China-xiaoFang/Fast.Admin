@@ -112,12 +112,12 @@ public class LoginOutput
         /// <summary>
         /// 部门Id
         /// </summary>
-        public long? DeptId { get; set; }
+        public long? DepartmentId { get; set; }
 
         /// <summary>
         /// 部门名称
         /// </summary>
-        public string DeptName { get; set; }
+        public string DepartmentName { get; set; }
 
         /// <summary>
         /// 用户类型

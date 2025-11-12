@@ -46,7 +46,7 @@ internal static class ConfigSeedData
             {
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ConfigId = YitIdHelper.NextId(),
                     ConfigCode = ConfigConst.SingleTenantWhenAutoLogin,
                     ConfigName = "单租户自动登录",
                     ConfigValue = "True",
@@ -57,7 +57,7 @@ internal static class ConfigSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ConfigId = YitIdHelper.NextId(),
                     ConfigCode = ConfigConst.SingleLogin,
                     ConfigName = "单点登录",
                     ConfigValue = "True",
@@ -68,7 +68,7 @@ internal static class ConfigSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ConfigId = YitIdHelper.NextId(),
                     ConfigCode = ConfigConst.LoginCaptchaOpen,
                     ConfigName = "登录验证码开关",
                     ConfigValue = "True",
@@ -79,7 +79,7 @@ internal static class ConfigSeedData
                 },
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    ConfigId = YitIdHelper.NextId(),
                     ConfigCode = ConfigConst.AllowViewUserData,
                     ConfigName = "是否允许查看用户数据",
                     ConfigValue = "True",

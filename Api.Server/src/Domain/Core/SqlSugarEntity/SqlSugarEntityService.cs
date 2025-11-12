@@ -97,7 +97,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
                 .Where(wh => wh.TenantId == tenantId && wh.DatabaseType == databaseType)
                 .Select(sl => new ConnectionSettingsOptions
                 {
-                    ConnectionId = sl.Id.ToString(),
+                    ConnectionId = sl.MainId.ToString(),
                     DbType = sl.DbType,
                     ServiceIp = _hostEnvironment.IsDevelopment()
                         // 开发环境使用公网地址

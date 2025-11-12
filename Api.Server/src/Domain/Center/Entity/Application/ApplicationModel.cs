@@ -34,6 +34,12 @@ namespace Fast.Center.Entity;
 public class ApplicationModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 应用Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "应用Id", IsPrimaryKey = true)]
+    public long AppId { get; set; }
+
+    /// <summary>
     /// 版本
     /// </summary>
     [SugarColumn(ColumnDescription = "版本")]

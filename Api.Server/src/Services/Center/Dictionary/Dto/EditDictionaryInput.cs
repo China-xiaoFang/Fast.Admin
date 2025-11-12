@@ -77,7 +77,7 @@ public class EditDictionaryInput
         /// <summary>
         /// 字典项Id
         /// </summary>
-        public long? DictionaryItemIdId { get; set; }
+        public long? DictionaryItemId { get; set; }
 
         /// <summary>
         /// 字典项名称

@@ -29,10 +29,16 @@ namespace Fast.Admin.Entity;
 /// </summary>
 [SugarTable("Department", "部门表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
-[SugarIndex($"IX_{{table}}_{nameof(DeptName)}", nameof(DeptName), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(DeptCode)}", nameof(DeptCode), OrderByType.Asc, true)]
-public class DepartmentModel : BaseEntity, IUpdateVersion
+[SugarIndex($"IX_{{table}}_{nameof(DepartmentName)}", nameof(DepartmentName), OrderByType.Asc, true)]
+[SugarIndex($"IX_{{table}}_{nameof(DepartmentCode)}", nameof(DepartmentCode), OrderByType.Asc, true)]
+public class DepartmentModel : IUpdateVersion
 {
+    /// <summary>
+    /// 部门Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "部门Id", IsPrimaryKey = true)]
+    public long DepartmentId { get; set; }
+
     /// <summary>
     /// 机构Id
     /// </summary>
@@ -57,7 +63,7 @@ public class DepartmentModel : BaseEntity, IUpdateVersion
     [Required]
     [SugarSearchValue]
     [SugarColumn(ColumnDescription = "部门名称", Length = 20)]
-    public string DeptName { get; set; }
+    public string DepartmentName { get; set; }
 
     /// <summary>
     /// 部门编码
@@ -65,7 +71,7 @@ public class DepartmentModel : BaseEntity, IUpdateVersion
     [Required]
     [SugarSearchValue]
     [SugarColumn(ColumnDescription = "部门编码", Length = 50)]
-    public string DeptCode { get; set; }
+    public string DepartmentCode { get; set; }
 
     /// <summary>
     /// 联系人
@@ -91,6 +97,42 @@ public class DepartmentModel : BaseEntity, IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "备注", Length = 200)]
     public string Remark { get; set; }
+
+    /// <summary>
+    /// 创建者用户Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
+    public long? CreatedUserId { get; set; }
+
+    /// <summary>
+    /// 创建者用户名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 992)]
+    public string CreatedUserName { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    [Required, SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    public DateTime? CreatedTime { get; set; }
+
+    /// <summary>
+    /// 更新者用户Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新者用户Id", CreateTableFieldSort = 994)]
+    public long? UpdatedUserId { get; set; }
+
+    /// <summary>
+    /// 更新者用户名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新者用户名称", Length = 20, IsNullable = true, CreateTableFieldSort = 995)]
+    public string UpdatedUserName { get; set; }
+
+    /// <summary>
+    /// 更新时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
+    public DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 更新版本控制字段

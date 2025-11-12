@@ -112,7 +112,7 @@ public class InitDatabaseHostedService : IHostedService
 
             var superAdminAccountModel = new AccountModel
             {
-                Id = CommonConst.Default.SuperAdminAccountId,
+                AccountId = CommonConst.Default.SuperAdminAccountId,
                 AccountKey = VerificationUtil.IdToCodeByLong(CommonConst.Default.SuperAdminAccountId),
                 Mobile = "15580001115",
                 Email = "2875616188@qq.com",
@@ -133,7 +133,7 @@ public class InitDatabaseHostedService : IHostedService
             var superAdminUserId = YitIdHelper.NextId();
             var superAdminUserModel = new TenantUserModel
             {
-                Id = superAdminUserId,
+                UserId = superAdminUserId,
                 UserKey = VerificationUtil.IdToCodeByLong(superAdminUserId),
                 AccountId = CommonConst.Default.SuperAdminAccountId,
                 Account = "SuperAdmin",
@@ -141,8 +141,8 @@ public class InitDatabaseHostedService : IHostedService
                 EmployeeNo = "",
                 EmployeeName = "超级管理员",
                 IdPhoto = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
-                DeptId = null,
-                DeptName = null,
+                DepartmentId = null,
+                DepartmentName = null,
                 UserType = UserTypeEnum.SuperAdmin,
                 Status = CommonStatusEnum.Enable,
                 CreatedUserId = null,
@@ -158,7 +158,7 @@ public class InitDatabaseHostedService : IHostedService
             // 初始化系统租户
             var systemTenantModel = new TenantModel
             {
-                Id = CommonConst.Default.TenantId,
+                TenantId = CommonConst.Default.TenantId,
                 TenantNo = CommonConst.Default.TenantNo,
                 TenantCode = "Fast",
                 Status = CommonStatusEnum.Enable,
@@ -175,7 +175,7 @@ public class InitDatabaseHostedService : IHostedService
                 LogoUrl = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
                 AllowDeleteData = true,
                 DatabaseInitialized = false,
-                CreatedUserId = superAdminUserModel.Id,
+                CreatedUserId = superAdminUserModel.UserId,
                 CreatedUserName = superAdminAccountModel.NickName,
                 CreatedTime = dateTime
             };
@@ -184,7 +184,7 @@ public class InitDatabaseHostedService : IHostedService
 
             await db.Insertable(new TenantUserModel
                 {
-                    Id = YitIdHelper.NextId(),
+                    UserId = YitIdHelper.NextId(),
                     UserKey = "",
                     AccountId = -99,
                     Account = $"{systemTenantModel.TenantCode}_Robot",
@@ -192,14 +192,14 @@ public class InitDatabaseHostedService : IHostedService
                     EmployeeNo = "",
                     EmployeeName = "机器人",
                     IdPhoto = null,
-                    DeptId = null,
-                    DeptName = null,
+                    DepartmentId = null,
+                    DepartmentName = null,
                     UserType = UserTypeEnum.Robot,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = superAdminUserModel.Id,
+                    CreatedUserId = superAdminUserModel.UserId,
                     CreatedUserName = superAdminAccountModel.NickName,
                     CreatedTime = dateTime,
-                    TenantId = systemTenantModel.Id
+                    TenantId = systemTenantModel.TenantId
                 })
                 .ExecuteCommandAsync(cancellationToken);
 
@@ -210,7 +210,7 @@ public class InitDatabaseHostedService : IHostedService
                 {
                     new()
                     {
-                        AccountId = superAdminAccountModel.Id,
+                        AccountId = superAdminAccountModel.AccountId,
                         OperationType = PasswordOperationTypeEnum.Create,
                         Type = PasswordTypeEnum.SHA1,
                         Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
@@ -257,22 +257,22 @@ public class InitDatabaseHostedService : IHostedService
             #endregion
 
             // 配置
-            await ConfigSeedData.SystemConfigSeedData(db, superAdminUserModel.Id, superAdminAccountModel.NickName, dateTime);
+            await ConfigSeedData.SystemConfigSeedData(db, superAdminUserModel.UserId, superAdminAccountModel.NickName, dateTime);
 
             // 系统数据库
-            await DatabaseSeedData.SystemDatabaseSeedData(db, systemTenantModel.Id, superAdminUserModel.Id,
+            await DatabaseSeedData.SystemDatabaseSeedData(db, systemTenantModel.TenantId, superAdminUserModel.UserId,
                 superAdminAccountModel.NickName, dateTime);
 
             // 系统序号规则
             await SysSerialSeedData.SeedData(db);
 
             // 应用
-            var applicationModel = await ApplicationSeedData.SeedData(db, superAdminUserModel.Id,
+            var applicationModel = await ApplicationSeedData.SeedData(db, superAdminUserModel.UserId,
                 superAdminAccountModel.NickName, dateTime);
 
             // 菜单
-            await MenuSeedData.DefaultMenuSeedData(db, applicationModel, superAdminUserModel.Id, superAdminAccountModel.NickName,
-                dateTime);
+            await MenuSeedData.DefaultMenuSeedData(db, applicationModel, superAdminUserModel.UserId,
+                superAdminAccountModel.NickName, dateTime);
 
             {
                 var logSb = new StringBuilder();

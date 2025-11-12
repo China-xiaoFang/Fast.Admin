@@ -33,6 +33,12 @@ namespace Fast.Admin.Entity;
 public class JobLevelModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 职级Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "职级Id", IsPrimaryKey = true)]
+    public long JobLevelId { get; set; }
+
+    /// <summary>
     /// 职级名称
     /// </summary>
     [Required]

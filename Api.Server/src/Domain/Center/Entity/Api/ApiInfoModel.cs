@@ -29,8 +29,14 @@ namespace Fast.Center.Entity;
 /// </summary>
 [SugarTable("ApiInfo", "接口信息表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-public class ApiInfoModel : SnowflakeKeyEntity
+public class ApiInfoModel : IDatabaseEntity
 {
+    /// <summary>
+    /// 接口Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "接口Id", IsPrimaryKey = true)]
+    public long ApiId { get; set; }
+
     /// <summary>
     /// 服务名称
     /// </summary>
@@ -140,7 +146,7 @@ public class ApiInfoModel : SnowflakeKeyEntity
     public override int GetHashCode()
     {
         // ReSharper disable once NonReadonlyMemberInGetHashCode
-        return Id.GetHashCode();
+        return ApiId.GetHashCode();
     }
 
     /// <summary>Determines whether the specified object is equal to the current object.</summary>
@@ -152,7 +158,7 @@ public class ApiInfoModel : SnowflakeKeyEntity
         if (obj is not ApiInfoModel oldApiModel)
             return false;
 
-        return Id == oldApiModel.Id
+        return ApiId == oldApiModel.ApiId
                && ServiceName == oldApiModel.ServiceName
                && GroupName == oldApiModel.GroupName
                && GroupTitle == oldApiModel.GroupTitle

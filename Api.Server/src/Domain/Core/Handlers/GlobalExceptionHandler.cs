@@ -182,7 +182,7 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
             var _user = httpContext.RequestServices.GetService<IUser>();
             var exceptionLogModel = new ExceptionLogModel
             {
-                Id = YitIdHelper.NextId(),
+                RecordId = YitIdHelper.NextId(),
                 AccountId = _user?.AccountId,
                 Account = _user?.Account,
                 Mobile = _user?.Mobile,

@@ -55,14 +55,14 @@ public class AccountService : IAccountService, ITransientDependency, IDynamicApp
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取账号分页列表", HttpRequestActionEnum.Paged)]
-    [Permission("Account:Paged")]
+    [Permission(PermissionConst.Account.Paged)]
     public async Task<PagedResult<QueryAccountPagedOutput>> QueryAccountPaged(QueryAccountPagedInput input)
     {
         var dateTime = DateTime.Now;
 
         var queryable = _repository.Queryable<AccountModel>()
-            .LeftJoin<TenantModel>((t1, t2) => t1.FirstLoginTenantId == t2.Id)
-            .LeftJoin<TenantModel>((t1, t2, t3) => t1.LastLoginTenantId == t3.Id)
+            .LeftJoin<TenantModel>((t1, t2) => t1.FirstLoginTenantId == t2.TenantId)
+            .LeftJoin<TenantModel>((t1, t2, t3) => t1.LastLoginTenantId == t3.TenantId)
             .WhereIF(!string.IsNullOrWhiteSpace(input.Mobile), t1 => t1.Mobile.Contains(input.Mobile))
             .WhereIF(!string.IsNullOrWhiteSpace(input.Email), t1 => t1.Email.Contains(input.Email))
             .WhereIF(input.Status != null, t1 => t1.Status == input.Status)
@@ -78,7 +78,7 @@ public class AccountService : IAccountService, ITransientDependency, IDynamicApp
         return await queryable.OrderBy(t1 => t1.CreatedTime)
             .Select((t1, t2, t3) => new QueryAccountPagedOutput
             {
-                Id = t1.Id,
+                AccountId = t1.AccountId,
                 Mobile = t1.Mobile,
                 Email = t1.Email,
                 Status = t1.Status,
@@ -121,15 +121,15 @@ public class AccountService : IAccountService, ITransientDependency, IDynamicApp
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取账号详情", HttpRequestActionEnum.Query)]
-    [Permission("Account:Detail")]
+    [Permission(PermissionConst.Account.Detail)]
     public async Task<QueryAccountDetailOutput> QueryAccountDetail([Required(ErrorMessage = "账号Id不能为空")] long? accountId)
     {
         var result = await _repository.Queryable<AccountModel>()
-            .LeftJoin<TenantModel>((t1, t2) => t1.FirstLoginTenantId == t2.Id)
-            .LeftJoin<TenantModel>((t1, t2, t3) => t1.LastLoginTenantId == t3.Id)
+            .LeftJoin<TenantModel>((t1, t2) => t1.FirstLoginTenantId == t2.TenantId)
+            .LeftJoin<TenantModel>((t1, t2, t3) => t1.LastLoginTenantId == t3.TenantId)
             .Select((t1, t2, t3) => new QueryAccountDetailOutput
             {
-                AccountId = t1.Id,
+                AccountId = t1.AccountId,
                 Mobile = t1.Mobile,
                 Email = t1.Email,
                 Status = t1.Status,
@@ -248,7 +248,7 @@ public class AccountService : IAccountService, ITransientDependency, IDynamicApp
         // 添加访问日志
         var visitLogModel = new VisitLogModel
         {
-            Id = YitIdHelper.NextId(),
+            RecordId = YitIdHelper.NextId(),
             AccountId = _user.AccountId,
             Account = _user.Account,
             Mobile = _user.Mobile,
@@ -280,7 +280,7 @@ public class AccountService : IAccountService, ITransientDependency, IDynamicApp
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("账号解除锁定", HttpRequestActionEnum.Edit)]
-    [Permission("Account:Unlock")]
+    [Permission(PermissionConst.Account.Unlock)]
     public async Task Unlock(AccountIdInput input)
     {
         var accountModel = await _repository.SingleOrDefaultAsync(input.AccountId);
@@ -312,7 +312,7 @@ public class AccountService : IAccountService, ITransientDependency, IDynamicApp
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("账号解除锁定", HttpRequestActionEnum.Edit)]
-    [Permission("Account:ResetPassword")]
+    [Permission(PermissionConst.Account.ResetPassword)]
     public async Task ResetPassword(AccountIdInput input)
     {
         if (_user.AccountId == input.AccountId)
@@ -341,7 +341,7 @@ public class AccountService : IAccountService, ITransientDependency, IDynamicApp
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("账号更改状态", HttpRequestActionEnum.Edit)]
-    [Permission("Account:Status")]
+    [Permission(PermissionConst.Account.Status)]
     public async Task ChangeStatus(AccountIdInput input)
     {
         if (_user.AccountId == input.AccountId)
@@ -373,7 +373,7 @@ public class AccountService : IAccountService, ITransientDependency, IDynamicApp
 
             var connectionIdList = await _repository.Queryable<TenantOnlineUserModel>()
                 .Where(wh => wh.IsOnline)
-                .Where(wh => wh.AccountId == accountModel.Id)
+                .Where(wh => wh.AccountId == accountModel.AccountId)
                 .Select(sl => sl.ConnectionId)
                 .ToListAsync();
 

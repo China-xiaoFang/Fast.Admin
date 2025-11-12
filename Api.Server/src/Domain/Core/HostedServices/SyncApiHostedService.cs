@@ -175,7 +175,7 @@ public class SyncApiHostedService : IHostedService
 
                     if (apiInfo != null)
                     {
-                        apiInfoModel.Id = apiInfo.Id;
+                        apiInfoModel.ApiId = apiInfo.ApiId;
                         // 不相同才修改
                         if (!apiInfo.Equals(apiInfoModel))
                         {
@@ -199,7 +199,7 @@ public class SyncApiHostedService : IHostedService
                     }
                     else
                     {
-                        apiInfoModel.Id = YitIdHelper.NextId();
+                        apiInfoModel.ApiId = YitIdHelper.NextId();
                         apiInfoModel.CreatedTime = dateTime;
                         addApiInfoList.Add(apiInfoModel);
                     }

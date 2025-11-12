@@ -100,7 +100,7 @@ public class AuthService : IAuthService, ITransientDependency, IDynamicApplicati
 
         // 查询租户信息
         var tenantModel = await _repository.Queryable<TenantModel>()
-            .Where(wh => wh.Id == _user.TenantId)
+            .Where(wh => wh.TenantId == _user.TenantId)
             .SingleAsync();
 
         if (tenantModel == null)
@@ -117,7 +117,7 @@ public class AuthService : IAuthService, ITransientDependency, IDynamicApplicati
         if (_user.IsSuperAdmin && tenantModel.TenantType == TenantTypeEnum.System && !tenantModel.DatabaseInitialized)
         {
             var databaseService = FastContext.GetService<IDatabaseService>();
-            await databaseService.SyncTenantDatabase(new SyncTenantDatabaseInput {TenantId = tenantModel.Id});
+            await databaseService.SyncTenantDatabase(new SyncTenantDatabaseInput {TenantId = tenantModel.TenantId});
         }
 
         // 查询角色
@@ -170,22 +170,23 @@ public class AuthService : IAuthService, ITransientDependency, IDynamicApplicati
             menuIds.AddRange(userMenuIds);
             menuIds = menuIds.Distinct()
                 .ToList();
-            enumQueryable = enumQueryable.Where(wh => menuIds.Contains(wh.Id));
+            enumQueryable = enumQueryable.Where(wh => menuIds.Contains(wh.MenuId));
         }
 
         // 查询所有模块
         var moduleList = await moduleQueryable.Clone()
             .OrderBy(ob => ob.Sort)
-            .Select(sl => new AuthModuleInfoDto {Id = sl.Id, ModuleName = sl.ModuleName, Icon = sl.Icon, Color = sl.Color})
+            .Select(sl =>
+                new AuthModuleInfoDto {ModuleId = sl.ModuleId, ModuleName = sl.ModuleName, Icon = sl.Icon, Color = sl.Color})
             .ToListAsync();
 
         // 查询所有菜单
         var menuList = await enumQueryable.Clone()
-            .InnerJoin(moduleQueryable.Clone(), (t1, t2) => t1.ModuleId == t2.Id)
+            .InnerJoin(moduleQueryable.Clone(), (t1, t2) => t1.ModuleId == t2.ModuleId)
             .OrderByDescending(t1 => t1.Sort)
             .Select((t1, t2) => new AuthMenuInfoDto
             {
-                Id = t1.Id,
+                MenuId = t1.MenuId,
                 ModuleId = t1.ModuleId,
                 MenuCode = t1.MenuCode,
                 MenuName = t1.MenuName,
@@ -211,7 +212,7 @@ public class AuthService : IAuthService, ITransientDependency, IDynamicApplicati
         // 组装菜单
         foreach (var item in moduleList)
         {
-            var curMenuTreeList = menuTreeList.Where(wh => wh.ModuleId == item.Id)
+            var curMenuTreeList = menuTreeList.Where(wh => wh.ModuleId == item.ModuleId)
                 .ToList();
             if (curMenuTreeList.Count > 0)
             {
@@ -246,10 +247,10 @@ public class AuthService : IAuthService, ITransientDependency, IDynamicApplicati
                 buttonIds.AddRange(userButtonIds);
                 buttonIds = buttonIds.Distinct()
                     .ToList();
-                buttonQueryable = buttonQueryable.Where(wh => buttonIds.Contains(wh.Id));
+                buttonQueryable = buttonQueryable.Where(wh => buttonIds.Contains(wh.ButtonId));
             }
 
-            result.ButtonCodeList = await buttonQueryable.InnerJoin(enumQueryable.Clone(), (t1, t2) => t1.MenuId == t2.Id)
+            result.ButtonCodeList = await buttonQueryable.InnerJoin(enumQueryable.Clone(), (t1, t2) => t1.MenuId == t2.MenuId)
                 .OrderBy(t1 => t1.Sort)
                 .Select(t1 => t1.ButtonCode)
                 .ToListAsync();

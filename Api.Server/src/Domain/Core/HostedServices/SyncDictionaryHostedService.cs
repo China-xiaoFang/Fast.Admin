@@ -136,7 +136,7 @@ public class SyncDictionaryHostedService : IHostedService
 
                     if (dictionaryTypeInfo != null)
                     {
-                        dictionaryTypeModel.Id = dictionaryTypeInfo.Id;
+                        dictionaryTypeModel.DictionaryId = dictionaryTypeInfo.DictionaryId;
                         // 不相同才修改
                         if (!dictionaryTypeInfo.Equals(dictionaryTypeModel))
                         {
@@ -153,7 +153,8 @@ public class SyncDictionaryHostedService : IHostedService
                             updateDictionaryTypeList.Add(dictionaryTypeInfo);
                         }
 
-                        deleteDictionaryItemList.AddRange(dictionaryItemList.Where(wh => wh.DictionaryId == dictionaryTypeInfo.Id)
+                        deleteDictionaryItemList.AddRange(dictionaryItemList
+                            .Where(wh => wh.DictionaryId == dictionaryTypeInfo.DictionaryId)
                             .Where(wh => enumItemList.All(a => a.Value.toString() != wh.Value))
                             .ToList());
 
@@ -166,7 +167,7 @@ public class SyncDictionaryHostedService : IHostedService
 
                             var dictionaryItemModel = new DictionaryItemModel
                             {
-                                DictionaryId = dictionaryTypeInfo.Id,
+                                DictionaryId = dictionaryTypeInfo.DictionaryId,
                                 Label = enumItem.Describe ?? enumItem.Name,
                                 Value = enumItem.Value.toString(),
                                 Type = tagType?.TagType ?? TagTypeEnum.Primary,
@@ -176,11 +177,12 @@ public class SyncDictionaryHostedService : IHostedService
                                 UpdatedTime = dateTime
                             };
 
-                            var dictionaryItemInfo = dictionaryItemList.Where(wh => wh.DictionaryId == dictionaryTypeInfo.Id)
+                            var dictionaryItemInfo = dictionaryItemList
+                                .Where(wh => wh.DictionaryId == dictionaryTypeInfo.DictionaryId)
                                 .SingleOrDefault(s => s.Value == enumItem.Value.toString());
                             if (dictionaryItemInfo != null)
                             {
-                                dictionaryItemModel.Id = dictionaryItemInfo.Id;
+                                dictionaryItemModel.DictionaryItemId = dictionaryItemInfo.DictionaryItemId;
                                 // 不相同才修改
                                 if (!dictionaryItemInfo.Equals(dictionaryItemModel))
                                 {
@@ -192,7 +194,7 @@ public class SyncDictionaryHostedService : IHostedService
                             }
                             else
                             {
-                                dictionaryItemModel.Id = YitIdHelper.NextId();
+                                dictionaryItemModel.DictionaryItemId = YitIdHelper.NextId();
                                 dictionaryItemModel.CreatedTime = dateTime;
                                 addDictionaryItemList.Add(dictionaryItemModel);
                             }
@@ -202,7 +204,7 @@ public class SyncDictionaryHostedService : IHostedService
                     }
                     else
                     {
-                        dictionaryTypeModel.Id = YitIdHelper.NextId();
+                        dictionaryTypeModel.DictionaryId = YitIdHelper.NextId();
                         dictionaryTypeModel.CreatedTime = dateTime;
                         addDictionaryTypeList.Add(dictionaryTypeModel);
 
@@ -215,8 +217,8 @@ public class SyncDictionaryHostedService : IHostedService
 
                             var dictionaryItemModel = new DictionaryItemModel
                             {
-                                Id = YitIdHelper.NextId(),
-                                DictionaryId = dictionaryTypeModel.Id,
+                                DictionaryItemId = YitIdHelper.NextId(),
+                                DictionaryId = dictionaryTypeModel.DictionaryId,
                                 Label = enumItem.Describe ?? enumItem.Name,
                                 Value = enumItem.Value.toString(),
                                 Type = tagType?.TagType ?? TagTypeEnum.Primary,

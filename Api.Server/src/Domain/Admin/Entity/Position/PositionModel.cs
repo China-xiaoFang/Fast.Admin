@@ -33,6 +33,12 @@ namespace Fast.Admin.Entity;
 public class PositionModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 职位Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "职位Id", IsPrimaryKey = true)]
+    public long PositionId { get; set; }
+
+    /// <summary>
     /// 机构Id
     /// </summary>
     [SugarColumn(ColumnDescription = "机构Id")]

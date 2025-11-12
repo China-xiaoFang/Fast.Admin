@@ -33,6 +33,12 @@ namespace Fast.Center.Entity;
 public class ApplicationOpenIdModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 记录Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "记录Id", IsPrimaryKey = true)]
+    public long RecordId { get; set; }
+
+    /// <summary>
     /// 应用Id
     /// </summary>
     [SugarColumn(ColumnDescription = "应用Id")]
@@ -151,6 +157,6 @@ public class ApplicationOpenIdModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 应用
     /// </summary>
-    [Navigate(NavigateType.OneToOne, nameof(AppId))]
+    [Navigate(NavigateType.OneToOne, nameof(AppId), nameof(ApplicationModel.AppId))]
     public ApplicationModel Application { get; set; }
 }

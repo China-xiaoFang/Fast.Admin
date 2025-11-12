@@ -134,7 +134,7 @@ public class SerialContext
             {
                 serialSettingModel = new SerialSettingModel
                 {
-                    Id = YitIdHelper.NextId(),
+                    SerialSettingId = YitIdHelper.NextId(),
                     RuleType = ruleType,
                     LastSerial = null,
                     LastSerialNo = null,

@@ -29,14 +29,25 @@ namespace Fast.Center.Entity;
 /// </summary>
 [SugarTable("TableColumnConfigCache", "表格列配置缓存表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(TableId)}", nameof(CreatedUserId), OrderByType.Asc, nameof(TableId), OrderByType.Asc)]
-public class TableColumnConfigCacheModel : SnowflakeKeyEntity, IBaseTEntity
+public class TableColumnConfigCacheModel : IBaseTEntity
 {
+    /// <summary>
+    /// 用户Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "用户Id", IsPrimaryKey = true)]
+    public long UserId { get; set; }
+
     /// <summary>
     /// 表格Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "表格Id")]
+    [SugarColumn(ColumnDescription = "表格Id", IsPrimaryKey = true)]
     public long TableId { get; set; }
+
+    /// <summary>
+    /// 列Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "列Id", IsPrimaryKey = true)]
+    public long ColumnId { get; set; }
 
     /// <summary>
     /// 名称
@@ -108,12 +119,6 @@ public class TableColumnConfigCacheModel : SnowflakeKeyEntity, IBaseTEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "搜索项排序")]
     public int SearchOrder { get; set; }
-
-    /// <summary>
-    /// 创建者用户Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
-    public long? CreatedUserId { get; set; }
 
     /// <summary>
     /// 创建时间

@@ -76,7 +76,7 @@ public class RefreshWeChatAccessTokenLocalJob : ISchedulerJob
         var applicationOpenIdList = await db.Queryable<ApplicationOpenIdModel>()
             .Where(wh => (wh.AppType & (AppEnvironmentEnum.MiniProgram | AppEnvironmentEnum.WeChatServiceAccount)) != 0)
             .Where(wh => !string.IsNullOrWhiteSpace(wh.OpenSecret))
-            .Select(sl => new {sl.Id, sl.AppType, sl.OpenId, sl.OpenSecret})
+            .Select(sl => new {sl.RecordId, sl.AppType, sl.OpenId, sl.OpenSecret})
             .ToListAsync();
 
         foreach (var item in applicationOpenIdList)
@@ -99,7 +99,7 @@ public class RefreshWeChatAccessTokenLocalJob : ISchedulerJob
                     WeChatAccessTokenExpiresIn = response.ExpiresIn,
                     WeChatAccessTokenRefreshTime = dateTime
                 })
-                .Where(wh => wh.Id == item.Id)
+                .Where(wh => wh.RecordId == item.RecordId)
                 .ExecuteCommandAsync();
             // 删除缓存
             await ApplicationContext.DeleteApplication(item.OpenId);
@@ -125,7 +125,7 @@ public class RefreshWeChatAccessTokenLocalJob : ISchedulerJob
                         WeChatJsApiTicketExpiresIn = ticketResponse.ExpiresIn,
                         WeChatJsApiTicketRefreshTime = dateTime
                     })
-                    .Where(wh => wh.Id == item.Id)
+                    .Where(wh => wh.RecordId == item.RecordId)
                     .ExecuteCommandAsync();
                 // 删除缓存
                 await ApplicationContext.DeleteApplication(item.OpenId);

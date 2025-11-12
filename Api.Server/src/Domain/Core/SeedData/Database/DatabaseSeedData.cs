@@ -52,7 +52,7 @@ internal static class DatabaseSeedData
                 // 初始化日志库
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    MainId = YitIdHelper.NextId(),
                     DatabaseType = DatabaseTypeEnum.CenterLog,
                     DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
@@ -73,7 +73,7 @@ internal static class DatabaseSeedData
                 // 初始化网关系统库
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    MainId = YitIdHelper.NextId(),
                     DatabaseType = DatabaseTypeEnum.Gateway,
                     DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
@@ -94,7 +94,7 @@ internal static class DatabaseSeedData
                 // 初始化部署系统库
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    MainId = YitIdHelper.NextId(),
                     DatabaseType = DatabaseTypeEnum.Deploy,
                     DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
@@ -115,7 +115,7 @@ internal static class DatabaseSeedData
                 // 初始化业务库
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    MainId = YitIdHelper.NextId(),
                     DatabaseType = DatabaseTypeEnum.Admin,
                     DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
@@ -136,7 +136,7 @@ internal static class DatabaseSeedData
                 // 初始化业务日志库
                 new()
                 {
-                    Id = YitIdHelper.NextId(),
+                    MainId = YitIdHelper.NextId(),
                     DatabaseType = DatabaseTypeEnum.AdminLog,
                     DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
