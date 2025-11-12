@@ -30,8 +30,14 @@ namespace Fast.Center.Entity;
 [SugarTable("WeChatUser", "微信用户表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(AppId), OrderByType.Asc, nameof(OpenId), OrderByType.Asc, true)]
-public class WeChatUserModel : SnowflakeKeyEntity, IUpdateVersion
+public class WeChatUserModel : IUpdateVersion
 {
+    /// <summary>
+    /// 微信用户Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "微信Id", IsPrimaryKey = true)]
+    public long WeChatId { get; set; }
+
     /// <summary>
     /// 应用Id
     /// </summary>

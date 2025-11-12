@@ -45,7 +45,7 @@ internal static class ApplicationSeedData
     {
         var applicationModel = new ApplicationModel
         {
-            Id = YitIdHelper.NextId(),
+            AppId = YitIdHelper.NextId(),
             Edition = EditionEnum.None,
             AppNo = "App201801",
             AppName = "Fast.Admin",
@@ -67,7 +67,7 @@ internal static class ApplicationSeedData
             {
                 new()
                 {
-                    AppId = applicationModel.Id,
+                    AppId = applicationModel.AppId,
                     OpenId = FastContext.HostEnvironment.IsDevelopment() ? "127.0.0.1:2001" : "admin.fastdotnet.com",
                     AppType = AppEnvironmentEnum.Web,
                     EnvironmentType = EnvironmentTypeEnum.Production,
@@ -82,7 +82,7 @@ internal static class ApplicationSeedData
                 },
                 new()
                 {
-                    AppId = applicationModel.Id,
+                    AppId = applicationModel.AppId,
                     OpenId = "DesktopOpenId",
                     AppType = AppEnvironmentEnum.Desktop,
                     EnvironmentType = EnvironmentTypeEnum.Production,
@@ -97,8 +97,8 @@ internal static class ApplicationSeedData
                 },
                 new()
                 {
-                    AppId = applicationModel.Id,
-                    OpenId = "wx1e4b5c59fb34d91f",
+                    AppId = applicationModel.AppId,
+                    OpenId = "WeChatMiniProgramOpenId",
                     AppType = AppEnvironmentEnum.WeChatMiniProgram,
                     EnvironmentType = EnvironmentTypeEnum.Production,
                     LoginComponent = "",
@@ -112,7 +112,7 @@ internal static class ApplicationSeedData
                 },
                 new()
                 {
-                    AppId = applicationModel.Id,
+                    AppId = applicationModel.AppId,
                     OpenId = "AndroidOpenId",
                     AppType = AppEnvironmentEnum.Android,
                     EnvironmentType = EnvironmentTypeEnum.Production,
@@ -127,7 +127,7 @@ internal static class ApplicationSeedData
                 },
                 new()
                 {
-                    AppId = applicationModel.Id,
+                    AppId = applicationModel.AppId,
                     OpenId = "IOSOpenId",
                     AppType = AppEnvironmentEnum.IOS,
                     EnvironmentType = EnvironmentTypeEnum.Production,

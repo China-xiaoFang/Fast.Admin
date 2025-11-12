@@ -30,8 +30,14 @@ namespace Fast.Admin.Entity;
 [SugarTable("SerialSetting", "序号配置表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
 [SugarIndex($"IX_{{table}}_{nameof(RuleType)}", nameof(RuleType), OrderByType.Asc, true)]
-public class SerialSettingModel : SnowflakeKeyEntity, IUpdateVersion
+public class SerialSettingModel : IUpdateVersion
 {
+    /// <summary>
+    /// 序号配置Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "序号配置Id", IsPrimaryKey = true)]
+    public long SerialSettingId { get; set; }
+
     /// <summary>
     /// 规则类型
     /// </summary>

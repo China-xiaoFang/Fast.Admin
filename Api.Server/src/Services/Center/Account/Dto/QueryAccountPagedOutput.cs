@@ -30,7 +30,7 @@ public class QueryAccountPagedOutput
     /// <summary>
     /// 账号Id
     /// </summary>
-    public long Id { get; set; }
+    public long AccountId { get; set; }
 
     /// <summary>
     /// 手机

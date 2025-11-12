@@ -133,7 +133,7 @@ public class FileService : IFileService, ITransientDependency, IDynamicApplicati
             .ToPagedListAsync(input,
                 sl => new QueryFilePagedOutput
                 {
-                    Id = sl.Id,
+                    FileId = sl.FileId,
                     FileObjectName = sl.FileObjectName,
                     FileOriginName = sl.FileOriginName,
                     FileSuffix = sl.FileSuffix,
@@ -223,7 +223,7 @@ public class FileService : IFileService, ITransientDependency, IDynamicApplicati
             }
         }
 
-        var localFileName = $"{fileInfoModel.Id}@{size}.{fileInfoModel.FileSuffix}";
+        var localFileName = $"{fileInfoModel.FileId}@{size}.{fileInfoModel.FileSuffix}";
 
         var localFilePath = Path.Combine(Environment.CurrentDirectory, fileInfoModel.FilePath, localFileName);
         if (!System.IO.File.Exists(localFilePath))
@@ -390,7 +390,7 @@ public class FileService : IFileService, ITransientDependency, IDynamicApplicati
 
         var fileInfoModel = new FileModel
         {
-            Id = fileId,
+            FileId = fileId,
             FileObjectName = fileObjectName,
             FileOriginName = file.FileName,
             FileSuffix = fileSuffix.TrimStart('.'),

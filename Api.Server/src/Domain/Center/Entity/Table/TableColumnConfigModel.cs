@@ -30,8 +30,14 @@ namespace Fast.Center.Entity;
 [SugarTable("TableColumnConfig", "表格列配置表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(TableId)}", nameof(TableId), OrderByType.Asc)]
-public class TableColumnConfigModel : SnowflakeKeyEntity
+public class TableColumnConfigModel : IDatabaseEntity
 {
+    /// <summary>
+    /// 列Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "列Id", IsPrimaryKey = true)]
+    public long ColumnId { get; set; }
+
     /// <summary>
     /// 表格Id
     /// </summary>

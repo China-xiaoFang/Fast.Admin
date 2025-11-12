@@ -33,8 +33,14 @@ namespace Fast.CenterLog.Entity;
 [SugarIndex($"IX_{{table}}_{nameof(CreatedUserId)}", nameof(CreatedUserId), OrderByType.Asc)]
 [SugarIndex($"IX_{{table}}_{nameof(CreatedTime)}", nameof(CreatedTime), OrderByType.Asc)]
 [SugarIndex($"IX_{{table}}_{nameof(TenantId)}", nameof(TenantId), OrderByType.Asc)]
-public class OperateLogModel : BaseSnowflakeRecordEntity, IBaseTEntity
+public class OperateLogModel : BaseRecordEntity, IBaseTEntity
 {
+    /// <summary>
+    /// 记录Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "记录Id", IsPrimaryKey = true)]
+    public long RecordId { get; set; }
+
     /// <summary>
     /// 账号Id
     /// </summary>

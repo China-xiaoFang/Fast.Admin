@@ -34,6 +34,12 @@ namespace Fast.Center.Entity;
 public class ConfigModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 配置Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "配置Id", IsPrimaryKey = true)]
+    public long ConfigId { get; set; }
+
+    /// <summary>
     /// 配置编码
     /// </summary>
     [Required]

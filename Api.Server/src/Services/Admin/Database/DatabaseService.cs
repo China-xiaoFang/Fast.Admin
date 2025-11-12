@@ -62,7 +62,7 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
             throw new UserFriendlyException("非超级管理员禁止操作！");
 
         var tenantModel = await _repository.Queryable<TenantModel>()
-            .Where(wh => wh.Id == input.TenantId)
+            .Where(wh => wh.TenantId == input.TenantId)
             .SingleAsync();
 
         if (tenantModel == null)
@@ -76,10 +76,11 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
         }
 
         var adminConnectionSettings =
-            await _sqlSugarEntityService.GetConnectionSetting(tenantModel.Id, tenantModel.TenantNo, DatabaseTypeEnum.Admin);
+            await _sqlSugarEntityService.GetConnectionSetting(tenantModel.TenantId, tenantModel.TenantNo, DatabaseTypeEnum.Admin);
 
         var adminLogConnectionSettings =
-            await _sqlSugarEntityService.GetConnectionSetting(tenantModel.Id, tenantModel.TenantNo, DatabaseTypeEnum.AdminLog);
+            await _sqlSugarEntityService.GetConnectionSetting(tenantModel.TenantId, tenantModel.TenantNo,
+                DatabaseTypeEnum.AdminLog);
 
         {
             var logSb = new StringBuilder();
@@ -151,7 +152,7 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
             // 初始化公司（组织架构）
             await adminDb.Insertable(new OrganizationModel
                 {
-                    Id = YitIdHelper.NextId(),
+                    OrgId = YitIdHelper.NextId(),
                     ParentId = 0,
                     ParentIds = [],
                     OrgName = tenantModel.TenantName,
@@ -166,7 +167,7 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
             // 初始化租户管理员角色
             await adminDb.Insertable(new RoleModel
                 {
-                    Id = YitIdHelper.NextId(),
+                    RoleId = YitIdHelper.NextId(),
                     RoleType = RoleTypeEnum.Admin,
                     RoleName = "管理员",
                     RoleCode = "manager_role",
@@ -187,7 +188,7 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
             {
                 accountModel = new AccountModel
                 {
-                    Id = YitIdHelper.NextId(),
+                    AccountId = YitIdHelper.NextId(),
                     Mobile = tenantModel.AdminMobile,
                     Email = tenantModel.AdminEmail,
                     Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
@@ -206,18 +207,18 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
             // 初始化租户管理员用户
             await _repository.Insertable(new TenantUserModel
                 {
-                    Id = YitIdHelper.NextId(),
-                    AccountId = accountModel.Id,
+                    UserId = YitIdHelper.NextId(),
+                    AccountId = accountModel.AccountId,
                     Account = $"{tenantModel.TenantCode}_Admin",
                     LoginEmployeeNo = "",
                     EmployeeNo = "",
                     EmployeeName = tenantModel.AdminName,
                     IdPhoto = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
-                    DeptId = null,
-                    DeptName = null,
+                    DepartmentId = null,
+                    DepartmentName = null,
                     UserType = UserTypeEnum.Admin,
                     Status = CommonStatusEnum.Enable,
-                    TenantId = tenantModel.Id
+                    TenantId = tenantModel.TenantId
                 })
                 .ExecuteCommandAsync();
         }
@@ -232,7 +233,7 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
         {
             await adminDb.Insertable(new SerialRuleModel
                 {
-                    Id = YitIdHelper.NextId(),
+                    SerialRuleId = YitIdHelper.NextId(),
                     RuleType = SerialRuleTypeEnum.EmployeeNo,
                     SerialType = SerialTypeEnum.AutoSerial,
                     Prefix = null,

@@ -32,6 +32,12 @@ namespace Fast.Center.Entity;
 public class DictionaryItemModel : BaseEntity
 {
     /// <summary>
+    /// 字典项Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "字典项Id", IsPrimaryKey = true)]
+    public long DictionaryItemId { get; set; }
+
+    /// <summary>
     /// 字典Id
     /// </summary>
     [Required]
@@ -88,7 +94,7 @@ public class DictionaryItemModel : BaseEntity
     public override int GetHashCode()
     {
         // ReSharper disable once NonReadonlyMemberInGetHashCode
-        return Id.GetHashCode();
+        return DictionaryItemId.GetHashCode();
     }
 
     /// <summary>Determines whether the specified object is equal to the current object.</summary>
@@ -100,7 +106,7 @@ public class DictionaryItemModel : BaseEntity
         if (obj is not DictionaryItemModel oldDictionaryItemModel)
             return false;
 
-        return Id == oldDictionaryItemModel.Id
+        return DictionaryItemId == oldDictionaryItemModel.DictionaryItemId
                && DictionaryId == oldDictionaryItemModel.DictionaryId
                && Label == oldDictionaryItemModel.Label
                && Value == oldDictionaryItemModel.Value;

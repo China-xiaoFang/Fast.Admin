@@ -33,6 +33,12 @@ namespace Fast.Center.Entity;
 public class DictionaryTypeModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 字典Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "字典Id", IsPrimaryKey = true)]
+    public long DictionaryId { get; set; }
+
+    /// <summary>
     /// 字典Key
     /// </summary>
     [Required]
@@ -80,7 +86,7 @@ public class DictionaryTypeModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 字典项信息
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(DictionaryItemModel.DictionaryId), nameof(Id))]
+    [Navigate(NavigateType.OneToMany, nameof(DictionaryItemModel.DictionaryId), nameof(DictionaryId))]
     public List<DictionaryItemModel> DictionaryItemList { get; set; }
 
     /// <summary>Serves as the default hash function.</summary>
@@ -88,7 +94,7 @@ public class DictionaryTypeModel : BaseEntity, IUpdateVersion
     public override int GetHashCode()
     {
         // ReSharper disable once NonReadonlyMemberInGetHashCode
-        return Id.GetHashCode();
+        return DictionaryId.GetHashCode();
     }
 
     /// <summary>Determines whether the specified object is equal to the current object.</summary>
@@ -100,7 +106,7 @@ public class DictionaryTypeModel : BaseEntity, IUpdateVersion
         if (obj is not DictionaryTypeModel oldDictionaryTypeModel)
             return false;
 
-        return Id == oldDictionaryTypeModel.Id
+        return DictionaryId == oldDictionaryTypeModel.DictionaryId
                && DictionaryKey == oldDictionaryTypeModel.DictionaryKey
                && DictionaryName == oldDictionaryTypeModel.DictionaryName
                && ValueType == oldDictionaryTypeModel.ValueType

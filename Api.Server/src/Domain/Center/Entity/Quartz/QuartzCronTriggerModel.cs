@@ -63,10 +63,4 @@ public class QuartzCronTriggerModel : IDatabaseEntity
     /// </summary>
     [SugarColumn(ColumnName = "TIME_ZONE_ID", ColumnDescription = "时区标识", Length = 80)]
     public string TimeZoneId { get; set; }
-
-    /// <summary>
-    /// 应用
-    /// </summary>
-    [Navigate(NavigateType.OneToOne, nameof(SchedName), nameof(TriggerName), nameof(TriggerGroup))]
-    public QuartzTriggerModel QuartzTrigger { get; set; }
 }

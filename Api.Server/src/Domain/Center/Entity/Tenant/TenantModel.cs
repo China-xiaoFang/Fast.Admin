@@ -34,6 +34,12 @@ namespace Fast.Center.Entity;
 public class TenantModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 租户Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "租户Id", IsPrimaryKey = true)]
+    public long TenantId { get; set; }
+
+    /// <summary>
     /// 租户编号
     /// </summary>
     [Required]
@@ -149,12 +155,12 @@ public class TenantModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 数据库信息
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(MainDatabaseModel.TenantId), nameof(Id))]
+    [Navigate(NavigateType.OneToMany, nameof(MainDatabaseModel.TenantId), nameof(TenantId))]
     public List<MainDatabaseModel> DatabaseList { get; set; }
 
     /// <summary>
     /// 租户管理员账号
     /// </summary>
-    [Navigate(NavigateType.OneToOne, nameof(Id), nameof(AdminAccountId))]
+    [Navigate(NavigateType.OneToOne, nameof(AdminAccountId), nameof(AccountModel.AccountId))]
     public AccountModel TenantAdminAccount { get; set; }
 }
