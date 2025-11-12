@@ -34,6 +34,7 @@ using Fast.Shared;
 using Fast.SqlSugar;
 using Fast.Swagger;
 using Fast.UnifyResult;
+using IGeekFan.AspNetCore.Knife4jUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
