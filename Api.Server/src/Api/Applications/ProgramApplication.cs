@@ -38,7 +38,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MiniExcelLibs;
 using Newtonsoft.Json;
-using SKIT.FlurlHttpClient.Wechat.Api;
 using SqlSugar;
 using Swashbuckle.AspNetCore.Swagger;
 using UAParser;
@@ -91,8 +90,8 @@ public class ProgramApplication : IDynamicApplication
         var openXmlAssembly = typeof(DocumentFormat.OpenXml.OpenXmlElement).Assembly.GetName();
         var mailKitAssembly = typeof(MailKit.Net.Smtp.SmtpClient).Assembly.GetName();
         var miniExcelAssembly = typeof(MiniExcel).Assembly.GetName();
-        var skitWechatApiAssembly = typeof(WechatApiClient).Assembly.GetName();
-        var knife4jUIAssembly = typeof(Knife4UIOptions).Assembly.GetName();
+        var skitWechatApiAssembly = typeof(SKIT.FlurlHttpClient.Wechat.Api.WechatApiClient).Assembly.GetName();
+        var knife4jUIAssembly = typeof(IGeekFan.AspNetCore.Knife4jUI.Knife4UIOptions).Assembly.GetName();
         var imageSharpAssembly = typeof(SixLabors.ImageSharp.Image).Assembly.GetName();
 
         var cpuUsage = await MachineUtil.GetProgramCpuUsage();
