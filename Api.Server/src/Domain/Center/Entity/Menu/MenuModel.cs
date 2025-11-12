@@ -34,6 +34,12 @@ namespace Fast.Center.Entity;
 public class MenuModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 菜单Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "菜单Id", IsPrimaryKey = true)]
+    public long MenuId { get; set; }
+
+    /// <summary>
     /// 版本
     /// </summary>
     [SugarColumn(ColumnDescription = "版本")]

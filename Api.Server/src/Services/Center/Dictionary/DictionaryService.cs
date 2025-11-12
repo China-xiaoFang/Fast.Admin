@@ -112,16 +112,16 @@ public class DictionaryService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("字典分页选择器", HttpRequestActionEnum.Paged)]
-    [Permission("Dictionary:Paged")]
+    [Permission(PermissionConst.Dictionary.Paged)]
     public async Task<PagedResult<ElSelectorOutput<long>>> SelectorPaged(PagedInput input)
     {
         var pagedData = await _typeRepository.Entities.OrderBy(ob => ob.DictionaryName)
-            .Select(sl => new {sl.DictionaryName, sl.Id, sl.ValueType})
+            .Select(sl => new {sl.DictionaryName, sl.DictionaryId, sl.ValueType})
             .ToPagedListAsync(input);
 
         return pagedData.ToPagedData(sl => new ElSelectorOutput<long>
         {
-            Label = sl.DictionaryName, Value = sl.Id, Data = new {sl.ValueType}
+            Label = sl.DictionaryName, Value = sl.DictionaryId, Data = new {sl.ValueType}
         });
     }
 
@@ -132,13 +132,13 @@ public class DictionaryService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取字典分页列表", HttpRequestActionEnum.Paged)]
-    [Permission("Dictionary:Paged")]
+    [Permission(PermissionConst.Dictionary.Paged)]
     public async Task<PagedResult<QueryDictionaryPagedOutput>> QueryDictionaryPaged(PagedInput input)
     {
         return await _typeRepository.Entities.OrderByDescending(ob => ob.CreatedTime)
             .Select(sl => new QueryDictionaryPagedOutput
             {
-                Id = sl.Id,
+                DictionaryId = sl.DictionaryId,
                 DictionaryKey = sl.DictionaryKey,
                 DictionaryName = sl.DictionaryName,
                 ValueType = sl.ValueType,
@@ -160,14 +160,14 @@ public class DictionaryService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取字典详情", HttpRequestActionEnum.Query)]
-    [Permission("Dictionary:Detail")]
+    [Permission(PermissionConst.Dictionary.Detail)]
     public async Task<QueryDictionaryDetailOutput> QueryDictionaryDetail([Required(ErrorMessage = "字典Id不能为空")] long? dictionaryId)
     {
         var result = await _typeRepository.Entities.Includes(e => e.DictionaryItemList)
-            .Where(wh => wh.Id == dictionaryId)
+            .Where(wh => wh.DictionaryId == dictionaryId)
             .Select(sl => new QueryDictionaryDetailOutput
             {
-                DictionaryId = sl.Id,
+                DictionaryId = sl.DictionaryId,
                 DictionaryKey = sl.DictionaryKey,
                 DictionaryName = sl.DictionaryName,
                 ValueType = sl.ValueType,
@@ -182,7 +182,7 @@ public class DictionaryService : IDynamicApplication
                 DictionaryItemList = sl.DictionaryItemList.OrderBy(ob => ob.Order)
                     .Select(iSl => new QueryDictionaryDetailOutput.QueryDictionaryItemDetailDto
                     {
-                        DictionaryItemId = iSl.Id,
+                        DictionaryItemId = iSl.DictionaryItemId,
                         Label = iSl.Label,
                         Value = iSl.Value,
                         Type = iSl.Type,
@@ -210,7 +210,7 @@ public class DictionaryService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加字典", HttpRequestActionEnum.Add)]
-    [Permission("Dictionary:Add")]
+    [Permission(PermissionConst.Dictionary.Add)]
     public async Task AddDictionary(AddDictionaryInput input)
     {
         // 判断key是否重复
@@ -221,7 +221,7 @@ public class DictionaryService : IDynamicApplication
 
         var dictionaryTypeModel = new DictionaryTypeModel
         {
-            Id = YitIdHelper.NextId(),
+            DictionaryId = YitIdHelper.NextId(),
             DictionaryKey = input.DictionaryKey,
             DictionaryName = input.DictionaryName,
             ValueType = input.ValueType,
@@ -235,7 +235,7 @@ public class DictionaryService : IDynamicApplication
         {
             dictionaryItemList.add(new DictionaryItemModel
             {
-                DictionaryId = dictionaryTypeModel.Id,
+                DictionaryId = dictionaryTypeModel.DictionaryId,
                 Label = item.Label,
                 Value = item.Value,
                 Type = item.Type,
@@ -263,7 +263,7 @@ public class DictionaryService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑字典", HttpRequestActionEnum.Edit)]
-    [Permission("Dictionary:Edit")]
+    [Permission(PermissionConst.Dictionary.Edit)]
     public async Task EditDictionary(EditDictionaryInput input)
     {
         var dictionaryTypeModel = await _typeRepository.Entities.Includes(e => e.DictionaryItemList)
@@ -283,10 +283,10 @@ public class DictionaryService : IDynamicApplication
         var newDictionaryItemList = input.DictionaryItemList ?? [];
 
         // 新增的项
-        var addDictionaryItemList = newDictionaryItemList.Where(wh => wh.DictionaryItemIdId == null)
+        var addDictionaryItemList = newDictionaryItemList.Where(wh => wh.DictionaryItemId == null)
             .Select(sl => new DictionaryItemModel
             {
-                DictionaryId = dictionaryTypeModel.Id,
+                DictionaryId = dictionaryTypeModel.DictionaryId,
                 Label = sl.Label,
                 Value = sl.Value,
                 Type = sl.Type,
@@ -299,10 +299,10 @@ public class DictionaryService : IDynamicApplication
 
         // 更新的项
         var updateDictionaryItemList = newDictionaryItemList
-            .Where(wh => oldDictionaryItemList.Any(a => a.Id == wh.DictionaryItemIdId))
+            .Where(wh => oldDictionaryItemList.Any(a => a.DictionaryItemId == wh.DictionaryItemId))
             .Select(sl =>
             {
-                var dictionaryItemModel = oldDictionaryItemList.First(f => f.Id == sl.DictionaryItemIdId);
+                var dictionaryItemModel = oldDictionaryItemList.First(f => f.DictionaryItemId == sl.DictionaryItemId);
                 dictionaryItemModel.Label = sl.Label;
                 dictionaryItemModel.Value = sl.Value;
                 dictionaryItemModel.Type = sl.Type;
@@ -316,7 +316,7 @@ public class DictionaryService : IDynamicApplication
 
         // 删除的项
         var deleteDictionaryItemList = oldDictionaryItemList
-            .Where(wh => newDictionaryItemList.All(a => a.DictionaryItemIdId != wh.Id))
+            .Where(wh => newDictionaryItemList.All(a => a.DictionaryItemId != wh.DictionaryItemId))
             .ToList();
 
         await _typeRepository.Ado.UseTranAsync(async () =>
@@ -338,7 +338,7 @@ public class DictionaryService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除字典", HttpRequestActionEnum.Delete)]
-    [Permission("Dictionary:Delete")]
+    [Permission(PermissionConst.Dictionary.Delete)]
     public async Task DeleteDictionary(DictionaryIdInput input)
     {
         var dictionaryTypeModel = await _typeRepository.Entities.Includes(e => e.DictionaryItemList)

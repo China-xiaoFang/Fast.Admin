@@ -34,6 +34,12 @@ namespace Fast.Admin.Entity;
 public class OrganizationModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 组织Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "组织Id", IsPrimaryKey = true)]
+    public long OrgId { get; set; }
+
+    /// <summary>
     /// 父级Id
     /// </summary>
     [SugarColumn(ColumnDescription = "父级Id")]

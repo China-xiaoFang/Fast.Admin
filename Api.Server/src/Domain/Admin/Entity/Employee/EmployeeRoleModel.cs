@@ -46,6 +46,6 @@ public class EmployeeRoleModel : IDatabaseEntity
     /// <summary>
     /// 角色信息
     /// </summary>
-    [Navigate(NavigateType.OneToOne, nameof(RoleId), nameof(RoleModel.Id))]
+    [Navigate(NavigateType.OneToOne, nameof(RoleId), nameof(RoleModel.RoleId))]
     public RoleModel Role { get; set; }
 }

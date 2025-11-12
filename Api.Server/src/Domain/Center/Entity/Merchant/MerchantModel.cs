@@ -33,6 +33,12 @@ namespace Fast.Center.Entity;
 public class MerchantModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
+    /// 商户号Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "商户号Id", IsPrimaryKey = true)]
+    public long MerchantId { get; set; }
+
+    /// <summary>
     /// 商户号类型
     /// </summary>
     [SugarColumn(ColumnDescription = "商户号类型")]

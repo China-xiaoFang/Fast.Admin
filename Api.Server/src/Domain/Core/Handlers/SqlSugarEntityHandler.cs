@@ -121,7 +121,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         // 组装数据
         var sqlExecutionLogModel = new SqlExecutionLogModel
         {
-            Id = YitIdHelper.NextId(),
+            RecordId = YitIdHelper.NextId(),
             AccountId = _user.AccountId,
             Account = _user.Account,
             Mobile = _user.Mobile,
@@ -183,7 +183,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         // 组装数据
         var sqlTimeoutLogModel = new SqlTimeoutLogModel
         {
-            Id = YitIdHelper.NextId(),
+            RecordId = YitIdHelper.NextId(),
             AccountId = _user.AccountId,
             Account = _user.Account,
             Mobile = _user.Mobile,
@@ -259,7 +259,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         // 组装数据
         var sqlDiffLogModel = new SqlDiffLogModel
         {
-            Id = YitIdHelper.NextId(),
+            RecordId = YitIdHelper.NextId(),
             AccountId = _user.AccountId,
             Account = _user.Account,
             Mobile = _user.Mobile,
@@ -327,7 +327,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         // 组装数据
         var sqlExceptionLogModel = new SqlExceptionLogModel
         {
-            Id = YitIdHelper.NextId(),
+            RecordId = YitIdHelper.NextId(),
             AccountId = _user.AccountId,
             Account = _user.Account,
             Mobile = _user.Mobile,

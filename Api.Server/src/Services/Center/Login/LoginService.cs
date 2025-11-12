@@ -165,7 +165,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
 
         // 查询租户
         var tenantModel = await _repository.Queryable<TenantModel>()
-            .Where(wh => wh.Id == tenantUserModel.TenantId)
+            .Where(wh => wh.TenantId == tenantUserModel.TenantId)
             .SingleAsync();
 
         if (tenantModel == null)
@@ -194,7 +194,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
 
         if (accountModel.FirstLoginTime == null)
         {
-            accountModel.FirstLoginTenantId = tenantModel.Id;
+            accountModel.FirstLoginTenantId = tenantModel.TenantId;
             accountModel.FirstLoginDevice = userAgentInfo.Device;
             accountModel.FirstLoginOS = userAgentInfo.OS;
             accountModel.FirstLoginBrowser = userAgentInfo.Browser;
@@ -204,7 +204,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             accountModel.FirstLoginTime = dateTime;
         }
 
-        accountModel.LastLoginTenantId = tenantModel.Id;
+        accountModel.LastLoginTenantId = tenantModel.TenantId;
         accountModel.LastLoginDevice = userAgentInfo.Device;
         accountModel.LastLoginOS = userAgentInfo.OS;
         accountModel.LastLoginBrowser = userAgentInfo.Browser;
@@ -222,22 +222,22 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             DeviceId = GlobalContext.DeviceId,
             AppNo = applicationModel.AppNo,
             AppName = applicationModel.AppName,
-            AccountId = accountModel.Id,
+            AccountId = accountModel.AccountId,
             AccountKey = accountModel.AccountKey,
             Mobile = accountModel.Mobile,
             NickName = accountModel.NickName,
             Avatar = accountModel.Avatar,
-            TenantId = tenantModel.Id,
+            TenantId = tenantModel.TenantId,
             TenantNo = tenantModel.TenantNo,
             TenantName = tenantModel.TenantName,
-            UserId = tenantUserModel.Id,
+            UserId = tenantUserModel.UserId,
             UserKey = tenantUserModel.UserKey,
             Account = tenantUserModel.Account,
             LoginEmployeeNo = tenantUserModel.LoginEmployeeNo,
             EmployeeNo = tenantUserModel.EmployeeNo,
             EmployeeName = tenantUserModel.EmployeeName,
-            DepartmentId = tenantUserModel.DeptId,
-            DepartmentName = tenantUserModel.DeptName,
+            DepartmentId = tenantUserModel.DepartmentId,
+            DepartmentName = tenantUserModel.DepartmentName,
             IsSuperAdmin = tenantUserModel.UserType == UserTypeEnum.SuperAdmin,
             IsAdmin = tenantUserModel.UserType == UserTypeEnum.Admin,
             LastLoginDevice = accountModel.LastLoginDevice,
@@ -252,7 +252,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         // 添加访问日志
         var visitLogModel = new VisitLogModel
         {
-            Id = YitIdHelper.NextId(),
+            RecordId = YitIdHelper.NextId(),
             AccountId = _user.AccountId,
             Account = _user.Account,
             Mobile = _user.Mobile,
@@ -289,8 +289,8 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
                     EmployeeNo = tenantUserModel.EmployeeNo,
                     EmployeeName = tenantUserModel.EmployeeName,
                     IdPhoto = tenantUserModel.IdPhoto,
-                    DeptId = tenantUserModel.DeptId,
-                    DeptName = tenantUserModel.DeptName,
+                    DepartmentId = tenantUserModel.DepartmentId,
+                    DepartmentName = tenantUserModel.DepartmentName,
                     UserType = tenantUserModel.UserType,
                     Status = tenantUserModel.Status
                 }
@@ -345,7 +345,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             {
                 // 查询账号
                 accountModel = await _repository.Queryable<AccountModel>()
-                    .Where(wh => wh.Id == tenantUserModel.AccountId)
+                    .Where(wh => wh.AccountId == tenantUserModel.AccountId)
                     .SingleAsync();
             }
         }
@@ -375,7 +375,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
 
             // 查询租户
             var tenantModel = await _repository.Queryable<TenantModel>()
-                .Where(wh => wh.Id == tenantUserModel.TenantId)
+                .Where(wh => wh.TenantId == tenantUserModel.TenantId)
                 .SingleAsync();
             tenantUserList.Add(new LoginOutput.LoginTenantOutput
             {
@@ -388,8 +388,8 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
                 EmployeeNo = tenantUserModel.EmployeeNo,
                 EmployeeName = tenantUserModel.EmployeeName,
                 IdPhoto = tenantUserModel.IdPhoto,
-                DeptId = tenantUserModel.DeptId,
-                DeptName = tenantUserModel.DeptName,
+                DepartmentId = tenantUserModel.DepartmentId,
+                DepartmentName = tenantUserModel.DepartmentName,
                 UserType = tenantUserModel.UserType,
                 Status = tenantUserModel.Status
             });
@@ -397,9 +397,9 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         else
         {
             tenantUserList = await _repository.Queryable<TenantUserModel>()
-                .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.Id)
+                .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
                 .ClearFilter<IBaseTEntity>()
-                .Where(t1 => t1.AccountId == accountModel.Id)
+                .Where(t1 => t1.AccountId == accountModel.AccountId)
                 .Select((t1, t2) => new LoginOutput.LoginTenantOutput
                 {
                     UserKey = t1.UserKey,
@@ -411,8 +411,8 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
                     EmployeeNo = t1.EmployeeNo,
                     EmployeeName = t1.EmployeeName,
                     IdPhoto = t1.IdPhoto,
-                    DeptId = t1.DeptId,
-                    DeptName = t1.DeptName,
+                    DepartmentId = t1.DepartmentId,
+                    DepartmentName = t1.DepartmentName,
                     UserType = t1.UserType,
                     Status = t1.Status
                 })
@@ -448,8 +448,8 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         [Required(ErrorMessage = "账号Key不能为空")] string accountKey)
     {
         return await _repository.Queryable<AccountModel>()
-            .InnerJoin<TenantUserModel>((t1, t2) => t1.Id == t2.AccountId)
-            .InnerJoin<TenantModel>((t1, t2, t3) => t2.TenantId == t3.Id)
+            .InnerJoin<TenantUserModel>((t1, t2) => t1.AccountId == t2.AccountId)
+            .InnerJoin<TenantModel>((t1, t2, t3) => t2.TenantId == t3.TenantId)
             .ClearFilter<IBaseTEntity>()
             .Where(t1 => t1.AccountKey == accountKey)
             .Select((t1, t2, t3) => new LoginOutput.LoginTenantOutput
@@ -463,8 +463,8 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
                 EmployeeNo = t2.EmployeeNo,
                 EmployeeName = t2.EmployeeName,
                 IdPhoto = t2.IdPhoto,
-                DeptId = t2.DeptId,
-                DeptName = t2.DeptName,
+                DepartmentId = t2.DepartmentId,
+                DepartmentName = t2.DepartmentName,
                 UserType = t2.UserType,
                 Status = t2.Status
             })
@@ -512,7 +512,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
 
         // 查询账号
         var accountModel = await _repository.Queryable<AccountModel>()
-            .Where(wh => wh.Id == tenantUserModel.AccountId)
+            .Where(wh => wh.AccountId == tenantUserModel.AccountId)
             .SingleAsync();
 
         if (accountModel == null)
@@ -583,23 +583,23 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         }
 
         // 处理账号绑定的问题
-        accountModel.WeChatId ??= weChatUserModel.Id;
-        if (accountModel.WeChatId != weChatUserModel.Id)
+        accountModel.WeChatId ??= weChatUserModel.WeChatId;
+        if (accountModel.WeChatId != weChatUserModel.WeChatId)
         {
             // 删除旧账号绑定
             await _repository.Updateable<AccountModel>()
                 .SetColumns(e => e.WeChatId == null)
-                .Where(wh => wh.WeChatId == weChatUserModel.Id)
+                .Where(wh => wh.WeChatId == weChatUserModel.WeChatId)
                 .ExecuteCommandAsync();
             // 更新账号绑定
-            accountModel.WeChatId = weChatUserModel.Id;
+            accountModel.WeChatId = weChatUserModel.WeChatId;
             await _repository.Updateable(accountModel)
                 .ExecuteCommandAsync();
         }
 
         var tenantUserList = await _repository.Queryable<TenantUserModel>()
             .ClearFilter<IBaseTEntity>()
-            .Where(t1 => t1.AccountId == accountModel.Id)
+            .Where(t1 => t1.AccountId == accountModel.AccountId)
             .ToListAsync();
         if (tenantUserList.Count == 0)
         {
@@ -640,9 +640,9 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             NickName = accountModel.NickName,
             Avatar = accountModel.Avatar,
             TenantList = await _repository.Queryable<TenantUserModel>()
-                .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.Id)
+                .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
                 .ClearFilter<IBaseTEntity>()
-                .Where(t1 => t1.AccountId == accountModel.Id)
+                .Where(t1 => t1.AccountId == accountModel.AccountId)
                 .Select((t1, t2) => new LoginOutput.LoginTenantOutput
                 {
                     UserKey = t1.UserKey,
@@ -654,8 +654,8 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
                     EmployeeNo = t1.EmployeeNo,
                     EmployeeName = t1.EmployeeName,
                     IdPhoto = t1.IdPhoto,
-                    DeptId = t1.DeptId,
-                    DeptName = t1.DeptName,
+                    DepartmentId = t1.DepartmentId,
+                    DepartmentName = t1.DepartmentName,
                     UserType = t1.UserType,
                     Status = t1.Status
                 })
@@ -722,7 +722,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             // 保存微信用户
             weChatUserModel = new WeChatUserModel
             {
-                Id = YitIdHelper.NextId(),
+                WeChatId = YitIdHelper.NextId(),
                 AppId = applicationModel.AppId,
                 UserType = GlobalContext.DeviceType switch
                 {
@@ -850,7 +850,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         }
 
         var accountModel = await _repository.Queryable<AccountModel>()
-            .Where(wh => wh.Id == tenantUserModel.AccountId)
+            .Where(wh => wh.AccountId == tenantUserModel.AccountId)
             .SingleAsync();
 
         if (accountModel == null)
@@ -876,7 +876,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             // 添加登出日志
             var visitLogModel = new VisitLogModel
             {
-                Id = YitIdHelper.NextId(),
+                RecordId = YitIdHelper.NextId(),
                 AccountId = _user.AccountId,
                 Account = _user.Account,
                 Mobile = _user.Mobile,
@@ -941,7 +941,7 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             // 保存微信用户
             weChatUserModel = new WeChatUserModel
             {
-                Id = YitIdHelper.NextId(),
+                WeChatId = YitIdHelper.NextId(),
                 AppId = applicationModel.AppId,
                 UserType = GlobalContext.DeviceType switch
                 {
@@ -1034,12 +1034,12 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
                 DeviceId = GlobalContext.DeviceId,
                 AppNo = applicationModel.Application.AppNo,
                 AppName = applicationModel.Application.AppName,
-                AccountId = weChatUserModel.Id,
+                AccountId = weChatUserModel.WeChatId,
                 Mobile = weChatUserModel.PurePhoneNumber,
                 NickName = weChatUserModel.NickName,
                 Avatar = weChatUserModel.Avatar,
                 TenantNo = applicationModel.Application.AppNo,
-                UserId = weChatUserModel.Id,
+                UserId = weChatUserModel.WeChatId,
                 Account = weChatUserModel.PurePhoneNumber,
                 EmployeeNo = weChatUserModel.OpenId,
                 EmployeeName = weChatUserModel.NickName,

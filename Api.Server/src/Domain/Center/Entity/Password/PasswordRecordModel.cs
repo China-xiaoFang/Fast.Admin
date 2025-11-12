@@ -30,8 +30,14 @@ namespace Fast.Center.Entity;
 [SugarTable("PasswordRecord", "密码记录表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(AccountId)}", nameof(AccountId), OrderByType.Asc)]
-public class PasswordRecordModel : IdentityKeyEntity
+public class PasswordRecordModel : IDatabaseEntity
 {
+    /// <summary>
+    /// 记录Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "记录Id", IsPrimaryKey = true, IsIdentity = true)]
+    public long RecordId { get; set; }
+
     /// <summary>
     /// 账号Id
     /// </summary>

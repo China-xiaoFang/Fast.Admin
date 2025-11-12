@@ -31,8 +31,14 @@ namespace Fast.Center.Entity;
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(FileHash)}", nameof(TenantId), OrderByType.Asc, nameof(CreatedUserId), OrderByType.Asc,
     nameof(FileHash), OrderByType.Asc)]
-public class FileModel : SnowflakeKeyEntity, IBaseTEntity
+public class FileModel : IBaseTEntity
 {
+    /// <summary>
+    /// 文件Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "文件Id", IsPrimaryKey = true)]
+    public long FileId { get; set; }
+
     /// <summary>
     /// 文件唯一标识
     /// </summary>

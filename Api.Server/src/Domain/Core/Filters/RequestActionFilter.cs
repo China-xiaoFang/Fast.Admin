@@ -96,7 +96,7 @@ public class RequestActionFilter : IAsyncActionFilter
 
         var operateLogModel = new OperateLogModel
         {
-            Id = YitIdHelper.NextId(),
+            RecordId = YitIdHelper.NextId(),
             AccountId = _user?.AccountId,
             Account = _user?.Account,
             Mobile = _user?.Mobile,

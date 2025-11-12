@@ -31,8 +31,14 @@ namespace Fast.CenterLog.Entity;
 [SugarDbType(DatabaseTypeEnum.CenterLog)]
 [SugarIndex($"IX_{{table}}_{nameof(CreatedTime)}", nameof(CreatedTime), OrderByType.Asc)]
 [SugarIndex($"IX_{{table}}_{nameof(TenantId)}", nameof(TenantId), OrderByType.Asc)]
-public class SqlExceptionLogModel : BaseIdentityRecordEntity
+public class SqlExceptionLogModel : BaseRecordEntity
 {
+    /// <summary>
+    /// 记录Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "记录Id", IsPrimaryKey = true, IsIdentity = true)]
+    public long RecordId { get; set; }
+
     /// <summary>
     /// 账号Id
     /// </summary>
