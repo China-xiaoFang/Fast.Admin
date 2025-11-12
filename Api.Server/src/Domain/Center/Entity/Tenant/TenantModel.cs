@@ -155,6 +155,6 @@ public class TenantModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 租户管理员账号
     /// </summary>
-    [Navigate(NavigateType.OneToOne, nameof(AdminAccountId))]
+    [Navigate(NavigateType.OneToOne, nameof(Id), nameof(AdminAccountId))]
     public AccountModel TenantAdminAccount { get; set; }
 }

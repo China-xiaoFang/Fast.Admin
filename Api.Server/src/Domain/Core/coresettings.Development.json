@@ -11,6 +11,15 @@
       "MiniLogLevel": "Information"
     }
   },
+  // 邮件配置
+  "MailSettingsOptions": {
+    "Smtp": "smtp.163.com",
+    "Port": 465,
+    "Email": "f2875616188@163.com",
+    "AuthCode": "BSxui374EreLjqTQ",
+    "DisplayName": "FastDotNet",
+    "ReceiveEmails": ["2875616188@qq.com"]
+  },
   // Swagger 配置
   "SwaggerSettings": {
     // 启用

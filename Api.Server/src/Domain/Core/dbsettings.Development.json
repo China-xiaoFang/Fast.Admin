@@ -1,0 +1,21 @@
+{
+  // 数据库连接字符串
+  "ConnectionSettings": {
+    // 默认库服务器Ip
+    "ServiceIp": "47.120.33.12",
+    // 默认库端口号
+    "Port": 8533,
+    // 默认库数据库名称
+    "DbName": "FastCenter_Dev",
+    // 默认库数据库用户
+    "DbUser": "fastAdmin",
+    // 默认库数据库密码
+    "DbPwd": "fast.2025"
+  },
+  // Redis 缓存连接字符串
+  "RedisSettings": {
+    "ServiceIp": "47.120.33.12",
+    "Port": 8579,
+    "DbPwd": "fast.2025"
+  }
+}

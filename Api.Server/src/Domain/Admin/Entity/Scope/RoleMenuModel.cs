@@ -34,15 +34,13 @@ public class RoleMenuModel : IDatabaseEntity
     /// <summary>
     /// 角色Id
     /// </summary>
-    [Key]
-    [SugarColumn(ColumnDescription = "角色Id")]
+    [SugarColumn(ColumnDescription = "角色Id", IsPrimaryKey = true)]
     public long RoleId { get; set; }
 
     /// <summary>
     /// 菜单Id
     /// </summary>
-    [Key]
-    [SugarColumn(ColumnDescription = "菜单Id")]
+    [SugarColumn(ColumnDescription = "菜单Id", IsPrimaryKey = true)]
     public long MenuId { get; set; }
 
     /// <summary>

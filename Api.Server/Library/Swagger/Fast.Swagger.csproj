@@ -10,11 +10,6 @@
 		<EmbeddedResource Include="Assets\**" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)Library\Runtime\Fast.Runtime.csproj" />
-		<ProjectReference Include="$(SolutionDir)Library\DynamicApplication\Fast.DynamicApplication.csproj" />
-	</ItemGroup>
-
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
 	</ItemGroup>

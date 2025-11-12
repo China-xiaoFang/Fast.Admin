@@ -34,7 +34,6 @@ using Fast.OpenApi;
 using Fast.SqlSugar;
 using Fast.Swagger;
 using Fast.UnifyResult;
-using IGeekFan.AspNetCore.Knife4jUI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MiniExcelLibs;

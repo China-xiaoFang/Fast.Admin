@@ -36,9 +36,8 @@ public class TenantOnlineUserModel : IBaseTEntity
     /// <summary>
     /// 连接Id
     /// </summary>
-    [Key]
     [Required]
-    [SugarColumn(ColumnDescription = "连接Id", Length = 32)]
+    [SugarColumn(ColumnDescription = "连接Id", Length = 32, IsPrimaryKey = true)]
     public string ConnectionId { get; set; }
 
     /// <summary>

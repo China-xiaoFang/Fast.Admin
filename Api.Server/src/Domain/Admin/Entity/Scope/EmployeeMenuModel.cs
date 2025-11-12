@@ -34,15 +34,13 @@ public class EmployeeMenuModel : IDatabaseEntity
     /// <summary>
     /// 职员Id
     /// </summary>
-    [Key]
-    [SugarColumn(ColumnDescription = "职员Id")]
+    [SugarColumn(ColumnDescription = "职员Id", IsPrimaryKey = true)]
     public long EmployeeId { get; set; }
 
     /// <summary>
     /// 菜单Id
     /// </summary>
-    [Key]
-    [SugarColumn(ColumnDescription = "菜单Id")]
+    [SugarColumn(ColumnDescription = "菜单Id", IsPrimaryKey = true)]
     public long MenuId { get; set; }
 
     /// <summary>
