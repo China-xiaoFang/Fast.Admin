@@ -30,7 +30,7 @@ public class QueryTableConfigPagedOutput
     /// <summary>
     /// 表格Id
     /// </summary>
-    public long TableId { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// 表格Key

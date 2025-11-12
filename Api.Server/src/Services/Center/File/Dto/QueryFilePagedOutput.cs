@@ -30,7 +30,7 @@ public class QueryFilePagedOutput
     /// <summary>
     /// 文件Id
     /// </summary>
-    public long FileId { get; set; }
+    public long Id { get; set; }
 
     /// <summary>
     /// 文件唯一标识

@@ -46,6 +46,7 @@ public class EmployeeModel : BaseEntity, IUpdateVersion
     /// </summary>
     /// <remarks>2024010101 ~ 20240101999</remarks>
     [Required]
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "工号", Length = 11)]
     public string EmployeeNo { get; set; }
 

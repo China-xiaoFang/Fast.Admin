@@ -78,7 +78,7 @@ public class AccountService : IAccountService, ITransientDependency, IDynamicApp
         return await queryable.OrderBy(t1 => t1.CreatedTime)
             .Select((t1, t2, t3) => new QueryAccountPagedOutput
             {
-                AccountId = t1.Id,
+                Id = t1.Id,
                 Mobile = t1.Mobile,
                 Email = t1.Email,
                 Status = t1.Status,

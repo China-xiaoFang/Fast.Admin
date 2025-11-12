@@ -138,7 +138,7 @@ public class DictionaryService : IDynamicApplication
         return await _typeRepository.Entities.OrderByDescending(ob => ob.CreatedTime)
             .Select(sl => new QueryDictionaryPagedOutput
             {
-                DictionaryId = sl.Id,
+                Id = sl.Id,
                 DictionaryKey = sl.DictionaryKey,
                 DictionaryName = sl.DictionaryName,
                 ValueType = sl.ValueType,
