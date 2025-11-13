@@ -213,7 +213,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// <returns></returns>
     public async Task ClientLogin(AuthUserInfo authUserInfo)
     {
-        if (authUserInfo == null || string.IsNullOrWhiteSpace(authUserInfo.Mobile))
+        if (authUserInfo == null)
         {
             throw new UnauthorizedAccessException("用户信息不存在！");
         }
