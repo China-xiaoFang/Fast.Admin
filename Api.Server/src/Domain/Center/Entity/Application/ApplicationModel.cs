@@ -50,7 +50,7 @@ public class ApplicationModel : BaseEntity, IUpdateVersion
     /// </summary>
     [Required]
     [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "应用编号", ColumnDataType = "varchar(10)")]
+    [SugarColumn(ColumnDescription = "应用编号", Length = 11)]
     public string AppNo { get; set; }
 
     /// <summary>

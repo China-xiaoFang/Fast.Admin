@@ -76,17 +76,14 @@ internal static partial class MenuSeedData
     /// </summary>
     /// <param name="db"></param>
     /// <param name="applicationModel"><see cref="ApplicationModel"/> 应用</param>
-    /// <param name="userId"><see cref="long"/> 用户Id</param>
-    /// <param name="userName"><see cref="string"/> 用户名称</param>
     /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
     /// <returns></returns>
-    public static async Task DefaultMenuSeedData(ISqlSugarClient db, ApplicationModel applicationModel, long userId,
-        string userName, DateTime dateTime)
+    public static async Task DefaultMenuSeedData(ISqlSugarClient db, ApplicationModel applicationModel, DateTime dateTime)
     {
         // 系统模块
-        await SystemModuleSeedData(db, applicationModel, userId, userName, dateTime);
+        await SystemModuleSeedData(db, applicationModel, dateTime);
 
         // 开发模块
-        await DevModuleSeedData(db, applicationModel, userId, userName, dateTime);
+        await DevModuleSeedData(db, applicationModel, dateTime);
     }
 }

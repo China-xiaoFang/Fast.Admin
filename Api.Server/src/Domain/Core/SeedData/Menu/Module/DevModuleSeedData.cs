@@ -38,12 +38,9 @@ internal static partial class MenuSeedData
     /// </summary>
     /// <param name="db"></param>
     /// <param name="applicationModel"><see cref="ApplicationModel"/> 应用</param>
-    /// <param name="userId"><see cref="long"/> 用户Id</param>
-    /// <param name="userName"><see cref="string"/> 用户名称</param>
     /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
     /// <returns></returns>
-    private static async Task DevModuleSeedData(ISqlSugarClient db, ApplicationModel applicationModel, long userId,
-        string userName, DateTime dateTime)
+    private static async Task DevModuleSeedData(ISqlSugarClient db, ApplicationModel applicationModel, DateTime dateTime)
     {
         var devModuleModel = new ModuleModel
         {
@@ -55,8 +52,6 @@ internal static partial class MenuSeedData
             ViewType = ModuleViewTypeEnum.All,
             Sort = moduleSort,
             Status = CommonStatusEnum.Enable,
-            CreatedUserId = userId,
-            CreatedUserName = userName,
             CreatedTime = dateTime
         };
         devModuleModel = await db.Insertable(devModuleModel)
@@ -88,8 +83,6 @@ internal static partial class MenuSeedData
             Visible = YesOrNotEnum.Y,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
-            CreatedUserId = userId,
-            CreatedUserName = userName,
             CreatedTime = dateTime
         };
         apiCLMenuModel = await db.Insertable(apiCLMenuModel)
@@ -120,8 +113,6 @@ internal static partial class MenuSeedData
             Visible = YesOrNotEnum.Y,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
-            CreatedUserId = userId,
-            CreatedUserName = userName,
             CreatedTime = dateTime
         };
         apiMenuModel = await db.Insertable(apiMenuModel)
@@ -139,8 +130,6 @@ internal static partial class MenuSeedData
                 HasMobile = true,
                 Sort = buttonSort,
                 Status = CommonStatusEnum.Enable,
-                CreatedUserId = userId,
-                CreatedUserName = userName,
                 CreatedTime = dateTime
             })
             .ExecuteCommandAsync();
@@ -173,8 +162,6 @@ internal static partial class MenuSeedData
                     Visible = YesOrNotEnum.Y,
                     Sort = menuSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -203,8 +190,6 @@ internal static partial class MenuSeedData
                     Visible = YesOrNotEnum.Y,
                     Sort = menuSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 }
             })
@@ -238,8 +223,6 @@ internal static partial class MenuSeedData
             Visible = YesOrNotEnum.Y,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
-            CreatedUserId = userId,
-            CreatedUserName = userName,
             CreatedTime = dateTime
         };
         menuModel = await db.Insertable(menuModel)
@@ -259,8 +242,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -276,8 +257,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -293,8 +272,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -310,8 +287,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -327,8 +302,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -344,8 +317,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 }
             })
@@ -379,8 +350,6 @@ internal static partial class MenuSeedData
             Visible = YesOrNotEnum.Y,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
-            CreatedUserId = userId,
-            CreatedUserName = userName,
             CreatedTime = dateTime
         };
         tableConfigMenuModel = await db.Insertable(tableConfigMenuModel)
@@ -400,8 +369,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -417,8 +384,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -434,8 +399,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -451,8 +414,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -468,8 +429,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 }
             })
@@ -503,8 +462,6 @@ internal static partial class MenuSeedData
             Visible = YesOrNotEnum.Y,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
-            CreatedUserId = userId,
-            CreatedUserName = userName,
             CreatedTime = dateTime
         };
         dictionaryMenuModel = await db.Insertable(dictionaryMenuModel)
@@ -524,8 +481,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -541,8 +496,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -558,8 +511,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -575,8 +526,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -592,8 +541,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -609,8 +556,6 @@ internal static partial class MenuSeedData
                     HasMobile = true,
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 }
             })
@@ -644,8 +589,6 @@ internal static partial class MenuSeedData
             Visible = YesOrNotEnum.Y,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
-            CreatedUserId = userId,
-            CreatedUserName = userName,
             CreatedTime = dateTime
         };
         passwordMapModel = await db.Insertable(passwordMapModel)
@@ -663,8 +606,6 @@ internal static partial class MenuSeedData
                 HasMobile = true,
                 Sort = buttonSort,
                 Status = CommonStatusEnum.Enable,
-                CreatedUserId = userId,
-                CreatedUserName = userName,
                 CreatedTime = dateTime
             })
             .ExecuteCommandAsync();

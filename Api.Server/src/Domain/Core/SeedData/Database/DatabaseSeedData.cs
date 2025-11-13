@@ -39,12 +39,10 @@ internal static class DatabaseSeedData
     /// </summary>
     /// <param name="db"></param>
     /// <param name="tenantId"><see cref="long"/> 租户Id</param>
-    /// <param name="userId"><see cref="long"/> 用户Id</param>
-    /// <param name="userName"><see cref="string"/> 用户名称</param>
+    /// <param name="tenantCode"><see cref="string"/> 租户编码</param>
     /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
     /// <returns></returns>
-    public static async Task SystemDatabaseSeedData(ISqlSugarClient db, long tenantId, long userId, string userName,
-        DateTime dateTime)
+    public static async Task SystemDatabaseSeedData(ISqlSugarClient db, long tenantId, string tenantCode, DateTime dateTime)
     {
         var isDevelopment = FastContext.HostEnvironment.IsDevelopment();
         await db.Insertable(new List<MainDatabaseModel>
@@ -65,8 +63,6 @@ internal static class DatabaseSeedData
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                     DiffLog = false,
                     DisableAop = true,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime,
                     TenantId = tenantId
                 },
@@ -86,8 +82,6 @@ internal static class DatabaseSeedData
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                     DiffLog = false,
                     DisableAop = true,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime,
                     TenantId = tenantId
                 },
@@ -107,8 +101,6 @@ internal static class DatabaseSeedData
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                     DiffLog = false,
                     DisableAop = true,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime,
                     TenantId = tenantId
                 },
@@ -121,15 +113,13 @@ internal static class DatabaseSeedData
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
-                    DbName = isDevelopment ? "FastAdmin_Dev" : "FastAdmin",
+                    DbName = isDevelopment ? $"{tenantCode}Admin_Dev" : $"{tenantCode}Admin",
                     DbUser = SqlSugarContext.ConnectionSettings.DbUser,
                     DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
                     CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                     DiffLog = true,
                     DisableAop = true,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime,
                     TenantId = tenantId
                 },
@@ -142,15 +132,68 @@ internal static class DatabaseSeedData
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
-                    DbName = isDevelopment ? "FastAdmin_Log_Dev" : "FastAdmin_Log",
+                    DbName = isDevelopment ? $"{tenantCode}Admin_Log_Dev" : $"{tenantCode}Admin_Log",
                     DbUser = SqlSugarContext.ConnectionSettings.DbUser,
                     DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
                     CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                     DiffLog = false,
                     DisableAop = true,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
+                    CreatedTime = dateTime,
+                    TenantId = tenantId
+                }
+            })
+            .ExecuteCommandAsync();
+    }
+
+    /// <summary>
+    /// 租户数据库种子数据
+    /// </summary>
+    /// <param name="db"></param>
+    /// <param name="tenantId"><see cref="long"/> 租户Id</param>
+    /// <param name="tenantCode"><see cref="string"/> 租户编码</param>
+    /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
+    /// <returns></returns>
+    public static async Task TenantDatabaseSeedData(ISqlSugarClient db, long tenantId, string tenantCode, DateTime dateTime)
+    {
+        var isDevelopment = FastContext.HostEnvironment.IsDevelopment();
+        await db.Insertable(new List<MainDatabaseModel>
+            {
+                // 初始化业务库
+                new()
+                {
+                    MainId = YitIdHelper.NextId(),
+                    DatabaseType = DatabaseTypeEnum.Admin,
+                    DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
+                    PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
+                    IntranetIp = "127.0.0.1",
+                    Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
+                    DbName = isDevelopment ? $"{tenantCode}Admin_Dev" : $"{tenantCode}Admin",
+                    DbUser = SqlSugarContext.ConnectionSettings.DbUser,
+                    DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
+                    CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
+                    SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
+                    DiffLog = true,
+                    DisableAop = true,
+                    CreatedTime = dateTime,
+                    TenantId = tenantId
+                },
+                // 初始化业务日志库
+                new()
+                {
+                    MainId = YitIdHelper.NextId(),
+                    DatabaseType = DatabaseTypeEnum.AdminLog,
+                    DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
+                    PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
+                    IntranetIp = "127.0.0.1",
+                    Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
+                    DbName = isDevelopment ? $"{tenantCode}Admin_Log_Dev" : $"{tenantCode}Admin_Log",
+                    DbUser = SqlSugarContext.ConnectionSettings.DbUser,
+                    DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
+                    CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
+                    SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
+                    DiffLog = false,
+                    DisableAop = true,
                     CreatedTime = dateTime,
                     TenantId = tenantId
                 }

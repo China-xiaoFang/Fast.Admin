@@ -286,7 +286,6 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
                 UserId = robotInfo?.UserId ?? 0,
                 UserKey = robotInfo?.UserKey,
                 Account = robotInfo?.Account,
-                LoginEmployeeNo = robotInfo?.LoginEmployeeNo,
                 EmployeeNo = robotInfo?.EmployeeNo,
                 EmployeeName = robotInfo?.EmployeeName,
                 DepartmentId = robotInfo?.DepartmentId,

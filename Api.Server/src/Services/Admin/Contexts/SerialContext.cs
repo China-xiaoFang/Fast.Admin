@@ -25,7 +25,8 @@ using Fast.Admin.Entity;
 using Fast.Admin.Enum;
 using Yitter.IdGenerator;
 
-namespace Fast.Admin.Service.Contexts;
+// ReSharper disable once CheckNamespace
+namespace Fast.Admin.Service;
 
 /// <summary>
 /// <see cref="SerialContext"/> 序号规则上下文
@@ -41,13 +42,13 @@ public class SerialContext
     /// <summary>
     /// 请求作用域系统序号规则缓存
     /// </summary>
-    internal static readonly AsyncLocal<ConcurrentDictionary<SerialRuleTypeEnum, SerialRuleModel>> SerialRuleRequestAsyncLocal =
+    private static readonly AsyncLocal<ConcurrentDictionary<SerialRuleTypeEnum, SerialRuleModel>> SerialRuleRequestAsyncLocal =
         new();
 
     /// <summary>
     /// 系统序号规则缓存
     /// </summary>
-    internal static ConcurrentDictionary<SerialRuleTypeEnum, SerialRuleModel> SerialRuleList
+    private static ConcurrentDictionary<SerialRuleTypeEnum, SerialRuleModel> SerialRuleList
     {
         get
         {
@@ -59,13 +60,13 @@ public class SerialContext
     /// <summary>
     /// 请求作用域系统序号配置缓存
     /// </summary>
-    internal static readonly AsyncLocal<ConcurrentDictionary<SerialRuleTypeEnum, SerialSettingModel>>
+    private static readonly AsyncLocal<ConcurrentDictionary<SerialRuleTypeEnum, SerialSettingModel>>
         SerialSettingRequestAsyncLocal = new();
 
     /// <summary>
     /// 系统序号配置缓存
     /// </summary>
-    internal static ConcurrentDictionary<SerialRuleTypeEnum, SerialSettingModel> SerialSettingList
+    private static ConcurrentDictionary<SerialRuleTypeEnum, SerialSettingModel> SerialSettingList
     {
         get
         {
@@ -77,38 +78,42 @@ public class SerialContext
     /// <summary>
     /// 生成工号
     /// </summary>
+    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
     /// <returns></returns>
-    public static string GenEmployeeNo<TEntity>(ISqlSugarRepository<TEntity> repository) where TEntity : class, new()
+    public static string GenEmployeeNo(ISqlSugarClient db)
     {
-        return GenerateSerialNo(repository, SerialRuleTypeEnum.EmployeeNo, null);
+        return GenerateSerialNo(db, SerialRuleTypeEnum.EmployeeNo);
     }
 
     /// <summary>
     /// 生成序号
     /// </summary>
-    /// <param name="repository"><see cref="ISqlSugarRepository{TEntity}"/> 仓储上下文</param>
+    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
     /// <param name="ruleType"><see cref="SerialRuleTypeEnum"/> 序号规则类型</param>
-    /// <param name="defaultPrefix"><see cref="string"/> 默认序号</param>
+    /// <param name="tenantCode"><see cref="string"/>租户编码</param>
     /// <returns></returns>
-    internal static string GenerateSerialNo<TEntity>(ISqlSugarRepository<TEntity> repository, SerialRuleTypeEnum ruleType,
-        string defaultPrefix) where TEntity : class, new()
+    public static string GenerateSerialNo(ISqlSugarClient db, SerialRuleTypeEnum ruleType, string tenantCode = null)
     {
-        if (!repository.Ado.IsAnyTran())
+        if (!db.Ado.IsAnyTran())
         {
             throw new SqlSugarException("请保证当前上下文在事务中，才能正确的调用此方法！");
         }
 
-        var user = FastContext.GetService<IUser>();
 
         var dateTime = DateTime.Now;
 
-        // 获取租户信息
-        var tenantModel = TenantContext.GetTenantSync(user.TenantNo);
+        if (string.IsNullOrWhiteSpace(tenantCode))
+        {
+            var user = FastContext.GetService<IUser>();
+            // 获取租户信息
+            var tenantModel = TenantContext.GetTenantSync(user.TenantNo);
+            tenantCode = tenantModel.TenantCode;
+        }
 
         // 获取序号规则配置
         var serialRuleModel = SerialRuleList.GetOrAdd(ruleType, key =>
         {
-            var result = repository.Queryable<SerialRuleModel>()
+            var result = db.Queryable<SerialRuleModel>()
                 .Where(wh => wh.RuleType == key)
                 .Single();
 
@@ -123,7 +128,7 @@ public class SerialContext
         // 获取序号配置
         var serialSettingModel = SerialSettingList.GetOrAdd(ruleType, key =>
         {
-            return repository.Queryable<SerialSettingModel>()
+            return db.Queryable<SerialSettingModel>()
                 .Where(wh => wh.RuleType == key)
                 .Single();
         });
@@ -140,11 +145,11 @@ public class SerialContext
                     LastSerialNo = null,
                     LastTime = null
                 };
-                serialSettingModel = repository.Insertable(serialSettingModel)
+                serialSettingModel = db.Insertable(serialSettingModel)
                     .ExecuteReturnEntity();
             }
 
-            var curSerialNo = $"{tenantModel.TenantCode}{serialRuleModel.Prefix}";
+            var curSerialNo = $"{tenantCode}{serialRuleModel.Prefix}";
 
             // 拼接分隔符
             switch (serialRuleModel.Spacer)
@@ -165,10 +170,12 @@ public class SerialContext
 
             var lastSerial = serialSettingModel.LastSerial.GetValueOrDefault();
 
+            // 组装年月日
             switch (serialRuleModel.DateType)
             {
                 default:
                 case SerialDateTypeEnum.Year:
+                    curSerialNo += dateTime.ToString("yyyy");
                     if (serialSettingModel.LastTime == null || serialSettingModel.LastTime.Value.Year != dateTime.Year)
                     {
                         lastSerial = 0;
@@ -176,6 +183,7 @@ public class SerialContext
 
                     break;
                 case SerialDateTypeEnum.Month:
+                    curSerialNo += dateTime.ToString("yyyyMM");
                     if (serialSettingModel.LastTime == null
                         || serialSettingModel.LastTime.Value.Year != dateTime.Year
                         || serialSettingModel.LastTime.Value.Month != dateTime.Month)
@@ -185,6 +193,7 @@ public class SerialContext
 
                     break;
                 case SerialDateTypeEnum.Day:
+                    curSerialNo += dateTime.ToString("yyyyMMdd");
                     if (serialSettingModel.LastTime == null || serialSettingModel.LastTime.Value.Date != dateTime.Date)
                     {
                         lastSerial = 0;
@@ -192,6 +201,7 @@ public class SerialContext
 
                     break;
                 case SerialDateTypeEnum.Hour:
+                    curSerialNo += dateTime.ToString("yyyyMMddHH");
                     if (serialSettingModel.LastTime == null
                         || serialSettingModel.LastTime.Value.Year != dateTime.Year
                         || serialSettingModel.LastTime.Value.Month != dateTime.Month
@@ -215,7 +225,8 @@ public class SerialContext
             serialSettingModel.LastTime = dateTime;
 
 
-            serialSettingModel = repository.Updateable(serialSettingModel)
+            serialSettingModel = db.Updateable(serialSettingModel)
+                .UpdateColumns(e => new {e.LastSerial, e.LastSerialNo, e.LastTime})
                 .ExecuteReturnEntity();
             SerialSettingList.AddOrUpdate(ruleType, serialSettingModel, (_, _) => serialSettingModel);
 

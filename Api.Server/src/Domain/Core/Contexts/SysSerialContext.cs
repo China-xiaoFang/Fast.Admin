@@ -43,13 +43,13 @@ public class SysSerialContext
     /// <summary>
     /// 请求作用域系统序号规则缓存
     /// </summary>
-    internal static readonly AsyncLocal<ConcurrentDictionary<SysSerialRuleTypeEnum, SysSerialRuleModel>>
+    private static readonly AsyncLocal<ConcurrentDictionary<SysSerialRuleTypeEnum, SysSerialRuleModel>>
         SysSerialRuleRequestAsyncLocal = new();
 
     /// <summary>
     /// 系统序号规则缓存
     /// </summary>
-    internal static ConcurrentDictionary<SysSerialRuleTypeEnum, SysSerialRuleModel> SysSerialRuleList
+    private static ConcurrentDictionary<SysSerialRuleTypeEnum, SysSerialRuleModel> SysSerialRuleList
     {
         get
         {
@@ -61,13 +61,13 @@ public class SysSerialContext
     /// <summary>
     /// 请求作用域系统序号配置缓存
     /// </summary>
-    internal static readonly AsyncLocal<ConcurrentDictionary<SysSerialRuleTypeEnum, SysSerialSettingModel>>
+    private static readonly AsyncLocal<ConcurrentDictionary<SysSerialRuleTypeEnum, SysSerialSettingModel>>
         SysSerialSettingRequestAsyncLocal = new();
 
     /// <summary>
     /// 系统序号配置缓存
     /// </summary>
-    internal static ConcurrentDictionary<SysSerialRuleTypeEnum, SysSerialSettingModel> SysSerialSettingList
+    private static ConcurrentDictionary<SysSerialRuleTypeEnum, SysSerialSettingModel> SysSerialSettingList
     {
         get
         {
@@ -79,31 +79,32 @@ public class SysSerialContext
     /// <summary>
     /// 生成应用编号
     /// </summary>
+    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
     /// <returns></returns>
-    public static string GenAppNo()
+    public static string GenAppNo(ISqlSugarClient db)
     {
-        return GenerateSerialNo(SysSerialRuleTypeEnum.AppNo);
+        return GenerateSerialNo(db, SysSerialRuleTypeEnum.AppNo);
     }
 
     /// <summary>
     /// 生成租户编号
     /// </summary>
+    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
     /// <returns></returns>
-    public static string GenTenantNo()
+    public static string GenTenantNo(ISqlSugarClient db)
     {
-        return GenerateSerialNo(SysSerialRuleTypeEnum.TenantNo);
+        return GenerateSerialNo(db, SysSerialRuleTypeEnum.TenantNo);
     }
 
     /// <summary>
     /// 生成序号
     /// </summary>
+    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
     /// <param name="ruleType"><see cref="SysSerialRuleTypeEnum"/> 系统序号规则类型</param>
     /// <returns></returns>
-    internal static string GenerateSerialNo(SysSerialRuleTypeEnum ruleType)
+    private static string GenerateSerialNo(ISqlSugarClient db, SysSerialRuleTypeEnum ruleType)
     {
-        var repository = FastContext.GetService<ISqlSugarClient>();
-
-        if (!repository.Ado.IsAnyTran())
+        if (!db.Ado.IsAnyTran())
         {
             throw new SqlSugarException("请保证当前上下文在事务中，才能正确的调用此方法！");
         }
@@ -113,7 +114,7 @@ public class SysSerialContext
         // 获取序号规则配置
         var sysSerialRuleModel = SysSerialRuleList.GetOrAdd(ruleType, key =>
         {
-            var result = repository.Queryable<SysSerialRuleModel>()
+            var result = db.Queryable<SysSerialRuleModel>()
                 .Where(wh => wh.RuleType == key)
                 .Single();
 
@@ -128,7 +129,7 @@ public class SysSerialContext
         // 获取序号配置
         var sysSerialSettingModel = SysSerialSettingList.GetOrAdd(ruleType, key =>
         {
-            return repository.Queryable<SysSerialSettingModel>()
+            return db.Queryable<SysSerialSettingModel>()
                 .Where(wh => wh.RuleType == key)
                 .Single();
         });
@@ -145,11 +146,11 @@ public class SysSerialContext
                     LastSerialNo = null,
                     LastTime = null
                 };
-                sysSerialSettingModel = repository.Insertable(sysSerialSettingModel)
+                sysSerialSettingModel = db.Insertable(sysSerialSettingModel)
                     .ExecuteReturnEntity();
             }
 
-            var curSerialNo = sysSerialRuleModel.Prefix;
+            var curSerialNo = sysSerialRuleModel.Prefix ?? "";
 
             // 拼接分隔符
             switch (sysSerialRuleModel.Spacer)
@@ -174,6 +175,7 @@ public class SysSerialContext
             {
                 default:
                 case SysSerialDateTypeEnum.Year:
+                    curSerialNo += dateTime.ToString("yyyy");
                     if (sysSerialSettingModel.LastTime == null || sysSerialSettingModel.LastTime.Value.Year != dateTime.Year)
                     {
                         lastSerial = 0;
@@ -181,6 +183,7 @@ public class SysSerialContext
 
                     break;
                 case SysSerialDateTypeEnum.Month:
+                    curSerialNo += dateTime.ToString("yyyyMM");
                     if (sysSerialSettingModel.LastTime == null
                         || sysSerialSettingModel.LastTime.Value.Year != dateTime.Year
                         || sysSerialSettingModel.LastTime.Value.Month != dateTime.Month)
@@ -190,6 +193,7 @@ public class SysSerialContext
 
                     break;
                 case SysSerialDateTypeEnum.Day:
+                    curSerialNo += dateTime.ToString("yyyyMMdd");
                     if (sysSerialSettingModel.LastTime == null || sysSerialSettingModel.LastTime.Value.Date != dateTime.Date)
                     {
                         lastSerial = 0;
@@ -197,6 +201,7 @@ public class SysSerialContext
 
                     break;
                 case SysSerialDateTypeEnum.Hour:
+                    curSerialNo += dateTime.ToString("yyyyMMddHH");
                     if (sysSerialSettingModel.LastTime == null
                         || sysSerialSettingModel.LastTime.Value.Year != dateTime.Year
                         || sysSerialSettingModel.LastTime.Value.Month != dateTime.Month
@@ -220,7 +225,8 @@ public class SysSerialContext
             sysSerialSettingModel.LastTime = dateTime;
 
 
-            sysSerialSettingModel = repository.Updateable(sysSerialSettingModel)
+            sysSerialSettingModel = db.Updateable(sysSerialSettingModel)
+                .UpdateColumns(e => new {e.LastSerial, e.LastSerialNo, e.LastTime})
                 .ExecuteReturnEntity();
             SysSerialSettingList.AddOrUpdate(ruleType, sysSerialSettingModel, (_, _) => sysSerialSettingModel);
 

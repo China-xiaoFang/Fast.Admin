@@ -37,11 +37,9 @@ internal static class ApplicationSeedData
     /// 应用种子数据
     /// </summary>
     /// <param name="db"></param>
-    /// <param name="userId"><see cref="long"/> 用户Id</param>
-    /// <param name="userName"><see cref="string"/> 用户名称</param>
     /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
     /// <returns></returns>
-    public static async Task<ApplicationModel> SeedData(ISqlSugarClient db, long userId, string userName, DateTime dateTime)
+    public static async Task<ApplicationModel> SeedData(ISqlSugarClient db, DateTime dateTime)
     {
         var applicationModel = new ApplicationModel
         {
@@ -57,8 +55,6 @@ internal static class ApplicationSeedData
             PrivacyAgreement = null,
             ServiceAgreement = null,
             Remark = null,
-            CreatedUserId = userId,
-            CreatedUserName = userName,
             CreatedTime = dateTime
         };
         applicationModel = await db.Insertable(applicationModel)
@@ -76,8 +72,6 @@ internal static class ApplicationSeedData
                     RequestTimeout = 60000,
                     RequestEncipher = true,
                     Remark = null,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -91,8 +85,6 @@ internal static class ApplicationSeedData
                     RequestTimeout = 60000,
                     RequestEncipher = false,
                     Remark = null,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -106,8 +98,6 @@ internal static class ApplicationSeedData
                     RequestTimeout = 60000,
                     RequestEncipher = true,
                     Remark = null,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -121,8 +111,6 @@ internal static class ApplicationSeedData
                     RequestTimeout = 60000,
                     RequestEncipher = true,
                     Remark = null,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -136,8 +124,6 @@ internal static class ApplicationSeedData
                     RequestTimeout = 60000,
                     RequestEncipher = true,
                     Remark = null,
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 }
             })

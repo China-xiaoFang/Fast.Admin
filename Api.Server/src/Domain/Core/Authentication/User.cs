@@ -91,7 +91,6 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         UserId = authUserInfo.UserId;
         UserKey = authUserInfo.UserKey;
         Account = authUserInfo.Account;
-        LoginEmployeeNo = authUserInfo.LoginEmployeeNo;
         EmployeeNo = authUserInfo.EmployeeNo;
         EmployeeName = authUserInfo.EmployeeName;
         DepartmentId = authUserInfo.DepartmentId;

@@ -36,11 +36,9 @@ internal static class ConfigSeedData
     /// 配置种子数据
     /// </summary>
     /// <param name="db"></param>
-    /// <param name="userId"><see cref="long"/> 用户Id</param>
-    /// <param name="userName"><see cref="string"/> 用户名称</param>
     /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
     /// <returns></returns>
-    public static async Task SystemConfigSeedData(ISqlSugarClient db, long userId, string userName, DateTime dateTime)
+    public static async Task SystemConfigSeedData(ISqlSugarClient db, DateTime dateTime)
     {
         await db.Insertable(new List<ConfigModel>
             {
@@ -51,8 +49,6 @@ internal static class ConfigSeedData
                     ConfigName = "单租户自动登录",
                     ConfigValue = "True",
                     Remark = "True：打开（如果只有一个租户，则默认当前租户自动登录）；False：关闭；",
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -62,8 +58,6 @@ internal static class ConfigSeedData
                     ConfigName = "单点登录",
                     ConfigValue = "True",
                     Remark = "True：打开（多次登录只会保留最后一次登录有效）；False：关闭；",
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -73,8 +67,6 @@ internal static class ConfigSeedData
                     ConfigName = "登录验证码开关",
                     ConfigValue = "True",
                     Remark = "True：打开；False：关闭；",
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 },
                 new()
@@ -84,8 +76,6 @@ internal static class ConfigSeedData
                     ConfigName = "是否允许查看用户数据",
                     ConfigValue = "True",
                     Remark = "True：打开（超级管理员可以切换租户查看租其数据）；False：关闭；",
-                    CreatedUserId = userId,
-                    CreatedUserName = userName,
                     CreatedTime = dateTime
                 }
             })
