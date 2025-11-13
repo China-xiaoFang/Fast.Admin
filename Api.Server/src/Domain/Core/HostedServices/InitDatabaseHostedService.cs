@@ -24,6 +24,7 @@ using System.Text;
 using Fast.Center.Entity;
 using Fast.Center.Enum;
 using Fast.SqlSugar;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SqlSugar;
@@ -39,6 +40,11 @@ namespace Fast.Core;
 public class InitDatabaseHostedService : IHostedService
 {
     /// <summary>
+    /// <see cref="IServiceProvider"/> 服务提供者
+    /// </summary>
+    private readonly IServiceProvider _serviceProvider;
+
+    /// <summary>
     /// 日志
     /// </summary>
     private readonly ILogger _logger;
@@ -46,9 +52,11 @@ public class InitDatabaseHostedService : IHostedService
     /// <summary>
     /// <see cref="InitDatabaseHostedService"/> 初始化 Database 托管服务
     /// </summary>
+    /// <param name="serviceProvider"><see cref="IServiceProvider"/> 服务提供者</param>
     /// <param name="logger"><see cref="ILogger"/> 日志</param>
-    public InitDatabaseHostedService(ILogger<InitDatabaseHostedService> logger)
+    public InitDatabaseHostedService(IServiceProvider serviceProvider, ILogger<InitDatabaseHostedService> logger)
     {
+        _serviceProvider = serviceProvider;
         _logger = logger;
     }
 
@@ -108,6 +116,32 @@ public class InitDatabaseHostedService : IHostedService
 
             var dateTime = new DateTime(2025, 01, 01);
 
+            // 初始化系统租户
+            var systemTenantModel = new TenantModel
+            {
+                TenantId = CommonConst.Default.TenantId,
+                TenantNo = CommonConst.Default.TenantNo,
+                TenantCode = "Fast",
+                Status = CommonStatusEnum.Enable,
+                TenantName = "FastDotNet工作室",
+                ShortName = "Fast",
+                SpellName = "fast dotnet gong zuo shi",
+                Edition = EditionEnum.Internal,
+                AdminAccountId = CommonConst.Default.SuperAdminAccountId,
+                AdminName = "超级管理员",
+                AdminMobile = "15580001115",
+                AdminEmail = "2875616188@qq.com",
+                AdminPhone = null,
+                RobotName = "机器人",
+                TenantType = TenantTypeEnum.System,
+                LogoUrl = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
+                AllowDeleteData = true,
+                DatabaseInitialized = false,
+                CreatedTime = dateTime
+            };
+            systemTenantModel = await db.Insertable(systemTenantModel)
+                .ExecuteReturnEntityAsync();
+
             #region 超级管理员
 
             var superAdminAccountModel = new AccountModel
@@ -121,87 +155,50 @@ public class InitDatabaseHostedService : IHostedService
                 NickName = "超级管理员",
                 Avatar = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
                 Status = CommonStatusEnum.Enable,
-                Phone = null,
                 Sex = GenderEnum.Unknown,
-                Birthday = null,
-                CreatedUserId = null,
-                CreatedUserName = "超级管理员",
+                Birthday = new DateTime(1998, 01, 01),
                 CreatedTime = dateTime
             };
             superAdminAccountModel = await db.Insertable(superAdminAccountModel)
                 .ExecuteReturnEntityAsync();
+
             var superAdminUserId = YitIdHelper.NextId();
-            var superAdminUserModel = new TenantUserModel
-            {
-                UserId = superAdminUserId,
-                UserKey = VerificationUtil.IdToCodeByLong(superAdminUserId),
-                AccountId = CommonConst.Default.SuperAdminAccountId,
-                Account = "SuperAdmin",
-                LoginEmployeeNo = "",
-                EmployeeNo = "",
-                EmployeeName = "超级管理员",
-                IdPhoto = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
-                DepartmentId = null,
-                DepartmentName = null,
-                UserType = UserTypeEnum.SuperAdmin,
-                Status = CommonStatusEnum.Enable,
-                CreatedUserId = null,
-                CreatedUserName = "超级管理员",
-                CreatedTime = dateTime,
-                TenantId = CommonConst.Default.TenantId
-            };
-            superAdminUserModel = await db.Insertable(superAdminUserModel)
-                .ExecuteReturnEntityAsync();
-
-            #endregion
-
-            // 初始化系统租户
-            var systemTenantModel = new TenantModel
-            {
-                TenantId = CommonConst.Default.TenantId,
-                TenantNo = CommonConst.Default.TenantNo,
-                TenantCode = "Fast",
-                Status = CommonStatusEnum.Enable,
-                TenantName = "FastDotNet工作室",
-                ShortName = "Fast",
-                SpellName = "FastDotNet gong zuo shi",
-                Edition = EditionEnum.Internal,
-                AdminAccountId = CommonConst.Default.SuperAdminAccountId,
-                AdminName = "超级管理员",
-                AdminMobile = "15580001115",
-                AdminEmail = "2875616188@qq.com",
-                AdminPhone = null,
-                TenantType = TenantTypeEnum.System,
-                LogoUrl = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
-                AllowDeleteData = true,
-                DatabaseInitialized = false,
-                CreatedUserId = superAdminUserModel.UserId,
-                CreatedUserName = superAdminAccountModel.NickName,
-                CreatedTime = dateTime
-            };
-            systemTenantModel = await db.Insertable(systemTenantModel)
-                .ExecuteReturnEntityAsync();
-
-            await db.Insertable(new TenantUserModel
+            var robotUserId = YitIdHelper.NextId();
+            await db.Insertable(new List<TenantUserModel>
                 {
-                    UserId = YitIdHelper.NextId(),
-                    UserKey = "",
-                    AccountId = -99,
-                    Account = $"{systemTenantModel.TenantCode}_Robot",
-                    LoginEmployeeNo = "",
-                    EmployeeNo = "",
-                    EmployeeName = "机器人",
-                    IdPhoto = null,
-                    DepartmentId = null,
-                    DepartmentName = null,
-                    UserType = UserTypeEnum.Robot,
-                    Status = CommonStatusEnum.Enable,
-                    CreatedUserId = superAdminUserModel.UserId,
-                    CreatedUserName = superAdminAccountModel.NickName,
-                    CreatedTime = dateTime,
-                    TenantId = systemTenantModel.TenantId
+                    new()
+                    {
+                        UserId = superAdminUserId,
+                        UserKey = VerificationUtil.IdToCodeByLong(superAdminUserId),
+                        AccountId = superAdminAccountModel.AccountId,
+                        Account = "SuperAdmin",
+                        EmployeeNo = "",
+                        EmployeeName = "超级管理员",
+                        IdPhoto = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
+                        DepartmentId = null,
+                        DepartmentName = null,
+                        UserType = UserTypeEnum.SuperAdmin,
+                        Status = CommonStatusEnum.Enable,
+                        CreatedTime = dateTime,
+                        TenantId = systemTenantModel.TenantId
+                    },
+                    new()
+                    {
+                        UserId = robotUserId,
+                        UserKey = VerificationUtil.IdToCodeByLong(robotUserId),
+                        AccountId = -99,
+                        Account = $"{systemTenantModel.TenantCode}_Robot",
+                        EmployeeNo = "",
+                        EmployeeName = systemTenantModel.RobotName,
+                        UserType = UserTypeEnum.Robot,
+                        Status = CommonStatusEnum.Disable,
+                        CreatedTime = dateTime,
+                        TenantId = systemTenantModel.TenantId
+                    }
                 })
                 .ExecuteCommandAsync(cancellationToken);
+
+            #endregion
 
             #region PasswordRecordModel
 
@@ -256,23 +253,72 @@ public class InitDatabaseHostedService : IHostedService
 
             #endregion
 
-            // 配置
-            await ConfigSeedData.SystemConfigSeedData(db, superAdminUserModel.UserId, superAdminAccountModel.NickName, dateTime);
-
             // 系统数据库
-            await DatabaseSeedData.SystemDatabaseSeedData(db, systemTenantModel.TenantId, superAdminUserModel.UserId,
-                superAdminAccountModel.NickName, dateTime);
+            await DatabaseSeedData.SystemDatabaseSeedData(db, systemTenantModel.TenantId, systemTenantModel.TenantCode, dateTime);
+
+            // 配置
+            await ConfigSeedData.SystemConfigSeedData(db, dateTime);
 
             // 系统序号规则
             await SysSerialSeedData.SeedData(db);
 
             // 应用
-            var applicationModel = await ApplicationSeedData.SeedData(db, superAdminUserModel.UserId,
-                superAdminAccountModel.NickName, dateTime);
+            var applicationModel = await ApplicationSeedData.SeedData(db, dateTime);
 
             // 菜单
-            await MenuSeedData.DefaultMenuSeedData(db, applicationModel, superAdminUserModel.UserId,
-                superAdminAccountModel.NickName, dateTime);
+            await MenuSeedData.DefaultMenuSeedData(db, applicationModel, dateTime);
+
+            // 初始化普通租户
+            TenantModel defaultTenantModel;
+            // 开启事务
+            await db.Ado.BeginTranAsync();
+            try
+            {
+                var tenantNo = SysSerialContext.GenTenantNo(db);
+                defaultTenantModel = new TenantModel
+                {
+                    TenantId = YitIdHelper.NextId(),
+                    TenantNo = tenantNo,
+                    TenantCode = "XiaoF",
+                    Status = CommonStatusEnum.Enable,
+                    TenantName = "小方科技有限公司",
+                    ShortName = "小方科技",
+                    SpellName = "xiao fang ke ji you xian gong si",
+                    Edition = EditionEnum.Flagship,
+                    AdminName = "管理员",
+                    AdminMobile = "15580001115",
+                    AdminEmail = "2875616188@qq.com",
+                    AdminPhone = null,
+                    RobotName = "小方机器人",
+                    TenantType = TenantTypeEnum.Common,
+                    LogoUrl = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
+                    AllowDeleteData = true,
+                    DatabaseInitialized = false,
+                    CreatedTime = dateTime
+                };
+                await db.Insertable(defaultTenantModel)
+                    .ExecuteCommandAsync(cancellationToken);
+
+                // 提交事务
+                await db.Ado.CommitTranAsync();
+            }
+            catch
+            {
+                // 回滚事务
+                await db.Ado.RollbackTranAsync();
+                throw;
+            }
+
+            // 租户数据库
+            await DatabaseSeedData.SystemDatabaseSeedData(db, defaultTenantModel.TenantId, defaultTenantModel.TenantCode,
+                dateTime);
+
+            // 创建请求作用域
+            using var scope = _serviceProvider.CreateScope();
+            // 初始化租户数据库
+            var tenantDatabaseService = scope.ServiceProvider.GetService<ITenantDatabaseService>();
+            await tenantDatabaseService.InitTenantDatabase(systemTenantModel.TenantId);
+            await tenantDatabaseService.InitTenantDatabase(defaultTenantModel.TenantId);
 
             {
                 var logSb = new StringBuilder();

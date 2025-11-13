@@ -36,33 +36,31 @@ namespace Fast.Admin.Service.Database;
 /// <see cref="DatabaseService"/> Database 服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Auth, Name = "database")]
-public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicApplication
+public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDynamicApplication
 {
     private readonly IUser _user;
-    private readonly ISqlSugarClient _repository;
     private readonly ISqlSugarEntityService _sqlSugarEntityService;
 
-    public DatabaseService(IUser user, ISqlSugarClient repository, ISqlSugarEntityService sqlSugarEntityService)
+    public DatabaseService(IUser user, ISqlSugarEntityService sqlSugarEntityService)
     {
         _user = user;
-        _repository = repository;
         _sqlSugarEntityService = sqlSugarEntityService;
     }
 
     /// <summary>
-    /// 同步租户数据库
+    /// 初始化租户数据库
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="tenantId"><see cref="long"/> 租户Id</param>
     /// <returns></returns>
-    [HttpPost]
-    [ApiInfo("同步租户数据库", HttpRequestActionEnum.Submit)]
-    public async Task SyncTenantDatabase(SyncTenantDatabaseInput input)
+    [NonAction]
+    public async Task InitTenantDatabase(long tenantId)
     {
-        if (_user?.IsSuperAdmin == false)
-            throw new UserFriendlyException("非超级管理员禁止操作！");
+        var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+        // 加载Aop
+        SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
-        var tenantModel = await _repository.Queryable<TenantModel>()
-            .Where(wh => wh.TenantId == input.TenantId)
+        var tenantModel = await db.Queryable<TenantModel>()
+            .Where(wh => wh.TenantId == tenantId)
             .SingleAsync();
 
         if (tenantModel == null)
@@ -77,10 +75,12 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
 
         var adminConnectionSettings =
             await _sqlSugarEntityService.GetConnectionSetting(tenantModel.TenantId, tenantModel.TenantNo, DatabaseTypeEnum.Admin);
+        var adminDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(adminConnectionSettings));
 
         var adminLogConnectionSettings =
             await _sqlSugarEntityService.GetConnectionSetting(tenantModel.TenantId, tenantModel.TenantNo,
                 DatabaseTypeEnum.AdminLog);
+        var logDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(adminLogConnectionSettings));
 
         {
             var logSb = new StringBuilder();
@@ -96,8 +96,6 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
             logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
             Console.WriteLine(logSb.ToString());
         }
-
-        var adminDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(adminConnectionSettings));
 
         // 创建库
         adminDb.DbMaintenance.CreateDatabase();
@@ -121,8 +119,6 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
         adminDb.CodeFirst.SplitTables()
             .InitTables(adminSplitTableTypes);
 
-        var logDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(adminLogConnectionSettings));
-
         // 创建库
         logDb.DbMaintenance.CreateDatabase();
 
@@ -145,82 +141,39 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
         logDb.CodeFirst.SplitTables()
             .InitTables(logSplitTableTypes);
 
-        // 判断是否存在组织架构
-        if (!await adminDb.Queryable<OrganizationModel>()
-                .AnyAsync())
         {
-            // 初始化公司（组织架构）
-            await adminDb.Insertable(new OrganizationModel
-                {
-                    OrgId = YitIdHelper.NextId(),
-                    ParentId = 0,
-                    ParentIds = [],
-                    OrgName = tenantModel.TenantName,
-                    OrgCode = $"{tenantModel.TenantCode.ToLower()}_hq",
-                    Contacts = tenantModel.AdminName,
-                    Phone = tenantModel.AdminMobile,
-                    Sort = 1,
-                    Remark = null
-                })
-                .ExecuteCommandAsync();
-
-            // 初始化租户管理员角色
-            await adminDb.Insertable(new RoleModel
-                {
-                    RoleId = YitIdHelper.NextId(),
-                    RoleType = RoleTypeEnum.Admin,
-                    RoleName = "管理员",
-                    RoleCode = "manager_role",
-                    Sort = 1,
-                    DataScopeType = DataScopeTypeEnum.All,
-                    Remark = null
-                })
-                .ExecuteCommandAsync();
+            var logSb = new StringBuilder();
+            logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
+            logSb.Append("info");
+            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+            logSb.Append(": ");
+            logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+            logSb.Append(Environment.NewLine);
+            logSb.Append("\u001b[40m\u001b[90m");
+            logSb.Append("      ");
+            logSb.Append($"同步租户【{tenantModel.TenantName}】数据库成功。");
+            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+            Console.WriteLine(logSb.ToString());
         }
 
-        // 判断是否为普通租户
-        if (tenantModel.TenantType == TenantTypeEnum.Common)
+        if (tenantModel.DatabaseInitialized)
         {
-            var accountModel = await _repository.Queryable<AccountModel>()
-                .Where(wh => wh.Mobile == tenantModel.AdminMobile)
-                .SingleAsync();
-            if (accountModel == null)
-            {
-                accountModel = new AccountModel
-                {
-                    AccountId = YitIdHelper.NextId(),
-                    Mobile = tenantModel.AdminMobile,
-                    Email = tenantModel.AdminEmail,
-                    Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
-                        .ToUpper(),
-                    NickName = tenantModel.AdminName,
-                    Avatar = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
-                    Status = CommonStatusEnum.Enable,
-                    Phone = null,
-                    Sex = GenderEnum.Unknown,
-                    Birthday = null
-                };
-                accountModel = await _repository.Insertable(accountModel)
-                    .ExecuteReturnEntityAsync();
-            }
+            return;
+        }
 
-            // 初始化租户管理员用户
-            await _repository.Insertable(new TenantUserModel
-                {
-                    UserId = YitIdHelper.NextId(),
-                    AccountId = accountModel.AccountId,
-                    Account = $"{tenantModel.TenantCode}_Admin",
-                    LoginEmployeeNo = "",
-                    EmployeeNo = "",
-                    EmployeeName = tenantModel.AdminName,
-                    IdPhoto = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
-                    DepartmentId = null,
-                    DepartmentName = null,
-                    UserType = UserTypeEnum.Admin,
-                    Status = CommonStatusEnum.Enable,
-                    TenantId = tenantModel.TenantId
-                })
-                .ExecuteCommandAsync();
+        {
+            var logSb = new StringBuilder();
+            logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
+            logSb.Append("info");
+            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+            logSb.Append(": ");
+            logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+            logSb.Append(Environment.NewLine);
+            logSb.Append("\u001b[40m\u001b[90m");
+            logSb.Append("      ");
+            logSb.Append($"开始初始化租户【{tenantModel.TenantName}】数据库...");
+            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+            Console.WriteLine(logSb.ToString());
         }
 
         // 查询所有系统规则序号
@@ -244,8 +197,122 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
                 .ExecuteCommandAsync();
         }
 
+        // 初始化公司（组织架构）
+        await adminDb.Insertable(new OrganizationModel
+            {
+                OrgId = YitIdHelper.NextId(),
+                ParentId = 0,
+                ParentIds = [0],
+                OrgName = tenantModel.TenantName,
+                OrgCode = $"{tenantModel.TenantCode.ToLower()}_hq",
+                Contacts = tenantModel.AdminName,
+                Phone = tenantModel.AdminMobile,
+                Sort = 1,
+                Remark = null
+            })
+            .ExecuteCommandAsync();
+
+        // 初始化租户管理员角色
+        await adminDb.Insertable(new RoleModel
+            {
+                RoleId = YitIdHelper.NextId(),
+                RoleType = RoleTypeEnum.Admin,
+                RoleName = "管理员",
+                RoleCode = "manager_role",
+                Sort = 1,
+                DataScopeType = DataScopeTypeEnum.All,
+                Remark = null
+            })
+            .ExecuteCommandAsync();
+
+        // 判断是否为普通租户
+        if (tenantModel.TenantType == TenantTypeEnum.Common)
+        {
+            var accountModel = await db.Queryable<AccountModel>()
+                .Where(wh => wh.Mobile == tenantModel.AdminMobile)
+                .SingleAsync();
+            if (accountModel == null)
+            {
+                var accountId = YitIdHelper.NextId();
+                accountModel = new AccountModel
+                {
+                    AccountId = accountId,
+                    AccountKey = VerificationUtil.IdToCodeByLong(accountId),
+                    Mobile = tenantModel.AdminMobile,
+                    Email = tenantModel.AdminEmail,
+                    Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
+                        .ToUpper(),
+                    NickName = tenantModel.AdminName,
+                    Avatar = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
+                    Status = CommonStatusEnum.Enable,
+                    Sex = GenderEnum.Unknown
+                };
+                accountModel = await db.Insertable(accountModel)
+                    .ExecuteReturnEntityAsync();
+            }
+
+            // 回填管理员账号Id
+            tenantModel.AdminAccountId = accountModel.AccountId;
+
+            // 初始化租户管理员用户
+            var userId = YitIdHelper.NextId();
+            var robotUserId = YitIdHelper.NextId();
+            await db.Insertable(new List<TenantUserModel>
+                {
+                    new()
+                    {
+                        UserId = userId,
+                        UserKey = VerificationUtil.IdToCodeByLong(userId),
+                        AccountId = accountModel.AccountId,
+                        Account = $"{tenantModel.TenantCode}_Admin",
+                        EmployeeNo = "",
+                        EmployeeName = tenantModel.AdminName,
+                        IdPhoto = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
+                        DepartmentId = null,
+                        DepartmentName = null,
+                        UserType = UserTypeEnum.Admin,
+                        Status = CommonStatusEnum.Enable,
+                        TenantId = tenantModel.TenantId
+                    },
+                    new()
+                    {
+                        UserId = robotUserId,
+                        UserKey = VerificationUtil.IdToCodeByLong(robotUserId),
+                        AccountId = -99,
+                        Account = $"{tenantModel.TenantCode}_Robot",
+                        EmployeeNo = "",
+                        EmployeeName = tenantModel.RobotName,
+                        UserType = UserTypeEnum.Robot,
+                        Status = CommonStatusEnum.Disable,
+                        TenantId = tenantModel.TenantId
+                    }
+                })
+                .ExecuteCommandAsync();
+
+            #region PasswordRecordModel
+
+            // 初始化密码记录表
+            await db.Insertable(new List<PasswordRecordModel>
+                {
+                    new()
+                    {
+                        AccountId = accountModel.AccountId,
+                        OperationType = PasswordOperationTypeEnum.Create,
+                        Type = PasswordTypeEnum.SHA1,
+                        Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
+                            .ToUpper()
+                    }
+                })
+                .ExecuteCommandAsync();
+
+            #endregion
+
+            // 回填管理员账号Id
+            tenantModel.AdminAccountId = accountModel.AccountId;
+        }
+
         tenantModel.DatabaseInitialized = true;
-        await _repository.Updateable(tenantModel)
+        await db.Updateable(tenantModel)
             .ExecuteCommandAsync();
 
         {
@@ -258,9 +325,24 @@ public class DatabaseService : IDatabaseService, ITransientDependency, IDynamicA
             logSb.Append(Environment.NewLine);
             logSb.Append("\u001b[40m\u001b[90m");
             logSb.Append("      ");
-            logSb.Append($"同步租户【{tenantModel.TenantName}】数据库成功。");
+            logSb.Append($"初始化租户【{tenantModel.TenantName}】数据库成功。");
             logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
             Console.WriteLine(logSb.ToString());
         }
+    }
+
+    /// <summary>
+    /// 同步数据库
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("同步数据库", HttpRequestActionEnum.Submit)]
+    public async Task SyncDatabase(SyncDatabaseInput input)
+    {
+        if (_user?.IsSuperAdmin == false)
+            throw new UserFriendlyException("非超级管理员禁止操作！");
+
+        await InitTenantDatabase(input.TenantId);
     }
 }

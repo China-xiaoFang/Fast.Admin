@@ -20,19 +20,20 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Admin.Service.Database.Dto;
+// ReSharper disable once CheckNamespace
 
-namespace Fast.Admin.Service.Database;
+namespace Fast.Core;
 
 /// <summary>
-/// <see cref="IDatabaseService"/> Database 服务
+/// <see cref="ITenantDatabaseService"/> 租户数据库服务
 /// </summary>
-public interface IDatabaseService
+/// <remarks>需要在 Admin 服务中实现</remarks>
+public interface ITenantDatabaseService
 {
     /// <summary>
-    /// 同步租户数据库
+    /// 初始化租户数据库
     /// </summary>
-    /// <param name="input"></param>
+    /// <param name="tenantId"><see cref="long"/> 租户Id</param>
     /// <returns></returns>
-    Task SyncTenantDatabase(SyncTenantDatabaseInput input);
+    Task InitTenantDatabase(long tenantId);
 }

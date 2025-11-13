@@ -62,7 +62,7 @@ public class SchedulerJobLocalLogInfo
     public string TenantName { get; set; }
 
     /// <summary>
-    /// 租户编码
+    /// 租户编号
     /// </summary>
     public string TenantNo { get; set; }
 

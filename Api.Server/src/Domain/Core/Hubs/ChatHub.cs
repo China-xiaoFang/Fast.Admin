@@ -253,7 +253,6 @@ public class ChatHub : Hub<IChatClient>
                 UserId = authUserInfo.UserId,
                 UserKey = authUserInfo.UserKey,
                 Account = authUserInfo.Account,
-                LoginEmployeeNo = authUserInfo.LoginEmployeeNo,
                 EmployeeNo = authUserInfo.EmployeeNo,
                 EmployeeName = authUserInfo.EmployeeName,
                 DepartmentId = authUserInfo.DepartmentId,

@@ -68,7 +68,7 @@ public class WeChatUserModel : IUpdateVersion
     /// <summary>
     /// 用户纯手机号码
     /// </summary>
-    [SugarColumn(ColumnDescription = "用户纯手机号码", Length = 11)]
+    [SugarColumn(ColumnDescription = "用户纯手机号码", ColumnDataType = "varchar(11)")]
     public string PurePhoneNumber { get; set; }
 
     /// <summary>
