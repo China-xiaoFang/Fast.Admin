@@ -75,7 +75,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
         {
-            throw new UserFriendlyException("租户编码不能为空！");
+            throw new UserFriendlyException("租户编号不能为空！");
         }
 
         // 优先从 HttpContext.Items 中获取
@@ -162,7 +162,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
         {
-            throw new UserFriendlyException("租户编码不能为空！");
+            throw new UserFriendlyException("租户编号不能为空！");
         }
 
         if (FastContext.HttpContext != null)
@@ -191,7 +191,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
         {
-            throw new UserFriendlyException("租户编码不能为空！");
+            throw new UserFriendlyException("租户编号不能为空！");
         }
 
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Database, tenantNo, "*");

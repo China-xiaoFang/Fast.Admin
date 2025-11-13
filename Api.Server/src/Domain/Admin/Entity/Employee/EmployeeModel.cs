@@ -53,14 +53,14 @@ public class EmployeeModel : BaseEntity, IUpdateVersion
     /// <remarks>2024010101 ~ 20240101999</remarks>
     [Required]
     [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "工号", Length = 11)]
+    [SugarColumn(ColumnDescription = "工号", ColumnDataType = "varchar(11)")]
     public string EmployeeNo { get; set; }
 
     /// <summary>
     /// 姓名
     /// </summary>
     [Required]
-    [SugarColumn(ColumnDescription = "姓名", Length = 10)]
+    [SugarColumn(ColumnDescription = "姓名", Length = 20)]
     public string EmployeeName { get; set; }
 
     /// <summary>

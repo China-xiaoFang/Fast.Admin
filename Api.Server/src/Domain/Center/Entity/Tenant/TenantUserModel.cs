@@ -56,30 +56,22 @@ public class TenantUserModel : IBaseTEntity, IUpdateVersion
     /// </summary>
     /// <remarks>6-20位字母或数字，必须以字母开头，不能全为数字</remarks>
     [Required]
-    [SugarColumn(ColumnDescription = "账户", ColumnDataType = "varchar(20)")]
+    [SugarColumn(ColumnDescription = "账户", Length = 20)]
     public string Account { get; set; }
-
-    /// <summary>
-    /// 登录工号（带租户编码）
-    /// </summary>
-    /// <remarks>XXX2024010101 ~ XXX20240101999</remarks>
-    [Required]
-    [SugarColumn(ColumnDescription = "登录工号（带租户编码）", Length = 11)]
-    public string LoginEmployeeNo { get; set; }
 
     /// <summary>
     /// 工号
     /// </summary>
     /// <remarks>2024010101 ~ 20240101999</remarks>
     [Required]
-    [SugarColumn(ColumnDescription = "工号", Length = 11)]
+    [SugarColumn(ColumnDescription = "工号", Length = 16)]
     public string EmployeeNo { get; set; }
 
     /// <summary>
     /// 姓名
     /// </summary>
     [Required]
-    [SugarColumn(ColumnDescription = "姓名", Length = 10)]
+    [SugarColumn(ColumnDescription = "姓名", Length = 20)]
     public string EmployeeName { get; set; }
 
     /// <summary>

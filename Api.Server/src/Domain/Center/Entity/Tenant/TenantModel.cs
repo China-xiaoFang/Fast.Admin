@@ -43,7 +43,7 @@ public class TenantModel : BaseEntity, IUpdateVersion
     /// 租户编号
     /// </summary>
     [Required]
-    [SugarColumn(ColumnDescription = "租户编号", ColumnDataType = "varchar(11)")]
+    [SugarColumn(ColumnDescription = "租户编号", Length = 11)]
     public string TenantNo { get; set; }
 
     /// <summary>
@@ -120,6 +120,13 @@ public class TenantModel : BaseEntity, IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "租户管理员电话", Length = 20)]
     public string AdminPhone { get; set; }
+
+    /// <summary>
+    /// 租户机器人名称
+    /// </summary>
+    [Required]
+    [SugarColumn(ColumnDescription = "租户机器人名称", Length = 20)]
+    public string RobotName { get; set; }
 
     /// <summary>
     /// 租户类型

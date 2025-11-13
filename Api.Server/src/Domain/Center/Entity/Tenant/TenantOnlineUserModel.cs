@@ -57,7 +57,7 @@ public class TenantOnlineUserModel : IBaseTEntity
     /// </summary>
     [Required]
     [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "应用编号", ColumnDataType = "varchar(10)")]
+    [SugarColumn(ColumnDescription = "应用编号", Length = 11)]
     public string AppNo { get; set; }
 
     /// <summary>
@@ -116,26 +116,19 @@ public class TenantOnlineUserModel : IBaseTEntity
     /// <summary>
     /// 账户
     /// </summary>
-    [SugarColumn(ColumnDescription = "账户", ColumnDataType = "varchar(20)")]
+    [SugarColumn(ColumnDescription = "账户", Length = 20)]
     public string Account { get; set; }
-
-    /// <summary>
-    /// 登录工号（带租户编码）
-    /// </summary>
-    /// <remarks>XXX2024010101 ~ XXX20240101999</remarks>
-    [SugarColumn(ColumnDescription = "登录工号（带租户编码）", Length = 11)]
-    public string LoginEmployeeNo { get; set; }
 
     /// <summary>
     /// 工号
     /// </summary>
-    [SugarColumn(ColumnDescription = "工号", Length = 11)]
+    [SugarColumn(ColumnDescription = "工号", ColumnDataType = "varchar(11)")]
     public string EmployeeNo { get; set; }
 
     /// <summary>
     /// 姓名
     /// </summary>
-    [SugarColumn(ColumnDescription = "姓名", Length = 10)]
+    [SugarColumn(ColumnDescription = "姓名", Length = 20)]
     public string EmployeeName { get; set; }
 
     /// <summary>

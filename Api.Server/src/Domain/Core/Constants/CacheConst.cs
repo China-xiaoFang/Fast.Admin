@@ -67,13 +67,13 @@ public class CacheConst
         /// <summary>
         /// 租户
         /// </summary>
-        /// <remarks>{0}租户编码</remarks>
+        /// <remarks>{0}租户编号</remarks>
         public const string Tenant = "Tenant:{0}";
 
         /// <summary>
         /// 机器人
         /// </summary>
-        /// <remarks>{0}租户编码</remarks>
+        /// <remarks>{0}租户编号</remarks>
         public const string Rabot = "Rabot:{0}";
 
         /// <summary>

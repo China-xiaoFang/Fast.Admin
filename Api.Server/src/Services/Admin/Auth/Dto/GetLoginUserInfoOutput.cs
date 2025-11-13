@@ -68,12 +68,6 @@ public class GetLoginUserInfoOutput
     public string Account { get; set; }
 
     /// <summary>
-    /// 登录工号（带租户编码）
-    /// </summary>
-    /// <remarks>XXX2024010101 ~ XXX20240101999</remarks>
-    public string LoginEmployeeNo { get; set; }
-
-    /// <summary>
     /// 工号
     /// </summary>
     public string EmployeeNo { get; set; }

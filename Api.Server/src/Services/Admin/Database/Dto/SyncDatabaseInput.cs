@@ -23,9 +23,9 @@
 namespace Fast.Admin.Service.Database.Dto;
 
 /// <summary>
-/// <see cref="SyncTenantDatabaseInput"/> 同步租户数据库输入
+/// <see cref="SyncDatabaseInput"/> 同步租户数据库输入
 /// </summary>
-public class SyncTenantDatabaseInput
+public class SyncDatabaseInput
 {
     /// <summary>
     /// 租户Id

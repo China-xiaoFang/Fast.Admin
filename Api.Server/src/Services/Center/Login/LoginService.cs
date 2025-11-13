@@ -233,7 +233,6 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             UserId = tenantUserModel.UserId,
             UserKey = tenantUserModel.UserKey,
             Account = tenantUserModel.Account,
-            LoginEmployeeNo = tenantUserModel.LoginEmployeeNo,
             EmployeeNo = tenantUserModel.EmployeeNo,
             EmployeeName = tenantUserModel.EmployeeName,
             DepartmentId = tenantUserModel.DepartmentId,
@@ -339,7 +338,8 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
             // 根据账号或登录工号查询租户用户信息
             tenantUserModel = await _repository.Queryable<TenantUserModel>()
                 .ClearFilter<IBaseTEntity>()
-                .Where(wh => wh.Account == input.Account || wh.LoginEmployeeNo == input.Account)
+                .Where(wh => (!string.IsNullOrWhiteSpace(wh.Account) && wh.Account == input.Account)
+                             || wh.EmployeeNo == input.Account)
                 .SingleAsync();
             if (tenantUserModel != null)
             {

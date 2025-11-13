@@ -46,13 +46,13 @@ public class TenantContext
     /// <summary>
     /// 获取租户
     /// </summary>
-    /// <param name="tenantNo"><see cref="string"/> 租户编码</param>
+    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
     /// <returns></returns>
     public static TenantModel GetTenantSync(string tenantNo)
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
         {
-            throw new UserFriendlyException("租户编码不能为空！");
+            throw new UserFriendlyException("租户编号不能为空！");
         }
 
         // 优先从 HttpContext.Items 中获取
@@ -95,13 +95,13 @@ public class TenantContext
     /// <summary>
     /// 获取租户
     /// </summary>
-    /// <param name="tenantNo"><see cref="string"/> 租户编码</param>
+    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
     /// <returns></returns>
     public static async Task<TenantModel> GetTenant(string tenantNo)
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
         {
-            throw new UserFriendlyException("租户编码不能为空！");
+            throw new UserFriendlyException("租户编号不能为空！");
         }
 
         // 优先从 HttpContext.Items 中获取
@@ -144,13 +144,13 @@ public class TenantContext
     /// <summary>
     /// 删除租户
     /// </summary>
-    /// <param name="tenantNo"><see cref="string"/> 租户编码</param>
+    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
     /// <returns></returns>
     public static async Task DeleteTenant(string tenantNo)
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
         {
-            throw new UserFriendlyException("租户编码不能为空！");
+            throw new UserFriendlyException("租户编号不能为空！");
         }
 
         if (FastContext.HttpContext != null)

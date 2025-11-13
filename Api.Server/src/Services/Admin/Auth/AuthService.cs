@@ -22,8 +22,6 @@
 
 using Fast.Admin.Entity;
 using Fast.Admin.Service.Auth.Dto;
-using Fast.Admin.Service.Database;
-using Fast.Admin.Service.Database.Dto;
 using Fast.Center.Entity;
 using Fast.Center.Enum;
 using Fast.JwtBearer;
@@ -89,7 +87,6 @@ public class AuthService : IAuthService, ITransientDependency, IDynamicApplicati
             TenantName = _user.TenantName,
             UserKey = _user.UserKey,
             Account = _user.Account,
-            LoginEmployeeNo = _user.LoginEmployeeNo,
             EmployeeNo = _user.EmployeeNo,
             EmployeeName = _user.EmployeeName,
             DepartmentId = _user.DepartmentId,
@@ -113,11 +110,9 @@ public class AuthService : IAuthService, ITransientDependency, IDynamicApplicati
             throw new UserFriendlyException("租户已被禁用！");
         }
 
-        // 判断是否为系统租户，系统租户业务库第一次没有初始化
-        if (_user.IsSuperAdmin && tenantModel.TenantType == TenantTypeEnum.System && !tenantModel.DatabaseInitialized)
+        if (!tenantModel.DatabaseInitialized)
         {
-            var databaseService = FastContext.GetService<IDatabaseService>();
-            await databaseService.SyncTenantDatabase(new SyncTenantDatabaseInput {TenantId = tenantModel.TenantId});
+            throw new UserFriendlyException("数据库未初始化！");
         }
 
         // 查询角色

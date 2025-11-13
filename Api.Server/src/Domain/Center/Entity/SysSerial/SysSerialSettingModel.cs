@@ -51,9 +51,9 @@ public class SysSerialSettingModel : IUpdateVersion
     public long? LastSerial { get; set; }
 
     /// <summary>
-    /// 最后一个序号值
+    /// 最后一个序号编号
     /// </summary>
-    [SugarColumn(ColumnDescription = "最后一个序号值", Length = 50)]
+    [SugarColumn(ColumnDescription = "最后一个序号编号", Length = 50)]
     public string LastSerialNo { get; set; }
 
     /// <summary>
