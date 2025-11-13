@@ -30,6 +30,11 @@ namespace Fast.Core;
 public class UploadFileSettingsOptions : IPostConfigure
 {
     /// <summary>
+    /// Logo
+    /// </summary>
+    public UploadFileInfoSettings Logo { get; set; }
+
+    /// <summary>
     /// 头像
     /// </summary>
     public UploadFileInfoSettings Avatar { get; set; }
@@ -52,6 +57,15 @@ public class UploadFileSettingsOptions : IPostConfigure
     /// <summary>后期配置</summary>
     public void PostConfigure()
     {
+        Logo ??= new UploadFileInfoSettings
+        {
+            Path = "Upload/Logo",
+            MaxSize = 2048,
+            ContentType =
+            [
+                "image/jpg", "image/jpeg", "image/png", "image/gif", "image/bmp"
+            ]
+        };
         Avatar ??= new UploadFileInfoSettings
         {
             Path = "Upload/Avatar",
