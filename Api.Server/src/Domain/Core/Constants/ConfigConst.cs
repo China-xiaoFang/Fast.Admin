@@ -44,10 +44,4 @@ public class ConfigConst
     /// 登录验证码开关
     /// </summary>
     public const string LoginCaptchaOpen = "LOGIN_CAPTCHA_OPEN";
-
-    /// <summary>
-    /// 是否允许查看用户数据
-    /// </summary>
-    /// <remarks>超级管理员可以切换租户查看其数据</remarks>
-    public const string AllowViewUserData = "ALLOW_VIEW_USER_DATA";
 }

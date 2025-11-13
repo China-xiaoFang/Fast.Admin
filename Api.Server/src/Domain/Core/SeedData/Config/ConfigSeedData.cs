@@ -69,15 +69,6 @@ internal static class ConfigSeedData
                     Remark = "True：打开；False：关闭；",
                     CreatedTime = dateTime
                 },
-                new()
-                {
-                    ConfigId = YitIdHelper.NextId(),
-                    ConfigCode = ConfigConst.AllowViewUserData,
-                    ConfigName = "是否允许查看用户数据",
-                    ConfigValue = "True",
-                    Remark = "True：打开（超级管理员可以切换租户查看租其数据）；False：关闭；",
-                    CreatedTime = dateTime
-                }
             })
             .ExecuteCommandAsync();
     }
