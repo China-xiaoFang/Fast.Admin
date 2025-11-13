@@ -1102,41 +1102,33 @@ public class LoginService : ILoginService, ITransientDependency, IDynamicApplica
         await _repository.Updateable(weChatUserModel)
             .ExecuteCommandAsync();
 
-        // 微信小程序
-        if (applicationModel.AppType == AppEnvironmentEnum.WeChatMiniProgram)
+        // 客户端登录
+        await _user.ClientLogin(new AuthUserInfo
         {
-            // 判断微信用户是否授权手机号码，只有存在手机号码才返回 AccessToken
-            if (!string.IsNullOrWhiteSpace(weChatUserModel.PurePhoneNumber))
-            {
-                // 客户端登录
-                await _user.ClientLogin(new AuthUserInfo
-                {
-                    DeviceType = GlobalContext.DeviceType,
-                    DeviceId = GlobalContext.DeviceId,
-                    AppNo = applicationModel.Application.AppNo,
-                    AppName = applicationModel.Application.AppName,
-                    AccountId = weChatUserModel.WeChatId,
-                    Mobile = weChatUserModel.PurePhoneNumber,
-                    NickName = weChatUserModel.NickName,
-                    Avatar = weChatUserModel.Avatar,
-                    TenantNo = applicationModel.Application.AppNo,
-                    UserId = weChatUserModel.WeChatId,
-                    Account = weChatUserModel.PurePhoneNumber,
-                    EmployeeNo = weChatUserModel.OpenId,
-                    EmployeeName = weChatUserModel.NickName,
-                    IsSuperAdmin = false,
-                    IsAdmin = false,
-                    LastLoginDevice = weChatUserModel.LastLoginDevice,
-                    LastLoginOS = weChatUserModel.LastLoginOS,
-                    LastLoginBrowser = weChatUserModel.LastLoginBrowser,
-                    LastLoginProvince = weChatUserModel.LastLoginProvince,
-                    LastLoginCity = weChatUserModel.LastLoginCity,
-                    LastLoginIp = weChatUserModel.LastLoginIp,
-                    LastLoginTime = weChatUserModel.LastLoginTime.Value,
-                    ButtonCodeList = [PermissionConst.ClientService]
-                });
-            }
-        }
+            DeviceType = GlobalContext.DeviceType,
+            DeviceId = GlobalContext.DeviceId,
+            AppNo = applicationModel.Application.AppNo,
+            AppName = applicationModel.Application.AppName,
+            AccountId = weChatUserModel.WeChatId,
+            Mobile = weChatUserModel.PurePhoneNumber,
+            NickName = weChatUserModel.NickName,
+            Avatar = weChatUserModel.Avatar,
+            TenantNo = applicationModel.Application.AppNo,
+            UserId = weChatUserModel.WeChatId,
+            Account = weChatUserModel.PurePhoneNumber,
+            EmployeeNo = weChatUserModel.OpenId,
+            EmployeeName = weChatUserModel.NickName,
+            IsSuperAdmin = false,
+            IsAdmin = false,
+            LastLoginDevice = weChatUserModel.LastLoginDevice,
+            LastLoginOS = weChatUserModel.LastLoginOS,
+            LastLoginBrowser = weChatUserModel.LastLoginBrowser,
+            LastLoginProvince = weChatUserModel.LastLoginProvince,
+            LastLoginCity = weChatUserModel.LastLoginCity,
+            LastLoginIp = weChatUserModel.LastLoginIp,
+            LastLoginTime = weChatUserModel.LastLoginTime.Value,
+            ButtonCodeList = [PermissionConst.ClientService]
+        });
 
         return new WeChatClientLoginOutput
         {
