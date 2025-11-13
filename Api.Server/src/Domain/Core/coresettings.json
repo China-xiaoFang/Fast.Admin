@@ -36,6 +36,12 @@
   },
   // 上传文件配置
   "UploadFileSettings": {
+    // Logo
+    "Logo": {
+      "Path": "Upload/Logo",
+      "MaxSize": 2048,
+      "ContentType": [ "image/jpg", "image/jpeg", "image/png", "image/gif", "image/bmp" ]
+    },
     // 头像
     "Avatar": {
       "Path": "Upload/Avatar",
