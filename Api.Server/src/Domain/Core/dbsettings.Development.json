@@ -8,7 +8,7 @@
     // 默认库数据库名称
     "DbName": "FastCenter_Dev",
     // 默认库数据库用户
-    "DbUser": "sa",
+    "DbUser": "admin",
     // 默认库数据库密码
     "DbPwd": "123456"
   },

@@ -100,6 +100,7 @@ export const handleDynamicRoute = (): void => {
 	if (router.hasRoute(deepLayoutRoute.name)) {
 		router.removeRoute(deepLayoutRoute.name);
 	}
+
 	router.addRoute(deepLayoutRoute);
 };
 
