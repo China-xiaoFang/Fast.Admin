@@ -32,6 +32,7 @@ export const useNavTabs = defineStore(
 		const $reset = (): void => {
 			state.activeIndex = -1;
 			state.lastActiveIndex = -1;
+			state.activeModuleId = router.currentRoute.value.meta?.moduleId;
 			state.activeTab = null;
 			state.navTabs = [];
 			state.keepAliveComponentNameList = [];
@@ -50,6 +51,7 @@ export const useNavTabs = defineStore(
 
 		/** 添加 Tab */
 		const addTab = (route: INavTab): void => {
+			if (route.meta?.breadcrumb === false) return;
 			const fRouteIdx = state.navTabs.findIndex((f) => f.path == route.path);
 			//  判断警告页面数量
 			if (fRouteIdx === -1) {
@@ -144,6 +146,7 @@ export const useNavTabs = defineStore(
 		const setActiveRoute = (route: INavTab): void => {
 			const fIdx = state.navTabs.findIndex((f) => f.path == route.path);
 			if (fIdx === -1) return;
+			state.activeModuleId = route.meta?.moduleId;
 			state.activeTab = routerUtil.pickByRoute(route);
 			state.lastActiveIndex = state.activeIndex;
 			state.activeIndex = fIdx;

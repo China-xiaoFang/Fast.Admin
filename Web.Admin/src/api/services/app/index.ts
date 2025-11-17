@@ -2,7 +2,7 @@ import { axiosUtil } from "@fast-china/axios";
 import { LaunchOutput } from "./models/LaunchOutput";
 
 /**
- * Fast.Center.Service.App.AppService 应用服务Api
+ * Fast.Center.Service.App.AppService AppApi
  */
 export const appApi = {
   /**

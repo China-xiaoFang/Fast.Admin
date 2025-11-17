@@ -3,6 +3,10 @@
  */
 export interface TenantLoginInput {
   /**
+   * 账号Key
+   */
+  accountKey?: string;
+  /**
    * 用户Key
    */
   userKey?: string;

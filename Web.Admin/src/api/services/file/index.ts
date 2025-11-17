@@ -35,6 +35,17 @@ export const fileApi = {
   /**
    * 上传头像
    */
+  uploadLogo(data: FormData) {
+    return axiosUtil.request<string>({
+      url: "/uploadLogo",
+      method: "post",
+      data,
+      requestType: "upload",
+    });
+  },
+  /**
+   * 上传头像
+   */
   uploadAvatar(data: FormData) {
     return axiosUtil.request<string>({
       url: "/uploadAvatar",

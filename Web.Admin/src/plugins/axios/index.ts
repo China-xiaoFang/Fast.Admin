@@ -52,7 +52,7 @@ export function loadFastAxios(): void {
 		baseUrl,
 		headers: {
 			"Fast-Origin": import.meta.env.DEV ? import.meta.env.VITE_APP_ORIGIN || window.location.host : window.location.host,
-			"Fast-Device-Type": AppEnvironmentEnum[AppEnvironmentEnum.Web],
+			"Fast-Device-Type": Object.keys(AppEnvironmentEnum).find((f) => AppEnvironmentEnum[f] === AppEnvironmentEnum.Web),
 			"Fast-Device-Id": useIdentity().deviceId,
 		},
 		requestCipher: true,

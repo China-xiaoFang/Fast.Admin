@@ -32,7 +32,7 @@
 							:ellipsis="false"
 							@select="handleModuleSelect"
 						>
-							<el-menu-item v-for="(item, idx) in userInfoStore.menuList" :key="idx" :index="item.id.toString()">
+							<el-menu-item v-for="(item, idx) in userInfoStore.menuList" :key="idx" :index="item.moduleId.toString()">
 								<FaIcon :name="item.icon || 'el-icon-Menu'" />
 								<template #title>
 									{{ item.moduleName }}
@@ -129,7 +129,7 @@ const handleRefreshSystem = () => {
 };
 
 const handleModuleSelect = (moduleId: string) => {
-	const fInfo = userInfoStore.menuList.find((f) => f.id.toString() === moduleId);
+	const fInfo = userInfoStore.menuList.find((f) => f.moduleId.toString() === moduleId);
 	if (fInfo) {
 		navTabsStore.activeModuleId = moduleId;
 	}
