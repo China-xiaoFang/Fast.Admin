@@ -1,13 +1,13 @@
 <template>
 	<el-sub-menu v-if="props.menu.children?.length > 0" :index="props.menu.children[0].router" :title="props.menu.menuTitle || props.menu.menuName">
 		<template #title>
-			<FaIcon :name="props.menu.icon || 'el-icon-Menu'" />
+			<FaIcon v-if="props.menu.icon" :name="props.menu.icon" />
 			<span>{{ props.menu.menuName }}</span>
 		</template>
 		<MenuItem v-for="(item, idx) in props.menu.children" :key="idx" :menu="item" />
 	</el-sub-menu>
-	<el-menu-item v-else :index="props.menu.router">
-		<FaIcon :name="props.menu.icon || 'el-icon-Menu'" />
+	<el-menu-item v-else :index="props.menu.router" @click="handleMenuClick">
+		<FaIcon v-if="props.menu.icon" :name="props.menu.icon" />
 		<template #title>
 			<span>{{ props.menu.menuName }}</span>
 		</template>
@@ -16,109 +16,36 @@
 
 <script setup lang="ts">
 import { definePropType } from "@fast-china/utils";
+import { useRouter } from "vue-router";
 import MenuItem from "./index.vue";
 import type { AuthMenuInfoDto } from "@/api/services/auth/models/AuthMenuInfoDto";
+import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 
 defineOptions({
 	name: "LayoutMenuItem",
 });
 
+const router = useRouter();
+
 const props = defineProps({
 	/** 菜单 */
 	menu: definePropType<AuthMenuInfoDto>(Object),
 });
+
+const handleMenuClick = () => {
+	switch (props.menu.menuType) {
+		case MenuTypeEnum.Catalog:
+		case MenuTypeEnum.Menu:
+			break;
+		case MenuTypeEnum.Internal:
+			router.push({
+				path: "/iframe",
+				query: { url: props.menu.link },
+			});
+			break;
+		case MenuTypeEnum.Outside:
+			window.open(props.menu.link, "_blank");
+			break;
+	}
+};
 </script>
-
-<style scoped lang="scss">
-.el-sub-menu {
-	&.is-active {
-		:deep() {
-			.el-sub-menu__title.el-tooltip__trigger {
-				font-weight: var(--el-font-weight-primary);
-				.el-icon {
-					color: var(--el-color-white);
-				}
-				// background-color: var(--el-menu-active-color);
-				background: none;
-				* {
-					z-index: 2;
-				}
-				&::before {
-					content: "";
-					position: absolute;
-					top: 5px;
-					bottom: 5px;
-					left: 0;
-					right: 0;
-					background-color: var(--el-menu-active-color);
-					border-radius: 3px;
-					z-index: 1;
-				}
-			}
-		}
-	}
-	:deep() {
-		.el-sub-menu__title {
-			* {
-				z-index: 2;
-			}
-			&:hover {
-				.el-icon {
-					color: var(--el-menu-text-color);
-				}
-				// background-color: var(--el-menu-hover-bg-color);
-				background: none;
-				&::before {
-					content: "";
-					position: absolute;
-					top: 5px;
-					bottom: 5px;
-					left: 0;
-					right: 0;
-					background-color: var(--el-menu-hover-bg-color);
-					border-radius: 3px;
-					z-index: 1;
-				}
-			}
-		}
-	}
-}
-.el-menu-item {
-	* {
-		z-index: 2;
-	}
-	&:hover {
-		// background-color: var(--el-menu-hover-bg-color);
-		background: none;
-		&::before {
-			content: "";
-			position: absolute;
-			top: 5px;
-			bottom: 5px;
-			left: 0;
-			right: 0;
-			background-color: var(--el-menu-hover-bg-color);
-			border-radius: 3px;
-			z-index: 1;
-		}
-	}
-
-	&.is-active {
-		font-weight: var(--el-font-weight-primary);
-		color: var(--el-color-white);
-		// background-color: var(--el-menu-active-color);
-		background: none;
-		&::before {
-			content: "";
-			position: absolute;
-			top: 5px;
-			bottom: 5px;
-			left: 0;
-			right: 0;
-			background-color: var(--el-menu-active-color);
-			border-radius: 3px;
-			z-index: 1;
-		}
-	}
-}
-</style>

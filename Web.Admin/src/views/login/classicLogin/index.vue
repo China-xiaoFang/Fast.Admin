@@ -96,7 +96,7 @@
 												<Tag size="small" name="EditionEnum" :value="item.tenant.edition" />
 											</div>
 											<div class="tenant__center">
-												<span>{{ item.tenant.deptName || "无部门..." }}</span>
+												<span>{{ item.tenant.departmentName || "无部门..." }}</span>
 												<span>{{ item.tenant.employeeNo || "无工号..." }}</span>
 											</div>
 											<div class="tenant__bottom">
@@ -227,7 +227,7 @@
 											<Tag size="small" name="EditionEnum" :value="item.edition" />
 										</div>
 										<div class="tenant__center">
-											<span>{{ item.deptName || "无部门..." }}</span>
+											<span>{{ item.departmentName || "无部门..." }}</span>
 											<span>{{ item.employeeNo || "无工号..." }}</span>
 										</div>
 										<div class="tenant__bottom">

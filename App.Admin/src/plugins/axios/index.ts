@@ -4,6 +4,7 @@ import type { ApiResponse } from "@fast-china/axios";
 import type { AxiosHeaders, AxiosResponse } from "axios";
 import { useLoading, useMessageBox, useToast } from "@/hooks";
 import { useApp, useUserInfo } from "@/stores";
+import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 
 /** 加载实例 */
 const loadingInstance = {
@@ -56,7 +57,7 @@ export function loadFastAxios(): void {
 		baseUrl,
 		headers: {
 			"Fast-Origin": import.meta.env.DEV ? import.meta.env.VITE_APP_ORIGIN || appStore.appId : appStore.appId,
-			"Fast-Device-Type": appStore.deviceType,
+			"Fast-Device-Type": Object.keys(AppEnvironmentEnum).find((f) => AppEnvironmentEnum[f] === appStore.deviceType),
 			"Fast-Device-Id": useIdentity().deviceId,
 		},
 		requestCipher: true,

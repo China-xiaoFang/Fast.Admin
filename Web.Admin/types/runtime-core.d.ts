@@ -3,7 +3,7 @@ declare module "vue-router" {
 		/**
 		 * 模块Id
 		 */
-		moduleId: number;
+		moduleId?: number;
 		/**
 		 * 设置该路由在侧边栏和面包屑中展示的名字
 		 */

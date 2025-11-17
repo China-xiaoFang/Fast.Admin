@@ -18,8 +18,18 @@ export const layoutRoute: RouteRecordRaw = {
 			component: () => import("@/views/dashboard/index.vue"),
 			meta: {
 				title: "首页",
-				icon: "g-icon-Dashboard",
+				icon: "fa-icon-Dashboard",
 				affix: true,
+			},
+		},
+		{
+			path: "/iframe",
+			name: "Iframe",
+			component: () => import("@/views/common/iframe/index.vue"),
+			meta: {
+				breadcrumb: false,
+				hide: true,
+				keepAlive: false,
 			},
 		},
 		// {

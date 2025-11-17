@@ -1,26 +1,4 @@
-﻿// ------------------------------------------------------------------------
-// Apache开源许可证
-// 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
-
-using System.Text;
+﻿using System.Text;
 using Fast.Center.Entity;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
@@ -469,17 +447,6 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 throw new UserFriendlyException("不能多次调用 'InitializeSchedule' 进行初始化调度程序！");
             }
 
-            // 获取服务器公网Ip地址，这里默认使用阿里云的元数据服务（Metadata Service），如果请求失败则不处理
-            try
-            {
-                var (ip, _) = await RemoteRequestUtil.GetAsync("http://100.100.100.200/latest/meta-data/eipv4", timeout: 5);
-                SchedulerContext.Ip = ip.Trim();
-            }
-            catch
-            {
-                // ignored
-            }
-
             // 在初始化的时候，创建所有租户调度器
             var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
             // 加载Aop
@@ -492,7 +459,8 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 .ToList();
             foreach (var schedulerJobType in schedulerJobTypes)
             {
-                if (ActivatorUtilities.CreateInstance(_serviceProvider, schedulerJobType) is ISchedulerJob schedulerJobInstance)
+                if (ActivatorUtilities.CreateInstance(_serviceProvider, schedulerJobType) is ISchedulerJob
+                    schedulerJobInstance)
                 {
                     var localJobEntity = schedulerJobInstance.GetLocalJob();
                     // 放入缓存集合中
@@ -519,7 +487,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
 
             var tenantList = await db.Queryable<TenantModel>()
                 .Where(wh => wh.Status == CommonStatusEnum.Enable)
-                .Select(sl => new {sl.TenantId, sl.TenantName, sl.TenantNo})
+                .Select(sl => new { sl.TenantId, sl.TenantName, sl.TenantNo })
                 .ToListAsync();
 
             foreach (var item in tenantList)
@@ -527,7 +495,8 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 // 启动租户调度器
                 await StartScheduler(item.TenantId);
                 // 放入租户调度器缓存中
-                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, Guid.NewGuid()
+                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, Guid
+                    .NewGuid()
                     .ToString()));
 
                 // 循环租户本地作业
@@ -571,7 +540,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 .Where(wh => wh.Status == CommonStatusEnum.Enable)
                 .Where(wh => !SchedulerContext.SchedulerTenantList.Keys.ToList()
                     .Contains(wh.TenantId))
-                .Select(sl => new {sl.TenantId, sl.TenantName, sl.TenantNo})
+                .Select(sl => new { sl.TenantId, sl.TenantName, sl.TenantNo })
                 .ToListAsync();
 
             foreach (var item in tenantList)
@@ -579,7 +548,8 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 // 启动租户调度器
                 await StartScheduler(item.TenantId);
                 // 放入租户调度器缓存中
-                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, Guid.NewGuid()
+                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, Guid
+                    .NewGuid()
                     .ToString()));
 
                 // 循环租户本地作业
@@ -906,7 +876,8 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                     TriggerState = await scheduler.GetTriggerState(trigger.Key),
                     RequestUrl = jobDetail.JobDataMap.GetString(nameof(SchedulerJobInfo.RequestUrl)),
                     RequestMethod =
-                        jobDetail.JobDataMap.GetNullableEnum<HttpRequestMethodEnum>(nameof(SchedulerJobInfo.RequestMethod)),
+                        jobDetail.JobDataMap.GetNullableEnum<HttpRequestMethodEnum>(
+                            nameof(SchedulerJobInfo.RequestMethod)),
                     RunNumber = jobDetail.JobDataMap.GetLong(nameof(SchedulerJobInfo.RunNumber)),
                     Exception = jobDetail.JobDataMap.GetString(nameof(SchedulerJobInfo.Exception))
                 });
@@ -976,7 +947,8 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
             weeks = dailyTimeIntervalTrigger.DaysOfWeek.ToList();
             dailyStartTime = new TimeSpan(dailyTimeIntervalTrigger.StartTimeOfDay.Hour,
                 dailyTimeIntervalTrigger.StartTimeOfDay.Minute, dailyTimeIntervalTrigger.StartTimeOfDay.Second);
-            dailyEndTime = new TimeSpan(dailyTimeIntervalTrigger.EndTimeOfDay.Hour, dailyTimeIntervalTrigger.EndTimeOfDay.Minute,
+            dailyEndTime = new TimeSpan(dailyTimeIntervalTrigger.EndTimeOfDay.Hour,
+                dailyTimeIntervalTrigger.EndTimeOfDay.Minute,
                 dailyTimeIntervalTrigger.EndTimeOfDay.Second);
             intervalSecond = dailyTimeIntervalTrigger.RepeatInterval;
             runTimes = dailyTimeIntervalTrigger.RepeatCount == -1 ? null : dailyTimeIntervalTrigger.RepeatCount;
@@ -1006,7 +978,8 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
             JobType = jobDetail.JobDataMap.GetEnum<SchedulerJobTypeEnum>(nameof(SchedulerJobInfo.JobType)),
             BeginTime = trigger.StartTimeUtc.LocalDateTime,
             EndTime =
-                trigger.EndTimeUtc?.LocalDateTime ?? jobDetail.JobDataMap.GetNullableDateTime(nameof(SchedulerJobInfo.EndTime)),
+                trigger.EndTimeUtc?.LocalDateTime
+                ?? jobDetail.JobDataMap.GetNullableDateTime(nameof(SchedulerJobInfo.EndTime)),
             TriggerType = triggerType,
             Cron = cron,
             Week = weeks?.ToWeekEnum(),
@@ -1022,7 +995,8 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
             // 触发器状态
             TriggerState = await scheduler.GetTriggerState(trigger.Key),
             RequestUrl = jobDetail.JobDataMap.GetString(nameof(SchedulerJobInfo.RequestUrl)),
-            RequestMethod = jobDetail.JobDataMap.GetNullableEnum<HttpRequestMethodEnum>(nameof(SchedulerJobInfo.RequestMethod)),
+            RequestMethod =
+                jobDetail.JobDataMap.GetNullableEnum<HttpRequestMethodEnum>(nameof(SchedulerJobInfo.RequestMethod)),
             RequestParams = jobDetail.JobDataMap[nameof(SchedulerJobInfo.RequestParams)] as IDictionary<string, object>,
             RequestHeader = jobDetail.JobDataMap[nameof(SchedulerJobInfo.RequestHeader)] as IDictionary<string, string>,
             RequestTimeout = jobDetail.JobDataMap.GetNullableInt(nameof(SchedulerJobInfo.RequestTimeout)),
@@ -1072,12 +1046,12 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     }
 
     /// <summary>
-    /// 更新调度作业
+    /// 编辑调度作业
     /// </summary>
     /// <remarks>注：这里更新作业会导致触发器的执行记录被清空。所以会导致更新后可能会立即执行一次。</remarks>
     /// <param name="input"></param>
     /// <returns></returns>
-    public async Task UpdateSchedulerJob(UpdateSchedulerJobInput input)
+    public async Task EditSchedulerJob(UpdateSchedulerJobInput input)
     {
         if (string.IsNullOrEmpty(input.OldJobName))
         {
@@ -1263,7 +1237,8 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                              """;
 
             // 执行更新
-            await db.Ado.ExecuteCommandAsync(updateSql, new SqlParameter("@JobData", Encoding.UTF8.GetBytes(jobData.ToString())));
+            await db.Ado.ExecuteCommandAsync(updateSql,
+                new SqlParameter("@JobData", Encoding.UTF8.GetBytes(jobData.ToString())));
         }
     }
 }

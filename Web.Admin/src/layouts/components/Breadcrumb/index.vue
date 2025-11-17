@@ -3,7 +3,6 @@
 		<transition-group appear name="slide-left" leaveActiveClass="">
 			<el-breadcrumb-item key="/" to="/">首页</el-breadcrumb-item>
 			<el-breadcrumb-item v-for="item in breadcrumbs" :key="item.path" :to="item.redirect ? item.redirect.toString() : undefined">
-				<FaIcon v-if="item.meta?.icon" :name="item.meta.icon" />
 				{{ item.meta.title }}
 			</el-breadcrumb-item>
 		</transition-group>
@@ -20,7 +19,7 @@ defineOptions({
 
 const route = useRoute();
 
-const breadcrumbs = computed(() => route.matched.filter((f) => !f.meta?.hide && f.meta?.title));
+const breadcrumbs = computed(() => route.matched.filter((f) => !f.meta?.breadcrumb && f.meta?.title));
 </script>
 
 <style scoped lang="scss">
@@ -38,7 +37,12 @@ const breadcrumbs = computed(() => route.matched.filter((f) => !f.meta?.hide && 
 		&:last-child {
 			:deep() {
 				.el-breadcrumb__inner {
-					color: var(--el-text-color-placeholder);
+					.fa-icon {
+						color: var(--el-text-color-primary);
+					}
+					span {
+						color: var(--el-text-color-placeholder);
+					}
 				}
 			}
 		}

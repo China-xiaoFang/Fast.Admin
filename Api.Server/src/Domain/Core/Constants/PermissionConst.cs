@@ -1,32 +1,11 @@
-﻿// ------------------------------------------------------------------------
-// Apache开源许可证
-// 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
-
-// ReSharper disable once CheckNamespace
+﻿// ReSharper disable once CheckNamespace
 
 namespace Fast.Core;
 
 /// <summary>
 /// <see cref="PermissionConst"/> 权限常量
 /// </summary>
+/// <remarks>所有权限都在这里</remarks>
 [SuppressSniffer]
 public class PermissionConst
 {
@@ -41,6 +20,19 @@ public class PermissionConst
 
     /// <summary>Knife4j</summary>
     public const string ApiKnife4j = "Api:Knife4j";
+
+    /// <summary><see cref="Config"/> 配置</summary>
+    public class Config
+    {
+        /// <summary>配置列表</summary>
+        public const string Paged = "Config:Paged";
+
+        /// <summary>配置详情</summary>
+        public const string Detail = "Config:Detail";
+
+        /// <summary>配置编辑</summary>
+        public const string Edit = "Config:Edit";
+    }
 
     /// <summary><see cref="Menu"/> 菜单</summary>
     public class Menu
@@ -64,23 +56,20 @@ public class PermissionConst
         public const string Status = "Menu:Status";
     }
 
-    /// <summary><see cref="Table"/> 表格</summary>
-    public class Table
+    /// <summary><see cref="SysSerial"/> 系统序号</summary>
+    public class SysSerial
     {
-        /// <summary>表格列表</summary>
-        public const string Paged = "Table:Paged";
+        /// <summary>系统序号列表</summary>
+        public const string Paged = "SysSerial:Paged";
 
-        /// <summary>表格详情</summary>
-        public const string Detail = "Table:Detail";
+        /// <summary>系统序号详情</summary>
+        public const string Detail = "SysSerial:Detail";
 
-        /// <summary>表格新增</summary>
-        public const string Add = "Table:Add";
+        /// <summary>系统序号新增</summary>
+        public const string Add = "SysSerial:Add";
 
-        /// <summary>表格编辑</summary>
-        public const string Edit = "Table:Edit";
-
-        /// <summary>表格删除</summary>
-        public const string Delete = "Table:Delete";
+        /// <summary>系统序号编辑</summary>
+        public const string Edit = "SysSerial:Edit";
     }
 
     /// <summary><see cref="Dictionary"/> 字典</summary>
@@ -105,46 +94,64 @@ public class PermissionConst
         public const string Status = "Dictionary:Status";
     }
 
+    /// <summary><see cref="Table"/> 表格</summary>
+    public class Table
+    {
+        /// <summary>表格列表</summary>
+        public const string Paged = "Table:Paged";
+
+        /// <summary>表格详情</summary>
+        public const string Detail = "Table:Detail";
+
+        /// <summary>表格新增</summary>
+        public const string Add = "Table:Add";
+
+        /// <summary>表格编辑</summary>
+        public const string Edit = "Table:Edit";
+
+        /// <summary>表格删除</summary>
+        public const string Delete = "Table:Delete";
+    }
+
+    /// <summary><see cref="Scheduler"/> 调度程序</summary>
+    public class Scheduler
+    {
+        /// <summary>调度程序列表</summary>
+        public const string Paged = "Scheduler:Paged";
+
+        /// <summary>调度程序详情</summary>
+        public const string Detail = "Scheduler:Detail";
+
+        /// <summary>调度程序新增</summary>
+        public const string Add = "Scheduler:Add";
+
+        /// <summary>调度程序编辑</summary>
+        public const string Edit = "Scheduler:Edit";
+
+        /// <summary>调度程序删除</summary>
+        public const string Delete = "Scheduler:Delete";
+
+        /// <summary>调度程序启动</summary>
+        public const string Start = "Scheduler:Start";
+
+        /// <summary>调度程序暂停</summary>
+        public const string Stop = "Scheduler:Stop";
+
+        /// <summary>调度程序执行作业</summary>
+        public const string Trigger = "Scheduler:Trigger";
+
+        /// <summary>调度程序恢复作业</summary>
+        public const string ResumeJob = "Scheduler:ResumeJob";
+
+        /// <summary>调度程序暂停作业</summary>
+        public const string StopJob = "Scheduler:StopJob";
+    }
+
     /// <summary>密码映射列表</summary>
     public const string PasswordMapPaged = "PasswordMap:Paged";
 
-    /// <summary><see cref="Tenant"/> 租户</summary>
-    public class Tenant
-    {
-        /// <summary>租户列表</summary>
-        public const string Paged = "Tenant:Paged";
-
-        /// <summary>租户详情</summary>
-        public const string Detail = "Tenant:Detail";
-
-        /// <summary>租户新增</summary>
-        public const string Add = "Tenant:Add";
-
-        /// <summary>租户编辑</summary>
-        public const string Edit = "Tenant:Edit";
-
-        /// <summary>租户状态更改</summary>
-        public const string Status = "Tenant:Status";
-    }
-
-    /// <summary><see cref="Account"/> 账号</summary>
-    public class Account
-    {
-        /// <summary>账号列表</summary>
-        public const string Paged = "Account:Paged";
-
-        /// <summary>账号详情</summary>
-        public const string Detail = "Account:Detail";
-
-        /// <summary>账号解除锁定</summary>
-        public const string Unlock = "Account:Unlock";
-
-        /// <summary>账号重置密码</summary>
-        public const string ResetPassword = "Account:ResetPassword";
-
-        /// <summary>账号状态更改</summary>
-        public const string Status = "Account:Status";
-    }
+    /// <summary>密码记录列表</summary>
+    public const string PasswordRecordPaged = "PasswordRecord:Paged";
 
     /// <summary><see cref="App"/> 应用</summary>
     public class App
@@ -163,6 +170,41 @@ public class PermissionConst
 
         /// <summary>应用删除</summary>
         public const string Delete = "App:Delete";
+    }
+
+    /// <summary><see cref="Serial"/> 序号</summary>
+    public class Serial
+    {
+        /// <summary>序号列表</summary>
+        public const string Paged = "Serial:Paged";
+
+        /// <summary>序号详情</summary>
+        public const string Detail = "Serial:Detail";
+
+        /// <summary>序号新增</summary>
+        public const string Add = "Serial:Add";
+
+        /// <summary>序号编辑</summary>
+        public const string Edit = "Serial:Edit";
+    }
+
+    /// <summary><see cref="Tenant"/> 租户</summary>
+    public class Tenant
+    {
+        /// <summary>租户列表</summary>
+        public const string Paged = "Tenant:Paged";
+
+        /// <summary>租户详情</summary>
+        public const string Detail = "Tenant:Detail";
+
+        /// <summary>租户新增</summary>
+        public const string Add = "Tenant:Add";
+
+        /// <summary>租户编辑</summary>
+        public const string Edit = "Tenant:Edit";
+
+        /// <summary>租户状态更改</summary>
+        public const string Status = "Tenant:Status";
     }
 
     /// <summary><see cref="Database"/> 数据库</summary>
@@ -184,19 +226,133 @@ public class PermissionConst
         public const string Delete = "Database:Delete";
     }
 
-    /// <summary><see cref="Config"/> 配置</summary>
-    public class Config
+    /// <summary><see cref="Account"/> 账号</summary>
+    public class Account
     {
-        /// <summary>配置列表</summary>
-        public const string Paged = "Config:Paged";
+        /// <summary>账号列表</summary>
+        public const string Paged = "Account:Paged";
 
-        /// <summary>配置详情</summary>
-        public const string Detail = "Config:Detail";
+        /// <summary>账号详情</summary>
+        public const string Detail = "Account:Detail";
 
-        /// <summary>配置新增</summary>
-        public const string Add = "Config:Add";
+        /// <summary>账号解除锁定</summary>
+        public const string Unlock = "Account:Unlock";
 
-        /// <summary>配置编辑</summary>
-        public const string Edit = "Config:Edit";
+        /// <summary>账号重置密码</summary>
+        public const string ResetPassword = "Account:ResetPassword";
+
+        /// <summary>账号状态更改</summary>
+        public const string Status = "Account:Status";
+    }
+
+    /// <summary><see cref="Position"/> 职位</summary>
+    public class Position
+    {
+        /// <summary>职位列表</summary>
+        public const string Paged = "Position:Paged";
+
+        /// <summary>职位详情</summary>
+        public const string Detail = "Position:Detail";
+
+        /// <summary>职位新增</summary>
+        public const string Add = "Position:Add";
+
+        /// <summary>职位编辑</summary>
+        public const string Edit = "Position:Edit";
+
+        /// <summary>职位删除</summary>
+        public const string Delete = "Position:Delete";
+    }
+
+    /// <summary><see cref="JobLevel"/> 职级</summary>
+    public class JobLevel
+    {
+        /// <summary>职级列表</summary>
+        public const string Paged = "JobLevel:Paged";
+
+        /// <summary>职级详情</summary>
+        public const string Detail = "JobLevel:Detail";
+
+        /// <summary>职级新增</summary>
+        public const string Add = "JobLevel:Add";
+
+        /// <summary>职级编辑</summary>
+        public const string Edit = "JobLevel:Edit";
+
+        /// <summary>职级删除</summary>
+        public const string Delete = "JobLevel:Delete";
+    }
+
+    /// <summary><see cref="Role"/> 角色</summary>
+    public class Role
+    {
+        /// <summary>角色列表</summary>
+        public const string Paged = "Role:Paged";
+
+        /// <summary>角色详情</summary>
+        public const string Detail = "Role:Detail";
+
+        /// <summary>角色新增</summary>
+        public const string Add = "Role:Add";
+
+        /// <summary>角色编辑</summary>
+        public const string Edit = "Role:Edit";
+
+        /// <summary>角色删除</summary>
+        public const string Delete = "Role:Delete";
+    }
+
+    /// <summary><see cref="Department"/> 部门</summary>
+    public class Department
+    {
+        /// <summary>部门列表</summary>
+        public const string Paged = "Department:Paged";
+
+        /// <summary>部门详情</summary>
+        public const string Detail = "Department:Detail";
+
+        /// <summary>部门新增</summary>
+        public const string Add = "Department:Add";
+
+        /// <summary>部门编辑</summary>
+        public const string Edit = "Department:Edit";
+
+        /// <summary>部门删除</summary>
+        public const string Delete = "Department:Delete";
+    }
+
+    /// <summary><see cref="Employee"/> 职员</summary>
+    public class Employee
+    {
+        /// <summary>职员列表</summary>
+        public const string Paged = "Employee:Paged";
+
+        /// <summary>职员详情</summary>
+        public const string Detail = "Employee:Detail";
+
+        /// <summary>职员新增</summary>
+        public const string Add = "Employee:Add";
+
+        /// <summary>职员编辑</summary>
+        public const string Edit = "Employee:Edit";
+    }
+
+    /// <summary><see cref="Merchant"/> 商户号</summary>
+    public class Merchant
+    {
+        /// <summary>商户号列表</summary>
+        public const string Paged = "Merchant:Paged";
+
+        /// <summary>商户号详情</summary>
+        public const string Detail = "Merchant:Detail";
+
+        /// <summary>商户号新增</summary>
+        public const string Add = "Merchant:Add";
+
+        /// <summary>商户号编辑</summary>
+        public const string Edit = "Merchant:Edit";
+
+        /// <summary>商户号删除</summary>
+        public const string Delete = "Merchant:Delete";
     }
 }

@@ -25,7 +25,7 @@ const initWebSocket = async (): Promise<void> => {
 		const url = `${fastAxios.baseUrl}${appStore.webSocketUrl}`;
 		const params = {
 			"Fast-Origin": import.meta.env.DEV ? import.meta.env.VITE_APP_ORIGIN || window.location.host : window.location.host,
-			"Fast-Device-Type": AppEnvironmentEnum[AppEnvironmentEnum.Web],
+			"Fast-Device-Type": Object.keys(AppEnvironmentEnum).find((f) => AppEnvironmentEnum[f] === AppEnvironmentEnum.Web),
 			"Fast-Device-Id": useIdentity().deviceId,
 		};
 		// 判断是否存在对象

@@ -1,26 +1,4 @@
-﻿// ------------------------------------------------------------------------
-// Apache开源许可证
-// 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
-
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 using Dm.util;
 using Fast.Center.Entity;
@@ -118,13 +96,15 @@ public class SyncDictionaryHostedService : IHostedService
                 {
                     var enumItemList = enumType.Type.EnumToList<long>();
 
-                    var dictionaryTypeInfo = dictionaryTypeList.SingleOrDefault(s => s.DictionaryKey == enumType.Type.Name);
+                    var dictionaryTypeInfo =
+                        dictionaryTypeList.SingleOrDefault(s => s.DictionaryKey == enumType.Type.Name);
 
                     var dictionaryTypeModel = new DictionaryTypeModel
                     {
                         DictionaryKey = enumType.Type.Name,
                         DictionaryName =
-                            enumType.FastEnumAttribute.ChName ?? enumType.FastEnumAttribute.EnName ?? enumType.Type.Name,
+                            enumType.FastEnumAttribute.ChName
+                            ?? enumType.FastEnumAttribute.EnName ?? enumType.Type.Name,
                         ValueType = Enum.GetUnderlyingType(enumType.Type) == typeof(long)
                             ? DictionaryValueTypeEnum.Long
                             : DictionaryValueTypeEnum.Int,
@@ -187,6 +167,8 @@ public class SyncDictionaryHostedService : IHostedService
                                 if (!dictionaryItemInfo.Equals(dictionaryItemModel))
                                 {
                                     dictionaryItemInfo.Label = dictionaryItemModel.Label;
+                                    dictionaryItemInfo.Value = dictionaryItemModel.Value;
+                                    dictionaryItemInfo.Type = dictionaryItemModel.Type;
                                     dictionaryItemInfo.Order = dictionaryItemModel.Order;
                                     dictionaryItemInfo.UpdatedTime = dateTime;
                                     updateDictionaryItemList.Add(dictionaryItemInfo);
@@ -244,6 +226,16 @@ public class SyncDictionaryHostedService : IHostedService
                         .ExecuteCommandAsync(cancellationToken);
                 }
 
+                var deleteDictionaryTypeList = dictionaryTypeList.Where(x => !enumTypes.Select(sl => sl.Type.Name)
+                        .ToHashSet()
+                        .Contains(x.DictionaryKey))
+                    .ToList();
+                if (deleteDictionaryTypeList.Count > 0)
+                {
+                    await db.Deleteable(deleteDictionaryTypeList)
+                        .ExecuteCommandAsync(cancellationToken);
+                }
+
                 await db.Updateable(updateDictionaryTypeList)
                     .ExecuteCommandAsync(cancellationToken);
                 await db.Updateable(updateDictionaryItemList)
@@ -267,7 +259,7 @@ public class SyncDictionaryHostedService : IHostedService
                     logSb.Append("\u001b[40m\u001b[90m");
                     logSb.Append("      ");
                     logSb.Append(
-                        $"同步字典信息成功。新增 {addDictionaryTypeList.Count} 个，更新 {updateDictionaryTypeList.Count} 个，删除 {deleteDictionaryItemList.Count} 个。");
+                        $"同步字典信息成功。新增 {addDictionaryTypeList.Count}/{addDictionaryItemList.Count} 个，更新 {updateDictionaryTypeList.Count}/{updateDictionaryItemList.Count} 个，删除 {deleteDictionaryTypeList.Count}/{deleteDictionaryItemList.Count} 个。");
                     logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
                     Console.WriteLine(logSb.ToString());
                 }

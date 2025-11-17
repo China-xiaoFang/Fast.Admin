@@ -1,5 +1,5 @@
 /**
- * Fast.SqlSugar.PagedSearchTypeEnum 分页搜索类型枚举
+ * 分页搜索类型枚举
  */
 export enum PagedSearchTypeEnum {
   /**
