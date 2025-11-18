@@ -20,9 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-
 using System.ComponentModel.DataAnnotations;
-
 
 namespace Fast.Shared;
 
@@ -32,7 +30,6 @@ namespace Fast.Shared;
 [SuppressSniffer]
 public class UpdateVersionInput
 {
-
     /// <summary>
     /// 更新版本控制字段
     /// </summary>
