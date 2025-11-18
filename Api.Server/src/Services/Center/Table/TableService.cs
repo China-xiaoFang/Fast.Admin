@@ -1,4 +1,26 @@
-﻿using Fast.Cache;
+﻿// ------------------------------------------------------------------------
+// Apache开源许可证
+// 
+// 版权所有 © 2018-Now 小方
+// 
+// 许可授权：
+// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
+// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
+// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
+// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
+// 3.修改或衍生作品须明确标注原作者及原软件出处。
+// 
+// 特别声明：
+// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
+// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
+// - 包括但不限于数据丢失、业务中断等情况。
+// 
+// 免责条款：
+// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
+// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
+// ------------------------------------------------------------------------
+
+using Fast.Cache;
 using Fast.Center.Entity;
 using Fast.Center.Service.Table.Dto;
 using Microsoft.AspNetCore.Authorization;
@@ -42,20 +64,21 @@ public class TableService : IDynamicApplication
     public async Task<PagedResult<QueryTableConfigPagedOutput>> QueryTableConfigPaged(PagedInput input)
     {
         return await _tableRepository.Entities.OrderBy(ob => ob.TableName)
-            .ToPagedListAsync(input, sl => new QueryTableConfigPagedOutput
-            {
-                TableId = sl.TableId,
-                TableKey = sl.TableKey,
-                TableName = sl.TableName,
-                Remark = sl.Remark,
-                DepartmentId = sl.DepartmentId,
-                DepartmentName = sl.DepartmentName,
-                CreatedUserName = sl.CreatedUserName,
-                CreatedTime = sl.CreatedTime,
-                UpdatedUserName = sl.UpdatedUserName,
-                UpdatedTime = sl.UpdatedTime,
-                RowVersion = sl.RowVersion
-            });
+            .ToPagedListAsync(input,
+                sl => new QueryTableConfigPagedOutput
+                {
+                    TableId = sl.TableId,
+                    TableKey = sl.TableKey,
+                    TableName = sl.TableName,
+                    Remark = sl.Remark,
+                    DepartmentId = sl.DepartmentId,
+                    DepartmentName = sl.DepartmentName,
+                    CreatedUserName = sl.CreatedUserName,
+                    CreatedTime = sl.CreatedTime,
+                    UpdatedUserName = sl.UpdatedUserName,
+                    UpdatedTime = sl.UpdatedTime,
+                    RowVersion = sl.RowVersion
+                });
     }
 
     /// <summary>
@@ -66,8 +89,7 @@ public class TableService : IDynamicApplication
     [HttpGet]
     [ApiInfo("获取表格配置详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Table.Detail)]
-    public async Task<QueryTableConfigDetailOutput> QueryTableConfigDetail(
-        [Required(ErrorMessage = "表格Id不能为空")] long? tableId)
+    public async Task<QueryTableConfigDetailOutput> QueryTableConfigDetail([Required(ErrorMessage = "表格Id不能为空")] long? tableId)
     {
         var result = await _tableRepository.Entities.Where(wh => wh.TableId == tableId)
             .Select(sl => new QueryTableConfigDetailOutput
@@ -174,8 +196,7 @@ public class TableService : IDynamicApplication
         });
 
         // 清除缓存
-        var cacheKey =
-            CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableConfigModel.TableKey, "*", "*");
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableConfigModel.TableKey, "*", "*");
         await _centerCache.DelByPatternAsync(cacheKey);
     }
 
@@ -235,8 +256,7 @@ public class TableService : IDynamicApplication
     [HttpGet]
     [ApiInfo("获取表格列配置详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Table.Detail)]
-    public async Task<List<FaTableColumnCtx>> QueryTableColumnConfigDetail(
-        [Required(ErrorMessage = "表格Id不能为空")] long? tableId)
+    public async Task<List<FaTableColumnCtx>> QueryTableColumnConfigDetail([Required(ErrorMessage = "表格Id不能为空")] long? tableId)
     {
         return await _columnRepository.Entities.Where(wh => wh.TableId == tableId)
             .Select(sl => new FaTableColumnCtx
@@ -429,11 +449,9 @@ public class TableService : IDynamicApplication
     /// <param name="tableId"></param>
     /// <param name="tableKey"></param>
     /// <returns></returns>
-    internal async Task<List<TableColumnConfigCacheModel>> QueryUserTableColumnConfigCache(long tableId,
-        string tableKey)
+    internal async Task<List<TableColumnConfigCacheModel>> QueryUserTableColumnConfigCache(long tableId, string tableKey)
     {
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableKey, _user.TenantNo,
-            _user.EmployeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableKey, _user.TenantNo, _user.EmployeeNo);
         return await _centerCache.GetAndSetAsync(cacheKey, async () =>
         {
             return await _columnCacheRepository.Entities.Where(wh => wh.UserId == _user.UserId && wh.TableId == tableId)
@@ -449,8 +467,7 @@ public class TableService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取表格列配置", HttpRequestActionEnum.Query)]
-    public async Task<QueryTableColumnConfigOutput> QueryTableColumnConfig(
-        [Required(ErrorMessage = "表格Key不能为空")] string tableKey)
+    public async Task<QueryTableColumnConfigOutput> QueryTableColumnConfig([Required(ErrorMessage = "表格Key不能为空")] string tableKey)
     {
         var tableConfigModel = await QueryTableConfigCache(tableKey);
         if (tableConfigModel == null)
@@ -482,30 +499,30 @@ public class TableService : IDynamicApplication
 
             var column = new Dictionary<string, object>
             {
-                { "columnId", item.ColumnId },
-                { "prop", item.Prop },
-                { "label", string.IsNullOrWhiteSpace(item.Label) ? null : item.Label },
-                { "fixed", columnFixed },
-                { "autoWidth", item.AutoWidth },
-                { "width", item.Width },
-                { "smallWidth", item.SmallWidth },
-                { "order", item.Order },
-                { "show", item.Show },
-                { "copy", item.Copy },
-                { "sortable", item.Sortable },
+                {"columnId", item.ColumnId},
+                {"prop", item.Prop},
+                {"label", string.IsNullOrWhiteSpace(item.Label) ? null : item.Label},
+                {"fixed", columnFixed},
+                {"autoWidth", item.AutoWidth},
+                {"width", item.Width},
+                {"smallWidth", item.SmallWidth},
+                {"order", item.Order},
+                {"show", item.Show},
+                {"copy", item.Copy},
+                {"sortable", item.Sortable},
                 // 如果配置原本不支持排序，则直接禁用
-                { "disabledSortable", !item.Sortable },
-                { "sortableField", string.IsNullOrWhiteSpace(item.SortableField) ? null : item.SortableField },
-                { "type", string.IsNullOrWhiteSpace(item.Type) ? null : item.Type },
-                { "link", item.Link },
-                { "clickEmit", string.IsNullOrWhiteSpace(item.ClickEmit) ? null : item.ClickEmit },
-                { "tag", item.Tag },
-                { "enum", string.IsNullOrWhiteSpace(item.Enum) ? null : item.Enum },
-                { "dateFix", item.DateFix },
-                { "dateFormat", string.IsNullOrWhiteSpace(item.DateFormat) ? null : item.DateFormat },
-                { "dataDeleteField", string.IsNullOrWhiteSpace(item.DataDeleteField) ? null : item.DataDeleteField },
-                { "slot", string.IsNullOrWhiteSpace(item.Slot) ? null : item.Slot },
-                { "pureSearch", item.PureSearch }
+                {"disabledSortable", !item.Sortable},
+                {"sortableField", string.IsNullOrWhiteSpace(item.SortableField) ? null : item.SortableField},
+                {"type", string.IsNullOrWhiteSpace(item.Type) ? null : item.Type},
+                {"link", item.Link},
+                {"clickEmit", string.IsNullOrWhiteSpace(item.ClickEmit) ? null : item.ClickEmit},
+                {"tag", item.Tag},
+                {"enum", string.IsNullOrWhiteSpace(item.Enum) ? null : item.Enum},
+                {"dateFix", item.DateFix},
+                {"dateFormat", string.IsNullOrWhiteSpace(item.DateFormat) ? null : item.DateFormat},
+                {"dataDeleteField", string.IsNullOrWhiteSpace(item.DataDeleteField) ? null : item.DataDeleteField},
+                {"slot", string.IsNullOrWhiteSpace(item.Slot) ? null : item.Slot},
+                {"pureSearch", item.PureSearch}
             };
 
             // 其他不常用配置选项
@@ -539,7 +556,7 @@ public class TableService : IDynamicApplication
                     }
                 }
 
-                column.TryAdd("otherAdvancedConfig", item.OtherConfig.Select(sl => new { sl.Prop, sl.Type }));
+                column.TryAdd("otherAdvancedConfig", item.OtherConfig.Select(sl => new {sl.Prop, sl.Type}));
             }
 
             // 搜素项
@@ -547,11 +564,11 @@ public class TableService : IDynamicApplication
             {
                 var searchConfig = new Dictionary<string, object>
                 {
-                    { "el", item.SearchEl },
-                    { "key", string.IsNullOrWhiteSpace(item.SearchKey) ? null : item.SearchKey },
-                    { "label", string.IsNullOrWhiteSpace(item.SearchLabel) ? null : item.SearchLabel },
-                    { "order", item.SearchOrder },
-                    { "slot", string.IsNullOrWhiteSpace(item.SearchSlot) ? null : item.SearchSlot }
+                    {"el", item.SearchEl},
+                    {"key", string.IsNullOrWhiteSpace(item.SearchKey) ? null : item.SearchKey},
+                    {"label", string.IsNullOrWhiteSpace(item.SearchLabel) ? null : item.SearchLabel},
+                    {"order", item.SearchOrder},
+                    {"slot", string.IsNullOrWhiteSpace(item.SearchSlot) ? null : item.SearchSlot}
                 };
 
                 var searchPropsConfig = new Dictionary<string, object>();
@@ -586,7 +603,7 @@ public class TableService : IDynamicApplication
                         }
                     }
 
-                    column.TryAdd("searchAdvancedConfig", item.SearchConfig.Select(sl => new { sl.Prop, sl.Type }));
+                    column.TryAdd("searchAdvancedConfig", item.SearchConfig.Select(sl => new {sl.Prop, sl.Type}));
                 }
 
                 if (searchPropsConfig.Count > 0)
@@ -601,8 +618,7 @@ public class TableService : IDynamicApplication
         }
 
         // 尝试获取缓存
-        var tableColumnCacheList =
-            await QueryUserTableColumnConfigCache(tableConfigModel.TableId, tableConfigModel.TableKey);
+        var tableColumnCacheList = await QueryUserTableColumnConfigCache(tableConfigModel.TableId, tableConfigModel.TableKey);
 
         // 判断是否存在缓存
         if (tableColumnCacheList?.Any() == true)
@@ -612,8 +628,7 @@ public class TableService : IDynamicApplication
             result.Change = tableConfigModel.UpdatedTime > result.UpdatedTime;
 
             // 深拷贝一份
-            result.CacheColumns = result.Columns
-                .Select(IDictionary<string, object> (sl) => new Dictionary<string, object>(sl))
+            result.CacheColumns = result.Columns.Select(IDictionary<string, object> (sl) => new Dictionary<string, object>(sl))
                 .ToList();
 
             // 循环缓存数据
@@ -676,8 +691,7 @@ public class TableService : IDynamicApplication
         }
 
         // 获取缓存
-        var tableColumnCacheList =
-            await QueryUserTableColumnConfigCache(tableConfigModel.TableId, tableConfigModel.TableKey);
+        var tableColumnCacheList = await QueryUserTableColumnConfigCache(tableConfigModel.TableId, tableConfigModel.TableKey);
 
         var columnIds = tableColumnCacheList.Select(sl => sl.ColumnId)
             .ToList();
@@ -685,8 +699,7 @@ public class TableService : IDynamicApplication
         var dateTime = DateTime.Now;
 
         // 添加的
-        var addTableColumnCacheList = tableConfigModel.TableColumnConfigList
-            .Where(wh => !columnIds.Contains(wh.ColumnId))
+        var addTableColumnCacheList = tableConfigModel.TableColumnConfigList.Where(wh => !columnIds.Contains(wh.ColumnId))
             .Select(sl => new TableColumnConfigCacheModel
             {
                 UserId = _user.UserId,
@@ -719,8 +732,7 @@ public class TableService : IDynamicApplication
         });
 
         // 删除缓存
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableConfigModel.TableKey,
-            _user.TenantNo,
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableConfigModel.TableKey, _user.TenantNo,
             _user.EmployeeNo);
         await _centerCache.DelAsync(cacheKey);
     }
@@ -741,16 +753,14 @@ public class TableService : IDynamicApplication
         }
 
         // 获取缓存
-        var tableColumnCacheList =
-            await QueryUserTableColumnConfigCache(tableConfigModel.TableId, tableConfigModel.TableKey);
+        var tableColumnCacheList = await QueryUserTableColumnConfigCache(tableConfigModel.TableId, tableConfigModel.TableKey);
         var addTableColumnCacheList = new List<TableColumnConfigCacheModel>();
         var dateTime = DateTime.Now;
 
         // 保存的时候没有删除的
         foreach (var item in input.Columns)
         {
-            var tableColumnModel =
-                tableConfigModel.TableColumnConfigList.SingleOrDefault(s => s.ColumnId == item.ColumnId);
+            var tableColumnModel = tableConfigModel.TableColumnConfigList.SingleOrDefault(s => s.ColumnId == item.ColumnId);
             if (tableColumnModel == null)
             {
                 throw new UserFriendlyException("数据不存在！");
@@ -783,10 +793,8 @@ public class TableService : IDynamicApplication
             }
             else
             {
-                tableColumnCacheModel.Label =
-                    string.IsNullOrWhiteSpace(item.Label) ? tableColumnModel.Label : item.Label;
-                tableColumnCacheModel.Fixed =
-                    string.IsNullOrWhiteSpace(item.Fixed) ? tableColumnModel.Fixed : item.Fixed;
+                tableColumnCacheModel.Label = string.IsNullOrWhiteSpace(item.Label) ? tableColumnModel.Label : item.Label;
+                tableColumnCacheModel.Fixed = string.IsNullOrWhiteSpace(item.Fixed) ? tableColumnModel.Fixed : item.Fixed;
                 tableColumnCacheModel.AutoWidth = item.AutoWidth;
                 tableColumnCacheModel.Width = item.Width ?? tableColumnModel.Width;
                 tableColumnCacheModel.SmallWidth = item.SmallWidth ?? tableColumnModel.SmallWidth;
@@ -808,8 +816,7 @@ public class TableService : IDynamicApplication
         });
 
         // 删除缓存
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableConfigModel.TableKey,
-            _user.TenantNo,
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableConfigModel.TableKey, _user.TenantNo,
             _user.EmployeeNo);
         await _centerCache.DelAsync(cacheKey);
     }
@@ -832,8 +839,7 @@ public class TableService : IDynamicApplication
         await _columnCacheRepository.DeleteAsync(wh => wh.TableId == tableConfigModel.TableId);
 
         // 删除缓存
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableConfigModel.TableKey,
-            _user.TenantNo,
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableConfigModel.TableKey, _user.TenantNo,
             _user.EmployeeNo);
         await _centerCache.DelAsync(cacheKey);
     }
