@@ -1,6 +1,6 @@
 ﻿using Fast.Center.Enum;
 
-namespace Fast.Center.Service.Menu.Dto;
+namespace Fast.Center.Service.Module.Dto;
 
 /// <summary>
 /// <see cref="AddModuleInput"/> 添加模块输入

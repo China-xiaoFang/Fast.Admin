@@ -95,7 +95,6 @@ public class ProgramApplication : IDynamicApplication
             // 程序版本
             ProgramVersion = entryAssembly?.GetName()
                 .Version,
-            // ReSharper disable once RedundantNameQualifier
             // 框架版本
             FrameworkVersion = $"{nameof(NET)} {typeof(MAppContext).Assembly.GetName().Version}",
             // 运行时版本

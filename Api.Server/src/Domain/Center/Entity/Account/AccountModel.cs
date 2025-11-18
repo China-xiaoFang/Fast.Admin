@@ -1,4 +1,4 @@
-﻿// ReSharper disable once CheckNamespace
+﻿
 
 namespace Fast.Center.Entity;
 
@@ -9,7 +9,7 @@ namespace Fast.Center.Entity;
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(Mobile)}", nameof(Mobile), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(Email)}", nameof(Email), OrderByType.Asc, true)]
-public class AccountModel : BaseEntity, IUpdateVersion
+public class AccountModel : IUpdateVersion
 {
     /// <summary>
     /// 账号Id
@@ -21,7 +21,7 @@ public class AccountModel : BaseEntity, IUpdateVersion
     /// 账号Key
     /// </summary>
     [Required]
-    [SugarColumn(ColumnDescription = "账号Key", ColumnDataType = "varchar(12)")]
+    [SugarColumn(ColumnDescription = "账号Key", Length = 12)]
     public string AccountKey { get; set; }
 
     /// <summary>
@@ -203,6 +203,18 @@ public class AccountModel : BaseEntity, IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "锁定结束时间")]
     public DateTime? LockEndTime { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    [Required, SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    public DateTime? CreatedTime { get; set; }
+
+    /// <summary>
+    /// 更新时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
+    public DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 更新版本控制字段

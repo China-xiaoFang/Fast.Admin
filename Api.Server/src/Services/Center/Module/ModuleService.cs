@@ -1,6 +1,7 @@
 ﻿using Fast.Center.Entity;
 using Fast.Center.Service.Menu;
 using Fast.Center.Service.Menu.Dto;
+using Fast.Center.Service.Module.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -65,10 +66,13 @@ public class Module : IDynamicApplication
                 ViewType = t1.ViewType,
                 Sort = t1.Sort,
                 Status = t1.Status,
+                DepartmentId = t1.DepartmentId,
+                DepartmentName = t1.DepartmentName,
                 CreatedUserName = t1.CreatedUserName,
                 CreatedTime = t1.CreatedTime,
                 UpdatedUserName = t1.UpdatedUserName,
-                UpdatedTime = t1.UpdatedTime
+                UpdatedTime = t1.UpdatedTime,
+                RowVersion = t1.RowVersion
             })
             .ToPagedListAsync(input);
     }
@@ -96,6 +100,8 @@ public class Module : IDynamicApplication
                 ViewType = t1.ViewType,
                 Sort = t1.Sort,
                 Status = t1.Status,
+                DepartmentId = t1.DepartmentId,
+                DepartmentName = t1.DepartmentName,
                 CreatedUserName = t1.CreatedUserName,
                 CreatedTime = t1.CreatedTime,
                 UpdatedUserName = t1.UpdatedUserName,

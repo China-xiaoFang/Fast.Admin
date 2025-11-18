@@ -23,7 +23,7 @@ public class QueryTableColumnConfigOutput
     /// <summary>
     /// 更新时间
     /// </summary>
-    public virtual DateTime? UpdatedTime { get; set; }
+    public  DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 是否存在改变

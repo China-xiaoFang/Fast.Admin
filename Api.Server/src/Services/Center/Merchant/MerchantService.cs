@@ -31,18 +31,20 @@ public class MerchantService : IDynamicApplication
         return await _repository.Entities
             .WhereIF(input.MerchantType != null, wh => wh.MerchantType == input.MerchantType)
             .OrderByDescending(ob => ob.CreatedTime)
-            .Select(sl => new QueryMerchantPagedOutput
+            .ToPagedListAsync(input, sl => new QueryMerchantPagedOutput
             {
                 MerchantId = sl.MerchantId,
                 MerchantType = sl.MerchantType,
                 MerchantNo = sl.MerchantNo,
                 Remark = sl.Remark,
+                DepartmentId = sl.DepartmentId,
+                DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
                 UpdatedUserName = sl.UpdatedUserName,
-                UpdatedTime = sl.UpdatedTime
-            })
-            .ToPagedListAsync(input);
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            });
     }
 
     /// <summary>
@@ -69,6 +71,8 @@ public class MerchantService : IDynamicApplication
                 Cert = sl.Cert,
                 CertPrivateKey = sl.CertPrivateKey,
                 Remark = sl.Remark,
+                DepartmentId = sl.DepartmentId,
+                DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
                 UpdatedUserName = sl.UpdatedUserName,

@@ -1,7 +1,7 @@
 ﻿using Fast.JwtBearer;
 using Microsoft.AspNetCore.Http;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Core;
 
 /// <summary>

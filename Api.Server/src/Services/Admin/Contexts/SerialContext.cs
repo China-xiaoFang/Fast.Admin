@@ -3,7 +3,7 @@ using Fast.Admin.Entity;
 using Fast.Admin.Enum;
 using Yitter.IdGenerator;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Admin.Service;
 
 /// <summary>
