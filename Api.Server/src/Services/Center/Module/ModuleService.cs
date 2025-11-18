@@ -225,7 +225,7 @@ public class Module : IDynamicApplication
             }
 
             await _repository.UpdateAsync(moduleModel);
-        });
+        }, ex => throw ex);
     }
 
     /// <summary>

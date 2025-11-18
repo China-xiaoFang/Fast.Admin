@@ -254,7 +254,7 @@ public class DictionaryService : IDynamicApplication
         {
             await _typeRepository.InsertAsync(dictionaryTypeModel);
             await _itemRepository.InsertAsync(dictionaryItemList);
-        });
+        }, ex => throw ex);
 
         // 删除缓存
         await _centerCache.DelAsync(CacheConst.Center.Dictionary);
@@ -329,7 +329,7 @@ public class DictionaryService : IDynamicApplication
             await _itemRepository.DeleteAsync(deleteDictionaryItemList);
             await _itemRepository.UpdateAsync(updateDictionaryItemList);
             await _itemRepository.InsertAsync(addDictionaryItemList);
-        });
+        }, ex => throw ex);
 
         // 删除缓存
         await _centerCache.DelAsync(CacheConst.Center.Dictionary);
@@ -356,7 +356,7 @@ public class DictionaryService : IDynamicApplication
         {
             await _itemRepository.DeleteAsync(dictionaryTypeModel.DictionaryItemList);
             await _typeRepository.DeleteAsync(dictionaryTypeModel);
-        });
+        }, ex => throw ex);
 
         // 删除缓存
         await _centerCache.DelAsync(CacheConst.Center.Dictionary);

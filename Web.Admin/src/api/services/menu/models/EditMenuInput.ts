@@ -1,8 +1,8 @@
-import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { EditMenuButtonDto } from "./EditMenuButtonDto";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
+import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
+import { EditMenuButtonDto } from "./EditMenuButtonDto";
 
 /**
  * Fast.Center.Service.Menu.Dto.EditMenuInput 编辑菜单输入
@@ -12,18 +12,6 @@ export interface EditMenuInput {
    * 菜单Id
    */
   menuId?: number;
-  /**
-   * 
-   */
-  status?: CommonStatusEnum;
-  /**
-   * 更新版本控制字段
-   */
-  rowVersion?: number;
-  /**
-   * 按钮信息
-   */
-  buttonList?: Array<EditMenuButtonDto>;
   /**
    * 
    */
@@ -104,5 +92,17 @@ export interface EditMenuInput {
    * 排序
    */
   sort?: number;
+  /**
+   * 
+   */
+  status?: CommonStatusEnum;
+  /**
+   * 按钮信息
+   */
+  buttonList?: Array<EditMenuButtonDto>;
+  /**
+   * 
+   */
+  rowVersion?: number;
 }
 

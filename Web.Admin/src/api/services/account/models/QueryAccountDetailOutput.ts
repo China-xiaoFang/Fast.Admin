@@ -118,17 +118,9 @@ export interface QueryAccountDetailOutput {
    */
   lockEndTime?: Date;
   /**
-   * 创建者用户名称
-   */
-  createdUserName?: string;
-  /**
    * 创建时间
    */
   createdTime?: Date;
-  /**
-   * 更新者用户名称
-   */
-  updatedUserName?: string;
   /**
    * 更新时间
    */

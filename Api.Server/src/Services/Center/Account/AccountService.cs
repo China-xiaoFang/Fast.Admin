@@ -264,7 +264,7 @@ public class AccountService : IDynamicApplication
         {
             await _repository.UpdateAsync(accountModel);
             await _visitLogRepository.InsertAsync(visitLogModel);
-        });
+        }, ex => throw ex);
 
         // 退出登录
         await _user.Logout();

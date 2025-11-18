@@ -55,7 +55,7 @@ public class AddDictionaryInput
     /// <summary>
     /// 字典项集合
     /// </summary>
-    public List<AddDictionaryItemInput> DictionaryItemList { get; set; }
+    public List<AddDictionaryItemInput> DictionaryItemList { get; set; } = [];
 
     /// <summary>
     /// <see cref="AddDictionaryItemInput"/> 添加字典项输入

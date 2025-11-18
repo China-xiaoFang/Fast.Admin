@@ -195,7 +195,7 @@ public class ApplicationService : IDynamicApplication
             applicationModel.AppNo = SysSerialContext.GenAppNo(_repository);
 
             await _repository.InsertAsync(applicationModel);
-        });
+        }, ex => throw ex);
     }
 
     /// <summary>
@@ -349,7 +349,7 @@ public class ApplicationService : IDynamicApplication
                 .ExecuteCommandAsync();
             await _repository.Insertable(addApplicationOpenIdList)
                 .ExecuteCommandAsync();
-        });
+        }, ex => throw ex);
 
         // 删除全部缓存
         await ApplicationContext.DeleteAllApplication();

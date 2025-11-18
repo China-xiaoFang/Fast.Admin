@@ -1,7 +1,7 @@
 import { ModuleViewTypeEnum } from "@/api/enums/ModuleViewTypeEnum";
 
 /**
- * Fast.Center.Service.Menu.Dto.AddModuleInput 添加模块输入
+ * Fast.Center.Service.Module.Dto.AddModuleInput 添加模块输入
  */
 export interface AddModuleInput {
   /**

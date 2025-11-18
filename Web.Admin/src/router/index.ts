@@ -98,6 +98,7 @@ router.beforeEach(async (to, from, next) => {
 		// 判断是否存在重定向路径，如果有则跳转
 		const redirect = decodeURIComponent((from.query.redirect as string) || "");
 		if (redirect && redirect != to.fullPath) {
+			delete from.query.redirect;
 			const _query = stringUtil.getUrlParams(redirect);
 			// 设置 replace: true, 因此导航将不会留下历史记录
 			next({ path: redirect, replace: true, query: _query });

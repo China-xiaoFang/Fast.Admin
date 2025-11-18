@@ -3,7 +3,7 @@ import { ModuleViewTypeEnum } from "@/api/enums/ModuleViewTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
- * Fast.Center.Service.Menu.Dto.QueryModulePagedInput 获取模块分页列表
+ * Fast.Center.Service.Module.Dto.QueryModulePagedInput 获取模块分页列表
  */
 export interface QueryModulePagedInput extends PagedInput  {
   /**

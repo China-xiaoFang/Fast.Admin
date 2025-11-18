@@ -193,7 +193,7 @@ public class TableService : IDynamicApplication
         {
             await _columnCacheRepository.DeleteAsync(wh => wh.TableId == tableConfigModel.TableId);
             await _tableRepository.DeleteAsync(tableConfigModel);
-        });
+        }, ex => throw ex);
 
         // 清除缓存
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableConfigModel.TableKey, "*", "*");
@@ -245,7 +245,7 @@ public class TableService : IDynamicApplication
         {
             await _tableRepository.InsertAsync(tableConfigModel);
             await _columnRepository.InsertAsync(columnConfigList);
-        });
+        }, ex => throw ex);
     }
 
     /// <summary>
@@ -418,7 +418,7 @@ public class TableService : IDynamicApplication
             await _columnRepository.DeleteAsync(deleteTableColumnList);
             await _columnRepository.UpdateAsync(updateTableColumnList);
             await _columnRepository.InsertAsync(addTableColumnList);
-        });
+        }, ex => throw ex);
 
         // 删除缓存
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.TableConfig, tableConfigModel.TableKey);
@@ -729,7 +729,7 @@ public class TableService : IDynamicApplication
         {
             await _columnCacheRepository.DeleteAsync(deleteTableColumnCacheList);
             await _columnCacheRepository.InsertAsync(addTableColumnCacheList);
-        });
+        }, ex => throw ex);
 
         // 删除缓存
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableConfigModel.TableKey, _user.TenantNo,
@@ -813,7 +813,7 @@ public class TableService : IDynamicApplication
         {
             await _columnCacheRepository.UpdateAsync(tableColumnCacheList);
             await _columnCacheRepository.InsertAsync(addTableColumnCacheList);
-        });
+        }, ex => throw ex);
 
         // 删除缓存
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableConfigModel.TableKey, _user.TenantNo,

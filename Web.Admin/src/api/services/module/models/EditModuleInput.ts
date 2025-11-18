@@ -1,22 +1,14 @@
-import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { ModuleViewTypeEnum } from "@/api/enums/ModuleViewTypeEnum";
+import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
- * Fast.Center.Service.Menu.Dto.EditModuleInput 编辑模块输入
+ * Fast.Center.Service.Module.Dto.EditModuleInput 编辑模块输入
  */
 export interface EditModuleInput {
   /**
    * 模块Id
    */
   moduleId?: number;
-  /**
-   * 
-   */
-  status?: CommonStatusEnum;
-  /**
-   * 更新版本控制字段
-   */
-  rowVersion?: number;
   /**
    * 应用Id
    */
@@ -41,5 +33,13 @@ export interface EditModuleInput {
    * 排序
    */
   sort?: number;
+  /**
+   * 
+   */
+  status?: CommonStatusEnum;
+  /**
+   * 
+   */
+  rowVersion?: number;
 }
 
