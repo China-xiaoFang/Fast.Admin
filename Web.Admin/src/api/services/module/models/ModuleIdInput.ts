@@ -1,5 +1,5 @@
 /**
- * Fast.Center.Service.Menu.Dto.ModuleIdInput 模块Id输入
+ * Fast.Center.Service.Module.Dto.ModuleIdInput 模块Id输入
  */
 export interface ModuleIdInput {
   /**
@@ -7,7 +7,7 @@ export interface ModuleIdInput {
    */
   moduleId?: number;
   /**
-   * 更新版本控制字段
+   * 
    */
   rowVersion?: number;
 }

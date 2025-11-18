@@ -1,0 +1,146 @@
+<template>
+	<FaDialog
+		ref="faDialogRef"
+		width="800"
+		:title="state.dialogTitle"
+		:showConfirmButton="!state.formDisabled"
+		:showBeforeClose="!state.formDisabled"
+		confirmButtonText="保存"
+		@confirm-click="handleConfirm"
+		@close="faFormRef.resetFields()"
+	>
+		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled" cols="2">
+			<FaFormItem label="字典项名称" prop="label">
+				<el-input v-model="state.formData.label" maxlength="50" placeholder="请输入字典项名称" />
+			</FaFormItem>
+			<FaFormItem label="字典项值" prop="value">
+				<el-input v-model="state.formData.value" maxlength="50" placeholder="请输入字典项值" />
+			</FaFormItem>
+			<FaFormItem label="标签类型" prop="type" span="2">
+				<el-radio-group v-model="state.formData.type">
+					<el-radio :value="1">Primary</el-radio>
+					<el-radio :value="2">Success</el-radio>
+					<el-radio :value="4">Info</el-radio>
+					<el-radio :value="8">Warning</el-radio>
+					<el-radio :value="16">Danger</el-radio>
+				</el-radio-group>
+			</FaFormItem>
+			<FaFormItem label="显示" prop="visible">
+				<el-radio-group v-model="state.formData.visible">
+					<el-radio :value="1">显示</el-radio>
+					<el-radio :value="0">隐藏</el-radio>
+				</el-radio-group>
+			</FaFormItem>
+			<FaFormItem label="排序" prop="order">
+				<el-input-number v-model="state.formData.order" :min="1" :max="9999" placeholder="请输入顺序" />
+			</FaFormItem>
+			<FaFormItem label="状态" prop="status">
+				<el-radio-group v-model="state.formData.status">
+					<el-radio :value="1">正常</el-radio>
+					<el-radio :value="2">禁用</el-radio>
+				</el-radio-group>
+			</FaFormItem>
+			<FaFormItem label="提示" prop="tips">
+				<el-input v-model="state.formData.tips" type="textarea" maxlength="100" placeholder="请输入提示" />
+			</FaFormItem>
+		</FaForm>
+	</FaDialog>
+</template>
+
+<script lang="ts" setup>
+import { nextTick, reactive, ref } from "vue";
+import { type FormRules } from "element-plus";
+import { FaDialog } from "fast-element-plus";
+import { definePropType, withDefineType } from "@fast-china/utils";
+import { useVModel } from "@vueuse/core";
+import type { EditDictionaryItemInput } from "@/api/services/dictionary/models/EditDictionaryItemInput";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
+import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
+import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
+
+defineOptions({
+	name: "DevDictionaryEditItemEdit",
+});
+
+const props = defineProps({
+	/** @description v-model绑定值 */
+	modelValue: definePropType<EditDictionaryItemInput[]>([Array]),
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+
+const faDialogRef = ref<FaDialogInstance>();
+const faFormRef = ref<FaFormInstance>();
+
+const state = reactive({
+	formData: withDefineType<EditDictionaryItemInput>({
+		type: TagTypeEnum.Primary,
+		visible: YesOrNotEnum.Y,
+		status: CommonStatusEnum.Enable,
+	}),
+	formRules: withDefineType<FormRules>({
+		label: [{ required: true, message: "请输入字典项名称", trigger: "blur" }],
+		value: [{ required: true, message: "请输入字典项值", trigger: "blur" }],
+		type: [{ required: true, message: "请选择标签类型", trigger: "change" }],
+		order: [{ required: true, message: "请输入排序", trigger: "blur" }],
+		visible: [{ required: true, message: "请选择显示", trigger: "change" }],
+		status: [{ required: true, message: "请选择状态", trigger: "change" }],
+	}),
+	formDisabled: false,
+	dialogState: withDefineType<IPageStateType>("add"),
+	dialogTitle: "数据字典项",
+	tableIndex: withDefineType<number>(),
+});
+
+const handleConfirm = () => {
+	faDialogRef.value.close(async () => {
+		await faFormRef.value.validateScrollToField();
+		switch (state.dialogState) {
+			case "add":
+				modelValue.value.push({ ...state.formData });
+				break;
+			case "edit":
+				modelValue.value[state.tableIndex] = { ...state.formData };
+				break;
+		}
+	});
+};
+
+const detail = (row: EditDictionaryItemInput) => {
+	faDialogRef.value.open(() => {
+		state.formDisabled = true;
+		state.formData = { ...row };
+		state.dialogTitle = `数据字典项详情 - ${row.label}`;
+	});
+};
+
+const add = () => {
+	faDialogRef.value.open();
+	nextTick(() => {
+		state.dialogState = "add";
+		state.dialogTitle = "添加数据字典项";
+		state.formDisabled = false;
+	});
+};
+
+const edit = (row: EditDictionaryItemInput, index: number) => {
+	faDialogRef.value.open(async () => {
+		state.dialogState = "edit";
+		state.formDisabled = false;
+		state.tableIndex = index;
+		state.formData = { ...row };
+		state.dialogTitle = `编辑数据字典项 - ${row.label}`;
+	});
+};
+
+// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
+defineExpose({
+	element: faDialogRef,
+	detail,
+	add,
+	edit,
+});
+</script>

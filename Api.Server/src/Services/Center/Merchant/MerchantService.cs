@@ -184,7 +184,7 @@ public class MerchantService : IDynamicApplication
                 .SetColumns(_ => new ApplicationOpenIdModel {AlipayMerchantNo = merchantModel.MerchantNo})
                 .Where(wh => wh.AlipayMerchantId == merchantModel.MerchantId)
                 .ExecuteCommandAsync();
-        });
+        }, ex => throw ex);
 
         // 删除缓存
         await MerchantContext.DeleteMerchant(merchantModel.MerchantNo);

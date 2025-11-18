@@ -39,6 +39,17 @@
 								</template>
 							</el-menu-item>
 						</el-menu>
+						<FaSelect
+							ref="faTenantSelectRef"
+							width="150px"
+							size="small"
+							valueKey="userKey"
+							:props="{ label: 'tenantName' }"
+							:lazy="false"
+							:requestApi="() => loginApi.queryLoginUserByAccount(userInfoStore.accountKey)"
+							@change="handleTenantChange"
+							@data-change-call-back="() => faTenantSelectRef.setSelection(userInfoStore.userKey)"
+						/>
 						<LayoutScreenFull />
 						<el-dropdown
 							class="avatar"
@@ -92,12 +103,16 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from "vue";
+import { inject, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Expand, Fold, Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
 import { Local, addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
 import LayoutMenu from "./components/Menu/index.vue";
+import type { LoginTenantOutput } from "@/api/services/login/models/LoginTenantOutput";
+import type { FaSelectInstance } from "fast-element-plus";
+import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
+import { loginApi } from "@/api/services/login";
 import { layoutConfigKey } from "@/layouts";
 import LayoutBreadcrumb from "@/layouts/components/Breadcrumb/index.vue";
 import LayoutLogo from "@/layouts/components/Logo/index.vue";
@@ -118,12 +133,15 @@ const navTabsStore = useNavTabs();
 const userInfoStore = useUserInfo();
 
 const layoutConfigRef = inject(layoutConfigKey);
+const faTenantSelectRef = ref<FaSelectInstance>();
 
 const handleRefreshSystem = () => {
 	ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {
 		type: "warning",
 	}).then(() => {
+		// 删除 HTTP 缓存数据
 		Local.removeByPrefix("HTTP_CACHE_");
+		// 刷新App
 		refreshApp();
 	});
 };
@@ -132,6 +150,24 @@ const handleModuleSelect = (moduleId: string) => {
 	const fInfo = userInfoStore.menuList.find((f) => f.moduleId.toString() === moduleId);
 	if (fInfo) {
 		navTabsStore.activeModuleId = moduleId;
+	}
+};
+
+const handleTenantChange = async (value: LoginTenantOutput) => {
+	const { accountKey, userKey } = userInfoStore;
+	if (value.userKey !== userKey) {
+		await userInfoStore.logout();
+		const loginRes = await loginApi.tenantLogin({ accountKey, userKey: value.userKey });
+		if (loginRes.status === LoginStatusEnum.Success) {
+			ElMessage.success(`切换租户【${value.tenantName}】成功`);
+			userInfoStore.login();
+			// 删除 HTTP 缓存数据
+			Local.removeByPrefix("HTTP_CACHE_");
+			// 刷新App
+			refreshApp();
+		} else {
+			ElMessage.error(loginRes.message);
+		}
 	}
 };
 

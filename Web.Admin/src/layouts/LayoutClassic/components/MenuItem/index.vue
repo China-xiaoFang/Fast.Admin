@@ -6,7 +6,7 @@
 		</template>
 		<MenuItem v-for="(item, idx) in props.menu.children" :key="idx" :menu="item" />
 	</el-sub-menu>
-	<el-menu-item v-else :index="props.menu.router" @click="handleMenuClick">
+	<el-menu-item v-else :index="props.menu.router || props.menu.link" @click="handleMenuClick">
 		<FaIcon v-if="props.menu.icon" :name="props.menu.icon" />
 		<template #title>
 			<span>{{ props.menu.menuName }}</span>

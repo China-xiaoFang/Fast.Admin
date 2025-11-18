@@ -26,7 +26,7 @@ export interface EditSysSerialRuleInput {
    */
   length?: number;
   /**
-   * 更新版本控制字段
+   * 
    */
   rowVersion?: number;
 }

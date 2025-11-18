@@ -9,10 +9,6 @@ export interface EditMerchantInput {
    */
   merchantId?: number;
   /**
-   * 更新版本控制字段
-   */
-  rowVersion?: number;
-  /**
    * 
    */
   merchantType?: PaymentChannelEnum;
@@ -48,5 +44,9 @@ export interface EditMerchantInput {
    * 备注
    */
   remark?: string;
+  /**
+   * 
+   */
+  rowVersion?: number;
 }
 

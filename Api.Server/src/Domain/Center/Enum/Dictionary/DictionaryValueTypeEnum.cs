@@ -32,14 +32,14 @@ public enum DictionaryValueTypeEnum : byte
     /// <summary>
     /// 字符串
     /// </summary>
-    [TagType(TagTypeEnum.Primary)]
+    [TagType(TagTypeEnum.Info)]
     [Description("字符串")]
     String = 1,
 
     /// <summary>
     /// Int
     /// </summary>
-    [TagType(TagTypeEnum.Primary)]
+    [TagType(TagTypeEnum.Success)]
     [Description("Int")]
     Int = 2,
 
@@ -53,7 +53,7 @@ public enum DictionaryValueTypeEnum : byte
     /// <summary>
     /// Boolean
     /// </summary>
-    [TagType(TagTypeEnum.Success)]
+    [TagType(TagTypeEnum.Danger)]
     [Description("Boolean")]
     Boolean = 8
 }

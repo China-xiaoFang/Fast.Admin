@@ -1,9 +1,9 @@
-[中](https://gitee.com/Net-18K/Fast.Admin) | **En**
+[中](https://gitee.com/FastDotnet/Fast.Admin) | **En**
 
 # Fast.Admin
 
 - A rapid construction project that combines the strengths of hundreds of experts, focuses on `Web Api` applications, provides out-of-the-box functionality, and keeps up with the latest cutting-edge technology of the `.NET` framework.
-- Use [Fast.NET](https://gitee.com/Net-18K/Fast.NET) as the bottom layer of the framework.
+- Use [Fast.NET](https://gitee.com/FastDotnet/Fast.NET) as the bottom layer of the framework.
 - Developed using `C#10` and `.NET6`.
 - Supports seamless upgrade to `.NET7` `.NET8`.
 
@@ -15,52 +15,54 @@
 
 ## Branch description
 
-| Branch | Details | Version | Environment | Suggestions |
-| ------- | ------- | ------- | ------- | ------------------------------------------------------------------------------ |
-| master | master branch | stable version | production environment | If you need to Fork or make modifications on this version, please pull the code of the master branch |
+| Branch  | Details            | Version           | Environment             | Suggestions                                                                                                                                         |
+| ------- | ------------------ | ----------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| master  | master branch      | stable version    | production environment  | If you need to Fork or make modifications on this version, please pull the code of the master branch                                                |
 | develop | development branch | iterative version | development environment | develop is a fast iteration version. The functions of this version are untested code, so it is not recommended to use develop for fork and learning |
-| next | Advanced branch | Advanced version | Not recommended | next is an advanced iteration version. The functions of this version are what I think are useful or are about to be implemented, so it is not recommended for any purpose |
 
 ## Update log
 
-Update log [Click to view](https://gitee.com/Net-18K/Fast.Admin/commits/master)
+Update log [Click to view](https://gitee.com/FastDotnet/Fast.Admin/commits/master)
 
 ## protocol
 
-[Fast.Admin](https://gitee.com/Net-18K/Fast.Admin) Follow [Apache-2.0](https://gitee.com/Net-18K/Fast.Admin/blob/master/LICENSE) Open source license, everyone is welcome to submit `PR` or `Issue`.
+[Fast.Admin](https://gitee.com/FastDotnet/Fast.Admin) Follow [Apache-2.0](https://gitee.com/FastDotnet/Fast.Admin/blob/master/LICENSE) Open source license, everyone is welcome to submit `PR` or `Issue`.
 
 ```
 Apache Open Source License
 
-Copyright © 2018-2024 1.8KZi
+Copyright © 2018-Now xiaoFang
 
-The right to deal in the Software is hereby granted free of charge to any person obtaining a copy of this software and its related documentation (the "Software"),
-Including but not limited to using, copying, modifying, merging, publishing, distributing, sublicensing, selling copies of the Software,
-and permit individuals in possession of a copy of the software to do so, subject to the following conditions:
+License:
+This Agreement grants any individual or organization that obtains a copy of this software and its related documentation (hereinafter referred to as the "Software").
+Subject to the terms of this Agreement, you have the right to use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the Software:
+1.All copies or major parts of the Software must retain this Copyright Notice and this License Agreement.
+2.The use, copying, modification, or distribution of the Software shall not violate applicable laws or infringe upon the legitimate rights and interests of others.
+3.Modified or derivative works must clearly indicate the original author and the source of the original Software.
 
-The above copyright notice and this license notice must be included on all copies or substantial portions of the Software.
+Special Statement:
+- This Software is provided "as is" without any express or implied warranty of any kind, including but not limited to the warranty of merchantability, fitness for purpose, and non-infringement.
+- In no event shall the author or copyright holder be liable for any direct or indirect loss caused by the use or inability to use this Software.
+- Including but not limited to data loss, business interruption, etc.
 
-THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS AND NON-INFRINGEMENT.
-In no event shall the author or copyright holder be liable for any claim, damages or other liability,
-WHETHER ARISING IN CONTRACT, TORT OR OTHERWISE, IN CONNECTION WITH THE SOFTWARE OR ITS USE OR OTHER DEALINGS.
+Disclaimer:
+It is prohibited to use this software to engage in illegal activities such as endangering national security, disrupting social order, or infringing on the legitimate rights and interests of others.
+The author does not assume any responsibility for any legal disputes and liabilities caused by the secondary development of this software.
 ```
-
-`
-Since it is still in the development stage and all functions are not very stable, the Apache-2.0 open source protocol is used for the time being. After all functions are stable, the MIT open source license will be adopted.
-`
 
 ## team member
 
-| Members | Technology | Nickname | Motto |
-| --- | ---- | ---- | ---- |
-| 小方 | Full Stack | 1.8K仔 | Accepting your own mediocrity and ordinaryness is a required course for growth<br> The life you envy is the hardship you have not survived<br> When your ability cannot support you When you are ambitious, you need to calm down and study hard |
+| Members | Technology | Nickname | Motto                                                                                                                                                                                                                                            |
+| ------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 小方    | Full Stack | 1.8K 仔  | Accepting your own mediocrity and ordinaryness is a required course for growth<br> The life you envy is the hardship you have not survived<br> When your ability cannot support you When you are ambitious, you need to calm down and study hard |
 
 ## Coding environment
-| Name | Remarks |
-| --- | ---- |
-| Visual Studio 2022 | |
-| Visual Studio Code | |
-| Resharper | The comments starting with `// ReSharper` that you see in the code are generated by this application to avoid unnecessary warnings or prompts |
+
+| Name               | Remarks                                                                                                                                       |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Visual Studio 2022 |                                                                                                                                               |
+| Visual Studio Code |                                                                                                                                               |
+| Resharper          | The comments starting with `// ReSharper` that you see in the code are generated by this application to avoid unnecessary warnings or prompts |
 
 ## Disclaimer
 
