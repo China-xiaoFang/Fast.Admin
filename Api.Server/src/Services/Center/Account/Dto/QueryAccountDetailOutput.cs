@@ -25,7 +25,7 @@ namespace Fast.Center.Service.Account.Dto;
 /// <summary>
 /// <see cref="QueryAccountDetailOutput"/> 获取账号详情输出
 /// </summary>
-public class QueryAccountDetailOutput : PagedOutput
+public class QueryAccountDetailOutput
 {
     /// <summary>
     /// 账号Id
