@@ -120,18 +120,6 @@ public static class IServiceCollectionExtension
             });
         });
 
-        services.AddQuartzHostedService(options =>
-        {
-            // when shutting down we want jobs to complete gracefully
-            options.WaitForJobsToComplete = true;
-
-            // when we need to init another IHostedServices first
-            options.StartDelay = TimeSpan.FromSeconds(10);
-
-            // start the task after the application has completed its startup process.
-            options.AwaitApplicationStarted = true;
-        });
-
         // 调度器工厂
         services.TryAddSingleton<ContainerConfigurationProcessor>();
         services.TryAddSingleton<IDependencySchedulerFactory, DependencySchedulerFactory>();
@@ -145,6 +133,29 @@ public static class IServiceCollectionExtension
         {
             services.TryAddScoped(type);
         }
+
+        return services;
+    }
+
+
+    /// <summary>
+    /// 添加 Quartz 托管服务
+    /// </summary>
+    /// <param name="services"><see cref="IServiceCollection"/></param>
+    /// <returns><see cref="IServiceCollection"/></returns>
+    public static IServiceCollection AddQuartzHostedService(this IServiceCollection services)
+    {
+        services.AddQuartzHostedService(options =>
+        {
+            // when shutting down we want jobs to complete gracefully
+            options.WaitForJobsToComplete = true;
+
+            // when we need to init another IHostedServices first
+            options.StartDelay = TimeSpan.FromSeconds(10);
+
+            // start the task after the application has completed its startup process.
+            options.AwaitApplicationStarted = true;
+        });
 
         return services;
     }

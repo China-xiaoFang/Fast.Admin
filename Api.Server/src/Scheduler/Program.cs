@@ -126,6 +126,9 @@ builder.Services.AddHostedService<SyncDictionaryHostedService>();
 // 添加生成Api文件托管服务
 builder.Services.AddHostedService<GenerateApiFileHostedService>();
 
+// 添加 Quartz 托管服务
+builder.Services.AddQuartzHostedService();
+
 // 添加调度后台托管服务
 builder.Services.AddHostedService<SchedulerHostedService>();
 
