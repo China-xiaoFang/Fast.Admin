@@ -1,6 +1,6 @@
 ﻿using Fast.Center.Enum;
 
-namespace Fast.Center.Service.Menu.Dto;
+namespace Fast.Center.Service.Module.Dto;
 
 /// <summary>
 /// <see cref="QueryModulePagedInput"/> 获取模块分页列表

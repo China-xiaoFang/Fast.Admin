@@ -13,7 +13,7 @@ using Quartz.Impl.Calendar;
 using Quartz.Impl.Matchers;
 using Quartz.Impl.Triggers;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Scheduler;
 
 /// <summary>

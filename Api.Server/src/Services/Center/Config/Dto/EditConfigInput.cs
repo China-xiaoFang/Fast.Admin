@@ -3,7 +3,7 @@
 /// <summary>
 /// <see cref="EditConfigInput"/> 编辑配置输入
 /// </summary>
-public class EditConfigInput
+public class EditConfigInput : UpdateVersionInput
 {
     /// <summary>
     /// 配置Id
@@ -30,10 +30,4 @@ public class EditConfigInput
     /// 备注
     /// </summary>
     public string Remark { get; set; }
-
-    /// <summary>
-    /// 更新版本控制字段
-    /// </summary>
-    [LongRequired(ErrorMessage = "更新版本控制字段不能为空")]
-    public long RowVersion { get; set; }
 }

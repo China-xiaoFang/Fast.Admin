@@ -1,4 +1,4 @@
-﻿// ReSharper disable once CheckNamespace
+﻿
 
 namespace Fast.Center.Entity;
 
@@ -161,13 +161,13 @@ public class WeChatUserModel : IUpdateVersion
     /// 创建时间
     /// </summary>
     [Required, SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
-    public virtual DateTime? CreatedTime { get; set; }
+    public  DateTime? CreatedTime { get; set; }
 
     /// <summary>
     /// 更新时间
     /// </summary>
     [SugarColumn(ColumnDescription = "更新时间", CreateTableFieldSort = 996)]
-    public virtual DateTime? UpdatedTime { get; set; }
+    public  DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 更新版本控制字段

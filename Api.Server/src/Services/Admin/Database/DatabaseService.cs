@@ -216,7 +216,7 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
                 accountModel = new AccountModel
                 {
                     AccountId = accountId,
-                    AccountKey = VerificationUtil.IdToCodeByLong(accountId),
+                    AccountKey = NumberUtil.IdToCodeByLong(accountId),
                     Mobile = tenantModel.AdminMobile,
                     Email = tenantModel.AdminEmail,
                     Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
@@ -241,7 +241,7 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
                     new()
                     {
                         UserId = userId,
-                        UserKey = VerificationUtil.IdToCodeByLong(userId),
+                        UserKey = NumberUtil.IdToCodeByLong(userId),
                         AccountId = accountModel.AccountId,
                         Account = $"{tenantModel.TenantCode}_Admin",
                         EmployeeNo = "",
@@ -256,7 +256,7 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
                     new()
                     {
                         UserId = robotUserId,
-                        UserKey = VerificationUtil.IdToCodeByLong(robotUserId),
+                        UserKey = NumberUtil.IdToCodeByLong(robotUserId),
                         AccountId = -99,
                         Account = $"{tenantModel.TenantCode}_Robot",
                         EmployeeNo = "",

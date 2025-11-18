@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Core;
 
 /// <summary>

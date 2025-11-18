@@ -113,7 +113,7 @@ public class DictionaryService : IDynamicApplication
     public async Task<PagedResult<QueryDictionaryPagedOutput>> QueryDictionaryPaged(PagedInput input)
     {
         return await _typeRepository.Entities.OrderByDescending(ob => ob.CreatedTime)
-            .Select(sl => new QueryDictionaryPagedOutput
+            .ToPagedListAsync(input, sl => new QueryDictionaryPagedOutput
             {
                 DictionaryId = sl.DictionaryId,
                 DictionaryKey = sl.DictionaryKey,
@@ -122,12 +122,14 @@ public class DictionaryService : IDynamicApplication
                 HasFlags = sl.HasFlags,
                 Status = sl.Status,
                 Remark = sl.Remark,
+                DepartmentId = sl.DepartmentId,
+                DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
                 UpdatedUserName = sl.UpdatedUserName,
-                UpdatedTime = sl.UpdatedTime
-            })
-            .ToPagedListAsync(input);
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            });
     }
 
     /// <summary>
@@ -152,6 +154,8 @@ public class DictionaryService : IDynamicApplication
                 HasFlags = sl.HasFlags,
                 Status = sl.Status,
                 Remark = sl.Remark,
+                DepartmentId = sl.DepartmentId,
+                DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
                 UpdatedUserName = sl.UpdatedUserName,

@@ -1,7 +1,6 @@
 ﻿using Fast.Center.Entity;
-using Fast.Core.Hubs.Dto;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Core;
 
 /// <summary>

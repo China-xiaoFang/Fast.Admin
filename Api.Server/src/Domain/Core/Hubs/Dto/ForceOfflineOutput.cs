@@ -1,4 +1,4 @@
-﻿namespace Fast.Core.Hubs.Dto;
+﻿namespace Fast.Core;
 
 /// <summary>
 /// <see cref="ForceOfflineOutput"/> 强制下线输出

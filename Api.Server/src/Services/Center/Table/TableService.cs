@@ -42,18 +42,20 @@ public class TableService : IDynamicApplication
     public async Task<PagedResult<QueryTableConfigPagedOutput>> QueryTableConfigPaged(PagedInput input)
     {
         return await _tableRepository.Entities.OrderBy(ob => ob.TableName)
-            .Select(sl => new QueryTableConfigPagedOutput
+            .ToPagedListAsync(input, sl => new QueryTableConfigPagedOutput
             {
                 TableId = sl.TableId,
                 TableKey = sl.TableKey,
                 TableName = sl.TableName,
                 Remark = sl.Remark,
+                DepartmentId = sl.DepartmentId,
+                DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
                 UpdatedUserName = sl.UpdatedUserName,
-                UpdatedTime = sl.UpdatedTime
-            })
-            .ToPagedListAsync(input);
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            });
     }
 
     /// <summary>
@@ -74,6 +76,8 @@ public class TableService : IDynamicApplication
                 TableKey = sl.TableKey,
                 TableName = sl.TableName,
                 Remark = sl.Remark,
+                DepartmentId = sl.DepartmentId,
+                DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
                 UpdatedUserName = sl.UpdatedUserName,
@@ -110,7 +114,7 @@ public class TableService : IDynamicApplication
         var tableConfigModel = new TableConfigModel
         {
             TableId = tableId,
-            TableKey = VerificationUtil.IdToCodeByLong(tableId),
+            TableKey = NumberUtil.IdToCodeByLong(tableId),
             TableName = input.TableName,
             Remark = input.Remark
         };
@@ -200,7 +204,7 @@ public class TableService : IDynamicApplication
         var tableConfigModel = new TableConfigModel
         {
             TableId = tableId,
-            TableKey = VerificationUtil.IdToCodeByLong(tableId),
+            TableKey = NumberUtil.IdToCodeByLong(tableId),
             TableName = input.TableName,
             Remark = input.Remark
         };

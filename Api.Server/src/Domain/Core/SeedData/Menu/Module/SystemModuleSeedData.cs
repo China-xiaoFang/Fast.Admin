@@ -3,7 +3,7 @@ using Fast.Center.Enum;
 using SqlSugar;
 using Yitter.IdGenerator;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Core;
 
 /// <summary>
@@ -135,103 +135,6 @@ internal static partial class MenuSeedData
                     MenuId = appMenuModel.MenuId,
                     ButtonCode = PermissionConst.App.Delete,
                     ButtonName = "删除",
-                    HasDesktop = true,
-                    HasWeb = true,
-                    HasMobile = true,
-                    Sort = buttonSort,
-                    Status = CommonStatusEnum.Enable,
-                    CreatedTime = dateTime
-                }
-            })
-            .ExecuteCommandAsync();
-
-        #endregion
-
-        #region 单号配置
-
-        var serialMenuModel = new MenuModel
-        {
-            MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
-            AppId = applicationModel.AppId,
-            ModuleId = systemModuleModel.ModuleId,
-            MenuCode = PermissionConst.Serial.Paged,
-            MenuName = "单号配置",
-            MenuTitle = "单号配置",
-            ParentId = 0,
-            ParentIds = [0],
-            MenuType = MenuTypeEnum.Menu,
-            HasDesktop = true,
-            DesktopIcon = "adjust",
-            HasWeb = true,
-            WebIcon = "fa-icon-Adjust",
-            WebRouter = "/system/serial",
-            WebComponent = "system/serial/index",
-            HasMobile = true,
-            MobileIcon = "https://image.fastdotnet.com/menu/mobile/menu.png",
-            MobileRouter = "pages_system/serial/page/index",
-            Visible = YesOrNotEnum.Y,
-            Sort = menuSort,
-            Status = CommonStatusEnum.Enable,
-            CreatedTime = dateTime
-        };
-        serialMenuModel = await db.Insertable(serialMenuModel)
-            .ExecuteReturnEntityAsync();
-        await db.Insertable(new List<ButtonModel>
-            {
-                new()
-                {
-                    ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
-                    AppId = applicationModel.AppId,
-                    MenuId = serialMenuModel.MenuId,
-                    ButtonCode = PermissionConst.Serial.Paged,
-                    ButtonName = "列表",
-                    HasDesktop = true,
-                    HasWeb = true,
-                    HasMobile = true,
-                    Sort = buttonSort,
-                    Status = CommonStatusEnum.Enable,
-                    CreatedTime = dateTime
-                },
-                new()
-                {
-                    ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
-                    AppId = applicationModel.AppId,
-                    MenuId = serialMenuModel.MenuId,
-                    ButtonCode = PermissionConst.Serial.Detail,
-                    ButtonName = "详情",
-                    HasDesktop = true,
-                    HasWeb = true,
-                    HasMobile = true,
-                    Sort = buttonSort,
-                    Status = CommonStatusEnum.Enable,
-                    CreatedTime = dateTime
-                },
-                new()
-                {
-                    ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
-                    AppId = applicationModel.AppId,
-                    MenuId = serialMenuModel.MenuId,
-                    ButtonCode = PermissionConst.Serial.Add,
-                    ButtonName = "新增",
-                    HasDesktop = true,
-                    HasWeb = true,
-                    HasMobile = true,
-                    Sort = buttonSort,
-                    Status = CommonStatusEnum.Enable,
-                    CreatedTime = dateTime
-                },
-                new()
-                {
-                    ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
-                    AppId = applicationModel.AppId,
-                    MenuId = serialMenuModel.MenuId,
-                    ButtonCode = PermissionConst.Serial.Edit,
-                    ButtonName = "编辑",
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
@@ -473,7 +376,7 @@ internal static partial class MenuSeedData
         var accountMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.Basic,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.Account.Paged,
@@ -503,7 +406,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Basic,
                     AppId = applicationModel.AppId,
                     MenuId = accountMenuModel.MenuId,
                     ButtonCode = PermissionConst.Account.Paged,
@@ -518,7 +421,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Basic,
                     AppId = applicationModel.AppId,
                     MenuId = accountMenuModel.MenuId,
                     ButtonCode = PermissionConst.Account.Detail,
@@ -533,7 +436,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Basic,
                     AppId = applicationModel.AppId,
                     MenuId = accountMenuModel.MenuId,
                     ButtonCode = PermissionConst.Account.Unlock,
@@ -548,7 +451,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Basic,
                     AppId = applicationModel.AppId,
                     MenuId = accountMenuModel.MenuId,
                     ButtonCode = PermissionConst.Account.ResetPassword,
@@ -563,7 +466,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Basic,
                     AppId = applicationModel.AppId,
                     MenuId = accountMenuModel.MenuId,
                     ButtonCode = PermissionConst.Account.Status,
@@ -580,10 +483,136 @@ internal static partial class MenuSeedData
 
         #endregion
 
+        var configCLMenuModel = new MenuModel
+        {
+            MenuId = YitIdHelper.NextId(),
+            Edition = EditionEnum.Basic,
+            AppId = applicationModel.AppId,
+            ModuleId = systemModuleModel.ModuleId,
+            MenuCode = "Config:Catalog",
+            MenuName = "配置管理",
+            MenuTitle = "配置管理",
+            ParentId = 0,
+            ParentIds = [0],
+            MenuType = MenuTypeEnum.Catalog,
+            HasDesktop = true,
+            DesktopIcon = "systemSetting",
+            HasWeb = true,
+            WebIcon = "fa-icon-SystemSetting",
+            WebRouter = null,
+            WebComponent = null,
+            HasMobile = false,
+            MobileIcon = "fa-icon-organization",
+            MobileRouter = null,
+            Visible = YesOrNotEnum.Y,
+            Sort = menuSort,
+            Status = CommonStatusEnum.Enable,
+            CreatedTime = dateTime
+        };
+        configCLMenuModel = await db.Insertable(configCLMenuModel)
+            .ExecuteReturnEntityAsync();
+
+        #region 单号配置
+
+        var serialMenuModel = new MenuModel
+        {
+            MenuId = YitIdHelper.NextId(),
+            Edition = EditionEnum.Basic,
+            AppId = applicationModel.AppId,
+            ModuleId = systemModuleModel.ModuleId,
+            MenuCode = PermissionConst.Serial.Paged,
+            MenuName = "单号配置",
+            MenuTitle = "单号配置",
+            ParentId = configCLMenuModel.MenuId,
+            ParentIds = [0, configCLMenuModel.MenuId],
+            MenuType = MenuTypeEnum.Menu,
+            HasDesktop = true,
+            DesktopIcon = "adjust",
+            HasWeb = true,
+            WebIcon = "fa-icon-Adjust",
+            WebRouter = "/system/serial",
+            WebComponent = "system/serial/index",
+            HasMobile = true,
+            MobileIcon = "https://image.fastdotnet.com/menu/mobile/menu.png",
+            MobileRouter = "pages_system/serial/page/index",
+            Visible = YesOrNotEnum.Y,
+            Sort = menuSort,
+            Status = CommonStatusEnum.Enable,
+            CreatedTime = dateTime
+        };
+        serialMenuModel = await db.Insertable(serialMenuModel)
+            .ExecuteReturnEntityAsync();
+        await db.Insertable(new List<ButtonModel>
+            {
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Basic,
+                    AppId = applicationModel.AppId,
+                    MenuId = serialMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Serial.Paged,
+                    ButtonName = "列表",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Basic,
+                    AppId = applicationModel.AppId,
+                    MenuId = serialMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Serial.Detail,
+                    ButtonName = "详情",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Basic,
+                    AppId = applicationModel.AppId,
+                    MenuId = serialMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Serial.Add,
+                    ButtonName = "新增",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Basic,
+                    AppId = applicationModel.AppId,
+                    MenuId = serialMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Serial.Edit,
+                    ButtonName = "编辑",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                }
+            })
+            .ExecuteCommandAsync();
+
+        #endregion
+
         var orgCLMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.None,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = "Organization:Catalog",
@@ -614,7 +643,7 @@ internal static partial class MenuSeedData
         var positionMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.None,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.Position.Paged,
@@ -644,7 +673,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = positionMenuModel.MenuId,
                     ButtonCode = PermissionConst.Position.Paged,
@@ -659,7 +688,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = positionMenuModel.MenuId,
                     ButtonCode = PermissionConst.Position.Detail,
@@ -674,7 +703,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = positionMenuModel.MenuId,
                     ButtonCode = PermissionConst.Position.Add,
@@ -689,7 +718,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = positionMenuModel.MenuId,
                     ButtonCode = PermissionConst.Position.Edit,
@@ -704,7 +733,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = positionMenuModel.MenuId,
                     ButtonCode = PermissionConst.Position.Delete,
@@ -726,7 +755,7 @@ internal static partial class MenuSeedData
         var jobLevelMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.None,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.JobLevel.Paged,
@@ -756,7 +785,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = jobLevelMenuModel.MenuId,
                     ButtonCode = PermissionConst.JobLevel.Paged,
@@ -771,7 +800,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = jobLevelMenuModel.MenuId,
                     ButtonCode = PermissionConst.JobLevel.Detail,
@@ -786,7 +815,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = jobLevelMenuModel.MenuId,
                     ButtonCode = PermissionConst.JobLevel.Add,
@@ -801,7 +830,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = jobLevelMenuModel.MenuId,
                     ButtonCode = PermissionConst.JobLevel.Edit,
@@ -816,7 +845,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = jobLevelMenuModel.MenuId,
                     ButtonCode = PermissionConst.JobLevel.Delete,
@@ -838,7 +867,7 @@ internal static partial class MenuSeedData
         var roleMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.None,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.Role.Paged,
@@ -868,7 +897,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = roleMenuModel.MenuId,
                     ButtonCode = PermissionConst.Role.Paged,
@@ -883,7 +912,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = roleMenuModel.MenuId,
                     ButtonCode = PermissionConst.Role.Detail,
@@ -898,7 +927,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = roleMenuModel.MenuId,
                     ButtonCode = PermissionConst.Role.Add,
@@ -913,7 +942,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = roleMenuModel.MenuId,
                     ButtonCode = PermissionConst.Role.Edit,
@@ -928,7 +957,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = roleMenuModel.MenuId,
                     ButtonCode = PermissionConst.Role.Delete,
@@ -950,7 +979,7 @@ internal static partial class MenuSeedData
         var departmentMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.None,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.Department.Paged,
@@ -980,7 +1009,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = departmentMenuModel.MenuId,
                     ButtonCode = PermissionConst.Department.Paged,
@@ -995,7 +1024,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = departmentMenuModel.MenuId,
                     ButtonCode = PermissionConst.Department.Detail,
@@ -1010,7 +1039,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = departmentMenuModel.MenuId,
                     ButtonCode = PermissionConst.Department.Add,
@@ -1025,7 +1054,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = departmentMenuModel.MenuId,
                     ButtonCode = PermissionConst.Department.Edit,
@@ -1040,7 +1069,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = departmentMenuModel.MenuId,
                     ButtonCode = PermissionConst.Department.Delete,
@@ -1062,7 +1091,7 @@ internal static partial class MenuSeedData
         var employeeMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.None,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.Employee.Paged,
@@ -1092,7 +1121,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = employeeMenuModel.MenuId,
                     ButtonCode = PermissionConst.Employee.Paged,
@@ -1107,7 +1136,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = employeeMenuModel.MenuId,
                     ButtonCode = PermissionConst.Employee.Detail,
@@ -1122,7 +1151,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = employeeMenuModel.MenuId,
                     ButtonCode = PermissionConst.Employee.Add,
@@ -1137,7 +1166,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = employeeMenuModel.MenuId,
                     ButtonCode = PermissionConst.Employee.Edit,
@@ -1157,7 +1186,7 @@ internal static partial class MenuSeedData
         var financeCLMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.Professional,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = "Finance:Catalog",
@@ -1188,7 +1217,7 @@ internal static partial class MenuSeedData
         var merchantMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.Professional,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.Merchant.Paged,
@@ -1218,7 +1247,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Professional,
                     AppId = applicationModel.AppId,
                     MenuId = merchantMenuModel.MenuId,
                     ButtonCode = PermissionConst.Merchant.Paged,
@@ -1233,7 +1262,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Professional,
                     AppId = applicationModel.AppId,
                     MenuId = merchantMenuModel.MenuId,
                     ButtonCode = PermissionConst.Merchant.Detail,
@@ -1248,7 +1277,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Professional,
                     AppId = applicationModel.AppId,
                     MenuId = merchantMenuModel.MenuId,
                     ButtonCode = PermissionConst.Merchant.Add,
@@ -1263,7 +1292,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Professional,
                     AppId = applicationModel.AppId,
                     MenuId = merchantMenuModel.MenuId,
                     ButtonCode = PermissionConst.Merchant.Edit,
@@ -1278,7 +1307,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Professional,
                     AppId = applicationModel.AppId,
                     MenuId = merchantMenuModel.MenuId,
                     ButtonCode = PermissionConst.Merchant.Delete,

@@ -3,7 +3,7 @@
 /// <summary>
 /// <see cref="EditAccountInput"/> 编辑账号输入
 /// </summary>
-public class EditAccountInput
+public class EditAccountInput : UpdateVersionInput
 {
     /// <summary>
     /// 邮箱
@@ -36,10 +36,4 @@ public class EditAccountInput
     /// 生日
     /// </summary>
     public DateTime? Birthday { get; set; }
-
-    /// <summary>
-    /// 更新版本控制字段
-    /// </summary>
-    [LongRequired(ErrorMessage = "更新版本控制字段不能为空")]
-    public long RowVersion { get; set; }
 }

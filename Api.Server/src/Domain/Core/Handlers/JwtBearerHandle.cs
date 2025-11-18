@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Core;
 
 /// <summary>

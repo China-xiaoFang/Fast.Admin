@@ -1,4 +1,4 @@
-﻿// ReSharper disable once CheckNamespace
+﻿
 
 namespace Fast.Center.Entity;
 
@@ -20,7 +20,7 @@ public class TenantUserModel : IBaseTEntity, IUpdateVersion
     /// 用户Key
     /// </summary>
     [Required]
-    [SugarColumn(ColumnDescription = "用户Key", ColumnDataType = "varchar(12)")]
+    [SugarColumn(ColumnDescription = "用户Key", Length = 12)]
     public string UserKey { get; set; }
 
     /// <summary>

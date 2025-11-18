@@ -42,10 +42,13 @@ public class SysSerialService : IDynamicApplication
                 LastSerial = t2.LastSerial,
                 LastSerialNo = t2.LastSerialNo,
                 LastTime = t2.LastTime,
+                DepartmentId = t1.DepartmentId,
+                DepartmentName = t1.DepartmentName,
                 CreatedUserName = t1.CreatedUserName,
                 CreatedTime = t1.CreatedTime,
                 UpdatedUserName = t1.UpdatedUserName,
-                UpdatedTime = t1.UpdatedTime
+                UpdatedTime = t1.UpdatedTime,
+                RowVersion = t1.RowVersion
             })
             .ToPagedListAsync(input);
     }
@@ -71,6 +74,8 @@ public class SysSerialService : IDynamicApplication
                 DateType = sl.DateType,
                 Spacer = sl.Spacer,
                 Length = sl.Length,
+                DepartmentId = sl.DepartmentId,
+                DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
                 UpdatedUserName = sl.UpdatedUserName,

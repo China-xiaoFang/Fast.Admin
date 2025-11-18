@@ -3,7 +3,7 @@ using Fast.Center.Enum;
 using SqlSugar;
 using Yitter.IdGenerator;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Core;
 
 /// <summary>
@@ -191,9 +191,9 @@ internal static partial class MenuSeedData
             ParentIds = [0],
             MenuType = MenuTypeEnum.Menu,
             HasDesktop = true,
-            DesktopIcon = "systemSetting",
+            DesktopIcon = "chrome",
             HasWeb = true,
-            WebIcon = "fa-icon-SystemSetting",
+            WebIcon = "fa-icon-Chrome",
             WebRouter = "/dev/config",
             WebComponent = "dev/config/index",
             HasMobile = true,
