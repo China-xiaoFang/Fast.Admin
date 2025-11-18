@@ -372,7 +372,7 @@ public class MenuService : IDynamicApplication
                 .ExecuteCommandAsync();
             await _repository.Insertable(addButtonList)
                 .ExecuteCommandAsync();
-        });
+        }, ex => throw ex);
     }
 
     /// <summary>

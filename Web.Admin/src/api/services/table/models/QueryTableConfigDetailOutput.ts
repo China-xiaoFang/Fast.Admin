@@ -19,23 +19,31 @@ export interface QueryTableConfigDetailOutput {
    */
   remark?: string;
   /**
-   * 创建者用户名称
+   * 
+   */
+  departmentId?: number;
+  /**
+   * 
+   */
+  departmentName?: string;
+  /**
+   * 
    */
   createdUserName?: string;
   /**
-   * 创建时间
+   * 
    */
   createdTime?: Date;
   /**
-   * 更新者用户名称
+   * 
    */
   updatedUserName?: string;
   /**
-   * 更新时间
+   * 
    */
   updatedTime?: Date;
   /**
-   * 更新版本控制字段
+   * 
    */
   rowVersion?: number;
 }
