@@ -1,6 +1,6 @@
 ﻿using Quartz;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Scheduler;
 
 /// <summary>

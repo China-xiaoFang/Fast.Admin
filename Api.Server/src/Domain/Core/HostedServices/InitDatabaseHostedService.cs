@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using SqlSugar;
 using Yitter.IdGenerator;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Core;
 
 /// <summary>
@@ -125,7 +125,7 @@ public class InitDatabaseHostedService : IHostedService
             var superAdminAccountModel = new AccountModel
             {
                 AccountId = CommonConst.Default.SuperAdminAccountId,
-                AccountKey = VerificationUtil.IdToCodeByLong(CommonConst.Default.SuperAdminAccountId),
+                AccountKey = NumberUtil.IdToCodeByLong(CommonConst.Default.SuperAdminAccountId),
                 Mobile = "15580001115",
                 Email = "2875616188@qq.com",
                 Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
@@ -147,7 +147,7 @@ public class InitDatabaseHostedService : IHostedService
                     new()
                     {
                         UserId = superAdminUserId,
-                        UserKey = VerificationUtil.IdToCodeByLong(superAdminUserId),
+                        UserKey = NumberUtil.IdToCodeByLong(superAdminUserId),
                         AccountId = superAdminAccountModel.AccountId,
                         Account = "SuperAdmin",
                         EmployeeNo = "",
@@ -163,7 +163,7 @@ public class InitDatabaseHostedService : IHostedService
                     new()
                     {
                         UserId = robotUserId,
-                        UserKey = VerificationUtil.IdToCodeByLong(robotUserId),
+                        UserKey = NumberUtil.IdToCodeByLong(robotUserId),
                         AccountId = -99,
                         Account = $"{systemTenantModel.TenantCode}_Robot",
                         EmployeeNo = "",

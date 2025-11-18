@@ -5,7 +5,7 @@ namespace Fast.Center.Service.Dictionary.Dto;
 /// <summary>
 /// <see cref="EditDictionaryInput"/> 编辑字典输入
 /// </summary>
-public class EditDictionaryInput
+public class EditDictionaryInput : UpdateVersionInput
 {
     /// <summary>
     /// 字典Id
@@ -35,12 +35,6 @@ public class EditDictionaryInput
     /// 备注
     /// </summary>
     public string Remark { get; set; }
-
-    /// <summary>
-    /// 更新版本控制字段
-    /// </summary>
-    [LongRequired(ErrorMessage = "更新版本控制字段不能为空")]
-    public long RowVersion { get; set; }
 
     /// <summary>
     /// 字典项集合

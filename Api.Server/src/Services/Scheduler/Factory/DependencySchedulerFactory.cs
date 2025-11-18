@@ -6,6 +6,7 @@ using Quartz.Impl;
 using Quartz.Spi;
 using Quartz.Util;
 
+
 // ReSharper disable once CheckNamespace
 namespace Quartz;
 

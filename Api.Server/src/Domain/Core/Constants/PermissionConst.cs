@@ -1,4 +1,4 @@
-﻿// ReSharper disable once CheckNamespace
+﻿
 
 namespace Fast.Core;
 
@@ -172,22 +172,6 @@ public class PermissionConst
         public const string Delete = "App:Delete";
     }
 
-    /// <summary><see cref="Serial"/> 序号</summary>
-    public class Serial
-    {
-        /// <summary>序号列表</summary>
-        public const string Paged = "Serial:Paged";
-
-        /// <summary>序号详情</summary>
-        public const string Detail = "Serial:Detail";
-
-        /// <summary>序号新增</summary>
-        public const string Add = "Serial:Add";
-
-        /// <summary>序号编辑</summary>
-        public const string Edit = "Serial:Edit";
-    }
-
     /// <summary><see cref="Tenant"/> 租户</summary>
     public class Tenant
     {
@@ -243,6 +227,22 @@ public class PermissionConst
 
         /// <summary>账号状态更改</summary>
         public const string Status = "Account:Status";
+    }
+
+    /// <summary><see cref="Serial"/> 序号</summary>
+    public class Serial
+    {
+        /// <summary>序号列表</summary>
+        public const string Paged = "Serial:Paged";
+
+        /// <summary>序号详情</summary>
+        public const string Detail = "Serial:Detail";
+
+        /// <summary>序号新增</summary>
+        public const string Add = "Serial:Add";
+
+        /// <summary>序号编辑</summary>
+        public const string Edit = "Serial:Edit";
     }
 
     /// <summary><see cref="Position"/> 职位</summary>

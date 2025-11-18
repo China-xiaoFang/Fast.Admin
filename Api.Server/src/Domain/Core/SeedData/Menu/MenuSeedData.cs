@@ -1,7 +1,7 @@
 ﻿using Fast.Center.Entity;
 using SqlSugar;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Core;
 
 /// <summary>

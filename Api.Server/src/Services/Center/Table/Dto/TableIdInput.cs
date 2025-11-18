@@ -3,7 +3,7 @@
 /// <summary>
 /// <see cref="TableIdInput"/> 表格Id输入
 /// </summary>
-public class TableIdInput
+public class TableIdInput : UpdateVersionInput
 {
     /// <summary>
     /// 表格Id
@@ -11,9 +11,4 @@ public class TableIdInput
     [LongRequired(ErrorMessage = "表格Id不能为空")]
     public long TableId { get; set; }
 
-    /// <summary>
-    /// 更新版本控制字段
-    /// </summary>
-    [LongRequired(ErrorMessage = "更新版本控制字段不能为空")]
-    public long RowVersion { get; set; }
 }

@@ -12,7 +12,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Quartz;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Scheduler;
 
 /// <summary>

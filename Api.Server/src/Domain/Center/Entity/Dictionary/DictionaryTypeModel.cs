@@ -1,4 +1,4 @@
-﻿// ReSharper disable once CheckNamespace
+﻿
 
 namespace Fast.Center.Entity;
 
@@ -19,6 +19,7 @@ public class DictionaryTypeModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 字典Key
     /// </summary>
+    [SugarSearchValue]
     [Required]
     [SugarColumn(ColumnDescription = "字典Key", Length = 50)]
     public string DictionaryKey { get; set; }

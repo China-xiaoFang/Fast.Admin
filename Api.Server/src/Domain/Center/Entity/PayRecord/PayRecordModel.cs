@@ -1,7 +1,7 @@
 ﻿using Fast.Runtime;
 using Microsoft.AspNetCore.Http;
 
-// ReSharper disable once CheckNamespace
+
 
 namespace Fast.Center.Entity;
 

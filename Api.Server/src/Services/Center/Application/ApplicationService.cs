@@ -51,7 +51,7 @@ public class ApplicationService : IDynamicApplication
     {
         return await _repository.Entities.WhereIF(input.Edition != null, wh => wh.Edition == input.Edition)
             .OrderByDescending(ob => ob.CreatedTime)
-            .Select(sl => new QueryApplicationPagedOutput
+            .ToPagedListAsync(input, sl => new QueryApplicationPagedOutput
             {
                 AppId = sl.AppId,
                 Edition = sl.Edition,
@@ -62,12 +62,14 @@ public class ApplicationService : IDynamicApplication
                 ICPSecurityCode = sl.ICPSecurityCode,
                 PublicSecurityCode = sl.PublicSecurityCode,
                 Remark = sl.Remark,
+                DepartmentId = sl.DepartmentId,
+                DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
                 UpdatedUserName = sl.UpdatedUserName,
-                UpdatedTime = sl.UpdatedTime
-            })
-            .ToPagedListAsync(input);
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            });
     }
 
     /// <summary>
@@ -96,6 +98,8 @@ public class ApplicationService : IDynamicApplication
                 PrivacyAgreement = sl.PrivacyAgreement,
                 ServiceAgreement = sl.ServiceAgreement,
                 Remark = sl.Remark,
+                DepartmentId = sl.DepartmentId,
+                DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
                 UpdatedUserName = sl.UpdatedUserName,

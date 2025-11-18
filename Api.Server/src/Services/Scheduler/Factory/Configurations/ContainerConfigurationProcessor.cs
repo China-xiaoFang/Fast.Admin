@@ -2,6 +2,7 @@
 using Quartz.Spi;
 using Quartz.Xml;
 
+
 // ReSharper disable once CheckNamespace
 namespace Quartz;
 

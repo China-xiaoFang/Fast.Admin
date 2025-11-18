@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Quartz;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Scheduler;
 
 /// <summary>

@@ -3,7 +3,7 @@ using Fast.UnifyResult;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Core;
 
 /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Scheduler;
 
 /// <summary>

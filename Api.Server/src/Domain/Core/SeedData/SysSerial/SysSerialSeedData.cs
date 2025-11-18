@@ -3,7 +3,7 @@ using Fast.Center.Enum;
 using SqlSugar;
 using Yitter.IdGenerator;
 
-// ReSharper disable once CheckNamespace
+
 namespace Fast.Core;
 
 /// <summary>

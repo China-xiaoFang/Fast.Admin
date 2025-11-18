@@ -1,4 +1,4 @@
-﻿// ReSharper disable once CheckNamespace
+﻿
 
 namespace Fast.Center.Entity;
 
@@ -54,7 +54,7 @@ public class TenantOnlineUserModel : IBaseTEntity
     /// <summary>
     /// 账号Key
     /// </summary>
-    [SugarColumn(ColumnDescription = "账号Key", ColumnDataType = "varchar(12)")]
+    [SugarColumn(ColumnDescription = "账号Key", Length = 12)]
     public string AccountKey { get; set; }
 
     /// <summary>
@@ -88,7 +88,7 @@ public class TenantOnlineUserModel : IBaseTEntity
     /// 用户Key
     /// </summary>
     [Required]
-    [SugarColumn(ColumnDescription = "用户Key", ColumnDataType = "varchar(12)")]
+    [SugarColumn(ColumnDescription = "用户Key", Length = 12)]
     public string UserKey { get; set; }
 
     /// <summary>
@@ -100,7 +100,7 @@ public class TenantOnlineUserModel : IBaseTEntity
     /// <summary>
     /// 工号
     /// </summary>
-    [SugarColumn(ColumnDescription = "工号", ColumnDataType = "varchar(11)")]
+    [SugarColumn(ColumnDescription = "工号", Length = 15)]
     public string EmployeeNo { get; set; }
 
     /// <summary>

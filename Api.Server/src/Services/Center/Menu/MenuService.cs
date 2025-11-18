@@ -67,10 +67,13 @@ public class MenuService : IDynamicApplication
                 Visible = t1.Visible,
                 Sort = t1.Sort,
                 Status = t1.Status,
+                DepartmentId = t1.DepartmentId,
+                DepartmentName = t1.DepartmentName,
                 CreatedUserName = t1.CreatedUserName,
                 CreatedTime = t1.CreatedTime,
                 UpdatedUserName = t1.UpdatedUserName,
-                UpdatedTime = t1.UpdatedTime
+                UpdatedTime = t1.UpdatedTime,
+                RowVersion = t1.RowVersion
             })
             .PagedWhere(input)
             .PagedSearch(input.SearchList)
@@ -119,6 +122,8 @@ public class MenuService : IDynamicApplication
                 Visible = t1.Visible,
                 Sort = t1.Sort,
                 Status = t1.Status,
+                DepartmentId = t1.DepartmentId,
+                DepartmentName = t1.DepartmentName,
                 CreatedUserName = t1.CreatedUserName,
                 CreatedTime = t1.CreatedTime,
                 UpdatedUserName = t1.UpdatedUserName,
@@ -169,7 +174,7 @@ public class MenuService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        if (await _repository.AnyAsync(a => a.ModuleId == input.ModuleId && a.MenuName == input.MenuName))
+        if (await _repository.AnyAsync(a => a.AppId == moduleModel.AppId && a.MenuName == input.MenuName))
         {
             throw new UserFriendlyException("菜单名称重复！");
         }
@@ -246,7 +251,7 @@ public class MenuService : IDynamicApplication
         }
 
         if (await _repository.AnyAsync(a =>
-                a.ModuleId == input.ModuleId && a.MenuName == input.MenuName && a.MenuId != input.MenuId))
+                a.AppId == moduleModel.AppId && a.MenuName == input.MenuName && a.MenuId != input.MenuId))
         {
             throw new UserFriendlyException("菜单名称重复！");
         }

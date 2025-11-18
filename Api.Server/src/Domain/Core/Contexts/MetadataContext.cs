@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 
-// ReSharper disable once CheckNamespace
+
 
 namespace Fast.Core;
 

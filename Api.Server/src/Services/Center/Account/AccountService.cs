@@ -2,7 +2,6 @@
 using Fast.Center.Service.Account.Dto;
 using Fast.CenterLog.Entity;
 using Fast.CenterLog.Enum;
-using Fast.Core.Hubs.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -86,10 +85,9 @@ public class AccountService : IDynamicApplication
                 LockStartTime = t1.LockStartTime,
                 LockEndTime = t1.LockEndTime,
                 IsLock = t1.LockEndTime != null && t1.LockEndTime >= dateTime,
-                CreatedUserName = t1.CreatedUserName,
                 CreatedTime = t1.CreatedTime,
-                UpdatedUserName = t1.UpdatedUserName,
-                UpdatedTime = t1.UpdatedTime
+                UpdatedTime = t1.UpdatedTime,
+                RowVersion = t1.RowVersion,
             })
             .ToPagedListAsync(input);
     }
@@ -139,9 +137,7 @@ public class AccountService : IDynamicApplication
                 PasswordErrorTime = t1.PasswordErrorTime,
                 LockStartTime = t1.LockStartTime,
                 LockEndTime = t1.LockEndTime,
-                CreatedUserName = t1.CreatedUserName,
                 CreatedTime = t1.CreatedTime,
-                UpdatedUserName = t1.UpdatedUserName,
                 UpdatedTime = t1.UpdatedTime,
                 RowVersion = t1.RowVersion
             })

@@ -3,7 +3,7 @@
 /// <summary>
 /// <see cref="ChangePasswordInput"/> 账号修改密码输入
 /// </summary>
-public class ChangePasswordInput
+public class ChangePasswordInput : UpdateVersionInput
 {
     /// <summary>
     /// 旧密码
@@ -22,10 +22,4 @@ public class ChangePasswordInput
     /// </summary>
     [StringRequired(ErrorMessage = "确认密码不能为空"), MinLength(6, ErrorMessage = "确认密码不能少于6位字符")]
     public string ConfirmPassword { get; set; }
-
-    /// <summary>
-    /// 更新版本控制字段
-    /// </summary>
-    [LongRequired(ErrorMessage = "更新版本控制字段不能为空")]
-    public long RowVersion { get; set; }
 }

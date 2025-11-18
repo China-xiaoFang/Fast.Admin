@@ -30,19 +30,22 @@ public class ConfigService : IDynamicApplication
     [Permission(PermissionConst.Config.Paged)]
     public async Task<PagedResult<QueryConfigPagedOutput>> QueryConfigPaged(PagedInput input)
     {
-        return await _repository.Entities.Select(sl => new QueryConfigPagedOutput
+        return await _repository.Entities
+            .ToPagedListAsync(input, sl => new QueryConfigPagedOutput
             {
                 ConfigId = sl.ConfigId,
                 ConfigCode = sl.ConfigCode,
                 ConfigName = sl.ConfigName,
                 ConfigValue = sl.ConfigValue,
                 Remark = sl.Remark,
+                DepartmentId = sl.DepartmentId,
+                DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
                 UpdatedUserName = sl.UpdatedUserName,
-                UpdatedTime = sl.UpdatedTime
-            })
-            .ToPagedListAsync(input);
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            });
     }
 
     /// <summary>
@@ -63,6 +66,8 @@ public class ConfigService : IDynamicApplication
                 ConfigName = sl.ConfigName,
                 ConfigValue = sl.ConfigValue,
                 Remark = sl.Remark,
+                DepartmentId = sl.DepartmentId,
+                DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
                 UpdatedUserName = sl.UpdatedUserName,

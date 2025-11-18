@@ -6,7 +6,7 @@ namespace Fast.Center.Service.Menu.Dto;
 /// <summary>
 /// <see cref="QueryMenuPagedOutput"/> 获取菜单列表输出
 /// </summary>
-public class QueryMenuPagedOutput : ITreeNode<long>
+public class QueryMenuPagedOutput :  PagedOutput ,ITreeNode<long>
 {
     /// <summary>
     /// 菜单Id
@@ -135,26 +135,6 @@ public class QueryMenuPagedOutput : ITreeNode<long>
     /// 状态
     /// </summary>
     public CommonStatusEnum Status { get; set; }
-
-    /// <summary>
-    /// 创建者用户名称
-    /// </summary>
-    public string CreatedUserName { get; set; }
-
-    /// <summary>
-    /// 创建时间
-    /// </summary>
-    public DateTime? CreatedTime { get; set; }
-
-    /// <summary>
-    /// 更新者用户名称
-    /// </summary>
-    public string UpdatedUserName { get; set; }
-
-    /// <summary>
-    /// 更新时间
-    /// </summary>
-    public DateTime? UpdatedTime { get; set; }
 
     /// <summary>
     /// 子节点

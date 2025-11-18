@@ -5,7 +5,7 @@ namespace Fast.Center.Service.Dictionary.Dto;
 /// <summary>
 /// <see cref="QueryDictionaryDetailOutput"/> 获取字典详情输出
 /// </summary>
-public class QueryDictionaryDetailOutput
+public class QueryDictionaryDetailOutput : PagedOutput
 {
     /// <summary>
     /// 字典Id
@@ -41,31 +41,6 @@ public class QueryDictionaryDetailOutput
     /// 备注
     /// </summary>
     public string Remark { get; set; }
-
-    /// <summary>
-    /// 创建者用户名称
-    /// </summary>
-    public virtual string CreatedUserName { get; set; }
-
-    /// <summary>
-    /// 创建时间
-    /// </summary>
-    public virtual DateTime? CreatedTime { get; set; }
-
-    /// <summary>
-    /// 更新者用户名称
-    /// </summary>
-    public virtual string UpdatedUserName { get; set; }
-
-    /// <summary>
-    /// 更新时间
-    /// </summary>
-    public virtual DateTime? UpdatedTime { get; set; }
-
-    /// <summary>
-    /// 更新版本控制字段
-    /// </summary>
-    public long RowVersion { get; set; }
 
     /// <summary>
     /// 字典项集合
