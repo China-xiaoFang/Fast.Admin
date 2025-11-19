@@ -1,5 +1,5 @@
 .fa-search-input {
-	padding: 20rpx;
+	padding: 20rpx 15rpx;
 	background-color: var(--wot-bg-color);
 	:deep() {
 		.wd-input__icon {
@@ -14,15 +14,19 @@
 				--wot-input-bg: var(--wot-bg-color-page);
 				--wot-input-inner-height-no-border: 34px;
 				flex: 1;
-				border-radius: var(--wot-border-radius-base);
+				border-radius: var(--wot-border-radius-round);
 				&::after {
 					content: none;
 				}
 				.wd-input__value {
-					padding: 0 10rpx;
+					padding: 0 20rpx;
 					.wd-input__suffix {
 						display: flex;
 						align-items: center;
+					}
+					.wd-button {
+						height: 26px;
+						line-height: 26px;
 					}
 				}
 			}

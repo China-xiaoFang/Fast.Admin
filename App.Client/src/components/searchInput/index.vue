@@ -4,7 +4,7 @@
 			<slot name="prefix" />
 			<wd-input
 				v-model="modelValue"
-				:placeholder="props.placeholder"
+				:placeholder="props.placeholder ? props.placeholder : props.scan ? '请输入或扫描您想要搜索的内容' : '请输入您想要搜索的内容'"
 				clearable
 				noBorder
 				@input="handleInput"
@@ -14,11 +14,17 @@
 				@clear="handleClear"
 			>
 				<template #prefix>
-					<wd-icon customClass="wd-input__icon" classPrefix="iconfont" name="scan" @click="handleScanClick" />
+					<view style="display: flex">
+						<FaIcon v-if="props.scan" customClass="wd-input__icon" name="scan" @click="handleScanClick" />
+						<wd-icon v-else customClass="wd-input__icon" name="search" />
+					</view>
+				</template>
+				<template #suffix v-if="props.search">
+					<wd-button size="small" type="primary" @click="(event) => emit('search')">搜素</wd-button>
 				</template>
 			</wd-input>
 			<view v-if="props.filter" class="fa-search-input__filter" @click="state.filterVisible = true">
-				<wd-icon customClass="wd-input__icon" classPrefix="iconfont" name="filter" />
+				<FaIcon customClass="wd-input__icon" name="filter" />
 				<text class="fa-search-input__filter-text">筛选</text>
 			</view>
 			<slot name="suffix" />
@@ -97,9 +103,16 @@ const props = defineProps({
 		default: {},
 	},
 	/** @description 占位文本 */
-	placeholder: {
-		type: String,
-		default: "请输入或扫描您想要搜索的内容",
+	placeholder: String,
+	/** @description 显示扫描图标 */
+	scan: {
+		type: Boolean,
+		default: true,
+	},
+	/** @description 显示搜素按钮 */
+	search: {
+		type: Boolean,
+		default: true,
 	},
 	/** @description 显示筛选图标 */
 	filter: {
