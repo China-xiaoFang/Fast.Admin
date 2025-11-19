@@ -107,4 +107,9 @@ public class LaunchOutput
     /// 请求加密
     /// </summary>
     public bool RequestEncipher { get; set; }
+
+    /// <summary>
+    /// 租户名称
+    /// </summary>
+    public string TenantName { get; set; }
 }

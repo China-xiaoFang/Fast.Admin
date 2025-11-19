@@ -36,7 +36,7 @@ namespace Fast.Core;
 /// <summary>
 /// <see cref="SyncDictionaryHostedService"/> 同步字典托管服务
 /// </summary>
-[Order(104)]
+[Order(105)]
 public class SyncDictionaryHostedService : IHostedService
 {
     /// <summary>

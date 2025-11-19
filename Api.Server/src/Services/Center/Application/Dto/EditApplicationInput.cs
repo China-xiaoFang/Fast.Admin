@@ -88,6 +88,16 @@ public class EditApplicationInput : UpdateVersionInput
     public string Remark { get; set; }
 
     /// <summary>
+    /// 租户Id
+    /// </summary>
+    public long? TenantId { get; set; }
+
+    /// <summary>
+    /// 租户名称
+    /// </summary>
+    public string TenantName { get; set; }
+
+    /// <summary>
     /// 开放平台信息
     /// </summary>
     public List<EditApplicationOpenIdDto> OpenIdList { get; set; }

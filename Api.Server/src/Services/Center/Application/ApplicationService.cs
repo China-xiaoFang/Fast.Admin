@@ -85,7 +85,7 @@ public class ApplicationService : IDynamicApplication
                     ICPSecurityCode = sl.ICPSecurityCode,
                     PublicSecurityCode = sl.PublicSecurityCode,
                     Remark = sl.Remark,
-                    DepartmentId = sl.DepartmentId,
+                    TenantName = sl.TenantName,
                     DepartmentName = sl.DepartmentName,
                     CreatedUserName = sl.CreatedUserName,
                     CreatedTime = sl.CreatedTime,
@@ -120,7 +120,8 @@ public class ApplicationService : IDynamicApplication
                 PrivacyAgreement = sl.PrivacyAgreement,
                 ServiceAgreement = sl.ServiceAgreement,
                 Remark = sl.Remark,
-                DepartmentId = sl.DepartmentId,
+                TenantId = sl.TenantId,
+                TenantName = sl.TenantName,
                 DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
@@ -154,7 +155,7 @@ public class ApplicationService : IDynamicApplication
                 AlipayMerchantNo = sl.AlipayMerchantNo,
                 WeChatAccessTokenRefreshTime = sl.WeChatAccessTokenRefreshTime,
                 WeChatJsApiTicketRefreshTime = sl.WeChatJsApiTicketRefreshTime,
-                Remark = sl.Remark
+                Remark = sl.Remark,
             })
             .ToListAsync();
 
@@ -187,7 +188,9 @@ public class ApplicationService : IDynamicApplication
             UserAgreement = input.UserAgreement,
             PrivacyAgreement = input.PrivacyAgreement,
             ServiceAgreement = input.ServiceAgreement,
-            Remark = input.Remark
+            Remark = input.Remark,
+            TenantId = input.TenantId,
+            TenantName = input.TenantName
         };
 
         await _repository.Ado.UseTranAsync(async () =>
@@ -247,6 +250,8 @@ public class ApplicationService : IDynamicApplication
         applicationModel.PrivacyAgreement = input.PrivacyAgreement;
         applicationModel.ServiceAgreement = input.ServiceAgreement;
         applicationModel.Remark = input.Remark;
+        applicationModel.TenantId = input.TenantId;
+        applicationModel.TenantName = input.TenantName;
         applicationModel.RowVersion = input.RowVersion;
 
         var addApplicationOpenIdList = new List<ApplicationOpenIdModel>();
@@ -272,7 +277,7 @@ public class ApplicationService : IDynamicApplication
                     WeChatMerchantNo = item.WeChatMerchantNo,
                     AlipayMerchantId = item.AlipayMerchantId,
                     AlipayMerchantNo = item.AlipayMerchantNo,
-                    Remark = item.Remark
+                    Remark = item.Remark,
                 };
                 addApplicationOpenIdList.Add(applicationOpenIdModel);
             }
