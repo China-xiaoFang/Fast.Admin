@@ -1,6 +1,6 @@
 <template>
 	<view class="fa-footer">
-		<text>FastDotnet提供计算服务</text>
+		<text>FastDotNet提供计算服务</text>
 		<text>© {{ new Date().getFullYear() }} {{ domain }} v{{ appStore.appVersion }}</text>
 	</view>
 </template>
