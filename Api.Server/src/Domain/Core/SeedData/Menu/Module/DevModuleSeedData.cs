@@ -196,6 +196,38 @@ internal static partial class MenuSeedData
 
         #endregion
 
+        #region 系统监控
+
+        await db.Insertable(new MenuModel
+            {
+                MenuId = YitIdHelper.NextId(),
+                Edition = EditionEnum.Internal,
+                AppId = applicationModel.AppId,
+                ModuleId = devModuleModel.ModuleId,
+                MenuCode = PermissionConst.SystemMonitor,
+                MenuName = "系统监控",
+                MenuTitle = "系统监控",
+                ParentId = 0,
+                ParentIds = [0],
+                MenuType = MenuTypeEnum.Menu,
+                HasDesktop = true,
+                DesktopIcon = "test",
+                HasWeb = true,
+                WebIcon = "fa-icon-Test",
+                WebRouter = "/dev/systemMonitor",
+                WebComponent = "dev/systemMonitor/index",
+                HasMobile = true,
+                MobileIcon = "https://image.fastdotnet.com/menu/mobile/database.png",
+                MobileRouter = "pages_dev/systemMonitor/page/index",
+                Visible = YesOrNotEnum.Y,
+                Sort = menuSort,
+                Status = CommonStatusEnum.Enable,
+                CreatedTime = dateTime
+            })
+            .ExecuteCommandAsync();
+
+        #endregion
+
         #region 系统配置
 
         var configMenuModel = new MenuModel
