@@ -74,8 +74,8 @@
 			<wd-cell title="热更新版本" :value="`v${appStore.appVersion}`" />
 			<!-- #endif -->
 			<template v-if="appStore.tenantName">
-				<wd-cell title="系统服务商" :value="appStore.tenantName" clickable isLink />
-				<wd-cell title="服务有效期" value="2029-12-31 23:59:59" clickable isLink />
+				<wd-cell title="系统服务商" :value="appStore.tenantName" />
+				<wd-cell title="服务有效期" value="2029-12-31 23:59:59" />
 			</template>
 		</wd-cell-group>
 
