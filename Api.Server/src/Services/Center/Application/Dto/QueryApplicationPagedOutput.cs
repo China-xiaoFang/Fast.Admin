@@ -71,4 +71,9 @@ public class QueryApplicationPagedOutput : PagedOutput
     /// 备注
     /// </summary>
     public string Remark { get; set; }
+
+    /// <summary>
+    /// 租户名称
+    /// </summary>
+    public string TenantName { get; set; }
 }

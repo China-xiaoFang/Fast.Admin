@@ -1100,6 +1100,13 @@ public class LoginService : IDynamicApplication
         await _repository.Updateable(weChatUserModel)
             .ExecuteCommandAsync();
 
+        TenantModel tenantMode = null;
+        if (applicationModel.Application.TenantId != null)
+        {
+            tenantMode = await _repository.Queryable<TenantModel>()
+                .InSingleAsync(applicationModel.Application.TenantId);
+        }
+
         // 客户端登录
         await _user.ClientLogin(new AuthUserInfo
         {
@@ -1111,7 +1118,9 @@ public class LoginService : IDynamicApplication
             Mobile = weChatUserModel.PurePhoneNumber,
             NickName = weChatUserModel.NickName,
             Avatar = weChatUserModel.Avatar,
-            TenantNo = applicationModel.Application.AppNo,
+            TenantId = applicationModel.Application.TenantId ?? 0,
+            TenantNo = tenantMode?.TenantNo ?? applicationModel.Application.AppNo,
+            TenantName = applicationModel.Application.TenantName,
             UserId = weChatUserModel.WeChatId,
             Account = weChatUserModel.PurePhoneNumber,
             EmployeeNo = weChatUserModel.OpenId,
