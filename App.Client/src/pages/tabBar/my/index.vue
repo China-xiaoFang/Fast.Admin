@@ -70,11 +70,17 @@
 
 		<wd-cell-group border>
 			<wd-cell title="系统版本" :value="appVersion" />
-			<wd-cell customClass="mb20" title="热更新版本" :value="`v${appStore.appVersion}`" />
+			<!-- #ifdef APP-PLUS -->
+			<wd-cell title="热更新版本" :value="`v${appStore.appVersion}`" />
+			<!-- #endif -->
+			<template v-if="appStore.tenantName">
+				<wd-cell title="系统服务商" :value="appStore.tenantName" clickable isLink />
+				<wd-cell title="服务有效期" value="2029-12-31 23:59:59" clickable isLink />
+			</template>
 		</wd-cell-group>
 
 		<wd-cell-group border>
-			<wd-cell title="消息通知" clickable isLink />
+			<wd-cell customClass="mt20" title="消息通知" clickable isLink />
 			<wd-cell title="通用" clickable isLink to="/pages/setting/general/index" />
 			<wd-cell customClass="mb20" title="清除缓存" :value="`${currentSize}/${limitSize}`" clickable isLink @click="handleClearCache" />
 		</wd-cell-group>

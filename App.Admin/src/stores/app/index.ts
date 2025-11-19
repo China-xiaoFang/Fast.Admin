@@ -68,6 +68,7 @@ export const useApp = defineStore(
 			webSocketUrl: "",
 			requestTimeout: 6000,
 			requestEncipher: true,
+			tenantName: "",
 			env: "production",
 			deviceType: AppEnvironmentEnum.MobileThree,
 			appId: "",

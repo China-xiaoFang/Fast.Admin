@@ -96,7 +96,6 @@ public class LoginOutput
         /// <summary>
         /// 工号
         /// </summary>
-        /// <remarks>2024010101 ~ 20240101999</remarks>
         public string EmployeeNo { get; set; }
 
         /// <summary>

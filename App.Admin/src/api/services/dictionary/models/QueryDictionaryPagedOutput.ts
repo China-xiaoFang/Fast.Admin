@@ -37,10 +37,6 @@ export interface QueryDictionaryPagedOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 

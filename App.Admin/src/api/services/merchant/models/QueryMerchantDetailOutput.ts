@@ -47,10 +47,6 @@ export interface QueryMerchantDetailOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 
