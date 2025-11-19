@@ -41,6 +41,9 @@ public class PermissionConst
     /// <summary>Knife4j</summary>
     public const string ApiKnife4j = "Api:Knife4j";
 
+    /// <summary>系统监控</summary>
+    public const string SystemMonitor = "System:Monitor";
+
     /// <summary><see cref="Config"/> 配置</summary>
     public class Config
     {
