@@ -8,7 +8,7 @@ export interface AuthMenuInfoDto {
   /**
    * 菜单Id
    */
-  id?: number;
+  menuId?: number;
   /**
    * 模块Id
    */
