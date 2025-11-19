@@ -41,7 +41,7 @@ namespace Fast.Core;
 /// <summary>
 /// <see cref="SyncApiHostedService"/> 同步 Api 托管服务
 /// </summary>
-[Order(103)]
+[Order(104)]
 public class SyncApiHostedService : IHostedService
 {
     /// <summary>

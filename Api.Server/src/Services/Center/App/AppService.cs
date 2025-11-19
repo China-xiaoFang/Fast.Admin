@@ -73,7 +73,8 @@ public class AppService : IDynamicApplication
             LoginComponent = applicationOpenIdModel.LoginComponent,
             WebSocketUrl = applicationOpenIdModel.WebSocketUrl,
             RequestTimeout = applicationOpenIdModel.RequestTimeout,
-            RequestEncipher = applicationOpenIdModel.RequestEncipher
+            RequestEncipher = applicationOpenIdModel.RequestEncipher,
+            TenantName = applicationOpenIdModel.Application.TenantName
         };
     }
 }
