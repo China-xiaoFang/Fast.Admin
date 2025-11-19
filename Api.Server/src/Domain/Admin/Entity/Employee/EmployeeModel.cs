@@ -48,7 +48,6 @@ public class EmployeeModel : IUpdateVersion
     /// <summary>
     /// 工号
     /// </summary>
-    /// <remarks>2024010101 ~ 20240101999</remarks>
     [Required]
     [SugarSearchValue]
     [SugarColumn(ColumnDescription = "工号", Length = 15)]
