@@ -45,11 +45,11 @@ export interface LoginTenantOutput {
   /**
    * 部门Id
    */
-  deptId?: number;
+  departmentId?: number;
   /**
    * 部门名称
    */
-  deptName?: string;
+  departmentName?: string;
   /**
    * 
    */

@@ -1,5 +1,5 @@
 /**
- * System.EnvironmentTypeEnum 环境类型枚举
+ * 环境类型枚举
  */
 export enum EnvironmentTypeEnum {
   /**

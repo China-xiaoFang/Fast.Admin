@@ -9,7 +9,7 @@ export interface EditDictionaryItemInput {
   /**
    * 字典项Id
    */
-  dictionaryItemIdId?: number;
+  dictionaryItemId?: number;
   /**
    * 字典项名称
    */
