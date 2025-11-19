@@ -60,7 +60,6 @@ public class TenantUserModel : IBaseTEntity, IUpdateVersion
     /// <summary>
     /// 工号
     /// </summary>
-    /// <remarks>2024010101 ~ 20240101999</remarks>
     [Required]
     [SugarColumn(ColumnDescription = "工号", Length = 16)]
     public string EmployeeNo { get; set; }

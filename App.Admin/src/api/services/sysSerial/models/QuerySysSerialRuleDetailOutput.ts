@@ -33,10 +33,6 @@ export interface QuerySysSerialRuleDetailOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 

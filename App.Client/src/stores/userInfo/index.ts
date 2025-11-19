@@ -118,7 +118,7 @@ export const useUserInfo = defineStore(
 		};
 
 		/** 登录 */
-		const login = async (input: WeChatClientLoginInput, checkMobile = false): Promise<void> => {
+		const login = async (input: WeChatClientLoginInput = {}, checkMobile = false): Promise<void> => {
 			return new Promise((resolve) => {
 				// #ifdef MP-WEIXIN
 				uni.login({

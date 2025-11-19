@@ -40,6 +40,7 @@ export const useApp = defineStore(
 			webSocketUrl: "",
 			requestTimeout: 6000,
 			requestEncipher: false,
+			tenantName: "",
 			hasLaunch: false,
 		});
 

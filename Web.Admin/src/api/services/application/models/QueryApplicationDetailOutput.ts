@@ -54,13 +54,17 @@ export interface QueryApplicationDetailOutput {
    */
   remark?: string;
   /**
+   * 租户Id
+   */
+  tenantId?: number;
+  /**
+   * 租户名称
+   */
+  tenantName?: string;
+  /**
    * 开放平台信息
    */
   openIdList?: Array<QueryApplicationOpenIdDetailDto>;
-  /**
-   * 
-   */
-  departmentId?: number;
   /**
    * 
    */

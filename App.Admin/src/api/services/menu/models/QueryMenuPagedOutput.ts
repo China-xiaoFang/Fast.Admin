@@ -114,10 +114,6 @@ export interface QueryMenuPagedOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 

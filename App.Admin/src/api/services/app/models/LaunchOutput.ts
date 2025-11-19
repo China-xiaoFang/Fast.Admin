@@ -70,5 +70,9 @@ export interface LaunchOutput {
    * 请求加密
    */
   requestEncipher?: boolean;
+  /**
+   * 租户名称
+   */
+  tenantName?: string;
 }
 

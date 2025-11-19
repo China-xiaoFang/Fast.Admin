@@ -25,10 +25,6 @@ export interface QueryConfigDetailOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 

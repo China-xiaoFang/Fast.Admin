@@ -155,7 +155,7 @@ public class ApplicationService : IDynamicApplication
                 AlipayMerchantNo = sl.AlipayMerchantNo,
                 WeChatAccessTokenRefreshTime = sl.WeChatAccessTokenRefreshTime,
                 WeChatJsApiTicketRefreshTime = sl.WeChatJsApiTicketRefreshTime,
-                Remark = sl.Remark,
+                Remark = sl.Remark
             })
             .ToListAsync();
 
@@ -277,7 +277,7 @@ public class ApplicationService : IDynamicApplication
                     WeChatMerchantNo = item.WeChatMerchantNo,
                     AlipayMerchantId = item.AlipayMerchantId,
                     AlipayMerchantNo = item.AlipayMerchantNo,
-                    Remark = item.Remark,
+                    Remark = item.Remark
                 };
                 addApplicationOpenIdList.Add(applicationOpenIdModel);
             }

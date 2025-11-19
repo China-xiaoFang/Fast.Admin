@@ -41,9 +41,9 @@ export interface QueryApplicationPagedOutput {
    */
   remark?: string;
   /**
-   * 
+   * 租户名称
    */
-  departmentId?: number;
+  tenantName?: string;
   /**
    * 
    */

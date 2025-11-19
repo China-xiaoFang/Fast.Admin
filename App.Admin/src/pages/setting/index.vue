@@ -7,7 +7,9 @@
 
 		<wd-cell-group border>
 			<wd-cell title="系统版本" :value="appVersion" />
+			<!-- #ifdef APP-PLUS -->
 			<wd-cell title="热更新版本" :value="`v${appStore.appVersion}`" />
+			<!-- #endif -->
 			<wd-cell title="系统服务商" value="FastDotNet" clickable isLink />
 			<wd-cell customClass="mb20" title="服务有效期" value="2029-12-31 23:59:59" clickable isLink />
 		</wd-cell-group>

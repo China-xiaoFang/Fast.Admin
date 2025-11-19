@@ -42,10 +42,6 @@ export interface QueryDictionaryDetailOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 

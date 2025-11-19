@@ -21,10 +21,6 @@ export interface QueryTableConfigPagedOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 

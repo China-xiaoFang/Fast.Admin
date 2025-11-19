@@ -21,10 +21,6 @@ export interface QueryTableConfigDetailOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 

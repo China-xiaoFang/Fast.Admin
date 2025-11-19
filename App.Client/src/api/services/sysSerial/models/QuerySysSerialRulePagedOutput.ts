@@ -45,10 +45,6 @@ export interface QuerySysSerialRulePagedOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 

@@ -25,10 +25,6 @@ export interface QueryConfigPagedOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 

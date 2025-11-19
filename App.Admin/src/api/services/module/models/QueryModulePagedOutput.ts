@@ -40,10 +40,6 @@ export interface QueryModulePagedOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 
