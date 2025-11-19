@@ -111,10 +111,6 @@ export interface QueryMenuDetailOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 

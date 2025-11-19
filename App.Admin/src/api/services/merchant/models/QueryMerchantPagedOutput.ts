@@ -23,10 +23,6 @@ export interface QueryMerchantPagedOutput {
   /**
    * 
    */
-  departmentId?: number;
-  /**
-   * 
-   */
   departmentName?: string;
   /**
    * 
