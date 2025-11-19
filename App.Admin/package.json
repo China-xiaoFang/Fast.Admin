@@ -28,9 +28,9 @@
 		"lint": "pnpm lint:eslint && pnpm lint:prettier"
 	},
 	"dependencies": {
-		"@dcloudio/uni-app": "3.0.0-4080520251106001",
-		"@dcloudio/uni-app-plus": "3.0.0-4080520251106001",
-		"@dcloudio/uni-mp-weixin": "3.0.0-4080520251106001",
+		"@dcloudio/uni-app": "3.0.0-alpha-4080620251107001",
+		"@dcloudio/uni-app-plus": "3.0.0-alpha-4080620251107001",
+		"@dcloudio/uni-mp-weixin": "3.0.0-alpha-4080620251107001",
 		"@fast-china/axios": "^1",
 		"@fast-china/utils": "^1",
 		"axios": "^1",
@@ -48,9 +48,9 @@
 	},
 	"devDependencies": {
 		"@dcloudio/types": "latest",
-		"@dcloudio/uni-cli-shared": "3.0.0-4080520251106001",
-		"@dcloudio/uni-stacktracey": "3.0.0-4080520251106001",
-		"@dcloudio/vite-plugin-uni": "3.0.0-4080520251106001",
+		"@dcloudio/uni-cli-shared": "3.0.0-alpha-4080620251107001",
+		"@dcloudio/uni-stacktracey": "3.0.0-alpha-4080620251107001",
+		"@dcloudio/vite-plugin-uni": "3.0.0-alpha-4080620251107001",
 		"@fast-china/eslint-config": "^1",
 		"@types/lodash": "latest",
 		"@types/lodash-es": "latest",
