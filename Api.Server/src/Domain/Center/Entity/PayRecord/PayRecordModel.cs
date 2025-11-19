@@ -68,7 +68,7 @@ public class PayRecordModel : IUpdateVersion
     /// 支付渠道
     /// </summary>
     [SugarColumn(ColumnDescription = "支付渠道")]
-    public PaymentChannelEnum PayChannel { get; set; }
+    public PaymentChannelEnum PaymentChannel { get; set; }
 
     /// <summary>
     /// 唯一用户标识
