@@ -33,7 +33,7 @@ namespace Fast.Admin.Service.Auth;
 /// <see cref="AuthService"/> 鉴权服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Auth, Name = "auth", Order = 998)]
-public class AuthService : IAuthService, ITransientDependency, IDynamicApplication
+public class AuthService : IDynamicApplication
 {
     private readonly IUser _user;
     private readonly ISqlSugarClient _repository;
