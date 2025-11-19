@@ -69,9 +69,7 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
         }
 
         if (tenantModel.DatabaseInitialized)
-        {
-            throw new UserFriendlyException("数据库已初始化！");
-        }
+            return;
 
         var adminConnectionSettings =
             await _sqlSugarEntityService.GetConnectionSetting(tenantModel.TenantId, tenantModel.TenantNo, DatabaseTypeEnum.Admin);
