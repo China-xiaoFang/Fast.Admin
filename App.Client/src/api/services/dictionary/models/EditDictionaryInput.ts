@@ -27,12 +27,12 @@ export interface EditDictionaryInput {
    */
   remark?: string;
   /**
-   * 更新版本控制字段
-   */
-  rowVersion?: number;
-  /**
    * 字典项集合
    */
   dictionaryItemList?: Array<EditDictionaryItemInput>;
+  /**
+   * 
+   */
+  rowVersion?: number;
 }
 

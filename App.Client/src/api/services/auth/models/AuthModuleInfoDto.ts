@@ -7,7 +7,7 @@ export interface AuthModuleInfoDto {
   /**
    * 模块Id
    */
-  id?: number;
+  moduleId?: number;
   /**
    * 模块名称
    */

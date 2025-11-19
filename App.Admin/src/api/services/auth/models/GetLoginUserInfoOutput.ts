@@ -37,10 +37,6 @@ export interface GetLoginUserInfoOutput {
    */
   account?: string;
   /**
-   * 登录工号（带租户编码）
-   */
-  loginEmployeeNo?: string;
-  /**
    * 工号
    */
   employeeNo?: string;

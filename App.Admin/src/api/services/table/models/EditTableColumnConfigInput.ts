@@ -9,12 +9,12 @@ export interface EditTableColumnConfigInput {
    */
   tableId?: number;
   /**
-   * 更新版本控制字段
-   */
-  rowVersion?: number;
-  /**
    * 表格列
    */
   columns?: Array<FaTableColumnCtx>;
+  /**
+   * 
+   */
+  rowVersion?: number;
 }
 

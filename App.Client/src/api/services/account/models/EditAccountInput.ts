@@ -29,7 +29,7 @@ export interface EditAccountInput {
    */
   birthday?: Date;
   /**
-   * 更新版本控制字段
+   * 
    */
   rowVersion?: number;
 }

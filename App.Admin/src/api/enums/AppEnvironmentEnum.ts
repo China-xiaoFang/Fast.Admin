@@ -1,5 +1,5 @@
 /**
- * System.AppEnvironmentEnum App运行环境枚举
+ * App运行环境枚举
  */
 export enum AppEnvironmentEnum {
   /**

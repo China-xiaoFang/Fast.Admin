@@ -15,7 +15,7 @@ export interface ChangePasswordInput {
    */
   confirmPassword?: string;
   /**
-   * 更新版本控制字段
+   * 
    */
   rowVersion?: number;
 }
