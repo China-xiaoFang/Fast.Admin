@@ -56,8 +56,6 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
     public async Task InitTenantDatabase(long tenantId)
     {
         var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
-        // 加载Aop
-        SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
         var tenantModel = await db.Queryable<TenantModel>()
             .Where(wh => wh.TenantId == tenantId)
@@ -70,6 +68,9 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
 
         if (tenantModel.DatabaseInitialized)
             return;
+
+        // 加载Aop
+        SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
         var adminConnectionSettings =
             await _sqlSugarEntityService.GetConnectionSetting(tenantModel.TenantId, tenantModel.TenantNo, DatabaseTypeEnum.Admin);
