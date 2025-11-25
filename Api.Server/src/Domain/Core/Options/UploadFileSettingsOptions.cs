@@ -57,7 +57,7 @@ public class UploadFileSettingsOptions : IPostConfigure
     {
         Logo ??= new UploadFileInfoSettings
         {
-            Path = "Upload/Logo",
+            Path = "Upload\\Logo",
             MaxSize = 2048,
             ContentType =
             [
@@ -66,7 +66,7 @@ public class UploadFileSettingsOptions : IPostConfigure
         };
         Avatar ??= new UploadFileInfoSettings
         {
-            Path = "Upload/Avatar",
+            Path = "Upload\\Avatar",
             MaxSize = 2048,
             ContentType =
             [
@@ -75,7 +75,7 @@ public class UploadFileSettingsOptions : IPostConfigure
         };
         IdPhoto ??= new UploadFileInfoSettings
         {
-            Path = "Upload/IdPhoto",
+            Path = "Upload\\IdPhoto",
             MaxSize = 5120,
             ContentType =
             [
@@ -84,8 +84,9 @@ public class UploadFileSettingsOptions : IPostConfigure
         };
         Editor ??= new UploadFileInfoSettings
         {
-            Path = "Upload/Editor",
+            Path = "Upload\\Editor",
             MaxSize = 10240,
+            UseDateFolder = true,
             ContentType =
             [ // 图片类
                 "image/jpg", "image/jpeg", "image/png", "image/gif", "image/bmp",
@@ -96,7 +97,7 @@ public class UploadFileSettingsOptions : IPostConfigure
         };
         Default ??= new UploadFileInfoSettings
         {
-            Path = "Upload/Default",
+            Path = "Upload\\Default",
             MaxSize = 102400,
             UseTypeFolder = true,
             UseDateFolder = true,

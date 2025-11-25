@@ -87,7 +87,7 @@ public class MenuModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 父级Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "父级Id", IsJson = true)]
+    [SugarColumn(ColumnDescription = "父级Id", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
     public List<long> ParentIds { get; set; }
 
     /// <summary>

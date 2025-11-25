@@ -242,12 +242,30 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
                     Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
                         .ToUpper(),
                     NickName = tenantModel.AdminName,
-                    Avatar = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
+                    Avatar = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
                     Status = CommonStatusEnum.Enable,
                     Sex = GenderEnum.Unknown
                 };
                 accountModel = await db.Insertable(accountModel)
                     .ExecuteReturnEntityAsync();
+
+                #region PasswordRecordModel
+
+                // 初始化密码记录表
+                await db.Insertable(new List<PasswordRecordModel>
+                    {
+                        new()
+                        {
+                            AccountId = accountModel.AccountId,
+                            OperationType = PasswordOperationTypeEnum.Create,
+                            Type = PasswordTypeEnum.SHA1,
+                            Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
+                                .ToUpper()
+                        }
+                    })
+                    .ExecuteCommandAsync();
+
+                #endregion
             }
 
             // 回填管理员账号Id
@@ -266,7 +284,7 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
                         Account = $"{tenantModel.TenantCode}_Admin",
                         EmployeeNo = "",
                         EmployeeName = tenantModel.AdminName,
-                        IdPhoto = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
+                        IdPhoto = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
                         DepartmentId = null,
                         DepartmentName = null,
                         UserType = UserTypeEnum.Admin,
@@ -287,24 +305,6 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
                     }
                 })
                 .ExecuteCommandAsync();
-
-            #region PasswordRecordModel
-
-            // 初始化密码记录表
-            await db.Insertable(new List<PasswordRecordModel>
-                {
-                    new()
-                    {
-                        AccountId = accountModel.AccountId,
-                        OperationType = PasswordOperationTypeEnum.Create,
-                        Type = PasswordTypeEnum.SHA1,
-                        Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
-                            .ToUpper()
-                    }
-                })
-                .ExecuteCommandAsync();
-
-            #endregion
 
             // 回填管理员账号Id
             tenantModel.AdminAccountId = accountModel.AccountId;

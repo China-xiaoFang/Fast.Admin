@@ -45,15 +45,14 @@ internal static class ApplicationSeedData
             AppId = YitIdHelper.NextId(),
             Edition = EditionEnum.None,
             AppNo = "App201801",
-            AppName = "Fast.Admin",
-            LogoUrl = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
+            AppName = "智慧医院",
+            LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
             ThemeColor = "#409EFF",
             ICPSecurityCode = "陇ICP备2020003856号",
             PublicSecurityCode = "甘公网安备 62090202000584号",
             UserAgreement = null,
             PrivacyAgreement = null,
             ServiceAgreement = null,
-            Remark = null,
             CreatedTime = dateTime
         };
         applicationModel = await db.Insertable(applicationModel)
@@ -70,7 +69,6 @@ internal static class ApplicationSeedData
                     WebSocketUrl = "/hubs/chatHub",
                     RequestTimeout = 60000,
                     RequestEncipher = true,
-                    Remark = null,
                     CreatedTime = dateTime
                 },
                 new()
@@ -79,11 +77,9 @@ internal static class ApplicationSeedData
                     OpenId = "DesktopOpenId",
                     AppType = AppEnvironmentEnum.Desktop,
                     EnvironmentType = EnvironmentTypeEnum.Production,
-                    LoginComponent = "",
                     WebSocketUrl = "/hubs/chatHub",
                     RequestTimeout = 60000,
                     RequestEncipher = false,
-                    Remark = null,
                     CreatedTime = dateTime
                 },
                 new()
@@ -92,11 +88,9 @@ internal static class ApplicationSeedData
                     OpenId = "WeChatMiniProgramOpenId",
                     AppType = AppEnvironmentEnum.WeChatMiniProgram,
                     EnvironmentType = EnvironmentTypeEnum.Production,
-                    LoginComponent = "",
                     WebSocketUrl = "/hubs/chatHub",
                     RequestTimeout = 60000,
                     RequestEncipher = true,
-                    Remark = null,
                     CreatedTime = dateTime
                 },
                 new()
@@ -105,11 +99,9 @@ internal static class ApplicationSeedData
                     OpenId = "AndroidOpenId",
                     AppType = AppEnvironmentEnum.Android,
                     EnvironmentType = EnvironmentTypeEnum.Production,
-                    LoginComponent = "",
                     WebSocketUrl = "/hubs/chatHub",
                     RequestTimeout = 60000,
                     RequestEncipher = true,
-                    Remark = null,
                     CreatedTime = dateTime
                 },
                 new()
@@ -118,11 +110,9 @@ internal static class ApplicationSeedData
                     OpenId = "IOSOpenId",
                     AppType = AppEnvironmentEnum.IOS,
                     EnvironmentType = EnvironmentTypeEnum.Production,
-                    LoginComponent = "",
                     WebSocketUrl = "/hubs/chatHub",
                     RequestTimeout = 60000,
                     RequestEncipher = true,
-                    Remark = null,
                     CreatedTime = dateTime
                 }
             })

@@ -46,7 +46,7 @@ public class OrganizationModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 父级Id集合
     /// </summary>
-    [SugarColumn(ColumnDescription = "父级Id集合", IsJson = true)]
+    [SugarColumn(ColumnDescription = "父级Id集合", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
     public List<long> ParentIds { get; set; }
 
     /// <summary>

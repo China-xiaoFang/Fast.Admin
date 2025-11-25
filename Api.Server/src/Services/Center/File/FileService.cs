@@ -156,7 +156,8 @@ public class FileService : IDynamicApplication
     /// </summary>
     /// <param name="fileName"></param>
     /// <returns></returns>
-    [HttpGet("/file/{fileName}")]
+    [ApiDescriptionSettings(false)]
+    [HttpGet("/fileStorage/{fileName}")]
     [ApiInfo("预览文件", HttpRequestActionEnum.Download)]
     [AllowAnonymous]
     public async Task<IActionResult> Preview([FromRoute, Required(ErrorMessage = "文件名称不能为空")] string fileName)
@@ -175,7 +176,8 @@ public class FileService : IDynamicApplication
     /// <para>normal：正常</para>
     /// </param>
     /// <returns></returns>
-    [HttpGet("/file/{fileName}@!{size}")]
+    [ApiDescriptionSettings(false)]
+    [HttpGet("/fileStorage/{fileName}@!{size}")]
     [ApiInfo("预览文件", HttpRequestActionEnum.Download)]
     [AllowAnonymous]
     public async Task<IActionResult> Preview([FromRoute, Required(ErrorMessage = "文件名称不能为空")] string fileName,
@@ -197,7 +199,19 @@ public class FileService : IDynamicApplication
     /// <returns></returns>
     private async Task<IActionResult> LocalPreview(string fileName, string size = null)
     {
-        size = string.IsNullOrWhiteSpace(size) ? "" : size.ToLower();
+        if (!string.IsNullOrWhiteSpace(size))
+        {
+            if (!ImageSizes.ContainsKey(size))
+            {
+                throw new UserFriendlyException("不支持的图片尺寸！");
+            }
+
+            size = $"@{size}";
+        }
+        else
+        {
+            size = "";
+        }
 
         // 获取文件后缀
         var fileSuffix = Path.GetExtension(fileName);
@@ -205,7 +219,8 @@ public class FileService : IDynamicApplication
         if (!long.TryParse(fileIdStr, out var fileId))
             throw new UserFriendlyException("文件不存在！");
 
-        var fileInfoModel = await _repository.SingleOrDefaultAsync(fileId);
+        var fileInfoModel = await _repository.Entities.ClearFilter<IBaseTEntity>()
+            .InSingleAsync(fileId);
         if (fileInfoModel == null)
             throw new UserFriendlyException("文件不存在！");
 
@@ -223,7 +238,7 @@ public class FileService : IDynamicApplication
             }
         }
 
-        var localFileName = $"{fileInfoModel.FileId}@{size}.{fileInfoModel.FileSuffix}";
+        var localFileName = $"{fileInfoModel.FileId}{size}.{fileInfoModel.FileSuffix}";
 
         var localFilePath = Path.Combine(Environment.CurrentDirectory, fileInfoModel.FilePath, localFileName);
         if (!System.IO.File.Exists(localFilePath))
@@ -238,12 +253,13 @@ public class FileService : IDynamicApplication
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    [HttpPost("/download")]
+    [HttpPost]
     [ApiInfo("下载文件", HttpRequestActionEnum.Download)]
     [AllowAnonymous]
     public async Task<IActionResult> Download(DownloadFileInput input)
     {
-        var fileInfoModel = await _repository.SingleOrDefaultAsync(input.FileId);
+        var fileInfoModel = await _repository.Entities.ClearFilter<IBaseTEntity>()
+            .InSingleAsync(input.FileId);
         if (fileInfoModel == null)
             throw new UserFriendlyException("文件不存在！");
 
@@ -260,7 +276,7 @@ public class FileService : IDynamicApplication
     /// </summary>
     /// <param name="file"></param>
     /// <returns></returns>
-    [HttpPost("/uploadLogo")]
+    [HttpPost]
     [ApiInfo("上传头像", HttpRequestActionEnum.Upload)]
     public async Task<string> UploadLogo(IFormFile file)
     {
@@ -272,7 +288,7 @@ public class FileService : IDynamicApplication
     /// </summary>
     /// <param name="file"></param>
     /// <returns></returns>
-    [HttpPost("/uploadAvatar")]
+    [HttpPost]
     [ApiInfo("上传头像", HttpRequestActionEnum.Upload)]
     public async Task<string> UploadAvatar(IFormFile file)
     {
@@ -284,7 +300,7 @@ public class FileService : IDynamicApplication
     /// </summary>
     /// <param name="file"></param>
     /// <returns></returns>
-    [HttpPost("/uploadIdPhoto")]
+    [HttpPost]
     [ApiInfo("上传证件照", HttpRequestActionEnum.Upload)]
     public async Task<string> UploadIdPhoto(IFormFile file)
     {
@@ -296,7 +312,7 @@ public class FileService : IDynamicApplication
     /// </summary>
     /// <param name="file"></param>
     /// <returns></returns>
-    [HttpPost("/uploadEditor")]
+    [HttpPost]
     [ApiInfo("上传富文本", HttpRequestActionEnum.Upload)]
     public async Task<string> UploadEditor(IFormFile file)
     {
@@ -308,7 +324,7 @@ public class FileService : IDynamicApplication
     /// </summary>
     /// <param name="file"></param>
     /// <returns></returns>
-    [HttpPost("/uploadFile")]
+    [HttpPost]
     [ApiInfo("上传文件", HttpRequestActionEnum.Upload)]
     public async Task<string> UploadFile(IFormFile file)
     {
@@ -409,7 +425,7 @@ public class FileService : IDynamicApplication
             FileMimeType = file.ContentType,
             FileSizeKb = fileSizeKb,
             FilePath = filePath,
-            FileLocation = $"{httpRequest.Scheme}://{httpRequest.Host}/{fileObjectName}",
+            FileLocation = $"{httpRequest.Scheme}://{httpRequest.Host}/fileStorage/{fileObjectName}",
             FileHash = fileHash
         };
         // 获取设备信息
@@ -434,8 +450,10 @@ public class FileService : IDynamicApplication
         if (!Directory.Exists(localFilePath))
             Directory.CreateDirectory(localFilePath);
         var localFullPath = Path.Combine(localFilePath, fileObjectName);
-        await using var fileStream = System.IO.File.Create(localFullPath);
-        await file.CopyToAsync(fileStream);
+        await using (var fileStream = System.IO.File.Create(localFullPath))
+        {
+            await file.CopyToAsync(fileStream);
+        }
 
         // 判断是否为图片
         if (Images.Contains(file.ContentType.ToLower()))

@@ -20,46 +20,36 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Entity;
-using Fast.Center.Enum;
-using SqlSugar;
-using Yitter.IdGenerator;
-
-namespace Fast.Core;
+namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="SysSerialSeedData"/> 系统序号种子数据
+/// <see cref="SerialDateTypeEnum"/> 序号时间类型枚举
 /// </summary>
-internal static class SysSerialSeedData
+[Flags]
+[FastEnum("序号时间类型枚举")]
+public enum SerialDateTypeEnum : byte
 {
     /// <summary>
-    /// 系统序号种子数据
+    /// 年(yyyy)
     /// </summary>
-    /// <param name="db"></param>
-    /// <returns></returns>
-    public static async Task SeedData(ISqlSugarClient db)
-    {
-        await db.Insertable(new List<SysSerialRuleModel>
-            {
-                new()
-                {
-                    SerialRuleId = YitIdHelper.NextId(),
-                    RuleType = SysSerialRuleTypeEnum.AppNo,
-                    Prefix = "App",
-                    DateType = SerialDateTypeEnum.Year,
-                    Spacer = SerialSpacerEnum.None,
-                    Length = 2
-                },
-                new()
-                {
-                    SerialRuleId = YitIdHelper.NextId(),
-                    RuleType = SysSerialRuleTypeEnum.TenantNo,
-                    Prefix = "Tnt",
-                    DateType = SerialDateTypeEnum.Month,
-                    Spacer = SerialSpacerEnum.None,
-                    Length = 2
-                }
-            })
-            .ExecuteCommandAsync();
-    }
+    [Description("年(yyyy)")]
+    Year = 1,
+
+    /// <summary>
+    /// 年月(yyyyMM)
+    /// </summary>
+    [Description("年月(yyyyMM)")]
+    Month = 2,
+
+    /// <summary>
+    /// 年月日(yyyyMMdd)
+    /// </summary>
+    [Description("年月日(yyyyMMdd)")]
+    Day = 4,
+
+    /// <summary>
+    /// 年月日时(yyyyMMddHH)
+    /// </summary>
+    [Description("年月日时(yyyyMMddHH)")]
+    Hour = 8
 }

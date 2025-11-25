@@ -30,7 +30,8 @@ namespace Fast.Center.Entity;
 /// </summary>
 [SugarTable("PayRecord", "支付记录表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(OrderNo)}", nameof(OrderNo), OrderByType.Desc, true)]
+[SugarIndex($"IX_{{table}}_{nameof(BizOrderNo)}", nameof(BizOrderId), OrderByType.Desc, nameof(BizOrderNo), OrderByType.Desc,
+    true)]
 public class PayRecordModel : IUpdateVersion
 {
     /// <summary>
@@ -40,10 +41,10 @@ public class PayRecordModel : IUpdateVersion
     public long RecordId { get; set; }
 
     /// <summary>
-    /// 应用Id
+    /// 应用标识
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id")]
-    public long AppId { get; set; }
+    [SugarColumn(ColumnDescription = "应用标识", Length = 50)]
+    public string AppOpenId { get; set; }
 
     /// <summary>
     /// 收款商户号
@@ -52,17 +53,17 @@ public class PayRecordModel : IUpdateVersion
     public string MerchantNo { get; set; }
 
     /// <summary>
-    /// 订单号
-    /// </summary>
-    [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "订单号", Length = 20)]
-    public string OrderNo { get; set; }
-
-    /// <summary>
     /// 业务订单Id
     /// </summary>
     [SugarColumn(ColumnDescription = "业务订单Id")]
     public long BizOrderId { get; set; }
+
+    /// <summary>
+    /// 业务订单号
+    /// </summary>
+    [SugarSearchValue]
+    [SugarColumn(ColumnDescription = "业务订单号", Length = 30)]
+    public string BizOrderNo { get; set; }
 
     /// <summary>
     /// 支付渠道
@@ -110,6 +111,12 @@ public class PayRecordModel : IUpdateVersion
     public YesOrNotEnum IsPay { get; set; }
 
     /// <summary>
+    /// 支付过期时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "支付订单过期时间")]
+    public DateTime PayExpireTime { get; set; }
+
+    /// <summary>
     /// 支付金额
     /// </summary>
     [SugarColumn(ColumnDescription = "支付金额", Length = 18, DecimalDigits = 2)]
@@ -138,12 +145,6 @@ public class PayRecordModel : IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "退款时间")]
     public DateTime? RefundTime { get; set; }
-
-    /// <summary>
-    /// 订单过期时间
-    /// </summary>
-    [SugarColumn(ColumnDescription = "订单过期时间")]
-    public DateTime ExpireTime { get; set; }
 
     /// <summary>
     /// 设备

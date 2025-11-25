@@ -149,31 +149,24 @@ public class SysSerialContext
                     .ExecuteReturnEntity();
             }
 
-            var curSerialNo = sysSerialRuleModel.Prefix ?? "";
-
-            // 拼接分隔符
-            switch (sysSerialRuleModel.Spacer)
+            // 分隔符
+            var spacer = sysSerialRuleModel.Spacer switch
             {
-                default:
-                case SysSerialSpacerEnum.None:
-                    break;
-                case SysSerialSpacerEnum.Underscore:
-                    curSerialNo += "_";
-                    break;
-                case SysSerialSpacerEnum.Hyphen:
-                    curSerialNo += "-";
-                    break;
-                case SysSerialSpacerEnum.Dot:
-                    curSerialNo += ".";
-                    break;
-            }
+                SerialSpacerEnum.None => "",
+                SerialSpacerEnum.Underscore => "_",
+                SerialSpacerEnum.Hyphen => "-",
+                SerialSpacerEnum.Dot => ".",
+                _ => ""
+            };
+
+            var curSerialNo = $"{sysSerialRuleModel.Prefix ?? ""}{spacer}";
 
             var lastSerial = sysSerialSettingModel.LastSerial.GetValueOrDefault();
 
             switch (sysSerialRuleModel.DateType)
             {
                 default:
-                case SysSerialDateTypeEnum.Year:
+                case SerialDateTypeEnum.Year:
                     curSerialNo += dateTime.ToString("yyyy");
                     if (sysSerialSettingModel.LastTime == null || sysSerialSettingModel.LastTime.Value.Year != dateTime.Year)
                     {
@@ -181,7 +174,7 @@ public class SysSerialContext
                     }
 
                     break;
-                case SysSerialDateTypeEnum.Month:
+                case SerialDateTypeEnum.Month:
                     curSerialNo += dateTime.ToString("yyyyMM");
                     if (sysSerialSettingModel.LastTime == null
                         || sysSerialSettingModel.LastTime.Value.Year != dateTime.Year
@@ -191,7 +184,7 @@ public class SysSerialContext
                     }
 
                     break;
-                case SysSerialDateTypeEnum.Day:
+                case SerialDateTypeEnum.Day:
                     curSerialNo += dateTime.ToString("yyyyMMdd");
                     if (sysSerialSettingModel.LastTime == null || sysSerialSettingModel.LastTime.Value.Date != dateTime.Date)
                     {
@@ -199,7 +192,7 @@ public class SysSerialContext
                     }
 
                     break;
-                case SysSerialDateTypeEnum.Hour:
+                case SerialDateTypeEnum.Hour:
                     curSerialNo += dateTime.ToString("yyyyMMddHH");
                     if (sysSerialSettingModel.LastTime == null
                         || sysSerialSettingModel.LastTime.Value.Year != dateTime.Year
@@ -212,6 +205,9 @@ public class SysSerialContext
 
                     break;
             }
+
+            // 拼接分隔符
+            curSerialNo += spacer;
 
             var curSerial = lastSerial + 1;
 

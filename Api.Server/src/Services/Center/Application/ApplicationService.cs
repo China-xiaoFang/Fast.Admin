@@ -144,7 +144,11 @@ public class ApplicationService : IDynamicApplication
                 OpenId = sl.OpenId,
                 AppType = sl.AppType,
                 EnvironmentType = sl.EnvironmentType,
+                ContactPhone = sl.ContactPhone,
+                Latitude = sl.Latitude,
+                Longitude = sl.Longitude,
                 LoginComponent = sl.LoginComponent,
+                BannerImages = sl.BannerImages,
                 WebSocketUrl = sl.WebSocketUrl,
                 RequestTimeout = sl.RequestTimeout,
                 RequestEncipher = sl.RequestEncipher,
@@ -268,7 +272,11 @@ public class ApplicationService : IDynamicApplication
                     OpenId = item.OpenId,
                     AppType = item.AppType,
                     EnvironmentType = item.EnvironmentType,
+                    ContactPhone = item.ContactPhone,
+                    Latitude = item.Latitude,
+                    Longitude = item.Longitude,
                     LoginComponent = item.LoginComponent,
+                    BannerImages = item.BannerImages,
                     WebSocketUrl = item.WebSocketUrl,
                     RequestTimeout = item.RequestTimeout,
                     RequestEncipher = item.RequestEncipher,
@@ -293,7 +301,11 @@ public class ApplicationService : IDynamicApplication
                 applicationOpenIdModel.OpenId = item.OpenId;
                 applicationOpenIdModel.AppType = item.AppType;
                 applicationOpenIdModel.EnvironmentType = item.EnvironmentType;
+                applicationOpenIdModel.ContactPhone = item.ContactPhone;
+                applicationOpenIdModel.Latitude = item.Latitude;
+                applicationOpenIdModel.Longitude = item.Longitude;
                 applicationOpenIdModel.LoginComponent = item.LoginComponent;
+                applicationOpenIdModel.BannerImages = item.BannerImages;
                 applicationOpenIdModel.WebSocketUrl = item.WebSocketUrl;
                 applicationOpenIdModel.RequestTimeout = item.RequestTimeout;
                 applicationOpenIdModel.RequestEncipher = item.RequestEncipher;

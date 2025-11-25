@@ -20,36 +20,36 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Enum;
+namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="SerialDateTypeEnum"/> 序号时间类型枚举
+/// <see cref="WeChatPayOutput"/> 微信支付输出
 /// </summary>
-[Flags]
-[FastEnum("序号时间类型枚举")]
-public enum SerialDateTypeEnum : byte
+[SuppressSniffer]
+public class WeChatPayOutput
 {
     /// <summary>
-    /// 年(yyyy)
+    /// 预支付交易会话标识
     /// </summary>
-    [Description("年(yyyy)")]
-    Year = 1,
+    public string PrepayId { get; set; }
 
     /// <summary>
-    /// 年月(yyyyMM)
+    /// 时间戳
     /// </summary>
-    [Description("年月(yyyyMM)")]
-    Month = 2,
+    public string Timestamp { get; set; }
 
     /// <summary>
-    /// 年月日(yyyyMMdd)
+    /// 随机串
     /// </summary>
-    [Description("年月日(yyyyMMdd)")]
-    Day = 4,
+    public string Nonce { get; set; }
 
     /// <summary>
-    /// 年月日时(yyyyMMddHH)
+    /// 签名
     /// </summary>
-    [Description("年月日时(yyyyMMddHH)")]
-    Hour = 8
+    public string Signature { get; set; }
+
+    /// <summary>
+    /// 获取微信应答签名类型
+    /// </summary>
+    public string SignatureType { get; set; }
 }

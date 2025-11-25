@@ -51,7 +51,7 @@ public class EmployeeOrgModel : IDatabaseEntity
     /// 是否为主部门
     /// </summary>
     [SugarColumn(ColumnDescription = "是否为主部门")]
-    public bool IsPrimary { get; set; }
+    public YesOrNotEnum IsPrimary { get; set; }
 
     /// <summary>
     /// 职位Id
