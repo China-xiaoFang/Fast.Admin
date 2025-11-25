@@ -2,6 +2,7 @@ import { type App } from "vue";
 import { consoleLog, useIdentity, useStorage } from "@fast-china/utils";
 import { dayjs } from "wot-design-uni";
 import { loadFastAxios } from "./axios";
+import { loadWotDesign } from "./wot-design-uni";
 import { loadZPaging } from "./z-paging";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { CommonUniApp } from "@/common";
@@ -44,24 +45,73 @@ export function loadPlugins(app: App): void {
 		};
 	});
 
+	// #ifdef MP-WEIXIN || H5 || APP-PLUS
 	// 获取系统信息
 	const appBaseInfo = uni.getAppBaseInfo();
 	appStore.appBaseInfo = appBaseInfo;
-	consoleLog("App", "AppBaseInfo", appStore.appBaseInfo);
 
 	// 获取设备信息
 	const deviceInfo = uni.getDeviceInfo();
 	appStore.deviceInfo = deviceInfo;
-	consoleLog("App", "DeviceInfo", appStore.deviceInfo);
 
 	// 获取窗口信息
 	appStore.windowInfo = uni.getWindowInfo();
-	consoleLog("App", "WindowInfo", appStore.windowInfo);
+	// #endif
+
+	// #ifndef MP-WEIXIN || H5 || APP-PLUS
+	const systemInfo = uni.getSystemInfoSync();
+	appStore.appBaseInfo = {
+		appId: systemInfo.appId,
+		appName: systemInfo.appName,
+		appVersion: systemInfo.appVersion,
+		appVersionCode: systemInfo.appVersionCode,
+		appWgtVersion: systemInfo.appWgtVersion,
+		language: systemInfo.language,
+		version: systemInfo.version,
+		hostName: systemInfo.hostName,
+		hostVersion: systemInfo.hostVersion,
+		hostLanguage: systemInfo.hostLanguage,
+		hostTheme: systemInfo.hostTheme,
+		hostPackageName: systemInfo.hostPackageName,
+		theme: systemInfo.theme,
+		SDKVersion: systemInfo.SDKVersion,
+		enableDebug: systemInfo.enableDebug,
+		host: systemInfo.host,
+		appLanguage: systemInfo.appLanguage,
+		hostFontSizeSetting: systemInfo.hostFontSizeSetting,
+		hostSDKVersion: systemInfo.hostSDKVersion,
+	};
+	appStore.deviceInfo = {
+		deviceBrand: systemInfo.deviceBrand,
+		deviceModel: systemInfo.deviceModel,
+		deviceId: systemInfo.deviceId,
+		deviceType: systemInfo.deviceType,
+		devicePixelRatio: systemInfo.devicePixelRatio,
+		deviceOrientation: systemInfo.deviceOrientation,
+		brand: systemInfo.brand,
+		model: systemInfo.model,
+		system: systemInfo.system,
+		platform: systemInfo.platform,
+	};
+	appStore.windowInfo = {
+		pixelRatio: systemInfo.pixelRatio,
+		screenWidth: systemInfo.screenWidth,
+		screenHeight: systemInfo.screenHeight,
+		windowWidth: systemInfo.windowWidth,
+		windowHeight: systemInfo.windowHeight,
+		statusBarHeight: systemInfo.statusBarHeight,
+		windowTop: systemInfo.windowTop,
+		windowBottom: systemInfo.windowBottom,
+		safeArea: systemInfo.safeArea,
+		safeAreaInsets: systemInfo.safeAreaInsets,
+		screenTop: 0,
+	};
+	// #endif
 
 	// AppId
-	appStore.appId = appBaseInfo.appId;
+	appStore.appId = appStore.appBaseInfo.appId;
 	// App版本号
-	appStore.appVersion = appBaseInfo.appVersion;
+	appStore.appVersion = appStore.appBaseInfo.appVersion;
 	appStore.menuButton = {
 		width: 0,
 		height: CommonUniApp.navbarCapsuleMenuButtonHeight,
@@ -84,29 +134,35 @@ export function loadPlugins(app: App): void {
 	// #endif
 
 	// #ifdef APP-PLUS
-	if (deviceInfo.platform === "ios") {
+	if (appStore.deviceInfo.platform === "ios") {
 		appStore.deviceType = AppEnvironmentEnum.IOS;
 	} else {
 		appStore.deviceType = AppEnvironmentEnum.Android;
 	}
 
 	// 判断是否存在 WGT 热更新的版本号
-	if (appBaseInfo.appWgtVersion) {
-		appStore.appVersion = appBaseInfo.appWgtVersion;
+	if (appStore.appBaseInfo.appWgtVersion) {
+		appStore.appVersion = appStore.appBaseInfo.appWgtVersion;
 	}
 	// #endif
 
+	// 是否为 Iphone 设备
+	const isIphone = RegExps.IPhone.test(appStore.deviceInfo.model);
+	appStore.isIphone = isIphone;
+
+	consoleLog("App", "AppBaseInfo", appStore.appBaseInfo);
+	consoleLog("App", "DeviceInfo", appStore.deviceInfo);
+	consoleLog("App", "WindowInfo", appStore.windowInfo);
 	consoleLog("App", "AppId", appStore.appId);
 	consoleLog("App", "AppVersion", appStore.appVersion);
 	consoleLog("App", "MenuButton", appStore.menuButton);
-
-	// 是否为 Iphone 设备
-	const isIphone = RegExps.IPhone.test(deviceInfo.model);
 	consoleLog("App", "IsIphone", isIphone);
 
 	dayjs.locale("zh-cn");
 
 	loadFastAxios();
+
+	loadWotDesign();
 
 	loadZPaging();
 }

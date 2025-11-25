@@ -2,7 +2,7 @@
 	<FaWatermark v-if="showWatermark" />
 	<wd-config-provider :customClass="`fa-layout fa-layout__${theme}`" :theme="theme" :customStyle="configStore.layout.themeStyle">
 		<view :class="['fa-main', { 'fa-main__tabBar': state.isTabBar, 'fa-main__page-scroll': state.pageScroll === false }]" :style="mainStyle">
-			<slot />
+			<slot v-if="state.rendered" />
 			<!-- 页脚 -->
 			<FaFooter v-if="showFooter" />
 			<!-- 底部导航栏 -->
@@ -24,14 +24,14 @@
 </template>
 
 <script setup lang="ts">
-import { onHide, onShow } from "@dcloudio/uni-app";
-import { computed, onBeforeMount, reactive, watch } from "vue";
+import { onHide, onLoad, onShow } from "@dcloudio/uni-app";
+import { computed, nextTick, onBeforeMount, reactive, watch } from "vue";
 import { withDefineType } from "@fast-china/utils";
 import { useRoute } from "uni-mini-router";
 import { useMessage, useNotify, useToast } from "wot-design-uni";
 import type { WatchHandle } from "vue";
 import { wdHookState } from "@/hooks";
-import { useConfig } from "@/stores";
+import { useApp, useConfig } from "@/stores";
 
 defineOptions({
 	name: "Layout",
@@ -42,7 +42,15 @@ defineOptions({
 	},
 });
 
+const appStore = useApp();
 const configStore = useConfig();
+
+let wdNotifyWatch: WatchHandle;
+const uNotify = useNotify("#fast_notify");
+let wdToastWatch: WatchHandle;
+const uToast = useToast("#fast_toast");
+let wdMessageBoxWatch: WatchHandle;
+const uMessage = useMessage("#fast_message_box");
 
 const state = reactive({
 	/** 页面滚动 */
@@ -59,6 +67,10 @@ const state = reactive({
 	lightBackgroundImage: withDefineType<string>(),
 	/** 深色背景图片 */
 	darkBackgroundImage: withDefineType<string>(),
+	/** Logo 图片 */
+	logoUrl: appStore.logoUrl,
+	/** 渲染结束 */
+	rendered: false,
 });
 
 /** 主题 */
@@ -96,18 +108,12 @@ const mainStyle = computed(() => {
 	return style;
 });
 
-let wdNotifyWatch: WatchHandle;
-const uNotify = useNotify("#fast_notify");
-let wdToastWatch: WatchHandle;
-const uToast = useToast("#fast_toast");
-let wdMessageBoxWatch: WatchHandle;
-const uMessage = useMessage("#fast_message_box");
-
-onShow(() => {
-	wdNotifyWatch = watch(
+/** 处理监听 */
+const handleWatch = () => {
+	wdNotifyWatch ||= watch(
 		() => wdHookState.wdNotify,
 		(newValue) => {
-			if (!newValue) return;
+			if (!newValue?.type) return;
 			if (newValue.type === "closeNotify") {
 				uNotify.closeNotify();
 			} else {
@@ -116,22 +122,25 @@ onShow(() => {
 			wdHookState.wdNotify = undefined;
 		}
 	);
-	wdToastWatch = watch(
+	wdToastWatch ||= watch(
 		() => wdHookState.wdToast,
 		(newValue) => {
-			if (!newValue) return;
+			if (!newValue?.type) return;
 			if (newValue.type === "close") {
 				uToast.close();
 			} else {
 				uToast[newValue.type](newValue.options);
 			}
 			wdHookState.wdToast = undefined;
+		},
+		{
+			immediate: true,
 		}
 	);
-	wdMessageBoxWatch = watch(
+	wdMessageBoxWatch ||= watch(
 		() => wdHookState.wdMessageBox,
 		(newValue) => {
-			if (!newValue) return;
+			if (!newValue?.type) return;
 			if (newValue.type === "close") {
 				uMessage.close();
 			} else {
@@ -146,13 +155,23 @@ onShow(() => {
 			wdHookState.wdMessageBox = undefined;
 		}
 	);
-});
+};
 
+onLoad(() => {
+	handleWatch();
+	nextTick(() => {
+		state.rendered = true;
+	});
+});
+onShow(handleWatch);
 onHide(() => {
 	/** 页面隐藏，取消监听 */
 	wdNotifyWatch && wdNotifyWatch();
+	wdNotifyWatch = undefined;
 	wdToastWatch && wdToastWatch();
+	wdToastWatch = undefined;
 	wdMessageBoxWatch && wdMessageBoxWatch();
+	wdMessageBoxWatch = undefined;
 });
 
 onBeforeMount(() => {

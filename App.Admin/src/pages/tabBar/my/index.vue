@@ -11,6 +11,7 @@
 				'background-color': state.isScrolled ? 'var(--wot-navbar-bg-color)' : '',
 			}"
 		/>
+
 		<view class="navbar">
 			<view class="navbar__title">个人中心</view>
 			<view class="navbar__warp">
@@ -19,8 +20,8 @@
 					<image class="top_bg" src="@/static/images/card_top_bg.png" />
 					<image class="bottom_bg" src="@/static/images/card_bottom_bg.png" />
 				</template>
-				<view class="navbar__warp__top">
-					<view class="top__left" @tap="router.push('/pages/setting/userInfo/index')">
+				<view class="warp__top">
+					<view class="top__left" @click="router.push('/pages/setting/userInfo/index')">
 						<image class="avatar" :src="userInfoStore.avatar || defaultAvatar" />
 						<view class="account-info">
 							<text class="tenant-name">
@@ -56,31 +57,31 @@
 		<view class="data-card">
 			<wd-cell customClass="wd-cell-border" title="作业" />
 			<view class="data-card__content">
-				<view class="cell-item">
+				<view class="card__item">
 					<wd-badge :modelValue="9999" :max="99">
 						<FaIcon name="performance" />
 					</wd-badge>
 					<text class="item_txt">收货</text>
 				</view>
-				<view class="cell-item">
+				<view class="card__item">
 					<wd-badge :modelValue="88" :max="99">
 						<FaIcon name="performance" />
 					</wd-badge>
 					<text class="item_txt">上架</text>
 				</view>
-				<view class="cell-item">
+				<view class="card__item">
 					<wd-badge :modelValue="0" :max="99">
 						<FaIcon name="performance" />
 					</wd-badge>
 					<text class="item_txt">拣货</text>
 				</view>
-				<view class="cell-item">
+				<view class="card__item">
 					<wd-badge :modelValue="99" :max="99">
 						<FaIcon name="performance" />
 					</wd-badge>
 					<text class="item_txt">复核</text>
 				</view>
-				<view class="cell-item">
+				<view class="card__item">
 					<wd-badge :modelValue="9" :max="99">
 						<FaIcon name="performance" />
 					</wd-badge>
@@ -91,23 +92,23 @@
 		<view class="data-card">
 			<wd-cell customClass="wd-cell-border" title="绩效" value="全部" clickable isLink />
 			<view class="data-card__content">
-				<view class="cell-item">
+				<view class="card__item">
 					<FaIcon name="performance" />
 					<text class="item_txt">收货</text>
 				</view>
-				<view class="cell-item">
+				<view class="card__item">
 					<FaIcon name="performance" />
 					<text class="item_txt">上架</text>
 				</view>
-				<view class="cell-item">
+				<view class="card__item">
 					<FaIcon name="performance" />
 					<text class="item_txt">拣货</text>
 				</view>
-				<view class="cell-item">
+				<view class="card__item">
 					<FaIcon name="performance" />
 					<text class="item_txt">复核</text>
 				</view>
-				<view class="cell-item">
+				<view class="card__item">
 					<FaIcon name="performance" />
 					<text class="item_txt">配送</text>
 				</view>
@@ -133,7 +134,17 @@
 			</template>
 		</wd-cell>
 
-		<wd-button customClass="btn__exit-login" type="primary" block :round="false" icon="exit" @tap="handleLogout">退出登录</wd-button>
+		<wd-button
+			v-if="userInfoStore.hasUserInfo"
+			customClass="btn__exit-login"
+			type="primary"
+			block
+			:round="false"
+			icon="exit"
+			@click="handleLogout"
+		>
+			退出登录
+		</wd-button>
 	</view>
 </template>
 
