@@ -91,7 +91,7 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
             logSb.Append(Environment.NewLine);
             logSb.Append("\u001b[40m\u001b[90m");
             logSb.Append("      ");
-            logSb.Append($"开始同步租户【{tenantModel.TenantName}】数据库...");
+            logSb.Append($"开始初始化租户【{tenantModel.TenantName}】数据库...");
             logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
             Console.WriteLine(logSb.ToString());
         }
@@ -113,7 +113,7 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
             .Select(sl => sl.EntityType)
             .ToArray();
 
-        // 同步表
+        // 创建表
         adminDb.CodeFirst.InitTables(adminTableTypes);
         adminDb.CodeFirst.SplitTables()
             .InitTables(adminSplitTableTypes);
@@ -135,45 +135,10 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
             .Select(sl => sl.EntityType)
             .ToArray();
 
-        // 同步表
+        // 创建表
         logDb.CodeFirst.InitTables(logTableTypes);
         logDb.CodeFirst.SplitTables()
             .InitTables(logSplitTableTypes);
-
-        {
-            var logSb = new StringBuilder();
-            logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-            logSb.Append("info");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            logSb.Append(": ");
-            logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-            logSb.Append(Environment.NewLine);
-            logSb.Append("\u001b[40m\u001b[90m");
-            logSb.Append("      ");
-            logSb.Append($"同步租户【{tenantModel.TenantName}】数据库成功。");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            Console.WriteLine(logSb.ToString());
-        }
-
-        if (tenantModel.DatabaseInitialized)
-        {
-            return;
-        }
-
-        {
-            var logSb = new StringBuilder();
-            logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-            logSb.Append("info");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            logSb.Append(": ");
-            logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-            logSb.Append(Environment.NewLine);
-            logSb.Append("\u001b[40m\u001b[90m");
-            logSb.Append("      ");
-            logSb.Append($"开始初始化租户【{tenantModel.TenantName}】数据库...");
-            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-            Console.WriteLine(logSb.ToString());
-        }
 
         // 查询所有系统规则序号
         var serialRuleList = await adminDb.Queryable<SerialRuleModel>()
