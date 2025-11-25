@@ -177,6 +177,7 @@ const state = reactive({
 	isScrolled: false,
 });
 
+/** 退出登录 */
 const handleLogout = async () => {
 	await clickUtil.throttleAsync(async () => {
 		await useMessageBox.confirm("确定要退出登录？");

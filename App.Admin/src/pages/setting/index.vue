@@ -100,6 +100,7 @@ const limitSize = computed(() => {
 	}
 });
 
+/** 清除缓存 */
 const handleClearCache = async () => {
 	await clickUtil.throttleAsync(async () => {
 		await useMessageBox.confirm("清除缓存后需要重新登录，确定要清除？");
@@ -109,6 +110,7 @@ const handleClearCache = async () => {
 	});
 };
 
+/** 退出登录 */
 const handleLogout = async () => {
 	await clickUtil.throttleAsync(async () => {
 		await useMessageBox.confirm("确定要退出登录？");
