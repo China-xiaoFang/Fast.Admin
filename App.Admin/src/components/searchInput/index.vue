@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, useModel } from "vue";
+import { onMounted, reactive, useModel, watch } from "vue";
 import { dateUtil, definePropType, withDefineType } from "@fast-china/utils";
 import dayjs from "dayjs";
 import { useConfig } from "@/stores";
@@ -107,12 +107,12 @@ const props = defineProps({
 	/** @description 显示扫描图标 */
 	scan: {
 		type: Boolean,
-		default: true,
+		default: false,
 	},
 	/** @description 显示搜素按钮 */
 	search: {
 		type: Boolean,
-		default: true,
+		default: false,
 	},
 	/** @description 显示筛选图标 */
 	filter: {
@@ -125,9 +125,9 @@ const props = defineProps({
 
 const emit = defineEmits({
 	/** @description v-model 回调 */
-	"update:modelValue": (value: string) => (boolean) => true,
+	"update:modelValue": (value: string): boolean => true,
 	/** @description v-model:searchParam 回调 */
-	"update:searchParam": (value: any) => (boolean) => true,
+	"update:searchParam": (value: any): boolean => true,
 	/** @description 监听输入框input事件 */
 	input: (detail: UniHelper.InputOnInputDetail): boolean => true,
 	/** @description 监听输入框focus事件 */
@@ -258,7 +258,7 @@ const handleDateRangeChange = ({ value }: { value: FaTableDataRange | "custom" }
 const defaultSearchTime = () => {
 	if (!props.filter || props.hideSearchTime) {
 		state.searchTimeList = [];
-		searchParam.value.searchTimeList = undefined;
+		// searchParam.value.searchTimeList = undefined;
 	} else {
 		const { start, end } = getDateTime(configStore.tableLayout.dataSearchRange);
 		state.dataSearchRange = configStore.tableLayout.dataSearchRange;
@@ -266,6 +266,31 @@ const defaultSearchTime = () => {
 		searchParam.value.searchTimeList = [dayjs(start).format("YYYY-MM-DD 00:00:00"), dayjs(end).format("YYYY-MM-DD 23:59:59")];
 	}
 };
+
+watch(
+	() => modelValue.value,
+	(newVal) => {
+		if (searchParam.value.searchValue !== newVal) {
+			searchParam.value.searchValue = newVal;
+		}
+	},
+	{
+		immediate: true,
+	}
+);
+
+watch(
+	() => searchParam.value,
+	(newVal) => {
+		if (modelValue.value !== newVal?.searchValue) {
+			modelValue.value = newVal.searchValue;
+		}
+	},
+	{
+		immediate: true,
+		deep: true,
+	}
+);
 
 onMounted(() => {
 	defaultSearchTime();

@@ -28,11 +28,8 @@ const watermarkProps = reactive({
 	color: computed(() => (configStore.layout.isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)")),
 	content: computed(() => {
 		let watermarkContent = appStore.appName;
-		if (userInfoStore.tenantName) {
-			watermarkContent = userInfoStore.tenantName;
-		}
 		if (userInfoStore.hasUserInfo) {
-			watermarkContent += ` - ${userInfoStore.employeeName || userInfoStore.nickName}`;
+			watermarkContent += ` - ${userInfoStore.nickName}`;
 		}
 
 		return watermarkContent;

@@ -69,7 +69,7 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 				dts: "types/pages.d.ts",
 				homePage: "pages/launcher/index",
 				dir: "src/pages",
-				subPackages: [],
+				subPackages: ["src/pages_**"],
 			}),
 			/** Layout 模式 */
 			UniHelperLayouts(),

@@ -50,7 +50,7 @@
 			/>
 		</wd-cell-group>
 
-		<wd-button customClass="mt40 btn__reset" type="error" block :round="false" @tap="configStore.reset">重置</wd-button>
+		<wd-button customClass="mt40 btn__reset" type="error" block :round="false" @click="configStore.reset">重置</wd-button>
 	</view>
 </template>
 

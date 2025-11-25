@@ -15,18 +15,18 @@
 		</wd-cell-group>
 
 		<wd-cell-group border>
-			<wd-cell title="消息通知" clickable isLink />
+			<wd-cell title="消息通知" clickable isLink @click="useToast.info('敬请期待')" />
 			<wd-cell customClass="mb20" title="通用" clickable isLink to="/pages/setting/general/index" />
 		</wd-cell-group>
 
 		<wd-cell-group border>
-			<wd-cell title="用户协议" clickable isLink @click="router.push({ path: CommonRoute.UserAgreement })" />
-			<wd-cell title="隐私协议" clickable isLink @click="router.push({ path: CommonRoute.PrivacyAgreement })" />
-			<wd-cell title="服务协议" clickable isLink @click="router.push({ path: CommonRoute.ServiceAgreement })" />
+			<wd-cell title="用户协议" clickable isLink @click="router.push(CommonRoute.UserAgreement)" />
+			<wd-cell title="隐私协议" clickable isLink @click="router.push(CommonRoute.PrivacyAgreement)" />
+			<wd-cell title="服务协议" clickable isLink @click="router.push(CommonRoute.ServiceAgreement)" />
 			<wd-cell customClass="mb20" title="清除缓存" :value="`${currentSize}/${limitSize}`" clickable isLink @click="handleClearCache" />
 		</wd-cell-group>
 
-		<wd-button customClass="btn__exit-login" type="primary" block :round="false" icon="exit" @tap="handleLogout">退出登录</wd-button>
+		<wd-button customClass="btn__exit-login" type="primary" block :round="false" icon="exit" @click="handleLogout">退出登录</wd-button>
 	</view>
 </template>
 

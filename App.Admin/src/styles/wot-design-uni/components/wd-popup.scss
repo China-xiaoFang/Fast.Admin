@@ -5,22 +5,22 @@
 	// padding-right: 15rpx;
 
 	&.wd-popup--center {
-		border-radius: 20rpx;
+		border-radius: var(--wot-border-radius-large);
 	}
 
 	&.wd-popup--top {
-		border-radius: 0 0 20rpx 20rpx;
+		border-radius: 0 0 var(--wot-border-radius-large) var(--wot-border-radius-large);
 	}
 
 	&.wd-popup--right {
-		border-radius: 20rpx 0 0 20rpx;
+		border-radius: var(--wot-border-radius-large) 0 0 var(--wot-border-radius-large);
 	}
 
 	&.wd-popup--bottom {
-		border-radius: 20rpx 20rpx 0 0;
+		border-radius: var(--wot-border-radius-large) var(--wot-border-radius-large) 0 0;
 	}
 
 	&.wd-popup--left {
-		border-radius: 0 20rpx 20rpx 0;
+		border-radius: 0 var(--wot-border-radius-large) var(--wot-border-radius-large) 0;
 	}
 }

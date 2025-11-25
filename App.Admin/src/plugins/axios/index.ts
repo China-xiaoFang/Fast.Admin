@@ -2,9 +2,9 @@ import { createFastAxios } from "@fast-china/axios";
 import { Local, consoleDebug, cryptoUtil, useIdentity } from "@fast-china/utils";
 import type { ApiResponse } from "@fast-china/axios";
 import type { AxiosHeaders, AxiosResponse } from "axios";
+import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { useLoading, useMessageBox, useToast } from "@/hooks";
 import { useApp, useUserInfo } from "@/stores";
-import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 
 /** 加载实例 */
 const loadingInstance = {

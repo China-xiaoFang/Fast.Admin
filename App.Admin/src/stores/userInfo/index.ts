@@ -28,7 +28,7 @@ export const useUserInfo = defineStore(
 		const state = reactive<IState & GetLoginUserInfoOutput>({
 			token: "",
 			refreshToken: "",
-			activeTabBar: "",
+			activeTabBar: CommonRoute.Workbench,
 			accountKey: "",
 			mobile: "",
 			nickName: "",
@@ -37,7 +37,6 @@ export const useUserInfo = defineStore(
 			tenantName: "",
 			userKey: "",
 			account: "",
-			loginEmployeeNo: "",
 			employeeNo: "",
 			employeeName: "",
 			departmentId: 0,
@@ -170,7 +169,7 @@ export const useUserInfo = defineStore(
 
 			// 排除登录页面报错的问题
 			if (router.route.value.path === CommonRoute.Login) {
-				router.push({ path: CommonRoute.Login });
+				router.push(CommonRoute.Login);
 			} else {
 				router.replaceAll({ path: CommonRoute.Login, query: { redirect: encodeURIComponent(router.route.value.fullPath) } });
 			}
@@ -247,16 +246,22 @@ export const useUserInfo = defineStore(
 
 		/** 获取微信Code */
 		const getWeChatCode = (): Promise<string> => {
-			return new Promise((resolve) => {
+			return new Promise((resolve, reject) => {
 				// #ifdef MP-WEIXIN
 				return uni.login({
 					success: (res) => {
 						return resolve(res.code);
 					},
+					fail: (error) => {
+						useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
+						return reject();
+					},
 				});
 				// #endif
 
+				// #ifndef MP-WEIXIN
 				return resolve("");
+				// #endif
 			});
 		};
 

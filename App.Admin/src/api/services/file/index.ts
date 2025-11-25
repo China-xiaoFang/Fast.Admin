@@ -23,7 +23,7 @@ export const fileApi = {
    */
   download(data: DownloadFileInput) {
     return axiosUtil.request({
-      url: "/download",
+      url: "/file/download",
       method: "post",
       data,
       responseType: "blob",
@@ -36,7 +36,7 @@ export const fileApi = {
    */
   uploadLogo(data: FormData) {
     return axiosUtil.request<string>({
-      url: "/uploadLogo",
+      url: "/file/uploadLogo",
       method: "post",
       data,
       requestType: "upload",
@@ -47,7 +47,7 @@ export const fileApi = {
    */
   uploadAvatar(data: FormData) {
     return axiosUtil.request<string>({
-      url: "/uploadAvatar",
+      url: "/file/uploadAvatar",
       method: "post",
       data,
       requestType: "upload",
@@ -58,7 +58,7 @@ export const fileApi = {
    */
   uploadIdPhoto(data: FormData) {
     return axiosUtil.request<string>({
-      url: "/uploadIdPhoto",
+      url: "/file/uploadIdPhoto",
       method: "post",
       data,
       requestType: "upload",
@@ -69,7 +69,7 @@ export const fileApi = {
    */
   uploadEditor(data: FormData) {
     return axiosUtil.request<string>({
-      url: "/uploadEditor",
+      url: "/file/uploadEditor",
       method: "post",
       data,
       requestType: "upload",
@@ -80,7 +80,7 @@ export const fileApi = {
    */
   uploadFile(data: FormData) {
     return axiosUtil.request<string>({
-      url: "/uploadFile",
+      url: "/file/uploadFile",
       method: "post",
       data,
       requestType: "upload",
