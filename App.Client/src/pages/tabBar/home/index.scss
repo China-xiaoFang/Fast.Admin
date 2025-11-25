@@ -1,2 +1,12 @@
-.page {
+.fa-search-input {
+	position: sticky;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 999;
+}
+
+.wd-swiper {
+	padding: 0 20rpx;
+	// --wot-swiper-radius: 0;
 }

@@ -22,9 +22,25 @@ export interface EditApplicationOpenIdDto {
    */
   environmentType?: EnvironmentTypeEnum;
   /**
+   * 联系电话
+   */
+  contactPhone?: string;
+  /**
+   * 经度
+   */
+  longitude?: number;
+  /**
+   * 纬度
+   */
+  latitude?: number;
+  /**
    * 登录组件
    */
   loginComponent?: string;
+  /**
+   * Banner图
+   */
+  bannerImages?: Array<string>;
   /**
    * WebSocket地址
    */

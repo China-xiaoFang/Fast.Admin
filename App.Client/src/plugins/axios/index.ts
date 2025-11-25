@@ -35,7 +35,7 @@ const handleReloadLogin = (response: AxiosResponse): boolean => {
 				.then(() => {
 					loginCallBack = false;
 					const userInfoStore = useUserInfo();
-					userInfoStore.logout();
+					userInfoStore.login();
 				});
 		}
 		return true;
