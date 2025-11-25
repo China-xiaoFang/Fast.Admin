@@ -20,8 +20,6 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
-
 namespace Fast.Center.Service.SysSerial.Dto;
 
 /// <summary>
@@ -45,13 +43,13 @@ public class EditSysSerialRuleInput : UpdateVersionInput
     /// 时间类型
     /// </summary>
     [EnumRequired(ErrorMessage = "时间类型不能为空")]
-    public SysSerialDateTypeEnum DateType { get; set; }
+    public SerialDateTypeEnum DateType { get; set; }
 
     /// <summary>
     /// 分隔符
     /// </summary>
     [EnumRequired(ErrorMessage = "分隔符不能为空")]
-    public SysSerialSpacerEnum Spacer { get; set; }
+    public SerialSpacerEnum Spacer { get; set; }
 
     /// <summary>
     /// 长度

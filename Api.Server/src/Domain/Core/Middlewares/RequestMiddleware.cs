@@ -71,7 +71,7 @@ public class RequestMiddleware
         }
 
         // 排除 multipart/form-data 格式
-        if (httpRequest.HasFormContentType)
+        if (httpRequest.ContentType?.StartsWith("multipart/form-data", StringComparison.OrdinalIgnoreCase) == true)
         {
             // 写入 HttpContext.Items
             httpContext.Items[$"{nameof(Fast)}.RequestParams"] = "文件上传...";

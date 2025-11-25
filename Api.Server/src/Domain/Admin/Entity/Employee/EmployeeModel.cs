@@ -50,7 +50,7 @@ public class EmployeeModel : IUpdateVersion
     /// </summary>
     [Required]
     [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "工号", Length = 15)]
+    [SugarColumn(ColumnDescription = "工号", Length = 20)]
     public string EmployeeNo { get; set; }
 
     /// <summary>
@@ -67,6 +67,12 @@ public class EmployeeModel : IUpdateVersion
     [SugarSearchValue]
     [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
+
+    /// <summary>
+    /// 性别
+    /// </summary>
+    [SugarColumn(ColumnDescription = "性别")]
+    public GenderEnum Sex { get; set; }
 
     /// <summary>
     /// 证件照

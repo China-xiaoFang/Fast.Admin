@@ -52,13 +52,13 @@ public class SysSerialRuleModel : BaseEntity, IUpdateVersion
     /// 时间类型
     /// </summary>
     [SugarColumn(ColumnDescription = "时间类型")]
-    public SysSerialDateTypeEnum DateType { get; set; }
+    public SerialDateTypeEnum DateType { get; set; }
 
     /// <summary>
     /// 分隔符
     /// </summary>
     [SugarColumn(ColumnDescription = "分隔符")]
-    public SysSerialSpacerEnum Spacer { get; set; }
+    public SerialSpacerEnum Spacer { get; set; }
 
     /// <summary>
     /// 长度

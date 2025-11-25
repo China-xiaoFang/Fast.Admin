@@ -38,26 +38,28 @@
   "UploadFileSettings": {
     // Logo
     "Logo": {
-      "Path": "Upload/Logo",
+      "Path": "Upload\\Logo",
       "MaxSize": 2048,
       "ContentType": [ "image/jpg", "image/jpeg", "image/png", "image/gif", "image/bmp" ]
     },
     // 头像
     "Avatar": {
-      "Path": "Upload/Avatar",
+      "Path": "Upload\\Avatar",
       "MaxSize": 2048,
       "ContentType": [ "image/jpg", "image/jpeg", "image/png", "image/gif", "image/bmp" ]
     },
     // 证件照
     "IdPhoto": {
-      "Path": "Upload/IdPhoto",
+      "Path": "Upload\\IdPhoto",
       "MaxSize": 5120,
       "ContentType": [ "image/jpg", "image/jpeg", "image/png" ]
     },
     // 富文本
     "Editor": {
-      "Path": "Upload/Editor",
+      "Path": "Upload\\Editor",
       "MaxSize": 10240,
+      // 使用日期文件夹
+      "UseDateFolder": true,
       "ContentType": [
         // 图片类
         "image/jpg",
@@ -77,7 +79,7 @@
     },
     // 默认
     "Default": {
-      "Path": "Upload/Default",
+      "Path": "Upload\\Default",
       "MaxSize": 102400,
       // 使用类型文件夹
       "UseTypeFolder": true,

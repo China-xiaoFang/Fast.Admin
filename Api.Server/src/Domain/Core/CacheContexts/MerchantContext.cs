@@ -46,8 +46,9 @@ public class MerchantContext
     /// 获取商户号
     /// </summary>
     /// <param name="merchantNo"><see cref="string"/> 商户号</param>
+    /// <param name="throwError"><see cref="bool"/> 抛出错误</param>
     /// <returns></returns>
-    public static MerchantModel GetMerchantSync(string merchantNo)
+    public static MerchantModel GetMerchantSync(string merchantNo, bool throwError = true)
     {
         if (string.IsNullOrWhiteSpace(merchantNo))
         {
@@ -73,7 +74,7 @@ public class MerchantContext
                 .Where(wh => wh.MerchantNo == merchantNo)
                 .Single();
 
-            if (result == null)
+            if (result == null && throwError)
             {
                 var message = $"未能找到对应商户号【{merchantNo}】信息！";
                 logger.LogError($"MerchantNo：{merchantNo}；{message}");
@@ -96,8 +97,9 @@ public class MerchantContext
     /// 获取商户号
     /// </summary>
     /// <param name="merchantNo"><see cref="string"/> 商户号</param>
+    /// <param name="throwError"><see cref="bool"/> 抛出错误</param>
     /// <returns></returns>
-    public static async Task<MerchantModel> GetMerchant(string merchantNo)
+    public static async Task<MerchantModel> GetMerchant(string merchantNo, bool throwError = true)
     {
         if (string.IsNullOrWhiteSpace(merchantNo))
         {
@@ -123,7 +125,7 @@ public class MerchantContext
                 .Where(wh => wh.MerchantNo == merchantNo)
                 .SingleAsync();
 
-            if (result == null)
+            if (result == null && throwError)
             {
                 var message = $"未能找到对应商户号【{merchantNo}】信息！";
                 logger.LogError($"MerchantNo：{merchantNo}；{message}");

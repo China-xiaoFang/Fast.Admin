@@ -299,7 +299,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 {
                     builder
                         // 执行日期（星期）
-                        .OnDaysOfTheWeek(jobInfo.Week!.Value.ToDayOfWeek())
+                        .OnDaysOfTheWeek(jobInfo.Week!.Value.ToDayOfWeeks())
                         // 执行开始时间
                         .StartingDailyAt(TimeOfDay.HourMinuteAndSecondOfDay(jobInfo.DailyStartTime!.Value.Hours,
                             jobInfo.DailyStartTime.Value.Minutes, jobInfo.DailyStartTime.Value.Seconds))

@@ -31,6 +31,7 @@ public enum SerialRuleTypeEnum : byte
     /// <summary>
     /// 工号
     /// </summary>
+    /// <remarks>因涉及到登录，所以必须存在租户编码</remarks>
     [Description("工号")]
     EmployeeNo = 1
 }

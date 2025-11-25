@@ -125,7 +125,7 @@ public class InitDatabaseHostedService : IHostedService
                 AdminPhone = null,
                 RobotName = "机器人",
                 TenantType = TenantTypeEnum.System,
-                LogoUrl = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
+                LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
                 AllowDeleteData = true,
                 DatabaseInitialized = false,
                 CreatedTime = dateTime
@@ -144,7 +144,7 @@ public class InitDatabaseHostedService : IHostedService
                 Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
                     .ToUpper(),
                 NickName = "超级管理员",
-                Avatar = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
+                Avatar = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
                 Status = CommonStatusEnum.Enable,
                 Sex = GenderEnum.Unknown,
                 Birthday = new DateTime(1998, 01, 01),
@@ -165,7 +165,7 @@ public class InitDatabaseHostedService : IHostedService
                         Account = "SuperAdmin",
                         EmployeeNo = "",
                         EmployeeName = "超级管理员",
-                        IdPhoto = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
+                        IdPhoto = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
                         DepartmentId = null,
                         DepartmentName = null,
                         UserType = UserTypeEnum.SuperAdmin,
@@ -283,7 +283,7 @@ public class InitDatabaseHostedService : IHostedService
                     AdminPhone = null,
                     RobotName = "小方机器人",
                     TenantType = TenantTypeEnum.Common,
-                    LogoUrl = "https://gitee.com/China-xiaoFang/fast.admin/raw/master/Fast.png",
+                    LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
                     AllowDeleteData = true,
                     DatabaseInitialized = false,
                     CreatedTime = dateTime
