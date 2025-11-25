@@ -224,7 +224,7 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
                             AccountId = accountModel.AccountId,
                             OperationType = PasswordOperationTypeEnum.Create,
                             Type = PasswordTypeEnum.SHA1,
-                            Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
+                            Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
                                 .ToUpper()
                         }
                     })
