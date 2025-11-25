@@ -135,14 +135,14 @@ builder.Services.AddHostedService<SchedulerHostedService>();
 
 var app = builder.Build();
 
-//// 强制使用 Https
-//app.UseHttpsRedirection();
-
 // 启用请求头转发
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
+
+//// 强制使用 Https
+//app.UseHttpsRedirection();
 
 // 启用静态文件
 app.UseStaticFiles();
