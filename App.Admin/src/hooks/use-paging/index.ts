@@ -60,7 +60,6 @@ export const usePaging = <TResult, TInput extends Record<string, any> = {}>(
 		if (pageIndex) {
 			zPagingRef.value?.refreshToPage(pageIndex);
 		} else {
-			zPagingRef.value?.clear();
 			zPagingRef.value?.reload();
 		}
 	}
