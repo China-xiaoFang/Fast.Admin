@@ -2,7 +2,7 @@
 	<FaWatermark v-if="showWatermark" />
 	<wd-config-provider :customClass="`fa-layout fa-layout__${theme}`" :theme="theme" :customStyle="configStore.layout.themeStyle">
 		<view :class="['fa-main', { 'fa-main__tabBar': state.isTabBar, 'fa-main__page-scroll': state.pageScroll === false }]" :style="mainStyle">
-			<slot />
+			<slot v-if="state.rendered" />
 			<!-- 页脚 -->
 			<FaFooter v-if="showFooter" />
 			<!-- 底部导航栏 -->
@@ -34,14 +34,14 @@
 						<text>为继续使用相关服务，请授权获取您的手机号</text>
 						<view class="agreement">
 							登录即表示您已阅读并同意
-							<text @tap.stop="router.push({ path: CommonRoute.UserAgreement })">《用户协议》</text>
-							<text @tap.stop="router.push({ path: CommonRoute.PrivacyAgreement })">《隐私协议》</text>
-							<text @tap.stop="router.push({ path: CommonRoute.ServiceAgreement })">《服务协议》</text>
+							<text class="txt" @click="router.push(CommonRoute.UserAgreement)">《用户协议》</text>
+							<text class="txt" @click="router.push(CommonRoute.PrivacyAgreement)">《隐私协议》</text>
+							<text class="txt" @click="router.push(CommonRoute.ServiceAgreement)">《服务协议》</text>
 						</view>
 					</view>
 				</view>
 				<view class="auth-actions">
-					<wd-button type="info" plain block @click="authLoginPopupRef.close()">暂不授权</wd-button>
+					<wd-button type="info" plain block @click="handleAuthPopupClose">暂不授权</wd-button>
 					<wd-button openType="getPhoneNumber" type="primary" block @getphonenumber="handlePhoneLogin">一键授权</wd-button>
 				</view>
 			</view>
@@ -51,8 +51,8 @@
 </template>
 
 <script setup lang="ts">
-import { onHide, onShow } from "@dcloudio/uni-app";
-import { computed, onBeforeMount, reactive, ref, watch } from "vue";
+import { onHide, onLoad, onShow } from "@dcloudio/uni-app";
+import { computed, nextTick, onBeforeMount, reactive, ref, watch } from "vue";
 import { clickUtil, consoleLog, withDefineType } from "@fast-china/utils";
 import { useRoute, useRouter } from "uni-mini-router";
 import { useMessage, useNotify, useToast } from "wot-design-uni";
@@ -77,6 +77,14 @@ const configStore = useConfig();
 const userInfoStore = useUserInfo();
 const router = useRouter();
 
+let wdNotifyWatch: WatchHandle;
+const uNotify = useNotify("#fast_notify");
+let wdToastWatch: WatchHandle;
+const uToast = useToast("#fast_toast");
+let wdMessageBoxWatch: WatchHandle;
+const uMessage = useMessage("#fast_message_box");
+let authLoginPopupWatch: WatchHandle;
+
 const authLoginPopupRef = ref<FaPopupInstance>();
 
 const state = reactive({
@@ -96,6 +104,8 @@ const state = reactive({
 	darkBackgroundImage: withDefineType<string>(),
 	/** Logo 图片 */
 	logoUrl: appStore.logoUrl,
+	/** 渲染结束 */
+	rendered: false,
 });
 
 /** 主题 */
@@ -133,9 +143,17 @@ const mainStyle = computed(() => {
 	return style;
 });
 
+/** 处理关闭 */
+const handleAuthPopupClose = () => {
+	authLoginPopupRef.value.close(() => {
+		uToast.warning("暂不授权可能会影响部分功能的正常使用，您可在后续使用过程中再次授权。");
+		userInfoStore.authLoginPopup = false;
+	});
+};
+
 /** 手机登录 */
 const handlePhoneLogin = async (detail: UniHelper.ButtonOnGetphonenumberDetail) => {
-	await clickUtil.throttleAsync(async () => {
+	await clickUtil.throttle(() => {
 		authLoginPopupRef.value.close(async () => {
 			consoleLog("Layout", "GetPhoneNumber", detail);
 			const { code } = detail;
@@ -146,19 +164,12 @@ const handlePhoneLogin = async (detail: UniHelper.ButtonOnGetphonenumberDetail) 
 	});
 };
 
-let wdNotifyWatch: WatchHandle;
-const uNotify = useNotify("#fast_notify");
-let wdToastWatch: WatchHandle;
-const uToast = useToast("#fast_toast");
-let wdMessageBoxWatch: WatchHandle;
-const uMessage = useMessage("#fast_message_box");
-let authLoginPopupWatch: WatchHandle;
-
-onShow(() => {
-	wdNotifyWatch = watch(
+/** 处理监听 */
+const handleWatch = () => {
+	wdNotifyWatch ||= watch(
 		() => wdHookState.wdNotify,
 		(newValue) => {
-			if (!newValue) return;
+			if (!newValue?.type) return;
 			if (newValue.type === "closeNotify") {
 				uNotify.closeNotify();
 			} else {
@@ -167,22 +178,25 @@ onShow(() => {
 			wdHookState.wdNotify = undefined;
 		}
 	);
-	wdToastWatch = watch(
+	wdToastWatch ||= watch(
 		() => wdHookState.wdToast,
 		(newValue) => {
-			if (!newValue) return;
+			if (!newValue?.type) return;
 			if (newValue.type === "close") {
 				uToast.close();
 			} else {
 				uToast[newValue.type](newValue.options);
 			}
 			wdHookState.wdToast = undefined;
+		},
+		{
+			immediate: true,
 		}
 	);
-	wdMessageBoxWatch = watch(
+	wdMessageBoxWatch ||= watch(
 		() => wdHookState.wdMessageBox,
 		(newValue) => {
-			if (!newValue) return;
+			if (!newValue?.type) return;
 			if (newValue.type === "close") {
 				uMessage.close();
 			} else {
@@ -197,21 +211,32 @@ onShow(() => {
 			wdHookState.wdMessageBox = undefined;
 		}
 	);
-	authLoginPopupWatch = watch(
+	authLoginPopupWatch ||= watch(
 		() => userInfoStore.authLoginPopup,
 		(newValue) => {
 			if (!newValue) return;
 			authLoginPopupRef.value.open();
 		}
 	);
-});
+};
 
+onLoad(() => {
+	handleWatch();
+	nextTick(() => {
+		state.rendered = true;
+	});
+});
+onShow(handleWatch);
 onHide(() => {
 	/** 页面隐藏，取消监听 */
 	wdNotifyWatch && wdNotifyWatch();
+	wdNotifyWatch = undefined;
 	wdToastWatch && wdToastWatch();
+	wdToastWatch = undefined;
 	wdMessageBoxWatch && wdMessageBoxWatch();
+	wdMessageBoxWatch = undefined;
 	authLoginPopupWatch && authLoginPopupWatch();
+	authLoginPopupWatch = undefined;
 });
 
 onBeforeMount(() => {

@@ -1,6 +1,5 @@
 /// <reference types="@uni-helper/vite-plugin-uni-pages/client" />
 import { stringUtil } from "@fast-china/utils";
-import { isNil } from "lodash-unified";
 import { createRouter } from "uni-mini-router";
 import { pages, subPackages } from "virtual:uni-pages";
 import type { PageMetaDatum } from "@uni-helper/vite-plugin-uni-pages";
@@ -51,11 +50,7 @@ router.beforeEach(async (to, from, next) => {
 	}
 
 	// 判断登录后是否禁止查看该页面
-	if (to.mobileRequired && isNil(userInfoStore.mobile)) {
-		// 弹出授权登录弹窗
-		userInfoStore.authLoginPopup = true;
-		return;
-	}
+	if (to.mobileRequired && !userInfoStore.authLoginCheck()) return;
 
 	next();
 });
