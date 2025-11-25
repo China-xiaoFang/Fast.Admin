@@ -55,6 +55,7 @@ public class AccountModel : IUpdateVersion
     /// <summary>
     /// 邮箱
     /// </summary>
+    [Required]
     [SugarSearchValue]
     [SugarColumn(ColumnDescription = "邮箱", Length = 50)]
     public string Email { get; set; }
