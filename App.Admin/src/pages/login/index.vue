@@ -30,26 +30,26 @@
 				placeholder="请输入密码"
 				@confirm="handleLogin"
 			/>
-			<wd-button type="info" plain block :round="false" @tap="handleLogin">账号登录</wd-button>
+			<wd-button type="info" plain block :round="false" @click="handleLogin">账号登录</wd-button>
 			<!-- #ifdef MP-WEIXIN -->
 			<wd-button openType="getUserInfo" type="primary" block :round="false" icon="mobile" @getuserinfo="handleWeChatLogin">快捷登陆</wd-button>
 			<!-- #endif -->
 			<view class="agreement">
 				<wd-checkbox v-model="state.formData.agreementSelect" shape="square">我已阅读并同意</wd-checkbox>
-				<text @tap.stop="router.push({ path: CommonRoute.UserAgreement })">《用户协议》</text>
-				<text @tap.stop="router.push({ path: CommonRoute.PrivacyAgreement })">《隐私协议》</text>
-				<text @tap.stop="router.push({ path: CommonRoute.ServiceAgreement })">《服务协议》</text>
+				<text @click="router.push(CommonRoute.UserAgreement)">《用户协议》</text>
+				<text @click="router.push(CommonRoute.PrivacyAgreement)">《隐私协议》</text>
+				<text @click="router.push(CommonRoute.ServiceAgreement)">《服务协议》</text>
 			</view>
-			<!-- <view class="find-password" @tap="router.push('/pages/setting/account/changePasswordByVerifyCode/index')">找回密码</view> -->
+			<!-- <view class="find-password" @click="router.push('/pages/setting/account/changePasswordByVerifyCode/index')">找回密码</view> -->
 		</wd-form>
 		<FaFooter />
 	</view>
 	<wd-message-box selector="confirm-agreement-box">
 		<view class="agreement__warp">
 			我已阅读并同意
-			<text @tap.stop="router.push({ path: CommonRoute.UserAgreement })">《用户协议》</text>
-			<text @tap.stop="router.push({ path: CommonRoute.PrivacyAgreement })">《隐私协议》</text>
-			<text @tap.stop="router.push({ path: CommonRoute.ServiceAgreement })">《服务协议》</text>
+			<text @click="router.push(CommonRoute.UserAgreement)">《用户协议》</text>
+			<text @click="router.push(CommonRoute.PrivacyAgreement)">《隐私协议》</text>
+			<text @click="router.push(CommonRoute.ServiceAgreement)">《服务协议》</text>
 		</view>
 	</wd-message-box>
 	<!-- #ifdef MP-WEIXIN -->
@@ -66,9 +66,9 @@
 					<text>您可使用手机号一键登录</text>
 					<view class="agreement">
 						登录即表示您已阅读并同意
-						<text @tap.stop="router.push({ path: CommonRoute.UserAgreement })">《用户协议》</text>
-						<text @tap.stop="router.push({ path: CommonRoute.PrivacyAgreement })">《隐私协议》</text>
-						<text @tap.stop="router.push({ path: CommonRoute.ServiceAgreement })">《服务协议》</text>
+						<text @click="router.push(CommonRoute.UserAgreement)">《用户协议》</text>
+						<text @click="router.push(CommonRoute.PrivacyAgreement)">《隐私协议》</text>
+						<text @click="router.push(CommonRoute.ServiceAgreement)">《服务协议》</text>
 					</view>
 				</view>
 			</view>
@@ -166,9 +166,7 @@ const loginSuccess = (loginRes: LoginOutput) => {
 			userInfoStore.login(loginRes);
 			break;
 		case LoginStatusEnum.SelectTenant:
-			router.push({
-				path: CommonRoute.SelectTenant,
-			});
+			router.push(CommonRoute.SelectTenant);
 			break;
 		case LoginStatusEnum.AuthExpired:
 			useMessageBox.alert(loginRes.message);

@@ -5,7 +5,7 @@
 			请选择您要登录的租户账号
 		</wd-divider>
 		<view class="card">
-			<wd-card v-for="item in tenantList" :key="item.userKey" @tap="handleTenantLogin(item.userKey)">
+			<wd-card v-for="item in tenantList" :key="item.userKey" @click="handleTenantLogin(item.userKey)">
 				<image v-if="item.logoUrl" class="logo_img" :src="item.logoUrl" mode="aspectFill" />
 				<FaIcon v-else name="tenant" />
 				<view class="tenant__warp">

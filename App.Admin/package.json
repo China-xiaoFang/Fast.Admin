@@ -5,11 +5,11 @@
 	"license": "Apache-2.0",
 	"homepage": "https://admin.fastdotnet.com",
 	"bugs": {
-		"url": "https://gitee.com/China-xiaoFang/fast.admin/issues"
+		"url": "https://gitee.com/FastDotnet/Fast.Admin/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://gitee.com/China-xiaoFang/fast.admin"
+		"url": "https://gitee.com/FastDotnet/Fast.Admin"
 	},
 	"author": "小方",
 	"scripts": {
