@@ -108,7 +108,9 @@ public class RequestActionFilter : IAsyncActionFilter
             Location = httpRequest.Path,
             RequestMethod = requestMethod,
             Param = context.ActionArguments.Count < 1 ? "" : context.ActionArguments.ToJsonString(),
-            Result = actionContext.Result?.GetType() == typeof(JsonResult) ? actionContext.Result.ToJsonString() : "",
+            Result =
+                (actionContext.Result?.GetType() == typeof(JsonResult) ? actionContext.Result.ToJsonString() : null)
+                ?? actionContext.Exception?.ToJsonString(),
             ElapsedTime = stopwatch.ElapsedMilliseconds,
             DepartmentId = _user?.DepartmentId,
             DepartmentName = _user?.DepartmentName,
