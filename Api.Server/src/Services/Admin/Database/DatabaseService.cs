@@ -35,7 +35,7 @@ namespace Fast.Admin.Service.Database;
 /// <summary>
 /// <see cref="DatabaseService"/> Database 服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "database")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "database")]
 public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDynamicApplication
 {
     private readonly IUser _user;
