@@ -5,6 +5,7 @@ import UniHelperComponents from "@uni-helper/vite-plugin-uni-components";
 import { WotResolver } from "@uni-helper/vite-plugin-uni-components/resolvers";
 import UniHelperLayouts from "@uni-helper/vite-plugin-uni-layouts";
 import UniHelperPages from "@uni-helper/vite-plugin-uni-pages";
+import fg from "fast-glob";
 import { type ConfigEnv, type UserConfig, loadEnv } from "vite";
 import { FastResolver } from "./resolver.fast";
 import { ZPagingResolver } from "./resolver.zPaging";
@@ -69,7 +70,8 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 				dts: "types/pages.d.ts",
 				homePage: "pages/tabBar/home/index",
 				dir: "src/pages",
-				subPackages: ["src/pages_**"],
+				exclude: ["**/components/**/*.*"],
+				subPackages: fg.sync("src/pages_**", { onlyDirectories: true }),
 			}),
 			/** Layout 模式 */
 			UniHelperLayouts(),
