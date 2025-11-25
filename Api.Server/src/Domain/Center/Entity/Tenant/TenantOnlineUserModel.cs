@@ -120,7 +120,7 @@ public class TenantOnlineUserModel : IBaseTEntity
     /// <summary>
     /// 工号
     /// </summary>
-    [SugarColumn(ColumnDescription = "工号", Length = 15)]
+    [SugarColumn(ColumnDescription = "工号", Length = 20)]
     public string EmployeeNo { get; set; }
 
     /// <summary>

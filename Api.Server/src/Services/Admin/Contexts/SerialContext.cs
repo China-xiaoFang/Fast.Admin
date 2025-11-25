@@ -77,11 +77,13 @@ public class SerialContext
     /// <summary>
     /// 生成工号
     /// </summary>
+    /// <remarks>因涉及到登录，所以必须存在租户编码</remarks>
     /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
+    /// <param name="tenantCode"><see cref="string"/>租户编码</param>
     /// <returns></returns>
-    public static string GenEmployeeNo(ISqlSugarClient db)
+    public static string GenEmployeeNo(ISqlSugarClient db, string tenantCode)
     {
-        return GenerateSerialNo(db, SerialRuleTypeEnum.EmployeeNo);
+        return GenerateSerialNo(db, SerialRuleTypeEnum.EmployeeNo, tenantCode);
     }
 
     /// <summary>
@@ -98,16 +100,8 @@ public class SerialContext
             throw new SqlSugarException("请保证当前上下文在事务中，才能正确的调用此方法！");
         }
 
-
         var dateTime = DateTime.Now;
-
-        if (string.IsNullOrWhiteSpace(tenantCode))
-        {
-            var user = FastContext.GetService<IUser>();
-            // 获取租户信息
-            var tenantModel = TenantContext.GetTenantSync(user.TenantNo);
-            tenantCode = tenantModel.TenantCode;
-        }
+        tenantCode ??= "";
 
         // 获取序号规则配置
         var serialRuleModel = SerialRuleList.GetOrAdd(ruleType, key =>
@@ -148,24 +142,17 @@ public class SerialContext
                     .ExecuteReturnEntity();
             }
 
-            var curSerialNo = $"{tenantCode}{serialRuleModel.Prefix}";
-
-            // 拼接分隔符
-            switch (serialRuleModel.Spacer)
+            // 分隔符
+            var spacer = serialRuleModel.Spacer switch
             {
-                default:
-                case SerialSpacerEnum.None:
-                    break;
-                case SerialSpacerEnum.Underscore:
-                    curSerialNo += "_";
-                    break;
-                case SerialSpacerEnum.Hyphen:
-                    curSerialNo += "-";
-                    break;
-                case SerialSpacerEnum.Dot:
-                    curSerialNo += ".";
-                    break;
-            }
+                SerialSpacerEnum.None => "",
+                SerialSpacerEnum.Underscore => "_",
+                SerialSpacerEnum.Hyphen => "-",
+                SerialSpacerEnum.Dot => ".",
+                _ => ""
+            };
+
+            var curSerialNo = $"{tenantCode}{serialRuleModel.Prefix}{spacer}";
 
             var lastSerial = serialSettingModel.LastSerial.GetValueOrDefault();
 
@@ -212,6 +199,9 @@ public class SerialContext
 
                     break;
             }
+
+            // 拼接分隔符
+            curSerialNo += spacer;
 
             var curSerial = lastSerial + 1;
 

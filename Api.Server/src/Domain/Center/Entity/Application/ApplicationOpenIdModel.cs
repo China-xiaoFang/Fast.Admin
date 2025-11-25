@@ -50,6 +50,12 @@ public class ApplicationOpenIdModel : BaseEntity
     public string OpenId { get; set; }
 
     /// <summary>
+    /// 开放平台密钥
+    /// </summary>
+    [SugarColumn(ColumnDescription = "开放平台密钥", Length = 32)]
+    public string OpenSecret { get; set; }
+
+    /// <summary>
     /// 应用类型
     /// </summary>
     [SugarColumn(ColumnDescription = "应用类型")]
@@ -64,7 +70,7 @@ public class ApplicationOpenIdModel : BaseEntity
     /// <summary>
     /// 登录组件
     /// </summary>
-    [SugarColumn(ColumnDescription = "WebSocket地址", Length = 50)]
+    [SugarColumn(ColumnDescription = "登录组件", Length = 50)]
     public string LoginComponent { get; set; }
 
     /// <summary>
@@ -86,10 +92,28 @@ public class ApplicationOpenIdModel : BaseEntity
     public bool RequestEncipher { get; set; }
 
     /// <summary>
-    /// 开放平台密钥
+    /// 联系电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "开放平台密钥", Length = 32)]
-    public string OpenSecret { get; set; }
+    [SugarColumn(ColumnDescription = "联系电话", Length = 20)]
+    public string ContactPhone { get; set; }
+
+    /// <summary>
+    /// 纬度
+    /// </summary>
+    [SugarColumn(ColumnDescription = "纬度", Length = 20, DecimalDigits = 7)]
+    public decimal? Latitude { get; set; }
+
+    /// <summary>
+    /// 经度
+    /// </summary>
+    [SugarColumn(ColumnDescription = "经度", Length = 20, DecimalDigits = 7)]
+    public decimal? Longitude { get; set; }
+
+    /// <summary>
+    /// Banner图
+    /// </summary>
+    [SugarColumn(ColumnDescription = "Banner图", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
+    public List<string> BannerImages { get; set; }
 
     /// <summary>
     /// 微信商户号Id

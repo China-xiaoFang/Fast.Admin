@@ -56,6 +56,14 @@ public class AppService : IDynamicApplication
             throw new UserFriendlyException("非法访问！");
         }
 
+        double? latitude = null, longitude = null;
+
+        if (applicationOpenIdModel.Latitude != null && applicationOpenIdModel.Longitude != null)
+        {
+            (latitude, longitude) = CoordinateUtil.WGS84ToGCJ02((double) applicationOpenIdModel.Latitude,
+                (double) applicationOpenIdModel.Longitude);
+        }
+
         return new LaunchOutput
         {
             Edition = applicationOpenIdModel.Application.Edition,
@@ -70,7 +78,11 @@ public class AppService : IDynamicApplication
             ServiceAgreement = applicationOpenIdModel.Application.ServiceAgreement,
             AppType = applicationOpenIdModel.AppType,
             EnvironmentType = applicationOpenIdModel.EnvironmentType,
+            ContactPhone = applicationOpenIdModel.ContactPhone,
+            Latitude = (decimal?) latitude,
+            Longitude = (decimal?) longitude,
             LoginComponent = applicationOpenIdModel.LoginComponent,
+            BannerImages = applicationOpenIdModel.BannerImages,
             WebSocketUrl = applicationOpenIdModel.WebSocketUrl,
             RequestTimeout = applicationOpenIdModel.RequestTimeout,
             RequestEncipher = applicationOpenIdModel.RequestEncipher,

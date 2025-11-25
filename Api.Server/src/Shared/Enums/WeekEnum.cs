@@ -99,50 +99,52 @@ public enum WeekEnum
 public static class WeekEnumExtension
 {
     /// <summary>
+    /// 星期映射
+    /// </summary>
+    private static readonly (WeekEnum weekEnum, DayOfWeek dayOfWeek)[] WeekMap =
+    [
+        (WeekEnum.Monday, DayOfWeek.Monday), (WeekEnum.Tuesday, DayOfWeek.Tuesday), (WeekEnum.Wednesday, DayOfWeek.Wednesday),
+        (WeekEnum.Thursday, DayOfWeek.Thursday), (WeekEnum.Friday, DayOfWeek.Friday), (WeekEnum.Saturday, DayOfWeek.Saturday),
+        (WeekEnum.Sunday, DayOfWeek.Sunday)
+    ];
+
+    /// <summary>
+    /// 转换为 <see cref="DayOfWeek"/> 集合
+    /// </summary>
+    /// <param name="week"></param>
+    /// <returns></returns>
+    public static List<DayOfWeek> ToDayOfWeeks(this WeekEnum week)
+    {
+        return WeekMap.Where(wh => (week & wh.weekEnum) != 0)
+            .Select(sl => sl.dayOfWeek)
+            .ToList();
+    }
+
+    /// <summary>
     /// 转换为 <see cref="DayOfWeek"/>
     /// </summary>
     /// <param name="week"></param>
     /// <returns></returns>
-    public static List<DayOfWeek> ToDayOfWeek(this WeekEnum week)
+    public static DayOfWeek ToDayOfWeek(this WeekEnum week)
     {
-        var result = new List<DayOfWeek>();
+        return ToDayOfWeeks(week)
+            .FirstOrDefault();
+    }
 
-        if ((week & WeekEnum.Monday) != 0)
+    /// <summary>
+    /// 转换为 <see cref="WeekEnum"/>
+    /// </summary>
+    /// <param name="daysOfWeek"></param>
+    /// <returns></returns>
+    public static WeekEnum? ToWeekEnum(this DayOfWeek daysOfWeek)
+    {
+        foreach (var item in WeekMap)
         {
-            result.Add(DayOfWeek.Monday);
+            if (item.dayOfWeek == daysOfWeek)
+                return item.weekEnum;
         }
 
-        if ((week & WeekEnum.Tuesday) != 0)
-        {
-            result.Add(DayOfWeek.Tuesday);
-        }
-
-        if ((week & WeekEnum.Wednesday) != 0)
-        {
-            result.Add(DayOfWeek.Wednesday);
-        }
-
-        if ((week & WeekEnum.Thursday) != 0)
-        {
-            result.Add(DayOfWeek.Thursday);
-        }
-
-        if ((week & WeekEnum.Friday) != 0)
-        {
-            result.Add(DayOfWeek.Friday);
-        }
-
-        if ((week & WeekEnum.Saturday) != 0)
-        {
-            result.Add(DayOfWeek.Saturday);
-        }
-
-        if ((week & WeekEnum.Sunday) != 0)
-        {
-            result.Add(DayOfWeek.Sunday);
-        }
-
-        return result;
+        return null;
     }
 
     /// <summary>
@@ -154,32 +156,10 @@ public static class WeekEnumExtension
     {
         var week = WeekEnum.None;
 
-        foreach (var day in daysOfWeek)
+        foreach (var item in WeekMap)
         {
-            switch (day)
-            {
-                case DayOfWeek.Monday:
-                    week |= WeekEnum.Monday;
-                    break;
-                case DayOfWeek.Tuesday:
-                    week |= WeekEnum.Tuesday;
-                    break;
-                case DayOfWeek.Wednesday:
-                    week |= WeekEnum.Wednesday;
-                    break;
-                case DayOfWeek.Thursday:
-                    week |= WeekEnum.Thursday;
-                    break;
-                case DayOfWeek.Friday:
-                    week |= WeekEnum.Friday;
-                    break;
-                case DayOfWeek.Saturday:
-                    week |= WeekEnum.Saturday;
-                    break;
-                case DayOfWeek.Sunday:
-                    week |= WeekEnum.Sunday;
-                    break;
-            }
+            if (daysOfWeek.Contains(item.dayOfWeek))
+                week |= item.weekEnum;
         }
 
         return week == WeekEnum.None ? null : week;

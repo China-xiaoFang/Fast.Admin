@@ -131,9 +131,29 @@ public class EditApplicationInput : UpdateVersionInput
         public EnvironmentTypeEnum EnvironmentType { get; set; }
 
         /// <summary>
+        /// 联系电话
+        /// </summary>
+        public string ContactPhone { get; set; }
+
+        /// <summary>
+        /// 经度
+        /// </summary>
+        public decimal? Longitude { get; set; }
+
+        /// <summary>
+        /// 纬度
+        /// </summary>
+        public decimal? Latitude { get; set; }
+
+        /// <summary>
         /// 登录组件
         /// </summary>
         public string LoginComponent { get; set; }
+
+        /// <summary>
+        /// Banner图
+        /// </summary>
+        public List<string> BannerImages { get; set; }
 
         /// <summary>
         /// WebSocket地址

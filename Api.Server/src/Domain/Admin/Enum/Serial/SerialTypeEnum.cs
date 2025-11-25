@@ -38,6 +38,7 @@ public enum SerialTypeEnum : byte
     /// <summary>
     /// 自定义序列号
     /// </summary>
+    /// <remarks>用户可做修改</remarks>
     [Description("自定义序列号")]
     CustomSerial = 2
 }

@@ -39,7 +39,6 @@ using Microsoft.AspNetCore.Mvc;
 using MiniExcelLibs;
 using Newtonsoft.Json;
 using SqlSugar;
-using Swashbuckle.AspNetCore.Swagger;
 using UAParser;
 using Yitter.IdGenerator;
 
@@ -64,16 +63,6 @@ public class ProgramApplication : IDynamicApplication
 
         var entryAssembly = Assembly.GetEntryAssembly();
 
-        var swaggerAssembly = typeof(SwaggerOptions).Assembly.GetName();
-
-        var csRedisCoreAssembly = typeof(CSRedisClient).Assembly.GetName();
-
-        var sqlSugarAssembly = typeof(ISqlSugarClient).Assembly.GetName();
-        var yitterIdGeneratorAssembly = typeof(YitIdHelper).Assembly.GetName();
-        var uaParserAssembly = typeof(UserAgent).Assembly.GetName();
-
-        var newtonsoftJsonAssembly = typeof(JsonConvert).Assembly.GetName();
-
         var fastRuntimeAssembly = typeof(MAppContext).Assembly.GetName();
         var fastCacheAssembly = typeof(ICache).Assembly.GetName();
         var fastDependencyAssembly = typeof(IDependency).Assembly.GetName();
@@ -87,12 +76,29 @@ public class ProgramApplication : IDynamicApplication
         var fastSwaggerAssembly = typeof(SwaggerSettingsOptions).Assembly.GetName();
         var fastUnifyResultAssembly = typeof(IGlobalExceptionHandler).Assembly.GetName();
 
+        var newtonsoftJsonAssembly = typeof(JsonConvert).Assembly.GetName();
+
+        var csRedisCoreAssembly = typeof(CSRedisClient).Assembly.GetName();
+        var sqlSugarAssembly = typeof(ISqlSugarClient).Assembly.GetName();
+        var yitterIdGeneratorAssembly = typeof(YitIdHelper).Assembly.GetName();
+        var uaParserAssembly = typeof(UserAgent).Assembly.GetName();
+
         var openXmlAssembly = typeof(DocumentFormat.OpenXml.OpenXmlElement).Assembly.GetName();
-        var mailKitAssembly = typeof(MailKit.Net.Smtp.SmtpClient).Assembly.GetName();
         var miniExcelAssembly = typeof(MiniExcel).Assembly.GetName();
+
+        var mailKitAssembly = typeof(MailKit.Net.Smtp.SmtpClient).Assembly.GetName();
+
+        var alipaySdkAssembly = typeof(Aop.Api.AlipayConfig).Assembly.GetName();
         var skitWechatApiAssembly = typeof(SKIT.FlurlHttpClient.Wechat.Api.WechatApiClient).Assembly.GetName();
-        var knife4jUIAssembly = typeof(IGeekFan.AspNetCore.Knife4jUI.Knife4UIOptions).Assembly.GetName();
+        var skitWechatTenpayAssembly = typeof(SKIT.FlurlHttpClient.Wechat.TenpayV3.WechatTenpayClient).Assembly.GetName();
+
         var imageSharpAssembly = typeof(SixLabors.ImageSharp.Image).Assembly.GetName();
+        var imageSharpFontAssembly = typeof(SixLabors.Fonts.IFontCollection).Assembly.GetName();
+        var imageSharpDrawingAssembly = typeof(SixLabors.ImageSharp.Drawing.IPathCollection).Assembly.GetName();
+        var zXingNetAssembly = typeof(ZXing.BarcodeFormat).Assembly.GetName();
+
+        var swaggerAssembly = typeof(Swashbuckle.AspNetCore.Swagger.SwaggerOptions).Assembly.GetName();
+        var knife4jUIAssembly = typeof(IGeekFan.AspNetCore.Knife4jUI.Knife4UIOptions).Assembly.GetName();
 
         var cpuUsage = await MachineUtil.GetProgramCpuUsage();
 
@@ -155,12 +161,6 @@ public class ProgramApplication : IDynamicApplication
             // 主要程序集
             Assemblys = new[]
             {
-                new {swaggerAssembly.Name, swaggerAssembly.Version},
-                new {csRedisCoreAssembly.Name, csRedisCoreAssembly.Version},
-                new {sqlSugarAssembly.Name, sqlSugarAssembly.Version},
-                new {yitterIdGeneratorAssembly.Name, yitterIdGeneratorAssembly.Version},
-                new {uaParserAssembly.Name, uaParserAssembly.Version},
-                new {newtonsoftJsonAssembly.Name, newtonsoftJsonAssembly.Version},
                 new {fastRuntimeAssembly.Name, fastRuntimeAssembly.Version},
                 new {fastCacheAssembly.Name, fastCacheAssembly.Version},
                 new {fastDependencyAssembly.Name, fastDependencyAssembly.Version},
@@ -173,11 +173,20 @@ public class ProgramApplication : IDynamicApplication
                 new {fastSqlSugarAssembly.Name, fastSqlSugarAssembly.Version},
                 new {fastSwaggerAssembly.Name, fastSwaggerAssembly.Version},
                 new {fastUnifyResultAssembly.Name, fastUnifyResultAssembly.Version},
-                new {openXmlAssembly.Name, openXmlAssembly.Version}, new {mailKitAssembly.Name, mailKitAssembly.Version},
-                new {miniExcelAssembly.Name, miniExcelAssembly.Version},
+                new {newtonsoftJsonAssembly.Name, newtonsoftJsonAssembly.Version},
+                new {csRedisCoreAssembly.Name, csRedisCoreAssembly.Version},
+                new {sqlSugarAssembly.Name, sqlSugarAssembly.Version},
+                new {yitterIdGeneratorAssembly.Name, yitterIdGeneratorAssembly.Version},
+                new {uaParserAssembly.Name, uaParserAssembly.Version}, new {openXmlAssembly.Name, openXmlAssembly.Version},
+                new {miniExcelAssembly.Name, miniExcelAssembly.Version}, new {mailKitAssembly.Name, mailKitAssembly.Version},
+                new {alipaySdkAssembly.Name, alipaySdkAssembly.Version},
                 new {skitWechatApiAssembly.Name, skitWechatApiAssembly.Version},
-                new {knife4jUIAssembly.Name, knife4jUIAssembly.Version},
-                new {imageSharpAssembly.Name, imageSharpAssembly.Version}
+                new {skitWechatTenpayAssembly.Name, skitWechatTenpayAssembly.Version},
+                new {imageSharpAssembly.Name, imageSharpAssembly.Version},
+                new {imageSharpFontAssembly.Name, imageSharpFontAssembly.Version},
+                new {imageSharpDrawingAssembly.Name, imageSharpDrawingAssembly.Version},
+                new {zXingNetAssembly.Name, zXingNetAssembly.Version},
+                new {knife4jUIAssembly.Name, knife4jUIAssembly.Version}, new {swaggerAssembly.Name, swaggerAssembly.Version}
             }
         });
     }

@@ -46,8 +46,8 @@ internal static class SysSerialSeedData
                     SerialRuleId = YitIdHelper.NextId(),
                     RuleType = SysSerialRuleTypeEnum.AppNo,
                     Prefix = "App",
-                    DateType = SysSerialDateTypeEnum.Year,
-                    Spacer = SysSerialSpacerEnum.None,
+                    DateType = SerialDateTypeEnum.Year,
+                    Spacer = SerialSpacerEnum.None,
                     Length = 2
                 },
                 new()
@@ -55,8 +55,8 @@ internal static class SysSerialSeedData
                     SerialRuleId = YitIdHelper.NextId(),
                     RuleType = SysSerialRuleTypeEnum.TenantNo,
                     Prefix = "Tnt",
-                    DateType = SysSerialDateTypeEnum.Month,
-                    Spacer = SysSerialSpacerEnum.None,
+                    DateType = SerialDateTypeEnum.Month,
+                    Spacer = SerialSpacerEnum.None,
                     Length = 2
                 }
             })
