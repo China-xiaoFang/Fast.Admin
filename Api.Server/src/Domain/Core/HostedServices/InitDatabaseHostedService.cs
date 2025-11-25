@@ -246,7 +246,6 @@ public class InitDatabaseHostedService : IHostedService
 
             // 系统数据库
             await DatabaseSeedData.SystemDatabaseSeedData(db, systemTenantModel.TenantId, systemTenantModel.TenantCode, dateTime);
-            await DatabaseSeedData.TenantDatabaseSeedData(db, systemTenantModel.TenantId, systemTenantModel.TenantCode, dateTime);
 
             // 配置
             await ConfigSeedData.SystemConfigSeedData(db, dateTime);
