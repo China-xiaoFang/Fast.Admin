@@ -31,7 +31,7 @@ namespace Fast.Core;
 /// <summary>
 /// <see cref="DatabaseSeedData"/> 系统数据库种子数据
 /// </summary>
-internal static class DatabaseSeedData
+public static class DatabaseSeedData
 {
     /// <summary>
     /// 系统数据库种子数据
