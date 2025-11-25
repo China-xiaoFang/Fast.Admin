@@ -171,9 +171,6 @@ export const useApp = defineStore(
 			}
 			uni.makePhoneCall({
 				phoneNumber: state.contactPhone,
-				fail: () => {
-					useToast.warning("无法拨打电话。");
-				},
 			});
 		};
 
