@@ -8,30 +8,44 @@
 	padding-right: var(--wot-area-inset-right);
 	// padding-top: var(--wot-area-inset-top);
 	padding-bottom: var(--wot-area-inset-bottom);
-	:deep(.page) {
-		box-sizing: border-box;
-		min-height: var(--main-height);
-	}
-	.z-paging__page {
-		box-sizing: border-box;
-		min-height: var(--main-height);
-	}
-	&.fa-main__page-scroll {
-		:deep(.page) {
-			min-height: auto;
-			height: var(--main-height);
-			overflow-y: auto;
+	:deep() {
+		.page {
+			box-sizing: border-box;
+			min-height: var(--main-height);
 		}
 		.z-paging__page {
-			min-height: auto;
-			height: var(--main-height);
-			overflow-y: auto;
+			box-sizing: border-box;
+			min-height: var(--main-height);
+		}
+	}
+
+	&.fa-main__page-scroll {
+		:deep() {
+			.page {
+				min-height: auto;
+				height: var(--main-height);
+				overflow-y: auto;
+			}
+			.z-paging__page {
+				min-height: auto;
+				height: var(--main-height);
+				overflow-y: auto;
+			}
 		}
 	}
 }
 
 .fa-main__tabBar {
 	padding-bottom: 0;
+	.fa-status-bar {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: var(--wot-status-bar-height);
+		// background-color: var(--wot-navbar-bg-color);
+		z-index: 1001;
+	}
 	.fa-footer {
 		height: calc(var(--wot-footer-height) + 15px);
 		padding-bottom: 15px;
@@ -40,8 +54,8 @@
 
 .pop__auth-warp {
 	.auth-body {
-		background-color: var(--wot-color-white);
-		padding: 40rpx 48rpx 0;
+		background-color: var(--wot-bg-color);
+		padding: 10rpx 40rpx;
 		.auth-title {
 			text-align: center;
 			font-size: var(--wot-font-size-medium);
@@ -62,7 +76,7 @@
 				padding-top: 20rpx;
 				color: var(--wot-text-color-secondary);
 				font-size: var(--wot-font-size-small);
-				text {
+				.txt {
 					color: var(--wot-color-primary);
 				}
 			}
@@ -70,7 +84,6 @@
 	}
 	.auth-actions {
 		display: flex;
-		flex-direction: row;
 		gap: 30rpx;
 		padding: 15rpx 40rpx 0;
 		:deep() {

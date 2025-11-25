@@ -14,7 +14,9 @@
 	height: var(--wot-status-bar-height);
 	// background-color: var(--wot-navbar-bg-color);
 	z-index: 1001;
+	transition: background-color var(--wot-transition-duration);
 }
+
 .navbar {
 	padding-bottom: 40rpx;
 	background-size: cover;
@@ -26,13 +28,13 @@
 		align-items: center;
 		justify-content: center;
 		color: var(--wot-navbar-color);
-		font-size: 13px;
+		font-size: var(--wot-font-size-small);
 		font-weight: var(--wot-navbar-title-font-weight, 600);
 	}
 	.navbar__warp {
 		position: relative;
-		margin: 0 30rpx;
-		border-radius: 20rpx;
+		margin: 0 20rpx;
+		border-radius: var(--wot-border-radius-large);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -54,7 +56,7 @@
 			bottom: 0;
 			left: 20px;
 		}
-		.navbar__warp__top {
+		.warp__top {
 			z-index: 2;
 			width: 100%;
 			height: 180rpx;
@@ -64,12 +66,11 @@
 			align-items: center;
 			justify-content: space-between;
 			gap: 20rpx;
-			border-bottom: 1px solid var(--wot-border-color);
+			border-bottom: var(--wot-border);
 			.top__left {
 				flex: 1;
 				height: 100%;
 				display: flex;
-				flex-direction: row;
 				align-items: center;
 				gap: 15rpx;
 				.avatar {
@@ -97,31 +98,29 @@
 }
 
 .data-card {
-	margin: 0 20rpx 30rpx;
-	border-radius: 20rpx;
+	margin: 0 20rpx;
+	border-radius: var(--wot-border-radius-large);
 	background-color: var(--wot-bg-color);
-	:deep() {
-		.wd-cell {
-			background: none !important;
-		}
-		.wd-cell-border::after {
-			position: absolute;
-			display: block;
-			content: "";
-			width: 94%;
-			height: 1px;
-			left: 3%;
-			bottom: 0;
-			transform: scaleY(0.5);
-			background: var(--wot-border-color);
-		}
+	:deep(.wd-cell) {
+		background: none !important;
 	}
-	.data-card__content {
+	.card__cell::after {
+		position: absolute;
+		display: block;
+		content: "";
+		width: 94%;
+		height: var(--wot-border-width);
+		left: 3%;
+		bottom: 0;
+		transform: scaleY(0.5);
+		background: var(--wot-border-color);
+	}
+	.card__content {
+		padding: 10rpx 20rpx;
 		display: flex;
 		align-items: center;
 		justify-content: space-around;
-		padding: 10rpx 20rpx;
-		.cell-item {
+		.card__item {
 			// height: 80rpx;
 			width: 100%;
 			display: flex;
@@ -130,14 +129,12 @@
 			justify-content: center;
 			gap: 15rpx;
 			padding: 20rpx 0;
-			:deep() {
-				.wd-icon,
-				.fa-icon {
-					font-size: 50rpx;
-					color: var(--wot-color-primary);
-				}
+			.wd-icon,
+			.fa-icon {
+				font-size: 50rpx;
+				color: var(--wot-color-primary);
 			}
-			.item_txt {
+			text {
 				color: var(--wot-text-color-secondary);
 				font-size: var(--wot-font-size-extra-small);
 			}
@@ -147,7 +144,6 @@
 
 .agreement {
 	display: flex;
-	flex-direction: row;
 	justify-content: center;
 	font-size: var(--wot-font-size-small);
 	white-space: nowrap;
@@ -157,15 +153,15 @@
 :deep() {
 	.wd-cell-group {
 		margin: 0 20rpx;
-		border-radius: 20rpx;
+		border-radius: var(--wot-border-radius-large);
 		.wd-cell-group__body {
 			background: none;
 		}
 		.wd-cell:first-child {
-			border-radius: 20rpx 20rpx 0 0;
+			border-radius: var(--wot-border-radius-large) var(--wot-border-radius-large) 0 0;
 		}
 		.wd-cell:last-child {
-			border-radius: 0 0 20rpx 20rpx;
+			border-radius: 0 0 var(--wot-border-radius-large) var(--wot-border-radius-large);
 		}
 	}
 	.wd-cell {

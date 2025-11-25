@@ -119,29 +119,36 @@ export const useUserInfo = defineStore(
 
 		/** 登录 */
 		const login = async (input: WeChatClientLoginInput = {}, checkMobile = false): Promise<void> => {
-			return new Promise((resolve) => {
+			return new Promise((resolve, reject) => {
 				// #ifdef MP-WEIXIN
 				uni.login({
 					success: async (res) => {
-						const apiRes = await loginApi.weChatClientLogin({
-							...input,
-							weChatCode: res.code,
-						});
-						setUserInfo(apiRes);
-						// 确保用户添加完成
-						hasUserInfo.value = true;
-						if (checkMobile && isNil(apiRes.mobile)) {
-							state.authLoginPopup = true;
+						try {
+							const apiRes = await loginApi.weChatClientLogin({
+								...input,
+								weChatCode: res.code,
+							});
+							setUserInfo(apiRes);
+							// 确保用户添加完成
+							hasUserInfo.value = true;
+							if (checkMobile && isNil(apiRes.mobile)) {
+								state.authLoginPopup = true;
+							}
+							return resolve();
+						} catch {
+							return reject();
 						}
-						return resolve();
 					},
 					fail: (error) => {
 						useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
+						return reject();
 					},
 				});
 				// #endif
 
+				// #ifndef MP-WEIXIN
 				return resolve();
+				// #endif
 			});
 		};
 
@@ -179,6 +186,16 @@ export const useUserInfo = defineStore(
 			await appStore.setDictionary();
 		};
 
+		/** 授权登录检查 */
+		const authLoginCheck = (): boolean => {
+			if (isNil(state.mobile)) {
+				state.authLoginPopup = true;
+				return false;
+			}
+
+			return true;
+		};
+
 		return {
 			...toRefs(state),
 			hasUserInfo,
@@ -193,6 +210,7 @@ export const useUserInfo = defineStore(
 			logout,
 			logoutClear,
 			refreshApp,
+			authLoginCheck,
 		};
 	},
 	{

@@ -9,6 +9,7 @@ import { EditionEnum } from "@/api/enums/EditionEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { appApi } from "@/api/services/app";
 import { dictionaryApi } from "@/api/services/dictionary";
+import { useToast } from "@/hooks";
 
 export type ILoginComponent = "ClassicLogin";
 
@@ -65,6 +66,10 @@ export const useApp = defineStore(
 			appType: AppEnvironmentEnum.MobileThree,
 			environmentType: EnvironmentTypeEnum.Development,
 			loginComponent: "",
+			contactPhone: "",
+			latitude: null,
+			longitude: null,
+			bannerImages: [],
 			webSocketUrl: "",
 			requestTimeout: 6000,
 			requestEncipher: true,
@@ -132,14 +137,7 @@ export const useApp = defineStore(
 					state.loginComponent = "ClassicLogin";
 				}
 
-				// 判断是否存在 Launch 数据
-				if (state.hasLaunch) {
-					uni.setNavigationBarTitle({
-						title: state.appName,
-					});
-
-					setFastAxios();
-				}
+				setFastAxios();
 
 				// 处理数据字典
 				await setDictionary();
@@ -150,14 +148,48 @@ export const useApp = defineStore(
 		};
 
 		/** 获取字典 */
-		const getDictionary = (key: string, throwError = true): FaTableEnumColumnCtx[] => {
+		const getDictionary = (key: string, isAll = false): FaTableEnumColumnCtx[] => {
 			if (!dictionary.value.has(key)) {
-				if (throwError) {
-					consoleError("app", `字典 [${key}] 不存在`);
-				}
+				consoleError("app", `字典 [${key}] 不存在`);
 				return;
 			}
-			return dictionary.value.get(key);
+			const result = dictionary.value.get(key);
+			if (isAll) {
+				result.unshift({
+					label: "全部",
+					value: 0,
+				});
+			}
+			return result;
+		};
+
+		/** 拨打电话 */
+		const makePhoneCall = (): void => {
+			if (!state.contactPhone) {
+				useToast.warning("未配置联系电话。");
+				return;
+			}
+			uni.makePhoneCall({
+				phoneNumber: state.contactPhone,
+				fail: () => {
+					useToast.warning("无法拨打电话。");
+				},
+			});
+		};
+
+		/** 打开位置 */
+		const openLocation = (): void => {
+			if (!state.latitude && !state.longitude) {
+				useToast.warning("未配置位置信息。");
+				return;
+			}
+			uni.openLocation({
+				latitude: state.latitude,
+				longitude: state.longitude,
+				fail: () => {
+					useToast.warning("无法打开位置。");
+				},
+			});
 		};
 
 		/** 清除 App 缓存 */
@@ -177,6 +209,8 @@ export const useApp = defineStore(
 			setFastAxios,
 			launch,
 			getDictionary,
+			makePhoneCall,
+			openLocation,
 			clearAppCache,
 		};
 	},

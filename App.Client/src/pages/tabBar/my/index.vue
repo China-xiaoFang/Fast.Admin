@@ -11,6 +11,7 @@
 				'background-color': state.isScrolled ? 'var(--wot-navbar-bg-color)' : '',
 			}"
 		/>
+
 		<view class="navbar">
 			<view class="navbar__title">个人中心</view>
 			<view class="navbar__warp">
@@ -19,8 +20,8 @@
 					<image class="top_bg" src="@/static/images/card_top_bg.png" />
 					<image class="bottom_bg" src="@/static/images/card_bottom_bg.png" />
 				</template>
-				<view class="navbar__warp__top">
-					<view class="top__left" @tap="router.push('/pages/setting/userInfo/index')">
+				<view class="warp__top">
+					<view class="top__left" @click="router.push('/pages/setting/userInfo/index')">
 						<image class="avatar" :src="userInfoStore.avatar || defaultAvatar" />
 						<view class="account-info">
 							<template v-if="userInfoStore.hasUserInfo">
@@ -44,26 +45,16 @@
 			</view>
 		</view>
 
-		<view class="data-card">
-			<wd-cell customClass="wd-cell-border" title="我的功能" />
-			<view class="data-card__content">
-				<view class="cell-item">
-					<wd-badge :modelValue="9999" :max="99">
-						<FaIcon name="performance" />
-					</wd-badge>
-					<text class="item_txt">挂号记录</text>
+		<view class="mb30 data-card">
+			<wd-cell customClass="card__cell" title="我的功能" />
+			<view class="card__content">
+				<view class="card__item" @click="appStore.makePhoneCall">
+					<FaIcon name="call" />
+					<text>联系我们</text>
 				</view>
-				<view class="cell-item">
-					<wd-badge :modelValue="88" :max="99">
-						<FaIcon name="performance" />
-					</wd-badge>
-					<text class="item_txt">投诉建议</text>
-				</view>
-				<view class="cell-item">
-					<wd-badge :modelValue="0" :max="99">
-						<FaIcon name="performance" />
-					</wd-badge>
-					<text class="item_txt">联系我们</text>
+				<view class="card__item" @click="useToast.info('敬请期待')">
+					<wd-icon name="evaluation" />
+					<text>投诉建议</text>
 				</view>
 			</view>
 		</view>
@@ -80,26 +71,34 @@
 		</wd-cell-group>
 
 		<wd-cell-group border>
-			<wd-cell customClass="mt20" title="消息通知" clickable isLink />
+			<wd-cell customClass="mt20" title="消息通知" clickable isLink @click="useToast.info('敬请期待')" />
 			<wd-cell title="通用" clickable isLink to="/pages/setting/general/index" />
 			<wd-cell customClass="mb20" title="清除缓存" :value="`${currentSize}/${limitSize}`" clickable isLink @click="handleClearCache" />
 		</wd-cell-group>
 
 		<view class="agreement mb20">
-			<text @tap.stop="router.push({ path: CommonRoute.UserAgreement })">《用户协议》</text>
-			<text @tap.stop="router.push({ path: CommonRoute.PrivacyAgreement })">《隐私协议》</text>
-			<text @tap.stop="router.push({ path: CommonRoute.ServiceAgreement })">《服务协议》</text>
+			<text @click="router.push(CommonRoute.UserAgreement)">《用户协议》</text>
+			<text @click="router.push(CommonRoute.PrivacyAgreement)">《隐私协议》</text>
+			<text @click="router.push(CommonRoute.ServiceAgreement)">《服务协议》</text>
 		</view>
 
-		<wd-button v-if="userInfoStore.hasUserInfo" customClass="btn__exit-login" type="primary" block :round="false" icon="exit" @tap="handleLogout">
+		<wd-button
+			v-if="userInfoStore.hasUserInfo"
+			customClass="btn__exit-login"
+			type="primary"
+			block
+			:round="false"
+			icon="exit"
+			@click="handleLogout"
+		>
 			退出登录
 		</wd-button>
 		<wd-message-box selector="confirm-agreement-box">
 			<view class="agreement__warp">
 				我已阅读并同意
-				<text @tap.stop="router.push({ path: CommonRoute.UserAgreement })">《用户协议》</text>
-				<text @tap.stop="router.push({ path: CommonRoute.PrivacyAgreement })">《隐私协议》</text>
-				<text @tap.stop="router.push({ path: CommonRoute.ServiceAgreement })">《服务协议》</text>
+				<text @click="router.push(CommonRoute.UserAgreement)">《用户协议》</text>
+				<text @click="router.push(CommonRoute.PrivacyAgreement)">《隐私协议》</text>
+				<text @click="router.push(CommonRoute.ServiceAgreement)">《服务协议》</text>
 			</view>
 		</wd-message-box>
 	</view>
@@ -233,18 +232,23 @@ const handleLogout = async () => {
 	});
 };
 
-onShow(() => {
-	storageInfo.value = uni.getStorageInfoSync();
-});
+/** 页面刷新 */
+const loadRefresh = async () => {};
 
-onPageScroll(({ scrollTop }) => {
-	state.isScrolled = scrollTop > 0;
+onShow(async () => {
+	storageInfo.value = await uni.getStorageInfo();
+	await loadRefresh();
 });
 
 onPullDownRefresh(async () => {
 	// 刷新App信息
 	await userInfoStore.refreshApp();
+	await loadRefresh();
 	uni.stopPullDownRefresh();
+});
+
+onPageScroll(({ scrollTop }) => {
+	state.isScrolled = scrollTop > 0;
 });
 </script>
 

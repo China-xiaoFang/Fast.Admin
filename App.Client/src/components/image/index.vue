@@ -1,11 +1,12 @@
 <template>
 	<wd-img
 		v-bind="wdImgProps"
-		:customClass="`fa-image ${props.customClass}`"
-		:customStyle="`--height:${addUnit(props.height)};--width:${addUnit(props.width)};--border-radio:${addUnit(props.radius)};`"
+		:customClass="`fa-image ${state.src ? '' : 'is-error'} ${props.customClass}`"
+		:customStyle="`--height:${addUnit(props.height)};--width:${addUnit(props.width)};`"
 		:src="state.hideImage ? artwork : (state.src ?? notImage)"
-		:previewSrc="props.src"
-		@click="(event) => emit('click', event)"
+		:previewSrc="state.previewSrc"
+		:enablePreview="props.enablePreview && !!state.src"
+		@click.stop="(event) => emit('click', event)"
 		@load="(event) => emit('load', event)"
 		@error="(event) => emit('error', event)"
 	>
@@ -13,7 +14,7 @@
 			<wd-icon customClass="fa-image__loading" classPrefix="iconfont" name="loadingImage" />
 		</template>
 		<template #error>
-			<WdIcon customClass="fa-image__error" classPrefix="iconfont" name="notImage" />
+			<image class="fa-image__error" :src="notImage" mode="scaleToFill" />
 		</template>
 	</wd-img>
 </template>
@@ -54,13 +55,10 @@ const props = defineProps({
 		type: [String, Number],
 		default: "100%",
 	},
-	/** @description 圆角大小 */
-	radius: {
-		type: [String, Number],
-		default: "unset",
-	},
 	/** @description 隐藏图片，优先级最高 */
 	hideImage: Boolean,
+	/** @description Base64图片 */
+	base64: Boolean,
 	/** @description 原图 */
 	original: Boolean,
 	/** @description 标准 */
@@ -71,7 +69,7 @@ const props = defineProps({
 	thumb: Boolean,
 });
 
-const wdImgProps = useProps(props, imgProps, ["customClass", "customStyle", "src", "previewSrc"]);
+const wdImgProps = useProps(props, imgProps, ["customClass", "customStyle", "src", "previewSrc", "enablePreview"]);
 
 const emit = defineEmits({
 	/** @description 点击事件 */
@@ -85,10 +83,24 @@ const emit = defineEmits({
 const configStore = useConfig();
 
 const state = reactive({
+	/** 隐藏图片 */
 	hideImage: computed(() => (isNil(props.hideImage) ? configStore.tableLayout.hideImage : props.hideImage)),
+	/** 预览地址 */
+	previewSrc: computed(() => {
+		if (props.src) {
+			if (props.base64) {
+				return `data:image/png;base64,${props.src}`;
+			}
+			return props.src;
+		}
+		return undefined;
+	}),
+	/** 图片地址 */
 	src: computed(() => {
 		if (props.src) {
-			if (props.original) {
+			if (props.base64) {
+				return `data:image/png;base64,${props.src}`;
+			} else if (props.original) {
 				return props.src;
 			} else if (props.normal) {
 				return `${props.src}@!normal`;
@@ -112,9 +124,12 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
+.is-error {
+	padding: calc(var(--height) * 0.1);
+	box-sizing: border-box;
+}
 :deep() {
-	.fa-image__loading,
-	.fa-image__error {
+	.fa-image__loading {
 		width: var(--width);
 		height: var(--height);
 		text-align: center;
@@ -122,6 +137,12 @@ defineExpose({
 		font-size: calc(var(--width) * 0.8);
 		background-color: var(--wot-bg-color);
 		color: var(--wot-text-color-placeholder);
+	}
+	.fa-image__error {
+		width: calc(var(--width) * 0.8);
+		height: calc(var(--height) * 0.8);
+		padding-top: calc(var(--height) * 0.1);
+		padding-left: calc(var(--width) * 0.1);
 	}
 }
 </style>

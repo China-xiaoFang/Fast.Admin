@@ -1,7 +1,7 @@
 /**
- * Fast.Center.Enum.SysSerialSpacerEnum 系统序号分隔符枚举
+ * Fast.Shared.SerialSpacerEnum 序号分隔符枚举
  */
-export enum SysSerialSpacerEnum {
+export enum SerialSpacerEnum {
   /**
    * 无
    */
