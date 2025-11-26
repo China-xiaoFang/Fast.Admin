@@ -15,8 +15,11 @@
 		<view class="navbar">
 			<view class="navbar__title">个人中心</view>
 			<view class="navbar__warp">
-				<image class="top_bg" src="@/static/images/card_top_bg.png" />
-				<image class="bottom_bg" src="@/static/images/card_bottom_bg.png" />
+				<template v-if="configStore.layout.isDark"></template>
+				<template v-else>
+					<image class="top_bg" src="@/static/images/card_top_bg.png" />
+					<image class="bottom_bg" src="@/static/images/card_bottom_bg.png" />
+				</template>
 				<view class="warp__top">
 					<view class="top__left" @click="router.push('/pages/setting/userInfo/index')">
 						<image class="avatar" :src="userInfoStore.avatar || defaultAvatar" />
