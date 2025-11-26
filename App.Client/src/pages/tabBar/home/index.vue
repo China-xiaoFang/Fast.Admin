@@ -57,7 +57,7 @@ const loadRefresh = async () => {};
 onLoad(async () => {
 	watch(
 		() => appStore.hasLaunch,
-		async (newVal) => {
+		(newVal) => {
 			if (newVal) {
 				uni.setNavigationBarTitle({
 					title: appStore.appName,
