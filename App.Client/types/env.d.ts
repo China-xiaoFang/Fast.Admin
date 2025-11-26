@@ -7,10 +7,6 @@ declare interface ImportMetaEnv {
 	 */
 	readonly VITE_ENV: "production" | "development" | "test" | "staging";
 	/**
-	 * 打包输出路径
-	 */
-	readonly VITE_OUT_DIR: string;
-	/**
 	 * 接口请求地址
 	 */
 	readonly VITE_AXIOS_REQUEST_URL: string;
