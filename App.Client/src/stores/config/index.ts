@@ -41,9 +41,9 @@ export const useConfig = defineStore(
 		/** 表格配置 */
 		const tableLayout = reactive({
 			/** Table隐藏图片 */
-			hideImage: true,
+			hideImage: false,
 			/** Table默认时间搜索范围 */
-			dataSearchRange: withDefineType<FaTableDataRange>("Past3D"),
+			dataSearchRange: withDefineType<FaTableDataRange>("Past1M"),
 		});
 
 		/** 设置主题色 */
@@ -219,8 +219,8 @@ export const useConfig = defineStore(
 			layout.footer = true;
 			layout.watermark = true;
 			initTheme();
-			tableLayout.hideImage = true;
-			tableLayout.dataSearchRange = "Past3D";
+			tableLayout.hideImage = false;
+			tableLayout.dataSearchRange = "Past1M";
 		};
 
 		return {

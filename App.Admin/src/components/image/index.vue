@@ -1,7 +1,7 @@
 <template>
 	<wd-img
 		v-bind="wdImgProps"
-		:customClass="`fa-image ${state.src ? '' : 'is-error'} ${props.customClass}`"
+		:customClass="`fa-image ${!state.src || state.hideImage ? 'is-small' : ''} ${props.customClass}`"
 		:customStyle="`--height:${addUnit(props.height)};--width:${addUnit(props.width)};`"
 		:src="state.hideImage ? artwork : (state.src ?? notImage)"
 		:previewSrc="state.previewSrc"
@@ -56,7 +56,10 @@ const props = defineProps({
 		default: "100%",
 	},
 	/** @description 隐藏图片，优先级最高 */
-	hideImage: Boolean,
+	hideImage: {
+		type: Boolean,
+		default: undefined,
+	},
 	/** @description Base64图片 */
 	base64: Boolean,
 	/** @description 原图 */
@@ -124,7 +127,7 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-.is-error {
+.is-small {
 	padding: calc(var(--height) * 0.1);
 	box-sizing: border-box;
 }
