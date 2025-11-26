@@ -55,9 +55,19 @@ const loadPage = async () => {};
 const loadRefresh = async () => {};
 
 onLoad(async () => {
-	uni.setNavigationBarTitle({
-		title: appStore.appName,
-	});
+	watch(
+		() => appStore.hasLaunch,
+		async (newVal) => {
+			if (newVal) {
+				uni.setNavigationBarTitle({
+					title: appStore.appName,
+				});
+			}
+		},
+		{
+			immediate: true,
+		}
+	);
 	watch(
 		() => userInfoStore.hasUserInfo,
 		async (newVal) => {
