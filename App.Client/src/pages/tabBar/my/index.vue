@@ -2,7 +2,7 @@
 	<view
 		class="page"
 		:style="{
-			'background-image': configStore.layout.isDark ? '' : `url('/static/images/topImage2.png')`,
+			'background-image': configStore.layout.isDark ? '' : `url(${appStore.statusBarImageUrl})`,
 		}"
 	>
 		<view
@@ -12,36 +12,62 @@
 			}"
 		/>
 
-		<view class="navbar">
-			<view class="navbar__title">个人中心</view>
-			<view class="navbar__warp">
-				<template v-if="configStore.layout.isDark"></template>
-				<template v-else>
-					<image class="top_bg" src="@/static/images/card_top_bg.png" />
-					<image class="bottom_bg" src="@/static/images/card_bottom_bg.png" />
-				</template>
-				<view class="warp__top">
-					<view class="top__left" @click="router.push('/pages/setting/userInfo/index')">
-						<image class="avatar" :src="userInfoStore.avatar || defaultAvatar" />
-						<view class="account-info">
-							<template v-if="userInfoStore.hasUserInfo">
-								<view class="nick-name">
-									{{ userInfoStore.nickName }}
-								</view>
-								<view class="mobile">
-									{{ userInfoStore.mobile }}
-								</view>
-							</template>
-							<template v-else>
-								<view class="nick-name">{{ appStore.appName }}用户</view>
-								<view class="mobile">登录后体验更多功能</view>
-							</template>
+		<wd-navbar :bordered="false" title="个人中心" />
+
+		<view class="user__card">
+			<template v-if="!configStore.layout.isDark">
+				<image class="top_bg" src="@/static/images/card_top_bg.png" />
+				<image class="bottom_bg" src="@/static/images/card_bottom_bg.png" />
+			</template>
+
+			<view class="user__warp">
+				<view class="left">
+					<template v-if="userInfoStore.hasUserInfo">
+						<FaImage width="120rpx" height="120rpx" round original :hideImage="false" :src="userInfoStore.avatar" />
+						<view class="user__info" @click="router.push('/pages/setting/userInfo/index')">
+							<view class="nickName">{{ userInfoStore.nickName }}</view>
+							<view class="mobile">{{ userInfoStore.mobile || "暂未授权手机号" }}</view>
 						</view>
-					</view>
-					<wd-button v-if="!userInfoStore.hasUserInfo" size="small" openType="getUserInfo" type="primary" @getuserinfo="handleWeChatLogin">
-						登录
-					</wd-button>
+					</template>
+
+					<template v-else>
+						<FaImage width="120rpx" height="120rpx" round :hideImage="false" :src="appStore.logoUrl" />
+						<view class="user__info">
+							<view class="nickName">{{ appStore.appName }} 用户</view>
+							<view class="mobile">登录后体验更多功能</view>
+						</view>
+					</template>
 				</view>
+
+				<!-- #ifdef MP-WEIXIN -->
+				<template v-if="!userInfoStore.hasUserInfo">
+					<wd-button size="small" openType="getUserInfo" type="primary" @getuserinfo="handleWeChatLogin">登录</wd-button>
+				</template>
+				<template v-else>
+					<template v-if="!userInfoStore.mobile">
+						<wd-button
+							v-if="appStore.isClient"
+							size="small"
+							openType="getPhoneNumber"
+							type="primary"
+							block
+							@getphonenumber="handlePhoneLogin"
+						>
+							授权手机号
+						</wd-button>
+						<wd-button
+							v-else
+							size="small"
+							openType="getRealtimePhoneNumber"
+							type="primary"
+							block
+							@getrealtimephonenumber="handlePhoneLogin"
+						>
+							授权手机号
+						</wd-button>
+					</template>
+				</template>
+				<!-- #endif -->
 			</view>
 		</view>
 
@@ -52,7 +78,7 @@
 					<FaIcon name="call" />
 					<text>联系我们</text>
 				</view>
-				<view class="card__item" @click="useToast.info('敬请期待')">
+				<view class="card__item" @click="router.push(CommonRoute.ComplaintSubmit)">
 					<wd-icon name="evaluation" />
 					<text>投诉建议</text>
 				</view>
@@ -113,7 +139,6 @@ import { useMessage } from "wot-design-uni";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { CommonRoute } from "@/common";
 import { useMessageBox, useToast } from "@/hooks";
-import defaultAvatar from "@/static/images/avatar.jpg";
 import { useApp, useConfig, useUserInfo } from "@/stores";
 
 definePage({
@@ -166,7 +191,7 @@ const appVersion = computed(() => {
 			envName = "压测版";
 			break;
 	}
-	return `${envName} ${appStore.appBaseInfo.appVersion}`;
+	return `${envName} v${appStore.appBaseInfo.appVersion}`;
 });
 
 const currentSize = computed(() => {
@@ -198,20 +223,33 @@ const handleWeChatLogin = async (detail: UniNamespace.GetUserInfoRes) => {
 			});
 		} catch {
 			useToast.warning(`登录前需确认您已阅读并同意《用户协议》、《隐私协议》、《服务协议》，以便为您提供更优质的服务。`);
+			return;
 		}
 		const { iv, encryptedData, userInfo } = detail;
 		if (userInfo) {
-			consoleLog("Login", "GetUserInfo", userInfo);
-			await userInfoStore.login(
-				{
-					iv,
-					encryptedData,
-				},
-				true
-			);
+			consoleLog("Login", "GetUserInfo", detail);
+			await userInfoStore.login({
+				iv,
+				encryptedData,
+			});
 		} else {
 			useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
 		}
+	});
+};
+
+/** 手机登录 */
+const handlePhoneLogin = async (detail: UniHelper.ButtonOnGetrealtimephonenumberEvent | UniHelper.ButtonOnGetphonenumberEvent) => {
+	await clickUtil.throttleAsync(async () => {
+		consoleLog("Login", "PhoneNumber", detail);
+		const { code } = detail;
+		if (!code) {
+			useToast.warning("暂不授权可能会影响部分功能的正常使用，您可在后续使用过程中再次授权。");
+			return;
+		}
+		await userInfoStore.login({
+			code,
+		});
 	});
 };
 

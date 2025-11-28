@@ -55,25 +55,9 @@ export interface LaunchOutput {
    */
   environmentType?: EnvironmentTypeEnum;
   /**
-   * 联系电话
-   */
-  contactPhone?: string;
-  /**
-   * 经度
-   */
-  longitude?: number;
-  /**
-   * 纬度
-   */
-  latitude?: number;
-  /**
    * 登录组件
    */
   loginComponent?: string;
-  /**
-   * Banner图
-   */
-  bannerImages?: Array<string>;
   /**
    * WebSocket地址
    */
@@ -86,6 +70,26 @@ export interface LaunchOutput {
    * 请求加密
    */
   requestEncipher?: boolean;
+  /**
+   * 状态栏图片地址
+   */
+  statusBarImageUrl?: string;
+  /**
+   * 联系电话
+   */
+  contactPhone?: string;
+  /**
+   * 经度
+   */
+  longitude?: number;
+  /**
+   * 纬度
+   */
+  latitude?: number;
+  /**
+   * Banner图
+   */
+  bannerImages?: Array<string>;
   /**
    * 租户名称
    */

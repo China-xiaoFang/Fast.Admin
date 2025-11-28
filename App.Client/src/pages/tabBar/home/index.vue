@@ -10,6 +10,7 @@
 			@search="handleSearch"
 		/>
 		<wd-swiper
+			v-if="appStore.bannerImages?.length > 0"
 			customClass="mb20"
 			:list="appStore.bannerImages"
 			autoplay

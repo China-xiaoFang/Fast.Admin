@@ -1,5 +1,5 @@
 /**
- * Fast.Scheduler.TriggerTypeEnum 触发器类型枚举
+ * Fast.Center.Enum.TriggerTypeEnum 触发器类型枚举
  */
 export enum TriggerTypeEnum {
   /**

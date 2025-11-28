@@ -58,6 +58,15 @@
 			}
 		},
 		{
+			"path": "pages/complaint/submit/index",
+			"type": "page",
+			"name": "ComplaintSubmit",
+			"layout": "layout",
+			"style": {
+				"navigationBarTitleText": "投诉"
+			}
+		},
+		{
 			"path": "pages/setting/general/index",
 			"type": "page",
 			"name": "SettingGeneral",

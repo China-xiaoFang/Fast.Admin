@@ -118,7 +118,7 @@ export const useUserInfo = defineStore(
 		};
 
 		/** 登录 */
-		const login = async (input: WeChatClientLoginInput = {}, checkMobile = false): Promise<void> => {
+		const login = async (input: WeChatClientLoginInput = {}): Promise<void> => {
 			return new Promise((resolve, reject) => {
 				// #ifdef MP-WEIXIN
 				uni.login({
@@ -131,9 +131,6 @@ export const useUserInfo = defineStore(
 							setUserInfo(apiRes);
 							// 确保用户添加完成
 							hasUserInfo.value = true;
-							if (checkMobile && isNil(apiRes.mobile)) {
-								state.authLoginPopup = true;
-							}
 							return resolve();
 						} catch {
 							return reject();
