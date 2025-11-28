@@ -143,7 +143,7 @@ public class InitDatabaseHostedService : IHostedService
                 Email = "2875616188@qq.com",
                 Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
                     .ToUpper(),
-                NickName = "超级管理员",
+                NickName = "小方",
                 Avatar = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
                 Status = CommonStatusEnum.Enable,
                 Sex = GenderEnum.Unknown,
