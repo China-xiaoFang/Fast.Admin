@@ -5,6 +5,10 @@ import { GenderEnum } from "@/api/enums/GenderEnum";
  */
 export interface EditAccountInput {
   /**
+   * 手机
+   */
+  mobile?: string;
+  /**
    * 邮箱
    */
   email?: string;

@@ -3,29 +3,34 @@
 	padding-bottom: 20rpx;
 }
 
-.btn_avatar {
+.btn_avatar,
+.btn_phone {
 	display: inline-flex;
 	padding: 0;
 	background: transparent;
 	border: 0;
-	border-radius: 50%;
+	font-size: var(--wot-font-size-base);
+	line-height: 1;
+	color: var(--wot-text-color-placeholder);
 }
+
 .avatar {
-	width: 80rpx;
-	height: 80rpx;
+	width: 120rpx;
+	height: 120rpx;
 	border-radius: 50%;
 }
+
+.wd-cell-group {
+	--wot-cell-value-color: var(--wot-text-color-placeholder);
+}
+
 :deep() {
-	.wd-cell {
-		--wot-cell-value-color: var(--wot-text-color-placeholder);
-		.wd-cell__right {
-			flex: unset;
-			.wd-cell__body {
-				align-items: center;
-				.wd-cell__value {
-					display: flex;
-				}
-			}
+	.wd-cell__body {
+		align-items: center;
+	}
+	.wd-picker {
+		.wd-icon-arrow-right {
+			margin-left: 8px;
 		}
 	}
 }

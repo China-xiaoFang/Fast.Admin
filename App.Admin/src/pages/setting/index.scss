@@ -13,17 +13,13 @@
 		color: var(--wot-text-color-regular);
 	}
 }
-:deep() {
-	.wd-cell {
-		--wot-cell-value-color: var(--wot-text-color-placeholder);
-		.wd-cell__right {
-			flex: unset;
-		}
-	}
 
-	.btn__exit-login {
-		--wot-button-medium-fs: var(--wot-font-size-base);
-		--wot-button-medium-height: 80rpx;
-		margin: 30rpx 50rpx !important;
-	}
+.wd-cell {
+	--wot-cell-value-color: var(--wot-text-color-placeholder);
+}
+
+.btn__exit-login {
+	--wot-button-medium-fs: var(--wot-font-size-base);
+	--wot-button-medium-height: 80rpx;
+	margin: 30rpx 50rpx !important;
 }

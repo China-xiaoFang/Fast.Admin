@@ -32,57 +32,62 @@ export const fileApi = {
     });
   },
   /**
-   * 上传头像
+   * 上传Logo
    */
-  uploadLogo(data: FormData) {
+  uploadLogo(filePath: string) {
     return axiosUtil.request<string>({
       url: "/file/uploadLogo",
-      method: "post",
-      data,
+      method: "upload",
+      name: "file",
+      filePath,
       requestType: "upload",
     });
   },
   /**
    * 上传头像
    */
-  uploadAvatar(data: FormData) {
+  uploadAvatar(filePath: string) {
     return axiosUtil.request<string>({
       url: "/file/uploadAvatar",
-      method: "post",
-      data,
+      method: "upload",
+      name: "file",
+      filePath,
       requestType: "upload",
     });
   },
   /**
    * 上传证件照
    */
-  uploadIdPhoto(data: FormData) {
+  uploadIdPhoto(filePath: string) {
     return axiosUtil.request<string>({
       url: "/file/uploadIdPhoto",
-      method: "post",
-      data,
+      method: "upload",
+      name: "file",
+      filePath,
       requestType: "upload",
     });
   },
   /**
    * 上传富文本
    */
-  uploadEditor(data: FormData) {
+  uploadEditor(filePath: string) {
     return axiosUtil.request<string>({
       url: "/file/uploadEditor",
-      method: "post",
-      data,
+      method: "upload",
+      name: "file",
+      filePath,
       requestType: "upload",
     });
   },
   /**
    * 上传文件
    */
-  uploadFile(data: FormData) {
+  uploadFile(filePath: string) {
     return axiosUtil.request<string>({
       url: "/file/uploadFile",
-      method: "post",
-      data,
+      method: "upload",
+      name: "file",
+      filePath,
       requestType: "upload",
     });
   },

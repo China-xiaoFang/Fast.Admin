@@ -42,7 +42,12 @@
 				</view>
 				<view class="auth-actions">
 					<wd-button type="info" plain block @click="handleAuthPopupClose">暂不授权</wd-button>
-					<wd-button openType="getPhoneNumber" type="primary" block @getphonenumber="handlePhoneLogin">一键授权</wd-button>
+					<wd-button v-if="appStore.isClient" openType="getPhoneNumber" type="primary" block @getphonenumber="handlePhoneLogin">
+						一键授权
+					</wd-button>
+					<wd-button v-else openType="getRealtimePhoneNumber" type="primary" block @getrealtimephonenumber="handlePhoneLogin">
+						一键授权
+					</wd-button>
 				</view>
 			</view>
 		</FaPopup>
@@ -152,11 +157,12 @@ const handleAuthPopupClose = () => {
 };
 
 /** 手机登录 */
-const handlePhoneLogin = async (detail: UniHelper.ButtonOnGetphonenumberDetail) => {
+const handlePhoneLogin = async (detail: UniHelper.ButtonOnGetrealtimephonenumberEvent | UniHelper.ButtonOnGetphonenumberEvent) => {
 	await clickUtil.throttle(() => {
 		authLoginPopupRef.value.close(async () => {
-			consoleLog("Layout", "GetPhoneNumber", detail);
+			consoleLog("Layout", "PhoneNumber", detail);
 			const { code } = detail;
+			if (!code) return;
 			await userInfoStore.login({
 				code,
 			});

@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 		<view class="logo">
-			<FaImage width="128rpx" height="128rpx" radius="50%" :src="userInfoStore.avatar" :hideImage="false" />
+			<FaImage width="128rpx" height="128rpx" round original :hideImage="false" :src="userInfoStore.avatar" />
 			<text>{{ userInfoStore.tenantName || appStore.appName }}</text>
 		</view>
 
@@ -11,11 +11,11 @@
 			<wd-cell title="热更新版本" :value="`v${appStore.appVersion}`" />
 			<!-- #endif -->
 			<wd-cell title="系统服务商" value="FastDotNet" />
-			<wd-cell customClass="mb20" title="服务有效期" value="2029-12-31 23:59:59" />
+			<wd-cell title="服务有效期" value="2029-12-31 23:59:59" />
 		</wd-cell-group>
 
 		<wd-cell-group border>
-			<wd-cell title="消息通知" clickable isLink @click="useToast.info('敬请期待')" />
+			<wd-cell customClass="mt20" title="消息通知" clickable isLink @click="useToast.info('敬请期待')" />
 			<wd-cell customClass="mb20" title="通用" clickable isLink to="/pages/setting/general/index" />
 		</wd-cell-group>
 
@@ -79,7 +79,7 @@ const appVersion = computed(() => {
 			envName = "压测版";
 			break;
 	}
-	return `${envName} ${appStore.appBaseInfo.appVersion}`;
+	return `${envName} v${appStore.appBaseInfo.appVersion}`;
 });
 
 const currentSize = computed(() => {

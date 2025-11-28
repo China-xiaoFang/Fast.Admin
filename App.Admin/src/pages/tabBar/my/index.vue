@@ -2,7 +2,7 @@
 	<view
 		class="page"
 		:style="{
-			'background-image': configStore.layout.isDark ? '' : `url('/static/images/topImage2.png')`,
+			'background-image': configStore.layout.isDark ? '' : `url(${appStore.statusBarImageUrl})`,
 		}"
 	>
 		<view
@@ -12,105 +12,93 @@
 			}"
 		/>
 
-		<view class="navbar">
-			<view class="navbar__title">个人中心</view>
-			<view class="navbar__warp">
-				<template v-if="configStore.layout.isDark"></template>
-				<template v-else>
-					<image class="top_bg" src="@/static/images/card_top_bg.png" />
-					<image class="bottom_bg" src="@/static/images/card_bottom_bg.png" />
-				</template>
-				<view class="warp__top">
-					<view class="top__left" @click="router.push('/pages/setting/userInfo/index')">
-						<image class="avatar" :src="userInfoStore.avatar || defaultAvatar" />
-						<view class="account-info">
-							<text class="tenant-name">
-								{{ userInfoStore.tenantName }}
-							</text>
-							<view>
-								<text class="nick-name">{{ userInfoStore.employeeNo }}123</text>
-								<text class="nick-name">{{ userInfoStore.departmentName }}123</text>
-							</view>
-							<text class="nick-name">
-								{{ userInfoStore.employeeName || userInfoStore.nickName }}
-							</text>
-						</view>
+		<wd-navbar :bordered="false" title="个人中心" />
+
+		<view class="user__card">
+			<template v-if="!configStore.layout.isDark">
+				<image class="top_bg" src="@/static/images/card_top_bg.png" />
+				<image class="bottom_bg" src="@/static/images/card_bottom_bg.png" />
+			</template>
+
+			<view class="user__warp">
+				<view class="top">
+					<FaImage width="120rpx" height="120rpx" round original :hideImage="false" :src="userInfoStore.avatar" />
+					<view class="user__info" @click="router.push('/pages/setting/userInfo/index')">
+						<view class="employeeName">{{ userInfoStore.employeeName }}</view>
+						<view class="employeeNo">{{ userInfoStore.employeeNo }}（{{ userInfoStore.departmentName || "暂无部门" }}）</view>
+						<view class="nickName">{{ userInfoStore.nickName }}</view>
 					</view>
 				</view>
-				<view class="navbar__warp__bottom">
-					<view class="bottom-item">
-						<text class="item_txt1">999999.99</text>
-						<text class="item_txt2">入库</text>
+
+				<view class="bottom">
+					<view class="bottom__item">
+						<text class="txt__1">999999.99</text>
+						<text class="txt__2">Fast</text>
 					</view>
-					<view class="bottom-item">
-						<text class="item_txt1">999999.99</text>
-						<text class="item_txt2">出库</text>
+					<view class="bottom__item">
+						<text class="txt__1">999999.99</text>
+						<text class="txt__2">Fast</text>
 					</view>
-					<view class="bottom-item">
-						<text class="item_txt1">999999.99</text>
-						<text class="item_txt2">配送</text>
+					<view class="bottom__item">
+						<text class="txt__1">999999.99</text>
+						<text class="txt__2">Fast</text>
 					</view>
 				</view>
 			</view>
 		</view>
 
-		<view class="data-card">
-			<wd-cell customClass="wd-cell-border" title="作业" />
-			<view class="data-card__content">
+		<view class="mb30 data-card">
+			<wd-cell customClass="card__cell" title="我的功能" />
+			<view class="card__content">
 				<view class="card__item">
 					<wd-badge :modelValue="9999" :max="99">
-						<FaIcon name="performance" />
+						<FaIcon name="test" />
 					</wd-badge>
-					<text class="item_txt">收货</text>
+					<text>Fast</text>
 				</view>
 				<view class="card__item">
-					<wd-badge :modelValue="88" :max="99">
-						<FaIcon name="performance" />
+					<wd-badge :modelValue="9999" :max="99">
+						<FaIcon name="test" />
 					</wd-badge>
-					<text class="item_txt">上架</text>
+					<text>Fast</text>
 				</view>
-				<view class="card__item">
-					<wd-badge :modelValue="0" :max="99">
-						<FaIcon name="performance" />
-					</wd-badge>
-					<text class="item_txt">拣货</text>
+				<view class="card__item" @click="appStore.makePhoneCall">
+					<FaIcon name="call" />
+					<text>联系我们</text>
 				</view>
-				<view class="card__item">
-					<wd-badge :modelValue="99" :max="99">
-						<FaIcon name="performance" />
-					</wd-badge>
-					<text class="item_txt">复核</text>
-				</view>
-				<view class="card__item">
-					<wd-badge :modelValue="9" :max="99">
-						<FaIcon name="performance" />
-					</wd-badge>
-					<text class="item_txt">盘点</text>
+				<view class="card__item" @click="router.push(CommonRoute.ComplaintSubmit)">
+					<wd-icon name="evaluation" />
+					<text>投诉建议</text>
 				</view>
 			</view>
 		</view>
-		<view class="data-card">
-			<wd-cell customClass="wd-cell-border" title="绩效" value="全部" clickable isLink />
-			<view class="data-card__content">
+
+		<view class="mb20 data-card">
+			<wd-cell customClass="card__cell" title="绩效" value="全部" clickable isLink />
+			<view class="card__content">
 				<view class="card__item">
-					<FaIcon name="performance" />
-					<text class="item_txt">收货</text>
+					<wd-badge :modelValue="9999" :max="99">
+						<FaIcon name="test" />
+					</wd-badge>
+					<text>Fast</text>
 				</view>
 				<view class="card__item">
-					<FaIcon name="performance" />
-					<text class="item_txt">上架</text>
+					<wd-badge :modelValue="9999" :max="99">
+						<FaIcon name="test" />
+					</wd-badge>
+					<text>Fast</text>
 				</view>
 				<view class="card__item">
-					<FaIcon name="performance" />
-					<text class="item_txt">拣货</text>
+					<wd-badge :modelValue="9999" :max="99">
+						<FaIcon name="test" />
+					</wd-badge>
+					<text>Fast</text>
 				</view>
 				<view class="card__item">
-					<FaIcon name="performance" />
-					<text class="item_txt">复核</text>
-				</view>
-				<view class="card__item">
-					<FaIcon name="performance" />
-					<text class="item_txt">配送</text>
+					<wd-badge :modelValue="9999" :max="99">
+						<FaIcon name="test" />
+					</wd-badge>
+					<text>Fast</text>
 				</view>
 			</view>
 		</view>
@@ -153,9 +141,9 @@ import { onPageScroll, onPullDownRefresh } from "@dcloudio/uni-app";
 import { reactive } from "vue";
 import { clickUtil } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
+import { CommonRoute } from "@/common";
 import { useMessageBox, useToast } from "@/hooks";
-import defaultAvatar from "@/static/images/avatar.jpg";
-import { useConfig, useUserInfo } from "@/stores";
+import { useApp, useConfig, useUserInfo } from "@/stores";
 
 definePage({
 	name: "My",
@@ -168,6 +156,7 @@ definePage({
 	},
 });
 
+const appStore = useApp();
 const configStore = useConfig();
 const userInfoStore = useUserInfo();
 const router = useRouter();

@@ -5,16 +5,16 @@
 			请选择您要登录的租户账号
 		</wd-divider>
 		<view class="card">
-			<wd-card v-for="item in tenantList" :key="item.userKey" @click="handleTenantLogin(item.userKey)">
+			<wd-card v-for="item in tenantList" :key="item.userKey">
 				<image v-if="item.logoUrl" class="logo_img" :src="item.logoUrl" mode="aspectFill" />
 				<FaIcon v-else name="tenant" />
-				<view class="tenant__warp">
+				<view class="tenant__warp" @click="handleTenantLogin(item.userKey)">
 					<view class="tenant__top">
 						<text class="top__name fa-text__overflow1">{{ item.tenantName }}</text>
 						<FaTag name="EditionEnum" :value="item.edition" />
 					</view>
 					<view class="tenant__center">
-						<text class="center__name fa-text__overflow1">{{ item.deptName || "无部门..." }}</text>
+						<text class="center__name fa-text__overflow1">{{ item.departmentName || "无部门..." }}</text>
 						<text>{{ item.employeeNo || "无工号..." }}</text>
 					</view>
 					<view class="tenant__bottom">

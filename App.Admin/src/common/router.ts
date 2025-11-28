@@ -12,6 +12,10 @@ export const CommonRoute = {
 	PrivacyAgreement: "/pages/agreement/privacy/index",
 	/** 服务协议 */
 	ServiceAgreement: "/pages/agreement/service/index",
+	/** 投诉建议 */
+	ComplaintPage: "/pages/complaint/page/index",
+	/** 投诉建议 */
+	ComplaintSubmit: "/pages/complaint/submit/index",
 	/** 登录页 */
 	Login: "/pages/login/index",
 	/** 选择租户 */

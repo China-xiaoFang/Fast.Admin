@@ -1,5 +1,5 @@
 /**
- * Fast.Scheduler.MailMessageEnum 邮件消息枚举
+ * Fast.Center.Enum.MailMessageEnum 邮件消息枚举
  */
 export enum MailMessageEnum {
   /**

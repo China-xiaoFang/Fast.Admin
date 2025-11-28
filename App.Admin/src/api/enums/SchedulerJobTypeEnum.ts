@@ -1,5 +1,5 @@
 /**
- * Fast.Scheduler.SchedulerJobTypeEnum 调度作业类型枚举
+ * Fast.Center.Enum.SchedulerJobTypeEnum 调度作业类型枚举
  */
 export enum SchedulerJobTypeEnum {
   /**

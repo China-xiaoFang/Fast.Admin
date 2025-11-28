@@ -10,6 +10,10 @@ export const CommonRoute = {
 	PrivacyAgreement: "/pages/agreement/privacy/index",
 	/** 服务协议 */
 	ServiceAgreement: "/pages/agreement/service/index",
+	/** 投诉建议 */
+	ComplaintPage: "/pages/complaint/page/index",
+	/** 投诉建议 */
+	ComplaintSubmit: "/pages/complaint/submit/index",
 	/** 首页 */
 	Home: "/pages/tabBar/home/index",
 	/** 个人中心 */
