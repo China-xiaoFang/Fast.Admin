@@ -190,6 +190,12 @@ public class WeChatUserModel : IUpdateVersion
     public DateTime? UpdatedTime { get; set; }
 
     /// <summary>
+    /// 手机号更新时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "手机号更新时间", CreateTableFieldSort = 996)]
+    public DateTime? MobileUpdateTime { get; set; }
+
+    /// <summary>
     /// 更新版本控制字段
     /// </summary>
     [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]

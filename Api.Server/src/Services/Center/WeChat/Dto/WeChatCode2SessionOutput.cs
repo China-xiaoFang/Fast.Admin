@@ -20,24 +20,64 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
-
-namespace Fast.Scheduler;
+namespace Fast.Center.Service.WeChat.Dto;
 
 /// <summary>
-/// <see cref="SchedulerJobKeyInput"/> 调度作业Key输入
+/// <see cref="WeChatCode2SessionOutput"/> 换取微信用户身份信息输出
 /// </summary>
-public class SchedulerJobKeyInput
+public class WeChatCode2SessionOutput
 {
     /// <summary>
-    /// 作业名称
+    /// 唯一用户标识
     /// </summary>
-    [StringRequired(ErrorMessage = "作业名称不能为空")]
-    public string JobName { get; set; }
+    public string OpenId { get; set; }
 
     /// <summary>
-    /// 作业分组
+    /// 统一用户标识
     /// </summary>
-    [EnumRequired(ErrorMessage = "作业分组不能为空")]
-    public SchedulerJobGroupEnum JobGroup { get; set; }
+    public string UnionId { get; set; }
+
+    /// <summary>
+    /// 小程序登录凭证
+    /// </summary>
+    public string SessionKey { get; set; }
+
+    /// <summary>
+    /// 微信昵称
+    /// </summary>
+    public string NickName { get; set; }
+
+    /// <summary>
+    /// 头像
+    /// </summary>
+    public string Avatar { get; set; }
+
+    /// <summary>
+    /// 性别
+    /// </summary>
+    public GenderEnum Sex { get; set; }
+
+    /// <summary>
+    /// 国家
+    /// </summary>
+
+    public string Country { get; set; }
+
+    /// <summary>
+    /// 省份
+    /// </summary>
+
+    public string Province { get; set; }
+
+    /// <summary>
+    /// 城市
+    /// </summary>
+
+    public string City { get; set; }
+
+    /// <summary>
+    /// 语言
+    /// </summary>
+
+    public string Language { get; set; }
 }

@@ -93,7 +93,7 @@ public class RequestActionFilter : IAsyncActionFilter
             CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
-        var operateLogModel = new OperateLogModel
+        var requestLogModel = new RequestLogModel
         {
             RecordId = YitIdHelper.NextId(),
             AccountId = _user?.AccountId,
@@ -119,7 +119,7 @@ public class RequestActionFilter : IAsyncActionFilter
             CreatedTime = dateTime,
             TenantId = _user?.TenantId ?? 0
         };
-        operateLogModel.RecordCreate(httpContext);
+        requestLogModel.RecordCreate(httpContext);
 
         _ = Task.Run(async () =>
         {
@@ -129,7 +129,7 @@ public class RequestActionFilter : IAsyncActionFilter
                 var db = new SqlSugarClient(connectionConfig);
 
                 // 异步不等待
-                await db.Insertable(operateLogModel)
+                await db.Insertable(requestLogModel)
                     .SplitTable()
                     .ExecuteCommandAsync();
             }

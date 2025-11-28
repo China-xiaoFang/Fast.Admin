@@ -20,24 +20,37 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
-
-namespace Fast.Scheduler;
+namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="SchedulerJobKeyInput"/> 调度作业Key输入
+/// <see cref="SchedulerJobTypeEnum"/> 调度作业类型枚举
 /// </summary>
-public class SchedulerJobKeyInput
+[Flags]
+[FastEnum("调度作业类型枚举")]
+public enum SchedulerJobTypeEnum : byte
 {
     /// <summary>
-    /// 作业名称
+    /// 无
     /// </summary>
-    [StringRequired(ErrorMessage = "作业名称不能为空")]
-    public string JobName { get; set; }
+    [Description("无")]
+    None = 0,
 
     /// <summary>
-    /// 作业分组
+    /// 本地
     /// </summary>
-    [EnumRequired(ErrorMessage = "作业分组不能为空")]
-    public SchedulerJobGroupEnum JobGroup { get; set; }
+    [Description("本地")]
+    Local = 1,
+
+    /// <summary>
+    /// 内网Url
+    /// </summary>
+    /// <remarks>自动处理 AccessToken</remarks>
+    [Description("内网Url")]
+    IntranetUrl = 2,
+
+    /// <summary>
+    /// 外网Url
+    /// </summary>
+    [Description("外网Url")]
+    OuterNetUrl = 4
 }

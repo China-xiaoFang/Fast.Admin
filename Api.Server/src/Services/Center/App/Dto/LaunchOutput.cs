@@ -89,29 +89,9 @@ public class LaunchOutput
     public EnvironmentTypeEnum EnvironmentType { get; set; }
 
     /// <summary>
-    /// 联系电话
-    /// </summary>
-    public string ContactPhone { get; set; }
-
-    /// <summary>
-    /// 经度
-    /// </summary>
-    public decimal? Longitude { get; set; }
-
-    /// <summary>
-    /// 纬度
-    /// </summary>
-    public decimal? Latitude { get; set; }
-
-    /// <summary>
     /// 登录组件
     /// </summary>
     public string LoginComponent { get; set; }
-
-    /// <summary>
-    /// Banner图
-    /// </summary>
-    public List<string> BannerImages { get; set; }
 
     /// <summary>
     /// WebSocket地址
@@ -127,6 +107,31 @@ public class LaunchOutput
     /// 请求加密
     /// </summary>
     public bool RequestEncipher { get; set; }
+
+    /// <summary>
+    /// 状态栏图片地址
+    /// </summary>
+    public string StatusBarImageUrl { get; set; }
+
+    /// <summary>
+    /// 联系电话
+    /// </summary>
+    public string ContactPhone { get; set; }
+
+    /// <summary>
+    /// 经度
+    /// </summary>
+    public decimal? Longitude { get; set; }
+
+    /// <summary>
+    /// 纬度
+    /// </summary>
+    public decimal? Latitude { get; set; }
+
+    /// <summary>
+    /// Banner图
+    /// </summary>
+    public List<string> BannerImages { get; set; }
 
     /// <summary>
     /// 租户名称

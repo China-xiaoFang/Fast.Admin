@@ -20,33 +20,41 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Scheduler;
+using Fast.Center.Enum;
+
+namespace Fast.Center.Service.Complaint.Dto;
 
 /// <summary>
-/// <see cref="TriggerTypeEnum"/> 触发器类型枚举
+/// <see cref="AddComplaintInput"/> 添加投诉输入
 /// </summary>
-[Flags]
-[FastEnum("触发器类型枚举")]
-public enum TriggerTypeEnum : byte
+public class AddComplaintInput
 {
     /// <summary>
-    /// Cron
+    /// 投诉类型
     /// </summary>
-    [TagType(TagTypeEnum.Primary)]
-    [Description("Cron")]
-    Cron = 1,
+    [EnumRequired(ErrorMessage = "投诉类型不能为空")]
+    public ComplaintTypeEnum ComplaintType { get; set; }
 
     /// <summary>
-    /// Daily
+    /// 联系电话
     /// </summary>
-    [TagType(TagTypeEnum.Success)]
-    [Description("Daily")]
-    Daily = 2,
+    [StringRequired(ErrorMessage = "联系电话不能为空")]
+    public string ContactPhone { get; set; }
 
     /// <summary>
-    /// Simple
+    /// 联系邮箱
     /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("Simple")]
-    Simple = 4
+    public string ContactEmail { get; set; }
+
+    /// <summary>
+    /// 投诉描述
+    /// </summary>
+    [StringRequired(ErrorMessage = "投诉描述不能为空")]
+    public string Description { get; set; }
+
+    /// <summary>
+    /// 附件图片
+    /// </summary>
+    [SugarColumn(IsJson = true)]
+    public List<string> AttachmentImages { get; set; }
 }

@@ -37,6 +37,12 @@ public class DictionaryTypeModel : BaseEntity, IUpdateVersion
     public long DictionaryId { get; set; }
 
     /// <summary>
+    /// 服务名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "服务名称", Length = 50)]
+    public string ServiceName { get; set; }
+
+    /// <summary>
     /// 字典Key
     /// </summary>
     [SugarSearchValue]

@@ -81,6 +81,12 @@ public class EmployeeModel : IUpdateVersion
     public string IdPhoto { get; set; }
 
     /// <summary>
+    /// 初次工作日期
+    /// </summary>
+    [SugarColumn(ColumnDescription = "初次工作日期")]
+    public DateTime FirstWorkDate { get; set; }
+
+    /// <summary>
     /// 入职日期
     /// </summary>
     [SugarColumn(ColumnDescription = "入职日期")]

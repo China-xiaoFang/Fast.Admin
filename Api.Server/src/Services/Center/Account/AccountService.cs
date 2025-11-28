@@ -131,6 +131,7 @@ public class AccountService : IDynamicApplication
                 AccountId = t1.AccountId,
                 Mobile = t1.Mobile,
                 Email = t1.Email,
+                WeChatId = t1.WeChatId,
                 Status = t1.Status,
                 NickName = t1.NickName,
                 Avatar = t1.Avatar,
@@ -185,6 +186,17 @@ public class AccountService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
+        if (await _repository.AnyAsync(a => a.Mobile == input.Mobile && a.AccountId != _user.AccountId))
+        {
+            throw new UserFriendlyException("手机号已存在账号信息！");
+        }
+
+        if (await _repository.AnyAsync(a => a.Email == input.Email && a.AccountId != _user.AccountId))
+        {
+            throw new UserFriendlyException("邮箱已存在账号信息！");
+        }
+
+        accountModel.Mobile = input.Mobile;
         accountModel.Email = input.Email;
         accountModel.NickName = input.NickName;
         accountModel.Avatar = input.Avatar;
@@ -193,15 +205,44 @@ public class AccountService : IDynamicApplication
         accountModel.Birthday = input.Birthday;
         accountModel.RowVersion = input.RowVersion;
 
-        await _repository.UpdateAsync(accountModel);
+        // 同步微信用户信息
+        WeChatUserModel weChatUserModel = null;
+        if (accountModel.WeChatId != null)
+        {
+            weChatUserModel = await _repository.Queryable<WeChatUserModel>()
+                .InSingleAsync(accountModel.WeChatId);
+
+            if (weChatUserModel == null)
+            {
+                // 自动解绑
+                accountModel.WeChatId = null;
+            }
+            else
+            {
+                weChatUserModel.NickName = input.NickName;
+                weChatUserModel.Avatar = input.Avatar;
+                weChatUserModel.Sex = input.Sex;
+            }
+        }
+
+        await _repository.Ado.UseTranAsync(async () =>
+        {
+            if (weChatUserModel != null)
+            {
+                await _repository.Updateable(weChatUserModel)
+                    .ExecuteCommandAsync();
+            }
+
+            await _repository.UpdateAsync(accountModel);
+        }, ex => throw ex);
 
         // 刷新缓存
-        await _user.RefreshAuth(new AuthUserInfo
+        await _user.RefreshAccount(new AuthUserInfo
         {
             DeviceType = _user.DeviceType,
             DeviceId = _user.DeviceId,
             AppNo = _user.AppNo,
-            Mobile = _user.Mobile,
+            Mobile = accountModel.Mobile,
             TenantNo = _user.TenantNo,
             EmployeeNo = _user.EmployeeNo,
             IsSuperAdmin = _user.IsSuperAdmin,
