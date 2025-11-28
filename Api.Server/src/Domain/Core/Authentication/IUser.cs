@@ -247,6 +247,13 @@ public interface IUser
     Task RefreshAccount(AuthUserInfo authUserInfo);
 
     /// <summary>
+    /// 刷新微信用户信息
+    /// </summary>
+    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <returns></returns>
+    Task RefreshWeChatUser(AuthUserInfo authUserInfo);
+
+    /// <summary>
     /// 刷新职员信息
     /// </summary>
     /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>

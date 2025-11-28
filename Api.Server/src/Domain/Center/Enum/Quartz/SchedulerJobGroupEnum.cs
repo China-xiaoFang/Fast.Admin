@@ -20,24 +20,40 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
-
-namespace Fast.Scheduler;
+namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="SchedulerJobKeyInput"/> 调度作业Key输入
+/// <see cref="SchedulerJobGroupEnum"/> 调度作业分组枚举
 /// </summary>
-public class SchedulerJobKeyInput
+[Flags]
+[FastEnum("调度作业分组枚举")]
+public enum SchedulerJobGroupEnum : byte
 {
     /// <summary>
-    /// 作业名称
+    /// 系统管理
     /// </summary>
-    [StringRequired(ErrorMessage = "作业名称不能为空")]
-    public string JobName { get; set; }
+    [TagType(TagTypeEnum.Primary)]
+    [Description("系统管理")]
+    System = 1,
 
     /// <summary>
-    /// 作业分组
+    /// 业务处理
     /// </summary>
-    [EnumRequired(ErrorMessage = "作业分组不能为空")]
-    public SchedulerJobGroupEnum JobGroup { get; set; }
+    [TagType(TagTypeEnum.Warning)]
+    [Description("业务处理")]
+    Business = 2,
+
+    /// <summary>
+    /// 第三方集成
+    /// </summary>
+    [TagType(TagTypeEnum.Danger)]
+    [Description("第三方集成")]
+    ThirdParty = 4,
+
+    /// <summary>
+    /// 自定义
+    /// </summary>
+    [TagType(TagTypeEnum.Info)]
+    [Description("自定义")]
+    Custom = 8
 }

@@ -20,52 +20,93 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Scheduler;
+using Fast.Center.Enum;
+
+namespace Fast.Center.Service.Complaint.Dto;
 
 /// <summary>
-/// <see cref="MailMessageEnum"/> 邮件消息枚举
+/// <see cref="QueryComplaintPagedOutput"/> 获取投诉分页列表输出
 /// </summary>
-[Flags]
-[FastEnum("邮件消息枚举")]
-public enum MailMessageEnum : byte
+public class QueryComplaintPagedOutput
 {
     /// <summary>
-    /// 无
+    /// 投诉Id
     /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("无")]
-    None = 0,
+    public long ComplaintId { get; set; }
 
     /// <summary>
-    /// 信息
+    /// 应用名称
     /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("信息")]
-    Info = 1,
+    public string AppName { get; set; }
 
     /// <summary>
-    /// 警告
+    /// 应用标识
     /// </summary>
-    /// <remarks>只有警告，错误日志才发送邮件</remarks>
-    [TagType(TagTypeEnum.Warning)]
-    [Description("警告")]
-    Warn = 2,
+    public string OpenId { get; set; }
 
     /// <summary>
-    /// 错误
+    /// 昵称
     /// </summary>
-    /// <remarks>只有错误日志才发送邮件</remarks>
-    [TagType(TagTypeEnum.Danger)]
-    [Description("错误")]
-    Error = 4,
+    public string NickName { get; set; }
 
     /// <summary>
-    /// 警告，错误
+    /// 投诉类型
     /// </summary>
-    WarnAndError = Warn | Error,
+    public ComplaintTypeEnum ComplaintType { get; set; }
 
     /// <summary>
-    /// 全部
+    /// 手机
     /// </summary>
-    All = Info | Warn | Error
+    public string Mobile { get; set; }
+
+    /// <summary>
+    /// 联系电话
+    /// </summary>
+    public string ContactPhone { get; set; }
+
+    /// <summary>
+    /// 联系邮箱
+    /// </summary>
+    public string ContactEmail { get; set; }
+
+    /// <summary>
+    /// 投诉描述
+    /// </summary>
+    public string Description { get; set; }
+
+    /// <summary>
+    /// 附件图片
+    /// </summary>
+    [SugarColumn(IsJson = true)]
+    public List<string> AttachmentImages { get; set; }
+
+    /// <summary>
+    /// 处理时间
+    /// </summary>
+    public DateTime? HandleTime { get; set; }
+
+    /// <summary>
+    /// 处理描述
+    /// </summary>
+    public string HandleDescription { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string Remark { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    public DateTime? CreatedTime { get; set; }
+
+    /// <summary>
+    /// 租户名称
+    /// </summary>
+    public string TenantName { get; set; }
+
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    public long RowVersion { get; set; }
 }

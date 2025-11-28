@@ -22,6 +22,7 @@
 
 using System.Text;
 using Fast.Center.Entity;
+using Fast.Center.Enum;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

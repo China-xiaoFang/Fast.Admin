@@ -20,24 +20,26 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
-
-namespace Fast.Scheduler;
+namespace Fast.Center.Service.WeChat.Dto;
 
 /// <summary>
-/// <see cref="SchedulerJobKeyInput"/> 调度作业Key输入
+/// <see cref="WeChatCode2SessionInput"/> 换取微信用户身份信息输入
 /// </summary>
-public class SchedulerJobKeyInput
+public class WeChatCode2SessionInput
 {
     /// <summary>
-    /// 作业名称
+    /// 微信Code
     /// </summary>
-    [StringRequired(ErrorMessage = "作业名称不能为空")]
-    public string JobName { get; set; }
+    [StringRequired(ErrorMessage = "微信Code不能为空")]
+    public string Code { get; set; }
 
     /// <summary>
-    /// 作业分组
+    /// 加密算法的初始向量
     /// </summary>
-    [EnumRequired(ErrorMessage = "作业分组不能为空")]
-    public SchedulerJobGroupEnum JobGroup { get; set; }
+    public string IV { get; set; }
+
+    /// <summary>
+    /// 包括敏感数据在内的完整用户信息的加密数据
+    /// </summary>
+    public string EncryptedData { get; set; }
 }

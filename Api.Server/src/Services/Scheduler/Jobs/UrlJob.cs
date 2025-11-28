@@ -22,6 +22,7 @@
 
 using System.Net.Http.Headers;
 using System.Web;
+using Fast.Center.Enum;
 using Fast.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;

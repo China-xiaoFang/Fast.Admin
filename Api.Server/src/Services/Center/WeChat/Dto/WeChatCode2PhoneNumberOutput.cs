@@ -20,24 +20,25 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
-
-namespace Fast.Scheduler;
+namespace Fast.Center.Service.WeChat.Dto;
 
 /// <summary>
-/// <see cref="SchedulerJobKeyInput"/> 调度作业Key输入
+/// <see cref="WeChatCode2PhoneNumberOutput"/> 换取微信用户手机号输出
 /// </summary>
-public class SchedulerJobKeyInput
+public class WeChatCode2PhoneNumberOutput
 {
     /// <summary>
-    /// 作业名称
+    /// 用户纯手机号码
     /// </summary>
-    [StringRequired(ErrorMessage = "作业名称不能为空")]
-    public string JobName { get; set; }
+    public string PurePhoneNumber { get; set; }
 
     /// <summary>
-    /// 作业分组
+    /// 用户手机号码
     /// </summary>
-    [EnumRequired(ErrorMessage = "作业分组不能为空")]
-    public SchedulerJobGroupEnum JobGroup { get; set; }
+    public string PhoneNumber { get; set; }
+
+    /// <summary>
+    /// 用户手机号码区号
+    /// </summary>
+    public string CountryCode { get; set; }
 }

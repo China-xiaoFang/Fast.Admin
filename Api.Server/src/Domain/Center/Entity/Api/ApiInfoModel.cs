@@ -39,7 +39,7 @@ public class ApiInfoModel : IDatabaseEntity
     /// 服务名称
     /// </summary>
     [Required]
-    [SugarColumn(ColumnDescription = "服务名称", Length = 20)]
+    [SugarColumn(ColumnDescription = "服务名称", Length = 50)]
     public string ServiceName { get; set; }
 
     /// <summary>

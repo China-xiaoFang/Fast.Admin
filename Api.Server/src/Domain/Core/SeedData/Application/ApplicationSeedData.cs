@@ -43,16 +43,11 @@ internal static class ApplicationSeedData
         var applicationModel = new ApplicationModel
         {
             AppId = YitIdHelper.NextId(),
-            Edition = EditionEnum.None,
+            Edition = EditionEnum.Internal,
             AppNo = "App201801",
-            AppName = "智慧医院",
+            AppName = "Fast.Admin",
             LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
             ThemeColor = "#409EFF",
-            ICPSecurityCode = "陇ICP备2020003856号",
-            PublicSecurityCode = "甘公网安备 62090202000584号",
-            UserAgreement = null,
-            PrivacyAgreement = null,
-            ServiceAgreement = null,
             CreatedTime = dateTime
         };
         applicationModel = await db.Insertable(applicationModel)
@@ -62,9 +57,12 @@ internal static class ApplicationSeedData
                 new()
                 {
                     AppId = applicationModel.AppId,
-                    OpenId = FastContext.HostEnvironment.IsDevelopment() ? "127.0.0.1:2001" : "admin.fastdotnet.com",
+                    OpenId = "127.0.0.1:2001",
                     AppType = AppEnvironmentEnum.Web,
-                    EnvironmentType = EnvironmentTypeEnum.Production,
+                    EnvironmentType =
+                        FastContext.HostEnvironment.IsDevelopment()
+                            ? EnvironmentTypeEnum.Development
+                            : EnvironmentTypeEnum.Production,
                     LoginComponent = "ClassicLogin",
                     WebSocketUrl = "/hubs/chatHub",
                     RequestTimeout = 60000,
@@ -76,8 +74,10 @@ internal static class ApplicationSeedData
                     AppId = applicationModel.AppId,
                     OpenId = "DesktopOpenId",
                     AppType = AppEnvironmentEnum.Desktop,
-                    EnvironmentType = EnvironmentTypeEnum.Production,
-                    WebSocketUrl = "/hubs/chatHub",
+                    EnvironmentType =
+                        FastContext.HostEnvironment.IsDevelopment()
+                            ? EnvironmentTypeEnum.Development
+                            : EnvironmentTypeEnum.Production,
                     RequestTimeout = 60000,
                     RequestEncipher = false,
                     CreatedTime = dateTime
@@ -87,10 +87,14 @@ internal static class ApplicationSeedData
                     AppId = applicationModel.AppId,
                     OpenId = "WeChatMiniProgramOpenId",
                     AppType = AppEnvironmentEnum.WeChatMiniProgram,
-                    EnvironmentType = EnvironmentTypeEnum.Production,
+                    EnvironmentType =
+                        FastContext.HostEnvironment.IsDevelopment()
+                            ? EnvironmentTypeEnum.Development
+                            : EnvironmentTypeEnum.Production,
                     WebSocketUrl = "/hubs/chatHub",
                     RequestTimeout = 60000,
                     RequestEncipher = true,
+                    StatusBarImageUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/TopImage.png",
                     CreatedTime = dateTime
                 },
                 new()
@@ -98,10 +102,14 @@ internal static class ApplicationSeedData
                     AppId = applicationModel.AppId,
                     OpenId = "AndroidOpenId",
                     AppType = AppEnvironmentEnum.Android,
-                    EnvironmentType = EnvironmentTypeEnum.Production,
+                    EnvironmentType =
+                        FastContext.HostEnvironment.IsDevelopment()
+                            ? EnvironmentTypeEnum.Development
+                            : EnvironmentTypeEnum.Production,
                     WebSocketUrl = "/hubs/chatHub",
                     RequestTimeout = 60000,
                     RequestEncipher = true,
+                    StatusBarImageUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/TopImage.png",
                     CreatedTime = dateTime
                 },
                 new()
@@ -109,10 +117,14 @@ internal static class ApplicationSeedData
                     AppId = applicationModel.AppId,
                     OpenId = "IOSOpenId",
                     AppType = AppEnvironmentEnum.IOS,
-                    EnvironmentType = EnvironmentTypeEnum.Production,
+                    EnvironmentType =
+                        FastContext.HostEnvironment.IsDevelopment()
+                            ? EnvironmentTypeEnum.Development
+                            : EnvironmentTypeEnum.Production,
                     WebSocketUrl = "/hubs/chatHub",
                     RequestTimeout = 60000,
                     RequestEncipher = true,
+                    StatusBarImageUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/TopImage.png",
                     CreatedTime = dateTime
                 }
             })

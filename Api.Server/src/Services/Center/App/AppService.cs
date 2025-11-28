@@ -78,14 +78,15 @@ public class AppService : IDynamicApplication
             ServiceAgreement = applicationOpenIdModel.Application.ServiceAgreement,
             AppType = applicationOpenIdModel.AppType,
             EnvironmentType = applicationOpenIdModel.EnvironmentType,
-            ContactPhone = applicationOpenIdModel.ContactPhone,
-            Latitude = (decimal?) latitude,
-            Longitude = (decimal?) longitude,
             LoginComponent = applicationOpenIdModel.LoginComponent,
-            BannerImages = applicationOpenIdModel.BannerImages,
             WebSocketUrl = applicationOpenIdModel.WebSocketUrl,
             RequestTimeout = applicationOpenIdModel.RequestTimeout,
             RequestEncipher = applicationOpenIdModel.RequestEncipher,
+            StatusBarImageUrl = applicationOpenIdModel.StatusBarImageUrl,
+            ContactPhone = applicationOpenIdModel.ContactPhone,
+            Latitude = (decimal?) latitude,
+            Longitude = (decimal?) longitude,
+            BannerImages = applicationOpenIdModel.BannerImages ?? [],
             TenantName = applicationOpenIdModel.Application.TenantName
         };
     }

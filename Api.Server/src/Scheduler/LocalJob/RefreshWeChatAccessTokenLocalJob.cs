@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 using Fast.Center.Entity;
+using Fast.Center.Enum;
 using Fast.Core;
 using SKIT.FlurlHttpClient.Wechat.Api;
 using SKIT.FlurlHttpClient.Wechat.Api.Models;

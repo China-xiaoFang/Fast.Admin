@@ -144,17 +144,19 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("未知的设备！");
         }
 
+        if (string.IsNullOrWhiteSpace(authUserInfo.AppNo))
+        {
+            throw new UnauthorizedAccessException("未知的应用！");
+        }
+
         if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
         {
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (!authUserInfo.IsSuperAdmin && !authUserInfo.IsAdmin)
+        if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
         {
-            if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
-            {
-                throw new UnauthorizedAccessException("员工信息不存在！");
-            }
+            throw new UnauthorizedAccessException("员工信息不存在！");
         }
 
         try
@@ -219,6 +221,11 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         if (string.IsNullOrWhiteSpace(authUserInfo.DeviceId))
         {
             throw new UnauthorizedAccessException("未知的设备！");
+        }
+
+        if (string.IsNullOrWhiteSpace(authUserInfo.AppNo))
+        {
+            throw new UnauthorizedAccessException("未知的应用！");
         }
 
         if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
@@ -312,7 +319,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     }
 
     /// <summary>
-    /// 刷新登录信息
+    /// 刷新授权信息
     /// </summary>
     /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
     /// <returns></returns>
@@ -323,9 +330,9 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("账号信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.DeviceId))
+        if (string.IsNullOrWhiteSpace(authUserInfo.AppNo))
         {
-            throw new UnauthorizedAccessException("未知的设备！");
+            throw new UnauthorizedAccessException("未知的应用！");
         }
 
         if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
@@ -333,12 +340,9 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (!authUserInfo.IsSuperAdmin && !authUserInfo.IsAdmin)
+        if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
         {
-            if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
-            {
-                throw new UnauthorizedAccessException("员工信息不存在！");
-            }
+            throw new UnauthorizedAccessException("员工信息不存在！");
         }
 
         // 设置授权用户信息
@@ -367,9 +371,9 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("账号信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.DeviceId))
+        if (string.IsNullOrWhiteSpace(authUserInfo.AppNo))
         {
-            throw new UnauthorizedAccessException("未知的设备！");
+            throw new UnauthorizedAccessException("未知的应用！");
         }
 
         if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
@@ -377,17 +381,57 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (!authUserInfo.IsSuperAdmin && !authUserInfo.IsAdmin)
+        if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
         {
-            if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
-            {
-                throw new UnauthorizedAccessException("员工信息不存在！");
-            }
+            throw new UnauthorizedAccessException("员工信息不存在！");
         }
 
         // 设置授权用户信息
+        Mobile = authUserInfo.Mobile;
         NickName = authUserInfo.NickName;
         Avatar = authUserInfo.Avatar;
+
+        // 获取缓存Key
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
+            authUserInfo.DeviceType.ToString(), authUserInfo.EmployeeNo);
+
+        // 设置缓存信息
+        await _authCache.SetAsync(cacheKey, this);
+    }
+
+    /// <summary>
+    /// 刷新微信用户信息
+    /// </summary>
+    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <returns></returns>
+    public async Task RefreshWeChatUser(AuthUserInfo authUserInfo)
+    {
+        if (authUserInfo == null)
+        {
+            throw new UnauthorizedAccessException("账号信息不存在！");
+        }
+
+        if (string.IsNullOrWhiteSpace(authUserInfo.AppNo))
+        {
+            throw new UnauthorizedAccessException("未知的应用！");
+        }
+
+        if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
+        {
+            throw new UnauthorizedAccessException("租户信息不存在！");
+        }
+
+        if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
+        {
+            throw new UnauthorizedAccessException("员工信息不存在！");
+        }
+
+        // 设置授权用户信息
+        Mobile = authUserInfo.Mobile;
+        NickName = authUserInfo.NickName;
+        Avatar = authUserInfo.Avatar;
+        Account = authUserInfo.Account;
+        EmployeeName = authUserInfo.EmployeeName;
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
@@ -409,9 +453,9 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("账号信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.DeviceId))
+        if (string.IsNullOrWhiteSpace(authUserInfo.AppNo))
         {
-            throw new UnauthorizedAccessException("未知的设备！");
+            throw new UnauthorizedAccessException("未知的应用！");
         }
 
         if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
@@ -419,12 +463,9 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (!authUserInfo.IsSuperAdmin && !authUserInfo.IsAdmin)
+        if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
         {
-            if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
-            {
-                throw new UnauthorizedAccessException("员工信息不存在！");
-            }
+            throw new UnauthorizedAccessException("员工信息不存在！");
         }
 
         // 设置授权用户信息

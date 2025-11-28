@@ -810,6 +810,7 @@ public class LoginService : IDynamicApplication
             weChatUserModel.PurePhoneNumber = phoneNumberResponse.PhoneInfo.PurePhoneNumber;
             weChatUserModel.PhoneNumber = phoneNumberResponse.PhoneInfo.PhoneNumber;
             weChatUserModel.CountryCode = phoneNumberResponse.PhoneInfo.CountryCode;
+            weChatUserModel.MobileUpdateTime = DateTime.Now;
         }
 
         return await HandleWeChatLogin(applicationModel.Application, weChatUserModel);
@@ -1010,6 +1011,7 @@ public class LoginService : IDynamicApplication
                     weChatUserModel.PurePhoneNumber = phoneNumberResponse.PhoneInfo.PurePhoneNumber;
                     weChatUserModel.PhoneNumber = phoneNumberResponse.PhoneInfo.PhoneNumber;
                     weChatUserModel.CountryCode = phoneNumberResponse.PhoneInfo.CountryCode;
+                    weChatUserModel.MobileUpdateTime = DateTime.Now;
                 }
             }
         }

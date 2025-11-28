@@ -121,9 +121,6 @@ builder.Services.AddHostedService<DeleteLogHostedService>();
 // 添加同步 Api 托管服务
 builder.Services.AddHostedService<SyncApiHostedService>();
 
-// 添加同步字典托管服务
-builder.Services.AddHostedService<SyncDictionaryHostedService>();
-
 // 添加生成Api文件托管服务
 builder.Services.AddHostedService<GenerateApiFileHostedService>();
 

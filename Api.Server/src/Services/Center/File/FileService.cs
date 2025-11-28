@@ -277,7 +277,7 @@ public class FileService : IDynamicApplication
     /// <param name="file"></param>
     /// <returns></returns>
     [HttpPost]
-    [ApiInfo("上传头像", HttpRequestActionEnum.Upload)]
+    [ApiInfo("上传Logo", HttpRequestActionEnum.Upload)]
     public async Task<string> UploadLogo(IFormFile file)
     {
         return await LocalUploadFile(file, _uploadFileSettingsOptions.Logo);

@@ -22,22 +22,15 @@
 
 using Fast.Center.Enum;
 
-namespace Fast.Scheduler;
+namespace Fast.Center.Service.Complaint.Dto;
 
 /// <summary>
-/// <see cref="SchedulerJobKeyInput"/> 调度作业Key输入
+/// <see cref="QueryComplaintPagedInput"/> 获取投诉分页列表输入
 /// </summary>
-public class SchedulerJobKeyInput
+public class QueryComplaintPagedInput : PagedInput
 {
     /// <summary>
-    /// 作业名称
+    /// 投诉类型
     /// </summary>
-    [StringRequired(ErrorMessage = "作业名称不能为空")]
-    public string JobName { get; set; }
-
-    /// <summary>
-    /// 作业分组
-    /// </summary>
-    [EnumRequired(ErrorMessage = "作业分组不能为空")]
-    public SchedulerJobGroupEnum JobGroup { get; set; }
+    public ComplaintTypeEnum? ComplaintType { get; set; }
 }

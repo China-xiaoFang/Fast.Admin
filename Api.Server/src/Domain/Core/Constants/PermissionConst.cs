@@ -378,4 +378,30 @@ public class PermissionConst
         /// <summary>商户号删除</summary>
         public const string Delete = "Merchant:Delete";
     }
+
+    /// <summary><see cref="WeChat"/> 微信用户</summary>
+    public class WeChat
+    {
+        /// <summary>微信用户列表</summary>
+        public const string Paged = "WeChat:Paged";
+
+        /// <summary>微信用户详情</summary>
+        public const string Detail = "WeChat:Detail";
+    }
+
+    /// <summary><see cref="Complaint"/> 投诉</summary>
+    public class Complaint
+    {
+        /// <summary>投诉列表</summary>
+        public const string Paged = "Complaint:Paged";
+
+        /// <summary>投诉详情</summary>
+        public const string Detail = "Complaint:Detail";
+
+        /// <summary>投诉租户列表</summary>
+        public const string TenantPaged = "Complaint:TenantPaged";
+
+        /// <summary>投诉租户详情</summary>
+        public const string TenantDetail = "Complaint:TenantDetail";
+    }
 }

@@ -92,6 +92,12 @@ public class ApplicationOpenIdModel : BaseEntity
     public bool RequestEncipher { get; set; }
 
     /// <summary>
+    /// 状态栏图片地址
+    /// </summary>
+    [SugarColumn(ColumnDescription = "状态栏图片地址", Length = 200)]
+    public string StatusBarImageUrl { get; set; }
+
+    /// <summary>
     /// 联系电话
     /// </summary>
     [SugarColumn(ColumnDescription = "联系电话", Length = 20)]

@@ -125,35 +125,20 @@ public class EditApplicationInput : UpdateVersionInput
         public AppEnvironmentEnum AppType { get; set; }
 
         /// <summary>
+        /// 开放平台密钥
+        /// </summary>
+        public string OpenSecret { get; set; }
+
+        /// <summary>
         /// 环境类型
         /// </summary>
         [EnumRequired(ErrorMessage = "环境类型不能为空")]
         public EnvironmentTypeEnum EnvironmentType { get; set; }
 
         /// <summary>
-        /// 联系电话
-        /// </summary>
-        public string ContactPhone { get; set; }
-
-        /// <summary>
-        /// 经度
-        /// </summary>
-        public decimal? Longitude { get; set; }
-
-        /// <summary>
-        /// 纬度
-        /// </summary>
-        public decimal? Latitude { get; set; }
-
-        /// <summary>
         /// 登录组件
         /// </summary>
         public string LoginComponent { get; set; }
-
-        /// <summary>
-        /// Banner图
-        /// </summary>
-        public List<string> BannerImages { get; set; }
 
         /// <summary>
         /// WebSocket地址
@@ -173,9 +158,29 @@ public class EditApplicationInput : UpdateVersionInput
         public bool RequestEncipher { get; set; }
 
         /// <summary>
-        /// 开放平台密钥
+        /// 状态栏图片地址
         /// </summary>
-        public string OpenSecret { get; set; }
+        public string StatusBarImageUrl { get; set; }
+
+        /// <summary>
+        /// 联系电话
+        /// </summary>
+        public string ContactPhone { get; set; }
+
+        /// <summary>
+        /// 经度
+        /// </summary>
+        public decimal? Longitude { get; set; }
+
+        /// <summary>
+        /// 纬度
+        /// </summary>
+        public decimal? Latitude { get; set; }
+
+        /// <summary>
+        /// Banner图
+        /// </summary>
+        public List<string> BannerImages { get; set; }
 
         /// <summary>
         /// 微信商户号Id

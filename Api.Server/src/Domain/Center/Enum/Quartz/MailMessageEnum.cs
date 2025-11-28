@@ -20,37 +20,52 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Scheduler;
+namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="SchedulerJobTypeEnum"/> 调度作业类型枚举
+/// <see cref="MailMessageEnum"/> 邮件消息枚举
 /// </summary>
 [Flags]
-[FastEnum("调度作业类型枚举")]
-public enum SchedulerJobTypeEnum : byte
+[FastEnum("邮件消息枚举")]
+public enum MailMessageEnum : byte
 {
     /// <summary>
     /// 无
     /// </summary>
+    [TagType(TagTypeEnum.Info)]
     [Description("无")]
     None = 0,
 
     /// <summary>
-    /// 本地
+    /// 信息
     /// </summary>
-    [Description("本地")]
-    Local = 1,
+    [TagType(TagTypeEnum.Info)]
+    [Description("信息")]
+    Info = 1,
 
     /// <summary>
-    /// 内网Url
+    /// 警告
     /// </summary>
-    /// <remarks>自动处理 AccessToken</remarks>
-    [Description("内网Url")]
-    IntranetUrl = 2,
+    /// <remarks>只有警告，错误日志才发送邮件</remarks>
+    [TagType(TagTypeEnum.Warning)]
+    [Description("警告")]
+    Warn = 2,
 
     /// <summary>
-    /// 外网Url
+    /// 错误
     /// </summary>
-    [Description("外网Url")]
-    OuterNetUrl = 4
+    /// <remarks>只有错误日志才发送邮件</remarks>
+    [TagType(TagTypeEnum.Danger)]
+    [Description("错误")]
+    Error = 4,
+
+    /// <summary>
+    /// 警告，错误
+    /// </summary>
+    WarnAndError = Warn | Error,
+
+    /// <summary>
+    /// 全部
+    /// </summary>
+    All = Info | Warn | Error
 }

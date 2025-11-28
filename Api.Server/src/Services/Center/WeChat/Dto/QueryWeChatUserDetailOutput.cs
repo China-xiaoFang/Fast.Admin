@@ -20,44 +20,53 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Service.Account.Dto;
+using Fast.Center.Enum;
+
+namespace Fast.Center.Service.WeChat.Dto;
 
 /// <summary>
-/// <see cref="QueryAccountDetailOutput"/> 获取账号详情输出
+/// <see cref="QueryWeChatUserDetailOutput"/> 获取微信用户详情输出
 /// </summary>
-public class QueryAccountDetailOutput
+public class QueryWeChatUserDetailOutput : UpdateVersionInput
 {
-    /// <summary>
-    /// 账号Id
-    /// </summary>
-    public long AccountId { get; set; }
-
-    /// <summary>
-    /// 手机
-    /// </summary>
-    [SugarSearchValue]
-    public string Mobile { get; set; }
-
-    /// <summary>
-    /// 邮箱
-    /// </summary>
-    [SugarSearchValue]
-    public string Email { get; set; }
-
     /// <summary>
     /// 微信用户Id
     /// </summary>
-    public long? WeChatId { get; set; }
+    public long WeChatId { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 用户类型
     /// </summary>
-    public CommonStatusEnum Status { get; set; }
+    public WeChatUserTypeEnum UserType { get; set; }
 
     /// <summary>
-    /// 昵称
+    /// 唯一用户标识
     /// </summary>
-    [SugarSearchValue]
+    public string OpenId { get; set; }
+
+    /// <summary>
+    /// 统一用户标识
+    /// </summary>
+    public string UnionId { get; set; }
+
+    /// <summary>
+    /// 用户纯手机号码
+    /// </summary>
+    public string PurePhoneNumber { get; set; }
+
+    /// <summary>
+    /// 用户手机号码
+    /// </summary>
+    public string PhoneNumber { get; set; }
+
+    /// <summary>
+    /// 用户手机号码区号
+    /// </summary>
+    public string CountryCode { get; set; }
+
+    /// <summary>
+    /// 微信昵称
+    /// </summary>
     public string NickName { get; set; }
 
     /// <summary>
@@ -66,64 +75,33 @@ public class QueryAccountDetailOutput
     public string Avatar { get; set; }
 
     /// <summary>
-    /// 电话
-    /// </summary>
-    public string Phone { get; set; }
-
-    /// <summary>
     /// 性别
     /// </summary>
     public GenderEnum Sex { get; set; }
 
     /// <summary>
-    /// 生日
+    /// 国家
     /// </summary>
-    public DateTime? Birthday { get; set; }
+
+    public string Country { get; set; }
 
     /// <summary>
-    /// 初次登录租户
+    /// 省份
     /// </summary>
-    public string FirstLoginTenantName { get; set; }
+
+    public string Province { get; set; }
 
     /// <summary>
-    /// 初次登录设备
+    /// 城市
     /// </summary>
-    public string FirstLoginDevice { get; set; }
+
+    public string City { get; set; }
 
     /// <summary>
-    /// 初次登录操作系统（版本）
+    /// 语言
     /// </summary>
-    public string FirstLoginOS { get; set; }
 
-    /// <summary>
-    /// 初次登录浏览器（版本）
-    /// </summary>
-    public string FirstLoginBrowser { get; set; }
-
-    /// <summary>
-    /// 初次登录省份
-    /// </summary>
-    public string FirstLoginProvince { get; set; }
-
-    /// <summary>
-    /// 初次登录城市
-    /// </summary>
-    public string FirstLoginCity { get; set; }
-
-    /// <summary>
-    /// 初次登录Ip
-    /// </summary>
-    public string FirstLoginIp { get; set; }
-
-    /// <summary>
-    /// 初次登录时间
-    /// </summary>
-    public DateTime? FirstLoginTime { get; set; }
-
-    /// <summary>
-    /// 最后登录租户
-    /// </summary>
-    public string LastLoginTenantName { get; set; }
+    public string Language { get; set; }
 
     /// <summary>
     /// 最后登录设备
@@ -161,21 +139,6 @@ public class QueryAccountDetailOutput
     public DateTime? LastLoginTime { get; set; }
 
     /// <summary>
-    /// 密码错误次数
-    /// </summary>
-    public int? PasswordErrorTime { get; set; }
-
-    /// <summary>
-    /// 锁定开始时间
-    /// </summary>
-    public DateTime? LockStartTime { get; set; }
-
-    /// <summary>
-    /// 锁定结束时间
-    /// </summary>
-    public DateTime? LockEndTime { get; set; }
-
-    /// <summary>
     /// 创建时间
     /// </summary>
     public DateTime? CreatedTime { get; set; }
@@ -186,7 +149,12 @@ public class QueryAccountDetailOutput
     public DateTime? UpdatedTime { get; set; }
 
     /// <summary>
-    /// 更新版本控制字段
+    /// 手机号更新时间
     /// </summary>
-    public long RowVersion { get; set; }
+    public DateTime? MobileUpdateTime { get; set; }
+
+    /// <summary>
+    /// 允许修改手机号
+    /// </summary>
+    public bool AllowModifyMobile => MobileUpdateTime == null || MobileUpdateTime.Value.AddDays(+1) < DateTime.Now;
 }

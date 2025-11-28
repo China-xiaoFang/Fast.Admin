@@ -20,24 +20,33 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
-
-namespace Fast.Scheduler;
+namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="SchedulerJobKeyInput"/> 调度作业Key输入
+/// <see cref="TriggerTypeEnum"/> 触发器类型枚举
 /// </summary>
-public class SchedulerJobKeyInput
+[Flags]
+[FastEnum("触发器类型枚举")]
+public enum TriggerTypeEnum : byte
 {
     /// <summary>
-    /// 作业名称
+    /// Cron
     /// </summary>
-    [StringRequired(ErrorMessage = "作业名称不能为空")]
-    public string JobName { get; set; }
+    [TagType(TagTypeEnum.Primary)]
+    [Description("Cron")]
+    Cron = 1,
 
     /// <summary>
-    /// 作业分组
+    /// Daily
     /// </summary>
-    [EnumRequired(ErrorMessage = "作业分组不能为空")]
-    public SchedulerJobGroupEnum JobGroup { get; set; }
+    [TagType(TagTypeEnum.Success)]
+    [Description("Daily")]
+    Daily = 2,
+
+    /// <summary>
+    /// Simple
+    /// </summary>
+    [TagType(TagTypeEnum.Info)]
+    [Description("Simple")]
+    Simple = 4
 }
