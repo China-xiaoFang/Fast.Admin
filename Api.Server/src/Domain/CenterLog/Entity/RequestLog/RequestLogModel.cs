@@ -25,7 +25,7 @@ namespace Fast.CenterLog.Entity;
 /// <summary>
 /// <see cref="RequestLogModel"/> 请求日志Model类
 /// </summary>
-[SugarTable("OperateLog_{year}{month}{day}", "请求日志表")]
+[SugarTable("RequestLog_{year}{month}{day}", "请求日志表")]
 [SplitTable(SplitType.Month)]
 [SugarDbType(DatabaseTypeEnum.CenterLog)]
 [SugarIndex($"IX_{{table}}_{nameof(CreatedUserId)}", nameof(CreatedUserId), OrderByType.Asc)]
