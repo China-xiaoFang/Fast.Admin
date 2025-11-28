@@ -169,7 +169,6 @@ public class WeChatService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取微信用户详情", HttpRequestActionEnum.Query)]
-    [Permission(PermissionConst.WeChat.Detail, PermissionConst.ClientService)]
     public async Task<QueryWeChatUserDetailOutput> QueryWeChatUserDetail()
     {
         // 查询应用信息
