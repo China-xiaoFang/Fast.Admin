@@ -27,6 +27,8 @@ type IState = {
 	appVersion: string;
 	/** 是否为 IPhone 设备 */
 	isIphone: boolean;
+	/** 是否为客户端（Pc） */
+	isClient: boolean;
 	/** 设备基础信息 */
 	appBaseInfo: UniNamespace.GetAppBaseInfoResult;
 	/** 设备信息 */
@@ -66,19 +68,21 @@ export const useApp = defineStore(
 			appType: AppEnvironmentEnum.MobileThree,
 			environmentType: EnvironmentTypeEnum.Development,
 			loginComponent: "",
+			webSocketUrl: "",
+			requestTimeout: 6000,
+			requestEncipher: true,
+			statusBarImageUrl: "",
 			contactPhone: "",
 			latitude: null,
 			longitude: null,
 			bannerImages: [],
-			webSocketUrl: "",
-			requestTimeout: 6000,
-			requestEncipher: true,
 			tenantName: "",
 			env: "production",
 			deviceType: AppEnvironmentEnum.MobileThree,
 			appId: "",
 			appVersion: "",
 			isIphone: false,
+			isClient: false,
 			appBaseInfo: null,
 			deviceInfo: null,
 			windowInfo: null,
@@ -166,7 +170,7 @@ export const useApp = defineStore(
 		/** 拨打电话 */
 		const makePhoneCall = (): void => {
 			if (!state.contactPhone) {
-				useToast.warning("未配置联系电话。");
+				useToast.warning("未配置联系电话");
 				return;
 			}
 			uni.makePhoneCall({
@@ -177,14 +181,14 @@ export const useApp = defineStore(
 		/** 打开位置 */
 		const openLocation = (): void => {
 			if (!state.latitude && !state.longitude) {
-				useToast.warning("未配置位置信息。");
+				useToast.warning("未配置位置信息");
 				return;
 			}
 			uni.openLocation({
 				latitude: state.latitude,
 				longitude: state.longitude,
 				fail: () => {
-					useToast.warning("无法打开位置。");
+					useToast.warning("无法打开位置");
 				},
 			});
 		};

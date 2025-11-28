@@ -150,6 +150,10 @@ export function loadPlugins(app: App): void {
 	const isIphone = RegExps.IPhone.test(appStore.deviceInfo.model);
 	appStore.isIphone = isIphone;
 
+	const isClient =
+		appStore.deviceInfo.platform === "windows" || appStore.deviceInfo.platform === "mac" || appStore.deviceInfo.platform === "devtools";
+	appStore.isClient = isClient;
+
 	consoleLog("App", "AppBaseInfo", appStore.appBaseInfo);
 	consoleLog("App", "DeviceInfo", appStore.deviceInfo);
 	consoleLog("App", "WindowInfo", appStore.windowInfo);
@@ -157,6 +161,7 @@ export function loadPlugins(app: App): void {
 	consoleLog("App", "AppVersion", appStore.appVersion);
 	consoleLog("App", "MenuButton", appStore.menuButton);
 	consoleLog("App", "IsIphone", isIphone);
+	consoleLog("App", "IsClient", isClient);
 
 	dayjs.locale("zh-cn");
 

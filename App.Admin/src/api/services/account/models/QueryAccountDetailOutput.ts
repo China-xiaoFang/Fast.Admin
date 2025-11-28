@@ -18,6 +18,10 @@ export interface QueryAccountDetailOutput {
    */
   email?: string;
   /**
+   * 微信用户Id
+   */
+  weChatId?: number;
+  /**
    * 
    */
   status?: CommonStatusEnum;

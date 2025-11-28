@@ -20,8 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import defaultAvatar from "@/static/images/avatar.jpg";
-
 definePage({
 	name: "SettingAccount",
 	layout: "layout",
