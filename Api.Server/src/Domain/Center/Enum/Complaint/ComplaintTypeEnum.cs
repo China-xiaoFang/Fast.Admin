@@ -20,24 +20,60 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
-
-namespace Fast.Scheduler;
+namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="SchedulerJobKeyInput"/> 调度作业Key输入
+/// <see cref="ComplaintTypeEnum"/> 投诉类型枚举
 /// </summary>
-public class SchedulerJobKeyInput
+[Flags]
+[FastEnum("投诉类型枚举")]
+public enum ComplaintTypeEnum : byte
 {
     /// <summary>
-    /// 作业名称
+    /// 诱导行为
     /// </summary>
-    [StringRequired(ErrorMessage = "作业名称不能为空")]
-    public string JobName { get; set; }
+    [Description("诱导行为")]
+    Inducement = 1,
 
     /// <summary>
-    /// 作业分组
+    /// 不良信息
     /// </summary>
-    [EnumRequired(ErrorMessage = "作业分组不能为空")]
-    public SchedulerJobGroupEnum JobGroup { get; set; }
+    [Description("不良信息")]
+    HarmfulInformation = 2,
+
+    /// <summary>
+    /// 犯罪违法
+    /// </summary>
+    [Description("犯罪违法")]
+    Illegal = 4,
+
+    /// <summary>
+    /// 欺诈
+    /// </summary>
+    [Description("欺诈")]
+    Fraud = 8,
+
+    /// <summary>
+    /// 骚扰
+    /// </summary>
+    [Description("骚扰")]
+    Harassment = 16,
+
+    /// <summary>
+    /// 侵权
+    /// </summary>
+    [Description("侵权")]
+    Infringement = 32,
+
+    /// <summary>
+    /// 色情
+    /// </summary>
+    [Description("色情")]
+    Pornography = 64,
+
+    /// <summary>
+    /// 其他
+    /// </summary>
+    [Description("其他")]
+    Other = 128
 }

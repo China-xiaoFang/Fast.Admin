@@ -28,6 +28,11 @@ namespace Fast.Center.Service.Account.Dto;
 public class EditAccountInput : UpdateVersionInput
 {
     /// <summary>
+    /// 手机
+    /// </summary>
+    public string Mobile { get; set; }
+
+    /// <summary>
     /// 邮箱
     /// </summary>
     public string Email { get; set; }

@@ -82,6 +82,8 @@ public class SyncDictionaryHostedService : IHostedService
             {
                 var dateTime = DateTime.Now;
 
+                var serviceName = Assembly.GetEntryAssembly()!.GetName()
+                    .Name;
                 var addDictionaryTypeList = new List<DictionaryTypeModel>();
                 var addDictionaryItemList = new List<DictionaryItemModel>();
                 var updateDictionaryTypeList = new List<DictionaryTypeModel>();
@@ -133,6 +135,7 @@ public class SyncDictionaryHostedService : IHostedService
                         var dictionaryTypeModel = new DictionaryTypeModel
                         {
                             DictionaryKey = enumType.Type.Name,
+                            ServiceName = serviceName,
                             DictionaryName =
                                 enumType.FastEnumAttribute.ChName ?? enumType.FastEnumAttribute.EnName ?? enumType.Type.Name,
                             ValueType = Enum.GetUnderlyingType(enumType.Type) == typeof(long)
@@ -256,9 +259,11 @@ public class SyncDictionaryHostedService : IHostedService
                             .ExecuteCommandAsync(cancellationToken);
                     }
 
-                    var deleteDictionaryTypeList = dictionaryTypeList.Where(x => !enumTypes.Select(sl => sl.Type.Name)
+                    // 只删除当前服务的
+                    var deleteDictionaryTypeList = dictionaryTypeList.Where(wh => wh.ServiceName == serviceName)
+                        .Where(wh => !enumTypes.Select(sl => sl.Type.Name)
                             .ToHashSet()
-                            .Contains(x.DictionaryKey))
+                            .Contains(wh.DictionaryKey))
                         .ToList();
                     if (deleteDictionaryTypeList.Count > 0)
                     {

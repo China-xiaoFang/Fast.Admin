@@ -25,6 +25,7 @@ using System.Reflection;
 using System.Web;
 using Fast.Cache;
 using Fast.Center.Entity;
+using Fast.Center.Enum;
 using Fast.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;

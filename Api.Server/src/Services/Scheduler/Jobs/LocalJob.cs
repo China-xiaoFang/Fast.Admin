@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 using System.Web;
+using Fast.Center.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

@@ -20,40 +20,16 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Scheduler;
+namespace Fast.Center.Service.WeChat.Dto;
 
 /// <summary>
-/// <see cref="SchedulerJobGroupEnum"/> 调度作业分组枚举
+/// <see cref="WeChatCode2PhoneNumberInput"/> 换取微信用户手机号输入
 /// </summary>
-[Flags]
-[FastEnum("调度作业分组枚举")]
-public enum SchedulerJobGroupEnum : byte
+public class WeChatCode2PhoneNumberInput
 {
     /// <summary>
-    /// 系统管理
+    /// 动态令牌
     /// </summary>
-    [TagType(TagTypeEnum.Primary)]
-    [Description("系统管理")]
-    System = 1,
-
-    /// <summary>
-    /// 业务处理
-    /// </summary>
-    [TagType(TagTypeEnum.Warning)]
-    [Description("业务处理")]
-    Business = 2,
-
-    /// <summary>
-    /// 第三方集成
-    /// </summary>
-    [TagType(TagTypeEnum.Danger)]
-    [Description("第三方集成")]
-    ThirdParty = 4,
-
-    /// <summary>
-    /// 自定义
-    /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("自定义")]
-    Custom = 8
+    [StringRequired(ErrorMessage = "动态令牌不能为空")]
+    public string Code { get; set; }
 }
