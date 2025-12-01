@@ -28,7 +28,7 @@ namespace Fast.Center.Entity;
 [SugarTable("File", "文件表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(TenantId)}", nameof(TenantId), OrderByType.Asc)]
-[SugarIndex($"IX_{{table}}_{nameof(FileHash)}", nameof(TenantId), OrderByType.Asc, nameof(FileHash), OrderByType.Asc, true)]
+[SugarIndex($"IX_{{table}}_{nameof(FileHash)}", nameof(FileHash), OrderByType.Asc, nameof(TenantId), OrderByType.Asc, true)]
 public class FileModel : IBaseTEntity
 {
     /// <summary>

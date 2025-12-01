@@ -27,7 +27,7 @@ namespace Fast.Center.Entity;
 /// </summary>
 [SugarTable("DatabaseMain", "主数据库表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(DatabaseType)}", nameof(TenantId), OrderByType.Asc, nameof(DatabaseType), OrderByType.Asc,
+[SugarIndex($"IX_{{table}}_{nameof(DatabaseType)}", nameof(DatabaseType), OrderByType.Asc, nameof(TenantId), OrderByType.Asc,
     true)]
 public class MainDatabaseModel : BaseTEntity, IUpdateVersion
 {
