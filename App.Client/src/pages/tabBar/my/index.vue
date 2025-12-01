@@ -12,7 +12,7 @@
 			}"
 		/>
 
-		<wd-navbar :bordered="false" title="个人中心" />
+		<wd-navbar class="fa-navbar" :customClass="state.isScrolled ? 'is-scrolled' : ''" :bordered="false" title="个人中心" />
 
 		<view class="user__card">
 			<template v-if="!configStore.layout.isDark">
