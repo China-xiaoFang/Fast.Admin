@@ -6,6 +6,7 @@
 	z-index: 1001;
 	.wd-navbar {
 		--wot-navbar-title-font-size: var(--wot-font-size-small);
+		--wot-navbar-title-font-weight: normal;
 		transition: background-color var(--wot-transition-duration);
 		&.is-scrolled {
 			--wot-navbar-background: var(--wot-navbar-bg-color);
