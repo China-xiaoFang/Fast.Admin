@@ -1462,7 +1462,7 @@ internal static partial class MenuSeedData
             Edition = EditionEnum.Professional,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
-            MenuCode = PermissionConst.Complaint.Paged,
+            MenuCode = PermissionConst.Complaint.TenantPaged,
             MenuName = "用户投诉",
             MenuTitle = "用户投诉",
             ParentId = platformCLMenuModel.MenuId,
