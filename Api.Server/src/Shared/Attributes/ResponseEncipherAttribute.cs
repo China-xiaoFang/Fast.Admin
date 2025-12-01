@@ -29,4 +29,25 @@ namespace Fast.Shared;
 [AttributeUsage(AttributeTargets.Method)]
 public class ResponseEncipherAttribute : Attribute
 {
+    /// <summary>
+    /// <see cref="bool"/> 启用
+    /// </summary>
+    public bool Enable { get; set; }
+
+    /// <summary>
+    /// <see cref="ResponseEncipherAttribute"/> 响应加密特性
+    /// </summary>
+    public ResponseEncipherAttribute()
+    {
+        Enable = true;
+    }
+
+    /// <summary>
+    /// <see cref="ResponseEncipherAttribute"/> 响应加密特性
+    /// </summary>
+    /// <param name="enable"><see cref="bool"/> 启用</param>
+    public ResponseEncipherAttribute(bool enable)
+    {
+        Enable = enable;
+    }
 }

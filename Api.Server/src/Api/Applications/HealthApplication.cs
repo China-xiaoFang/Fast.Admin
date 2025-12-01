@@ -22,6 +22,7 @@
 
 using Fast.DynamicApplication;
 using Fast.NET.Core;
+using Fast.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,6 +41,7 @@ public class HealthApplication : IDynamicApplication
     [HttpGet("/health"), HttpGet("/health/index")]
     [ApiInfo("健康检查", HttpRequestActionEnum.Other)]
     [AllowAnonymous]
+    [ResponseEncipher(false)]
     public IActionResult Index()
     {
         return new JsonResult(new

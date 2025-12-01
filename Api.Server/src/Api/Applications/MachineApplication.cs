@@ -23,6 +23,7 @@
 using System.Runtime.InteropServices;
 using Fast.DynamicApplication;
 using Fast.NET.Core;
+using Fast.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,6 +42,7 @@ public class MachineApplication : IDynamicApplication
     [HttpGet("/machine"), HttpGet("/machine/index")]
     [ApiInfo("服务器信息", HttpRequestActionEnum.Other)]
     [AllowAnonymous]
+    [ResponseEncipher]
     public IActionResult Index()
     {
         var dateTime = DateTime.Now;

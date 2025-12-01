@@ -31,6 +31,7 @@ using Fast.JwtBearer;
 using Fast.Logging;
 using Fast.NET.Core;
 using Fast.OpenApi;
+using Fast.Shared;
 using Fast.SqlSugar;
 using Fast.Swagger;
 using Fast.UnifyResult;
@@ -57,6 +58,7 @@ public class ProgramApplication : IDynamicApplication
     [HttpGet("/program"), HttpGet("/program/index")]
     [ApiInfo("程序信息", HttpRequestActionEnum.Other)]
     [AllowAnonymous]
+    [ResponseEncipher]
     public async Task<IActionResult> Index()
     {
         var dateTime = DateTime.Now;

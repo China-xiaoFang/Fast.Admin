@@ -128,15 +128,24 @@ public class UnifyResponseProvider : IUnifyResponseProvider
     public async Task<object> ResponseDataAsync(long timestamp, object data, HttpContext httpContext)
     {
         // 响应加密特性
-        var responseEncipher = httpContext.GetEndpoint()
-                                   ?.Metadata.GetMetadata<ResponseEncipherAttribute>()
-                               != null;
+        var responseEncipherAttribute = httpContext.GetEndpoint()
+            ?.Metadata.GetMetadata<ResponseEncipherAttribute>();
 
-        if (!responseEncipher)
+        bool responseEncipher;
+
+        if (responseEncipherAttribute == null)
         {
             // 获取应用信息
             var applicationOpenIdModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
             responseEncipher = applicationOpenIdModel.RequestEncipher;
+        }
+        else if (responseEncipherAttribute.Enable)
+        {
+            responseEncipher = true;
+        }
+        else
+        {
+            responseEncipher = false;
         }
 
         // 判断是否开启响应加密
