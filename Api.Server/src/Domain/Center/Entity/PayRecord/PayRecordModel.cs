@@ -105,16 +105,28 @@ public class PayRecordModel : IUpdateVersion
     public string NotifyUrl { get; set; }
 
     /// <summary>
-    /// 是否支付
+    /// 是否已支付
     /// </summary>
-    [SugarColumn(ColumnDescription = "是否支付")]
-    public YesOrNotEnum IsPay { get; set; }
+    [SugarColumn(ColumnDescription = "是否已支付")]
+    public YesOrNotEnum IsPaid { get; set; }
 
     /// <summary>
     /// 支付过期时间
     /// </summary>
     [SugarColumn(ColumnDescription = "支付订单过期时间")]
     public DateTime PayExpireTime { get; set; }
+
+    /// <summary>
+    /// 是否已关闭
+    /// </summary>
+    [SugarColumn(ColumnDescription = "是否已关闭")]
+    public YesOrNotEnum IsClosed { get; set; }
+
+    /// <summary>
+    /// 关闭时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "关闭时间")]
+    public DateTime? CloseTime { get; set; }
 
     /// <summary>
     /// 支付金额
