@@ -78,8 +78,7 @@
 		"vue": "3.5.13",
 		"vite": "5.2.8",
 		"@dcloudio/types": "3.4.19",
-		"sass": "1.78.0",
-		"unconfig": "7.3.3"
+		"sass": "1.78.0"
 	},
 	"pnpm": {
 		"patchedDependencies": {
