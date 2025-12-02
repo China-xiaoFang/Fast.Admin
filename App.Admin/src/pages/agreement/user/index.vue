@@ -20,3 +20,9 @@ definePage({
 
 const appStore = useApp();
 </script>
+
+<style scoped lang="scss">
+.page {
+	background-color: var(--wot-bg-color);
+}
+</style>
