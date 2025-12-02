@@ -81,6 +81,11 @@ public class RequestActionFilter : IAsyncActionFilter
         stopwatch.Stop();
 
         var actionDescriptor = actionContext.ActionDescriptor as ControllerActionDescriptor;
+
+        // 判断是否存在禁用请求日志特性
+        if (actionDescriptor?.MethodInfo.GetCustomAttribute<DisabledRequestLogAttribute>() != null)
+            return;
+
         var apiInfoAttribute = actionDescriptor?.MethodInfo.GetCustomAttribute<ApiInfoAttribute>();
         if (!Enum.TryParse(httpRequest.Method, true, out HttpRequestMethodEnum requestMethod))
         {

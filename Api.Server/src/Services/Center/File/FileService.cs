@@ -159,7 +159,7 @@ public class FileService : IDynamicApplication
     [ApiDescriptionSettings(false)]
     [HttpGet("/fileStorage/{fileName}")]
     [ApiInfo("预览文件", HttpRequestActionEnum.Download)]
-    [AllowAnonymous]
+    [AllowAnonymous, DisabledRequestLog]
     public async Task<IActionResult> Preview([FromRoute, Required(ErrorMessage = "文件名称不能为空")] string fileName)
     {
         return await LocalPreview(fileName);
@@ -179,7 +179,7 @@ public class FileService : IDynamicApplication
     [ApiDescriptionSettings(false)]
     [HttpGet("/fileStorage/{fileName}@!{size}")]
     [ApiInfo("预览文件", HttpRequestActionEnum.Download)]
-    [AllowAnonymous]
+    [AllowAnonymous, DisabledRequestLog]
     public async Task<IActionResult> Preview([FromRoute, Required(ErrorMessage = "文件名称不能为空")] string fileName,
         [FromRoute, Required(ErrorMessage = "文件大小不能为空")] string size)
     {
@@ -219,7 +219,9 @@ public class FileService : IDynamicApplication
         if (!long.TryParse(fileIdStr, out var fileId))
             throw new UserFriendlyException("文件不存在！");
 
-        var fileInfoModel = await _repository.Entities.ClearFilter<IBaseTEntity>()
+        // 这里作为预览文件，必须禁用 AOP，所以直接使用 NEW 的方式
+        var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+        var fileInfoModel = await db.Queryable<FileModel>()
             .InSingleAsync(fileId);
         if (fileInfoModel == null)
             throw new UserFriendlyException("文件不存在！");
