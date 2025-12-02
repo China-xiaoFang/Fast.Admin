@@ -46,8 +46,9 @@ public class TenantContext
     /// 获取租户
     /// </summary>
     /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
+    /// <param name="throwError"><see cref="bool"/> 抛出错误</param>
     /// <returns></returns>
-    public static TenantModel GetTenantSync(string tenantNo)
+    public static TenantModel GetTenantSync(string tenantNo, bool throwError = true)
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
         {
@@ -72,7 +73,7 @@ public class TenantContext
                 .Where(wh => wh.TenantNo == tenantNo)
                 .Single();
 
-            if (result == null)
+            if (result == null && throwError)
             {
                 var message = $"未能找到对应租户【{tenantNo}】信息！";
                 logger.LogError($"TenantNo：{tenantNo}；{message}");
@@ -95,8 +96,9 @@ public class TenantContext
     /// 获取租户
     /// </summary>
     /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
+    /// <param name="throwError"><see cref="bool"/> 抛出错误</param>
     /// <returns></returns>
-    public static async Task<TenantModel> GetTenant(string tenantNo)
+    public static async Task<TenantModel> GetTenant(string tenantNo, bool throwError = true)
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
         {
@@ -121,7 +123,7 @@ public class TenantContext
                 .Where(wh => wh.TenantNo == tenantNo)
                 .SingleAsync();
 
-            if (result == null)
+            if (result == null && throwError)
             {
                 var message = $"未能找到对应租户【{tenantNo}】信息！";
                 logger.LogError($"TenantNo：{tenantNo}；{message}");
