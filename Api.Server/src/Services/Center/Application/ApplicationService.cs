@@ -153,6 +153,7 @@ public class ApplicationService : IDynamicApplication
                 ContactPhone = sl.ContactPhone,
                 Latitude = sl.Latitude,
                 Longitude = sl.Longitude,
+                Address = sl.Address,
                 BannerImages = sl.BannerImages,
                 WeChatMerchantId = sl.WeChatMerchantId,
                 WeChatMerchantNo = sl.WeChatMerchantNo,
@@ -282,6 +283,7 @@ public class ApplicationService : IDynamicApplication
                     ContactPhone = item.ContactPhone,
                     Latitude = item.Latitude,
                     Longitude = item.Longitude,
+                    Address = item.Address,
                     BannerImages = item.BannerImages,
                     WeChatMerchantId = item.WeChatMerchantId,
                     WeChatMerchantNo = item.WeChatMerchantNo,
@@ -312,6 +314,7 @@ public class ApplicationService : IDynamicApplication
                 applicationOpenIdModel.ContactPhone = item.ContactPhone;
                 applicationOpenIdModel.Latitude = item.Latitude;
                 applicationOpenIdModel.Longitude = item.Longitude;
+                applicationOpenIdModel.Address = item.Address;
                 applicationOpenIdModel.BannerImages = item.BannerImages;
                 applicationOpenIdModel.WeChatMerchantId = item.WeChatMerchantId;
                 applicationOpenIdModel.WeChatMerchantNo = item.WeChatMerchantNo;

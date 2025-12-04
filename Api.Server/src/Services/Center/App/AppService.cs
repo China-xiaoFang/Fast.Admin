@@ -86,6 +86,7 @@ public class AppService : IDynamicApplication
             ContactPhone = applicationOpenIdModel.ContactPhone,
             Latitude = (decimal?) latitude,
             Longitude = (decimal?) longitude,
+            Address = applicationOpenIdModel.Address,
             BannerImages = applicationOpenIdModel.BannerImages ?? [],
             TenantName = applicationOpenIdModel.Application.TenantName
         };

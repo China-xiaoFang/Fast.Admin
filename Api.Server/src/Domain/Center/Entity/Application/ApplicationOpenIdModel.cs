@@ -116,6 +116,12 @@ public class ApplicationOpenIdModel : BaseEntity
     public decimal? Longitude { get; set; }
 
     /// <summary>
+    /// 地址
+    /// </summary>
+    [SugarColumn(ColumnDescription = "地址", Length = 100)]
+    public string Address { get; set; }
+
+    /// <summary>
     /// Banner图
     /// </summary>
     [SugarColumn(ColumnDescription = "Banner图", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
