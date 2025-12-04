@@ -188,7 +188,8 @@ export const useApp = defineStore(
 			uni.openLocation({
 				latitude: state.latitude,
 				longitude: state.longitude,
-				name: state.address,
+				name: state.appName,
+				address: state.address,
 				fail: () => {
 					useToast.warning("无法打开位置");
 				},
