@@ -18,6 +18,10 @@ export interface EditApplicationOpenIdDto {
    */
   appType?: AppEnvironmentEnum;
   /**
+   * 开放平台密钥
+   */
+  openSecret?: string;
+  /**
    * 
    */
   environmentType?: EnvironmentTypeEnum;
@@ -38,9 +42,29 @@ export interface EditApplicationOpenIdDto {
    */
   requestEncipher?: boolean;
   /**
-   * 开放平台密钥
+   * 状态栏图片地址
    */
-  openSecret?: string;
+  statusBarImageUrl?: string;
+  /**
+   * 联系电话
+   */
+  contactPhone?: string;
+  /**
+   * 纬度
+   */
+  latitude?: number;
+  /**
+   * 经度
+   */
+  longitude?: number;
+  /**
+   * 地址
+   */
+  address?: string;
+  /**
+   * Banner图
+   */
+  bannerImages?: Array<string>;
   /**
    * 微信商户号Id
    */

@@ -50,13 +50,17 @@ export interface EditApplicationOpenIdDto {
    */
   contactPhone?: string;
   /**
+   * 纬度
+   */
+  latitude?: number;
+  /**
    * 经度
    */
   longitude?: number;
   /**
-   * 纬度
+   * 地址
    */
-  latitude?: number;
+  address?: string;
   /**
    * Banner图
    */

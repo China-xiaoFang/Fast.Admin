@@ -71,6 +71,30 @@ export interface LaunchOutput {
    */
   requestEncipher?: boolean;
   /**
+   * 状态栏图片地址
+   */
+  statusBarImageUrl?: string;
+  /**
+   * 联系电话
+   */
+  contactPhone?: string;
+  /**
+   * 纬度
+   */
+  latitude?: number;
+  /**
+   * 经度
+   */
+  longitude?: number;
+  /**
+   * 地址
+   */
+  address?: string;
+  /**
+   * Banner图
+   */
+  bannerImages?: Array<string>;
+  /**
    * 租户名称
    */
   tenantName?: string;
