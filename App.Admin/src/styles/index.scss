@@ -132,7 +132,7 @@ page {
 	text-align: right;
 	padding-left: calc(var(--wot-area-inset-left) + 20rpx);
 	padding-right: calc(var(--wot-area-inset-right) + 20rpx);
-	padding-bottom: var(--wot-area-inset-bottom);
+	padding-bottom: calc(var(--wot-area-inset-bottom) + 20rpx);
 	padding-top: 30rpx;
 	background-color: var(--wot-bg-color-page);
 	position: sticky;
