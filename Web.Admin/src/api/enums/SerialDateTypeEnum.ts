@@ -1,7 +1,7 @@
 /**
- * Fast.Center.Enum.SysSerialDateTypeEnum 系统序号时间类型枚举
+ * Fast.Shared.SerialDateTypeEnum 序号时间类型枚举
  */
-export enum SysSerialDateTypeEnum {
+export enum SerialDateTypeEnum {
   /**
    * 年(yyyy)
    */

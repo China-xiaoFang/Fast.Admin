@@ -1,6 +1,6 @@
 import { SysSerialRuleTypeEnum } from "@/api/enums/SysSerialRuleTypeEnum";
-import { SysSerialDateTypeEnum } from "@/api/enums/SysSerialDateTypeEnum";
-import { SysSerialSpacerEnum } from "@/api/enums/SysSerialSpacerEnum";
+import { SerialDateTypeEnum } from "@/api/enums/SerialDateTypeEnum";
+import { SerialSpacerEnum } from "@/api/enums/SerialSpacerEnum";
 
 /**
  * Fast.Center.Service.SysSerial.Dto.QuerySysSerialRulePagedOutput  获取系统序号规则分页列表输出
@@ -21,11 +21,11 @@ export interface QuerySysSerialRulePagedOutput {
   /**
    * 
    */
-  dateType?: SysSerialDateTypeEnum;
+  dateType?: SerialDateTypeEnum;
   /**
    * 
    */
-  spacer?: SysSerialSpacerEnum;
+  spacer?: SerialSpacerEnum;
   /**
    * 长度
    */
