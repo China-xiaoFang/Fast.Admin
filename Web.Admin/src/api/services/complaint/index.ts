@@ -1,0 +1,57 @@
+import { axiosUtil } from "@fast-china/axios";
+import { PagedResult } from "fast-element-plus";
+import { QueryComplaintPagedOutput } from "./models/QueryComplaintPagedOutput";
+import { QueryComplaintPagedInput } from "./models/QueryComplaintPagedInput";
+import { AddComplaintInput } from "./models/AddComplaintInput";
+
+/**
+ * Fast.Center.Service.Complaint.ComplaintService 投诉服务Api
+ */
+export const complaintApi = {
+  /**
+   * 获取投诉分页列表
+   */
+  queryComplaintPaged(data: QueryComplaintPagedInput) {
+    return axiosUtil.request<PagedResult<QueryComplaintPagedOutput>>({
+      url: "/complaint/queryComplaintPaged",
+      method: "post",
+      data,
+      requestType: "query",
+    });
+  },
+  /**
+   * 获取租户投诉分页列表
+   */
+  queryTenantComplaintPaged(data: QueryComplaintPagedInput) {
+    return axiosUtil.request<PagedResult<QueryComplaintPagedOutput>>({
+      url: "/complaint/queryTenantComplaintPaged",
+      method: "post",
+      data,
+      requestType: "query",
+    });
+  },
+  /**
+   * 获取投诉详情
+   */
+  queryComplaintDetail(complaintId: number) {
+    return axiosUtil.request<QueryComplaintPagedOutput>({
+      url: "/complaint/queryComplaintDetail",
+      method: "get",
+      params: {
+        complaintId,
+      },
+      requestType: "query",
+    });
+  },
+  /**
+   * 添加投诉
+   */
+  addComplaint(data: AddComplaintInput) {
+    return axiosUtil.request({
+      url: "/complaint/addComplaint",
+      method: "post",
+      data,
+      requestType: "add",
+    });
+  },
+};
