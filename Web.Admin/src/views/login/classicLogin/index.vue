@@ -28,7 +28,7 @@
 							labelSuffix=""
 							@keyup.enter="handleKeyupEnter"
 						>
-							<el-form-item label="账号" prop="account">
+							<el-form-item prop="account" label="账号">
 								<el-input
 									v-model.trim="formData.account"
 									placeholder="账号"
@@ -38,7 +38,7 @@
 									@change="handleAccountChange"
 								/>
 							</el-form-item>
-							<el-form-item label="密码" prop="password">
+							<el-form-item prop="password" label="密码">
 								<el-input
 									v-model.trim="formData.password"
 									placeholder="密码"
@@ -128,7 +128,7 @@
 									@change="handleAccountChange"
 								/>
 							</el-form-item>
-							<el-form-item label="密码" prop="password">
+							<el-form-item prop="password" label="密码">
 								<el-input
 									v-model.trim="formData.password"
 									placeholder="密码"
@@ -163,7 +163,7 @@
 							labelSuffix=""
 							@keyup.enter="handleKeyupEnter"
 						>
-							<el-form-item label="账号" prop="account">
+							<el-form-item prop="account" label="账号">
 								<el-input
 									v-model.trim="formData.account"
 									placeholder="账号"
@@ -173,7 +173,7 @@
 									@change="handleAccountChange"
 								/>
 							</el-form-item>
-							<el-form-item label="密码" prop="password">
+							<el-form-item prop="password" label="密码">
 								<el-input
 									v-model.trim="formData.password"
 									placeholder="密码"
