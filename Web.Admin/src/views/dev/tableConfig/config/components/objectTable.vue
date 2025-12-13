@@ -1,0 +1,62 @@
+<template>
+	<FaTable :data="modelValue" :pagination="false" hideSearchTime>
+		<!-- 表格按钮操作区域 -->
+		<template #header>
+			<el-button type="primary" :icon="Plus" @click="handleTableRowAdd">新增字段</el-button>
+		</template>
+		<FaTableColumn prop="prop" label="字段名称" width="280">
+			<template #default="{ row }">
+				<el-input v-model="row.prop" maxlength="50" placeholder="请输入字段名称" />
+			</template>
+		</FaTableColumn>
+		<FaTableColumn prop="type" label="字段类型" width="280">
+			<template #default="{ row }">
+				<el-radio-group v-model="row.type">
+					<el-radio :value="1">字符串</el-radio>
+					<el-radio :value="2">数字</el-radio>
+					<el-radio :value="3">Boolean</el-radio>
+					<el-radio :value="4">方法</el-radio>
+				</el-radio-group>
+			</template>
+		</FaTableColumn>
+		<FaTableColumn prop="value" label="字段值" width="280">
+			<template #default="{ row }">
+				<el-input v-model="row.value" type="textarea" maxlength="500" placeholder="请输入字段值" />
+			</template>
+		</FaTableColumn>
+		<!-- 表格操作 -->
+		<template #operation="{ $index }">
+			<el-button size="small" plain type="danger" @click="handleTableRowDelete($index)">删除字段</el-button>
+		</template>
+	</FaTable>
+</template>
+
+<script lang="ts" setup>
+import { Plus } from "@element-plus/icons-vue";
+import { definePropType } from "@fast-china/utils";
+import { useVModel } from "@vueuse/core";
+import type { FaTableColumnAdvancedCtx } from "@/api/services/table/models/FaTableColumnAdvancedCtx";
+
+defineOptions({
+	name: "DevTableConfigObjectTable",
+});
+
+const props = defineProps({
+	/** @description v-model绑定值 */
+	modelValue: definePropType<FaTableColumnAdvancedCtx[]>([Array]),
+});
+
+const emit = defineEmits(["update:modelValue"]);
+
+const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+
+/** 处理新增行 */
+const handleTableRowAdd = () => {
+	modelValue.value.push({ type: 1 });
+};
+
+/** 处理删除行 */
+const handleTableRowDelete = (index: number) => {
+	modelValue.value.splice(index, 1);
+};
+</script>

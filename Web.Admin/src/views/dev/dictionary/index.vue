@@ -1,6 +1,13 @@
 <template>
 	<div>
-		<FaTable ref="faTableRef" rowKey="dictionaryId" :columns="tableColumns" :requestApi="dictionaryApi.queryDictionaryPaged" hideSearchTime>
+		<FaTable
+			ref="faTableRef"
+			rowKey="dictionaryId"
+			:columns="tableColumns"
+			:requestApi="dictionaryApi.queryDictionaryPaged"
+			hideSearchTime
+			@custom-cell-click="(_, { row }) => editFormRef.detail(row.dictionaryId)"
+		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
@@ -33,6 +40,7 @@ defineOptions({
 const faTableRef = ref<FaTableInstance>();
 const editFormRef = ref<InstanceType<typeof DictionaryEdit>>();
 
+/** 处理删除 */
 const handleDelete = (row: QueryDictionaryPagedOutput) => {
 	const { dictionaryId, rowVersion } = row;
 	ElMessageBox.confirm("确定要删除数据字典？", {

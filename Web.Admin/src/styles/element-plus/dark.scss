@@ -19,10 +19,8 @@ html.dark {
 	}
 
 	.el-form {
-		.el-form-item {
-			.el-divider__text {
-				background-color: var(--el-bg-color) !important;
-			}
+		.el-divider__text {
+			background-color: var(--el-bg-color-overlay) !important;
 		}
 	}
 }
