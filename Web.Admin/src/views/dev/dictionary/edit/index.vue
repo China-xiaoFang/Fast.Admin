@@ -12,13 +12,13 @@
 	>
 		<div :class="{ 'fa__display_tb-b': state.dialogState !== 'add' }">
 			<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled" cols="2">
-				<FaFormItem label="字典Key" prop="dictionaryKey">
+				<FaFormItem prop="dictionaryKey" label="字典Key">
 					<el-input v-model="state.formData.dictionaryKey" maxlength="50" placeholder="请输入字典Key" />
 				</FaFormItem>
-				<FaFormItem label="字典名称" prop="dictionaryName">
+				<FaFormItem prop="dictionaryName" label="字典名称">
 					<el-input v-model="state.formData.dictionaryName" maxlength="50" placeholder="请输入字典名称" />
 				</FaFormItem>
-				<FaFormItem label="值类型" prop="valueType" span="2">
+				<FaFormItem prop="valueType" label="值类型" span="2">
 					<el-radio-group v-model="state.formData.valueType">
 						<el-radio :value="1">字符串</el-radio>
 						<el-radio :value="2">数字（Int）</el-radio>
@@ -26,13 +26,13 @@
 						<el-radio :value="8">Boolean</el-radio>
 					</el-radio-group>
 				</FaFormItem>
-				<FaFormItem v-if="state.dialogState !== 'add'" label="状态" prop="status" span="2">
+				<FaFormItem v-if="state.dialogState !== 'add'" prop="status" label="状态" span="2">
 					<el-radio-group v-model="state.formData.status">
 						<el-radio :value="1">正常</el-radio>
 						<el-radio :value="2">禁用</el-radio>
 					</el-radio-group>
 				</FaFormItem>
-				<FaFormItem label="备注" prop="remark">
+				<FaFormItem prop="remark" label="备注">
 					<el-input v-model="state.formData.remark" type="textarea" maxlength="200" placeholder="请输入备注" />
 				</FaFormItem>
 			</FaForm>
@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { FaDialog } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
@@ -104,8 +104,7 @@ const detail = (dictionaryId: number) => {
 };
 
 const add = () => {
-	faDialogRef.value.open();
-	nextTick(() => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加数据字典";
 		state.formDisabled = false;

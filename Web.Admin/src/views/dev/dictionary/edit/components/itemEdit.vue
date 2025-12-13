@@ -10,13 +10,13 @@
 		@close="faFormRef.resetFields()"
 	>
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled" cols="2">
-			<FaFormItem label="字典项名称" prop="label">
+			<FaFormItem prop="label" label="字典项名称">
 				<el-input v-model="state.formData.label" maxlength="50" placeholder="请输入字典项名称" />
 			</FaFormItem>
-			<FaFormItem label="字典项值" prop="value">
+			<FaFormItem prop="value" label="字典项值">
 				<el-input v-model="state.formData.value" maxlength="50" placeholder="请输入字典项值" />
 			</FaFormItem>
-			<FaFormItem label="标签类型" prop="type" span="2">
+			<FaFormItem prop="type" label="标签类型" span="2">
 				<el-radio-group v-model="state.formData.type">
 					<el-radio :value="1">Primary</el-radio>
 					<el-radio :value="2">Success</el-radio>
@@ -25,22 +25,22 @@
 					<el-radio :value="16">Danger</el-radio>
 				</el-radio-group>
 			</FaFormItem>
-			<FaFormItem label="显示" prop="visible">
+			<FaFormItem prop="visible" label="显示">
 				<el-radio-group v-model="state.formData.visible">
 					<el-radio :value="1">显示</el-radio>
 					<el-radio :value="0">隐藏</el-radio>
 				</el-radio-group>
 			</FaFormItem>
-			<FaFormItem label="排序" prop="order">
+			<FaFormItem prop="order" label="排序">
 				<el-input-number v-model="state.formData.order" :min="1" :max="9999" placeholder="请输入顺序" />
 			</FaFormItem>
-			<FaFormItem label="状态" prop="status">
+			<FaFormItem prop="status" label="状态">
 				<el-radio-group v-model="state.formData.status">
 					<el-radio :value="1">正常</el-radio>
 					<el-radio :value="2">禁用</el-radio>
 				</el-radio-group>
 			</FaFormItem>
-			<FaFormItem label="提示" prop="tips">
+			<FaFormItem prop="tips" label="提示">
 				<el-input v-model="state.formData.tips" type="textarea" maxlength="100" placeholder="请输入提示" />
 			</FaFormItem>
 		</FaForm>
@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 import { type FormRules } from "element-plus";
 import { FaDialog } from "fast-element-plus";
 import { definePropType, withDefineType } from "@fast-china/utils";
@@ -118,8 +118,7 @@ const detail = (row: EditDictionaryItemInput) => {
 };
 
 const add = () => {
-	faDialogRef.value.open();
-	nextTick(() => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加数据字典项";
 		state.formDisabled = false;
