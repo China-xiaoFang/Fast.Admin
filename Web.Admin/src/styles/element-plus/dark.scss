@@ -11,16 +11,4 @@ html.dark {
 		--el-table-fixed-left-column: inset 10px 0 10px -10px rgba(0, 0, 0, 0.72);
 		--el-table-fixed-right-column: inset -10px 0 10px -10px rgba(0, 0, 0, 0.72);
 	}
-
-	.el-card {
-		.el-divider__text {
-			background-color: var(--el-bg-color-overlay) !important;
-		}
-	}
-
-	.el-form {
-		.el-divider__text {
-			background-color: var(--el-bg-color-overlay) !important;
-		}
-	}
 }

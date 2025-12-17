@@ -6,7 +6,7 @@ export default defineConfig(
 	...fastChinaFlat,
 	{
 		name: "fast/ignores",
-		ignores: ["src/api", "src/icons", "src/components/index.ts"],
+		ignores: ["src/api", "src/icons"],
 	},
 	{
 		name: "fast/import/lodash",
