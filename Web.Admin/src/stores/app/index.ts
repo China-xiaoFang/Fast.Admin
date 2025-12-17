@@ -6,7 +6,7 @@ import { useTitle } from "@vueuse/core";
 import { defineStore } from "pinia";
 import { useConfig } from "../config";
 import type { LaunchOutput } from "@/api/services/app/models/LaunchOutput";
-import type { FaTableEnumColumnCtx } from "fast-element-plus";
+import type { FaTableColumnCtx, FaTableEnumColumnCtx } from "fast-element-plus";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
@@ -52,6 +52,9 @@ export const useApp = defineStore(
 
 		/** 字典 */
 		const dictionary = ref<Map<string, FaTableEnumColumnCtx[]>>(new Map());
+
+		/** 表格列 */
+		const tableColumns = ref<Map<string, FaTableColumnCtx[]>>(new Map());
 
 		/** Launch */
 		const launch = async (): Promise<void> => {
@@ -115,10 +118,39 @@ export const useApp = defineStore(
 			return dictionary.value.get(key);
 		};
 
+		/** 获取表格列 */
+		const getTableColumns = (tableKey: string, throwError = true): FaTableColumnCtx[] => {
+			if (!tableColumns.value.has(tableKey)) {
+				if (throwError) {
+					consoleError("app", `表格列 [${tableKey}] 不存在`);
+				}
+				return;
+			}
+			return tableColumns.value.get(tableKey);
+		};
+
+		/** 设置或更新表格列 */
+		const setTableColumns = (tableKey: string, columns: FaTableColumnCtx[]): void => {
+			if (tableColumns.value.has(tableKey)) {
+				tableColumns.value.delete(tableKey);
+			}
+			tableColumns.value.set(tableKey, columns);
+		};
+
+		/** 删除表格列 */
+		const deleteTableColumns = (tableKey: string): void => {
+			if (tableColumns.value.has(tableKey)) {
+				tableColumns.value.delete(tableKey);
+			}
+		};
+
 		return {
 			...toRefs(state),
 			launch,
 			getDictionary,
+			getTableColumns,
+			setTableColumns,
+			deleteTableColumns,
 		};
 	},
 	{
