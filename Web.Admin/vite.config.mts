@@ -2,7 +2,7 @@ import { resolve } from "path";
 import legacyPlugin from "@vitejs/plugin-legacy";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import { buildSvgIcon, cdnImport, versionUpdatePlugin, vueComponentAutoImport } from "fast-vite-plugins";
+import { buildSvgIcon, cdnImport, versionUpdatePlugin } from "fast-vite-plugins";
 // import { visualizer } from "rollup-plugin-visualizer";
 import { loadEnv } from "vite";
 import viteCompression from "vite-plugin-compression";
@@ -180,8 +180,6 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 			vueJsx(),
 			// 版本号
 			versionUpdatePlugin(viteEnv.VITE_APP_VERSION),
-			/** 自定义组件自动导入 */
-			vueComponentAutoImport("./src/components"),
 			/** 本地 SVG 图标 */
 			buildSvgIcon("./src/assets/icons/", "src/icons"),
 			/** 兼容旧版 Chrome 和 IE浏览器 */

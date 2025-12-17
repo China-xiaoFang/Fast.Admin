@@ -137,7 +137,9 @@ defineOptions({
 });
 
 const state = reactive({
+	/** 加载状态 */
 	loading: false,
+	/** 定时器 */
 	interval: withDefineType<NodeJS.Timeout>(),
 	machineDetail: withDefineType<{
 		/** 当前时间 */
