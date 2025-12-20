@@ -31,6 +31,10 @@
 		margin-left: #{$i_step}rpx !important;
 		margin-right: #{$i_step}rpx !important;
 	}
+	.my#{$i_step} {
+		margin-top: #{$i_step}rpx !important;
+		margin-bottom: #{$i_step}rpx !important;
+	}
 	.pt#{$i_step} {
 		padding-top: #{$i_step}rpx !important;
 	}
@@ -42,6 +46,14 @@
 	}
 	.pl#{$i_step} {
 		padding-left: #{$i_step}rpx !important;
+	}
+	.px#{$i_step} {
+		padding-left: #{$i_step}rpx !important;
+		padding-right: #{$i_step}rpx !important;
+	}
+	.py#{$i_step} {
+		padding-top: #{$i_step}rpx !important;
+		padding-bottom: #{$i_step}rpx !important;
 	}
 }
 
