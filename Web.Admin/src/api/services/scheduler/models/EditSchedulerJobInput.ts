@@ -6,9 +6,9 @@ import { MailMessageEnum } from "@/api/enums/MailMessageEnum";
 import { HttpRequestMethodEnum } from "@/api/enums/HttpRequestMethodEnum";
 
 /**
- * Fast.Scheduler.UpdateSchedulerJobInput 更新调度作业输入
+ * Fast.Scheduler.EditSchedulerJobInput 更新调度作业输入
  */
-export interface UpdateSchedulerJobInput {
+export interface EditSchedulerJobInput {
   /**
    * 旧的作业名称
    */

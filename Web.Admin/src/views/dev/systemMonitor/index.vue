@@ -128,7 +128,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onActivated, onDeactivated, onMounted, reactive } from "vue";
+import { onActivated, onDeactivated, onMounted, onUnmounted, reactive } from "vue";
 import { axiosUtil } from "@fast-china/axios";
 import { withDefineType } from "@fast-china/utils";
 
@@ -287,14 +287,6 @@ const startInterval = () => {
 	}
 };
 
-onActivated(() => {
-	startInterval();
-});
-
-onDeactivated(() => {
-	stopInterval();
-});
-
 onMounted(async () => {
 	state.loading = true;
 	[state.machineDetail, state.programDetail] = await Promise.all([
@@ -314,6 +306,18 @@ onMounted(async () => {
 		state.loading = false;
 	});
 	startInterval();
+});
+
+onActivated(() => {
+	startInterval();
+});
+
+onDeactivated(() => {
+	stopInterval();
+});
+
+onUnmounted(() => {
+	stopInterval();
 });
 </script>
 
