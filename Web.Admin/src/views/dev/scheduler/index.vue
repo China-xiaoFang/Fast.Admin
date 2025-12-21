@@ -160,7 +160,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onActivated, onDeactivated, onMounted, reactive, ref } from "vue";
+import { onActivated, onDeactivated, onMounted, onUnmounted, reactive, ref } from "vue";
 import { ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
@@ -466,15 +466,6 @@ const tableColumns = withDefineType<FaTableColumnCtx[]>([
 		width: 280,
 	},
 ]);
-
-onActivated(() => {
-	startInterval();
-});
-
-onDeactivated(() => {
-	stopInterval();
-});
-
 onMounted(async () => {
 	state.loading = true;
 	[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()])
@@ -485,6 +476,18 @@ onMounted(async () => {
 			state.loading = false;
 		});
 	startInterval();
+});
+
+onActivated(() => {
+	startInterval();
+});
+
+onDeactivated(() => {
+	stopInterval();
+});
+
+onUnmounted(() => {
+	stopInterval();
 });
 </script>
 
