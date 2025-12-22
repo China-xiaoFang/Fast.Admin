@@ -157,4 +157,28 @@ public class ConfigService : IDynamicApplication
         // 删除缓存
         await ConfigContext.DeleteConfig(configModel.ConfigCode);
     }
+
+    /// <summary>
+    /// 删除配置
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("删除配置", HttpRequestActionEnum.Delete)]
+    public async Task DeleteConfig(ConfigIdInput input)
+    {
+        if (_user?.IsSuperAdmin == false)
+            throw new UserFriendlyException("非超级管理员禁止操作！");
+
+        var configModel = await _repository.SingleOrDefaultAsync(input.ConfigId);
+        if (configModel == null)
+        {
+            throw new UserFriendlyException("数据不存在！");
+        }
+
+        await _repository.DeleteAsync(configModel);
+        
+        // 删除缓存
+        await ConfigContext.DeleteConfig(configModel.ConfigCode);
+    }
 }
