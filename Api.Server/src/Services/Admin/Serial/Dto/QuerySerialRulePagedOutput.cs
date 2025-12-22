@@ -20,27 +20,58 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Enum;
+using Fast.Admin.Enum;
+using Fast.Center.Enum;
+
+namespace Fast.Admin.Service.Serial.Dto;
 
 /// <summary>
-/// <see cref="RoleTypeEnum"/> 角色类型枚举
+/// <see cref="QuerySerialRulePagedOutput"/> 获取序号规则分页列表输出
 /// </summary>
-[Flags]
-[FastEnum("角色类型枚举")]
-public enum RoleTypeEnum : byte
+public class QuerySerialRulePagedOutput : PagedOutput
 {
     /// <summary>
-    /// 普通
+    /// 序号规则Id
     /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("普通")]
-    Normal = 0,
+    public long SerialRuleId { get; set; }
 
     /// <summary>
-    /// 管理员
+    /// 规则类型
     /// </summary>
-    /// <remarks>默认查看所有数据</remarks>
-    [TagType(TagTypeEnum.Primary)]
-    [Description("管理员")]
-    Admin = 1
+    public SerialRuleTypeEnum RuleType { get; set; }
+
+    /// <summary>
+    /// 前缀
+    /// </summary>
+    public string Prefix { get; set; }
+
+    /// <summary>
+    /// 时间类型
+    /// </summary>
+    public SerialDateTypeEnum DateType { get; set; }
+
+    /// <summary>
+    /// 分隔符
+    /// </summary>
+    public SerialSpacerEnum Spacer { get; set; }
+
+    /// <summary>
+    /// 长度
+    /// </summary>
+    public int Length { get; set; }
+
+    /// <summary>
+    /// 最后一个序号
+    /// </summary>
+    public long? LastSerial { get; set; }
+
+    /// <summary>
+    /// 最后一个序号编号
+    /// </summary>
+    public string LastSerialNo { get; set; }
+
+    /// <summary>
+    /// 最后一个序号生成时间
+    /// </summary>
+    public DateTime? LastTime { get; set; }
 }

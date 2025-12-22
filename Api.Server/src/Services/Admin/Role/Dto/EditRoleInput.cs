@@ -20,27 +20,47 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Enum;
+using Fast.Admin.Enum;
+
+namespace Fast.Admin.Service.Role.Dto;
 
 /// <summary>
-/// <see cref="RoleTypeEnum"/> 角色类型枚举
+/// <see cref="EditRoleInput"/> 编辑角色输入
 /// </summary>
-[Flags]
-[FastEnum("角色类型枚举")]
-public enum RoleTypeEnum : byte
+public class EditRoleInput : UpdateVersionInput
 {
     /// <summary>
-    /// 普通
+    /// 角色Id
     /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("普通")]
-    Normal = 0,
+    [LongRequired(ErrorMessage = "角色Id不能为空")]
+    public long RoleId { get; set; }
 
     /// <summary>
-    /// 管理员
+    /// 角色名称
     /// </summary>
-    /// <remarks>默认查看所有数据</remarks>
-    [TagType(TagTypeEnum.Primary)]
-    [Description("管理员")]
-    Admin = 1
+    [StringRequired(ErrorMessage = "角色名称不能为空")]
+    public string RoleName { get; set; }
+
+    /// <summary>
+    /// 角色编码
+    /// </summary>
+    [StringRequired(ErrorMessage = "角色编码不能为空")]
+    public string RoleCode { get; set; }
+
+    /// <summary>
+    /// 排序
+    /// </summary>
+    [IntRequired(ErrorMessage = "排序不能为空")]
+    public int Sort { get; set; }
+
+    /// <summary>
+    /// 数据范围类型
+    /// </summary>
+    [EnumRequired(ErrorMessage = "数据范围类型不能为空")]
+    public DataScopeTypeEnum DataScopeType { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string Remark { get; set; }
 }
