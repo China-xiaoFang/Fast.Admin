@@ -4,14 +4,14 @@
 // 版权所有 © 2018-Now 小方
 // 
 // 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称"软件"）副本的个人或组织。
+// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
 // 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
 // 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
 // 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
 // 3.修改或衍生作品须明确标注原作者及原软件出处。
 // 
 // 特别声明：
-// - 本软件按"原样"提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
+// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
 // - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
 // - 包括但不限于数据丢失、业务中断等情况。
 // 
@@ -27,17 +27,22 @@ namespace Fast.Center.Service.WeChat.Dto;
 /// <summary>
 /// <see cref="QueryWeChatUserPagedOutput"/> 获取微信用户分页列表输出
 /// </summary>
-public class QueryWeChatUserPagedOutput
+public class QueryWeChatUserPagedOutput : PagedOutput
 {
     /// <summary>
     /// 微信用户Id
     /// </summary>
-    public long WeChatUserId { get; set; }
+    public long WeChatId { get; set; }
 
     /// <summary>
     /// 应用Id
     /// </summary>
     public long AppId { get; set; }
+
+    /// <summary>
+    /// 用户类型
+    /// </summary>
+    public WeChatUserTypeEnum UserType { get; set; }
 
     /// <summary>
     /// 唯一用户标识
@@ -48,6 +53,22 @@ public class QueryWeChatUserPagedOutput
     /// 统一用户标识
     /// </summary>
     public string UnionId { get; set; }
+
+    /// <summary>
+    /// 用户纯手机号码
+    /// </summary>
+    public string PurePhoneNumber { get; set; }
+
+    /// <summary>
+    /// 用户手机号码
+    /// </summary>
+    [SugarSearchValue]
+    public string PhoneNumber { get; set; }
+
+    /// <summary>
+    /// 用户手机号码区号
+    /// </summary>
+    public string CountryCode { get; set; }
 
     /// <summary>
     /// 微信昵称
@@ -85,7 +106,42 @@ public class QueryWeChatUserPagedOutput
     public string Language { get; set; }
 
     /// <summary>
-    /// 创建时间
+    /// 最后登录设备
     /// </summary>
-    public DateTime? CreatedTime { get; set; }
+    public string LastLoginDevice { get; set; }
+
+    /// <summary>
+    /// 最后登录操作系统（版本）
+    /// </summary>
+    public string LastLoginOS { get; set; }
+
+    /// <summary>
+    /// 最后登录浏览器（版本）
+    /// </summary>
+    public string LastLoginBrowser { get; set; }
+
+    /// <summary>
+    /// 最后登录省份
+    /// </summary>
+    public string LastLoginProvince { get; set; }
+
+    /// <summary>
+    /// 最后登录城市
+    /// </summary>
+    public string LastLoginCity { get; set; }
+
+    /// <summary>
+    /// 最后登录Ip
+    /// </summary>
+    public string LastLoginIp { get; set; }
+
+    /// <summary>
+    /// 最后登录时间
+    /// </summary>
+    public DateTime? LastLoginTime { get; set; }
+
+    /// <summary>
+    /// 手机号更新时间
+    /// </summary>
+    public DateTime? MobileUpdateTime { get; set; }
 }
