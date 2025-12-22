@@ -269,56 +269,60 @@ public class TenantService : IDynamicApplication
             // 只有手机号码不同才更换管理员
             if (tenantModel.AdminMobile != input.AdminMobile)
             {
-                var accountModel = await _repository.Queryable<AccountModel>()
-                    .Where(wh => wh.Mobile == input.AdminMobile)
-                    .SingleAsync();
-                if (accountModel == null)
+                if (tenantModel.AdminAccountId != 0)
                 {
-                    var accountId = YitIdHelper.NextId();
-                    accountModel = new AccountModel
+                    var accountModel = await _repository.Queryable<AccountModel>()
+                        .Where(wh => wh.Mobile == input.AdminMobile)
+                        .SingleAsync();
+                    if (accountModel == null)
                     {
-                        AccountId = accountId,
-                        AccountKey = NumberUtil.IdToCodeByLong(accountId),
-                        Mobile = input.AdminMobile,
-                        Email = input.AdminEmail,
-                        Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
-                            .ToUpper(),
-                        NickName = input.AdminName,
-                        Avatar = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
-                        Status = CommonStatusEnum.Enable,
-                        Sex = GenderEnum.Unknown
-                    };
-                    accountModel = await _repository.Insertable(accountModel)
-                        .ExecuteReturnEntityAsync();
-
-                    #region PasswordRecordModel
-
-                    // 初始化密码记录表
-                    await _repository.Insertable(new List<PasswordRecordModel>
+                        var accountId = YitIdHelper.NextId();
+                        accountModel = new AccountModel
                         {
-                            new()
+                            AccountId = accountId,
+                            AccountKey = NumberUtil.IdToCodeByLong(accountId),
+                            Mobile = input.AdminMobile,
+                            Email = input.AdminEmail,
+                            Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
+                                .ToUpper(),
+                            NickName = input.AdminName,
+                            Avatar = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+                            Status = CommonStatusEnum.Enable,
+                            Sex = GenderEnum.Unknown
+                        };
+                        accountModel = await _repository.Insertable(accountModel)
+                            .ExecuteReturnEntityAsync();
+
+                        #region PasswordRecordModel
+
+                        // 初始化密码记录表
+                        await _repository.Insertable(new List<PasswordRecordModel>
                             {
-                                AccountId = accountModel.AccountId,
-                                OperationType = PasswordOperationTypeEnum.Create,
-                                Type = PasswordTypeEnum.SHA1,
-                                Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
-                                    .ToUpper()
-                            }
-                        })
+                                new()
+                                {
+                                    AccountId = accountModel.AccountId,
+                                    OperationType = PasswordOperationTypeEnum.Create,
+                                    Type = PasswordTypeEnum.SHA1,
+                                    Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
+                                        .ToUpper()
+                                }
+                            })
+                            .ExecuteCommandAsync();
+
+                        #endregion
+                    }
+
+                    var tenantUserModel = await _repository.Queryable<TenantUserModel>()
+                        .Where(wh => wh.AccountId == tenantModel.AdminAccountId)
+                        .SingleAsync();
+                    tenantUserModel.AccountId = accountModel.AccountId;
+                    await _repository.Updateable(tenantUserModel)
                         .ExecuteCommandAsync();
 
-                    #endregion
+                    // 回填管理员账号Id
+                    tenantModel.AdminAccountId = accountModel.AccountId;
                 }
 
-                var tenantUserModel = await _repository.Queryable<TenantUserModel>()
-                    .Where(wh => wh.AccountId == tenantModel.AdminAccountId)
-                    .SingleAsync();
-                tenantUserModel.AccountId = accountModel.AccountId;
-                await _repository.Updateable(tenantUserModel)
-                    .ExecuteCommandAsync();
-
-                // 回填管理员账号Id
-                tenantModel.AdminAccountId = accountModel.AccountId;
                 tenantModel.AdminMobile = input.AdminMobile;
             }
 
@@ -327,9 +331,12 @@ public class TenantService : IDynamicApplication
                 var tenantUserModel = await _repository.Queryable<TenantUserModel>()
                     .Where(wh => wh.UserType == UserTypeEnum.Robot)
                     .SingleAsync();
-                tenantUserModel.EmployeeName = input.RobotName;
-                await _repository.Updateable(tenantUserModel)
-                    .ExecuteCommandAsync();
+                if (tenantUserModel != null)
+                {
+                    tenantUserModel.EmployeeName = input.RobotName;
+                    await _repository.Updateable(tenantUserModel)
+                        .ExecuteCommandAsync();
+                }
                 tenantModel.RobotName = input.RobotName;
             }
 
