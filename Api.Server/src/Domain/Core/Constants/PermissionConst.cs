@@ -444,4 +444,32 @@ public class PermissionConst
 
     /// <summary>请求日志列表</summary>
     public const string RequestLogPaged = "RequestLog:Paged";
+
+    /// <summary>登录日志</summary>
+    public class LoginLog
+    {
+        public const string Paged = "LoginLog:Paged";
+        public const string Detail = "LoginLog:Detail";
+    }
+
+    /// <summary>操作日志</summary>
+    public class OperationLog
+    {
+        public const string Paged = "OperationLog:Paged";
+        public const string Detail = "OperationLog:Detail";
+    }
+
+    /// <summary>异常日志</summary>
+    public class ExceptionLog
+    {
+        public const string Paged = "ExceptionLog:Paged";
+        public const string Detail = "ExceptionLog:Detail";
+    }
+
+    /// <summary>调度作业日志</summary>
+    public class SchedulerJobLog
+    {
+        public const string Paged = "SchedulerJobLog:Paged";
+        public const string Detail = "SchedulerJobLog:Detail";
+    }
 }
