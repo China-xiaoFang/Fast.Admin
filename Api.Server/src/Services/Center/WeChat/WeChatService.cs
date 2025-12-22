@@ -292,4 +292,37 @@ public class WeChatService : IDynamicApplication
             EmployeeName = weChatUserModel.NickName
         });
     }
+
+    /// <summary>
+    /// 获取微信用户分页列表
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("获取微信用户分页列表", HttpRequestActionEnum.Paged)]
+    [Permission(PermissionConst.WeChat.Paged)]
+    public async Task<PagedResult<QueryWeChatUserPagedOutput>> QueryWeChatUserPaged(QueryWeChatUserPagedInput input)
+    {
+        return await _repository.Entities
+            .WhereIF(input.AppId != null, wh => wh.AppId == input.AppId)
+            .WhereIF(!string.IsNullOrEmpty(input.NickName), wh => wh.NickName.Contains(input.NickName))
+            .WhereIF(!string.IsNullOrEmpty(input.OpenId), wh => wh.OpenId.Contains(input.OpenId))
+            .WhereIF(!string.IsNullOrEmpty(input.UnionId), wh => wh.UnionId.Contains(input.UnionId))
+            .OrderByDescending(ob => ob.CreatedTime)
+            .ToPagedListAsync(input, sl => new QueryWeChatUserPagedOutput
+            {
+                WeChatUserId = sl.WeChatId,
+                AppId = sl.AppId,
+                OpenId = sl.OpenId,
+                UnionId = sl.UnionId,
+                NickName = sl.NickName,
+                Avatar = sl.Avatar,
+                Sex = sl.Sex,
+                Country = sl.Country,
+                Province = sl.Province,
+                City = sl.City,
+                Language = sl.Language,
+                CreatedTime = sl.CreatedTime
+            });
+    }
 }
