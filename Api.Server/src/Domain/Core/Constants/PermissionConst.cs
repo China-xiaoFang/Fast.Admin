@@ -434,6 +434,12 @@ public class PermissionConst
 
         /// <summary>投诉租户详情</summary>
         public const string TenantDetail = "Complaint:TenantDetail";
+
+        /// <summary>处理投诉</summary>
+        public const string Handle = "Complaint:Handle";
+
+        /// <summary>处理租户投诉</summary>
+        public const string TenantHandle = "Complaint:TenantHandle";
     }
 
     /// <summary>访问日志列表</summary>
