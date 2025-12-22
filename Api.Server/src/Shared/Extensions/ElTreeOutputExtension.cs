@@ -20,54 +20,36 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Entity;
+namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="EmployeeOrgModel"/> 职员机构表Model类
+/// <see cref="ElTreeOutput{T}"/> 拓展类
 /// </summary>
-[SugarTable("EmployeeOrg", "职员机构表")]
-[SugarDbType(DatabaseTypeEnum.Admin)]
-public class EmployeeOrgModel : IDatabaseEntity
+public static class ElTreeOutputExtension
 {
     /// <summary>
-    /// 职员Id
+    /// 构造树形
     /// </summary>
-    [SugarColumn(ColumnDescription = "职员Id", IsPrimaryKey = true)]
-    public long EmployeeId { get; set; }
+    /// <param name="list"><see cref="List{T}"/></param>
+    /// <returns><see cref="List{T}"/></returns>
+    public static List<ElTreeOutput<T>> Build<T>(this List<ElTreeOutput<T>> list)
+    {
+        var result = list.Where(wh => wh.ParentId.Equals(0))
+            .ToList();
+        result.ForEach(e => BuildChildNodes(list, e));
+        return result;
+    }
 
     /// <summary>
-    /// 机构Id
+    /// 构造子节点集合
     /// </summary>
-    [SugarColumn(ColumnDescription = "机构Id")]
-    public long OrganizationId { get; set; }
-
-    /// <summary>
-    /// 部门Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "部门Id", IsPrimaryKey = true)]
-    public long DepartmentId { get; set; }
-
-    /// <summary>
-    /// 是否为主部门
-    /// </summary>
-    [SugarColumn(ColumnDescription = "是否为主部门")]
-    public YesOrNotEnum IsPrimary { get; set; }
-
-    /// <summary>
-    /// 职位Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "职位Id", IsPrimaryKey = true)]
-    public long PositionId { get; set; }
-
-    /// <summary>
-    /// 职级Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "职级Id")]
-    public long? JobLevelId { get; set; }
-
-    /// <summary>
-    /// 是否为负责人
-    /// </summary>
-    [SugarColumn(ColumnDescription = "是否为负责人")]
-    public YesOrNotEnum IsPrincipal { get; set; }
+    /// <param name="totalNodes"></param>
+    /// <param name="node"></param>
+    private static void BuildChildNodes<T>(List<ElTreeOutput<T>> totalNodes, ElTreeOutput<T> node)
+    {
+        var nodeSubList = totalNodes.Where(wh => wh.ParentId.Equals(node.ParentId))
+            .ToList();
+        nodeSubList.ForEach(e => BuildChildNodes(totalNodes, e));
+        node.Children = nodeSubList;
+    }
 }

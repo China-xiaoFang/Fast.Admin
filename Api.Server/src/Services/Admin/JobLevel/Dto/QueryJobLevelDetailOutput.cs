@@ -20,54 +20,31 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Entity;
+namespace Fast.Admin.Service.JobLevel.Dto;
 
 /// <summary>
-/// <see cref="EmployeeOrgModel"/> 职员机构表Model类
+/// <see cref="QueryJobLevelDetailOutput"/> 获取职级详情输出
 /// </summary>
-[SugarTable("EmployeeOrg", "职员机构表")]
-[SugarDbType(DatabaseTypeEnum.Admin)]
-public class EmployeeOrgModel : IDatabaseEntity
+public class QueryJobLevelDetailOutput : PagedOutput
 {
-    /// <summary>
-    /// 职员Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "职员Id", IsPrimaryKey = true)]
-    public long EmployeeId { get; set; }
-
-    /// <summary>
-    /// 机构Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "机构Id")]
-    public long OrganizationId { get; set; }
-
-    /// <summary>
-    /// 部门Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "部门Id", IsPrimaryKey = true)]
-    public long DepartmentId { get; set; }
-
-    /// <summary>
-    /// 是否为主部门
-    /// </summary>
-    [SugarColumn(ColumnDescription = "是否为主部门")]
-    public YesOrNotEnum IsPrimary { get; set; }
-
-    /// <summary>
-    /// 职位Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "职位Id", IsPrimaryKey = true)]
-    public long PositionId { get; set; }
-
     /// <summary>
     /// 职级Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "职级Id")]
-    public long? JobLevelId { get; set; }
+    public long JobLevelId { get; set; }
 
     /// <summary>
-    /// 是否为负责人
+    /// 职级名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "是否为负责人")]
-    public YesOrNotEnum IsPrincipal { get; set; }
+    public string JobLevelName { get; set; }
+
+    /// <summary>
+    /// 职级等级
+    /// </summary>
+    /// <remarks>从大到小</remarks>
+    public int Level { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string Remark { get; set; }
 }

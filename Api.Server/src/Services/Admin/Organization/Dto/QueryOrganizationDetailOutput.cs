@@ -4,7 +4,7 @@
 // 版权所有 © 2018-Now 小方
 // 
 // 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
+// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或机构。
 // 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
 // 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
 // 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
@@ -20,54 +20,62 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Entity;
+namespace Fast.Admin.Service.Organization.Dto;
 
 /// <summary>
-/// <see cref="EmployeeOrgModel"/> 职员机构表Model类
+/// <see cref="QueryOrganizationDetailOutput"/> 获取机构详情输出
 /// </summary>
-[SugarTable("EmployeeOrg", "职员机构表")]
-[SugarDbType(DatabaseTypeEnum.Admin)]
-public class EmployeeOrgModel : IDatabaseEntity
+public class QueryOrganizationDetailOutput : PagedOutput
 {
-    /// <summary>
-    /// 职员Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "职员Id", IsPrimaryKey = true)]
-    public long EmployeeId { get; set; }
-
     /// <summary>
     /// 机构Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "机构Id")]
-    public long OrganizationId { get; set; }
+    public long OrgId { get; set; }
 
     /// <summary>
-    /// 部门Id
+    /// 父级Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "部门Id", IsPrimaryKey = true)]
-    public long DepartmentId { get; set; }
+    public long ParentId { get; set; }
 
     /// <summary>
-    /// 是否为主部门
+    /// 父级Id集合
     /// </summary>
-    [SugarColumn(ColumnDescription = "是否为主部门")]
-    public YesOrNotEnum IsPrimary { get; set; }
+    [SugarColumn(IsJson = true)]
+    public List<long> ParentIds { get; set; }
 
     /// <summary>
-    /// 职位Id
+    /// 机构名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "职位Id", IsPrimaryKey = true)]
-    public long PositionId { get; set; }
+    public string OrgName { get; set; }
 
     /// <summary>
-    /// 职级Id
+    /// 机构编码
     /// </summary>
-    [SugarColumn(ColumnDescription = "职级Id")]
-    public long? JobLevelId { get; set; }
+    public string OrgCode { get; set; }
 
     /// <summary>
-    /// 是否为负责人
+    /// 联系人
     /// </summary>
-    [SugarColumn(ColumnDescription = "是否为负责人")]
-    public YesOrNotEnum IsPrincipal { get; set; }
+    public string Contacts { get; set; }
+
+    /// <summary>
+    /// 电话
+    /// </summary>
+    public string Phone { get; set; }
+
+    /// <summary>
+    /// 邮箱
+    /// </summary>
+    public string Email { get; set; }
+
+    /// <summary>
+    /// 排序
+    /// </summary>
+    /// <remarks>从小到大</remarks>
+    public int Sort { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string Remark { get; set; }
 }

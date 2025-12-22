@@ -4,7 +4,7 @@
 // 版权所有 © 2018-Now 小方
 // 
 // 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
+// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或机构。
 // 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
 // 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
 // 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
@@ -23,18 +23,18 @@
 namespace Fast.Admin.Entity;
 
 /// <summary>
-/// <see cref="OrganizationModel"/> 组织架构表Model类
+/// <see cref="OrganizationModel"/> 机构表Model类
 /// </summary>
-[SugarTable("Organization", "组织架构表")]
+[SugarTable("Organization", "机构表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
 [SugarIndex($"IX_{{table}}_{nameof(OrgName)}", nameof(OrgName), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(OrgCode)}", nameof(OrgCode), OrderByType.Asc, true)]
 public class OrganizationModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
-    /// 组织Id
+    /// 机构Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "组织Id", IsPrimaryKey = true)]
+    [SugarColumn(ColumnDescription = "机构Id", IsPrimaryKey = true)]
     public long OrgId { get; set; }
 
     /// <summary>
@@ -50,19 +50,19 @@ public class OrganizationModel : BaseEntity, IUpdateVersion
     public List<long> ParentIds { get; set; }
 
     /// <summary>
-    /// 组织名称
+    /// 机构名称
     /// </summary>
     [Required]
     [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "组织名称", Length = 30)]
+    [SugarColumn(ColumnDescription = "机构名称", Length = 30)]
     public string OrgName { get; set; }
 
     /// <summary>
-    /// 组织编码
+    /// 机构编码
     /// </summary>
     [Required]
     [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "组织编码", Length = 50)]
+    [SugarColumn(ColumnDescription = "机构编码", Length = 50)]
     public string OrgCode { get; set; }
 
     /// <summary>
@@ -76,6 +76,12 @@ public class OrganizationModel : BaseEntity, IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "电话", Length = 20)]
     public string Phone { get; set; }
+
+    /// <summary>
+    /// 邮箱
+    /// </summary>
+    [SugarColumn(ColumnDescription = "邮箱", Length = 50)]
+    public string Email { get; set; }
 
     /// <summary>
     /// 排序
