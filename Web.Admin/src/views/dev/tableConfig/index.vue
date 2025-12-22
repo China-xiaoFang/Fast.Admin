@@ -21,7 +21,7 @@
 				<el-button size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
 			</template>
 		</FaTable>
-		<TableColumnConfig v-show="state.isEdit" ref="tableColumnConfigRef" @back="handleBack" />
+		<TableColumnConfig v-show="state.isEdit" ref="tableColumnConfigRef" @back="handleBack" @ok="faTableRef.refresh()" />
 		<TableConfigEdit ref="editFormRef" @ok="faTableRef.refresh()" />
 	</div>
 </template>

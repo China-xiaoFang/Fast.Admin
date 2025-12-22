@@ -347,7 +347,7 @@ const handleConfirm = () => {
 			}
 		}
 	} else {
-		state.formData.searchConfig = null;
+		state.formData.searchConfig = [];
 	}
 	if (state.formData.otherConfig?.length > 0) {
 		for (let index = 0; index < state.formData.otherConfig.length; index++) {
@@ -364,9 +364,10 @@ const handleConfirm = () => {
 			}
 		}
 	} else {
-		state.formData.otherConfig = null;
+		state.formData.otherConfig = [];
 	}
 	emit("change", state.formData, state.rowIndex);
+	faDialogRef.value.close();
 };
 
 const edit = (row: FaTableColumnCtx, rowIndex: number) => {
