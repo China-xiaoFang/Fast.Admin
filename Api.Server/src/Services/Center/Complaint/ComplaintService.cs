@@ -226,7 +226,7 @@ public class ComplaintService : IDynamicApplication
     {
         var complaintModel = await _repository.Entities
             .Where(wh => wh.ComplaintId == input.ComplaintId && wh.TenantId == _user.TenantId)
-            .SingleAsync();
+            .FirstAsync();
         
         if (complaintModel == null)
         {
