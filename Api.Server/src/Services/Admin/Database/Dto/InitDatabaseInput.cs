@@ -20,5 +20,22 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-global using System.ComponentModel;
-global using Fast.Shared;
+namespace Fast.Admin.Service.Database.Dto;
+
+/// <summary>
+/// <see cref="InitDatabaseInput"/> 同初始化数据库输入
+/// </summary>
+public class InitDatabaseInput
+{
+    /// <summary>
+    /// 租户Id
+    /// </summary>
+    [LongRequired(ErrorMessage = "租户Id不能为空")]
+    public long TenantId { get; set; }
+
+    /// <summary>
+    /// 数据库类型
+    /// </summary>
+    [EnumRequired(ErrorMessage = "数据库类型")]
+    public DatabaseTypeEnum DatabaseType { get; set; }
+}

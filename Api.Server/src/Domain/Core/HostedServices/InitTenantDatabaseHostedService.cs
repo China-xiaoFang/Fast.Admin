@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 using Fast.Center.Entity;
+using Fast.Center.Enum;
 using Fast.SqlSugar;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -73,9 +74,11 @@ public class InitTenantDatabaseHostedService : IHostedService
 
             // 初始化租户数据库
             foreach (var tenantModel in await db.Queryable<TenantModel>()
+                         .Where(wh => wh.TenantType == TenantTypeEnum.System)
                          .ToListAsync(cancellationToken))
             {
-                await tenantDatabaseService.InitTenantDatabase(tenantModel.TenantId);
+                await tenantDatabaseService.InitDatabase(tenantModel.TenantId, DatabaseTypeEnum.Admin);
+                await tenantDatabaseService.InitDatabase(tenantModel.TenantId, DatabaseTypeEnum.AdminLog);
             }
 
             await Task.CompletedTask;

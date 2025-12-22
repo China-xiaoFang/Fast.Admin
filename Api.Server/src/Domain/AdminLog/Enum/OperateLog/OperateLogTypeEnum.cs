@@ -20,5 +20,36 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-global using System.ComponentModel;
-global using Fast.Shared;
+namespace Fast.AdminLog.Enum;
+
+/// <summary>
+/// <see cref="OperateLogTypeEnum"/> 操作日志类型枚举
+/// </summary>
+[Flags]
+[FastEnum("操作日志类型枚举")]
+public enum OperateLogTypeEnum : long
+{
+    /// <summary>
+    /// 配置管理
+    /// </summary>
+    [Description("配置管理")]
+    Config = 1 << 0,
+
+    /// <summary>
+    /// 组织架构
+    /// </summary>
+    [Description("组织架构")]
+    Organization = 1 << 1,
+
+    /// <summary>
+    /// 财务管理
+    /// </summary>
+    [Description("财务管理")]
+    Finance = 1 << 2,
+
+    /// <summary>
+    /// 平台管理
+    /// </summary>
+    [Description("平台管理")]
+    Platform = 1 << 3
+}

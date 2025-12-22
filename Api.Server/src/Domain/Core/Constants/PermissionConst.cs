@@ -41,8 +41,43 @@ public class PermissionConst
     /// <summary>Knife4j</summary>
     public const string ApiKnife4j = "Api:Knife4j";
 
-    /// <summary>系统监控</summary>
-    public const string SystemMonitor = "System:Monitor";
+    /// <summary><see cref="Tenant"/> 租户</summary>
+    public class Tenant
+    {
+        /// <summary>租户列表</summary>
+        public const string Paged = "Tenant:Paged";
+
+        /// <summary>租户详情</summary>
+        public const string Detail = "Tenant:Detail";
+
+        /// <summary>租户新增</summary>
+        public const string Add = "Tenant:Add";
+
+        /// <summary>租户编辑</summary>
+        public const string Edit = "Tenant:Edit";
+
+        /// <summary>租户状态更改</summary>
+        public const string Status = "Tenant:Status";
+    }
+
+    /// <summary><see cref="Database"/> 数据库</summary>
+    public class Database
+    {
+        /// <summary>数据库列表</summary>
+        public const string Paged = "Database:Paged";
+
+        /// <summary>数据库详情</summary>
+        public const string Detail = "Database:Detail";
+
+        /// <summary>数据库新增</summary>
+        public const string Add = "Database:Add";
+
+        /// <summary>数据库编辑</summary>
+        public const string Edit = "Database:Edit";
+
+        /// <summary>数据库删除</summary>
+        public const string Delete = "Database:Delete";
+    }
 
     /// <summary><see cref="Config"/> 配置</summary>
     public class Config
@@ -170,11 +205,32 @@ public class PermissionConst
         public const string StopJob = "Scheduler:StopJob";
     }
 
+    /// <summary>系统监控</summary>
+    public const string SystemMonitor = "System:Monitor";
+
     /// <summary>密码映射列表</summary>
     public const string PasswordMapPaged = "PasswordMap:Paged";
 
     /// <summary>密码记录列表</summary>
     public const string PasswordRecordPaged = "PasswordRecord:Paged";
+
+    /// <summary>异常日志列表</summary>
+    public const string ExceptionLogPaged = "ExceptionLog:Paged";
+
+    /// <summary>Sql异常日志列表</summary>
+    public const string SqlExceptionLogPaged = "SqlExceptionLog:Paged";
+
+    /// <summary>Sql超时日志列表</summary>
+    public const string SqlTimeoutLogModelPaged = "SqlTimeoutLog:Paged";
+
+    /// <summary>Sql执行日志列表</summary>
+    public const string SqlExecutionLogPaged = "SqlExecutionLog:Paged";
+
+    /// <summary>Sql差异日志列表</summary>
+    public const string SqlDiffLogPaged = "SqlDiffLog:Paged";
+
+    /// <summary>文件列表</summary>
+    public const string FilePaged = "File:Paged";
 
     /// <summary><see cref="App"/> 应用</summary>
     public class App
@@ -193,44 +249,6 @@ public class PermissionConst
 
         /// <summary>应用删除</summary>
         public const string Delete = "App:Delete";
-    }
-
-    /// <summary><see cref="Tenant"/> 租户</summary>
-    public class Tenant
-    {
-        /// <summary>租户列表</summary>
-        public const string Paged = "Tenant:Paged";
-
-        /// <summary>租户详情</summary>
-        public const string Detail = "Tenant:Detail";
-
-        /// <summary>租户新增</summary>
-        public const string Add = "Tenant:Add";
-
-        /// <summary>租户编辑</summary>
-        public const string Edit = "Tenant:Edit";
-
-        /// <summary>租户状态更改</summary>
-        public const string Status = "Tenant:Status";
-    }
-
-    /// <summary><see cref="Database"/> 数据库</summary>
-    public class Database
-    {
-        /// <summary>数据库列表</summary>
-        public const string Paged = "Database:Paged";
-
-        /// <summary>数据库详情</summary>
-        public const string Detail = "Database:Detail";
-
-        /// <summary>数据库新增</summary>
-        public const string Add = "Database:Add";
-
-        /// <summary>数据库编辑</summary>
-        public const string Edit = "Database:Edit";
-
-        /// <summary>数据库删除</summary>
-        public const string Delete = "Database:Delete";
     }
 
     /// <summary><see cref="Account"/> 账号</summary>
@@ -360,6 +378,16 @@ public class PermissionConst
         public const string Edit = "Employee:Edit";
     }
 
+    /// <summary><see cref="TenantOnlineUser"/> 在线用户</summary>
+    public class TenantOnlineUser
+    {
+        /// <summary>在线用户列表</summary>
+        public const string Paged = "TenantOnlineUser:Paged";
+
+        /// <summary>强制下线</summary>
+        public const string ForceOffline = "TenantOnlineUser:ForceOffline";
+    }
+
     /// <summary><see cref="Merchant"/> 商户号</summary>
     public class Merchant
     {
@@ -378,6 +406,9 @@ public class PermissionConst
         /// <summary>商户号删除</summary>
         public const string Delete = "Merchant:Delete";
     }
+
+    /// <summary>支付记录列表</summary>
+    public const string PayRecordPaged = "PayRecord:Paged";
 
     /// <summary><see cref="WeChat"/> 微信用户</summary>
     public class WeChat
@@ -404,4 +435,13 @@ public class PermissionConst
         /// <summary>投诉租户详情</summary>
         public const string TenantDetail = "Complaint:TenantDetail";
     }
+
+    /// <summary>访问日志列表</summary>
+    public const string VisitLogPaged = "VisitLog:Paged";
+
+    /// <summary>操作日志列表</summary>
+    public const string OperateLogPaged = "OperateLog:Paged";
+
+    /// <summary>请求日志列表</summary>
+    public const string RequestLogPaged = "RequestLog:Paged";
 }

@@ -116,6 +116,7 @@ public class FileService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取文件分页列表", HttpRequestActionEnum.Paged)]
+    [Permission(PermissionConst.FilePaged)]
     public async Task<PagedResult<QueryFilePagedOutput>> QueryFilePaged(QueryFilePagedInput input)
     {
         var queryable = _repository.Entities;

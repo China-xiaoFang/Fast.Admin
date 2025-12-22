@@ -20,5 +20,22 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-global using System.ComponentModel;
-global using Fast.Shared;
+using Fast.Center.Enum;
+
+namespace Fast.Center.Service.PasswordRecord.Dto;
+
+/// <summary>
+/// <see cref="QueryPasswordRecordPagedInput"/> 获取密码记录分页列表输入
+/// </summary>
+public class QueryPasswordRecordPagedInput : PagedInput
+{
+    /// <summary>
+    /// 账号Id
+    /// </summary>
+    public long? AccountId { get; set; }
+
+    /// <summary>
+    /// 操作类型
+    /// </summary>
+    public PasswordOperationTypeEnum? OperationType { get; set; }
+}

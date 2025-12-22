@@ -110,11 +110,6 @@ public class AuthService : IDynamicApplication
             throw new UserFriendlyException("租户已被禁用！");
         }
 
-        if (!tenantModel.DatabaseInitialized)
-        {
-            throw new UserFriendlyException("数据库未初始化！");
-        }
-
         // 查询角色
         var roleList = await _empRepository.Queryable<EmployeeRoleModel>()
             .Includes(e => e.Role)

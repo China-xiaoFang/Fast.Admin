@@ -194,7 +194,8 @@ public class MenuService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        if (await _repository.AnyAsync(a => a.AppId == moduleModel.AppId && a.MenuName == input.MenuName))
+        if (await _repository.AnyAsync(a =>
+                a.AppId == moduleModel.AppId && a.ModuleId == moduleModel.ModuleId && a.MenuName == input.MenuName))
         {
             throw new UserFriendlyException("菜单名称重复！");
         }
@@ -271,7 +272,10 @@ public class MenuService : IDynamicApplication
         }
 
         if (await _repository.AnyAsync(a =>
-                a.AppId == moduleModel.AppId && a.MenuName == input.MenuName && a.MenuId != input.MenuId))
+                a.AppId == moduleModel.AppId
+                && a.ModuleId == moduleModel.ModuleId
+                && a.MenuName == input.MenuName
+                && a.MenuId != input.MenuId))
         {
             throw new UserFriendlyException("菜单名称重复！");
         }

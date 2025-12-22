@@ -39,21 +39,20 @@ namespace Fast.Admin.Service.Database;
 public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDynamicApplication
 {
     private readonly IUser _user;
-    private readonly ISqlSugarEntityService _sqlSugarEntityService;
 
-    public DatabaseService(IUser user, ISqlSugarEntityService sqlSugarEntityService)
+    public DatabaseService(IUser user)
     {
         _user = user;
-        _sqlSugarEntityService = sqlSugarEntityService;
     }
 
     /// <summary>
-    /// 初始化租户数据库
+    /// 初始化数据库
     /// </summary>
     /// <param name="tenantId"><see cref="long"/> 租户Id</param>
+    /// <param name="databaseType"><see cref="DatabaseTypeEnum"/> 数据库类型</param>
     /// <returns></returns>
     [NonAction]
-    public async Task InitTenantDatabase(long tenantId)
+    public async Task InitDatabase(long tenantId, DatabaseTypeEnum databaseType)
     {
         var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
@@ -66,20 +65,56 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
             throw new UserFriendlyException("租户不存在！");
         }
 
-        if (tenantModel.DatabaseInitialized)
-            return;
-
         // 加载Aop
         SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
-        var adminConnectionSettings =
-            await _sqlSugarEntityService.GetConnectionSetting(tenantModel.TenantId, tenantModel.TenantNo, DatabaseTypeEnum.Admin);
-        var adminDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(adminConnectionSettings));
+        var databaseModel = await db.Queryable<MainDatabaseModel>()
+            .Includes(e => e.SlaveDatabaseList)
+            .Where(wh => wh.TenantId == tenantId && wh.DatabaseType == databaseType)
+            .SingleAsync();
+        if (databaseModel == null)
+        {
+            throw new UserFriendlyException($"未能找到对应类型【{databaseType.ToString()}】所存在的 Database 信息！");
+        }
 
-        var adminLogConnectionSettings =
-            await _sqlSugarEntityService.GetConnectionSetting(tenantModel.TenantId, tenantModel.TenantNo,
-                DatabaseTypeEnum.AdminLog);
-        var logDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(adminLogConnectionSettings));
+        if (databaseModel.IsInitialized)
+            return;
+
+        var newDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(new ConnectionSettingsOptions
+        {
+            ConnectionId = databaseModel.MainId.ToString(),
+            DbType = databaseModel.DbType,
+            ServiceIp = FastContext.HostEnvironment.IsDevelopment()
+                // 开发环境使用公网地址
+                ? databaseModel.PublicIp
+                // 生产环境使用内网地址
+                : databaseModel.IntranetIp,
+            Port = databaseModel.Port,
+            DbName = databaseModel.DbName,
+            DbUser = databaseModel.DbUser,
+            DbPwd = databaseModel.DbPwd,
+            CustomConnectionStr = databaseModel.CustomConnectionStr,
+            CommandTimeOut = databaseModel.CommandTimeOut,
+            SugarSqlExecMaxSeconds = databaseModel.SugarSqlExecMaxSeconds,
+            DiffLog = databaseModel.DiffLog,
+            DisableAop = databaseModel.DisableAop,
+            SlaveConnectionList = databaseModel.SlaveDatabaseList.Select(dSl => new SlaveConnectionInfo
+                {
+                    ServiceIp = FastContext.HostEnvironment.IsDevelopment()
+                        // 开发环境使用公网地址
+                        ? string.IsNullOrWhiteSpace(dSl.PublicIp) ? databaseModel.PublicIp : dSl.PublicIp
+                        // 生产环境使用内网地址
+                        :
+                        string.IsNullOrWhiteSpace(dSl.IntranetIp) ? databaseModel.IntranetIp : dSl.IntranetIp,
+                    Port = dSl.Port ?? databaseModel.Port,
+                    DbName = string.IsNullOrWhiteSpace(dSl.DbName) ? databaseModel.DbName : dSl.DbName,
+                    DbUser = string.IsNullOrWhiteSpace(dSl.DbUser) ? databaseModel.DbUser : dSl.DbUser,
+                    DbPwd = string.IsNullOrWhiteSpace(dSl.DbPwd) ? databaseModel.DbPwd : dSl.DbPwd,
+                    CustomConnectionStr = databaseModel.CustomConnectionStr,
+                    HitRate = dSl.HitRate
+                })
+                .ToList()
+        }));
 
         {
             var logSb = new StringBuilder();
@@ -97,187 +132,167 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
         }
 
         // 创建库
-        adminDb.DbMaintenance.CreateDatabase();
+        newDb.DbMaintenance.CreateDatabase();
 
         // 加载Aop
-        SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), adminDb);
+        SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), newDb);
 
         // 获取所有不分表的Model类型
-        var adminTableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => !wh.IsSplitTable)
-            .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.Admin)
+        var tableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => !wh.IsSplitTable)
+            .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == databaseType)
             .Select(sl => sl.EntityType)
             .ToArray();
         // 获取所有分表的Model类型
-        var adminSplitTableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => wh.IsSplitTable)
-            .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.Admin)
+        var splitTableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => wh.IsSplitTable)
+            .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == databaseType)
             .Select(sl => sl.EntityType)
             .ToArray();
 
         // 创建表
-        adminDb.CodeFirst.InitTables(adminTableTypes);
-        adminDb.CodeFirst.SplitTables()
-            .InitTables(adminSplitTableTypes);
+        newDb.CodeFirst.InitTables(tableTypes);
+        newDb.CodeFirst.SplitTables()
+            .InitTables(splitTableTypes);
 
-        // 创建库
-        logDb.DbMaintenance.CreateDatabase();
-
-        // 加载Aop
-        SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), logDb);
-
-        // 获取所有不分表的Model类型
-        var logTableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => !wh.IsSplitTable)
-            .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.AdminLog)
-            .Select(sl => sl.EntityType)
-            .ToArray();
-        // 获取所有分表的Model类型
-        var logSplitTableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => wh.IsSplitTable)
-            .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == DatabaseTypeEnum.AdminLog)
-            .Select(sl => sl.EntityType)
-            .ToArray();
-
-        // 创建表
-        logDb.CodeFirst.InitTables(logTableTypes);
-        logDb.CodeFirst.SplitTables()
-            .InitTables(logSplitTableTypes);
-
-        // 查询所有系统规则序号
-        var serialRuleList = await adminDb.Queryable<SerialRuleModel>()
-            .Where(wh => wh.SerialType == SerialTypeEnum.AutoSerial)
-            .ToListAsync();
-
-        // 初始化工号序号
-        if (serialRuleList.All(a => a.RuleType != SerialRuleTypeEnum.EmployeeNo))
+        if (databaseType == DatabaseTypeEnum.Admin)
         {
-            await adminDb.Insertable(new SerialRuleModel
+            // 查询所有系统规则序号
+            var serialRuleList = await newDb.Queryable<SerialRuleModel>()
+                .Where(wh => wh.SerialType == SerialTypeEnum.AutoSerial)
+                .ToListAsync();
+
+            // 初始化工号序号
+            if (serialRuleList.All(a => a.RuleType != SerialRuleTypeEnum.EmployeeNo))
+            {
+                await newDb.Insertable(new SerialRuleModel
+                    {
+                        SerialRuleId = YitIdHelper.NextId(),
+                        RuleType = SerialRuleTypeEnum.EmployeeNo,
+                        SerialType = SerialTypeEnum.AutoSerial,
+                        Prefix = null,
+                        DateType = SerialDateTypeEnum.Day,
+                        Spacer = SerialSpacerEnum.None,
+                        Length = 2
+                    })
+                    .ExecuteCommandAsync();
+            }
+
+            // 初始化公司（组织架构）
+            await newDb.Insertable(new OrganizationModel
                 {
-                    SerialRuleId = YitIdHelper.NextId(),
-                    RuleType = SerialRuleTypeEnum.EmployeeNo,
-                    SerialType = SerialTypeEnum.AutoSerial,
-                    Prefix = null,
-                    DateType = SerialDateTypeEnum.Day,
-                    Spacer = SerialSpacerEnum.None,
-                    Length = 2
+                    OrgId = YitIdHelper.NextId(),
+                    ParentId = 0,
+                    ParentIds = [0],
+                    OrgName = tenantModel.TenantName,
+                    OrgCode = $"{tenantModel.TenantCode.ToLower()}_hq",
+                    Contacts = tenantModel.AdminName,
+                    Phone = tenantModel.AdminMobile,
+                    Sort = 1,
+                    Remark = null
                 })
                 .ExecuteCommandAsync();
-        }
 
-        // 初始化公司（组织架构）
-        await adminDb.Insertable(new OrganizationModel
-            {
-                OrgId = YitIdHelper.NextId(),
-                ParentId = 0,
-                ParentIds = [0],
-                OrgName = tenantModel.TenantName,
-                OrgCode = $"{tenantModel.TenantCode.ToLower()}_hq",
-                Contacts = tenantModel.AdminName,
-                Phone = tenantModel.AdminMobile,
-                Sort = 1,
-                Remark = null
-            })
-            .ExecuteCommandAsync();
-
-        // 初始化租户管理员角色
-        await adminDb.Insertable(new RoleModel
-            {
-                RoleId = YitIdHelper.NextId(),
-                RoleType = RoleTypeEnum.Admin,
-                RoleName = "管理员",
-                RoleCode = "manager_role",
-                Sort = 1,
-                DataScopeType = DataScopeTypeEnum.All,
-                Remark = null
-            })
-            .ExecuteCommandAsync();
-
-        // 判断是否为普通租户
-        if (tenantModel.TenantType == TenantTypeEnum.Common)
-        {
-            var accountModel = await db.Queryable<AccountModel>()
-                .Where(wh => wh.Mobile == tenantModel.AdminMobile)
-                .SingleAsync();
-            if (accountModel == null)
-            {
-                var accountId = YitIdHelper.NextId();
-                accountModel = new AccountModel
+            // 初始化租户管理员角色
+            await newDb.Insertable(new RoleModel
                 {
-                    AccountId = accountId,
-                    AccountKey = NumberUtil.IdToCodeByLong(accountId),
-                    Mobile = tenantModel.AdminMobile,
-                    Email = tenantModel.AdminEmail,
-                    Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
-                        .ToUpper(),
-                    NickName = tenantModel.AdminName,
-                    Avatar = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
-                    Status = CommonStatusEnum.Enable,
-                    Sex = GenderEnum.Unknown
-                };
-                accountModel = await db.Insertable(accountModel)
-                    .ExecuteReturnEntityAsync();
+                    RoleId = YitIdHelper.NextId(),
+                    RoleType = RoleTypeEnum.Admin,
+                    RoleName = "管理员",
+                    RoleCode = "manager_role",
+                    Sort = 1,
+                    DataScopeType = DataScopeTypeEnum.All,
+                    Remark = null
+                })
+                .ExecuteCommandAsync();
 
-                #region PasswordRecordModel
+            // 判断是否为普通租户
+            if (tenantModel.TenantType == TenantTypeEnum.Common)
+            {
+                var accountModel = await db.Queryable<AccountModel>()
+                    .Where(wh => wh.Mobile == tenantModel.AdminMobile)
+                    .SingleAsync();
+                if (accountModel == null)
+                {
+                    var accountId = YitIdHelper.NextId();
+                    accountModel = new AccountModel
+                    {
+                        AccountId = accountId,
+                        AccountKey = NumberUtil.IdToCodeByLong(accountId),
+                        Mobile = tenantModel.AdminMobile,
+                        Email = tenantModel.AdminEmail,
+                        Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
+                            .ToUpper(),
+                        NickName = tenantModel.AdminName,
+                        Avatar = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+                        Status = CommonStatusEnum.Enable,
+                        Sex = GenderEnum.Unknown
+                    };
+                    accountModel = await db.Insertable(accountModel)
+                        .ExecuteReturnEntityAsync();
 
-                // 初始化密码记录表
-                await db.Insertable(new List<PasswordRecordModel>
+                    #region PasswordRecordModel
+
+                    // 初始化密码记录表
+                    await db.Insertable(new List<PasswordRecordModel>
+                        {
+                            new()
+                            {
+                                AccountId = accountModel.AccountId,
+                                OperationType = PasswordOperationTypeEnum.Create,
+                                Type = PasswordTypeEnum.SHA1,
+                                Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
+                                    .ToUpper()
+                            }
+                        })
+                        .ExecuteCommandAsync();
+
+                    #endregion
+                }
+
+                // 回填管理员账号Id
+                tenantModel.AdminAccountId = accountModel.AccountId;
+
+                // 初始化租户管理员用户
+                var userId = YitIdHelper.NextId();
+                var robotUserId = YitIdHelper.NextId();
+                await db.Insertable(new List<TenantUserModel>
                     {
                         new()
                         {
+                            UserId = userId,
+                            UserKey = NumberUtil.IdToCodeByLong(userId),
                             AccountId = accountModel.AccountId,
-                            OperationType = PasswordOperationTypeEnum.Create,
-                            Type = PasswordTypeEnum.SHA1,
-                            Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
-                                .ToUpper()
+                            Account = $"{tenantModel.TenantCode}_Admin",
+                            EmployeeNo = $"{tenantModel.TenantCode}_Admin",
+                            EmployeeName = tenantModel.AdminName,
+                            IdPhoto = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+                            DepartmentId = null,
+                            DepartmentName = null,
+                            UserType = UserTypeEnum.Admin,
+                            Status = CommonStatusEnum.Enable,
+                            TenantId = tenantModel.TenantId
+                        },
+                        new()
+                        {
+                            UserId = robotUserId,
+                            UserKey = NumberUtil.IdToCodeByLong(robotUserId),
+                            AccountId = -99,
+                            Account = $"{tenantModel.TenantCode}_Robot",
+                            EmployeeNo = $"{tenantModel.TenantCode}_Robot",
+                            EmployeeName = tenantModel.RobotName,
+                            UserType = UserTypeEnum.Robot,
+                            Status = CommonStatusEnum.Disable,
+                            TenantId = tenantModel.TenantId
                         }
                     })
                     .ExecuteCommandAsync();
-
-                #endregion
             }
 
-            // 回填管理员账号Id
-            tenantModel.AdminAccountId = accountModel.AccountId;
-
-            // 初始化租户管理员用户
-            var userId = YitIdHelper.NextId();
-            var robotUserId = YitIdHelper.NextId();
-            await db.Insertable(new List<TenantUserModel>
-                {
-                    new()
-                    {
-                        UserId = userId,
-                        UserKey = NumberUtil.IdToCodeByLong(userId),
-                        AccountId = accountModel.AccountId,
-                        Account = $"{tenantModel.TenantCode}_Admin",
-                        EmployeeNo = $"{tenantModel.TenantCode}_Admin",
-                        EmployeeName = tenantModel.AdminName,
-                        IdPhoto = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
-                        DepartmentId = null,
-                        DepartmentName = null,
-                        UserType = UserTypeEnum.Admin,
-                        Status = CommonStatusEnum.Enable,
-                        TenantId = tenantModel.TenantId
-                    },
-                    new()
-                    {
-                        UserId = robotUserId,
-                        UserKey = NumberUtil.IdToCodeByLong(robotUserId),
-                        AccountId = -99,
-                        Account = $"{tenantModel.TenantCode}_Robot",
-                        EmployeeNo = $"{tenantModel.TenantCode}_Robot",
-                        EmployeeName = tenantModel.RobotName,
-                        UserType = UserTypeEnum.Robot,
-                        Status = CommonStatusEnum.Disable,
-                        TenantId = tenantModel.TenantId
-                    }
-                })
+            databaseModel.IsInitialized = true;
+            await db.Updateable(databaseModel)
                 .ExecuteCommandAsync();
-
-            // 回填管理员账号Id
-            tenantModel.AdminAccountId = accountModel.AccountId;
+            await db.Updateable(tenantModel)
+                .ExecuteCommandAsync();
         }
-
-        tenantModel.DatabaseInitialized = true;
-        await db.Updateable(tenantModel)
-            .ExecuteCommandAsync();
 
         {
             var logSb = new StringBuilder();
@@ -296,17 +311,17 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
     }
 
     /// <summary>
-    /// 同步数据库
+    /// 初始化数据库
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    [ApiInfo("同步数据库", HttpRequestActionEnum.Submit)]
-    public async Task SyncDatabase(SyncDatabaseInput input)
+    [ApiInfo("初始化数据库", HttpRequestActionEnum.Submit)]
+    public async Task InitDatabase(InitDatabaseInput input)
     {
         if (_user?.IsSuperAdmin == false)
             throw new UserFriendlyException("非超级管理员禁止操作！");
 
-        await InitTenantDatabase(input.TenantId);
+        await InitDatabase(input.TenantId, input.DatabaseType);
     }
 }

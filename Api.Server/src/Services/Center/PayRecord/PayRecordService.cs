@@ -20,5 +20,35 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-global using System.ComponentModel;
-global using Fast.Shared;
+using Fast.Center.Entity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Fast.Center.Service.PayRecord;
+
+/// <summary>
+/// <see cref="PayRecordService"/> 支付记录服务
+/// </summary>
+[ApiDescriptionSettings(ApiGroupConst.Center, Name = "payRecord")]
+public class PayRecordService
+{
+    private readonly ISqlSugarRepository<PayRecordModel> _repository;
+
+    public PayRecordService(ISqlSugarRepository<PayRecordModel> repository)
+    {
+        _repository = repository;
+    }
+
+    /// <summary>
+    /// 获取支付记录分页列表
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("获取支付记录分页列表", HttpRequestActionEnum.Paged)]
+    [Permission(PermissionConst.PayRecordPaged)]
+    public async Task<PagedResult<PayRecordModel>> QueryPasswordMapPaged(PagedInput input)
+    {
+        return await _repository.Entities.ToPagedListAsync(input);
+    }
+}

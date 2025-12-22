@@ -349,7 +349,7 @@ public class AccountService : IDynamicApplication
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    [ApiInfo("账号解除锁定", HttpRequestActionEnum.Edit)]
+    [ApiInfo("账号重置密码", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Account.ResetPassword)]
     public async Task ResetPassword(AccountIdInput input)
     {

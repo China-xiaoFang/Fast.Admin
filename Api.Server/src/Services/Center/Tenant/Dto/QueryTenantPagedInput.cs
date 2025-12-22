@@ -20,5 +20,37 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-global using System.ComponentModel;
-global using Fast.Shared;
+using Fast.Center.Enum;
+
+namespace Fast.Center.Service.Tenant.Dto;
+
+/// <summary>
+/// <see cref="QueryTenantPagedInput"/> 获取租户分页列表输入
+/// </summary>
+public class QueryTenantPagedInput : PagedInput
+{
+    /// <summary>
+    /// 状态
+    /// </summary>
+    public CommonStatusEnum? Status { get; set; }
+
+    /// <summary>
+    /// 版本
+    /// </summary>
+    public EditionEnum? Edition { get; set; }
+
+    /// <summary>
+    /// 租户管理员手机
+    /// </summary>
+    public string AdminMobile { get; set; }
+
+    /// <summary>
+    /// 租户管理员邮箱
+    /// </summary>
+    public string AdminEmail { get; set; }
+
+    /// <summary>
+    /// 租户类型
+    /// </summary>
+    public TenantTypeEnum? TenantType { get; set; }
+}
