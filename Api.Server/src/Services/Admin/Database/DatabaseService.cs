@@ -186,6 +186,7 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
                     OrgCode = $"{tenantModel.TenantCode.ToLower()}_hq",
                     Contacts = tenantModel.AdminName,
                     Phone = tenantModel.AdminMobile,
+                    Email = tenantModel.AdminEmail,
                     Sort = 1,
                     Remark = null
                 })

@@ -38,14 +38,12 @@ public enum DataScopeTypeEnum : byte
     /// <summary>
     /// 本机构及以下数据
     /// </summary>
-    /// <remarks>当前主机构下所有部门的数据</remarks>
     [Description("本机构及以下数据")]
     OrgWithChild = 2,
 
     /// <summary>
     /// 本机构数据
     /// </summary>
-    /// <remarks>当前主机构下直属部门的数据</remarks>
     [Description("本机构数据")]
     Org = 4,
 

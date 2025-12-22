@@ -27,7 +27,7 @@ namespace Fast.Admin.Entity;
 /// </summary>
 [SugarTable("Position", "职位表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
-[SugarIndex($"IX_{{table}}_{nameof(PositionName)}", nameof(OrgId), OrderByType.Asc, nameof(PositionName), OrderByType.Asc, true)]
+[SugarIndex($"IX_{{table}}_{nameof(PositionName)}", nameof(PositionName), OrderByType.Asc, true)]
 public class PositionModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
@@ -35,12 +35,6 @@ public class PositionModel : BaseEntity, IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "职位Id", IsPrimaryKey = true)]
     public long PositionId { get; set; }
-
-    /// <summary>
-    /// 机构Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "机构Id")]
-    public long OrgId { get; set; }
 
     /// <summary>
     /// 职位名称

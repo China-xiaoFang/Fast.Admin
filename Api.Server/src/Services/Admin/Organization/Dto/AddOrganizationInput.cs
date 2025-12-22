@@ -20,54 +20,53 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Entity;
+namespace Fast.Admin.Service.Organization.Dto;
 
 /// <summary>
-/// <see cref="EmployeeOrgModel"/> 职员机构表Model类
+/// <see cref="AddOrganizationInput"/> 添加机构输入
 /// </summary>
-[SugarTable("EmployeeOrg", "职员机构表")]
-[SugarDbType(DatabaseTypeEnum.Admin)]
-public class EmployeeOrgModel : IDatabaseEntity
+public class AddOrganizationInput
 {
     /// <summary>
-    /// 职员Id
+    /// 父级Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "职员Id", IsPrimaryKey = true)]
-    public long EmployeeId { get; set; }
+    public long? ParentId { get; set; }
 
     /// <summary>
-    /// 机构Id
+    /// 机构名称
     /// </summary>
-    [SugarColumn(ColumnDescription = "机构Id")]
-    public long OrganizationId { get; set; }
+    [StringRequired(ErrorMessage = "机构名称不能为空")]
+    public string OrgName { get; set; }
 
     /// <summary>
-    /// 部门Id
+    /// 机构编码
     /// </summary>
-    [SugarColumn(ColumnDescription = "部门Id", IsPrimaryKey = true)]
-    public long DepartmentId { get; set; }
+    [StringRequired(ErrorMessage = "机构编码不能为空")]
+    public string OrgCode { get; set; }
 
     /// <summary>
-    /// 是否为主部门
+    /// 联系人
     /// </summary>
-    [SugarColumn(ColumnDescription = "是否为主部门")]
-    public YesOrNotEnum IsPrimary { get; set; }
+    public string Contacts { get; set; }
 
     /// <summary>
-    /// 职位Id
+    /// 电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "职位Id", IsPrimaryKey = true)]
-    public long PositionId { get; set; }
+    public string Phone { get; set; }
 
     /// <summary>
-    /// 职级Id
+    /// 邮箱
     /// </summary>
-    [SugarColumn(ColumnDescription = "职级Id")]
-    public long? JobLevelId { get; set; }
+    public string Email { get; set; }
 
     /// <summary>
-    /// 是否为负责人
+    /// 排序
     /// </summary>
-    [SugarColumn(ColumnDescription = "是否为负责人")]
-    public YesOrNotEnum IsPrincipal { get; set; }
+    [IntRequired(ErrorMessage = "排序不能为空")]
+    public int Sort { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string Remark { get; set; }
 }

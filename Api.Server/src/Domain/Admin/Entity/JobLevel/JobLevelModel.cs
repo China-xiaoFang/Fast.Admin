@@ -45,11 +45,11 @@ public class JobLevelModel : BaseEntity, IUpdateVersion
     public string JobLevelName { get; set; }
 
     /// <summary>
-    /// 排序
+    /// 职级等级
     /// </summary>
-    /// <remarks>从小到大</remarks>
-    [SugarColumn(ColumnDescription = "排序")]
-    public int Sort { get; set; }
+    /// <remarks>从大到小</remarks>
+    [SugarColumn(ColumnDescription = "职级等级")]
+    public int Level { get; set; }
 
     /// <summary>
     /// 备注

@@ -84,6 +84,12 @@ public class DepartmentModel : IUpdateVersion
     public string Phone { get; set; }
 
     /// <summary>
+    /// 邮箱
+    /// </summary>
+    [SugarColumn(ColumnDescription = "邮箱", Length = 50)]
+    public string Email { get; set; }
+
+    /// <summary>
     /// 排序
     /// </summary>
     /// <remarks>从小到大</remarks>
