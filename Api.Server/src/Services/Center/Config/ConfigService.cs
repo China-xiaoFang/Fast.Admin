@@ -165,6 +165,7 @@ public class ConfigService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除配置", HttpRequestActionEnum.Delete)]
+    [Permission(PermissionConst.Config.Detail)]
     public async Task DeleteConfig(ConfigIdInput input)
     {
         if (_user?.IsSuperAdmin == false)
