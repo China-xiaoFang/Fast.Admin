@@ -189,4 +189,55 @@ public class ComplaintService : IDynamicApplication
         };
         await _repository.InsertAsync(complaintModel);
     }
+
+    /// <summary>
+    /// 处理投诉 (平台)
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("处理投诉", HttpRequestActionEnum.Edit)]
+    [Permission(PermissionConst.Complaint.Handle)]
+    public async Task HandleComplaint(HandleComplaintInput input)
+    {
+        var complaintModel = await _repository.SingleOrDefaultAsync(input.ComplaintId);
+        if (complaintModel == null)
+        {
+            throw new UserFriendlyException("数据不存在！");
+        }
+
+        complaintModel.HandleTime = DateTime.Now;
+        complaintModel.HandleDescription = input.HandleDescription;
+        complaintModel.Remark = input.Remark;
+        complaintModel.RowVersion = input.RowVersion;
+
+        await _repository.UpdateAsync(complaintModel);
+    }
+
+    /// <summary>
+    /// 处理租户投诉
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("处理租户投诉", HttpRequestActionEnum.Edit)]
+    [Permission(PermissionConst.Complaint.TenantHandle)]
+    public async Task HandleTenantComplaint(HandleComplaintInput input)
+    {
+        var complaintModel = await _repository.Entities
+            .Where(wh => wh.ComplaintId == input.ComplaintId && wh.TenantId == _user.TenantId)
+            .FirstAsync();
+        
+        if (complaintModel == null)
+        {
+            throw new UserFriendlyException("数据不存在！");
+        }
+
+        complaintModel.HandleTime = DateTime.Now;
+        complaintModel.HandleDescription = input.HandleDescription;
+        complaintModel.Remark = input.Remark;
+        complaintModel.RowVersion = input.RowVersion;
+
+        await _repository.UpdateAsync(complaintModel);
+    }
 }
