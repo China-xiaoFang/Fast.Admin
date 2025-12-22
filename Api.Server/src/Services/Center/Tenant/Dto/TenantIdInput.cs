@@ -20,12 +20,12 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Service.Database.Dto;
+namespace Fast.Center.Service.Tenant.Dto;
 
 /// <summary>
-/// <see cref="SyncDatabaseInput"/> 同步租户数据库输入
+/// <see cref="TenantIdInput"/> 租户Id输入
 /// </summary>
-public class SyncDatabaseInput
+public class TenantIdInput : UpdateVersionInput
 {
     /// <summary>
     /// 租户Id

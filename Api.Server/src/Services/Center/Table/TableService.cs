@@ -451,11 +451,12 @@ public class TableService : IDynamicApplication
     {
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableKey, _user.TenantNo, _user.EmployeeNo);
         return await _centerCache.GetAndSetAsync(cacheKey, async () =>
-        {
-            return await _columnCacheRepository.Entities.Where(wh => wh.UserId == _user.UserId && wh.TableId == tableId)
-                .OrderBy(ob => ob.Order)
-                .ToListAsync();
-        });
+               {
+                   return await _columnCacheRepository.Entities.Where(wh => wh.UserId == _user.UserId && wh.TableId == tableId)
+                       .OrderBy(ob => ob.Order)
+                       .ToListAsync();
+               })
+               ?? [];
     }
 
     /// <summary>

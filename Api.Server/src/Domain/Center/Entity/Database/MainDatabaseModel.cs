@@ -128,6 +128,12 @@ public class MainDatabaseModel : BaseTEntity, IUpdateVersion
     public bool DisableAop { get; set; }
 
     /// <summary>
+    /// 是否初始化
+    /// </summary>
+    [SugarColumn(ColumnDescription = "是否初始化")]
+    public bool IsInitialized { get; set; }
+
+    /// <summary>
     /// 更新版本控制字段
     /// </summary>
     [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]

@@ -62,6 +62,7 @@ public static class DatabaseSeedData
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                     DiffLog = false,
                     DisableAop = true,
+                    IsInitialized = true,
                     CreatedTime = dateTime,
                     TenantId = tenantId
                 },
@@ -81,6 +82,7 @@ public static class DatabaseSeedData
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                     DiffLog = true,
                     DisableAop = false,
+                    IsInitialized = false,
                     CreatedTime = dateTime,
                     TenantId = tenantId
                 },
@@ -100,6 +102,7 @@ public static class DatabaseSeedData
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                     DiffLog = true,
                     DisableAop = false,
+                    IsInitialized = false,
                     CreatedTime = dateTime,
                     TenantId = tenantId
                 },
@@ -119,6 +122,7 @@ public static class DatabaseSeedData
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                     DiffLog = true,
                     DisableAop = false,
+                    IsInitialized = true,
                     CreatedTime = dateTime,
                     TenantId = tenantId
                 },
@@ -138,6 +142,7 @@ public static class DatabaseSeedData
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                     DiffLog = true,
                     DisableAop = false,
+                    IsInitialized = true,
                     CreatedTime = dateTime,
                     TenantId = tenantId
                 }
@@ -174,6 +179,7 @@ public static class DatabaseSeedData
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                     DiffLog = true,
                     DisableAop = false,
+                    IsInitialized = false,
                     CreatedTime = dateTime,
                     TenantId = tenantId
                 },
@@ -193,6 +199,7 @@ public static class DatabaseSeedData
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
                     DiffLog = true,
                     DisableAop = false,
+                    IsInitialized = false,
                     CreatedTime = dateTime,
                     TenantId = tenantId
                 }

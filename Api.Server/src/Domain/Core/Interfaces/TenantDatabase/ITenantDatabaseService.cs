@@ -29,9 +29,10 @@ namespace Fast.Core;
 public interface ITenantDatabaseService
 {
     /// <summary>
-    /// 初始化租户数据库
+    /// 初始化数据库
     /// </summary>
     /// <param name="tenantId"><see cref="long"/> 租户Id</param>
+    /// <param name="databaseType"><see cref="DatabaseTypeEnum"/> 数据库类型</param>
     /// <returns></returns>
-    Task InitTenantDatabase(long tenantId);
+    Task InitDatabase(long tenantId, DatabaseTypeEnum databaseType);
 }
