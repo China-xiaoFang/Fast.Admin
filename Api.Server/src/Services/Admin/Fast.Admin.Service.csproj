@@ -12,6 +12,7 @@
         <ProjectReference Include="$(SolutionDir)src\Domain\Core\Fast.Core.csproj" />
         <ProjectReference Include="$(SolutionDir)src\Domain\Admin\Entity\Fast.Admin.Entity.csproj" />
         <ProjectReference Include="$(SolutionDir)src\Domain\AdminLog\Entity\Fast.AdminLog.Entity.csproj" />
+        <ProjectReference Include="$(SolutionDir)src\Domain\Center\Entity\Fast.Center.Entity.csproj" />
     </ItemGroup>
 
 </Project>

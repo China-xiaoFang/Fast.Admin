@@ -341,6 +341,18 @@ public class PermissionConst
 
         /// <summary>角色删除</summary>
         public const string Delete = "Role:Delete";
+
+        /// <summary>分配菜单权限</summary>
+        public const string AuthorizeMenus = "Role:AuthorizeMenus";
+
+        /// <summary>分配按钮权限</summary>
+        public const string AuthorizeButtons = "Role:AuthorizeButtons";
+
+        /// <summary>查询角色菜单</summary>
+        public const string QueryMenus = "Role:QueryMenus";
+
+        /// <summary>查询角色按钮</summary>
+        public const string QueryButtons = "Role:QueryButtons";
     }
 
     /// <summary><see cref="Department"/> 部门</summary>
