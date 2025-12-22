@@ -20,27 +20,16 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Enum;
+namespace Fast.Admin.Service.Role.Dto;
 
 /// <summary>
-/// <see cref="RoleTypeEnum"/> 角色类型枚举
+/// <see cref="RoleIdInput"/> 角色Id输入
 /// </summary>
-[Flags]
-[FastEnum("角色类型枚举")]
-public enum RoleTypeEnum : byte
+public class RoleIdInput : UpdateVersionInput
 {
     /// <summary>
-    /// 普通
+    /// 角色Id
     /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("普通")]
-    Normal = 0,
-
-    /// <summary>
-    /// 管理员
-    /// </summary>
-    /// <remarks>默认查看所有数据</remarks>
-    [TagType(TagTypeEnum.Primary)]
-    [Description("管理员")]
-    Admin = 1
+    [LongRequired(ErrorMessage = "角色Id不能为空")]
+    public long RoleId { get; set; }
 }

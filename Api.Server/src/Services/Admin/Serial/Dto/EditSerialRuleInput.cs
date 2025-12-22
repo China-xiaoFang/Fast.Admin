@@ -20,27 +20,40 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Enum;
+namespace Fast.Admin.Service.Serial.Dto;
 
 /// <summary>
-/// <see cref="RoleTypeEnum"/> 角色类型枚举
+/// <see cref="EditSerialRuleInput"/> 编辑序号规则输入
 /// </summary>
-[Flags]
-[FastEnum("角色类型枚举")]
-public enum RoleTypeEnum : byte
+public class EditSerialRuleInput : UpdateVersionInput
 {
     /// <summary>
-    /// 普通
+    /// 序号规则Id
     /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("普通")]
-    Normal = 0,
+    [LongRequired(ErrorMessage = "序号规则Id不能为空")]
+    public long SerialRuleId { get; set; }
 
     /// <summary>
-    /// 管理员
+    /// 前缀
     /// </summary>
-    /// <remarks>默认查看所有数据</remarks>
-    [TagType(TagTypeEnum.Primary)]
-    [Description("管理员")]
-    Admin = 1
+    [MaxLength(5, ErrorMessage = "前缀最长为5个字符")]
+    public string Prefix { get; set; }
+
+    /// <summary>
+    /// 时间类型
+    /// </summary>
+    [EnumRequired(ErrorMessage = "时间类型不能为空")]
+    public SerialDateTypeEnum DateType { get; set; }
+
+    /// <summary>
+    /// 分隔符
+    /// </summary>
+    [EnumRequired(ErrorMessage = "分隔符不能为空")]
+    public SerialSpacerEnum Spacer { get; set; }
+
+    /// <summary>
+    /// 长度
+    /// </summary>
+    [IntRequired(ErrorMessage = "长度不能为空")]
+    public int Length { get; set; }
 }

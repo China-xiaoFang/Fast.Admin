@@ -20,27 +20,47 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Enum;
+using Fast.Admin.Enum;
+
+namespace Fast.Admin.Service.Role.Dto;
 
 /// <summary>
-/// <see cref="RoleTypeEnum"/> 角色类型枚举
+/// <see cref="QueryRoleDetailOutput"/> 获取角色详情输出
 /// </summary>
-[Flags]
-[FastEnum("角色类型枚举")]
-public enum RoleTypeEnum : byte
+public class QueryRoleDetailOutput : PagedOutput
 {
     /// <summary>
-    /// 普通
+    /// 角色Id
     /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("普通")]
-    Normal = 0,
+    public long RoleId { get; set; }
 
     /// <summary>
-    /// 管理员
+    /// 角色类型
     /// </summary>
-    /// <remarks>默认查看所有数据</remarks>
-    [TagType(TagTypeEnum.Primary)]
-    [Description("管理员")]
-    Admin = 1
+    public RoleTypeEnum RoleType { get; set; }
+
+    /// <summary>
+    /// 角色名称
+    /// </summary>
+    public string RoleName { get; set; }
+
+    /// <summary>
+    /// 角色编码
+    /// </summary>
+    public string RoleCode { get; set; }
+
+    /// <summary>
+    /// 排序
+    /// </summary>
+    public int Sort { get; set; }
+
+    /// <summary>
+    /// 数据范围类型
+    /// </summary>
+    public DataScopeTypeEnum DataScopeType { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string Remark { get; set; }
 }
