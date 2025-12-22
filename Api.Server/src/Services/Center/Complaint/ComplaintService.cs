@@ -43,12 +43,12 @@ public class ComplaintService : IDynamicApplication
     }
 
     /// <summary>
-    /// 获取投诉分页列表
+    /// 获取投诉工单分页列表
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    [ApiInfo("获取投诉分页列表", HttpRequestActionEnum.Paged)]
+    [ApiInfo("获取投诉工单分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Complaint.Paged)]
     public async Task<PagedResult<QueryComplaintPagedOutput>> QueryComplaintPaged(QueryComplaintPagedInput input)
     {
@@ -76,12 +76,12 @@ public class ComplaintService : IDynamicApplication
     }
 
     /// <summary>
-    /// 获取租户投诉分页列表
+    /// 获取用户投诉分页列表
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    [ApiInfo("获取租户投诉分页列表", HttpRequestActionEnum.Paged)]
+    [ApiInfo("获取用户投诉分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Complaint.TenantPaged)]
     public async Task<PagedResult<QueryComplaintPagedOutput>> QueryTenantComplaintPaged(QueryComplaintPagedInput input)
     {
@@ -191,7 +191,7 @@ public class ComplaintService : IDynamicApplication
     }
 
     /// <summary>
-    /// 处理投诉 (平台)
+    /// 处理投诉
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
@@ -201,33 +201,6 @@ public class ComplaintService : IDynamicApplication
     public async Task HandleComplaint(HandleComplaintInput input)
     {
         var complaintModel = await _repository.SingleOrDefaultAsync(input.ComplaintId);
-        if (complaintModel == null)
-        {
-            throw new UserFriendlyException("数据不存在！");
-        }
-
-        complaintModel.HandleTime = DateTime.Now;
-        complaintModel.HandleDescription = input.HandleDescription;
-        complaintModel.Remark = input.Remark;
-        complaintModel.RowVersion = input.RowVersion;
-
-        await _repository.UpdateAsync(complaintModel);
-    }
-
-    /// <summary>
-    /// 处理租户投诉
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    [HttpPost]
-    [ApiInfo("处理租户投诉", HttpRequestActionEnum.Edit)]
-    [Permission(PermissionConst.Complaint.TenantHandle)]
-    public async Task HandleTenantComplaint(HandleComplaintInput input)
-    {
-        var complaintModel = await _repository.Entities
-            .Where(wh => wh.ComplaintId == input.ComplaintId && wh.TenantId == _user.TenantId)
-            .FirstAsync();
-        
         if (complaintModel == null)
         {
             throw new UserFriendlyException("数据不存在！");

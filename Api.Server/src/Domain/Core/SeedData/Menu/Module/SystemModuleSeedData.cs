@@ -1492,6 +1492,21 @@ internal static partial class MenuSeedData
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Internal,
+                    AppId = applicationModel.AppId,
+                    MenuId = complaintMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Complaint.Handle,
+                    ButtonName = "处理",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
                 }
             })
             .ExecuteCommandAsync();

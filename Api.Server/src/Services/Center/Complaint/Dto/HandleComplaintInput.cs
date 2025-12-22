@@ -34,9 +34,9 @@ public class HandleComplaintInput : UpdateVersionInput
     public long ComplaintId { get; set; }
 
     /// <summary>
-    /// 处理说明
+    /// 处理描述
     /// </summary>
-    [StringRequired(ErrorMessage = "处理说明不能为空")]
+    [StringRequired(ErrorMessage = "处理描述不能为空")]
     public string HandleDescription { get; set; }
 
     /// <summary>

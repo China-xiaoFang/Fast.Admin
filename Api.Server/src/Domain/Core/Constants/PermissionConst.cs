@@ -423,23 +423,20 @@ public class PermissionConst
     /// <summary><see cref="Complaint"/> 投诉</summary>
     public class Complaint
     {
-        /// <summary>投诉列表</summary>
+        /// <summary>投诉工单列表</summary>
         public const string Paged = "Complaint:Paged";
 
-        /// <summary>投诉详情</summary>
+        /// <summary>投诉工单详情</summary>
         public const string Detail = "Complaint:Detail";
 
-        /// <summary>投诉租户列表</summary>
-        public const string TenantPaged = "Complaint:TenantPaged";
-
-        /// <summary>投诉租户详情</summary>
-        public const string TenantDetail = "Complaint:TenantDetail";
-
-        /// <summary>处理投诉</summary>
+        /// <summary>处理投诉工单</summary>
         public const string Handle = "Complaint:Handle";
 
-        /// <summary>处理租户投诉</summary>
-        public const string TenantHandle = "Complaint:TenantHandle";
+        /// <summary>用户投诉列表</summary>
+        public const string TenantPaged = "Complaint:TenantPaged";
+
+        /// <summary>用户投诉详情</summary>
+        public const string TenantDetail = "Complaint:TenantDetail";
     }
 
     /// <summary>访问日志列表</summary>

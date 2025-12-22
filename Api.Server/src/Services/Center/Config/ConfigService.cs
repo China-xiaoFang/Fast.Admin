@@ -159,27 +159,29 @@ public class ConfigService : IDynamicApplication
     }
 
     /// <summary>
-    /// 删除配置
+    /// 删除配置缓存
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    [ApiInfo("删除配置", HttpRequestActionEnum.Delete)]
-    [Permission(PermissionConst.Config.Detail)]
-    public async Task DeleteConfig(ConfigIdInput input)
+    [ApiInfo("删除配置缓存", HttpRequestActionEnum.Delete)]
+    [Permission(PermissionConst.Config.Edit)]
+    public async Task DeleteConfigCache(DeleteConfigCacheInput input)
     {
-        if (_user?.IsSuperAdmin == false)
-            throw new UserFriendlyException("非超级管理员禁止操作！");
-
-        var configModel = await _repository.SingleOrDefaultAsync(input.ConfigId);
-        if (configModel == null)
-        {
-            throw new UserFriendlyException("数据不存在！");
-        }
-
-        await _repository.DeleteAsync(configModel);
-        
         // 删除缓存
-        await ConfigContext.DeleteConfig(configModel.ConfigCode);
+        await ConfigContext.DeleteConfig(input.ConfigCode);
+    }
+
+    /// <summary>
+    /// 删除所有配置缓存
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("删除所有配置缓存", HttpRequestActionEnum.Delete)]
+    [Permission(PermissionConst.Config.Edit)]
+    public async Task DeleteAllConfigCache()
+    {
+        // 删除缓存
+        await ConfigContext.DeleteAllConfig();
     }
 }
