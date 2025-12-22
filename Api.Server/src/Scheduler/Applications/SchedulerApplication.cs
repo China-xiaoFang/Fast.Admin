@@ -240,7 +240,7 @@ public class SchedulerApplication : IDynamicApplication
     [HttpPost]
     [ApiInfo("编辑调度作业", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Scheduler.Edit)]
-    public async Task EditSchedulerJob(UpdateSchedulerJobInput input)
+    public async Task EditSchedulerJob(EditSchedulerJobInput input)
     {
         await _schedulerCenter.EditSchedulerJob(input);
     }
