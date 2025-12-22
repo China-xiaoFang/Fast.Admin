@@ -47,7 +47,6 @@ public class LoginLogService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取登录日志分页列表", HttpRequestActionEnum.Paged)]
-    [Permission(PermissionConst.LoginLog.Paged)]
     public async Task<PagedResult<QueryLoginLogPagedOutput>> QueryLoginLogPaged(QueryLoginLogPagedInput input)
     {
         return await _repository.Entities
@@ -78,7 +77,6 @@ public class LoginLogService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取登录日志详情", HttpRequestActionEnum.Query)]
-    [Permission(PermissionConst.LoginLog.Detail)]
     public async Task<QueryLoginLogDetailOutput> QueryLoginLogDetail([Required(ErrorMessage = "登录日志Id不能为空")] long? loginLogId)
     {
         var result = await _repository.Entities

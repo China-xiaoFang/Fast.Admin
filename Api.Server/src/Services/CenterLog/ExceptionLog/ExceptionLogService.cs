@@ -47,7 +47,6 @@ public class ExceptionLogService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取异常日志分页列表", HttpRequestActionEnum.Paged)]
-    [Permission(PermissionConst.ExceptionLog.Paged)]
     public async Task<PagedResult<QueryExceptionLogPagedOutput>> QueryExceptionLogPaged(QueryExceptionLogPagedInput input)
     {
         return await _repository.Entities
@@ -76,7 +75,6 @@ public class ExceptionLogService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取异常日志详情", HttpRequestActionEnum.Query)]
-    [Permission(PermissionConst.ExceptionLog.Detail)]
     public async Task<QueryExceptionLogDetailOutput> QueryExceptionLogDetail([Required(ErrorMessage = "异常日志Id不能为空")] long? recordId)
     {
         var result = await _repository.Entities

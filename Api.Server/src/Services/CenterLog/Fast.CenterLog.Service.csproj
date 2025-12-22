@@ -10,7 +10,6 @@
 
     <ItemGroup>
         <ProjectReference Include="$(SolutionDir)src\Domain\Core\Fast.Core.csproj" />
-        <ProjectReference Include="$(SolutionDir)src\Domain\CenterLog\Entity\Fast.CenterLog.Entity.csproj" />
     </ItemGroup>
 
 </Project>

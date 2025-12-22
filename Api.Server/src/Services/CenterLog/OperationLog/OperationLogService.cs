@@ -47,7 +47,6 @@ public class OperationLogService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取操作日志分页列表", HttpRequestActionEnum.Paged)]
-    [Permission(PermissionConst.OperationLog.Paged)]
     public async Task<PagedResult<QueryOperationLogPagedOutput>> QueryOperationLogPaged(QueryOperationLogPagedInput input)
     {
         return await _repository.Entities
@@ -83,7 +82,6 @@ public class OperationLogService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取操作日志详情", HttpRequestActionEnum.Query)]
-    [Permission(PermissionConst.OperationLog.Detail)]
     public async Task<QueryOperationLogDetailOutput> QueryOperationLogDetail([Required(ErrorMessage = "操作日志Id不能为空")] long? operationLogId)
     {
         var result = await _repository.Entities

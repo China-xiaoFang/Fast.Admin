@@ -47,7 +47,6 @@ public class SchedulerJobLogService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取调度作业日志分页列表", HttpRequestActionEnum.Paged)]
-    [Permission(PermissionConst.SchedulerJobLog.Paged)]
     public async Task<PagedResult<QuerySchedulerJobLogPagedOutput>> QuerySchedulerJobLogPaged(QuerySchedulerJobLogPagedInput input)
     {
         return await _repository.Entities
@@ -79,7 +78,6 @@ public class SchedulerJobLogService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取调度作业日志详情", HttpRequestActionEnum.Query)]
-    [Permission(PermissionConst.SchedulerJobLog.Detail)]
     public async Task<QuerySchedulerJobLogDetailOutput> QuerySchedulerJobLogDetail([Required(ErrorMessage = "调度作业日志Id不能为空")] long? jobLogId)
     {
         var result = await _repository.Entities
