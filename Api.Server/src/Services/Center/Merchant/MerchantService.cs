@@ -41,6 +41,25 @@ public class MerchantService : IDynamicApplication
     }
 
     /// <summary>
+    /// 商户号选择器
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [ApiInfo("商户号选择器", HttpRequestActionEnum.Query)]
+    public async Task<List<ElSelectorOutput<long>>> MerchantSelector()
+    {
+        var data = await _repository.Entities.OrderBy(ob => ob.MerchantNo)
+            .Select(sl => new {sl.MerchantId, sl.MerchantNo, sl.MerchantType, sl.Remark})
+            .ToListAsync();
+
+        return data.Select(sl => new ElSelectorOutput<long>
+            {
+                Value = sl.MerchantId, Label = sl.MerchantNo, Data = new {sl.MerchantType, sl.Remark}
+            })
+            .ToList();
+    }
+
+    /// <summary>
     /// 获取商户号分页列表
     /// </summary>
     /// <param name="input"></param>
