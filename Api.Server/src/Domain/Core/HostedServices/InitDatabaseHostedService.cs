@@ -70,7 +70,6 @@ public class InitDatabaseHostedService : IHostedService
                 $"SELECT COUNT(*) FROM [information_schema].[TABLES] WHERE [TABLE_NAME] = '{typeof(AccountModel).GetSugarTableName()}'";
             if (await db.Ado.GetIntAsync(sql) > 0)
                 return;
-
             // 加载Aop
             SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
@@ -127,7 +126,6 @@ public class InitDatabaseHostedService : IHostedService
                 TenantType = TenantTypeEnum.System,
                 LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
                 AllowDeleteData = true,
-                DatabaseInitialized = false,
                 CreatedTime = dateTime
             };
             systemTenantModel = await db.Insertable(systemTenantModel)
@@ -284,7 +282,6 @@ public class InitDatabaseHostedService : IHostedService
                     TenantType = TenantTypeEnum.Common,
                     LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
                     AllowDeleteData = true,
-                    DatabaseInitialized = false,
                     CreatedTime = dateTime
                 };
                 await db.Insertable(defaultTenantModel)

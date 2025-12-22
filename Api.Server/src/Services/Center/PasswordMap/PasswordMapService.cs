@@ -20,5 +20,35 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-global using System.ComponentModel;
-global using Fast.Shared;
+using Fast.Center.Entity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Fast.Center.Service.PasswordMap;
+
+/// <summary>
+/// <see cref="PasswordMapService"/> 密码映射服务
+/// </summary>
+[ApiDescriptionSettings(ApiGroupConst.Center, Name = "passwordMap")]
+public class PasswordMapService : IDynamicApplication
+{
+    private readonly ISqlSugarRepository<PasswordMapModel> _repository;
+
+    public PasswordMapService(ISqlSugarRepository<PasswordMapModel> repository)
+    {
+        _repository = repository;
+    }
+
+    /// <summary>
+    /// 获取密码映射分页列表
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("获取密码映射分页列表", HttpRequestActionEnum.Paged)]
+    [Permission(PermissionConst.PasswordMapPaged)]
+    public async Task<PagedResult<PasswordMapModel>> QueryPasswordMapPaged(PagedInput input)
+    {
+        return await _repository.Entities.ToPagedListAsync(input);
+    }
+}

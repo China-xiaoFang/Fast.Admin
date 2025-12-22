@@ -40,7 +40,8 @@ public static class IServiceCollectionExtension
     {
         var IHostedServiceType = typeof(IHostedService);
 
-        var hostedServiceTypes = MAppContext.EffectiveTypes.Where(wh => IHostedServiceType.IsAssignableFrom(wh))
+        var hostedServiceTypes = MAppContext.EffectiveTypes.Where(wh =>
+                IHostedServiceType.IsAssignableFrom(wh) && wh.IsClass && !wh.IsInterface && !wh.IsAbstract)
             .Select(sl => new
             {
                 Type = sl,

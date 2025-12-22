@@ -20,137 +20,99 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Entity;
+using Fast.Center.Enum;
+
+namespace Fast.Center.Service.Tenant.Dto;
 
 /// <summary>
-/// <see cref="TenantModel"/> 租户信息表Model类
+/// <see cref="QueryTenantPagedOutput"/> 获取租户分页列表输出
 /// </summary>
-[SugarTable("Tenant", "租户信息表")]
-[SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(TenantNo)}", nameof(TenantNo), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(TenantName)}", nameof(TenantName), OrderByType.Asc, true)]
-public class TenantModel : BaseEntity, IUpdateVersion
+public class QueryTenantPagedOutput : PagedOutput
 {
     /// <summary>
     /// 租户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户Id", IsPrimaryKey = true)]
     public long TenantId { get; set; }
 
     /// <summary>
     /// 租户编号
     /// </summary>
-    [SugarSearchValue]
-    [Required]
-    [SugarColumn(ColumnDescription = "租户编号", Length = 11)]
     public string TenantNo { get; set; }
 
     /// <summary>
     /// 租户编码
     /// </summary>
     /// <remarks>单号生成前缀</remarks>
-    [SugarSearchValue]
-    [Required]
-    [SugarColumn(ColumnDescription = "租户编码", ColumnDataType = "varchar(5)")]
     public string TenantCode { get; set; }
 
     /// <summary>
     /// 状态
     /// </summary>
-    [SugarColumn(ColumnDescription = "状态")]
     public CommonStatusEnum Status { get; set; }
 
     /// <summary>
     /// 租户名称
     /// </summary>
-    [SugarSearchValue]
-    [Required]
-    [SugarColumn(ColumnDescription = "租户名称", Length = 30)]
     public string TenantName { get; set; }
 
     /// <summary>
     /// 租户简称
     /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "租户简称", Length = 20)]
     public string ShortName { get; set; }
 
     /// <summary>
     /// 租户英文名称
     /// </summary>
     /// <remarks>根据 <see cref="TenantName"/> 生成的拼音</remarks>
-    [Required]
-    [SugarColumn(ColumnDescription = "租户英文名称", Length = 100)]
     public string SpellName { get; set; }
 
     /// <summary>
     /// 版本
     /// </summary>
-    [SugarColumn(ColumnDescription = "版本")]
     public EditionEnum Edition { get; set; }
 
     /// <summary>
     /// 租户管理员账号Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户管理员账号Id")]
     public long AdminAccountId { get; set; }
 
     /// <summary>
     /// 租户管理员名称
     /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "租户管理员名称", Length = 20)]
     public string AdminName { get; set; }
 
     /// <summary>
     /// 租户管理员手机
     /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "租户管理员手机", ColumnDataType = "varchar(11)")]
     public string AdminMobile { get; set; }
 
     /// <summary>
     /// 租户管理员邮箱
     /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "租户管理员邮箱", Length = 50)]
     public string AdminEmail { get; set; }
 
     /// <summary>
     /// 租户管理员电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户管理员电话", Length = 20)]
     public string AdminPhone { get; set; }
 
     /// <summary>
     /// 租户机器人名称
     /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "租户机器人名称", Length = 20)]
     public string RobotName { get; set; }
 
     /// <summary>
     /// 租户类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "租户类型")]
     public TenantTypeEnum TenantType { get; set; }
 
     /// <summary>
     /// LogoUrl
     /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "LogoUrl", Length = 200)]
     public string LogoUrl { get; set; }
 
     /// <summary>
     /// 允许删除数据
     /// </summary>
-    [SugarColumn(ColumnDescription = "允许删除数据")]
     public bool AllowDeleteData { get; set; }
-
-    /// <summary>
-    /// 更新版本控制字段
-    /// </summary>
-    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
-    public long RowVersion { get; set; }
 }
