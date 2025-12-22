@@ -132,7 +132,6 @@ public class WeChatUserModel : IUpdateVersion
     /// 语言
     /// </summary>
     [SugarColumn(ColumnDescription = "语言", Length = 10)]
-
     public string Language { get; set; }
 
     /// <summary>
