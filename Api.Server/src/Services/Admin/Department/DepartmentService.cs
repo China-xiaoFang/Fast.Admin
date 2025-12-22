@@ -129,7 +129,7 @@ public class DepartmentService : IDynamicApplication
                 UpdatedTime = t1.UpdatedTime,
                 RowVersion = t1.RowVersion
             })
-            .SingleAsync();
+            .SingleOrDefaultAsync();
 
         if (result == null)
         {
@@ -142,8 +142,11 @@ public class DepartmentService : IDynamicApplication
             var parentDept = await _repository.Entities
                 .Where(wh => wh.DepartmentId == result.ParentId)
                 .Select(sl => sl.DepartmentName)
-                .FirstAsync();
-            result.ParentName = parentDept;
+                .FirstOrDefaultAsync();
+            if (!string.IsNullOrEmpty(parentDept))
+            {
+                result.ParentName = parentDept;
+            }
         }
 
         return result;
@@ -337,7 +340,13 @@ public class DepartmentService : IDynamicApplication
             var parent = await _repository.Entities
                 .Where(wh => wh.DepartmentId == parentId)
                 .Select(sl => sl.ParentId)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
+
+            // If parent not found or no parent, break the loop
+            if (parent == 0)
+            {
+                break;
+            }
 
             parentId = parent;
         }
