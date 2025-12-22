@@ -27,7 +27,7 @@ namespace Fast.Core;
 /// </summary>
 /// <remarks>所有权限都在这里</remarks>
 [SuppressSniffer]
-public class PermissionConst
+public partial class PermissionConst
 {
     /// <summary>客户端服务</summary>
     public const string ClientService = "ClientService";
