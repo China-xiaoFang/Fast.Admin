@@ -27,7 +27,7 @@ namespace Fast.Center.Entity;
 /// </summary>
 [SugarTable("DatabaseSlave", "从数据库表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-public class SlaveDatabaseModel : BaseTEntity, IUpdateVersion
+public class SlaveDatabaseModel : BaseTEntity
 {
     /// <summary>
     /// 从库Id
@@ -100,14 +100,8 @@ public class SlaveDatabaseModel : BaseTEntity, IUpdateVersion
     /// </summary>
     /// <remarks>
     /// <para>为 0 则不命中</para>
-    /// <para>建议相加不超过10</para>
+    /// <para>建议相加不超过100</para>
     /// </remarks>
     [SugarColumn(ColumnDescription = "从库命中率")]
     public int HitRate { get; set; }
-
-    /// <summary>
-    /// 更新版本控制字段
-    /// </summary>
-    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
-    public long RowVersion { get; set; }
 }

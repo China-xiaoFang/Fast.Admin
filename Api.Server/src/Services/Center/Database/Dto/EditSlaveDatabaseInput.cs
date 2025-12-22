@@ -20,65 +20,68 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
-
 namespace Fast.Center.Service.Database.Dto;
 
 /// <summary>
-/// <see cref="EditSlaveDatabaseInput"/> 编辑从库模板输入
+/// <see cref="EditSlaveDatabaseInput"/> 编辑从数据库输入
 /// </summary>
-public class EditSlaveDatabaseInput : UpdateVersionInput
+public class EditSlaveDatabaseInput 
 {
     /// <summary>
-    /// 从库模板Id
+    /// 从库Id
     /// </summary>
-    [LongRequired(ErrorMessage = "从库模板Id不能为空")]
-    public long SlaveDatabaseId { get; set; }
+    public long? SlaveId { get; set; }
 
     /// <summary>
-    /// 主库模板Id
+    /// 数据库类型，用于区分使用的是那个类型的数据库
     /// </summary>
-    [LongRequired(ErrorMessage = "主库模板Id不能为空")]
-    public long MainDatabaseId { get; set; }
+    [EnumRequired(ErrorMessage = "数据库类型不能为空")]
+    public DbType DbType { get; set; }
+
+    /// <summary>
+    /// 公网Ip地址
+    /// </summary>
+    [StringRequired(ErrorMessage = "公网Ip地址不能为空")]
+    public string PublicIp { get; set; }
+
+    /// <summary>
+    /// 内网Ip地址
+    /// </summary>
+    [StringRequired(ErrorMessage = "内网Ip地址不能为空")]
+    public string IntranetIp { get; set; }
+
+    /// <summary>
+    /// 端口号
+    /// </summary>
+    [IntRequired(ErrorMessage = "端口号不能为空")]
+    public int Port { get; set; }
 
     /// <summary>
     /// 数据库名称
     /// </summary>
     [StringRequired(ErrorMessage = "数据库名称不能为空")]
-    public string DatabaseName { get; set; }
+    public string DbName { get; set; }
 
     /// <summary>
-    /// 主机地址
+    /// 数据库用户
     /// </summary>
-    [StringRequired(ErrorMessage = "主机地址不能为空")]
-    public string Host { get; set; }
+    [StringRequired(ErrorMessage = "数据库用户不能为空")]
+    public string DbUser { get; set; }
 
     /// <summary>
-    /// 端口
+    /// 数据库密码
     /// </summary>
-    [Required(ErrorMessage = "端口不能为空")]
-    public int Port { get; set; }
+    [StringRequired(ErrorMessage = "数据库密码不能为空")]
+    public string DbPwd { get; set; }
 
     /// <summary>
-    /// 用户名
+    /// 自定义连接字符串
     /// </summary>
-    [StringRequired(ErrorMessage = "用户名不能为空")]
-    public string UserName { get; set; }
+    public string CustomConnectionStr { get; set; }
 
     /// <summary>
-    /// 密码
+    /// 从库命中率
     /// </summary>
-    [StringRequired(ErrorMessage = "密码不能为空")]
-    public string Password { get; set; }
-
-    /// <summary>
-    /// 状态
-    /// </summary>
-    [Required(ErrorMessage = "状态不能为空")]
-    public CommonStatusEnum Status { get; set; }
-
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public string Remark { get; set; }
+    [IntRequired(ErrorMessage = "从库命中率不能为空")]
+    public int HitRate { get; set; }
 }
