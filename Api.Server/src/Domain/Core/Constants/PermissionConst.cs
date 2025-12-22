@@ -324,6 +324,25 @@ public class PermissionConst
         public const string Delete = "JobLevel:Delete";
     }
 
+    /// <summary><see cref="Organization"/> 组织机构</summary>
+    public class Organization
+    {
+        /// <summary>组织机构列表</summary>
+        public const string Tree = "Organization:Tree";
+
+        /// <summary>组织机构详情</summary>
+        public const string Detail = "Organization:Detail";
+
+        /// <summary>组织机构新增</summary>
+        public const string Add = "Organization:Add";
+
+        /// <summary>组织机构编辑</summary>
+        public const string Edit = "Organization:Edit";
+
+        /// <summary>组织机构删除</summary>
+        public const string Delete = "Organization:Delete";
+    }
+
     /// <summary><see cref="Role"/> 角色</summary>
     public class Role
     {

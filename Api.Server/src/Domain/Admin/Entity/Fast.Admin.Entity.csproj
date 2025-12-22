@@ -10,6 +10,7 @@
 
     <ItemGroup>
         <ProjectReference Include="$(SolutionDir)src\Domain\Admin\Enum\Fast.Admin.Enum.csproj" />
+        <ProjectReference Include="$(SolutionDir)src\Shared\Fast.Shared.csproj" />
     </ItemGroup>
 
 </Project>

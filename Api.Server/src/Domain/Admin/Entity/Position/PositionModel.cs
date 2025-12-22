@@ -28,6 +28,7 @@ namespace Fast.Admin.Entity;
 [SugarTable("Position", "职位表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
 [SugarIndex($"IX_{{table}}_{nameof(PositionName)}", nameof(OrgId), OrderByType.Asc, nameof(PositionName), OrderByType.Asc, true)]
+[SugarIndex($"IX_{{table}}_{nameof(PositionCode)}", nameof(PositionCode), OrderByType.Asc, true)]
 public class PositionModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
@@ -51,11 +52,25 @@ public class PositionModel : BaseEntity, IUpdateVersion
     public string PositionName { get; set; }
 
     /// <summary>
+    /// 职位编码
+    /// </summary>
+    [Required]
+    [SugarSearchValue]
+    [SugarColumn(ColumnDescription = "职位编码", Length = 50)]
+    public string PositionCode { get; set; }
+
+    /// <summary>
     /// 排序
     /// </summary>
     /// <remarks>从小到大</remarks>
     [SugarColumn(ColumnDescription = "排序")]
     public int Sort { get; set; }
+
+    /// <summary>
+    /// 状态
+    /// </summary>
+    [SugarColumn(ColumnDescription = "状态")]
+    public CommonStatusEnum Status { get; set; }
 
     /// <summary>
     /// 备注
