@@ -349,6 +349,9 @@ public class PermissionConst
         /// <summary>部门列表</summary>
         public const string Paged = "Department:Paged";
 
+        /// <summary>部门树形列表</summary>
+        public const string Tree = "Department:Tree";
+
         /// <summary>部门详情</summary>
         public const string Detail = "Department:Detail";
 
