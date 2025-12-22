@@ -1,14 +1,15 @@
-import { Fragment, computed, defineComponent, reactive, ref } from "vue";
+import { Fragment, computed, defineComponent, onMounted, reactive, ref } from "vue";
 import { ElDropdownItem, ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { FaTable, faTableEmits, faTableProps } from "fast-element-plus";
 import { clickUtil, makeSlots, useExpose, useProps, useRender, withDefineType } from "@fast-china/utils";
-import { pick } from "lodash";
+import { isString } from "lodash";
 import type { FaTableColumnCtx, FaTableInstance, FaTableSlots } from "fast-element-plus";
+import type { VNode } from "vue";
 import { tableApi } from "@/api/services/table";
 import { useApp, useConfig } from "@/stores";
 
 export default defineComponent({
-	name: "Table",
+	name: "FastTable",
 	props: {
 		...faTableProps,
 		/** @description 列配置按钮 */
@@ -28,9 +29,11 @@ export default defineComponent({
 		const configStore = useConfig();
 
 		const state = reactive({
+			loading: false,
+			loadingText: "加载中...",
 			/** 表格列 */
 			columns: withDefineType<FaTableColumnCtx[]>([]),
-			/** 是否存在缓存列 @description 需要通过 GejiaApp.table.columnsSettings.get 方法获取 */
+			/** 是否存在缓存列 */
 			existCacheColumns: false,
 		});
 
@@ -155,7 +158,7 @@ export default defineComponent({
 						columns: columns.map((m) => ({
 							columnId: m.columnId,
 							label: m.label,
-							fixed: m.fixed.toString(),
+							fixed: isString(m.fixed) ? m.fixed : "",
 							autoWidth: m.autoWidth,
 							width: Number(m.width),
 							smallWidth: Number(m.smallWidth),
@@ -179,6 +182,25 @@ export default defineComponent({
 			}, "保存列配置中...");
 		};
 
+		const handleColumns = (columns: FaTableColumnCtx[]): FaTableColumnCtx[] => {
+			return columns.map((col) => {
+				const result = { ...col };
+
+				if (result._children?.length) {
+					result._children = handleColumns(result._children);
+				}
+
+				if (result.enum && isString(result.enum)) {
+					const enumDict = appStore.getDictionary(result.enum);
+					if (enumDict) {
+						result.enum = enumDict;
+					}
+				}
+
+				return result;
+			});
+		};
+
 		/** 加载表格列 */
 		const loadTableColumns = async (): Promise<void> => {
 			let columns: FaTableColumnCtx[] = [];
@@ -189,32 +211,34 @@ export default defineComponent({
 				if (cacheColumns) {
 					columns = cacheColumns;
 				} else {
-					await faTableRef.value.doLoading(async () => {
-						try {
-							const apiRes = await tableApi.queryTableColumnConfig(props.tableKey);
-							// 判断是否存在改变
-							if (apiRes.change) {
-								const lastUpdateTime = apiRes.updatedTime ?? new Date();
-								ElMessage.info(
-									`当前列配置于 '${dayjs(lastUpdateTime).format("YYYY-MM-DD")}' 已发生改变，为确保数据准确性，正在同步缓存配置，请稍后...`
-								);
-								// 同步表格列配置
-								await syncColumnsCache(false);
-								return;
-							} else {
-								state.existCacheColumns = apiRes.cache;
-								columns = handleColumnType(apiRes.cache ? apiRes.cacheColumns : apiRes.columns);
-								appStore.setTableColumns(props.tableKey, columns);
-							}
-						} catch (error) {
-							ElMessage.error("加载列配置失败");
-							throw error;
+					state.loading = true;
+					state.loadingText = "加载列配置中...";
+					try {
+						const apiRes = await tableApi.queryTableColumnConfig(props.tableKey);
+						// 判断是否存在改变
+						if (apiRes.change) {
+							const lastUpdateTime = apiRes.updatedTime ?? new Date();
+							ElMessage.info(
+								`当前列配置于 '${dayjs(lastUpdateTime).format("YYYY-MM-DD")}' 已发生改变，为确保数据准确性，正在同步缓存配置，请稍后...`
+							);
+							// 同步表格列配置
+							await syncColumnsCache(false);
+							return;
+						} else {
+							state.existCacheColumns = apiRes.cache;
+							columns = handleColumnType(apiRes.cache ? apiRes.cacheColumns : apiRes.columns);
+							appStore.setTableColumns(props.tableKey, columns);
 						}
-					}, "加载列配置中...");
+					} catch (error) {
+						ElMessage.error("加载列配置失败");
+						throw error;
+					} finally {
+						state.loading = false;
+					}
 				}
 			}
 
-			state.columns = columns;
+			state.columns = handleColumns(columns);
 		};
 
 		const doRender = async (): Promise<void> => {
@@ -224,6 +248,10 @@ export default defineComponent({
 				faTableRef.value?.doRender();
 			}, 300);
 		};
+
+		onMounted(async () => {
+			await loadTableColumns();
+		});
 
 		const tableProps = useProps(props, faTableProps, [
 			"columns",
@@ -235,22 +263,27 @@ export default defineComponent({
 			"columnsChange",
 		]);
 
+		const tableSlot = {
+			...slots,
+			columnSetting: (): VNode => (
+				<Fragment>
+					<ElDropdownItem title="同步列配置" disabled={!state.existCacheColumns} onClick={syncColumnsCache}>
+						同步列配置
+					</ElDropdownItem>
+					<ElDropdownItem title="重置列配置" disabled={!state.existCacheColumns} onClick={clearColumnsCache}>
+						重置列配置
+					</ElDropdownItem>
+				</Fragment>
+			),
+		};
+
 		useRender(() => (
 			<FaTable
 				{...tableProps.value}
 				ref={faTableRef}
-				vSlots={pick(slots, [
-					"default",
-					"append",
-					"empty",
-					"topHeader",
-					"header",
-					"toolButton",
-					"toolButtonAdv",
-					"operation",
-					"pagination",
-					"footer",
-				])}
+				vLoading={state.loading}
+				element-loading-text={state.loadingText}
+				vSlots={tableSlot}
 				columns={state.columns}
 				hideImage={configStore.tableLayout.hideImage}
 				searchForm={configStore.tableLayout.showSearch}
@@ -258,20 +291,7 @@ export default defineComponent({
 				advancedSearchDrawer={configStore.tableLayout.advancedSearchDrawer}
 				dataSearchRange={configStore.tableLayout.dataSearchRange}
 				columnsChange={saveColumnsCache}
-			>
-				{{
-					columnSetting: () => (
-						<Fragment>
-							<ElDropdownItem title="同步列配置" disabled={!state.existCacheColumns} onClick={syncColumnsCache}>
-								同步列配置
-							</ElDropdownItem>
-							<ElDropdownItem title="重置列配置" disabled={!state.existCacheColumns} onClick={clearColumnsCache}>
-								重置列配置
-							</ElDropdownItem>
-						</Fragment>
-					),
-				}}
-			</FaTable>
+			/>
 		));
 
 		return useExpose(expose, {

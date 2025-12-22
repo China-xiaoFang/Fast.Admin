@@ -5,6 +5,7 @@ import "@vue/runtime-core";
 declare module "@vue/runtime-core" {
 	export interface GlobalComponents {
 		Editor: (typeof import("@/components/Editor/index.vue"))["default"];
+		FastTable: (typeof import("@/components/FastTable/index.tsx"))["default"];
 		Footer: (typeof import("@/components/Footer/index.vue"))["default"];
 		Loading: (typeof import("@/components/Loading/index.vue"))["default"];
 		Tag: (typeof import("@/components/Tag/index.vue"))["default"];

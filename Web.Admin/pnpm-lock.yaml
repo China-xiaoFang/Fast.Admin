@@ -47,8 +47,8 @@ importers:
         specifier: ^2.12
         version: 2.12.0(patch_hash=ab4e7ac1898854e02d6d4390c6528141578cd92dff6e0617a215b4e17b215d8e)(vue@3.5.25(typescript@5.9.3))
       fast-element-plus:
-        specifier: link:D:/Projects/Fast/Fast.Element.Plus/fast-element-plus
-        version: link:../../Fast.Element.Plus/fast-element-plus
+        specifier: ^1
+        version: 1.0.4(@element-plus/icons-vue@2.3.2(vue@3.5.25(typescript@5.9.3)))(@fast-china/utils@1.0.33(vue@3.5.25(typescript@5.9.3)))(@fast-element-plus/icons-vue@1.0.20(vue@3.5.25(typescript@5.9.3)))(@types/lodash-es@4.17.12)(element-plus@2.12.0(patch_hash=ab4e7ac1898854e02d6d4390c6528141578cd92dff6e0617a215b4e17b215d8e)(vue@3.5.25(typescript@5.9.3)))(vue@3.5.25(typescript@5.9.3))
       lodash:
         specifier: ^4.17
         version: 4.17.21
@@ -1726,6 +1726,9 @@ packages:
       supports-color:
         optional: true
 
+  decimal.js@10.6.0:
+    resolution: {integrity: sha512-YpgQiITW3JXGntzdUmyUR1V812Hn8T1YVXhCu+wO3OpS4eU9l4YdD3qjyiKdV6mvV29zapkMeD390UVEf2lkUg==}
+
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
 
@@ -2028,6 +2031,15 @@ packages:
 
   fast-diff@1.3.0:
     resolution: {integrity: sha512-VxPP4NqbUjj6MaAOafWeUn2cXWLcCtljklUtZf0Ind4XQ+QPtmA0b18zZy0jIQx+ExRVCR/ZQpBmik5lXshNsw==}
+
+  fast-element-plus@1.0.4:
+    resolution: {integrity: sha512-xerajakKRxtxVebmJkMH2VVWFYX4pCFakEO8IFqHTtAoYMWbJWLrrKhEwI/M51mZ7c2lHOayLaE7BRcbkTB/aA==}
+    peerDependencies:
+      '@element-plus/icons-vue': ^2.3
+      '@fast-china/utils': ^1
+      '@fast-element-plus/icons-vue': ^1.0.17
+      element-plus: ^2
+      vue: ^3.5
 
   fast-json-stable-stringify@2.1.0:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
@@ -2791,6 +2803,10 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
+  screenfull@6.0.2:
+    resolution: {integrity: sha512-AQdy8s4WhNvUZ6P8F6PB21tSPIYKniic+Ogx0AacBMjKP1GUHN2E9URxQHtCusiwxudnCKkdy4GrHXPPJSkCCw==}
+    engines: {node: ^14.13.1 || >=16.0.0}
+
   scroll-into-view-if-needed@2.2.31:
     resolution: {integrity: sha512-dGCXy99wZQivjmjIqihaBQNjryrz5rueJY7eHfTdyWEiR4ttYpsajb14rn9s5d4DY4EcY6+4+U/maARBXJedkA==}
 
@@ -2857,6 +2873,9 @@ packages:
   snabbdom@3.6.3:
     resolution: {integrity: sha512-W2lHLLw2qR2Vv0DcMmcxXqcfdBaIcoN+y/86SmHv8fn4DazEQSH6KN3TjZcWvwujW56OHiiirsbHWZb4vx/0fg==}
     engines: {node: '>=12.17.0'}
+
+  sortablejs@1.15.6:
+    resolution: {integrity: sha512-aNfiuwMEpfBM/CN6LY0ibyhxPfPbyFeBTYJKCvzkJ2GkUpazIt3H+QIPAMHwqQ7tMKaHz1Qj+rJJCqljnf4p3A==}
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -5007,6 +5026,8 @@ snapshots:
     dependencies:
       ms: 2.1.3
 
+  decimal.js@10.6.0: {}
+
   deep-is@0.1.4: {}
 
   define-data-property@1.1.4:
@@ -5436,6 +5457,23 @@ snapshots:
   fast-deep-equal@3.1.3: {}
 
   fast-diff@1.3.0: {}
+
+  fast-element-plus@1.0.4(@element-plus/icons-vue@2.3.2(vue@3.5.25(typescript@5.9.3)))(@fast-china/utils@1.0.33(vue@3.5.25(typescript@5.9.3)))(@fast-element-plus/icons-vue@1.0.20(vue@3.5.25(typescript@5.9.3)))(@types/lodash-es@4.17.12)(element-plus@2.12.0(patch_hash=ab4e7ac1898854e02d6d4390c6528141578cd92dff6e0617a215b4e17b215d8e)(vue@3.5.25(typescript@5.9.3)))(vue@3.5.25(typescript@5.9.3)):
+    dependencies:
+      '@element-plus/icons-vue': 2.3.2(vue@3.5.25(typescript@5.9.3))
+      '@fast-china/utils': 1.0.33(vue@3.5.25(typescript@5.9.3))
+      '@fast-element-plus/icons-vue': 1.0.20(vue@3.5.25(typescript@5.9.3))
+      '@vueuse/core': 14.1.0(vue@3.5.25(typescript@5.9.3))
+      decimal.js: 10.6.0
+      element-plus: 2.12.0(patch_hash=ab4e7ac1898854e02d6d4390c6528141578cd92dff6e0617a215b4e17b215d8e)(vue@3.5.25(typescript@5.9.3))
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      lodash-unified: 1.0.3(@types/lodash-es@4.17.12)(lodash-es@4.17.21)(lodash@4.17.21)
+      screenfull: 6.0.2
+      sortablejs: 1.15.6
+      vue: 3.5.25(typescript@5.9.3)
+    transitivePeerDependencies:
+      - '@types/lodash-es'
 
   fast-json-stable-stringify@2.1.0: {}
 
@@ -6216,6 +6254,8 @@ snapshots:
     optionalDependencies:
       '@parcel/watcher': 2.5.1
 
+  screenfull@6.0.2: {}
+
   scroll-into-view-if-needed@2.2.31:
     dependencies:
       compute-scroll-into-view: 1.0.20
@@ -6300,6 +6340,8 @@ snapshots:
       tiny-warning: 1.0.3
 
   snabbdom@3.6.3: {}
+
+  sortablejs@1.15.6: {}
 
   source-map-js@1.2.1: {}
 

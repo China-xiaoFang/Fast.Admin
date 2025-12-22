@@ -1,5 +1,5 @@
 <template>
-	<div class="fa__display_tb-b">
+	<div class="el-card h100" style="display: flex; flex-direction: column">
 		<el-divider contentPosition="left">
 			<el-icon>
 				<StarFilled />
@@ -83,6 +83,10 @@
 				<el-button size="small" plain type="danger" @click="handleDelete($index)">删除</el-button>
 			</template>
 		</FaTable>
+		<div style="display: flex; justify-content: center; margin-top: 10px">
+			<el-button :icon="Close" @click="handleBack">取消</el-button>
+			<el-button type="primary" :icon="Select" @click="handleSave">保存</el-button>
+		</div>
 		<AdvancedConfigForm
 			ref="advancedConfigRef"
 			@change="
@@ -96,8 +100,8 @@
 
 <script lang="ts" setup>
 import { reactive, ref, watch } from "vue";
-import { ElMessageBox } from "element-plus";
-import { ArrowLeftBold, Plus, StarFilled } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ArrowLeftBold, Close, Plus, Select, StarFilled } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
 import AdvancedConfigForm from "./components/advancedConfig.vue";
 import type { FaTableColumnCtx } from "@/api/services/table/models/FaTableColumnCtx";
@@ -196,6 +200,24 @@ const handleOrderChange = () => {
 	});
 	state.tableData.forEach((item, index) => {
 		item.order = index + 1;
+	});
+};
+
+/** 处理保存 */
+const handleSave = () => {
+	ElMessageBox.confirm("确认要保存表格配置？", {
+		type: "warning",
+		async beforeClose(action, instance, done) {
+			await tableApi.editTableColumnConfig({
+				tableId: state.tableId,
+				columns: state.tableData,
+				rowVersion: state.rowVersion,
+			});
+			state.change = false;
+			ElMessage.success("保存成功！");
+			handleBack();
+			emit("ok");
+		},
 	});
 };
 
