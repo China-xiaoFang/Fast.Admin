@@ -69,10 +69,34 @@ public class EmployeeModel : IUpdateVersion
     public string Mobile { get; set; }
 
     /// <summary>
+    /// 邮箱
+    /// </summary>
+    [SugarColumn(ColumnDescription = "邮箱", Length = 50)]
+    public string Email { get; set; }
+
+    /// <summary>
     /// 性别
     /// </summary>
     [SugarColumn(ColumnDescription = "性别")]
     public GenderEnum Sex { get; set; }
+
+    /// <summary>
+    /// 头像
+    /// </summary>
+    [SugarColumn(ColumnDescription = "头像", Length = 200)]
+    public string Avatar { get; set; }
+
+    /// <summary>
+    /// 生日
+    /// </summary>
+    [SugarColumn(ColumnDescription = "生日")]
+    public DateTime? Birthday { get; set; }
+
+    /// <summary>
+    /// 地址
+    /// </summary>
+    [SugarColumn(ColumnDescription = "地址", Length = 200)]
+    public string Address { get; set; }
 
     /// <summary>
     /// 证件照
@@ -205,6 +229,18 @@ public class EmployeeModel : IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "紧急联系地址", Length = 200)]
     public string EmergencyAddress { get; set; }
+
+    /// <summary>
+    /// 状态
+    /// </summary>
+    [SugarColumn(ColumnDescription = "状态")]
+    public CommonStatusEnum Status { get; set; }
+
+    /// <summary>
+    /// 部门名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "部门名称", Length = 50)]
+    public string DepartmentName { get; set; }
 
     /// <summary>
     /// 备注

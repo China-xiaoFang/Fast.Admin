@@ -376,6 +376,15 @@ public class PermissionConst
 
         /// <summary>职员编辑</summary>
         public const string Edit = "Employee:Edit";
+
+        /// <summary>删除职员</summary>
+        public const string Delete = "Employee:Delete";
+
+        /// <summary>设置职员组织</summary>
+        public const string SetOrg = "Employee:SetOrg";
+
+        /// <summary>设置职员角色</summary>
+        public const string SetRole = "Employee:SetRole";
     }
 
     /// <summary><see cref="TenantOnlineUser"/> 在线用户</summary>
