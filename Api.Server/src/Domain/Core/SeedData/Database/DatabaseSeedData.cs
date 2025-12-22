@@ -140,8 +140,8 @@ public static class DatabaseSeedData
                     DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
                     CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
-                    DiffLog = true,
-                    DisableAop = false,
+                    DiffLog = false,
+                    DisableAop = true,
                     IsInitialized = true,
                     CreatedTime = dateTime,
                     TenantId = tenantId
@@ -197,8 +197,8 @@ public static class DatabaseSeedData
                     DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
                     CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
                     SugarSqlExecMaxSeconds = SqlSugarContext.ConnectionSettings.SugarSqlExecMaxSeconds!.Value,
-                    DiffLog = true,
-                    DisableAop = false,
+                    DiffLog = false,
+                    DisableAop = true,
                     IsInitialized = false,
                     CreatedTime = dateTime,
                     TenantId = tenantId
