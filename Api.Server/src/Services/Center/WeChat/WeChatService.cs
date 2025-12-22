@@ -48,119 +48,49 @@ public class WeChatService : IDynamicApplication
     }
 
     /// <summary>
-    /// 换取微信用户身份信息
+    /// 获取微信用户分页列表
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    [ApiInfo("换取微信用户身份信息", HttpRequestActionEnum.Auth)]
-    [AllowAnonymous]
-    public async Task<WeChatCode2SessionOutput> WeChatCode2Session(WeChatCode2SessionInput input)
+    [ApiInfo("获取微信用户分页列表", HttpRequestActionEnum.Paged)]
+    [Permission(PermissionConst.WeChat.Paged)]
+    public async Task<PagedResult<QueryWeChatUserPagedOutput>> QueryWeChatUserPaged(QueryWeChatUserPagedInput input)
     {
-        // 查询应用信息
-        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
-
-        if (applicationModel == null)
-        {
-            throw new UserFriendlyException("未知的应用！");
-        }
-
-        if (applicationModel.AppType != GlobalContext.DeviceType)
-        {
-            throw new UserFriendlyException("应用类型不匹配！");
-        }
-
-        var client = WechatApiClientBuilder
-            .Create(new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret})
-            .Build();
-
-        // 解析微信Code，获取OpenId
-        var response = await client.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.Code});
-        if (!response.IsSuccessful())
-        {
-            throw new UserFriendlyException(
-                $"解析Code失败，获取微信登录信息失败：ErrorCode：{response.ErrorCode}。ErrorMessage：{response.ErrorMessage}");
-        }
-
-        var result = new WeChatCode2SessionOutput
-        {
-            OpenId = response.OpenId,
-            UnionId = response.UnionId,
-            SessionKey = response.SessionKey,
-            NickName = "微信用户",
-            Avatar =
-                "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132",
-            Sex = GenderEnum.Unknown
-        };
-
-
-        // 这里的 IV 和 EncryptedData 在没有授权的情况下是为空的
-        if (!string.IsNullOrWhiteSpace(input.IV) || !string.IsNullOrWhiteSpace(input.EncryptedData))
-        {
-            // 尝试解析加密数据
-            var decryptBytes = AESUtility.DecryptWithCBC(Convert.FromBase64String(response.SessionKey),
-                Convert.FromBase64String(input.IV), Convert.FromBase64String(input.EncryptedData));
-            var decryptStr = Encoding.Default.GetString(decryptBytes);
-            var decryptData = decryptStr.ToObject<DecryptWeChatUserInfo>();
-            if (decryptData == null)
-            {
-                throw new UserFriendlyException("解析加密用户信息失败！");
-            }
-
-            result.NickName = decryptData.NickName;
-            result.Sex = decryptData.Gender;
-            result.Country = decryptData.Country;
-            result.Province = decryptData.Province;
-            result.City = decryptData.City;
-            result.Language = decryptData.Language;
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// 换取微信用户手机号
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    [HttpPost]
-    [ApiInfo("换取微信用户手机号", HttpRequestActionEnum.Auth)]
-    [AllowAnonymous]
-    public async Task<WeChatCode2PhoneNumberOutput> WeChatCode2PhoneNumber(WeChatCode2PhoneNumberInput input)
-    {
-        // 查询应用信息
-        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
-
-        if (applicationModel == null)
-        {
-            throw new UserFriendlyException("未知的应用！");
-        }
-
-        if (applicationModel.AppType != GlobalContext.DeviceType)
-        {
-            throw new UserFriendlyException("应用类型不匹配！");
-        }
-
-        var client = WechatApiClientBuilder
-            .Create(new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret})
-            .Build();
-
-        // 换取用户手机号
-        var response = await client.ExecuteWxaBusinessGetUserPhoneNumberAsync(
-            new WxaBusinessGetUserPhoneNumberRequest {AccessToken = applicationModel.WeChatAccessToken, Code = input.Code});
-
-        if (!response.IsSuccessful())
-        {
-            throw new UserFriendlyException(
-                $"解析Code失败，获取用户手机号失败：ErrorCode：{response.ErrorCode}。ErrorMessage：{response.ErrorMessage}");
-        }
-
-        return new WeChatCode2PhoneNumberOutput
-        {
-            PurePhoneNumber = response.PhoneInfo.PurePhoneNumber,
-            PhoneNumber = response.PhoneInfo.PhoneNumber,
-            CountryCode = response.PhoneInfo.CountryCode
-        };
+        return await _repository.Entities.WhereIF(input.AppId != null, wh => wh.AppId == input.AppId)
+            .WhereIF(input.UserType != null, wh => wh.UserType == input.UserType)
+            .WhereIF(input.Sex != null, wh => wh.Sex == input.Sex)
+            .OrderByDescending(ob => ob.CreatedTime)
+            .ToPagedListAsync(input,
+                sl => new QueryWeChatUserPagedOutput
+                {
+                    WeChatId = sl.WeChatId,
+                    AppId = sl.AppId,
+                    UserType = sl.UserType,
+                    OpenId = sl.OpenId,
+                    UnionId = sl.UnionId,
+                    PurePhoneNumber = sl.PurePhoneNumber,
+                    PhoneNumber = sl.PhoneNumber,
+                    CountryCode = sl.CountryCode,
+                    NickName = sl.NickName,
+                    Avatar = sl.Avatar,
+                    Sex = sl.Sex,
+                    Country = sl.Country,
+                    Province = sl.Province,
+                    City = sl.City,
+                    Language = sl.Language,
+                    LastLoginDevice = sl.LastLoginDevice,
+                    LastLoginOS = sl.LastLoginOS,
+                    LastLoginBrowser = sl.LastLoginBrowser,
+                    LastLoginProvince = sl.LastLoginProvince,
+                    LastLoginCity = sl.LastLoginCity,
+                    LastLoginIp = sl.LastLoginIp,
+                    LastLoginTime = sl.LastLoginTime,
+                    MobileUpdateTime = sl.MobileUpdateTime,
+                    CreatedTime = sl.CreatedTime,
+                    UpdatedTime = sl.UpdatedTime,
+                    RowVersion = sl.RowVersion
+                });
     }
 
     /// <summary>
@@ -294,35 +224,118 @@ public class WeChatService : IDynamicApplication
     }
 
     /// <summary>
-    /// 获取微信用户分页列表
+    /// 换取微信用户身份信息
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    [ApiInfo("获取微信用户分页列表", HttpRequestActionEnum.Paged)]
-    [Permission(PermissionConst.WeChat.Paged)]
-    public async Task<PagedResult<QueryWeChatUserPagedOutput>> QueryWeChatUserPaged(QueryWeChatUserPagedInput input)
+    [ApiInfo("换取微信用户身份信息", HttpRequestActionEnum.Auth)]
+    [AllowAnonymous]
+    public async Task<WeChatCode2SessionOutput> WeChatCode2Session(WeChatCode2SessionInput input)
     {
-        return await _repository.Entities
-            .WhereIF(input.AppId != null, wh => wh.AppId == input.AppId)
-            .WhereIF(!string.IsNullOrEmpty(input.NickName), wh => wh.NickName.Contains(input.NickName))
-            .WhereIF(!string.IsNullOrEmpty(input.OpenId), wh => wh.OpenId.Contains(input.OpenId))
-            .WhereIF(!string.IsNullOrEmpty(input.UnionId), wh => wh.UnionId.Contains(input.UnionId))
-            .OrderByDescending(ob => ob.CreatedTime)
-            .ToPagedListAsync(input, sl => new QueryWeChatUserPagedOutput
+        // 查询应用信息
+        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+
+        if (applicationModel == null)
+        {
+            throw new UserFriendlyException("未知的应用！");
+        }
+
+        if (applicationModel.AppType != GlobalContext.DeviceType)
+        {
+            throw new UserFriendlyException("应用类型不匹配！");
+        }
+
+        var client = WechatApiClientBuilder
+            .Create(new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret})
+            .Build();
+
+        // 解析微信Code，获取OpenId
+        var response = await client.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.Code});
+        if (!response.IsSuccessful())
+        {
+            throw new UserFriendlyException(
+                $"解析Code失败，获取微信登录信息失败：ErrorCode：{response.ErrorCode}。ErrorMessage：{response.ErrorMessage}");
+        }
+
+        var result = new WeChatCode2SessionOutput
+        {
+            OpenId = response.OpenId,
+            UnionId = response.UnionId,
+            SessionKey = response.SessionKey,
+            NickName = "微信用户",
+            Avatar =
+                "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132",
+            Sex = GenderEnum.Unknown
+        };
+
+
+        // 这里的 IV 和 EncryptedData 在没有授权的情况下是为空的
+        if (!string.IsNullOrWhiteSpace(input.IV) || !string.IsNullOrWhiteSpace(input.EncryptedData))
+        {
+            // 尝试解析加密数据
+            var decryptBytes = AESUtility.DecryptWithCBC(Convert.FromBase64String(response.SessionKey),
+                Convert.FromBase64String(input.IV), Convert.FromBase64String(input.EncryptedData));
+            var decryptStr = Encoding.Default.GetString(decryptBytes);
+            var decryptData = decryptStr.ToObject<DecryptWeChatUserInfo>();
+            if (decryptData == null)
             {
-                WeChatUserId = sl.WeChatId,
-                AppId = sl.AppId,
-                OpenId = sl.OpenId,
-                UnionId = sl.UnionId,
-                NickName = sl.NickName,
-                Avatar = sl.Avatar,
-                Sex = sl.Sex,
-                Country = sl.Country,
-                Province = sl.Province,
-                City = sl.City,
-                Language = sl.Language,
-                CreatedTime = sl.CreatedTime
-            });
+                throw new UserFriendlyException("解析加密用户信息失败！");
+            }
+
+            result.NickName = decryptData.NickName;
+            result.Sex = decryptData.Gender;
+            result.Country = decryptData.Country;
+            result.Province = decryptData.Province;
+            result.City = decryptData.City;
+            result.Language = decryptData.Language;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// 换取微信用户手机号
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("换取微信用户手机号", HttpRequestActionEnum.Auth)]
+    [AllowAnonymous]
+    public async Task<WeChatCode2PhoneNumberOutput> WeChatCode2PhoneNumber(WeChatCode2PhoneNumberInput input)
+    {
+        // 查询应用信息
+        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+
+        if (applicationModel == null)
+        {
+            throw new UserFriendlyException("未知的应用！");
+        }
+
+        if (applicationModel.AppType != GlobalContext.DeviceType)
+        {
+            throw new UserFriendlyException("应用类型不匹配！");
+        }
+
+        var client = WechatApiClientBuilder
+            .Create(new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret})
+            .Build();
+
+        // 换取用户手机号
+        var response = await client.ExecuteWxaBusinessGetUserPhoneNumberAsync(
+            new WxaBusinessGetUserPhoneNumberRequest {AccessToken = applicationModel.WeChatAccessToken, Code = input.Code});
+
+        if (!response.IsSuccessful())
+        {
+            throw new UserFriendlyException(
+                $"解析Code失败，获取用户手机号失败：ErrorCode：{response.ErrorCode}。ErrorMessage：{response.ErrorMessage}");
+        }
+
+        return new WeChatCode2PhoneNumberOutput
+        {
+            PurePhoneNumber = response.PhoneInfo.PurePhoneNumber,
+            PhoneNumber = response.PhoneInfo.PhoneNumber,
+            CountryCode = response.PhoneInfo.CountryCode
+        };
     }
 }
