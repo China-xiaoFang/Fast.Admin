@@ -21,12 +21,10 @@
 // ------------------------------------------------------------------------
 
 using Fast.DynamicApplication;
-using Fast.NET.Core;
-using Fast.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fast.Api.Applications;
+namespace Fast.Core;
 
 /// <summary>
 /// <see cref="HealthApplication"/> 健康检查
