@@ -20,8 +20,8 @@ import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import ConfigEdit from "./edit/index.vue";
-import type { FastTableInstance } from "@/components";
 import type { QueryConfigPagedOutput } from "@/api/services/config/models/QueryConfigPagedOutput";
+import type { FastTableInstance } from "@/components";
 import { configApi } from "@/api/services/config";
 
 defineOptions({
@@ -34,11 +34,15 @@ const editFormRef = ref<InstanceType<typeof ConfigEdit>>();
 /** 处理删除 */
 const handleDelete = (row: QueryConfigPagedOutput) => {
 	const { configId, rowVersion } = row;
+	if (!configId || !rowVersion) {
+		ElMessage.error("数据错误，无法删除");
+		return;
+	}
 	ElMessageBox.confirm("确定要删除此配置吗？", {
 		type: "warning",
 		async beforeClose(action, instance, done) {
 			if (action === "confirm") {
-				await configApi.deleteConfig({ configId: configId!, rowVersion: rowVersion! });
+				await configApi.deleteConfig({ configId, rowVersion });
 				ElMessage.success("删除成功！");
 				fastTableRef.value?.refresh();
 				done();

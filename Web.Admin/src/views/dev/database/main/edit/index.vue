@@ -31,7 +31,7 @@
 				<el-input v-model="state.formData.userName" maxlength="100" placeholder="请输入用户名" />
 			</FaFormItem>
 			<FaFormItem prop="password" label="密码">
-				<el-input v-model="state.formData.password" type="password" maxlength="100" placeholder="请输入密码" show-password />
+				<el-input v-model="state.formData.password" type="password" maxlength="100" placeholder="请输入密码" showPassword />
 			</FaFormItem>
 			<FaFormItem prop="remark" label="备注">
 				<el-input v-model="state.formData.remark" type="textarea" :rows="3" maxlength="200" placeholder="请输入备注" />

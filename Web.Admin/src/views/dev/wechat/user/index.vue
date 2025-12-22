@@ -1,7 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="DEV_WECHAT_USER" rowKey="weChatId" :requestApi="weChatApi.queryWeChatUserPaged">
-		</FastTable>
+		<FastTable ref="fastTableRef" tableKey="DEV_WECHAT_USER" rowKey="weChatId" :requestApi="weChatApi.queryWeChatUserPaged"> </FastTable>
 	</div>
 </template>
 

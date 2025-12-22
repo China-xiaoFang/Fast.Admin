@@ -13,10 +13,10 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import type { FastTableInstance } from "@/components";
-import type { QueryComplaintPagedOutput } from "@/api/services/complaint/models/QueryComplaintPagedOutput";
-import { complaintApi } from "@/api/services/complaint";
 import HandleDialog from "./handle/index.vue";
+import type { QueryComplaintPagedOutput } from "@/api/services/complaint/models/QueryComplaintPagedOutput";
+import type { FastTableInstance } from "@/components";
+import { complaintApi } from "@/api/services/complaint";
 
 defineOptions({
 	name: "BusinessComplaint",

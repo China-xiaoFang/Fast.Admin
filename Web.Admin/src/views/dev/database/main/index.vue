@@ -20,8 +20,8 @@ import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import MainDatabaseEdit from "./edit/index.vue";
-import type { FastTableInstance } from "@/components";
 import type { QueryMainDatabasePagedOutput } from "@/api/services/database/models/QueryMainDatabasePagedOutput";
+import type { FastTableInstance } from "@/components";
 import { databaseApi } from "@/api/services/database";
 
 defineOptions({
@@ -34,11 +34,15 @@ const editFormRef = ref<InstanceType<typeof MainDatabaseEdit>>();
 /** 处理删除 */
 const handleDelete = (row: QueryMainDatabasePagedOutput) => {
 	const { mainDatabaseId, rowVersion } = row;
+	if (!mainDatabaseId || !rowVersion) {
+		ElMessage.error("数据错误，无法删除");
+		return;
+	}
 	ElMessageBox.confirm("确定要删除此主库模板吗？", {
 		type: "warning",
 		async beforeClose(action, instance, done) {
 			if (action === "confirm") {
-				await databaseApi.deleteMainDatabase({ mainDatabaseId: mainDatabaseId!, rowVersion: rowVersion! });
+				await databaseApi.deleteMainDatabase({ mainDatabaseId, rowVersion });
 				ElMessage.success("删除成功！");
 				fastTableRef.value?.refresh();
 				done();
