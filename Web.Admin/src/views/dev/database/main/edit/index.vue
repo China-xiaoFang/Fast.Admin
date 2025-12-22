@@ -101,9 +101,10 @@ const detail = (mainDatabaseId: number) => {
 	});
 };
 
-const add = () => {
-	faDialogRef.value.open(() => {
+const add = async () => {
+	await faDialogRef.value.open(async () => {
 		state.formDisabled = false;
+		await loadMainDatabaseList();
 		state.formData = {};
 		state.dialogState = "add";
 		state.dialogTitle = "新增主库模板";

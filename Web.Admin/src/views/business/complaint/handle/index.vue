@@ -7,7 +7,7 @@
 		:showBeforeClose="!state.formDisabled"
 		confirmButtonText="提交"
 		@confirm-click="handleConfirm"
-		@close="faFormRef?.resetFields()"
+		@close="faFormRef.resetFields()"
 	>
 		<div v-if="state.formDisabled">
 			<el-descriptions :column="1" border>

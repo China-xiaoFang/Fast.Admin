@@ -82,7 +82,9 @@ const state = reactive({
 });
 
 const loadMainDatabaseList = async () => {
-	const res = await databaseApi.queryMainDatabasePaged({ pageIndex: 1, pageSize: 1000 });
+	// Load main databases for dropdown selection
+	// Using a reasonable page size to avoid performance issues
+	const res = await databaseApi.queryMainDatabasePaged({ pageIndex: 1, pageSize: 100 });
 	state.mainDatabaseList = res.rows.map((item) => ({
 		label: item.databaseName || "",
 		value: item.mainDatabaseId || 0,

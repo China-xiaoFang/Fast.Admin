@@ -1,11 +1,13 @@
 import { axiosUtil } from "@fast-china/axios";
-import { PagedInput, PagedResult } from "fast-element-plus";
+import { PagedResult } from "fast-element-plus";
 import { SyncDatabaseInput } from "./models/SyncDatabaseInput";
+import { QueryMainDatabasePagedInput } from "./models/QueryMainDatabasePagedInput";
 import { QueryMainDatabasePagedOutput } from "./models/QueryMainDatabasePagedOutput";
 import { QueryMainDatabaseDetailOutput } from "./models/QueryMainDatabaseDetailOutput";
 import { AddMainDatabaseInput } from "./models/AddMainDatabaseInput";
 import { EditMainDatabaseInput } from "./models/EditMainDatabaseInput";
 import { MainDatabaseIdInput } from "./models/MainDatabaseIdInput";
+import { QuerySlaveDatabasePagedInput } from "./models/QuerySlaveDatabasePagedInput";
 import { QuerySlaveDatabasePagedOutput } from "./models/QuerySlaveDatabasePagedOutput";
 import { QuerySlaveDatabaseDetailOutput } from "./models/QuerySlaveDatabaseDetailOutput";
 import { AddSlaveDatabaseInput } from "./models/AddSlaveDatabaseInput";
@@ -30,7 +32,7 @@ export const databaseApi = {
   /**
    * 获取主库模板分页列表
    */
-  queryMainDatabasePaged(data: PagedInput) {
+  queryMainDatabasePaged(data: QueryMainDatabasePagedInput) {
     return axiosUtil.request<PagedResult<QueryMainDatabasePagedOutput>>({
       url: "/mainDatabase/queryMainDatabasePaged",
       method: "post",
@@ -87,7 +89,7 @@ export const databaseApi = {
   /**
    * 获取从库模板分页列表
    */
-  querySlaveDatabasePaged(data: PagedInput) {
+  querySlaveDatabasePaged(data: QuerySlaveDatabasePagedInput) {
     return axiosUtil.request<PagedResult<QuerySlaveDatabasePagedOutput>>({
       url: "/slaveDatabase/querySlaveDatabasePaged",
       method: "post",
