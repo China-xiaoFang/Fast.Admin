@@ -139,7 +139,7 @@ public interface ISchedulerCenter
     /// <remarks>注：这里更新作业会导致触发器的执行记录被清空。所以会导致更新后可能会立即执行一次。</remarks>
     /// <param name="input"></param>
     /// <returns></returns>
-    Task EditSchedulerJob(UpdateSchedulerJobInput input);
+    Task EditSchedulerJob(EditSchedulerJobInput input);
 
     /// <summary>
     /// 删除调度作业
