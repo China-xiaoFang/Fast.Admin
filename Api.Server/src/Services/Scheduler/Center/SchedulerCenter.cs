@@ -1066,7 +1066,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// <remarks>注：这里更新作业会导致触发器的执行记录被清空。所以会导致更新后可能会立即执行一次。</remarks>
     /// <param name="input"></param>
     /// <returns></returns>
-    public async Task EditSchedulerJob(UpdateSchedulerJobInput input)
+    public async Task EditSchedulerJob(EditSchedulerJobInput input)
     {
         if (string.IsNullOrEmpty(input.OldJobName))
         {
