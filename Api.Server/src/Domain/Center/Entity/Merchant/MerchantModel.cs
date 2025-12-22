@@ -28,7 +28,7 @@ namespace Fast.Center.Entity;
 [SugarTable("Merchant", "商户号表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(MerchantNo)}", nameof(MerchantNo), OrderByType.Asc, true)]
-public class MerchantModel : BaseEntity, IUpdateVersion
+public class MerchantModel : BaseTEntity, IUpdateVersion
 {
     /// <summary>
     /// 商户号Id
