@@ -132,7 +132,7 @@ public class EmployeeService : IDynamicApplication
                 UpdatedTime = sl.UpdatedTime,
                 RowVersion = sl.RowVersion
             })
-            .SingleAsync();
+            .SingleOrDefaultAsync();
 
         if (result == null)
         {
@@ -154,7 +154,7 @@ public class EmployeeService : IDynamicApplication
         // 获取职员的职位
         var employeePosition = await _repository.Queryable<EmployeePositionModel>()
             .Where(wh => wh.EmployeeId == employeeId)
-            .FirstAsync();
+            .FirstOrDefaultAsync();
         
         if (employeePosition != null)
         {
@@ -354,7 +354,7 @@ public class EmployeeService : IDynamicApplication
             // 处理职位和职级
             var employeePosition = await _repository.Queryable<EmployeePositionModel>()
                 .Where(wh => wh.EmployeeId == input.EmployeeId)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
             if (input.PositionId != null || input.JobLevelId != null)
             {
@@ -371,9 +371,9 @@ public class EmployeeService : IDynamicApplication
                 }
                 else
                 {
-                    // 更新
-                    employeePosition.PositionId = input.PositionId ?? 0;
-                    employeePosition.JobLevelId = input.JobLevelId ?? 0;
+                    // 更新 - 保留现有值如果输入为null
+                    employeePosition.PositionId = input.PositionId ?? employeePosition.PositionId;
+                    employeePosition.JobLevelId = input.JobLevelId ?? employeePosition.JobLevelId;
                     await _repository.Updateable(employeePosition).ExecuteCommandAsync();
                 }
             }
