@@ -3,6 +3,7 @@ import { PagedResult } from "fast-element-plus";
 import { QueryComplaintPagedOutput } from "./models/QueryComplaintPagedOutput";
 import { QueryComplaintPagedInput } from "./models/QueryComplaintPagedInput";
 import { AddComplaintInput } from "./models/AddComplaintInput";
+import { HandleComplaintInput } from "./models/HandleComplaintInput";
 
 /**
  * Fast.Center.Service.Complaint.ComplaintService 投诉服务Api
@@ -52,6 +53,17 @@ export const complaintApi = {
       method: "post",
       data,
       requestType: "add",
+    });
+  },
+  /**
+   * 处理投诉
+   */
+  handleComplaint(data: HandleComplaintInput) {
+    return axiosUtil.request({
+      url: "/complaint/handleComplaint",
+      method: "post",
+      data,
+      requestType: "edit",
     });
   },
 };
