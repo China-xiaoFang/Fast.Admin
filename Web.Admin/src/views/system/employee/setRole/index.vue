@@ -23,7 +23,6 @@
 import { reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
 import { FaDialog } from "fast-element-plus";
-import { withDefineType } from "@fast-china/utils";
 import type { FaDialogInstance } from "fast-element-plus";
 import { employeeApi } from "@/api/services/employee";
 import { roleApi } from "@/api/services/role";

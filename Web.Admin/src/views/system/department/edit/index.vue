@@ -14,7 +14,9 @@
 				<el-tree-select
 					v-model="state.formData.parentId"
 					:data="state.departmentTree"
-					:props="{ label: 'departmentName', value: 'departmentId' }"
+					:props="{ label: 'departmentName' }"
+					node-key="departmentId"
+					value-key="departmentId"
 					check-strictly
 					placeholder="请选择父部门"
 				/>
@@ -115,7 +117,7 @@ const handleConfirm = () => {
 const loadDepartmentTree = async () => {
 	try {
 		const result = await departmentApi.queryDepartmentPaged({ pageIndex: 1, pageSize: 1000 });
-		state.departmentTree = result.items || [];
+		state.departmentTree = result.rows || [];
 	} catch {
 		state.departmentTree = [];
 	}

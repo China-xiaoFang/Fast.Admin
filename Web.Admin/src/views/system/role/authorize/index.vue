@@ -38,10 +38,8 @@
 import { reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
 import { FaDialog } from "fast-element-plus";
-import { withDefineType } from "@fast-china/utils";
 import type { FaDialogInstance } from "fast-element-plus";
 import { roleApi } from "@/api/services/role";
-import { menuApi } from "@/api/services/menu";
 
 defineOptions({
 	name: "SystemRoleAuthorize",

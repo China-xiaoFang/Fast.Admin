@@ -14,7 +14,9 @@
 				<el-tree-select
 					v-model="state.formData.parentId"
 					:data="state.organizationTree"
-					:props="{ label: 'organizationName', value: 'organizationId' }"
+					:props="{ label: 'organizationName' }"
+					node-key="organizationId"
+					value-key="organizationId"
 					check-strictly
 					placeholder="请选择父组织"
 				/>
@@ -103,7 +105,7 @@ const handleConfirm = () => {
 const loadOrganizationTree = async () => {
 	try {
 		const result = await organizationApi.queryOrganizationPaged({ pageIndex: 1, pageSize: 1000 });
-		state.organizationTree = result.items || [];
+		state.organizationTree = result.rows || [];
 	} catch {
 		state.organizationTree = [];
 	}
