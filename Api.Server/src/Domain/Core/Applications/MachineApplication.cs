@@ -22,12 +22,10 @@
 
 using System.Runtime.InteropServices;
 using Fast.DynamicApplication;
-using Fast.NET.Core;
-using Fast.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fast.Scheduler.Applications;
+namespace Fast.Core;
 
 /// <summary>
 /// <see cref="MachineApplication"/> 服务器信息
