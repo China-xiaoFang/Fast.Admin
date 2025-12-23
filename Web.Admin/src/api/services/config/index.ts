@@ -4,6 +4,7 @@ import { QueryConfigPagedOutput } from "./models/QueryConfigPagedOutput";
 import { QueryConfigDetailOutput } from "./models/QueryConfigDetailOutput";
 import { AddConfigInput } from "./models/AddConfigInput";
 import { EditConfigInput } from "./models/EditConfigInput";
+import { ConfigIdInput } from "./models/ConfigIdInput";
 
 /**
  * Fast.Center.Service.Config.ConfigService 配置服务Api
@@ -53,6 +54,17 @@ export const configApi = {
       method: "post",
       data,
       requestType: "edit",
+    });
+  },
+  /**
+   * 删除配置
+   */
+  deleteConfig(data: ConfigIdInput) {
+    return axiosUtil.request({
+      url: "/config/deleteConfig",
+      method: "post",
+      data,
+      requestType: "delete",
     });
   },
 };

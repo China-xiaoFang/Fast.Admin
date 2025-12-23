@@ -1,9 +1,12 @@
 import { axiosUtil } from "@fast-china/axios";
+import { PagedResult } from "fast-element-plus";
 import { WeChatCode2SessionOutput } from "./models/WeChatCode2SessionOutput";
 import { WeChatCode2SessionInput } from "./models/WeChatCode2SessionInput";
 import { WeChatCode2PhoneNumberOutput } from "./models/WeChatCode2PhoneNumberOutput";
 import { WeChatCode2PhoneNumberInput } from "./models/WeChatCode2PhoneNumberInput";
 import { QueryWeChatUserDetailOutput } from "./models/QueryWeChatUserDetailOutput";
+import { QueryWeChatUserPagedOutput } from "./models/QueryWeChatUserPagedOutput";
+import { QueryWeChatUserPagedInput } from "./models/QueryWeChatUserPagedInput";
 import { EditWeChatUserInput } from "./models/EditWeChatUserInput";
 
 /**
@@ -30,6 +33,17 @@ export const weChatApi = {
       method: "post",
       data,
       requestType: "auth",
+    });
+  },
+  /**
+   * 获取微信用户分页列表
+   */
+  queryWeChatUserPaged(data: QueryWeChatUserPagedInput) {
+    return axiosUtil.request<PagedResult<QueryWeChatUserPagedOutput>>({
+      url: "/weChat/queryWeChatUserPaged",
+      method: "post",
+      data,
+      requestType: "query",
     });
   },
   /**
