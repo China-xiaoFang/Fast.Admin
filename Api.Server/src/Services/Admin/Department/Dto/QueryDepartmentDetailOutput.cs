@@ -20,68 +20,102 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Entity;
-
-namespace Fast.Scheduler;
+namespace Fast.Admin.Service.Department.Dto;
 
 /// <summary>
-/// <see cref="SchedulerJobLogInfo"/> 调度作业日志信息
+/// <see cref="QueryDepartmentDetailOutput"/> 获取部门详情输出
 /// </summary>
-[SuppressSniffer]
-public class SchedulerJobLogInfo
+public class QueryDepartmentDetailOutput
 {
     /// <summary>
-    /// 租户Id
+    /// 部门Id
     /// </summary>
-    public long? TenantId { get; set; }
+    public long DepartmentId { get; set; }
 
     /// <summary>
-    /// 租户名称
+    /// 机构Id
     /// </summary>
-    public string TenantName { get; set; }
+    public long OrgId { get; set; }
 
     /// <summary>
-    /// 租户编号
+    /// 父级Id
     /// </summary>
-    public string TenantNo { get; set; }
+    public long ParentId { get; set; }
 
     /// <summary>
-    /// 租户编码
+    /// 父级名称
     /// </summary>
-    public string TenantCode { get; set; }
+    public string ParentName { get; set; }
 
     /// <summary>
-    /// 机器人信息
+    /// 父级Id集合
     /// </summary>
-    public TenantUserModel RobotInfo { get; set; }
+    [SugarColumn(IsJson = true)]
+    public List<long> ParentIds { get; set; }
 
     /// <summary>
-    /// 开始执行时间
+    /// 父级名称集合
     /// </summary>
-    public DateTime BeginTime { get; set; }
+    [SugarColumn(IsJson = true)]
+    public List<string> ParentNames { get; set; }
 
     /// <summary>
-    /// 结束时间
+    /// 部门名称
     /// </summary>
-    public DateTime EndTime { get; set; }
+    public string DepartmentName { get; set; }
 
     /// <summary>
-    /// 耗时（毫秒）
+    /// 部门编码
     /// </summary>
-    public double ExecuteTime { get; set; }
+    public string DepartmentCode { get; set; }
 
     /// <summary>
-    /// 作业名称
+    /// 联系人
     /// </summary>
-    public string JobName { get; set; }
+    public string Contacts { get; set; }
 
     /// <summary>
-    /// 返回结果
+    /// 电话
     /// </summary>
-    public string Result { get; set; }
+    public string Phone { get; set; }
 
     /// <summary>
-    /// 异常消息
+    /// 邮箱
     /// </summary>
-    public string ErrorMsg { get; set; }
+    public string Email { get; set; }
+
+    /// <summary>
+    /// 排序
+    /// </summary>
+    public int Sort { get; set; }
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string Remark { get; set; }
+
+    /// <summary>
+    /// 创建者用户名称
+    /// </summary>
+    public string CreatedUserName { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
+    public DateTime? CreatedTime { get; set; }
+
+    /// <summary>
+    /// 更新者用户名称
+    /// </summary>
+    public string UpdatedUserName { get; set; }
+
+    /// <summary>
+    /// 更新时间
+    /// </summary>
+    public DateTime? UpdatedTime { get; set; }
+
+    /// <summary>
+    /// 更新版本控制字段
+    /// </summary>
+    public long RowVersion { get; set; }
 }

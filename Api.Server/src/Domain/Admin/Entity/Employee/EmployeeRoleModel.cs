@@ -42,8 +42,8 @@ public class EmployeeRoleModel : IDatabaseEntity
     public long RoleId { get; set; }
 
     /// <summary>
-    /// 角色信息
+    /// 角色名称
     /// </summary>
-    [Navigate(NavigateType.OneToOne, nameof(RoleId), nameof(RoleModel.RoleId))]
-    public RoleModel Role { get; set; }
+    [SugarColumn(ColumnDescription = "角色名称", Length = 20)]
+    public string RoleName { get; set; }
 }

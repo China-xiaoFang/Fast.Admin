@@ -30,11 +30,13 @@ public class EditAccountInput : UpdateVersionInput
     /// <summary>
     /// 手机
     /// </summary>
+    [StringRequired(ErrorMessage = "手机不能为空")]
     public string Mobile { get; set; }
 
     /// <summary>
     /// 邮箱
     /// </summary>
+    [StringRequired(ErrorMessage = "邮箱不能为空")]
     public string Email { get; set; }
 
     /// <summary>

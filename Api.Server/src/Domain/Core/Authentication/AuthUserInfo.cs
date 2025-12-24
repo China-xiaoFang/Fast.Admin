@@ -94,6 +94,11 @@ public class AuthUserInfo
     public virtual string TenantName { get; set; }
 
     /// <summary>
+    /// 租户编码
+    /// </summary>
+    public virtual string TenantCode { get; set; }
+
+    /// <summary>
     /// 用户Id/职员Id
     /// </summary>
     public virtual long UserId { get; set; }

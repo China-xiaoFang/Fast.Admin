@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -20,24 +20,62 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Service.Complaint.Dto;
+namespace Fast.Admin.Service.Department.Dto;
 
 /// <summary>
-/// <see cref="HandleComplaintInput"/> 处理投诉输入
+/// <see cref="EditDepartmentInput"/> 编辑部门输入
 /// </summary>
-public class HandleComplaintInput : UpdateVersionInput
+public class EditDepartmentInput : UpdateVersionInput
 {
     /// <summary>
-    /// 投诉Id
+    /// 部门Id
     /// </summary>
-    [LongRequired(ErrorMessage = "投诉Id不能为空")]
-    public long ComplaintId { get; set; }
+    [LongRequired(ErrorMessage = "部门Id不能为空")]
+    public long DepartmentId { get; set; }
 
     /// <summary>
-    /// 处理描述
+    /// 机构Id
     /// </summary>
-    [StringRequired(ErrorMessage = "处理描述不能为空")]
-    public string HandleDescription { get; set; }
+    [LongRequired(ErrorMessage = "机构Id不能为空")]
+    public long OrgId { get; set; }
+
+    /// <summary>
+    /// 父级Id
+    /// </summary>
+    public long? ParentId { get; set; }
+
+    /// <summary>
+    /// 部门名称
+    /// </summary>
+    [StringRequired(ErrorMessage = "部门名称不能为空")]
+    public string DepartmentName { get; set; }
+
+    /// <summary>
+    /// 部门编码
+    /// </summary>
+    [StringRequired(ErrorMessage = "部门编码不能为空")]
+    public string DepartmentCode { get; set; }
+
+    /// <summary>
+    /// 联系人
+    /// </summary>
+    public string Contacts { get; set; }
+
+    /// <summary>
+    /// 电话
+    /// </summary>
+    public string Phone { get; set; }
+
+    /// <summary>
+    /// 邮箱
+    /// </summary>
+    public string Email { get; set; }
+
+    /// <summary>
+    /// 排序
+    /// </summary>
+    [IntRequired(ErrorMessage = "排序不能为空")]
+    public int Sort { get; set; }
 
     /// <summary>
     /// 备注

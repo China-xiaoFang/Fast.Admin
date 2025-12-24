@@ -84,6 +84,7 @@ internal class LocalJob : JobBase<SchedulerJobLogInfo>
                 TenantId = _logInfo.TenantId,
                 TenantName = _logInfo.TenantName,
                 TenantNo = _logInfo.TenantNo,
+                TenantCode = _logInfo.TenantCode,
                 RobotInfo = _logInfo.RobotInfo
             });
 
