@@ -7,7 +7,7 @@ export interface ModuleIdInput {
    */
   moduleId?: number;
   /**
-   * 
+   * 行版本
    */
   rowVersion?: number;
 }

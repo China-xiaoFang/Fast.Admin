@@ -11,11 +11,11 @@ export interface QueryWeChatUserPagedInput extends PagedInput  {
    */
   appId?: number;
   /**
-   * 
+   * 用户类型
    */
   userType?: WeChatUserTypeEnum;
   /**
-   * 
+   * 性别
    */
   sex?: GenderEnum;
 }

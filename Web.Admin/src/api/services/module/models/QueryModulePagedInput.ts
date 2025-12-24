@@ -11,11 +11,11 @@ export interface QueryModulePagedInput extends PagedInput  {
    */
   appId?: number;
   /**
-   * 
+   * 查看类型
    */
   viewType?: ModuleViewTypeEnum;
   /**
-   * 
+   * 状态
    */
   status?: CommonStatusEnum;
 }

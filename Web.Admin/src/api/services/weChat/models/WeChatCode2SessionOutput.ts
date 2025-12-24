@@ -25,7 +25,7 @@ export interface WeChatCode2SessionOutput {
    */
   avatar?: string;
   /**
-   * 
+   * 性别
    */
   sex?: GenderEnum;
   /**
