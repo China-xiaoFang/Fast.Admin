@@ -85,6 +85,7 @@ public class AuthService : IDynamicApplication
             Avatar = _user.Avatar,
             TenantNo = _user.TenantNo,
             TenantName = _user.TenantName,
+            TenantCode = _user.TenantCode,
             UserKey = _user.UserKey,
             Account = _user.Account,
             EmployeeNo = _user.EmployeeNo,
@@ -112,9 +113,8 @@ public class AuthService : IDynamicApplication
 
         // 查询角色
         var roleList = await _empRepository.Queryable<EmployeeRoleModel>()
-            .Includes(e => e.Role)
             .Where(wh => wh.EmployeeId == _user.UserId)
-            .Select(sl => new {sl.RoleId, sl.Role.RoleName})
+            .Select(sl => new {sl.RoleId, sl.RoleName})
             .ToListAsync();
         var roleIds = roleList.Select(sl => sl.RoleId)
             .ToList();

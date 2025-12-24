@@ -4,7 +4,7 @@
 // 版权所有 © 2018-Now 小方
 // 
 // 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或机构。
+// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
 // 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
 // 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
 // 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
@@ -38,10 +38,21 @@ public class QueryOrganizationDetailOutput : PagedOutput
     public long ParentId { get; set; }
 
     /// <summary>
+    /// 父级名称
+    /// </summary>
+    public string ParentName { get; set; }
+
+    /// <summary>
     /// 父级Id集合
     /// </summary>
     [SugarColumn(IsJson = true)]
     public List<long> ParentIds { get; set; }
+
+    /// <summary>
+    /// 父级名称集合
+    /// </summary>
+    [SugarColumn(IsJson = true)]
+    public List<string> ParentNames { get; set; }
 
     /// <summary>
     /// 机构名称

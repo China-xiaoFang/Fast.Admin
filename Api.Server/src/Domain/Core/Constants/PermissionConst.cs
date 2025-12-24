@@ -376,6 +376,9 @@ public partial class PermissionConst
 
         /// <summary>职员编辑</summary>
         public const string Edit = "Employee:Edit";
+
+        /// <summary>职员状态更改</summary>
+        public const string Status = "Employee:Status";
     }
 
     /// <summary><see cref="TenantOnlineUser"/> 在线用户</summary>

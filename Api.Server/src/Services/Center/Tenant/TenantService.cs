@@ -286,7 +286,7 @@ public class TenantService : IDynamicApplication
                             Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
                                 .ToUpper(),
                             NickName = input.AdminName,
-                            Avatar = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+                            Avatar = tenantModel.LogoUrl,
                             Status = CommonStatusEnum.Enable,
                             Sex = GenderEnum.Unknown
                         };
@@ -337,6 +337,7 @@ public class TenantService : IDynamicApplication
                     await _repository.Updateable(tenantUserModel)
                         .ExecuteCommandAsync();
                 }
+
                 tenantModel.RobotName = input.RobotName;
             }
 

@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -20,27 +20,24 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Service.Complaint.Dto;
+using Fast.Admin.Enum;
+
+namespace Fast.Admin.Service.Employee.Dto;
 
 /// <summary>
-/// <see cref="HandleComplaintInput"/> 处理投诉输入
+/// <see cref="ChangeStatusInput"/> 职员更改状态输入
 /// </summary>
-public class HandleComplaintInput : UpdateVersionInput
+public class ChangeStatusInput : UpdateVersionInput
 {
     /// <summary>
-    /// 投诉Id
+    /// 职员Id
     /// </summary>
-    [LongRequired(ErrorMessage = "投诉Id不能为空")]
-    public long ComplaintId { get; set; }
+    [LongRequired(ErrorMessage = "职员Id不能为空")]
+    public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 处理描述
+    /// 状态
     /// </summary>
-    [StringRequired(ErrorMessage = "处理描述不能为空")]
-    public string HandleDescription { get; set; }
-
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public string Remark { get; set; }
+    [EnumRequired(ErrorMessage = "状态不能为空")]
+    public EmployeeStatusEnum Status { get; set; }
 }

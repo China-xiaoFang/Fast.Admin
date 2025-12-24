@@ -508,7 +508,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
 
             var tenantList = await db.Queryable<TenantModel>()
                 .Where(wh => wh.Status == CommonStatusEnum.Enable)
-                .Select(sl => new {sl.TenantId, sl.TenantName, sl.TenantNo})
+                .Select(sl => new {sl.TenantId, sl.TenantNo, sl.TenantCode, sl.TenantName})
                 .ToListAsync();
 
             foreach (var item in tenantList)
@@ -516,7 +516,8 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 // 启动租户调度器
                 await StartScheduler(item.TenantId);
                 // 放入租户调度器缓存中
-                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, Guid.NewGuid()
+                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, item.TenantCode, Guid
+                    .NewGuid()
                     .ToString()));
 
                 // 循环租户本地作业
@@ -560,7 +561,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 .Where(wh => wh.Status == CommonStatusEnum.Enable)
                 .Where(wh => !SchedulerContext.SchedulerTenantList.Keys.ToList()
                     .Contains(wh.TenantId))
-                .Select(sl => new {sl.TenantId, sl.TenantName, sl.TenantNo})
+                .Select(sl => new {sl.TenantId, sl.TenantNo, sl.TenantCode, sl.TenantName})
                 .ToListAsync();
 
             foreach (var item in tenantList)
@@ -568,7 +569,8 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 // 启动租户调度器
                 await StartScheduler(item.TenantId);
                 // 放入租户调度器缓存中
-                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, Guid.NewGuid()
+                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, item.TenantCode, Guid
+                    .NewGuid()
                     .ToString()));
 
                 // 循环租户本地作业

@@ -244,10 +244,11 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
         // 数据库连接字符串处理
         if (_logInfo.TenantId != null)
         {
-            var (tenantName, tenantNo, deviceId) =
+            var (tenantName, tenantNo, tenantCode, deviceId) =
                 SchedulerContext.SchedulerTenantList.GetValueOrDefault(_logInfo.TenantId.Value);
             _logInfo.TenantName = tenantName;
             _logInfo.TenantNo = tenantNo;
+            _logInfo.TenantCode = tenantCode;
 
             // 解析服务
             var centerCache = scope.ServiceProvider.GetService<ICache<CenterCCL>>();
@@ -281,8 +282,9 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
                 AppName = "调度程序",
                 NickName = robotInfo?.EmployeeName,
                 TenantId = _logInfo.TenantId.Value,
-                TenantName = tenantName,
                 TenantNo = tenantNo,
+                TenantName = tenantName,
+                TenantCode = tenantCode,
                 UserId = robotInfo?.UserId ?? 0,
                 UserKey = robotInfo?.UserKey,
                 Account = robotInfo?.Account,

@@ -56,7 +56,7 @@ public class RoleModel : BaseEntity, IUpdateVersion
     /// </summary>
     [Required]
     [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "角色编码", Length = 50)]
+    [SugarColumn(ColumnDescription = "角色编码", Length = 30)]
     public string RoleCode { get; set; }
 
     /// <summary>

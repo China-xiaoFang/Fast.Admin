@@ -66,6 +66,11 @@ public class SchedulerJobLocalLogInfo
     public string TenantNo { get; set; }
 
     /// <summary>
+    /// 租户编码
+    /// </summary>
+    public string TenantCode { get; set; }
+
+    /// <summary>
     /// 机器人信息
     /// </summary>
     public TenantUserModel RobotInfo { get; set; }

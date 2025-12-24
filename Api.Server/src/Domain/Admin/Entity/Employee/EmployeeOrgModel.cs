@@ -39,13 +39,37 @@ public class EmployeeOrgModel : IDatabaseEntity
     /// 机构Id
     /// </summary>
     [SugarColumn(ColumnDescription = "机构Id")]
-    public long OrganizationId { get; set; }
+    public long OrgId { get; set; }
+
+    /// <summary>
+    /// 机构名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "机构名称", Length = 20)]
+    public string OrgName { get; set; }
+
+    /// <summary>
+    /// 机构名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "机构名称", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
+    public List<string> OrgNames { get; set; }
 
     /// <summary>
     /// 部门Id
     /// </summary>
     [SugarColumn(ColumnDescription = "部门Id", IsPrimaryKey = true)]
     public long DepartmentId { get; set; }
+
+    /// <summary>
+    /// 部门名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "部门名称", Length = 20)]
+    public string DepartmentName { get; set; }
+
+    /// <summary>
+    /// 部门名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "部门名称", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
+    public List<string> DepartmentNames { get; set; }
 
     /// <summary>
     /// 是否为主部门
@@ -60,10 +84,22 @@ public class EmployeeOrgModel : IDatabaseEntity
     public long PositionId { get; set; }
 
     /// <summary>
+    /// 职位名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "职位名称", Length = 20)]
+    public string PositionName { get; set; }
+
+    /// <summary>
     /// 职级Id
     /// </summary>
     [SugarColumn(ColumnDescription = "职级Id")]
     public long? JobLevelId { get; set; }
+
+    /// <summary>
+    /// 职级名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "职级名称", Length = 20)]
+    public string JobLevelName { get; set; }
 
     /// <summary>
     /// 是否为负责人

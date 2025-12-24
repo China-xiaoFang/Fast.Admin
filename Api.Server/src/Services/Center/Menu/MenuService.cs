@@ -234,8 +234,7 @@ public class MenuService : IDynamicApplication
             }
 
             menuModel.ParentId = parentMenu.MenuId;
-            menuModel.ParentIds = parentMenu.ParentIds;
-            menuModel.ParentIds.Add(parentMenu.MenuId);
+            menuModel.ParentIds = [..parentMenu.ParentIds, parentMenu.MenuId];
         }
         else
         {

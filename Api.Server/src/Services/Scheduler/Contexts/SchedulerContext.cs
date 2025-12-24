@@ -41,11 +41,8 @@ public class SchedulerContext
     /// <para>租户编号</para>
     /// <para>虚拟的设备ID</para>
     /// </summary>
-    public static ConcurrentDictionary<long, (string tenantName, string tenantNo, string deviceId)> SchedulerTenantList
-    {
-        get;
-        internal set;
-    } = [];
+    public static ConcurrentDictionary<long, (string tenantName, string tenantNo, string tenantCode, string deviceId)>
+        SchedulerTenantList { get; internal set; } = [];
 
     /// <summary>
     /// 本地调度作业类型
