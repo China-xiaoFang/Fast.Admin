@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -20,27 +20,16 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Service.Complaint.Dto;
+namespace Fast.Admin.Service.Department.Dto;
 
 /// <summary>
-/// <see cref="HandleComplaintInput"/> 处理投诉输入
-/// </summary>
-public class HandleComplaintInput : UpdateVersionInput
+/// <see cref="DepartmentIdInput"/> 部门Id输入
+/// </summary> 
+public class DepartmentIdInput : UpdateVersionInput
 {
     /// <summary>
-    /// 投诉Id
+    /// 部门Id
     /// </summary>
-    [LongRequired(ErrorMessage = "投诉Id不能为空")]
-    public long ComplaintId { get; set; }
-
-    /// <summary>
-    /// 处理描述
-    /// </summary>
-    [StringRequired(ErrorMessage = "处理描述不能为空")]
-    public string HandleDescription { get; set; }
-
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public string Remark { get; set; }
+    [LongRequired(ErrorMessage = "部门Id不能为空")]
+    public long DepartmentId { get; set; }
 }

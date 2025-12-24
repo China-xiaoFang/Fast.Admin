@@ -22,7 +22,6 @@
 
 using Fast.Admin.Entity;
 using Fast.Admin.Service.Serial.Dto;
-using Fast.Center.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

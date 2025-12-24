@@ -53,7 +53,9 @@ public class OrganizationService : IDynamicApplication
             {
                 sl.OrgId,
                 sl.ParentId,
+                sl.ParentName,
                 sl.ParentIds,
+                sl.ParentNames,
                 sl.OrgName,
                 sl.OrgCode,
                 sl.Contacts,
@@ -66,9 +68,18 @@ public class OrganizationService : IDynamicApplication
                 Value = sl.OrgId,
                 Label = sl.OrgName,
                 ParentId = sl.ParentId,
-                Data = new {sl.ParentIds, sl.OrgCode, sl.Contacts, sl.Phone}
+                Data = new
+                {
+                    sl.ParentName,
+                    sl.ParentIds,
+                    sl.ParentNames,
+                    sl.OrgCode,
+                    sl.Contacts,
+                    sl.Phone
+                }
             })
-            .ToList();
+            .ToList()
+            .Build();
     }
 
     /// <summary>
@@ -86,7 +97,9 @@ public class OrganizationService : IDynamicApplication
             {
                 OrgId = sl.OrgId,
                 ParentId = sl.ParentId,
+                ParentName = sl.ParentName,
                 ParentIds = sl.ParentIds,
+                ParentNames = sl.ParentNames,
                 OrgName = sl.OrgName,
                 OrgCode = sl.OrgCode,
                 Contacts = sl.Contacts,
@@ -151,13 +164,16 @@ public class OrganizationService : IDynamicApplication
             }
 
             organizationModel.ParentId = parentOrganization.OrgId;
-            organizationModel.ParentIds = parentOrganization.ParentIds;
-            organizationModel.ParentIds.Add(parentOrganization.OrgId);
+            organizationModel.ParentName = parentOrganization.OrgName;
+            organizationModel.ParentIds = [..parentOrganization.ParentIds, parentOrganization.OrgId];
+            organizationModel.ParentNames = [.. parentOrganization.ParentNames, parentOrganization.OrgName];
         }
         else
         {
             organizationModel.ParentId = 0;
+            organizationModel.ParentName = null;
             organizationModel.ParentIds = [0];
+            organizationModel.ParentNames = [];
         }
 
         await _repository.InsertAsync(organizationModel);
@@ -178,12 +194,6 @@ public class OrganizationService : IDynamicApplication
             throw new UserFriendlyException("不能将自己设为父机构！");
         }
 
-        var organizationModel = await _repository.SingleOrDefaultAsync(input.OrgId);
-        if (organizationModel == null)
-        {
-            throw new UserFriendlyException("数据不存在！");
-        }
-
         if (await _repository.AnyAsync(a => a.OrgName == input.OrgName && a.OrgId != input.OrgId))
         {
             throw new UserFriendlyException("机构名称重复！");
@@ -192,6 +202,12 @@ public class OrganizationService : IDynamicApplication
         if (await _repository.AnyAsync(a => a.OrgCode == input.OrgCode && a.OrgId != input.OrgId))
         {
             throw new UserFriendlyException("机构编码重复！");
+        }
+
+        var organizationModel = await _repository.SingleOrDefaultAsync(input.OrgId);
+        if (organizationModel == null)
+        {
+            throw new UserFriendlyException("数据不存在！");
         }
 
         organizationModel.OrgName = input.OrgName;
@@ -212,16 +228,62 @@ public class OrganizationService : IDynamicApplication
             }
 
             organizationModel.ParentId = parentOrganization.OrgId;
-            organizationModel.ParentIds = parentOrganization.ParentIds;
-            organizationModel.ParentIds.Add(parentOrganization.OrgId);
+            organizationModel.ParentName = parentOrganization.OrgName;
+            organizationModel.ParentIds = [.. parentOrganization.ParentIds, parentOrganization.OrgId];
+            organizationModel.ParentNames = [.. parentOrganization.ParentNames, parentOrganization.OrgName];
         }
         else
         {
             organizationModel.ParentId = 0;
+            organizationModel.ParentName = null;
             organizationModel.ParentIds = [0];
+            organizationModel.ParentNames = [];
         }
 
         await _repository.UpdateAsync(organizationModel);
+
+        // 更新所有子级
+        var childrenList = await _repository.Entities.Where(wh => wh.ParentIds.Contains(organizationModel.OrgId))
+            .ToListAsync();
+
+        void updateChildrenName(long parentId)
+        {
+            var parentModel = childrenList.Single(s => s.OrgId == parentId);
+            foreach (var item in childrenList.Where(wh => wh.ParentId == parentId))
+            {
+                item.ParentIds = [.. parentModel.ParentIds, parentModel.OrgId];
+                item.ParentNames = [.. parentModel.ParentNames, parentModel.OrgName];
+                updateChildrenName(item.OrgId);
+            }
+        }
+
+        // 处理顶层
+        foreach (var item in childrenList.Where(wh => wh.ParentId == organizationModel.OrgId))
+        {
+            item.ParentName = organizationModel.OrgName;
+            item.ParentIds = [.. organizationModel.ParentIds, organizationModel.OrgId];
+            item.ParentNames = [.. organizationModel.ParentNames, organizationModel.OrgName];
+
+            updateChildrenName(item.OrgId);
+        }
+
+        await _repository.Updateable(childrenList)
+            .UpdateColumns(e => new {e.ParentName, e.ParentIds, e.ParentNames})
+            .ExecuteCommandAsync();
+
+        await _repository.Updateable<DepartmentModel>()
+            .SetColumns(_ => new DepartmentModel {OrgName = organizationModel.OrgName})
+            .Where(wh => wh.OrgId == organizationModel.OrgId)
+            .ExecuteCommandAsync();
+
+        await _repository.Updateable<EmployeeOrgModel>()
+            .SetColumns(_ => new EmployeeOrgModel
+            {
+                OrgName = organizationModel.OrgName,
+                OrgNames = new List<string>(organizationModel.ParentNames) {organizationModel.OrgName}
+            })
+            .Where(wh => wh.OrgId == organizationModel.OrgId)
+            .ExecuteCommandAsync();
     }
 
     /// <summary>
@@ -244,6 +306,13 @@ public class OrganizationService : IDynamicApplication
                 .AnyAsync(a => a.OrgId == input.OrgId))
         {
             throw new UserFriendlyException("机构存在部门关联，无法删除！");
+        }
+
+        // 检查是否有员工关联
+        if (await _repository.Queryable<EmployeeOrgModel>()
+                .AnyAsync(a => a.OrgId == input.OrgId))
+        {
+            throw new UserFriendlyException("机构存在员工关联，无法删除！");
         }
 
         var organizationModel = await _repository.SingleOrDefaultAsync(input.OrgId);

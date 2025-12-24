@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -20,27 +20,62 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Service.Complaint.Dto;
+using Fast.Admin.Enum;
+
+namespace Fast.Admin.Service.Employee.Dto;
 
 /// <summary>
-/// <see cref="HandleComplaintInput"/> 处理投诉输入
+/// <see cref="QueryEmployeePagedInput"/> 获取职员分页列表输入
 /// </summary>
-public class HandleComplaintInput : UpdateVersionInput
+public class QueryEmployeePagedInput : PagedInput
 {
     /// <summary>
-    /// 投诉Id
+    /// 状态
     /// </summary>
-    [LongRequired(ErrorMessage = "投诉Id不能为空")]
-    public long ComplaintId { get; set; }
+    public EmployeeStatusEnum? Status { get; set; }
 
     /// <summary>
-    /// 处理描述
+    /// 性别
     /// </summary>
-    [StringRequired(ErrorMessage = "处理描述不能为空")]
-    public string HandleDescription { get; set; }
+    public GenderEnum? Sex { get; set; }
 
     /// <summary>
-    /// 备注
+    /// 民族
     /// </summary>
-    public string Remark { get; set; }
+    public NationEnum? Nation { get; set; }
+
+    /// <summary>
+    /// 籍贯
+    /// </summary>
+    public string NativePlace { get; set; }
+
+    /// <summary>
+    /// 文件程度
+    /// </summary>
+    public EducationLevelEnum? EducationLevel { get; set; }
+
+    /// <summary>
+    /// 政治面貌
+    /// </summary>
+    public PoliticalStatusEnum? PoliticalStatus { get; set; }
+
+    /// <summary>
+    /// 毕业学院
+    /// </summary>
+    public string GraduationCollege { get; set; }
+
+    /// <summary>
+    /// 学历
+    /// </summary>
+    public AcademicQualificationsEnum? AcademicQualifications { get; set; }
+
+    /// <summary>
+    /// 学制
+    /// </summary>
+    public AcademicSystemEnum? AcademicSystem { get; set; }
+
+    /// <summary>
+    /// 学位
+    /// </summary>
+    public DegreeEnum? Degree { get; set; }
 }

@@ -94,6 +94,11 @@ public interface IUser
     string TenantName { get; set; }
 
     /// <summary>
+    /// 租户编码
+    /// </summary>
+    string TenantCode { get; set; }
+
+    /// <summary>
     /// 用户Id/职员Id
     /// </summary>
     long UserId { get; set; }

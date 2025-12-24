@@ -167,6 +167,11 @@ public class JobLevelService : IDynamicApplication
         jobLevelModel.RowVersion = input.RowVersion;
 
         await _repository.UpdateAsync(jobLevelModel);
+
+        await _repository.Updateable<EmployeeOrgModel>()
+            .SetColumns(_ => new EmployeeOrgModel {JobLevelName = jobLevelModel.JobLevelName})
+            .Where(wh => wh.JobLevelId == jobLevelModel.JobLevelId)
+            .ExecuteCommandAsync();
     }
 
     /// <summary>

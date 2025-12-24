@@ -1,4 +1,4 @@
-// ------------------------------------------------------------------------
+﻿// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -20,27 +20,68 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Service.Complaint.Dto;
+namespace Fast.Admin.Enum;
 
 /// <summary>
-/// <see cref="HandleComplaintInput"/> 处理投诉输入
+/// <see cref="EmployeeStatusEnum"/> 职员状态枚举
 /// </summary>
-public class HandleComplaintInput : UpdateVersionInput
+[Flags]
+[FastEnum("职员状态枚举")]
+public enum EmployeeStatusEnum : byte
 {
     /// <summary>
-    /// 投诉Id
+    /// 无
     /// </summary>
-    [LongRequired(ErrorMessage = "投诉Id不能为空")]
-    public long ComplaintId { get; set; }
+    [TagType(TagTypeEnum.Info)]
+    [Description("无")]
+    None = 0,
 
     /// <summary>
-    /// 处理描述
+    /// 临时工
     /// </summary>
-    [StringRequired(ErrorMessage = "处理描述不能为空")]
-    public string HandleDescription { get; set; }
+    [TagType(TagTypeEnum.Info)]
+    [Description("临时")]
+    Temporary = 1,
 
     /// <summary>
-    /// 备注
+    /// 试用期
     /// </summary>
-    public string Remark { get; set; }
+    [TagType(TagTypeEnum.Info)]
+    [Description("试用")]
+    Probation = 2,
+
+    /// <summary>
+    /// 实习生
+    /// </summary>
+    [TagType(TagTypeEnum.Info)]
+    [Description("实习生")]
+    Intern = 4,
+
+    /// <summary>
+    /// 外包
+    /// </summary>
+    [TagType(TagTypeEnum.Info)]
+    [Description("外包")]
+    Outsourcing = 8,
+
+    /// <summary>
+    /// 挂职
+    /// </summary>
+    [TagType(TagTypeEnum.Primary)]
+    [Description("挂职")]
+    Secondment = 16,
+
+    /// <summary>
+    /// 正式
+    /// </summary>
+    [TagType(TagTypeEnum.Primary)]
+    [Description("正式")]
+    Formal = 32,
+
+    /// <summary>
+    /// 离职
+    /// </summary>
+    [TagType(TagTypeEnum.Danger)]
+    [Description("离职")]
+    Resigned = 64
 }

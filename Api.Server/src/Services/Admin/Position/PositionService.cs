@@ -164,6 +164,11 @@ public class PositionService : IDynamicApplication
         positionModel.RowVersion = input.RowVersion;
 
         await _repository.UpdateAsync(positionModel);
+
+        await _repository.Updateable<EmployeeOrgModel>()
+            .SetColumns(_ => new EmployeeOrgModel {PositionName = positionModel.PositionName})
+            .Where(wh => wh.PositionId == positionModel.PositionId)
+            .ExecuteCommandAsync();
     }
 
     /// <summary>

@@ -223,7 +223,7 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
                         Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
                             .ToUpper(),
                         NickName = tenantModel.AdminName,
-                        Avatar = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+                        Avatar = tenantModel.LogoUrl,
                         Status = CommonStatusEnum.Enable,
                         Sex = GenderEnum.Unknown
                     };
@@ -265,7 +265,7 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
                             Account = $"{tenantModel.TenantCode}_Admin",
                             EmployeeNo = $"{tenantModel.TenantCode}_Admin",
                             EmployeeName = tenantModel.AdminName,
-                            IdPhoto = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+                            IdPhoto = tenantModel.LogoUrl,
                             DepartmentId = null,
                             DepartmentName = null,
                             UserType = UserTypeEnum.Admin,

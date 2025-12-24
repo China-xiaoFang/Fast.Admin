@@ -345,7 +345,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Basic,
+                    Edition = EditionEnum.Custom,
                     AppId = applicationModel.AppId,
                     MenuId = accountMenuModel.MenuId,
                     ButtonCode = PermissionConst.Account.Status,
@@ -1058,6 +1058,21 @@ internal static partial class MenuSeedData
                     MenuId = employeeMenuModel.MenuId,
                     ButtonCode = PermissionConst.Employee.Edit,
                     ButtonName = "编辑",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.None,
+                    AppId = applicationModel.AppId,
+                    MenuId = employeeMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Employee.Status,
+                    ButtonName = "状态更改",
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,

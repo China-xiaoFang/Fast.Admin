@@ -36,10 +36,12 @@ namespace Fast.Admin.Service.Role;
 public class RoleService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<RoleModel> _repository;
+    private readonly ISqlSugarClient _centerRepository;
 
-    public RoleService(ISqlSugarRepository<RoleModel> repository)
+    public RoleService(ISqlSugarRepository<RoleModel> repository, ISqlSugarClient centerRepository)
     {
         _repository = repository;
+        _centerRepository = centerRepository;
     }
 
     /// <summary>
@@ -199,6 +201,11 @@ public class RoleService : IDynamicApplication
         roleModel.RowVersion = input.RowVersion;
 
         await _repository.UpdateAsync(roleModel);
+
+        await _repository.Updateable<EmployeeRoleModel>()
+            .SetColumns(_ => new EmployeeRoleModel {RoleName = roleModel.RoleName})
+            .Where(wh => wh.RoleId == roleModel.RoleId)
+            .ExecuteCommandAsync();
     }
 
     /// <summary>
@@ -249,7 +256,7 @@ public class RoleService : IDynamicApplication
     [HttpPost]
     [ApiInfo("角色授权", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Role.Edit)]
-    public async Task RoleAuthMenu(RoleAuthInput input)
+    public async Task RoleAuth(RoleAuthInput input)
     {
         var roleModel = await _repository.SingleOrDefaultAsync(input.RoleId);
         if (roleModel == null)
@@ -257,11 +264,16 @@ public class RoleService : IDynamicApplication
             throw new UserFriendlyException("角色不存在！");
         }
 
+        if (roleModel.RoleType == RoleTypeEnum.Admin)
+        {
+            throw new UserFriendlyException("禁止操作管理员角色！");
+        }
+
         // 验证菜单是否都存在
         var menuIds = input.MenuIds ?? [];
         if (menuIds.Any())
         {
-            if (await _repository.Queryable<MenuModel>()
+            if (await _centerRepository.Queryable<MenuModel>()
                     .Where(wh => menuIds.Contains(wh.MenuId))
                     .Select(sl => sl.MenuId)
                     .CountAsync()
@@ -275,7 +287,7 @@ public class RoleService : IDynamicApplication
         var buttonIds = input.ButtonIds ?? [];
         if (buttonIds.Any())
         {
-            var existButtonIds = await _repository.Queryable<ButtonModel>()
+            var existButtonIds = await _centerRepository.Queryable<ButtonModel>()
                 .Where(wh => buttonIds.Contains(wh.ButtonId))
                 .Select(sl => sl.ButtonId)
                 .ToListAsync();
@@ -290,27 +302,28 @@ public class RoleService : IDynamicApplication
         {
             // 删除旧的菜单权限
             await _repository.Deleteable<RoleMenuModel>()
-                .Where(wh => wh.RoleId == input.RoleId)
+                .Where(wh => wh.RoleId == roleModel.RoleId)
                 .ExecuteCommandAsync();
 
             // 添加新的菜单权限
             if (menuIds.Any())
             {
-                await _repository.Insertable(menuIds.Select(menuId => new RoleMenuModel {RoleId = input.RoleId, MenuId = menuId})
+                await _repository.Insertable(menuIds
+                        .Select(menuId => new RoleMenuModel {RoleId = roleModel.RoleId, MenuId = menuId})
                         .ToList())
                     .ExecuteCommandAsync();
             }
 
             // 删除旧的按钮权限
             await _repository.Deleteable<RoleButtonModel>()
-                .Where(wh => wh.RoleId == input.RoleId)
+                .Where(wh => wh.RoleId == roleModel.RoleId)
                 .ExecuteCommandAsync();
 
             // 添加新的按钮权限
             if (buttonIds.Any())
             {
                 await _repository.Insertable(buttonIds
-                        .Select(buttonId => new RoleButtonModel {RoleId = input.RoleId, ButtonId = buttonId})
+                        .Select(buttonId => new RoleButtonModel {RoleId = roleModel.RoleId, ButtonId = buttonId})
                         .ToList())
                     .ExecuteCommandAsync();
             }

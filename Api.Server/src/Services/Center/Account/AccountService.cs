@@ -20,6 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using System.Text.RegularExpressions;
 using Fast.Center.Entity;
 using Fast.Center.Service.Account.Dto;
 using Fast.CenterLog.Entity;
@@ -180,6 +181,11 @@ public class AccountService : IDynamicApplication
     [ApiInfo("编辑账号", HttpRequestActionEnum.Edit)]
     public async Task EditAccount(EditAccountInput input)
     {
+        if (!new Regex(RegexConst.Mobile).IsMatch(input.Mobile))
+        {
+            throw new UserFriendlyException("手机号码不正确！");
+        }
+
         var accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
         if (accountModel == null)
         {
@@ -409,13 +415,13 @@ public class AccountService : IDynamicApplication
             // 强制下线当前账号所有在线用户
             var _hubContext = FastContext.HttpContext.RequestServices.GetService<IHubContext<ChatHub, IChatClient>>();
 
-            var connectionIdList = await _repository.Queryable<TenantOnlineUserModel>()
+            var connectionIds = await _repository.Queryable<TenantOnlineUserModel>()
                 .Where(wh => wh.IsOnline)
                 .Where(wh => wh.AccountId == accountModel.AccountId)
                 .Select(sl => sl.ConnectionId)
                 .ToListAsync();
 
-            await _hubContext.Clients.Clients(connectionIdList)
+            await _hubContext.Clients.Clients(connectionIds)
                 .ForceOffline(new ForceOfflineOutput
                 {
                     IsAdmin = _user.IsSuperAdmin || _user.IsAdmin,

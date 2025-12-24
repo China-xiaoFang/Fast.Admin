@@ -21,7 +21,6 @@
 // ------------------------------------------------------------------------
 
 using Fast.Admin.Enum;
-using Fast.Center.Enum;
 
 namespace Fast.Admin.Service.Serial.Dto;
 
