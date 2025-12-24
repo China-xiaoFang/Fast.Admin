@@ -13,7 +13,7 @@ export interface EditTableColumnConfigInput {
    */
   columns?: Array<FaTableColumnCtx>;
   /**
-   * 
+   * 行版本
    */
   rowVersion?: number;
 }

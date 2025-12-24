@@ -15,7 +15,7 @@ export interface EditTableConfigInput {
    */
   remark?: string;
   /**
-   * 
+   * 行版本
    */
   rowVersion?: number;
 }

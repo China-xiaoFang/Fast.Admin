@@ -2,7 +2,7 @@ import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 
 /**
- * 
+ * Fast.Center.Service.Tenant.Dto.EditTenantInput 编辑租户输入
  */
 export interface EditTenantInput {
   /**
@@ -14,7 +14,7 @@ export interface EditTenantInput {
    */
   tenantCode?: string;
   /**
-   * 
+   * 状态
    */
   status?: CommonStatusEnum;
   /**
@@ -30,7 +30,7 @@ export interface EditTenantInput {
    */
   spellName?: string;
   /**
-   * 
+   * 版本
    */
   edition?: EditionEnum;
   /**
@@ -58,7 +58,7 @@ export interface EditTenantInput {
    */
   logoUrl?: string;
   /**
-   * 
+   * 行版本
    */
   rowVersion?: number;
 }

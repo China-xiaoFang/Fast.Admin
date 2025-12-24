@@ -8,11 +8,11 @@ import { TenantTypeEnum } from "@/api/enums/TenantTypeEnum";
  */
 export interface QueryTenantPagedInput extends PagedInput  {
   /**
-   * 
+   * 状态
    */
   status?: CommonStatusEnum;
   /**
-   * 
+   * 版本
    */
   edition?: EditionEnum;
   /**
@@ -24,7 +24,7 @@ export interface QueryTenantPagedInput extends PagedInput  {
    */
   adminEmail?: string;
   /**
-   * 
+   * 租户类型
    */
   tenantType?: TenantTypeEnum;
 }
