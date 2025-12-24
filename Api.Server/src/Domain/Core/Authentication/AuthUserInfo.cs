@@ -189,6 +189,11 @@ public class AuthUserInfo
     public List<string> RoleNameList { get; set; } = new();
 
     /// <summary>
+    /// 数据范围类型
+    /// </summary>
+    public int DataScopeType { get; set; }
+
+    /// <summary>
     /// 菜单编码集合
     /// </summary>
     public virtual List<string> MenuCodeList { get; set; } = new();
