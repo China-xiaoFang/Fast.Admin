@@ -21,7 +21,7 @@ export interface AddModuleInput {
    */
   color?: string;
   /**
-   * 
+   * 查看类型
    */
   viewType?: ModuleViewTypeEnum;
   /**

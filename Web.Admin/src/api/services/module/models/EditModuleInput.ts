@@ -26,7 +26,7 @@ export interface EditModuleInput {
    */
   color?: string;
   /**
-   * 
+   * 查看类型
    */
   viewType?: ModuleViewTypeEnum;
   /**
@@ -34,11 +34,11 @@ export interface EditModuleInput {
    */
   sort?: number;
   /**
-   * 
+   * 状态
    */
   status?: CommonStatusEnum;
   /**
-   * 
+   * 行版本
    */
   rowVersion?: number;
 }

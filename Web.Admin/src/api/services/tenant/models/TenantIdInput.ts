@@ -7,7 +7,7 @@ export interface TenantIdInput {
    */
   tenantId?: number;
   /**
-   * 
+   * 行版本
    */
   rowVersion?: number;
 }

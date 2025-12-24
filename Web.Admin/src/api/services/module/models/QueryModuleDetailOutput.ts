@@ -30,7 +30,7 @@ export interface QueryModuleDetailOutput {
    */
   color?: string;
   /**
-   * 
+   * 查看类型
    */
   viewType?: ModuleViewTypeEnum;
   /**
@@ -38,31 +38,31 @@ export interface QueryModuleDetailOutput {
    */
   sort?: number;
   /**
-   * 
+   * 状态
    */
   status?: CommonStatusEnum;
   /**
-   * 
+   * 部门名称
    */
   departmentName?: string;
   /**
-   * 
+   * 创建人名称
    */
   createdUserName?: string;
   /**
-   * 
+   * 创建时间
    */
   createdTime?: Date;
   /**
-   * 
+   * 更新人名称
    */
   updatedUserName?: string;
   /**
-   * 
+   * 更新时间
    */
   updatedTime?: Date;
   /**
-   * 
+   * 行版本
    */
   rowVersion?: number;
 }

@@ -7,7 +7,7 @@ export interface TableIdInput {
    */
   tableId?: number;
   /**
-   * 
+   * 行版本
    */
   rowVersion?: number;
 }

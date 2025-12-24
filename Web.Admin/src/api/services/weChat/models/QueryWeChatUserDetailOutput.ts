@@ -10,7 +10,7 @@ export interface QueryWeChatUserDetailOutput {
    */
   weChatId?: number;
   /**
-   * 
+   * 用户类型
    */
   userType?: WeChatUserTypeEnum;
   /**
@@ -42,7 +42,7 @@ export interface QueryWeChatUserDetailOutput {
    */
   avatar?: string;
   /**
-   * 
+   * 性别
    */
   sex?: GenderEnum;
   /**
@@ -106,7 +106,7 @@ export interface QueryWeChatUserDetailOutput {
    */
   readonly allowModifyMobile?: boolean;
   /**
-   * 
+   * 行版本
    */
   rowVersion?: number;
 }

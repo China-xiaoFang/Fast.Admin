@@ -19,7 +19,7 @@ export interface EditConfigInput {
    */
   remark?: string;
   /**
-   * 
+   * 行版本
    */
   rowVersion?: number;
 }

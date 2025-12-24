@@ -21,7 +21,7 @@ export interface AddTenantInput {
    */
   spellName?: string;
   /**
-   * 
+   * 版本
    */
   edition?: EditionEnum;
   /**

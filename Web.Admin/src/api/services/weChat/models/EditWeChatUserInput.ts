@@ -25,7 +25,7 @@ export interface EditWeChatUserInput {
    */
   avatar?: string;
   /**
-   * 
+   * 性别
    */
   sex?: GenderEnum;
   /**
@@ -41,7 +41,7 @@ export interface EditWeChatUserInput {
    */
   city?: string;
   /**
-   * 
+   * 行版本
    */
   rowVersion?: number;
 }

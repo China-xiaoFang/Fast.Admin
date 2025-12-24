@@ -8,13 +8,13 @@ import { EditModuleInput } from "./models/EditModuleInput";
 import { ModuleIdInput } from "./models/ModuleIdInput";
 
 /**
- * Fast.Center.Service.Menu.MenuService 菜单服务Api
+ * Fast.Center.Service.Module.ModuleService 模块服务Api
  */
 export const moduleApi = {
   /**
    * 模块选择器
    */
-  moduleSelector(appId: number) {
+  moduleSelector(appId?: number) {
     return axiosUtil.request<ElSelectorOutput<number>[]>({
       url: "/module/moduleSelector",
       method: "get",

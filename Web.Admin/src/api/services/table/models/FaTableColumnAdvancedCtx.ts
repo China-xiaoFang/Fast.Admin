@@ -9,7 +9,7 @@ export interface FaTableColumnAdvancedCtx {
    */
   prop?: string;
   /**
-   * 
+   * 类型
    */
   type?: ColumnAdvancedTypeEnum;
   /**
