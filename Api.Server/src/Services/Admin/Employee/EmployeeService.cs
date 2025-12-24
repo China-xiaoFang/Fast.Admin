@@ -69,7 +69,8 @@ public class EmployeeService : IDynamicApplication
             .WhereIF(!string.IsNullOrWhiteSpace(input.NativePlace), t1 => t1.NativePlace.Contains(input.NativePlace))
             .WhereIF(input.EducationLevel != null, t1 => t1.EducationLevel == input.EducationLevel)
             .WhereIF(input.PoliticalStatus != null, t1 => t1.PoliticalStatus == input.PoliticalStatus)
-            .WhereIF(!string.IsNullOrWhiteSpace(input.GraduationCollege), t1 => t1.GraduationCollege.Contains(input.GraduationCollege))
+            .WhereIF(!string.IsNullOrWhiteSpace(input.GraduationCollege),
+                t1 => t1.GraduationCollege.Contains(input.GraduationCollege))
             .WhereIF(input.AcademicQualifications != null, t1 => t1.AcademicQualifications == input.AcademicQualifications)
             .WhereIF(input.AcademicSystem != null, t1 => t1.AcademicSystem == input.AcademicSystem)
             .WhereIF(input.Degree != null, t1 => t1.Degree == input.Degree)
