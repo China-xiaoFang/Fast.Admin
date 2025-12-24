@@ -40,22 +40,4 @@ public class EmployeeButtonModel : IDatabaseEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "按钮Id", IsPrimaryKey = true)]
     public long ButtonId { get; set; }
-
-    /// <summary>
-    /// 创建者用户Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户Id", CreateTableFieldSort = 991)]
-    public long? CreatedUserId { get; set; }
-
-    /// <summary>
-    /// 创建者用户名称
-    /// </summary>
-    [SugarColumn(ColumnDescription = "创建者用户名称", Length = 20, CreateTableFieldSort = 992)]
-    public string CreatedUserName { get; set; }
-
-    /// <summary>
-    /// 创建时间
-    /// </summary>
-    [Required, SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
-    public DateTime? CreatedTime { get; set; }
 }

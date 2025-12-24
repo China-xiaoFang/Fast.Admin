@@ -189,6 +189,11 @@ public interface IUser
     List<string> RoleNameList { get; set; }
 
     /// <summary>
+    /// 数据范围类型
+    /// </summary>
+    int DataScopeType { get; set; }
+
+    /// <summary>
     /// 菜单编码集合
     /// </summary>
     List<string> MenuCodeList { get; set; }

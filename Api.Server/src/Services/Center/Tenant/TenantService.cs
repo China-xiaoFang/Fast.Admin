@@ -81,8 +81,8 @@ public class TenantService : IDynamicApplication
     {
         return await _repository.Entities.WhereIF(input.Status != null, wh => wh.Status == input.Status)
             .WhereIF(input.Edition != null, wh => (wh.Edition & input.Edition) != 0)
-            .WhereIF(!string.IsNullOrEmpty(input.AdminMobile), wh => wh.AdminMobile.Contains(input.AdminMobile))
-            .WhereIF(!string.IsNullOrEmpty(input.AdminEmail), wh => wh.AdminEmail.Contains(input.AdminEmail))
+            .WhereIF(!string.IsNullOrWhiteSpace(input.AdminMobile), wh => wh.AdminMobile.Contains(input.AdminMobile))
+            .WhereIF(!string.IsNullOrWhiteSpace(input.AdminEmail), wh => wh.AdminEmail.Contains(input.AdminEmail))
             .WhereIF(input.TenantType != null, wh => wh.TenantType == input.TenantType)
             .OrderByDescending(ob => ob.CreatedTime)
             .ToPagedListAsync(input,

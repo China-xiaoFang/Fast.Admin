@@ -264,20 +264,20 @@ public class MailService : IMailService, ISingletonDependency
     {
         try
         {
-            if (string.IsNullOrEmpty(_mailSettingsOptions.Smtp))
+            if (string.IsNullOrWhiteSpace(_mailSettingsOptions.Smtp))
                 throw new UserFriendlyException("发件服务器地址为空！");
 
             if (_mailSettingsOptions.Port == null || _mailSettingsOptions.Port <= 0)
                 throw new ArgumentException("发件服务器端口为空！");
 
-            if (string.IsNullOrEmpty(_mailSettingsOptions.Email))
+            if (string.IsNullOrWhiteSpace(_mailSettingsOptions.Email))
                 throw new ArgumentException("发件邮箱为空！");
 
-            if (string.IsNullOrEmpty(_mailSettingsOptions.AuthCode))
+            if (string.IsNullOrWhiteSpace(_mailSettingsOptions.AuthCode))
                 throw new ArgumentException("发件邮箱授权码为空！");
 
             // 显示名称
-            var displayName = string.IsNullOrEmpty(_mailSettingsOptions.DisplayName) ? "掘慧科技" : _mailSettingsOptions.DisplayName;
+            var displayName = string.IsNullOrWhiteSpace(_mailSettingsOptions.DisplayName) ? "掘慧科技" : _mailSettingsOptions.DisplayName;
 
             // 创建邮件内容
             var message = new MimeMessage();

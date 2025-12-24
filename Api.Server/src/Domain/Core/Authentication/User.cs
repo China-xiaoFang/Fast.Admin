@@ -106,6 +106,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         LastLoginTime = authUserInfo.LastLoginTime;
         RoleIdList = authUserInfo.RoleIdList;
         RoleNameList = authUserInfo.RoleNameList;
+        DataScopeType = authUserInfo.DataScopeType;
         MenuCodeList = authUserInfo.MenuCodeList;
         ButtonCodeList = authUserInfo.ButtonCodeList;
         _hasUserInfo = true;
@@ -349,6 +350,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         // 设置授权用户信息
         RoleIdList = authUserInfo.RoleIdList;
         RoleNameList = authUserInfo.RoleNameList;
+        DataScopeType = authUserInfo.DataScopeType;
         MenuCodeList = authUserInfo.MenuCodeList;
         ButtonCodeList = authUserInfo.ButtonCodeList;
 
@@ -475,6 +477,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         DepartmentName = authUserInfo.DepartmentName;
         RoleIdList = authUserInfo.RoleIdList;
         RoleNameList = authUserInfo.RoleNameList;
+        DataScopeType = authUserInfo.DataScopeType;
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,

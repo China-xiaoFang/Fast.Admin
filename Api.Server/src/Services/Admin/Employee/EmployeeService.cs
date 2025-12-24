@@ -66,10 +66,10 @@ public class EmployeeService : IDynamicApplication
             .WhereIF(input.Status != null, t1 => t1.Status == input.Status)
             .WhereIF(input.Sex != null, t1 => t1.Sex == input.Sex)
             .WhereIF(input.Nation != null, t1 => t1.Nation == input.Nation)
-            .WhereIF(!string.IsNullOrEmpty(input.NativePlace), t1 => t1.NativePlace.Contains(input.NativePlace))
+            .WhereIF(!string.IsNullOrWhiteSpace(input.NativePlace), t1 => t1.NativePlace.Contains(input.NativePlace))
             .WhereIF(input.EducationLevel != null, t1 => t1.EducationLevel == input.EducationLevel)
             .WhereIF(input.PoliticalStatus != null, t1 => t1.PoliticalStatus == input.PoliticalStatus)
-            .WhereIF(!string.IsNullOrEmpty(input.GraduationCollege), t1 => t1.GraduationCollege.Contains(input.GraduationCollege))
+            .WhereIF(!string.IsNullOrWhiteSpace(input.GraduationCollege), t1 => t1.GraduationCollege.Contains(input.GraduationCollege))
             .WhereIF(input.AcademicQualifications != null, t1 => t1.AcademicQualifications == input.AcademicQualifications)
             .WhereIF(input.AcademicSystem != null, t1 => t1.AcademicSystem == input.AcademicSystem)
             .WhereIF(input.Degree != null, t1 => t1.Degree == input.Degree)
@@ -647,7 +647,7 @@ public class EmployeeService : IDynamicApplication
             .SingleAsync(s => s.EmployeeId == employeeModel.EmployeeId && s.IsPrimary == YesOrNotEnum.Y);
 
         employeeModel.UserId = YitIdHelper.NextId();
-        if (string.IsNullOrEmpty(employeeModel.Email))
+        if (string.IsNullOrWhiteSpace(employeeModel.Email))
         {
             employeeModel.Email = input.Email;
         }
@@ -791,7 +791,7 @@ public class EmployeeService : IDynamicApplication
                 .Select(sl => sl.ConnectionId)
                 .SingleAsync();
 
-            if (!string.IsNullOrEmpty(connectionId))
+            if (!string.IsNullOrWhiteSpace(connectionId))
             {
                 await _hubContext.Clients.Clients(connectionId)
                     .ForceOffline(new ForceOfflineOutput
