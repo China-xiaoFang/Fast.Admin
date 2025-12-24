@@ -115,16 +115,13 @@ public class AuthService : IDynamicApplication
         // 查询角色
         var roleList = await _empRepository.Queryable<EmployeeRoleModel>()
             .LeftJoin<RoleModel>((t1, t2) => t1.RoleId == t2.RoleId)
-            .Where(wh => wh.EmployeeId == _user.UserId)
+            .Where(t1 => t1.EmployeeId == _user.UserId)
             .Select((t1, t2) => new {t1.RoleId, t1.RoleName, t2.RoleType, t2.DataScopeType})
             .ToListAsync();
         var roleIds = roleList.Select(sl => sl.RoleId)
             .ToList();
         result.RoleNameList = roleList.Select(sl => sl.RoleName)
             .ToList();
-        result.DataScopeType = roleList.Any(a => a.RoleType == RoleTypeEnum.Admin)
-            ? DataScopeTypeEnum.All
-            : roleList.Min(m => m.DataScopeType);
 
         var moduleQueryable = _repository.Queryable<ModuleModel>()
             .Where(wh => wh.AppId == applicationModel.AppId)
@@ -139,16 +136,23 @@ public class AuthService : IDynamicApplication
 
         if (_user.IsSuperAdmin)
         {
+            result.DataScopeType = DataScopeTypeEnum.All;
+
             moduleQueryable = moduleQueryable.Where(wh =>
                 (wh.ViewType & (ModuleViewTypeEnum.SuperAdmin | ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
         }
         else if (_user.IsAdmin)
         {
+            result.DataScopeType = DataScopeTypeEnum.All;
+
             moduleQueryable =
                 moduleQueryable.Where(wh => (wh.ViewType & (ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
         }
         else
         {
+            result.DataScopeType = roleList.Any(a => a.RoleType == RoleTypeEnum.Admin) ? DataScopeTypeEnum.All :
+                roleList.Any() ? roleList.Min(m => m.DataScopeType) : DataScopeTypeEnum.Self;
+
             moduleQueryable = moduleQueryable.Where(wh => (wh.ViewType & ModuleViewTypeEnum.All) != 0);
             // 查询当前用户角色对应的菜单Id
             var roleMenuIds = await _empRepository.Queryable<RoleMenuModel>()

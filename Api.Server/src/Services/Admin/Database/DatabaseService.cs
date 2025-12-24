@@ -65,9 +65,6 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
             throw new UserFriendlyException("租户不存在！");
         }
 
-        // 加载Aop
-        SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
-
         var databaseModel = await db.Queryable<MainDatabaseModel>()
             .Includes(e => e.SlaveDatabaseList)
             .Where(wh => wh.TenantId == tenantId && wh.DatabaseType == databaseType)
@@ -79,6 +76,9 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
 
         if (databaseModel.IsInitialized)
             return;
+
+        // 加载Aop
+        SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
         var newDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(new ConnectionSettingsOptions
         {
@@ -287,13 +287,13 @@ public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDy
                     })
                     .ExecuteCommandAsync();
             }
-
-            databaseModel.IsInitialized = true;
-            await db.Updateable(databaseModel)
-                .ExecuteCommandAsync();
             await db.Updateable(tenantModel)
                 .ExecuteCommandAsync();
         }
+
+        databaseModel.IsInitialized = true;
+        await db.Updateable(databaseModel)
+            .ExecuteCommandAsync();
 
         {
             var logSb = new StringBuilder();
