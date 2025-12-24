@@ -80,7 +80,6 @@ public class LoginOutput
         /// <summary>
         /// 租户英文名称
         /// </summary>
-        /// <remarks>根据 <see cref="TenantName"/> 生成的拼音</remarks>
         public string SpellName { get; set; }
 
         /// <summary>

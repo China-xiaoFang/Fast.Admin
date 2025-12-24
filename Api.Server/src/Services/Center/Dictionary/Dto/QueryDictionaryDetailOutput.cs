@@ -97,7 +97,6 @@ public class QueryDictionaryDetailOutput : PagedOutput
         /// <summary>
         /// 排序
         /// </summary>
-        /// <remarks>从小到大</remarks>
         public int Order { get; set; }
 
         /// <summary>

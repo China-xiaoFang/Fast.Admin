@@ -94,7 +94,6 @@ public class EditDictionaryInput : UpdateVersionInput
         /// <summary>
         /// 排序
         /// </summary>
-        /// <remarks>从小到大</remarks>
         [IntRequired(ErrorMessage = "排序不能为空")]
         public int Order { get; set; }
 

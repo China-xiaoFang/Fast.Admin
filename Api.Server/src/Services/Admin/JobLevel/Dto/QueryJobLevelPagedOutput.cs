@@ -40,7 +40,6 @@ public class QueryJobLevelPagedOutput : PagedOutput
     /// <summary>
     /// 职级等级
     /// </summary>
-    /// <remarks>从大到小</remarks>
     public int Level { get; set; }
 
     /// <summary>

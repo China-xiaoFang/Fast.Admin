@@ -33,7 +33,6 @@ public class EditTenantInput : UpdateVersionInput
     /// <summary>
     /// 租户编码
     /// </summary>
-    /// <remarks>单号生成前缀</remarks>
     [StringRequired(ErrorMessage = "租户编码不能为空"), MaxLength(5, ErrorMessage = "租户编码不能超过5个字符")]
     public string TenantCode { get; set; }
 
@@ -58,7 +57,6 @@ public class EditTenantInput : UpdateVersionInput
     /// <summary>
     /// 租户英文名称
     /// </summary>
-    /// <remarks>根据 <see cref="TenantName"/> 生成的拼音</remarks>
     [StringRequired(ErrorMessage = "租户英文名称不能为空")]
     public string SpellName { get; set; }
 

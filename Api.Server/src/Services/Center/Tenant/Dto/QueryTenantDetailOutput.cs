@@ -42,7 +42,6 @@ public class QueryTenantDetailOutput : PagedOutput
     /// <summary>
     /// 租户编码
     /// </summary>
-    /// <remarks>单号生成前缀</remarks>
     public string TenantCode { get; set; }
 
     /// <summary>
@@ -63,7 +62,6 @@ public class QueryTenantDetailOutput : PagedOutput
     /// <summary>
     /// 租户英文名称
     /// </summary>
-    /// <remarks>根据 <see cref="TenantName"/> 生成的拼音</remarks>
     public string SpellName { get; set; }
 
     /// <summary>

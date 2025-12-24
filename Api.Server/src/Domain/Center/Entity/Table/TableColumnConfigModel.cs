@@ -129,7 +129,7 @@ public class TableColumnConfigModel : IDatabaseEntity
     /// <para>gd2：数值列，保留 2 位小数，带千分位</para>
     /// <para>gd4：数值列，保留 4 位小数，带千分位</para>
     /// <para>gd6：数值列，保留 6 位小数，带千分位</para>
-    /// <para>submitInfo：提交信息列</para>
+    /// <para>timeInfo：时间信息列</para>
     /// </remarks>
     [SugarColumn(ColumnDescription = "列类型", Length = 10)]
     public string Type { get; set; }

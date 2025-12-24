@@ -138,7 +138,6 @@ public class AddMenuInput
     /// <summary>
     /// 排序
     /// </summary>
-    /// <remarks>从小到大</remarks>
     [IntRequired(ErrorMessage = "排序不能为空")]
     public int Sort { get; set; }
 }

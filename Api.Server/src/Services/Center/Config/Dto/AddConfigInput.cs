@@ -42,9 +42,6 @@ public class AddConfigInput
     /// <summary>
     /// 配置值
     /// </summary>
-    /// <remarks>
-    /// <para>Boolean：[True, False]</para>
-    /// </remarks>
     [StringRequired(ErrorMessage = "配置值不能为空")]
     public string ConfigValue { get; set; }
 
