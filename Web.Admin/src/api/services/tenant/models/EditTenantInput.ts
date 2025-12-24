@@ -1,19 +1,14 @@
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
-import { TenantTypeEnum } from "@/api/enums/TenantTypeEnum";
 
 /**
- * Fast.Center.Service.Tenant.Dto.QueryTenantPagedOutput 获取租户分页列表输出
+ * 
  */
-export interface QueryTenantPagedOutput {
+export interface EditTenantInput {
   /**
    * 租户Id
    */
   tenantId?: number;
-  /**
-   * 租户编号
-   */
-  tenantNo?: string;
   /**
    * 租户编码
    */
@@ -39,10 +34,6 @@ export interface QueryTenantPagedOutput {
    */
   edition?: EditionEnum;
   /**
-   * 租户管理员账号Id
-   */
-  adminAccountId?: number;
-  /**
    * 租户管理员名称
    */
   adminName?: string;
@@ -63,37 +54,9 @@ export interface QueryTenantPagedOutput {
    */
   robotName?: string;
   /**
-   * 
-   */
-  tenantType?: TenantTypeEnum;
-  /**
    * LogoUrl
    */
   logoUrl?: string;
-  /**
-   * 允许删除数据
-   */
-  allowDeleteData?: boolean;
-  /**
-   * 
-   */
-  departmentName?: string;
-  /**
-   * 
-   */
-  createdUserName?: string;
-  /**
-   * 
-   */
-  createdTime?: Date;
-  /**
-   * 
-   */
-  updatedUserName?: string;
-  /**
-   * 
-   */
-  updatedTime?: Date;
   /**
    * 
    */

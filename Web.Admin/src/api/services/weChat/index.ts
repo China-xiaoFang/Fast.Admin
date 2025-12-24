@@ -1,35 +1,27 @@
 import { axiosUtil } from "@fast-china/axios";
+import { PagedResult } from "fast-element-plus";
+import { QueryWeChatUserPagedOutput } from "./models/QueryWeChatUserPagedOutput";
+import { QueryWeChatUserPagedInput } from "./models/QueryWeChatUserPagedInput";
+import { QueryWeChatUserDetailOutput } from "./models/QueryWeChatUserDetailOutput";
+import { EditWeChatUserInput } from "./models/EditWeChatUserInput";
 import { WeChatCode2SessionOutput } from "./models/WeChatCode2SessionOutput";
 import { WeChatCode2SessionInput } from "./models/WeChatCode2SessionInput";
 import { WeChatCode2PhoneNumberOutput } from "./models/WeChatCode2PhoneNumberOutput";
 import { WeChatCode2PhoneNumberInput } from "./models/WeChatCode2PhoneNumberInput";
-import { QueryWeChatUserDetailOutput } from "./models/QueryWeChatUserDetailOutput";
-import { EditWeChatUserInput } from "./models/EditWeChatUserInput";
 
 /**
  * Fast.Center.Service.WeChat.WeChatService 微信服务Api
  */
 export const weChatApi = {
   /**
-   * 换取微信用户身份信息
+   * 获取微信用户分页列表
    */
-  weChatCode2Session(data: WeChatCode2SessionInput) {
-    return axiosUtil.request<WeChatCode2SessionOutput>({
-      url: "/weChat/weChatCode2Session",
+  queryWeChatUserPaged(data: QueryWeChatUserPagedInput) {
+    return axiosUtil.request<PagedResult<QueryWeChatUserPagedOutput>>({
+      url: "/weChat/queryWeChatUserPaged",
       method: "post",
       data,
-      requestType: "auth",
-    });
-  },
-  /**
-   * 换取微信用户手机号
-   */
-  weChatCode2PhoneNumber(data: WeChatCode2PhoneNumberInput) {
-    return axiosUtil.request<WeChatCode2PhoneNumberOutput>({
-      url: "/weChat/weChatCode2PhoneNumber",
-      method: "post",
-      data,
-      requestType: "auth",
+      requestType: "query",
     });
   },
   /**
@@ -51,6 +43,28 @@ export const weChatApi = {
       method: "post",
       data,
       requestType: "edit",
+    });
+  },
+  /**
+   * 换取微信用户身份信息
+   */
+  weChatCode2Session(data: WeChatCode2SessionInput) {
+    return axiosUtil.request<WeChatCode2SessionOutput>({
+      url: "/weChat/weChatCode2Session",
+      method: "post",
+      data,
+      requestType: "auth",
+    });
+  },
+  /**
+   * 换取微信用户手机号
+   */
+  weChatCode2PhoneNumber(data: WeChatCode2PhoneNumberInput) {
+    return axiosUtil.request<WeChatCode2PhoneNumberOutput>({
+      url: "/weChat/weChatCode2PhoneNumber",
+      method: "post",
+      data,
+      requestType: "auth",
     });
   },
 };
