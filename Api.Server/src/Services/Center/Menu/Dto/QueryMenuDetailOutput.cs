@@ -142,7 +142,6 @@ public class QueryMenuDetailOutput : PagedOutput
     /// <summary>
     /// 排序
     /// </summary>
-    /// <remarks>从小到大</remarks>
     public int Sort { get; set; }
 
     /// <summary>
@@ -198,7 +197,6 @@ public class QueryMenuDetailOutput : PagedOutput
         /// <summary>
         /// 排序
         /// </summary>
-        /// <remarks>从小到大</remarks>
         public int Sort { get; set; }
 
         /// <summary>

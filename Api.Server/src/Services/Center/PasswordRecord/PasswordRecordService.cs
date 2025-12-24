@@ -68,23 +68,6 @@ public class PasswordRecordService : IDynamicApplication
                 Status = t2.Status,
                 NickName = t2.NickName,
                 Avatar = t2.Avatar,
-                FirstLoginDevice = t2.FirstLoginDevice,
-                FirstLoginOS = t2.FirstLoginOS,
-                FirstLoginBrowser = t2.FirstLoginBrowser,
-                FirstLoginProvince = t2.FirstLoginProvince,
-                FirstLoginCity = t2.FirstLoginCity,
-                FirstLoginIp = t2.FirstLoginIp,
-                FirstLoginTime = t2.FirstLoginTime,
-                LastLoginDevice = t2.LastLoginDevice,
-                LastLoginOS = t2.LastLoginOS,
-                LastLoginBrowser = t2.LastLoginBrowser,
-                LastLoginProvince = t2.LastLoginProvince,
-                LastLoginCity = t2.LastLoginCity,
-                LastLoginIp = t2.LastLoginIp,
-                LastLoginTime = t2.LastLoginTime,
-                PasswordErrorTime = t2.PasswordErrorTime,
-                LockStartTime = t2.LockStartTime,
-                LockEndTime = t2.LockEndTime
             })
             .ToPagedListAsync(input);
     }

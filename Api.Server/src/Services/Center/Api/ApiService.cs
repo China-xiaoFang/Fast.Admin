@@ -20,53 +20,37 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
+using Fast.Center.Entity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Fast.Center.Service.Module.Dto;
+namespace Fast.Center.Service.Api;
 
 /// <summary>
-/// <see cref="QueryModulePagedOutput"/> 获取模块分页列表输出
+/// <see cref="ApiService"/> Api
 /// </summary>
-public class QueryModulePagedOutput : PagedOutput
+[ApiDescriptionSettings(ApiGroupConst.Center, Name = "api")]
+public class ApiService : IDynamicApplication
 {
-    /// <summary>
-    /// 模块Id
-    /// </summary>
-    public long ModuleId { get; set; }
+    private readonly ISqlSugarRepository<ApiInfoModel> _repository;
+
+    public ApiService(ISqlSugarRepository<ApiInfoModel> repository)
+    {
+        _repository = repository;
+    }
 
     /// <summary>
-    /// 应用名称
+    /// 获取接口分页列表
     /// </summary>
-    public string AppName { get; set; }
-
-    /// <summary>
-    /// 模块名称
-    /// </summary>
-    [SugarSearchValue]
-    public string ModuleName { get; set; }
-
-    /// <summary>
-    /// 图标
-    /// </summary>
-    public string Icon { get; set; }
-
-    /// <summary>
-    /// 颜色
-    /// </summary>
-    public string Color { get; set; }
-
-    /// <summary>
-    /// 查看类型
-    /// </summary>
-    public ModuleViewTypeEnum ViewType { get; set; }
-
-    /// <summary>
-    /// 排序
-    /// </summary>
-    public int Sort { get; set; }
-
-    /// <summary>
-    /// 状态
-    /// </summary>
-    public CommonStatusEnum Status { get; set; }
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("获取接口分页列表", HttpRequestActionEnum.Paged)]
+    [Permission(PermissionConst.ApiPaged)]
+    public async Task<PagedResult<ApiInfoModel>> QueryApiPaged(PagedInput input)
+    {
+        return await _repository.Entities.OrderByDescending(ob => ob.Sort)
+            .OrderBy(ob => ob.ModuleName)
+            .ToPagedListAsync(input);
+    }
 }

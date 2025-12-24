@@ -63,7 +63,7 @@ public class TableService : IDynamicApplication
     [Permission(PermissionConst.Table.Paged)]
     public async Task<PagedResult<QueryTableConfigPagedOutput>> QueryTableConfigPaged(PagedInput input)
     {
-        return await _tableRepository.Entities.OrderBy(ob => ob.TableName)
+        return await _tableRepository.Entities.OrderBy(ob => ob.CreatedTime)
             .ToPagedListAsync(input,
                 sl => new QueryTableConfigPagedOutput
                 {
@@ -512,7 +512,7 @@ public class TableService : IDynamicApplication
                 // 如果配置原本不支持排序，则直接禁用
                 {"disabledSortable", !item.Sortable},
                 {"sortableField", string.IsNullOrWhiteSpace(item.SortableField) ? null : item.SortableField},
-                {"type", string.IsNullOrWhiteSpace(item.Type) ? null : item.Type},
+                {"type", string.IsNullOrWhiteSpace(item.Type) ? "default" : item.Type},
                 {"link", item.Link},
                 {"clickEmit", string.IsNullOrWhiteSpace(item.ClickEmit) ? null : item.ClickEmit},
                 {"tag", item.Tag},
