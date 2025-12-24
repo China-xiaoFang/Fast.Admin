@@ -69,7 +69,7 @@ export const accountApi = {
     });
   },
   /**
-   * 账号解除锁定
+   * 账号重置密码
    */
   resetPassword(data: AccountIdInput) {
     return axiosUtil.request({

@@ -1,3 +1,4 @@
+import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 import { AuthModuleInfoDto } from "./AuthModuleInfoDto";
 
 /**
@@ -28,6 +29,10 @@ export interface GetLoginUserInfoOutput {
    * 租户名称
    */
   tenantName?: string;
+  /**
+   * 租户编码
+   */
+  tenantCode?: string;
   /**
    * 用户Key
    */
@@ -64,6 +69,10 @@ export interface GetLoginUserInfoOutput {
    * 角色名称集合
    */
   roleNameList?: Array<string>;
+  /**
+   * 
+   */
+  dataScopeType?: DataScopeTypeEnum;
   /**
    * 按钮编码集合
    */

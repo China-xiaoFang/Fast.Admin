@@ -1,5 +1,5 @@
 import { axiosUtil } from "@fast-china/axios";
-import { PagedResult } from "fast-element-plus";
+import { ElSelectorOutput, PagedResult } from "fast-element-plus";
 import { QueryMerchantPagedOutput } from "./models/QueryMerchantPagedOutput";
 import { QueryMerchantPagedInput } from "./models/QueryMerchantPagedInput";
 import { QueryMerchantDetailOutput } from "./models/QueryMerchantDetailOutput";
@@ -11,6 +11,16 @@ import { MerchantIdInput } from "./models/MerchantIdInput";
  * Fast.Center.Service.Merchant.MerchantService 商户号服务Api
  */
 export const merchantApi = {
+  /**
+   * 商户号选择器
+   */
+  merchantSelector() {
+    return axiosUtil.request<ElSelectorOutput<number>[]>({
+      url: "/merchant/merchantSelector",
+      method: "get",
+      requestType: "query",
+    });
+  },
   /**
    * 获取商户号分页列表
    */

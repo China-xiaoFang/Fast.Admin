@@ -1,16 +1,16 @@
 import { axiosUtil } from "@fast-china/axios";
-import { SyncDatabaseInput } from "./models/SyncDatabaseInput";
+import { InitDatabaseInput } from "./models/InitDatabaseInput";
 
 /**
  * Fast.Admin.Service.Database.DatabaseService Database 服务Api
  */
 export const databaseApi = {
   /**
-   * 同步数据库
+   * 初始化数据库
    */
-  syncDatabase(data: SyncDatabaseInput) {
+  initDatabase(data: InitDatabaseInput) {
     return axiosUtil.request({
-      url: "/database/syncDatabase",
+      url: "/database/initDatabase",
       method: "post",
       data,
       requestType: "other",
