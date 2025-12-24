@@ -45,9 +45,6 @@ public class QueryConfigPagedOutput : PagedOutput
     /// <summary>
     /// 配置值
     /// </summary>
-    /// <remarks>
-    /// <para>Boolean：[True, False]</para>
-    /// </remarks>
     public string ConfigValue { get; set; }
 
     /// <summary>
