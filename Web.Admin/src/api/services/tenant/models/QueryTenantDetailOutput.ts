@@ -3,9 +3,9 @@ import { EditionEnum } from "@/api/enums/EditionEnum";
 import { TenantTypeEnum } from "@/api/enums/TenantTypeEnum";
 
 /**
- * Fast.Center.Service.Tenant.Dto.QueryTenantPagedOutput 获取租户分页列表输出
+ * Fast.Center.Service.Tenant.Dto.QueryTenantDetailOutput 获取租户详情输出
  */
-export interface QueryTenantPagedOutput {
+export interface QueryTenantDetailOutput {
   /**
    * 租户Id
    */
@@ -74,6 +74,74 @@ export interface QueryTenantPagedOutput {
    * 允许删除数据
    */
   allowDeleteData?: boolean;
+  /**
+   * 初次登录设备
+   */
+  firstLoginDevice?: string;
+  /**
+   * 初次登录操作系统（版本）
+   */
+  firstLoginOS?: string;
+  /**
+   * 初次登录浏览器（版本）
+   */
+  firstLoginBrowser?: string;
+  /**
+   * 初次登录省份
+   */
+  firstLoginProvince?: string;
+  /**
+   * 初次登录城市
+   */
+  firstLoginCity?: string;
+  /**
+   * 初次登录Ip
+   */
+  firstLoginIp?: string;
+  /**
+   * 初次登录时间
+   */
+  firstLoginTime?: Date;
+  /**
+   * 最后登录设备
+   */
+  lastLoginDevice?: string;
+  /**
+   * 最后登录操作系统（版本）
+   */
+  lastLoginOS?: string;
+  /**
+   * 最后登录浏览器（版本）
+   */
+  lastLoginBrowser?: string;
+  /**
+   * 最后登录省份
+   */
+  lastLoginProvince?: string;
+  /**
+   * 最后登录城市
+   */
+  lastLoginCity?: string;
+  /**
+   * 最后登录Ip
+   */
+  lastLoginIp?: string;
+  /**
+   * 最后登录时间
+   */
+  lastLoginTime?: Date;
+  /**
+   * 密码错误次数
+   */
+  passwordErrorTime?: number;
+  /**
+   * 锁定开始时间
+   */
+  lockStartTime?: Date;
+  /**
+   * 锁定结束时间
+   */
+  lockEndTime?: Date;
   /**
    * 
    */

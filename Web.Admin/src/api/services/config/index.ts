@@ -4,6 +4,7 @@ import { QueryConfigPagedOutput } from "./models/QueryConfigPagedOutput";
 import { QueryConfigDetailOutput } from "./models/QueryConfigDetailOutput";
 import { AddConfigInput } from "./models/AddConfigInput";
 import { EditConfigInput } from "./models/EditConfigInput";
+import { DeleteConfigCacheInput } from "./models/DeleteConfigCacheInput";
 
 /**
  * Fast.Center.Service.Config.ConfigService 配置服务Api
@@ -53,6 +54,27 @@ export const configApi = {
       method: "post",
       data,
       requestType: "edit",
+    });
+  },
+  /**
+   * 删除配置缓存
+   */
+  deleteConfigCache(data: DeleteConfigCacheInput) {
+    return axiosUtil.request({
+      url: "/config/deleteConfigCache",
+      method: "post",
+      data,
+      requestType: "delete",
+    });
+  },
+  /**
+   * 删除所有配置缓存
+   */
+  deleteAllConfigCache() {
+    return axiosUtil.request({
+      url: "/config/deleteAllConfigCache",
+      method: "post",
+      requestType: "delete",
     });
   },
 };
