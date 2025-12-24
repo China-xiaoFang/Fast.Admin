@@ -20,6 +20,8 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.Admin.Enum;
+
 namespace Fast.Admin.Service.Auth.Dto;
 
 /// <summary>
@@ -106,6 +108,11 @@ public class GetLoginUserInfoOutput
     /// 角色名称集合
     /// </summary>
     public List<string> RoleNameList { get; set; } = [];
+
+    /// <summary>
+    /// 数据范围类型
+    /// </summary>
+    public DataScopeTypeEnum DataScopeType { get; set; }
 
     /// <summary>
     /// 按钮编码集合

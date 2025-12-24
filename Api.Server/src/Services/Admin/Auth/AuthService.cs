@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 using Fast.Admin.Entity;
+using Fast.Admin.Enum;
 using Fast.Admin.Service.Auth.Dto;
 using Fast.Center.Entity;
 using Fast.Center.Enum;
@@ -113,13 +114,17 @@ public class AuthService : IDynamicApplication
 
         // 查询角色
         var roleList = await _empRepository.Queryable<EmployeeRoleModel>()
+            .LeftJoin<RoleModel>((t1, t2) => t1.RoleId == t2.RoleId)
             .Where(wh => wh.EmployeeId == _user.UserId)
-            .Select(sl => new {sl.RoleId, sl.RoleName})
+            .Select((t1, t2) => new {t1.RoleId, t1.RoleName, t2.RoleType, t2.DataScopeType})
             .ToListAsync();
         var roleIds = roleList.Select(sl => sl.RoleId)
             .ToList();
         result.RoleNameList = roleList.Select(sl => sl.RoleName)
             .ToList();
+        result.DataScopeType = roleList.Any(a => a.RoleType == RoleTypeEnum.Admin)
+            ? DataScopeTypeEnum.All
+            : roleList.Min(m => m.DataScopeType);
 
         var moduleQueryable = _repository.Queryable<ModuleModel>()
             .Where(wh => wh.AppId == applicationModel.AppId)
@@ -259,6 +264,7 @@ public class AuthService : IDynamicApplication
             IsAdmin = _user.IsAdmin,
             RoleIdList = roleIds,
             RoleNameList = result.RoleNameList,
+            DataScopeType = (int) result.DataScopeType,
             MenuCodeList = _user.IsSuperAdmin
                 ? []
                 : menuList.Select(sl => sl.MenuCode)

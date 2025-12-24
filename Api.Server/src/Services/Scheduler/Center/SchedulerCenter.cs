@@ -85,7 +85,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     {
         jobInfo.IsSystem = jobInfo.TenantId == null;
 
-        if (string.IsNullOrEmpty(jobInfo.JobName))
+        if (string.IsNullOrWhiteSpace(jobInfo.JobName))
         {
             throw new UserFriendlyException("调度作业名称不能为空！");
         }
@@ -107,7 +107,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 jobInfo.IntervalSecond = null;
                 jobInfo.RunTimes = null;
 
-                if (string.IsNullOrEmpty(jobInfo.Cron))
+                if (string.IsNullOrWhiteSpace(jobInfo.Cron))
                 {
                     throw new UserFriendlyException("Cron表达式不能为空！");
                 }
@@ -200,7 +200,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 break;
             case SchedulerJobTypeEnum.IntranetUrl:
             case SchedulerJobTypeEnum.OuterNetUrl:
-                if (string.IsNullOrEmpty(jobInfo.RequestUrl))
+                if (string.IsNullOrWhiteSpace(jobInfo.RequestUrl))
                 {
                     throw new UserFriendlyException("请求Url不能为空！");
                 }
@@ -1070,7 +1070,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// <returns></returns>
     public async Task EditSchedulerJob(EditSchedulerJobInput input)
     {
-        if (string.IsNullOrEmpty(input.OldJobName))
+        if (string.IsNullOrWhiteSpace(input.OldJobName))
         {
             throw new UserFriendlyException("旧的调度作业名称不能为空！");
         }
