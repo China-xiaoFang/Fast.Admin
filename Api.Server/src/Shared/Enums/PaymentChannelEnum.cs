@@ -30,13 +30,6 @@ namespace Fast.Shared;
 public enum PaymentChannelEnum : byte
 {
     /// <summary>
-    /// 未知
-    /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("未知")]
-    None = 0,
-
-    /// <summary>
     /// 微信
     /// </summary>
     [TagType(TagTypeEnum.Primary)]

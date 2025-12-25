@@ -84,26 +84,10 @@
 							</el-col>
 							<el-col :span="6">
 								<el-form-item prop="copy" label="复制">
-									<el-radio-group v-model="state.formData.autoWidth">
+									<el-radio-group v-model="state.formData.copy">
 										<el-radio :value="true">是</el-radio>
 										<el-radio :value="false">否</el-radio>
 									</el-radio-group>
-								</el-form-item>
-							</el-col>
-						</el-row>
-
-						<el-row :gutter="24">
-							<el-col :span="6">
-								<el-form-item prop="sortable" label="排序">
-									<el-radio-group v-model="state.formData.sortable">
-										<el-radio :value="true">是</el-radio>
-										<el-radio :value="false">否</el-radio>
-									</el-radio-group>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item prop="sortableField" label="排序字段">
-									<el-input v-model="state.formData.sortableField" maxlength="50" placeholder="请输入排序字段" />
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -122,11 +106,19 @@
 								<el-radio value="gd2">保留2位(千分位)</el-radio>
 								<el-radio value="gd4">保留4位(千分位)</el-radio>
 								<el-radio value="gd6">保留6位(千分位)</el-radio>
-								<el-radio value="submitInfo">提交信息</el-radio>
+								<el-radio value="timeInfo">时间信息</el-radio>
 							</el-radio-group>
 						</el-form-item>
 
 						<el-row :gutter="24">
+							<el-col :span="6">
+								<el-form-item prop="sortable" label="排序">
+									<el-radio-group v-model="state.formData.sortable">
+										<el-radio :value="true">是</el-radio>
+										<el-radio :value="false">否</el-radio>
+									</el-radio-group>
+								</el-form-item>
+							</el-col>
 							<el-col :span="6">
 								<el-form-item prop="link" label="链接">
 									<el-radio-group v-model="state.formData.link">
@@ -136,19 +128,24 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-form-item prop="clickEmit" label="点击事件名称">
-									<el-input v-model="state.formData.clickEmit" maxlength="50" placeholder="请输入链接按钮事件名称" />
+								<el-form-item prop="tag" label="标签">
+									<el-radio-group v-model="state.formData.tag">
+										<el-radio :value="true">是</el-radio>
+										<el-radio :value="false">否</el-radio>
+									</el-radio-group>
 								</el-form-item>
 							</el-col>
 						</el-row>
 
 						<el-row :gutter="24">
 							<el-col :span="6">
-								<el-form-item prop="tag" label="标签">
-									<el-radio-group v-model="state.formData.tag">
-										<el-radio :value="true">是</el-radio>
-										<el-radio :value="false">否</el-radio>
-									</el-radio-group>
+								<el-form-item prop="sortableField" label="排序字段">
+									<el-input v-model="state.formData.sortableField" maxlength="50" placeholder="请输入排序字段" />
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item prop="clickEmit" label="点击事件名称">
+									<el-input v-model="state.formData.clickEmit" maxlength="50" placeholder="请输入链接按钮事件名称" />
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
@@ -217,7 +214,7 @@
 									/>
 								</el-form-item>
 							</el-col>
-							<el-col :span="6">
+							<el-col :span="12">
 								<el-form-item prop="dataDeleteField" label="数据删除">
 									<el-radio-group v-model="state.formData.dataDeleteField" class="pr30" style="width: auto">
 										<el-radio value="">无</el-radio>

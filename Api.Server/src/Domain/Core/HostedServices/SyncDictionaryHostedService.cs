@@ -22,7 +22,6 @@
 
 using System.Reflection;
 using System.Text;
-using Dm.util;
 using Fast.Center.Entity;
 using Fast.Center.Enum;
 using Fast.SqlSugar;
@@ -125,6 +124,62 @@ public class SyncDictionaryHostedService : IHostedService
                         .Where(wh => wh.FastEnumAttribute != null)
                         .ToList();
 
+                    if (!dictionaryTypeList.Any(a => a.DictionaryKey == "BooleanEnum" && a.ServiceName == serviceName))
+                    {
+                        var dictionaryId = YitIdHelper.NextId();
+                        addDictionaryTypeList.Add(new DictionaryTypeModel
+                        {
+                            DictionaryId = dictionaryId,
+                            DictionaryKey = "BooleanEnum",
+                            ServiceName = serviceName,
+                            DictionaryName = "Boolean类型枚举",
+                            ValueType = DictionaryValueTypeEnum.Boolean,
+                            HasFlags = YesOrNotEnum.N,
+                            Status = CommonStatusEnum.Enable,
+                            Remark = null,
+                            CreatedTime = dateTime
+                        });
+                        addDictionaryItemList.AddRange(new List<DictionaryItemModel>
+                        {
+                            new()
+                            {
+                                DictionaryItemId = YitIdHelper.NextId(),
+                                DictionaryId = dictionaryId,
+                                Label = "是",
+                                Value = "true",
+                                Type = TagTypeEnum.Primary,
+                                Order = 1,
+                                Visible = YesOrNotEnum.Y,
+                                Status = CommonStatusEnum.Enable,
+                                CreatedTime = dateTime
+                            },
+                            new()
+                            {
+                                DictionaryItemId = YitIdHelper.NextId(),
+                                DictionaryId = dictionaryId,
+                                Label = "否",
+                                Value = "false",
+                                Type = TagTypeEnum.Danger,
+                                Order = 1,
+                                Visible = YesOrNotEnum.Y,
+                                Status = CommonStatusEnum.Enable,
+                                CreatedTime = dateTime
+                            }
+                        });
+                    }
+
+                    #region 额外的枚举
+
+                    enumTypes.Insert(0,
+                        new
+                        {
+                            Type = typeof(DbType),
+                            FastEnumAttribute = (FastEnumAttribute) null,
+                            FlagsAttribute = (FlagsAttribute) null
+                        });
+
+                    #endregion
+
                     // 循环所有枚举类型
                     foreach (var enumType in enumTypes)
                     {
@@ -137,13 +192,13 @@ public class SyncDictionaryHostedService : IHostedService
                             DictionaryKey = enumType.Type.Name,
                             ServiceName = serviceName,
                             DictionaryName =
-                                enumType.FastEnumAttribute.ChName ?? enumType.FastEnumAttribute.EnName ?? enumType.Type.Name,
+                                enumType.FastEnumAttribute?.ChName ?? enumType.FastEnumAttribute?.EnName ?? enumType.Type.Name,
                             ValueType = Enum.GetUnderlyingType(enumType.Type) == typeof(long)
                                 ? DictionaryValueTypeEnum.Long
                                 : DictionaryValueTypeEnum.Int,
                             HasFlags = enumType.FlagsAttribute != null ? YesOrNotEnum.Y : YesOrNotEnum.N,
                             Status = CommonStatusEnum.Enable,
-                            Remark = enumType.FastEnumAttribute.Remark,
+                            Remark = enumType.FastEnumAttribute?.Remark,
                             UpdatedTime = dateTime
                         };
 
@@ -168,7 +223,7 @@ public class SyncDictionaryHostedService : IHostedService
 
                             deleteDictionaryItemList.AddRange(dictionaryItemList
                                 .Where(wh => wh.DictionaryId == dictionaryTypeInfo.DictionaryId)
-                                .Where(wh => enumItemList.All(a => a.Value.toString() != wh.Value))
+                                .Where(wh => enumItemList.All(a => a.Value.ToString() != wh.Value))
                                 .ToList());
 
                             var orderIndex = 1;
@@ -182,7 +237,7 @@ public class SyncDictionaryHostedService : IHostedService
                                 {
                                     DictionaryId = dictionaryTypeInfo.DictionaryId,
                                     Label = enumItem.Describe ?? enumItem.Name,
-                                    Value = enumItem.Value.toString(),
+                                    Value = enumItem.Value.ToString(),
                                     Type = tagType?.TagType ?? TagTypeEnum.Primary,
                                     Order = orderIndex,
                                     Visible = YesOrNotEnum.Y,
@@ -192,7 +247,7 @@ public class SyncDictionaryHostedService : IHostedService
 
                                 var dictionaryItemInfo = dictionaryItemList
                                     .Where(wh => wh.DictionaryId == dictionaryTypeInfo.DictionaryId)
-                                    .SingleOrDefault(s => s.Value == enumItem.Value.toString());
+                                    .SingleOrDefault(s => s.Value == enumItem.Value.ToString());
                                 if (dictionaryItemInfo != null)
                                 {
                                     dictionaryItemModel.DictionaryItemId = dictionaryItemInfo.DictionaryItemId;
@@ -235,7 +290,7 @@ public class SyncDictionaryHostedService : IHostedService
                                     DictionaryItemId = YitIdHelper.NextId(),
                                     DictionaryId = dictionaryTypeModel.DictionaryId,
                                     Label = enumItem.Describe ?? enumItem.Name,
-                                    Value = enumItem.Value.toString(),
+                                    Value = enumItem.Value.ToString(),
                                     Type = tagType?.TagType ?? TagTypeEnum.Primary,
                                     Order = orderIndex,
                                     Visible = YesOrNotEnum.Y,
@@ -262,8 +317,9 @@ public class SyncDictionaryHostedService : IHostedService
                     // 只删除当前服务的
                     var deleteDictionaryTypeList = dictionaryTypeList.Where(wh => wh.ServiceName == serviceName)
                         .Where(wh => !enumTypes.Select(sl => sl.Type.Name)
-                            .ToHashSet()
-                            .Contains(wh.DictionaryKey))
+                                         .ToHashSet()
+                                         .Contains(wh.DictionaryKey)
+                                     && wh.DictionaryKey != "BooleanEnum")
                         .ToList();
                     if (deleteDictionaryTypeList.Count > 0)
                     {

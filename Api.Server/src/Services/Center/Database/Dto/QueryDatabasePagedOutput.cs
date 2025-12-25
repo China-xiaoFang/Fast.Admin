@@ -20,6 +20,9 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.Serialization;
+using Newtonsoft.Json;
+
 namespace Fast.Center.Service.Database.Dto;
 
 /// <summary>
@@ -34,7 +37,7 @@ public class QueryDatabasePagedOutput : PagedOutput
 
     /// <summary>
     /// 数据库类型
-    /// </summary>
+    /// </summary>  
     public DatabaseTypeEnum DatabaseType { get; set; }
 
     /// <summary>
@@ -45,6 +48,7 @@ public class QueryDatabasePagedOutput : PagedOutput
     /// <summary>
     /// 公网Ip地址
     /// </summary>
+    [JsonConverter(typeof(DataMaskingConverter), DataMaskingTypeEnum.Ip)]
     [SugarSearchValue]
     public string PublicIp { get; set; }
 

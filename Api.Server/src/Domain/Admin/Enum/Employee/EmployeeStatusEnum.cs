@@ -30,13 +30,6 @@ namespace Fast.Admin.Enum;
 public enum EmployeeStatusEnum : byte
 {
     /// <summary>
-    /// 无
-    /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("无")]
-    None = 0,
-
-    /// <summary>
     /// 临时工
     /// </summary>
     [TagType(TagTypeEnum.Info)]

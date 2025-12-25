@@ -64,13 +64,15 @@ const tableColumns = withDefineType<FaTableColumnCtx[]>([
 		},
 		copy: true,
 		fixed: "left",
-		width: 280,
+		width: 300,
+		minWidth: 280,
 	},
 	{
 		prop: "dictionaryName",
 		label: "字典名称",
 		sortable: true,
-		width: 200,
+		width: 300,
+		minWidth: 280,
 	},
 	{
 		prop: "valueType",
@@ -84,6 +86,7 @@ const tableColumns = withDefineType<FaTableColumnCtx[]>([
 			{ label: "Boolean", value: 8, type: "danger" },
 		],
 		width: 100,
+		minWidth: 80,
 	},
 	{
 		prop: "hasFlags",
@@ -95,6 +98,7 @@ const tableColumns = withDefineType<FaTableColumnCtx[]>([
 			{ label: "是", value: 1, type: "primary" },
 		],
 		width: 120,
+		minWidth: 100,
 	},
 	{
 		prop: "status",
@@ -105,31 +109,35 @@ const tableColumns = withDefineType<FaTableColumnCtx[]>([
 			{ label: "正常", value: 1, type: "primary" },
 			{ label: "禁用", value: 2, type: "danger" },
 		],
-		width: 80,
+		width: 100,
+		minWidth: 80,
 	},
 	{
 		prop: "remark",
 		label: "备注",
 		sortable: true,
-		width: 280,
+		width: 200,
+		minWidth: 180,
 	},
 	{
-		type: "submitInfo",
+		type: "timeInfo",
 		prop: "createdTime",
 		label: "创建时间",
 		sortable: true,
-		width: 180,
+		width: 240,
+		minWidth: 220,
 	},
 	{
-		type: "submitInfo",
+		type: "timeInfo",
 		prop: "updatedTime",
 		label: "更新时间",
 		sortable: true,
-		submitInfoField: {
-			submitClerkName: "updatedUserName",
-			submitTime: "updatedTime",
+		timeInfoField: {
+			userName: "updatedUserName",
+			time: "updatedTime",
 		},
-		width: 180,
+		width: 240,
+		minWidth: 220,
 	},
 ]);
 </script>

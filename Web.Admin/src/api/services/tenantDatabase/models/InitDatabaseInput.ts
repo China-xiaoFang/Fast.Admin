@@ -1,7 +1,7 @@
 import { DatabaseTypeEnum } from "@/api/enums/DatabaseTypeEnum";
 
 /**
- * Fast.Admin.Service.Database.Dto.InitDatabaseInput 同初始化数据库输入
+ * Fast.Admin.Service.TenantDatabase.Dto.InitDatabaseInput 同初始化数据库输入
  */
 export interface InitDatabaseInput {
   /**

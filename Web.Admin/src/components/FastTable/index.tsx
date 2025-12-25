@@ -37,7 +37,7 @@ export default defineComponent({
 			existCacheColumns: false,
 		});
 
-		/** type: 1 字符串，2 数字，3 Boolean，4 方法 */
+		/** type: 1 字符串，2 数字，4 Boolean，8 方法 */
 		type FaTableColumnLocalCtx = {
 			otherAdvancedConfig?: { prop: string; type: number }[];
 			searchAdvancedConfig?: { prop: string; type: number }[];
@@ -73,7 +73,7 @@ export default defineComponent({
 			for (let i = 0; i < localColumns.length; i++) {
 				if (localColumns[i]?.otherAdvancedConfig?.length > 0) {
 					localColumns[i]?.otherAdvancedConfig
-						.filter((f) => f.type === 4)
+						.filter((f) => f.type === 8)
 						.forEach((advKey: { prop: string; type: number }) => {
 							const { args, body } = handleFunctionArgs(localColumns[i][advKey.prop]);
 							localColumns[i][advKey.prop] = new Function(...args, body);
@@ -82,7 +82,7 @@ export default defineComponent({
 				}
 				if (localColumns[i]?.searchAdvancedConfig?.length > 0) {
 					localColumns[i]?.searchAdvancedConfig
-						.filter((f) => f.type === 4)
+						.filter((f) => f.type === 8)
 						.forEach((advKey: { prop: string; type: number }) => {
 							const { args, body } = handleFunctionArgs(localColumns[i].search[advKey.prop]);
 							localColumns[i].search[advKey.prop] = new Function(...args, body);

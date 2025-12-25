@@ -55,11 +55,13 @@ const tableColumns = withDefineType<FaTableColumnCtx[]>([
 		prop: "label",
 		label: "字典项名称",
 		width: 120,
+		minWidth: 100,
 	},
 	{
 		prop: "value",
 		label: "字典项值",
-		width: 100,
+		width: 120,
+		minWidth: 100,
 	},
 	{
 		prop: "type",
@@ -73,11 +75,13 @@ const tableColumns = withDefineType<FaTableColumnCtx[]>([
 			{ label: "Danger", value: 16, type: "danger" },
 		],
 		width: 100,
+		minWidth: 80,
 	},
 	{
 		prop: "order",
 		label: "排序",
 		width: 100,
+		minWidth: 80,
 	},
 	{
 		prop: "visible",
@@ -88,6 +92,7 @@ const tableColumns = withDefineType<FaTableColumnCtx[]>([
 			{ label: "显示", value: 1, type: "primary" },
 		],
 		width: 100,
+		minWidth: 80,
 	},
 	{
 		prop: "status",
@@ -97,13 +102,15 @@ const tableColumns = withDefineType<FaTableColumnCtx[]>([
 			{ label: "正常", value: 1, type: "primary" },
 			{ label: "禁用", value: 2, type: "danger" },
 		],
-		width: 80,
+		width: 100,
+		minWidth: 80,
 	},
 	{
 		prop: "tips",
 		label: "提示",
 		sortable: true,
 		width: 120,
+		minWidth: 100,
 	},
 ]);
 </script>
