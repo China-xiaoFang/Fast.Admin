@@ -8,6 +8,7 @@ declare module "@vue/runtime-core" {
 		FastTable: (typeof import("@/components/FastTable/index.tsx"))["default"];
 		Footer: (typeof import("@/components/Footer/index.vue"))["default"];
 		Loading: (typeof import("@/components/Loading/index.vue"))["default"];
+		RadioGroup: (typeof import("@/components/RadioGroup/index.vue"))["default"];
 		Tag: (typeof import("@/components/Tag/index.vue"))["default"];
 		Tendril: (typeof import("@/components/Tendril/index.vue"))["default"];
 		Watermark: (typeof import("@/components/Watermark/index.vue"))["default"];

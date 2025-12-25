@@ -23,24 +23,24 @@
 using System.Text;
 using Fast.Admin.Entity;
 using Fast.Admin.Enum;
-using Fast.Admin.Service.Database.Dto;
+using Fast.Admin.Service.TenantDatabase.Dto;
 using Fast.Center.Entity;
 using Fast.Center.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Yitter.IdGenerator;
 
-namespace Fast.Admin.Service.Database;
+namespace Fast.Admin.Service.TenantDatabase;
 
 /// <summary>
-/// <see cref="DatabaseService"/> Database 服务
+/// <see cref="TenantDatabaseService"/> 租户 Database 服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "database")]
-public class DatabaseService : ITenantDatabaseService, ITransientDependency, IDynamicApplication
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "tenantDatabase")]
+public class TenantDatabaseService : ITenantDatabaseService, ITransientDependency, IDynamicApplication
 {
     private readonly IUser _user;
 
-    public DatabaseService(IUser user)
+    public TenantDatabaseService(IUser user)
     {
         _user = user;
     }

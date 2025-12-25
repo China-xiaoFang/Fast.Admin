@@ -14,8 +14,8 @@
 				<el-radio-group v-model="row.type">
 					<el-radio :value="1">字符串</el-radio>
 					<el-radio :value="2">数字</el-radio>
-					<el-radio :value="3">Boolean</el-radio>
-					<el-radio :value="4">方法</el-radio>
+					<el-radio :value="4">Boolean</el-radio>
+					<el-radio :value="8">方法</el-radio>
 				</el-radio-group>
 			</template>
 		</FaTableColumn>
