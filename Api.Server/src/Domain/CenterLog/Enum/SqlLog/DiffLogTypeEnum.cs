@@ -34,7 +34,7 @@ public enum DiffLogTypeEnum : byte
     /// </summary>
     [TagType(TagTypeEnum.Info)]
     [Description("未知")]
-    None = 0,
+    Unknown = 0,
 
     /// <summary>
     /// 添加

@@ -252,7 +252,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             DiffType.insert => DiffLogTypeEnum.Insert,
             DiffType.update => DiffLogTypeEnum.Update,
             DiffType.delete => DiffLogTypeEnum.Delete,
-            _ => DiffLogTypeEnum.None
+            _ => DiffLogTypeEnum.Unknown
         };
 
         // 组装数据

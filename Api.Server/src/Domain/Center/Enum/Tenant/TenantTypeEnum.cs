@@ -31,12 +31,14 @@ public enum TenantTypeEnum : byte
     /// <summary>
     /// 系统租户
     /// </summary>
+    [TagType(TagTypeEnum.Primary)]
     [Description("系统租户")]
     System = 1,
 
     /// <summary>
     /// 普通租户
     /// </summary>
+    [TagType(TagTypeEnum.Info)]
     [Description("普通租户")]
     Common = 2
 }

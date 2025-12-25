@@ -168,7 +168,10 @@ public class TableService : IDynamicApplication
         tableConfigModel.Remark = input.Remark;
         tableConfigModel.RowVersion = input.RowVersion;
 
-        await _tableRepository.UpdateAsync(tableConfigModel);
+        await _tableRepository.Updateable(tableConfigModel)
+            // 避免表格同步循环问题，这里不更新时间
+            .IgnoreColumns(it => new {it.UpdatedTime})
+            .ExecuteCommandWithOptLockAsync(true);
     }
 
     /// <summary>
@@ -257,6 +260,7 @@ public class TableService : IDynamicApplication
     public async Task<List<FaTableColumnCtx>> QueryTableColumnConfigDetail([Required(ErrorMessage = "表格Id不能为空")] long? tableId)
     {
         return await _columnRepository.Entities.Where(wh => wh.TableId == tableId)
+            .OrderBy(ob => ob.Order)
             .Select(sl => new FaTableColumnCtx
             {
                 ColumnId = sl.ColumnId,
@@ -408,11 +412,14 @@ public class TableService : IDynamicApplication
         var deleteTableColumnList = tableColumnList.Where(wh => !columnIds.Contains(wh.ColumnId))
             .ToList();
 
-        tableConfigModel.RowVersion = input.RowVersion;
+        // TODO：记得修改
+        //tableConfigModel.RowVersion = input.RowVersion;
 
         await _tableRepository.Ado.UseTranAsync(async () =>
         {
-            await _tableRepository.UpdateAsync(tableConfigModel);
+            //await _tableRepository.UpdateAsync(tableConfigModel);
+            await _tableRepository.Updateable(tableConfigModel)
+                .ExecuteCommandAsync();
             await _columnRepository.DeleteAsync(deleteTableColumnList);
             await _columnRepository.UpdateAsync(updateTableColumnList);
             await _columnRepository.InsertAsync(addTableColumnList);

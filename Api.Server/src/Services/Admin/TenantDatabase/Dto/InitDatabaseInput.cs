@@ -20,7 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Service.Database.Dto;
+namespace Fast.Admin.Service.TenantDatabase.Dto;
 
 /// <summary>
 /// <see cref="InitDatabaseInput"/> 同初始化数据库输入

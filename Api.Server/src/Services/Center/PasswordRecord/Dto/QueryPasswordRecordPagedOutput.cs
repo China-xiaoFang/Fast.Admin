@@ -78,11 +78,6 @@ public class QueryPasswordRecordPagedOutput
     public string Email { get; set; }
 
     /// <summary>
-    /// 状态
-    /// </summary>
-    public CommonStatusEnum Status { get; set; }
-
-    /// <summary>
     /// 昵称
     /// </summary>
     [SugarSearchValue]

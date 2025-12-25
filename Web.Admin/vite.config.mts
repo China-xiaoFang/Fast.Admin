@@ -181,7 +181,7 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 			// 版本号
 			versionUpdatePlugin(viteEnv.VITE_APP_VERSION),
 			/** 本地 SVG 图标 */
-			buildSvgIcon("./src/assets/icons/", "src/icons"),
+			buildSvgIcon("src/assets/icons/", "src/icons"),
 			/** 兼容旧版 Chrome 和 IE浏览器 */
 			legacyPlugin({
 				/** 需要兼容的目标列表，可以设置多个 */

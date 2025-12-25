@@ -166,7 +166,7 @@ public class QueryMenuPagedOutput : PagedOutput, ITreeNode<long>
     /// <returns></returns>
     public long GetId()
     {
-        return ModuleId;
+        return MenuId;
     }
 
     /// <summary>获取节点父id</summary>
