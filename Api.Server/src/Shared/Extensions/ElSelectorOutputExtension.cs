@@ -20,53 +20,36 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
-
-namespace Fast.Center.Service.Module.Dto;
+namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="QueryModulePagedOutput"/> 获取模块分页列表输出
+/// <see cref="ElSelectorOutput{T}"/> 拓展类
 /// </summary>
-public class QueryModulePagedOutput : PagedOutput
+public static class ElSelectorOutputExtension
 {
     /// <summary>
-    /// 模块Id
+    /// 构造树形
     /// </summary>
-    public long ModuleId { get; set; }
+    /// <param name="list"><see cref="List{T}"/></param>
+    /// <returns><see cref="List{T}"/></returns>
+    public static List<ElSelectorOutput<T>> Build<T>(this List<ElSelectorOutput<T>> list)
+    {
+        var result = list.Where(wh => wh.ParentId.Equals(0))
+            .ToList();
+        result.ForEach(e => BuildChildNodes(list, e));
+        return result;
+    }
 
     /// <summary>
-    /// 应用名称
+    /// 构造子节点集合
     /// </summary>
-    public string AppName { get; set; }
-
-    /// <summary>
-    /// 模块名称
-    /// </summary>
-    [SugarSearchValue]
-    public string ModuleName { get; set; }
-
-    /// <summary>
-    /// 图标
-    /// </summary>
-    public string Icon { get; set; }
-
-    /// <summary>
-    /// 颜色
-    /// </summary>
-    public string Color { get; set; }
-
-    /// <summary>
-    /// 查看类型
-    /// </summary>
-    public ModuleViewTypeEnum ViewType { get; set; }
-
-    /// <summary>
-    /// 排序
-    /// </summary>
-    public int Sort { get; set; }
-
-    /// <summary>
-    /// 状态
-    /// </summary>
-    public CommonStatusEnum Status { get; set; }
+    /// <param name="totalNodes"></param>
+    /// <param name="node"></param>
+    private static void BuildChildNodes<T>(List<ElSelectorOutput<T>> totalNodes, ElSelectorOutput<T> node)
+    {
+        var nodeSubList = totalNodes.Where(wh => wh.ParentId.Equals(node.Value))
+            .ToList();
+        nodeSubList.ForEach(e => BuildChildNodes(totalNodes, e));
+        node.Children = nodeSubList;
+    }
 }

@@ -1,7 +1,7 @@
 <template>
 	<FaDialog
 		ref="faDialogRef"
-		width="800"
+		width="1000"
 		:title="state.dialogTitle"
 		:showConfirmButton="!state.formDisabled"
 		:showBeforeClose="!state.formDisabled"
@@ -41,7 +41,7 @@
 				<el-input v-model="state.formData.robotName" maxlength="20" placeholder="请输入机器人名称" />
 			</FaFormItem>
 			<FaFormItem v-if="state.dialogState !== 'add'" prop="status" label="状态">
-				<RadioGroup name="CommonStatusEnum" v-model="state.formData.status" />
+				<RadioGroup button name="CommonStatusEnum" v-model="state.formData.status" />
 			</FaFormItem>
 			<FaFormItem prop="logoUrl" label="Logo">
 				<FaUploadImage v-model="state.formData.logoUrl" :uploadApi="fileApi.uploadLogo" />
@@ -97,7 +97,7 @@ const handleConfirm = () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
-				tenantApi.addTenant(state.formData);
+				await tenantApi.addTenant(state.formData);
 				ElMessage.success("新增成功！");
 				break;
 			case "edit":

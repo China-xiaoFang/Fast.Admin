@@ -47,7 +47,8 @@
 	"explorer.fileNesting.patterns": {
 		".env": ".env.*",
 		".prettierrc.cjs": ".prettierignore, .eslintignore, .eslintrc.cjs, eslint.config.mjs",
-		"package.json": ".npmrc, .nvmrc, pnpm-lock.yaml, pnpm-workspace.yaml",
+		"package.json": ".npmrc, .nvmrc, pnpm-*.yaml",
+		"tsconfig.json": "tsconfig.*.json",
 		"vite.config.*": "vite.*"
 	}
 }

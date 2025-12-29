@@ -1,9 +1,9 @@
 import { type App, type ComponentPublicInstance, nextTick } from "vue";
 import { ElNotification } from "element-plus";
-import { consoleError, consoleWarn, useIdentity, useStorage } from "@fast-china/utils";
+import { useIdentity, useStorage } from "@fast-china/utils";
 import { loadFastAxios } from "./axios";
 import { loadElementPlus } from "./element-plus";
-import commonComponents from "@/components";
+import { registerComponents } from "@/components";
 
 export function loadPlugins(app: App): void {
 	// 全局异常捕获
@@ -26,14 +26,14 @@ export function loadPlugins(app: App): void {
 			EventError: "事件处理错误",
 		};
 		if (err === "cancel") {
-			consoleWarn("Cancel", "操作已取消");
+			console.warn("操作已取消");
 		} else if (err?.name === "AxiosError") {
 			return;
 		} else {
 			const errorName = errorMap[err?.name] || "未知错误";
-			consoleError("Handler", err);
-			instance && consoleError("Handler", instance);
-			info && consoleError("Handler", info);
+			console.error(err);
+			// instance && consoleError("Handler", instance);
+			// info && consoleError("Handler", info);
 			nextTick(() => {
 				ElNotification({
 					title: "系统错误",
@@ -58,7 +58,5 @@ export function loadPlugins(app: App): void {
 	loadFastAxios();
 
 	/** 注册本地全局组件 */
-	for (const component of commonComponents) {
-		app.component(component.name, component);
-	}
+	registerComponents(app);
 }

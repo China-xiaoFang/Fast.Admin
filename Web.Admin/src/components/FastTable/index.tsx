@@ -1,7 +1,7 @@
 import { Fragment, computed, defineComponent, onMounted, reactive, ref } from "vue";
 import { ElDropdownItem, ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { FaTable, faTableEmits, faTableProps } from "fast-element-plus";
-import { clickUtil, makeSlots, useExpose, useProps, useRender, withDefineType } from "@fast-china/utils";
+import { clickUtil, makeSlots, useEmits, useExpose, useProps, useRender, withDefineType } from "@fast-china/utils";
 import { isString } from "lodash";
 import type { FaTableColumnCtx, FaTableInstance, FaTableSlots } from "fast-element-plus";
 import type { VNode } from "vue";
@@ -149,6 +149,7 @@ export default defineComponent({
 			});
 		};
 
+		/** 保存表格列配置 */
 		const saveColumnsCache = async (columns: FaTableColumnCtx[]): Promise<void> => {
 			if (props.columns) return;
 			await faTableRef.value.doLoading(async () => {
@@ -182,6 +183,7 @@ export default defineComponent({
 			}, "保存列配置中...");
 		};
 
+		/** 处理列 */
 		const handleColumns = (columns: FaTableColumnCtx[]): FaTableColumnCtx[] => {
 			return columns.map((col) => {
 				const result = { ...col };
@@ -260,8 +262,11 @@ export default defineComponent({
 			"collapsedSearch",
 			"advancedSearchDrawer",
 			"dataSearchRange",
+			"columnSettingBtn",
 			"columnsChange",
 		]);
+
+		const tableEmits = useEmits(faTableEmits, emit);
 
 		const tableSlot = {
 			...slots,
@@ -280,16 +285,18 @@ export default defineComponent({
 		useRender(() => (
 			<FaTable
 				{...tableProps.value}
+				{...tableEmits.value}
+				vSlots={tableSlot}
 				ref={faTableRef}
 				vLoading={state.loading}
 				element-loading-text={state.loadingText}
-				vSlots={tableSlot}
 				columns={state.columns}
 				hideImage={configStore.tableLayout.hideImage}
 				searchForm={configStore.tableLayout.showSearch}
 				collapsedSearch={configStore.tableLayout.defaultCollapsedSearch}
 				advancedSearchDrawer={configStore.tableLayout.advancedSearchDrawer}
 				dataSearchRange={configStore.tableLayout.dataSearchRange}
+				columnSettingBtn={props.columnSettingBtn && !props.columns}
 				columnsChange={saveColumnsCache}
 			/>
 		));

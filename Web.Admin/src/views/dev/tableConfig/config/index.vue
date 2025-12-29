@@ -12,17 +12,17 @@
 				<el-button :disabled="loading" type="primary" :icon="Plus" @click="handleAdd">新增</el-button>
 			</template>
 			<FaTableColumn prop="prop" label="绑定字段" width="280" fixed>
-				<template #default="{ row }">
+				<template #default="{ row }: { row: FaTableColumnCtx }">
 					<el-input v-model="row.prop" maxlength="50" placeholder="请输入绑定字段" />
 				</template>
 			</FaTableColumn>
 			<FaTableColumn prop="label" label="名称" width="280">
-				<template #default="{ row }">
+				<template #default="{ row }: { row: FaTableColumnCtx }">
 					<el-input v-model="row.label" maxlength="50" placeholder="请输入绑定名称" />
 				</template>
 			</FaTableColumn>
 			<FaTableColumn prop="fixed" label="固定" width="240">
-				<template #default="{ row }">
+				<template #default="{ row }: { row: FaTableColumnCtx }">
 					<el-radio-group v-model="row.fixed">
 						<el-radio value="">无</el-radio>
 						<el-radio value="left">左侧</el-radio>
@@ -31,7 +31,7 @@
 				</template>
 			</FaTableColumn>
 			<FaTableColumn prop="autoWidth" label="自动宽度" width="160">
-				<template #default="{ row }">
+				<template #default="{ row }: { row: FaTableColumnCtx }">
 					<el-radio-group v-model="row.autoWidth">
 						<el-radio :value="true">是</el-radio>
 						<el-radio :value="false">否</el-radio>
@@ -39,17 +39,17 @@
 				</template>
 			</FaTableColumn>
 			<FaTableColumn prop="width" label="宽度" width="200">
-				<template #default="{ row }">
+				<template #default="{ row }: { row: FaTableColumnCtx }">
 					<el-input-number v-model="row.width" :min="0" :max="999" stepStrictly :controls="false" placeholder="请输入宽度" />
 				</template>
 			</FaTableColumn>
 			<FaTableColumn prop="smallWidth" label="最小宽度" width="200">
-				<template #default="{ row }">
+				<template #default="{ row }: { row: FaTableColumnCtx }">
 					<el-input-number v-model="row.smallWidth" :min="0" :max="999" stepStrictly :controls="false" placeholder="请输入最小宽度" />
 				</template>
 			</FaTableColumn>
 			<FaTableColumn prop="order" label="顺序" width="200">
-				<template #default="{ row }">
+				<template #default="{ row }: { row: FaTableColumnCtx }">
 					<el-input-number
 						v-model="row.order"
 						:min="0"
@@ -62,7 +62,7 @@
 				</template>
 			</FaTableColumn>
 			<FaTableColumn prop="show" label="显示" width="160">
-				<template #default="{ row }">
+				<template #default="{ row }: { row: FaTableColumnCtx }">
 					<el-radio-group v-model="row.show">
 						<el-radio :value="true">显示</el-radio>
 						<el-radio :value="false">隐藏</el-radio>
@@ -70,7 +70,7 @@
 				</template>
 			</FaTableColumn>
 			<FaTableColumn prop="copy" label="复制" width="160">
-				<template #default="{ row }">
+				<template #default="{ row }: { row: FaTableColumnCtx }">
 					<el-radio-group v-model="row.copy">
 						<el-radio :value="true">是</el-radio>
 						<el-radio :value="false">否</el-radio>

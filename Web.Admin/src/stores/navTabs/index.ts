@@ -51,7 +51,7 @@ export const useNavTabs = defineStore(
 
 		/** 添加 Tab */
 		const addTab = (route: INavTab): void => {
-			if (route.meta?.breadcrumb === false) return;
+			if (route.meta?.tab === false) return;
 			const fRouteIdx = state.navTabs.findIndex((f) => f.path == route.path);
 			//  判断警告页面数量
 			if (fRouteIdx === -1) {

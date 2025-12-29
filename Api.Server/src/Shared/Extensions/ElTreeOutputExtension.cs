@@ -47,7 +47,7 @@ public static class ElTreeOutputExtension
     /// <param name="node"></param>
     private static void BuildChildNodes<T>(List<ElTreeOutput<T>> totalNodes, ElTreeOutput<T> node)
     {
-        var nodeSubList = totalNodes.Where(wh => wh.ParentId.Equals(node.ParentId))
+        var nodeSubList = totalNodes.Where(wh => wh.ParentId.Equals(node.Value))
             .ToList();
         nodeSubList.ForEach(e => BuildChildNodes(totalNodes, e));
         node.Children = nodeSubList;

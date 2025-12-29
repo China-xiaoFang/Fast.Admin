@@ -84,7 +84,7 @@ public class MainDatabaseModel : BaseTEntity, IUpdateVersion
     /// 数据库用户
     /// </summary>
     [Required]
-    [SugarColumn(ColumnDescription = "数据库用户", Length = 10)]
+    [SugarColumn(ColumnDescription = "数据库用户", Length = 20)]
     public string DbUser { get; set; }
 
     /// <summary>

@@ -12,34 +12,23 @@ if (import.meta.env.DEV) {
 	await import("fast-element-plus/styles/index.scss");
 }
 
-let app = createApp(App);
+const app = createApp(App);
 
-async function start(): Promise<void> {
-	// 注册持久化存储
-	loadPinia(app);
+// 注册持久化存储
+loadPinia(app);
 
-	/** 加载插件 */
-	loadPlugins(app);
+/** 加载插件 */
+loadPlugins(app);
 
-	/** Launch */
-	await useApp().launch();
+/** Launch */
+await useApp().launch();
 
-	/** 加载路由 */
-	app.use(router);
+/** 加载路由 */
+app.use(router);
 
-	/** 加载自定义指令 */
-	loadDirectives(app);
+/** 加载自定义指令 */
+loadDirectives(app);
 
-	app.mount("#app");
+app.mount("#app");
 
-	checkVersionUpdate(`v${import.meta.env.VITE_APP_VERSION}`);
-}
-
-await start();
-
-/** 刷新应用 */
-export const refreshApp = (): void => {
-	app.unmount();
-	app = createApp(App);
-	start();
-};
+checkVersionUpdate(`v${import.meta.env.VITE_APP_VERSION}`);

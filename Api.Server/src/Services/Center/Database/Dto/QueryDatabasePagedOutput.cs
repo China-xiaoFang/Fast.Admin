@@ -74,16 +74,6 @@ public class QueryDatabasePagedOutput : PagedOutput
     public string DbUser { get; set; }
 
     /// <summary>
-    /// 数据库密码
-    /// </summary>
-    public string DbPwd { get; set; }
-
-    /// <summary>
-    /// 自定义连接字符串
-    /// </summary>
-    public string CustomConnectionStr { get; set; }
-
-    /// <summary>
     /// 超时时间，单位秒
     /// </summary>
     public int CommandTimeOut { get; set; }
@@ -107,6 +97,11 @@ public class QueryDatabasePagedOutput : PagedOutput
     /// 是否初始化
     /// </summary>
     public bool IsInitialized { get; set; }
+
+    /// <summary>
+    /// 租户Id
+    /// </summary>
+    public long TenantId { get; set; }
 
     /// <summary>
     /// 租户名称

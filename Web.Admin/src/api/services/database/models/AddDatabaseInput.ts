@@ -61,5 +61,9 @@ export interface AddDatabaseInput {
    * 租户Id
    */
   tenantId?: number;
+  /**
+   * 是否创建数据库
+   */
+  isCreateDatabase?: boolean;
 }
 

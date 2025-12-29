@@ -75,6 +75,11 @@ public class QueryMenuDetailOutput : PagedOutput
     public string MenuTitle { get; set; }
 
     /// <summary>
+    /// 父级Id
+    /// </summary>
+    public long ParentId { get; set; }
+
+    /// <summary>
     /// 菜单类型
     /// </summary>
     public MenuTypeEnum MenuType { get; set; }
@@ -113,6 +118,16 @@ public class QueryMenuDetailOutput : PagedOutput
     /// Web端组件地址
     /// </summary>
     public string WebComponent { get; set; }
+
+    /// <summary>
+    /// Web端页面是否在导航栏显示
+    /// </summary>
+    public bool WebTab { get; set; }
+
+    /// <summary>
+    /// Web端页面是否缓存
+    /// </summary>
+    public bool WebKeepAlive { get; set; }
 
     /// <summary>
     /// 是否移动端

@@ -51,12 +51,12 @@ public class ApplicationService : IDynamicApplication
     public async Task<List<ElSelectorOutput<long>>> ApplicationSelector()
     {
         var data = await _repository.Entities.OrderBy(ob => ob.AppName)
-            .Select(sl => new {sl.AppId, sl.Edition, sl.AppName, sl.LogoUrl})
+            .Select(sl => new {sl.AppId, sl.Edition, sl.AppName,sl.AppNo, sl.LogoUrl})
             .ToListAsync();
 
         return data.Select(sl => new ElSelectorOutput<long>
             {
-                Value = sl.AppId, Label = sl.AppName, Data = new {sl.Edition, sl.LogoUrl}
+                Value = sl.AppId, Label = sl.AppName, Data = new {sl.AppNo,sl.Edition, sl.LogoUrl}
             })
             .ToList();
     }

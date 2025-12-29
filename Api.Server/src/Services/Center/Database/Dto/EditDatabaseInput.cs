@@ -105,7 +105,13 @@ public class EditDatabaseInput : UpdateVersionInput
     public bool DisableAop { get; set; }
 
     /// <summary>
+    /// 是否创建数据库
+    /// </summary>
+    [Required(ErrorMessage = "是否创建数据库不能为空")]
+    public bool IsCreateDatabase { get; set; }
+
+    /// <summary>
     /// 从库信息
     /// </summary>
-    public List<EditSlaveDatabaseInput> SlaveDatabaseList { get; set; }
+    public List<EditSlaveDatabaseInput> SlaveDatabaseList { get; set; } = [];
 }

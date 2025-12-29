@@ -5,7 +5,7 @@
 			<el-button :disabled="props.disabled" type="primary" :icon="Plus" @click="editFormRef.add()">新增字典项</el-button>
 		</template>
 		<!-- 表格操作 -->
-		<template #operation="{ row, $index }">
+		<template #operation="{ row, $index }: { row: EditDictionaryItemInput; $index: number }">
 			<el-button size="small" plain @click="editFormRef.detail(row)">详情</el-button>
 			<el-button :disabled="props.disabled" size="small" plain type="primary" @click="editFormRef.edit(row, $index)">编辑</el-button>
 			<el-button :disabled="props.disabled" size="small" plain type="danger" @click="handleDelete(row, $index)">删除</el-button>

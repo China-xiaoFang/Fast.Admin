@@ -67,6 +67,14 @@ export interface QueryDatabaseDetailOutput {
    */
   isInitialized?: boolean;
   /**
+   * 租户Id
+   */
+  tenantId?: number;
+  /**
+   * 租户名称
+   */
+  tenantName?: string;
+  /**
    * 从数据库集合
    */
   children?: Array<QuerySlaveDatabaseOutput>;

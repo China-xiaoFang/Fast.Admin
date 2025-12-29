@@ -19,7 +19,7 @@ defineOptions({
 
 const route = useRoute();
 
-const breadcrumbs = computed(() => route.matched.filter((f) => !f.meta?.breadcrumb && f.meta?.title));
+const breadcrumbs = computed(() => route.matched.filter((f) => !f.meta?.tab && f.meta?.title));
 </script>
 
 <style scoped lang="scss">
