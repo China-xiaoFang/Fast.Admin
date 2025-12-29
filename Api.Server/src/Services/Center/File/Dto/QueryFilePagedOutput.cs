@@ -58,9 +58,19 @@ public class QueryFilePagedOutput
     public long FileSizeKb { get; set; }
 
     /// <summary>
+    /// 存储路径
+    /// </summary>
+    public string FilePath { get; set; }
+
+    /// <summary>
     /// 访问地址
     /// </summary>
     public string FileLocation { get; set; }
+
+    /// <summary>
+    /// 文件哈希
+    /// </summary>
+    public string FileHash { get; set; }
 
     /// <summary>
     /// 上传设备
