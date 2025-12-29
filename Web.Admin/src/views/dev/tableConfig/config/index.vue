@@ -40,12 +40,20 @@
 			</FaTableColumn>
 			<FaTableColumn prop="width" label="宽度" width="200">
 				<template #default="{ row }: { row: FaTableColumnCtx }">
-					<el-input-number v-model="row.width" :min="0" :max="999" stepStrictly :controls="false" placeholder="请输入宽度" />
+					<el-input-number v-model="row.width" :min="0" :max="999" stepStrictly :controls="false" placeholder="请输入宽度">
+						<template #suffix>
+							<span>px</span>
+						</template>
+					</el-input-number>
 				</template>
 			</FaTableColumn>
 			<FaTableColumn prop="smallWidth" label="最小宽度" width="200">
 				<template #default="{ row }: { row: FaTableColumnCtx }">
-					<el-input-number v-model="row.smallWidth" :min="0" :max="999" stepStrictly :controls="false" placeholder="请输入最小宽度" />
+					<el-input-number v-model="row.smallWidth" :min="0" :max="999" stepStrictly :controls="false" placeholder="请输入最小宽度">
+						<template #suffix>
+							<span>px</span>
+						</template>
+					</el-input-number>
 				</template>
 			</FaTableColumn>
 			<FaTableColumn prop="order" label="顺序" width="200">
