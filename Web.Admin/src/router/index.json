@@ -32,5 +32,7 @@
   "/src/views/dev/tenant/index.vue": "DevTenant",
   "/src/views/login/classicLogin/index.vue": "ClassicLogin",
   "/src/views/login/index.vue": "Login",
-  "/src/views/system/file/index.vue": "SystemFile"
+  "/src/views/system/file/index.vue": "SystemFile",
+  "/src/views/system/serial/edit/index.vue": "SystemSerialEdit",
+  "/src/views/system/serial/index.vue": "SystemSerial"
 }

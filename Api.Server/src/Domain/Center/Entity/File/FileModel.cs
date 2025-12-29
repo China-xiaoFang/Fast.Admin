@@ -40,12 +40,14 @@ public class FileModel : IBaseTEntity
     /// <summary>
     /// 文件唯一标识
     /// </summary>
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "文件唯一标识", Length = 255)]
     public string FileObjectName { get; set; }
 
     /// <summary>
     /// 文件名称（上传时候的文件名）
     /// </summary>
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "文件名称（上传时候的文件名）", Length = 255)]
     public string FileOriginName { get; set; }
 
@@ -70,18 +72,21 @@ public class FileModel : IBaseTEntity
     /// <summary>
     /// 存储路径
     /// </summary>
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "存储路径", Length = 200)]
     public string FilePath { get; set; }
 
     /// <summary>
     /// 访问地址
     /// </summary>
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "访问地址", Length = 200)]
     public string FileLocation { get; set; }
 
     /// <summary>
     /// 文件哈希
     /// </summary>
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "文件哈希", Length = 32)]
     public string FileHash { get; set; }
 
