@@ -11,4 +11,15 @@ html.dark {
 		--el-table-fixed-left-column: inset 10px 0 10px -10px rgba(0, 0, 0, 0.72);
 		--el-table-fixed-right-column: inset -10px 0 10px -10px rgba(0, 0, 0, 0.72);
 	}
+
+	.el-tree {
+		.el-tree-node {
+			&.is-current {
+				.el-tag {
+					--el-tag-text-color: var(--el-color-white);
+					--el-tag-border-color: var(--el-color-white);
+				}
+			}
+		}
+	}
 }

@@ -3,10 +3,6 @@
  */
 export enum EmployeeStatusEnum {
   /**
-   * 无
-   */
-  None = 0,
-  /**
    * 临时
    */
   Temporary = 1,

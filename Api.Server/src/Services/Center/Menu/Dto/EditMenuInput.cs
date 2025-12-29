@@ -38,7 +38,7 @@ public class EditMenuInput : UpdateVersionInput
     /// <summary>
     /// 版本
     /// </summary>
-    [EnumRequired(ErrorMessage = "版本不能为空")]
+    [EnumRequired(ErrorMessage = "版本不能为空", AllowZero = true)]
     public EditionEnum Edition { get; set; }
 
     /// <summary>
@@ -68,8 +68,7 @@ public class EditMenuInput : UpdateVersionInput
     /// <summary>
     /// 父级Id
     /// </summary>
-    [LongRequired(ErrorMessage = "父级Id不能为空")]
-    public long ParentId { get; set; }
+    public long? ParentId { get; set; }
 
     /// <summary>
     /// 菜单类型
@@ -115,6 +114,18 @@ public class EditMenuInput : UpdateVersionInput
     public string WebComponent { get; set; }
 
     /// <summary>
+    /// Web端页面是否在导航栏显示
+    /// </summary>
+    [Required(ErrorMessage = "Web端页面是否在导航栏显示不能为空")]
+    public bool WebTab { get; set; }
+
+    /// <summary>
+    /// Web端页面是否缓存
+    /// </summary>
+    [Required(ErrorMessage = "Web端页面是否缓存不能为空")]
+    public bool WebKeepAlive { get; set; }
+
+    /// <summary>
     /// 是否移动端
     /// </summary>
     [Required(ErrorMessage = "是否移动端不能为空")]
@@ -150,7 +161,7 @@ public class EditMenuInput : UpdateVersionInput
     /// <summary>
     /// 状态
     /// </summary>
-    [IntRequired(ErrorMessage = "状态不能为空")]
+    [EnumRequired(ErrorMessage = "状态不能为空")]
     public CommonStatusEnum Status { get; set; }
 
     /// <summary>
@@ -171,7 +182,7 @@ public class EditMenuInput : UpdateVersionInput
         /// <summary>
         /// 版本
         /// </summary>
-        [EnumRequired(ErrorMessage = "版本不能为空")]
+        [EnumRequired(ErrorMessage = "版本不能为空", AllowZero = true)]
         public EditionEnum Edition { get; set; }
 
         /// <summary>
@@ -213,7 +224,7 @@ public class EditMenuInput : UpdateVersionInput
         /// <summary>
         /// 状态
         /// </summary>
-        [IntRequired(ErrorMessage = "状态不能为空")]
+        [EnumRequired(ErrorMessage = "状态不能为空")]
         public CommonStatusEnum Status { get; set; }
     }
 }

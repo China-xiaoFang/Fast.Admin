@@ -1,6 +1,6 @@
 <template>
 	<el-config-provider v-bind="elConfigProviderProps">
-		<router-view></router-view>
+		<RouterView></RouterView>
 	</el-config-provider>
 </template>
 
@@ -10,6 +10,7 @@ import { type componentSizes } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { useWindowSize } from "@vueuse/core";
 import { useConfig } from "@/stores";
+import { RouterView } from "vue-router";
 
 defineOptions({
 	name: "App",

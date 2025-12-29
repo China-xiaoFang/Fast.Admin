@@ -17,9 +17,9 @@ declare module "vue-router" {
 		 */
 		icon?: string;
 		/**
-		 * 默认 true，如果设置为 false，则不会在面包屑中显示
+		 * 默认 true，如果设置为 false，则不会在导航栏中显示
 		 */
-		breadcrumb?: boolean;
+		tab?: boolean;
 		/**
 		 * 登录后是否禁止查看该页面
 		 * 默认是 false，为 true 是代表登录后此页面不能再进入，否则跳转到首页

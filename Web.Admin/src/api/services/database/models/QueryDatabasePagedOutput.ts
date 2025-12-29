@@ -39,14 +39,6 @@ export interface QueryDatabasePagedOutput {
    */
   dbUser?: string;
   /**
-   * 数据库密码
-   */
-  dbPwd?: string;
-  /**
-   * 自定义连接字符串
-   */
-  customConnectionStr?: string;
-  /**
    * 超时时间，单位秒
    */
   commandTimeOut?: number;
@@ -66,6 +58,10 @@ export interface QueryDatabasePagedOutput {
    * 是否初始化
    */
   isInitialized?: boolean;
+  /**
+   * 租户Id
+   */
+  tenantId?: number;
   /**
    * 租户名称
    */

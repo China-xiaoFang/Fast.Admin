@@ -116,9 +116,9 @@ router.beforeEach(async (to, from, next) => {
 	// 刷新页面标题
 	const title = useTitle();
 	if (to.meta.title) {
-		title.value = `${to.meta.title} - ${userInfoStore.employeeName} - ${appStore.appName}`;
+		title.value = `${to.meta.title} - ${userInfoStore.employeeName && `${userInfoStore.employeeName} -`}${appStore.appName}`;
 	} else {
-		title.value = `${userInfoStore.employeeName} - ${appStore.appName}`;
+		title.value = `${userInfoStore.employeeName && `${userInfoStore.employeeName} -`}${appStore.appName}`;
 	}
 
 	next();

@@ -58,6 +58,10 @@ export interface EditDatabaseInput {
    */
   disableAop?: boolean;
   /**
+   * 是否创建数据库
+   */
+  isCreateDatabase?: boolean;
+  /**
    * 从库信息
    */
   slaveDatabaseList?: Array<EditSlaveDatabaseInput>;

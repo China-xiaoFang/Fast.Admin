@@ -109,4 +109,10 @@ public class AddDatabaseInput
     /// </summary>
     [LongRequired(ErrorMessage = "租户Id不能为空")]
     public long TenantId { get; set; }
+
+    /// <summary>
+    /// 是否创建数据库
+    /// </summary>
+    [Required(ErrorMessage = "是否创建数据库不能为空")]
+    public bool IsCreateDatabase { get; set; }
 }

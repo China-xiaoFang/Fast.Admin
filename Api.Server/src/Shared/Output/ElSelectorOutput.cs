@@ -44,6 +44,11 @@ public class ElSelectorOutput<T>
     public bool Disabled { get; set; }
 
     /// <summary>
+    /// 父级Id
+    /// </summary>
+    public long ParentId { get; set; }
+
+    /// <summary>
     /// 附加数据
     /// </summary>
     public object Data { get; set; }

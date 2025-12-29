@@ -5,12 +5,12 @@
 			<el-button type="primary" :icon="Plus" @click="handleTableRowAdd">新增字段</el-button>
 		</template>
 		<FaTableColumn prop="prop" label="字段名称" width="280">
-			<template #default="{ row }">
+			<template #default="{ row }: { row: FaTableColumnAdvancedCtx }">
 				<el-input v-model="row.prop" maxlength="50" placeholder="请输入字段名称" />
 			</template>
 		</FaTableColumn>
 		<FaTableColumn prop="type" label="字段类型" width="280">
-			<template #default="{ row }">
+			<template #default="{ row }: { row: FaTableColumnAdvancedCtx }">
 				<el-radio-group v-model="row.type">
 					<el-radio :value="1">字符串</el-radio>
 					<el-radio :value="2">数字</el-radio>
@@ -20,7 +20,7 @@
 			</template>
 		</FaTableColumn>
 		<FaTableColumn prop="value" label="字段值" width="280">
-			<template #default="{ row }">
+			<template #default="{ row }: { row: FaTableColumnAdvancedCtx }">
 				<el-input v-model="row.value" type="textarea" maxlength="500" placeholder="请输入字段值" />
 			</template>
 		</FaTableColumn>

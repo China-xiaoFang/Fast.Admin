@@ -81,13 +81,13 @@
 			</el-header>
 			<el-main :style="{ '--el-main-padding': addUnit(configStore.layout.mainPadding) }">
 				<el-scrollbar>
-					<router-view v-slot="{ Component, route }">
+					<RouterView v-slot="{ Component, route }">
 						<transition mode="out-in" :name="configStore.layout.mainAnimation">
-							<keep-alive :include="navTabsStore.keepAliveComponentNameList">
-								<component :is="Component" :key="route.name" class="layout-main" />
-							</keep-alive>
+							<KeepAlive :include="navTabsStore.keepAliveComponentNameList">
+								<component :is="Component" :key="route.path" class="layout-main" />
+							</KeepAlive>
 						</transition>
-					</router-view>
+					</RouterView>
 				</el-scrollbar>
 			</el-main>
 			<el-footer :style="{ '--el-footer-height': configStore.layout.footer ? addUnit(configStore.layout.footerHeight) : 0 }">
@@ -103,11 +103,11 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { inject, KeepAlive, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Expand, Fold, Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
 import { Local, addUnit } from "@fast-china/utils";
-import { useRouter } from "vue-router";
+import { RouterView, useRouter } from "vue-router";
 import LayoutMenu from "./components/Menu/index.vue";
 import type { LoginTenantOutput } from "@/api/services/login/models/LoginTenantOutput";
 import type { FaSelectInstance } from "fast-element-plus";
@@ -119,7 +119,6 @@ import LayoutLogo from "@/layouts/components/Logo/index.vue";
 import LayoutNavTab from "@/layouts/components/NavTab/index.vue";
 import LayoutScreenFull from "@/layouts/components/ScreenFull/index.vue";
 import LayoutScreenLock from "@/layouts/components/ScreenLock/index.vue";
-import { refreshApp } from "@/main";
 import { routerUtil } from "@/router";
 import { useConfig, useNavTabs, useUserInfo } from "@/stores";
 
@@ -142,7 +141,7 @@ const handleRefreshSystem = () => {
 		// 删除 HTTP 缓存数据
 		Local.removeByPrefix("HTTP_CACHE_");
 		// 刷新App
-		refreshApp();
+		window.location.reload();
 	});
 };
 
@@ -164,7 +163,7 @@ const handleTenantChange = async (value: LoginTenantOutput) => {
 			// 删除 HTTP 缓存数据
 			Local.removeByPrefix("HTTP_CACHE_");
 			// 刷新App
-			refreshApp();
+			window.location.reload();
 		} else {
 			ElMessage.error(loginRes.message);
 		}

@@ -13,7 +13,7 @@
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
 			<!-- 表格操作 -->
-			<template #operation="{ row }">
+			<template #operation="{ row }: { row: QueryTableConfigPagedOutput }">
 				<el-button size="small" plain @click="editFormRef.detail(row.tableId)">详情</el-button>
 				<el-button size="small" plain type="primary" @click="editFormRef.edit(row.tableId)">编辑</el-button>
 				<el-button size="small" plain type="info" @click="editFormRef.copy(row.tableId)">复制</el-button>
@@ -80,7 +80,7 @@ const tableColumns = withDefineType<FaTableColumnCtx[]>([
 		label: "表格Key",
 		sortable: true,
 		link: true,
-		click({ row, $index }) {
+		click({ row }: { row: QueryTableConfigPagedOutput }) {
 			editFormRef.value.detail(row.tableId);
 		},
 		copy: true,

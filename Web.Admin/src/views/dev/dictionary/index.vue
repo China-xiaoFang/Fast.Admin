@@ -6,14 +6,14 @@
 			:columns="tableColumns"
 			:requestApi="dictionaryApi.queryDictionaryPaged"
 			hideSearchTime
-			@custom-cell-click="(_, { row }) => editFormRef.detail(row.dictionaryId)"
+			@custom-cell-click="(_, { row }: { row: QueryDictionaryPagedOutput }) => editFormRef.detail(row.dictionaryId)"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
 			<!-- 表格操作 -->
-			<template #operation="{ row }">
+			<template #operation="{ row }: { row: QueryDictionaryPagedOutput }">
 				<el-button size="small" plain @click="editFormRef.detail(row.dictionaryId)">详情</el-button>
 				<el-button size="small" plain type="primary" @click="editFormRef.edit(row.dictionaryId)">编辑</el-button>
 				<el-button size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
@@ -59,7 +59,7 @@ const tableColumns = withDefineType<FaTableColumnCtx[]>([
 		label: "字典Key",
 		sortable: true,
 		link: true,
-		click({ row, $index }) {
+		click({ row }: { row: QueryDictionaryPagedOutput }) {
 			editFormRef.value.detail(row.dictionaryId);
 		},
 		copy: true,

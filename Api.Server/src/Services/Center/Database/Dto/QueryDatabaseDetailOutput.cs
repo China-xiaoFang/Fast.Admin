@@ -105,6 +105,16 @@ public class QueryDatabaseDetailOutput : PagedOutput
     public bool IsInitialized { get; set; }
 
     /// <summary>
+    /// 租户Id
+    /// </summary>
+    public long TenantId { get; set; }
+
+    /// <summary>
+    /// 租户名称
+    /// </summary>
+    public string TenantName { get; set; }
+
+    /// <summary>
     /// 从数据库集合
     /// </summary>
     public List<QuerySlaveDatabaseOutput> Children { get; set; }

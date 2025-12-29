@@ -1,5 +1,5 @@
 import { axiosUtil } from "@fast-china/axios";
-import { PagedResult } from "fast-element-plus";
+import { ElSelectorOutput, PagedInput, PagedResult } from "fast-element-plus";
 import { QueryAccountPagedOutput } from "./models/QueryAccountPagedOutput";
 import { QueryAccountPagedInput } from "./models/QueryAccountPagedInput";
 import { QueryAccountDetailOutput } from "./models/QueryAccountDetailOutput";
@@ -11,6 +11,17 @@ import { AccountIdInput } from "./models/AccountIdInput";
  * Fast.Center.Service.Account.AccountService 账号服务Api
  */
 export const accountApi = {
+  /**
+   * 账号选择器
+   */
+  accountSelector(data: PagedInput) {
+    return axiosUtil.request<PagedResult<ElSelectorOutput<number>>>({
+      url: "/account/accountSelector",
+      method: "post",
+      data,
+      requestType: "query",
+    });
+  },
   /**
    * 获取账号分页列表
    */

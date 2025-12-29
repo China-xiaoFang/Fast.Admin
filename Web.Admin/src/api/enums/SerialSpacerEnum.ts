@@ -7,15 +7,15 @@ export enum SerialSpacerEnum {
    */
   None = 0,
   /**
-   * _
+   * 下划线(_)
    */
   Underscore = 1,
   /**
-   * -
+   * 中横线(-)
    */
   Hyphen = 2,
   /**
-   * .
+   * 点(.)
    */
   Dot = 4,
 }

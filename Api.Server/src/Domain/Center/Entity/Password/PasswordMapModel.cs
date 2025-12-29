@@ -46,6 +46,7 @@ public class PasswordMapModel : IDatabaseEntity
     /// <summary>
     /// 密文
     /// </summary>
+    [SugarSearchValue]
     [Required]
     [SugarColumn(ColumnDescription = "密文", Length = 50)]
     public string Ciphertext { get; set; }

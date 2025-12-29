@@ -27,7 +27,7 @@ export const layoutRoute: RouteRecordRaw = {
 			name: "Iframe",
 			component: () => import("@/views/common/iframe/index.vue"),
 			meta: {
-				breadcrumb: false,
+				tab: false,
 				hide: true,
 				keepAlive: false,
 			},

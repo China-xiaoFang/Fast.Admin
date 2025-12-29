@@ -81,6 +81,16 @@ public class AuthMenuInfoDto : ITreeNode<long>
     public string Component { get; set; }
 
     /// <summary>
+    /// 导航栏显示
+    /// </summary>
+    public bool Tab { get; set; }
+
+    /// <summary>
+    /// 缓存页面
+    /// </summary>
+    public bool KeepAlive { get; set; }
+
+    /// <summary>
     /// 内链/外链地址
     /// </summary>
     public string Link { get; set; }

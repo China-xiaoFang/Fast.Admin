@@ -1,6 +1,11 @@
 <template>
 	<ElRadioGroup v-bind="elRadioGroupProps" v-model="modelValue" @change="(value: string | number | boolean) => emit('change', value)">
-		<ElRadio v-for="(item, index) in dictionaries" :key="index" :value="item.value">{{ item.label }}</ElRadio>
+		<ElRadio v-if="!props.button" v-for="(item, index) in dictionaries" :key="index" :value="item.value" :disabled="item.disabled">
+			{{ item.label }}
+		</ElRadio>
+		<ElRadioButton v-if="props.button" v-for="(item, index) in dictionaries" :key="index" :value="item.value" :disabled="item.disabled" border>
+			{{ item.label }}
+		</ElRadioButton>
 	</ElRadioGroup>
 </template>
 
@@ -18,6 +23,11 @@ defineOptions({
 
 const props = defineProps({
 	...radioGroupProps,
+	/** @description 按钮 */
+	button: {
+		type: Boolean,
+		default: false,
+	},
 	/** @description 字典名称 */
 	name: {
 		type: String,

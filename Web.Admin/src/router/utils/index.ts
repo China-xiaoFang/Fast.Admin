@@ -61,8 +61,9 @@ const packageMenu = (menuList: AuthMenuInfoDto[]): RouteRecordRaw[] => {
 				moduleId: item.moduleId,
 				title: item.menuTitle || item.menuName,
 				icon: item.icon,
+				tab: item.tab,
 				hide: item.visible == YesOrNotEnum.N,
-				keepAlive: true,
+				keepAlive: item.keepAlive,
 			},
 			children: [],
 		};

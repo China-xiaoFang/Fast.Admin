@@ -32,7 +32,7 @@ public class AddMenuInput
     /// <summary>
     /// 版本
     /// </summary>
-    [EnumRequired(ErrorMessage = "版本不能为空")]
+    [EnumRequired(ErrorMessage = "版本不能为空", AllowZero = true)]
     public EditionEnum Edition { get; set; }
 
     /// <summary>
@@ -62,8 +62,7 @@ public class AddMenuInput
     /// <summary>
     /// 父级Id
     /// </summary>
-    [LongRequired(ErrorMessage = "父级Id不能为空")]
-    public long ParentId { get; set; }
+    public long? ParentId { get; set; }
 
     /// <summary>
     /// 菜单类型
@@ -107,6 +106,18 @@ public class AddMenuInput
     /// Web端组件地址
     /// </summary>
     public string WebComponent { get; set; }
+
+    /// <summary>
+    /// Web端页面是否在导航栏显示
+    /// </summary>
+    [Required(ErrorMessage = "Web端页面是否在导航栏显示不能为空")]
+    public bool WebTab { get; set; }
+
+    /// <summary>
+    /// Web端页面是否缓存
+    /// </summary>
+    [Required(ErrorMessage = "Web端页面是否缓存不能为空")]
+    public bool WebKeepAlive { get; set; }
 
     /// <summary>
     /// 是否移动端

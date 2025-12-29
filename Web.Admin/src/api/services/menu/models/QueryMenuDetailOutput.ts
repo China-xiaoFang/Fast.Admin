@@ -77,6 +77,14 @@ export interface QueryMenuDetailOutput {
    */
   webComponent?: string;
   /**
+   * Web端页面是否在导航栏显示
+   */
+  webTab?: boolean;
+  /**
+   * Web端页面是否缓存
+   */
+  webKeepAlive?: boolean;
+  /**
    * 是否移动端
    */
   hasMobile?: boolean;

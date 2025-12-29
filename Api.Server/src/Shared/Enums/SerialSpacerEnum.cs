@@ -38,18 +38,18 @@ public enum SerialSpacerEnum : byte
     /// <summary>
     /// 下划线
     /// </summary>
-    [Description("_")]
+    [Description("下划线(_)")]
     Underscore = 1,
 
     /// <summary>
     /// 中横线
     /// </summary>
-    [Description("-")]
+    [Description("中横线(-)")]
     Hyphen = 2,
 
     /// <summary>
     /// 点
     /// </summary>
-    [Description(".")]
+    [Description("点(.)")]
     Dot = 4
 }

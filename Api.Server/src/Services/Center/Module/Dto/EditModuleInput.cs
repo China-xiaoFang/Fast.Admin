@@ -73,6 +73,6 @@ public class EditModuleInput : UpdateVersionInput
     /// <summary>
     /// 状态
     /// </summary>
-    [IntRequired(ErrorMessage = "状态不能为空")]
+    [EnumRequired(ErrorMessage = "状态不能为空")]
     public CommonStatusEnum Status { get; set; }
 }

@@ -48,7 +48,6 @@ import type { TenantLoginInput } from "@/api/services/login/models/TenantLoginIn
 import type { ILoginComponent } from "@/stores";
 import type { DropdownInstance, FormRules } from "element-plus";
 import type { Component } from "vue";
-import { refreshApp } from "@/main";
 import { useApp, useConfig } from "@/stores";
 
 defineOptions({
@@ -156,7 +155,8 @@ const handleDropdownClick = (command: string) => {
 								Session.clear();
 								// 重新设置设备Id
 								uIdentity.makeIdentity(uIdentity.deviceId);
-								refreshApp();
+								// 刷新App
+								window.location.reload();
 								resolve(true);
 							}, 2000);
 						});

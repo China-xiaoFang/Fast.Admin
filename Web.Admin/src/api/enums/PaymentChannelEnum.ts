@@ -3,10 +3,6 @@
  */
 export enum PaymentChannelEnum {
   /**
-   * 未知
-   */
-  None = 0,
-  /**
    * 微信
    */
   WeChat = 1,

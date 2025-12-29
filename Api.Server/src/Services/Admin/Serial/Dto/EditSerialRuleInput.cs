@@ -48,7 +48,7 @@ public class EditSerialRuleInput : UpdateVersionInput
     /// <summary>
     /// 分隔符
     /// </summary>
-    [EnumRequired(ErrorMessage = "分隔符不能为空")]
+    [EnumRequired(ErrorMessage = "分隔符不能为空", AllowZero = true)]
     public SerialSpacerEnum Spacer { get; set; }
 
     /// <summary>

@@ -95,14 +95,14 @@
 					<el-button type="primary" :icon="Plus" @click="editFormRef.add(state.tenantId, state.activeJobGroup)">添加作业</el-button>
 				</template>
 
-				<template #requestUrl="{ row }">
+				<template #requestUrl="{ row }: { row?: SchedulerJobInfoDto }">
 					<Tag v-if="row.requestMethod" name="HttpRequestMethodEnum" :value="row.requestMethod" />
 					<br v-if="row.requestUrl" />
 					<span v-if="row.requestUrl">{{ row.requestUrl }}</span>
 					<span v-else>--</span>
 				</template>
 
-				<template #exception="{ row }">
+				<template #exception="{ row }: { row?: SchedulerJobInfoDto }">
 					<el-tag
 						v-if="row.exception"
 						type="danger"
@@ -116,7 +116,7 @@
 					<span v-else>--</span>
 				</template>
 
-				<template #fireTime="{ row }">
+				<template #fireTime="{ row }: { row?: SchedulerJobInfoDto }">
 					<el-text v-if="row.previousFireTime" type="info">{{ row.previousFireTime }}</el-text>
 					<span v-else>- -</span>
 					<br />
@@ -124,7 +124,7 @@
 					<span v-else>- -</span>
 				</template>
 
-				<template #time="{ row }">
+				<template #time="{ row }: { row?: SchedulerJobInfoDto }">
 					<el-text type="info">{{ row.beginTime }}</el-text>
 					<br />
 					<el-text v-if="row.endTime" type="primary">{{ row.endTime }}</el-text>
@@ -132,7 +132,7 @@
 				</template>
 
 				<!-- 表格操作 -->
-				<template #operation="{ row }">
+				<template #operation="{ row }: { row: SchedulerJobInfoDto }">
 					<div class="mb5">
 						<el-button size="small" @click="editFormRef.edit(state.tenantId, row.jobName, state.activeJobGroup)">编辑</el-button>
 						<el-button size="small" @click="editFormRef.copy(state.tenantId, row.jobName, state.activeJobGroup)">复制</el-button>

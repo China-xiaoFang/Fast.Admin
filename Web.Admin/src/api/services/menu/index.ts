@@ -1,4 +1,5 @@
 import { axiosUtil } from "@fast-china/axios";
+import { ElSelectorOutput } from "fast-element-plus";
 import { QueryMenuPagedOutput } from "./models/QueryMenuPagedOutput";
 import { QueryMenuPagedInput } from "./models/QueryMenuPagedInput";
 import { QueryMenuDetailOutput } from "./models/QueryMenuDetailOutput";
@@ -10,6 +11,19 @@ import { MenuIdInput } from "./models/MenuIdInput";
  * Fast.Center.Service.Menu.MenuService 菜单服务Api
  */
 export const menuApi = {
+  /**
+   * 菜单选择器
+   */
+  menuSelector(moduleId: number) {
+    return axiosUtil.request<ElSelectorOutput<number>[]>({
+      url: "/menu/menuSelector",
+      method: "get",
+      params: {
+        moduleId,
+      },
+      requestType: "query",
+    });
+  },
   /**
    * 获取菜单列表
    */

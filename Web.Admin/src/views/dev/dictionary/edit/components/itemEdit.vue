@@ -31,7 +31,7 @@
 					<el-radio :value="0">隐藏</el-radio>
 				</el-radio-group>
 			</FaFormItem>
-			<FaFormItem prop="order" label="排序">
+			<FaFormItem prop="order" label="排序" tips="从小到大">
 				<el-input-number v-model="state.formData.order" :min="1" :max="9999" placeholder="请输入顺序" />
 			</FaFormItem>
 			<FaFormItem prop="status" label="状态">

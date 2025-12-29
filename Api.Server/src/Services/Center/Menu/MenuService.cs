@@ -41,6 +41,28 @@ public class MenuService : IDynamicApplication
     }
 
     /// <summary>
+    /// 菜单选择器
+    /// </summary>
+    /// <param name="moduleId"></param>
+    /// <returns></returns>
+    [HttpGet]
+    [ApiInfo("菜单选择器", HttpRequestActionEnum.Query)]
+    public async Task<List<ElSelectorOutput<long>>> MenuSelector(long? moduleId)
+    {
+        var data = await _repository.Entities.WhereIF(moduleId != null, wh => wh.ModuleId == moduleId)
+            .OrderBy(ob => ob.Sort)
+            .Select(sl => new {sl.MenuId, sl.MenuName, sl.MenuCode, sl.ParentId})
+            .ToListAsync();
+
+        return data.Select(sl => new ElSelectorOutput<long>
+            {
+                Value = sl.MenuId, Label = sl.MenuName, ParentId = sl.ParentId, Data = new {sl.MenuCode}
+            })
+            .ToList()
+            .Build();
+    }
+
+    /// <summary>
     /// 获取菜单列表
     /// </summary>
     /// <param name="input"></param>
@@ -82,6 +104,8 @@ public class MenuService : IDynamicApplication
                 WebIcon = t1.WebIcon,
                 WebRouter = t1.WebRouter,
                 WebComponent = t1.WebComponent,
+                WebTab = t1.WebTab,
+                WebKeepAlive = t1.WebKeepAlive,
                 HasMobile = t1.HasMobile,
                 MobileIcon = t1.MobileIcon,
                 MobileRouter = t1.MobileRouter,
@@ -128,6 +152,7 @@ public class MenuService : IDynamicApplication
                 MenuCode = t1.MenuCode,
                 MenuName = t1.MenuName,
                 MenuTitle = t1.MenuTitle,
+                ParentId = t1.ParentId,
                 MenuType = t1.MenuType,
                 HasDesktop = t1.HasDesktop,
                 DesktopIcon = t1.DesktopIcon,
@@ -136,6 +161,8 @@ public class MenuService : IDynamicApplication
                 WebIcon = t1.WebIcon,
                 WebRouter = t1.WebRouter,
                 WebComponent = t1.WebComponent,
+                WebTab = t1.WebTab,
+                WebKeepAlive = t1.WebKeepAlive,
                 HasMobile = t1.HasMobile,
                 MobileIcon = t1.MobileIcon,
                 MobileRouter = t1.MobileRouter,
@@ -216,6 +243,8 @@ public class MenuService : IDynamicApplication
             WebIcon = input.WebIcon,
             WebRouter = input.WebRouter,
             WebComponent = input.WebComponent,
+            WebTab = input.WebTab,
+            WebKeepAlive = input.WebKeepAlive,
             HasMobile = input.HasMobile,
             MobileIcon = input.MobileIcon,
             MobileRouter = input.MobileRouter,
@@ -303,6 +332,8 @@ public class MenuService : IDynamicApplication
         menuModel.WebIcon = input.WebIcon;
         menuModel.WebRouter = input.WebRouter;
         menuModel.WebComponent = input.WebComponent;
+        menuModel.WebTab = input.WebTab;
+        menuModel.WebKeepAlive = input.WebKeepAlive;
         menuModel.HasMobile = input.HasMobile;
         menuModel.MobileIcon = input.MobileIcon;
         menuModel.MobileRouter = input.MobileRouter;
@@ -386,6 +417,11 @@ public class MenuService : IDynamicApplication
     [Permission(PermissionConst.Menu.Delete)]
     public async Task DeleteMenu(MenuIdInput input)
     {
+        if (await _repository.AnyAsync(a => a.ParentId == input.MenuId))
+        {
+            throw new UserFriendlyException("菜单存在子菜单，无法删除！");
+        }
+
         if (await _repository.Queryable<ButtonModel>()
                 .AnyAsync(a => a.MenuId == input.MenuId))
         {

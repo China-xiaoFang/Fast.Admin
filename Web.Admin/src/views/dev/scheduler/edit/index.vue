@@ -2,7 +2,7 @@
 	<FaDialog
 		ref="faDialogRef"
 		width="1000"
-		fillHeight
+		fullHeight
 		:title="state.dialogTitle"
 		confirmButtonText="保存"
 		@confirm-click="handleConfirm"

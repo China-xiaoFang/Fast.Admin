@@ -199,6 +199,10 @@ public class AuthService : IDynamicApplication
                     hasWeb ? t1.WebRouter :
                     hasMobile ? t1.MobileRouter : null,
                 Component = hasWeb ? t1.WebComponent : null,
+                // ReSharper disable once SimplifyConditionalTernaryExpression
+                Tab = hasWeb ? t1.WebTab : false,
+                // ReSharper disable once SimplifyConditionalTernaryExpression
+                KeepAlive = hasWeb ? t1.WebKeepAlive : false,
                 Link = t1.Link,
                 Visible = t1.Visible,
                 Sort = t1.Sort
