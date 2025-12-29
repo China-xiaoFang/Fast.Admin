@@ -9,6 +9,7 @@
 					width="180"
 					:requestApi="() => moduleApi.moduleSelector(fastTableRef?.searchParam?.appId)"
 					@change="handleModuleChange"
+					@node-contextmenu="handleModuleContextmenu"
 				>
 					<template #label="{ data }: { data: ElSelectorOutput }">
 						<FaIcon v-if="data.data?.icon" style="margin-right: 5px" size="16" :name="data.data.icon" />
@@ -77,21 +78,25 @@
 				</FastTable>
 			</div>
 		</div>
+		<FaContextMenu ref="faContextMenuRef" :data="state.contextMenuList" />
 		<MenuEdit ref="editFormRef" @ok="fastTableRef.refresh()" />
+		<ModuleEdit ref="moduleEditFormRef" @ok="moduleTreeRef.refresh()" />
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import type { QueryMenuPagedOutput } from "@/api/services/menu/models/QueryMenuPagedOutput";
 import type { FastTableInstance } from "@/components";
 import { menuApi } from "@/api/services/menu";
 import { moduleApi } from "@/api/services/module";
-import { ElSelectorOutput, FaTreeInstance } from "fast-element-plus";
+import { ElSelectorOutput, FaContextMenuData, FaContextMenuInstance, FaTreeInstance } from "fast-element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import MenuEdit from "./edit/index.vue";
+import ModuleEdit from "./edit/moduleEdit.vue";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 
 defineOptions({
 	name: "DevMenu",
@@ -99,7 +104,45 @@ defineOptions({
 
 const fastTableRef = ref<FastTableInstance>();
 const moduleTreeRef = ref<FaTreeInstance>();
+const faContextMenuRef = ref<FaContextMenuInstance>();
 const editFormRef = ref<InstanceType<typeof MenuEdit>>();
+const moduleEditFormRef = ref<InstanceType<typeof ModuleEdit>>();
+
+const state = reactive({
+	contextMenuList: withDefineType<FaContextMenuData[]>([
+		{
+			name: "add",
+			label: "添加模块",
+			icon: "el-icon-FolderAdd",
+			click: (_, { data }: { data?: ElSelectorOutput<number> }) => {
+				moduleEditFormRef.value.add();
+			},
+		},
+		{
+			name: "edit",
+			label: "编辑模块",
+			icon: "el-icon-EditPen",
+			click: (_, { data }: { data?: ElSelectorOutput<number> }) => {
+				moduleEditFormRef.value.edit(data.value);
+			},
+		},
+		{
+			name: "delete",
+			label: "删除模块",
+			icon: "el-icon-Delete",
+			click: (_, { data }: { data?: ElSelectorOutput<number> }) => {
+				ElMessageBox.confirm("确定要删除模块？", {
+					type: "warning",
+					async beforeClose(action, instance, done) {
+						await moduleApi.deleteModule({ moduleId: data.value, rowVersion: data.data?.rowVersion });
+						ElMessage.success("删除成功！");
+						fastTableRef.value?.refresh();
+					},
+				});
+			},
+		},
+	]),
+});
 
 /** 应用更改 */
 const handleApplicationChange = (data: ElSelectorOutput) => {
@@ -113,6 +156,22 @@ const handleApplicationChange = (data: ElSelectorOutput) => {
 const handleModuleChange = (data: ElSelectorOutput) => {
 	fastTableRef.value.searchParam.moduleId = data.value;
 	fastTableRef.value.refresh();
+};
+
+const handleModuleContextmenu = (event: MouseEvent, data: ElSelectorOutput) => {
+	if (data.all) {
+		state.contextMenuList[0].hide = false;
+		state.contextMenuList[1].hide = true;
+		state.contextMenuList[2].hide = true;
+	} else {
+		state.contextMenuList[0].hide = true;
+		state.contextMenuList[1].hide = false;
+		state.contextMenuList[2].hide = false;
+	}
+	state.contextMenuList.forEach((item) => {
+		item.data = data;
+	});
+	faContextMenuRef.value.open({ x: event.clientX, y: event.clientY });
 };
 
 /** 处理删除 */

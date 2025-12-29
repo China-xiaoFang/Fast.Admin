@@ -11,12 +11,12 @@
 	>
 		<template #default="data">
 			<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%">
-				<FaAvatar :src="data.data.logoUrl" thumb size="small" />
+				<FaAvatar v-if="data.data?.logoUrl" :src="data.data?.logoUrl" thumb size="small" />
 				<div style="flex: 1">
 					<span>{{ data.label }}</span>
 					<span style="display: flex; justify-content: space-between; width: 100%">
 						<span style="font-size: var(--el-font-size-extra-small); padding-right: 8px">{{ data.data?.appNo }}</span>
-						<Tag name="EditionEnum" :value="data.data.edition" size="small" />
+						<Tag name="EditionEnum" :value="data.data?.edition" size="small" />
 					</span>
 				</div>
 			</div>

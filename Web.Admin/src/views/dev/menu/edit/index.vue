@@ -101,9 +101,9 @@
 				</template>
 			</template>
 
-			<FaFormItem span="2" labelWidth="0">
+			<FaLayoutGridItem span="2">
 				<el-divider contentPosition="left">移动端</el-divider>
-			</FaFormItem>
+			</FaLayoutGridItem>
 			<FaFormItem prop="hasMobile" label="移动端" span="2">
 				<el-checkbox v-model="state.formData.hasMobile">移动端</el-checkbox>
 			</FaFormItem>
@@ -116,9 +116,9 @@
 				</FaFormItem>
 			</template>
 
-			<FaFormItem span="2" labelWidth="0">
+			<FaLayoutGridItem span="2">
 				<el-divider span="2" contentPosition="left">桌面端</el-divider>
-			</FaFormItem>
+			</FaLayoutGridItem>
 			<FaFormItem prop="hasDesktop" label="桌面端" span="2">
 				<el-checkbox v-model="state.formData.hasDesktop">桌面端</el-checkbox>
 			</FaFormItem>
@@ -132,13 +132,114 @@
 			</template>
 
 			<template v-if="state.formData.menuType === MenuTypeEnum.Internal || state.formData.menuType === MenuTypeEnum.Outside">
-				<FaFormItem span="2" labelWidth="0">
+				<FaLayoutGridItem span="2">
 					<el-divider span="2" contentPosition="left">其他</el-divider>
-				</FaFormItem>
+				</FaLayoutGridItem>
 				<FaFormItem prop="link" label="内链/外链地址" span="2">
 					<el-input type="textarea" v-model="state.formData.link" :rows="2" maxlength="200" placeholder="请输入内链/外链地址" />
 				</FaFormItem>
 			</template>
+
+			<FaLayoutGridItem span="2" v-if="state.formData.menuType === MenuTypeEnum.Menu">
+				<FaTable v-if="state.dialogState !== 'add'" height="300" rowKey="buttonId" :data="state.formData.buttonList" span="2">
+					<!-- 表格按钮操作区域 -->
+					<template #header>
+						<el-button type="primary" :icon="Plus" @click="handleButtonAdd">新增</el-button>
+					</template>
+					<FaTableColumn prop="buttonName" label="按钮名称" width="200">
+						<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`buttonList.${$index}.buttonName`"
+								:rules="[{ required: true, message: '请输入按钮名称', trigger: 'blur' }]"
+							>
+								<el-input v-model="row.buttonName" maxlength="20" placeholder="请输入按钮名称" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="buttonCode" label="按钮编码" width="280">
+						<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`buttonList.${$index}.buttonCode`"
+								:rules="[{ required: true, message: '请输入按钮编码', trigger: 'blur' }]"
+							>
+								<el-input v-model="row.buttonCode" maxlength="50" placeholder="请输入按钮编码" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="edition" label="版本" width="120">
+						<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`buttonList.${$index}.edition`"
+								:rules="[{ required: true, message: '请选择版本', trigger: 'change' }]"
+							>
+								<FaSelect :data="editionEnum" v-model="row.edition" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="hasWeb" label="Web端" width="80">
+						<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`buttonList.${$index}.hasWeb`"
+								:rules="[{ required: true, message: '请选择是否Web端', trigger: 'change' }]"
+							>
+								<el-checkbox v-model="row.hasWeb" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="hasMobile" label="移动端" width="80">
+						<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`buttonList.${$index}.hasMobile`"
+								:rules="[{ required: true, message: '请选择是否移动端', trigger: 'change' }]"
+							>
+								<el-checkbox v-model="row.hasMobile" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="hasDesktop" label="桌面端" width="80">
+						<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`buttonList.${$index}.hasDesktop`"
+								:rules="[{ required: true, message: '请选择是否桌面端', trigger: 'change' }]"
+							>
+								<el-checkbox v-model="row.hasDesktop" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="sort" label="排序" width="100">
+						<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`buttonList.${$index}.sort`"
+								:rules="[{ required: true, message: '请输入排序', trigger: 'blur' }]"
+							>
+								<el-input-number style="width: auto" v-model="row.sort" :min="1" :max="9999" placeholder="请输入排序" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="sort" label="状态" width="150">
+						<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`buttonList.${$index}.status`"
+								:rules="[{ required: true, message: '请选择状态', trigger: 'change' }]"
+							>
+								<RadioGroup button name="CommonStatusEnum" v-model="row.status" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<!-- 表格操作 -->
+					<template #operation="{ $index }: { $index: number }">
+						<el-button size="small" plain type="danger" @click="handleButtonDelete($index)">删除</el-button>
+					</template>
+				</FaTable>
+			</FaLayoutGridItem>
 		</FaForm>
 	</FaDialog>
 </template>
@@ -152,16 +253,24 @@ import { EditMenuInput } from "@/api/services/menu/models/EditMenuInput";
 import { AddMenuInput } from "@/api/services/menu/models/AddMenuInput";
 import { menuApi } from "@/api/services/menu";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
+import { Plus } from "@element-plus/icons-vue";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import * as FastElementPlusIconsVue from "@fast-element-plus/icons-vue";
 import routerPath from "@/router/index.json";
 import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
+import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
+import { EditMenuButtonDto } from "@/api/services/menu/models/EditMenuButtonDto";
+import { useApp } from "@/stores";
+import { EditionEnum } from "@/api/enums/EditionEnum";
 
 defineOptions({
 	name: "DevMenuEdit",
 });
 
 const emit = defineEmits(["ok"]);
+
+const appStore = useApp();
+const editionEnum = appStore.getDictionary("EditionEnum");
 
 const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
@@ -173,6 +282,9 @@ const state = reactive({
 		hasWeb: true,
 		webTab: false,
 		webKeepAlive: false,
+		hasMobile: false,
+		hasDesktop: false,
+		buttonList: [],
 	}),
 	formRules: withDefineType<FormRules>({
 		moduleId: [{ required: true, message: "请选择模块", trigger: "change" }],
@@ -248,6 +360,21 @@ const handleComponentChange = (value: CascaderValue) => {
 		state.formData.webRouter = "";
 		state.formData.webComponent = "";
 	}
+};
+
+const handleButtonAdd = () => {
+	state.formData.buttonList.push({
+		edition: EditionEnum.None,
+		hasWeb: true,
+		hasMobile: false,
+		hasDesktop: false,
+		sort: 1,
+		status: CommonStatusEnum.Enable,
+	});
+};
+
+const handleButtonDelete = (index: number) => {
+	state.formData.buttonList.splice(index, 1);
 };
 
 const handleConfirm = () => {

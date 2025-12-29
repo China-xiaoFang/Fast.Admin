@@ -28,7 +28,7 @@ const loadComponent = (component: string): any => {
 const loadComponentName = (name: string): string => {
 	if (name) {
 		if (name.includes("/")) {
-			const cArr = name.split("/");
+			const cArr = name.replace(/(^|\/)index(?=\/|$)/gi, "").split("/");
 			let result = "";
 			cArr.forEach((item) => {
 				result += item.slice(0, 1).toUpperCase() + item.slice(1);
@@ -54,7 +54,7 @@ const packageMenu = (menuList: AuthMenuInfoDto[]): RouteRecordRaw[] => {
 		const routeInfo = {
 			path: item.menuType === MenuTypeEnum.Catalog ? stringUtil.generateRandomString(8) : item.router,
 			// 这里由于 keep-alive 必须设置 name 的问题，所以根据组件的地址，生成固定的 name，需要在每个页面增加 name，不然 keep-alive 会失效
-			name: loadComponentName(item.menuName),
+			name: loadComponentName(item.component || item.menuCode),
 			component: loadComponent(item.component),
 			redirect: undefined,
 			meta: {
@@ -102,6 +102,7 @@ export const handleDynamicRoute = (): void => {
 		router.removeRoute(deepLayoutRoute.name);
 	}
 
+	console.log("动态路由：", deepLayoutRoute);
 	router.addRoute(deepLayoutRoute);
 };
 

@@ -15,6 +15,7 @@
   "/src/views/dev/dictionary/edit/index.vue": "DevDictionaryEdit",
   "/src/views/dev/dictionary/index.vue": "DevDictionary",
   "/src/views/dev/menu/edit/index.vue": "DevMenuEdit",
+  "/src/views/dev/menu/edit/moduleEdit.vue": "DevModuleEdit",
   "/src/views/dev/menu/index.vue": "DevMenu",
   "/src/views/dev/passwordMap/index.vue": "DevPasswordMap",
   "/src/views/dev/passwordRecord/index.vue": "DevPasswordRecord",
@@ -32,6 +33,10 @@
   "/src/views/dev/tenant/index.vue": "DevTenant",
   "/src/views/login/classicLogin/index.vue": "ClassicLogin",
   "/src/views/login/index.vue": "Login",
+  "/src/views/system/account/edit/index.vue": "SystemAccountEdit",
+  "/src/views/system/account/index.vue": "SystemAccount",
+  "/src/views/system/application/edit/index.vue": "SystemApplicationEdit",
+  "/src/views/system/application/index.vue": "SystemApplication",
   "/src/views/system/file/index.vue": "SystemFile",
   "/src/views/system/serial/edit/index.vue": "SystemSerialEdit",
   "/src/views/system/serial/index.vue": "SystemSerial"
