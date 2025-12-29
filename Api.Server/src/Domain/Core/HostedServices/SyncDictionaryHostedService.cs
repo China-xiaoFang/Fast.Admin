@@ -185,6 +185,12 @@ public class SyncDictionaryHostedService : IHostedService
                     {
                         var enumItemList = enumType.Type.EnumToList<long>();
 
+                        if (enumType.Type.Name == nameof(YesOrNotEnum))
+                        {
+                            enumItemList = enumItemList.OrderByDescending(ob => ob.Value)
+                                .ToList();
+                        }
+
                         var dictionaryTypeInfo = dictionaryTypeList.SingleOrDefault(s => s.DictionaryKey == enumType.Type.Name);
 
                         var dictionaryTypeModel = new DictionaryTypeModel

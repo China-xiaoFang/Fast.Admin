@@ -57,6 +57,8 @@ public class TenantService : IDynamicApplication
             {
                 sl.TenantId,
                 sl.TenantName,
+                sl.TenantNo,
+                sl.TenantCode,
                 sl.ShortName,
                 sl.Edition,
                 sl.LogoUrl
@@ -65,7 +67,16 @@ public class TenantService : IDynamicApplication
 
         return data.ToPagedData(sl => new ElSelectorOutput<long>
         {
-            Value = sl.TenantId, Label = sl.TenantName, Data = new {sl.ShortName, sl.Edition, sl.LogoUrl}
+            Value = sl.TenantId,
+            Label = sl.TenantName,
+            Data = new
+            {
+                sl.TenantNo,
+                sl.TenantCode,
+                sl.ShortName,
+                sl.Edition,
+                sl.LogoUrl
+            }
         });
     }
 

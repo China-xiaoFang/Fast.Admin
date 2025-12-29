@@ -3,111 +3,139 @@
  */
 export enum DbType {
   /**
-   * AnsiString
+   * MySql
    */
-  AnsiString = 0,
+  MySql = 0,
   /**
-   * Binary
+   * SqlServer
    */
-  Binary = 1,
+  SqlServer = 1,
   /**
-   * Byte
+   * Sqlite
    */
-  Byte = 2,
+  Sqlite = 2,
   /**
-   * Boolean
+   * Oracle
    */
-  Boolean = 3,
+  Oracle = 3,
   /**
-   * Currency
+   * PostgreSQL
    */
-  Currency = 4,
+  PostgreSQL = 4,
   /**
-   * Date
+   * Dm
    */
-  Date = 5,
+  Dm = 5,
   /**
-   * DateTime
+   * Kdbndp
    */
-  DateTime = 6,
+  Kdbndp = 6,
   /**
-   * Decimal
+   * Oscar
    */
-  Decimal = 7,
+  Oscar = 7,
   /**
-   * Double
+   * MySqlConnector
    */
-  Double = 8,
+  MySqlConnector = 8,
   /**
-   * Guid
+   * Access
    */
-  Guid = 9,
+  Access = 9,
   /**
-   * Int16
+   * OpenGauss
    */
-  Int16 = 10,
+  OpenGauss = 10,
   /**
-   * Int32
+   * QuestDB
    */
-  Int32 = 11,
+  QuestDB = 11,
   /**
-   * Int64
+   * HG
    */
-  Int64 = 12,
+  HG = 12,
   /**
-   * Object
+   * ClickHouse
    */
-  Object = 13,
+  ClickHouse = 13,
   /**
-   * SByte
+   * GBase
    */
-  SByte = 14,
+  GBase = 14,
   /**
-   * Single
+   * Odbc
    */
-  Single = 15,
+  Odbc = 15,
   /**
-   * String
+   * OceanBaseForOracle
    */
-  String = 16,
+  OceanBaseForOracle = 16,
   /**
-   * Time
+   * TDengine
    */
-  Time = 17,
+  TDengine = 17,
   /**
-   * UInt16
+   * GaussDB
    */
-  UInt16 = 18,
+  GaussDB = 18,
   /**
-   * UInt32
+   * OceanBase
    */
-  UInt32 = 19,
+  OceanBase = 19,
   /**
-   * UInt64
+   * Tidb
    */
-  UInt64 = 20,
+  Tidb = 20,
   /**
-   * VarNumeric
+   * Vastbase
    */
-  VarNumeric = 21,
+  Vastbase = 21,
   /**
-   * AnsiStringFixedLength
+   * PolarDB
    */
-  AnsiStringFixedLength = 22,
+  PolarDB = 22,
   /**
-   * StringFixedLength
+   * Doris
    */
-  StringFixedLength = 23,
+  Doris = 23,
   /**
-   * Xml
+   * Xugu
    */
-  Xml = 25,
+  Xugu = 24,
   /**
-   * DateTime2
+   * GoldenDB
    */
-  DateTime2 = 26,
+  GoldenDB = 25,
   /**
-   * DateTimeOffset
+   * TDSQLForPGODBC
    */
-  DateTimeOffset = 27,
+  TDSQLForPGODBC = 26,
+  /**
+   * TDSQL
+   */
+  TDSQL = 27,
+  /**
+   * HANA
+   */
+  HANA = 28,
+  /**
+   * DB2
+   */
+  DB2 = 29,
+  /**
+   * GaussDBNative
+   */
+  GaussDBNative = 30,
+  /**
+   * DuckDB
+   */
+  DuckDB = 31,
+  /**
+   * MongoDb
+   */
+  MongoDb = 32,
+  /**
+   * Custom
+   */
+  Custom = 900,
 }

@@ -69,13 +69,12 @@ public class DatabaseService : IDynamicApplication
                 Port = t1.Port,
                 DbName = t1.DbName,
                 DbUser = t1.DbUser,
-                DbPwd = t1.DbPwd,
-                CustomConnectionStr = t1.CustomConnectionStr,
                 CommandTimeOut = t1.CommandTimeOut,
                 SugarSqlExecMaxSeconds = t1.SugarSqlExecMaxSeconds,
                 DiffLog = t1.DiffLog,
                 DisableAop = t1.DisableAop,
                 IsInitialized = t1.IsInitialized,
+                TenantId = t1.TenantId,
                 TenantName = t2.TenantName,
                 DepartmentName = t1.DepartmentName,
                 CreatedUserName = t1.CreatedUserName,
@@ -119,31 +118,34 @@ public class DatabaseService : IDynamicApplication
     public async Task<QueryDatabaseDetailOutput> QueryDatabaseDetail([Required(ErrorMessage = "主库Id不能为空")] long? mainId)
     {
         var result = await _repository.Entities.Includes(e => e.SlaveDatabaseList)
-            .Where(wh => wh.MainId == mainId)
-            .Select(sl => new QueryDatabaseDetailOutput
+            .LeftJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
+            .Where(t1 => t1.MainId == mainId)
+            .Select((t1, t2) => new QueryDatabaseDetailOutput
             {
-                MainId = sl.MainId,
-                DatabaseType = sl.DatabaseType,
-                DbType = sl.DbType,
-                PublicIp = sl.PublicIp,
-                IntranetIp = sl.IntranetIp,
-                Port = sl.Port,
-                DbName = sl.DbName,
-                DbUser = sl.DbUser,
-                DbPwd = sl.DbPwd,
-                CustomConnectionStr = sl.CustomConnectionStr,
-                CommandTimeOut = sl.CommandTimeOut,
-                SugarSqlExecMaxSeconds = sl.SugarSqlExecMaxSeconds,
-                DiffLog = sl.DiffLog,
-                DisableAop = sl.DisableAop,
-                IsInitialized = sl.IsInitialized,
-                DepartmentName = sl.DepartmentName,
-                CreatedUserName = sl.CreatedUserName,
-                CreatedTime = sl.CreatedTime,
-                UpdatedUserName = sl.UpdatedUserName,
-                UpdatedTime = sl.UpdatedTime,
-                RowVersion = sl.RowVersion,
-                Children = sl.SlaveDatabaseList.Select(dSl => new QuerySlaveDatabaseOutput
+                MainId = t1.MainId,
+                DatabaseType = t1.DatabaseType,
+                DbType = t1.DbType,
+                PublicIp = t1.PublicIp,
+                IntranetIp = t1.IntranetIp,
+                Port = t1.Port,
+                DbName = t1.DbName,
+                DbUser = t1.DbUser,
+                DbPwd = t1.DbPwd,
+                CustomConnectionStr = t1.CustomConnectionStr,
+                CommandTimeOut = t1.CommandTimeOut,
+                SugarSqlExecMaxSeconds = t1.SugarSqlExecMaxSeconds,
+                DiffLog = t1.DiffLog,
+                DisableAop = t1.DisableAop,
+                IsInitialized = t1.IsInitialized,
+                TenantId = t1.TenantId,
+                TenantName = t2.TenantName,
+                DepartmentName = t1.DepartmentName,
+                CreatedUserName = t1.CreatedUserName,
+                CreatedTime = t1.CreatedTime,
+                UpdatedUserName = t1.UpdatedUserName,
+                UpdatedTime = t1.UpdatedTime,
+                RowVersion = t1.RowVersion,
+                Children = t1.SlaveDatabaseList.Select(dSl => new QuerySlaveDatabaseOutput
                     {
                         SlaveId = dSl.SlaveId,
                         MainId = dSl.MainId,
@@ -203,9 +205,12 @@ public class DatabaseService : IDynamicApplication
             DisableAop = true
         }));
 
-        if (!db.Ado.IsValidConnection())
+        if (!input.IsCreateDatabase)
         {
-            throw new UserFriendlyException("未能连接到数据库！");
+            if (!db.Ado.IsValidConnection())
+            {
+                throw new UserFriendlyException("未能连接到数据库！");
+            }
         }
 
         var tenantModel = await _repository.Queryable<TenantModel>()
@@ -215,6 +220,14 @@ public class DatabaseService : IDynamicApplication
         {
             throw new UserFriendlyException("数据不存在！");
         }
+
+        if (input.IsCreateDatabase)
+        {
+            // 创建数据库
+            db.DbMaintenance.CreateDatabase();
+        }
+
+        db.Close();
 
         var isLog = (input.DatabaseType & (DatabaseTypeEnum.CenterLog | DatabaseTypeEnum.AdminLog)) != 0;
 
@@ -276,9 +289,12 @@ public class DatabaseService : IDynamicApplication
             DisableAop = true
         }));
 
-        if (!db.Ado.IsValidConnection())
+        if (!input.IsCreateDatabase)
         {
-            throw new UserFriendlyException("未能连接到数据库！");
+            if (!db.Ado.IsValidConnection())
+            {
+                throw new UserFriendlyException("未能连接到数据库！");
+            }
         }
 
         var mainDatabaseModel = await _repository.Queryable<MainDatabaseModel>()
@@ -298,6 +314,14 @@ public class DatabaseService : IDynamicApplication
         {
             throw new UserFriendlyException("数据不存在！");
         }
+
+        if (input.IsCreateDatabase)
+        {
+            // 创建数据库
+            db.DbMaintenance.CreateDatabase();
+        }
+
+        db.Close();
 
         var isLog = (mainDatabaseModel.DatabaseType & (DatabaseTypeEnum.CenterLog | DatabaseTypeEnum.AdminLog)) != 0;
 

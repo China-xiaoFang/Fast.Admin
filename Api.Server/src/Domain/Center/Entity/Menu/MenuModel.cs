@@ -140,6 +140,18 @@ public class MenuModel : BaseEntity, IUpdateVersion
     public string WebComponent { get; set; }
 
     /// <summary>
+    /// Web端页面是否在导航栏显示
+    /// </summary>
+    [SugarColumn(ColumnDescription = "Web端页面是否在导航栏显示")]
+    public bool WebTab { get; set; }
+
+    /// <summary>
+    /// Web端页面是否缓存
+    /// </summary>
+    [SugarColumn(ColumnDescription = "Web端页面是否缓存")]
+    public bool WebKeepAlive { get; set; }
+
+    /// <summary>
     /// 是否移动端
     /// </summary>
     [SugarColumn(ColumnDescription = "是否移动端")]

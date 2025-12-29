@@ -1,6 +1,5 @@
 import { PasswordOperationTypeEnum } from "@/api/enums/PasswordOperationTypeEnum";
 import { PasswordTypeEnum } from "@/api/enums/PasswordTypeEnum";
-import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
  * Fast.Center.Service.PasswordRecord.Dto.QueryPasswordRecordPagedOutput 获取密码记录分页列表输出
@@ -42,10 +41,6 @@ export interface QueryPasswordRecordPagedOutput {
    * 邮箱
    */
   email?: string;
-  /**
-   * 
-   */
-  status?: CommonStatusEnum;
   /**
    * 昵称
    */

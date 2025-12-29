@@ -123,6 +123,16 @@ public class QueryMenuPagedOutput : PagedOutput, ITreeNode<long>
     public string WebComponent { get; set; }
 
     /// <summary>
+    /// Web端页面是否在导航栏显示
+    /// </summary>
+    public bool WebTab { get; set; }
+
+    /// <summary>
+    /// Web端页面是否缓存
+    /// </summary>
+    public bool WebKeepAlive { get; set; }
+
+    /// <summary>
     /// 是否移动端
     /// </summary>
     public bool HasMobile { get; set; }

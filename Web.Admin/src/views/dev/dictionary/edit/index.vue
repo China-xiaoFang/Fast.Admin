@@ -2,7 +2,7 @@
 	<FaDialog
 		ref="faDialogRef"
 		width="1200"
-		:fillHeight="state.dialogState !== 'add'"
+		:fullHeight="state.dialogState !== 'add'"
 		:title="state.dialogTitle"
 		:showConfirmButton="!state.formDisabled"
 		:showBeforeClose="!state.formDisabled"

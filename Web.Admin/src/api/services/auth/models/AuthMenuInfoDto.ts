@@ -46,6 +46,14 @@ export interface AuthMenuInfoDto {
    */
   component?: string;
   /**
+   * 导航栏显示
+   */
+  tab?: boolean;
+  /**
+   * 缓存页面
+   */
+  keepAlive?: boolean;
+  /**
    * 内链/外链地址
    */
   link?: string;

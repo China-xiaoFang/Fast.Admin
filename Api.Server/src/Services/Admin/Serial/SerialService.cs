@@ -50,7 +50,7 @@ public class SerialService : IDynamicApplication
     [Permission(PermissionConst.Serial.Paged)]
     public async Task<PagedResult<QuerySerialRulePagedOutput>> QuerySerialRulePaged(PagedInput input)
     {
-        return await _repository.Entities.LeftJoin<SerialSettingModel>((t1, t2) => t1.SerialRuleId == t2.SerialSettingId)
+        return await _repository.Entities.LeftJoin<SerialSettingModel>((t1, t2) => t1.RuleType == t2.RuleType)
             .OrderByDescending(t1 => t1.RuleType)
             .Select((t1, t2) => new QuerySerialRulePagedOutput
             {

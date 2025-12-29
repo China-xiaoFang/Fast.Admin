@@ -50,50 +50,14 @@ public class Module : IDynamicApplication
     [ApiInfo("模块选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> ModuleSelector(long? appId)
     {
-        var data = await _repository.Entities.Where(wh => wh.Status == CommonStatusEnum.Enable)
-            .WhereIF(appId != null, wh => wh.AppId == appId)
+        var data = await _repository.Entities.WhereIF(appId != null, wh => wh.AppId == appId)
             .OrderBy(ob => ob.Sort)
-            .Select(sl => new {sl.ModuleId, sl.ModuleName, sl.ViewType})
+            .Select(sl => new {sl.ModuleId, sl.ModuleName, sl.Icon, sl.Status})
             .ToListAsync();
 
-        return data
-            .Select(sl => new ElSelectorOutput<long> {Value = sl.ModuleId, Label = sl.ModuleName, Data = new {sl.ViewType}})
+        return data.Select(sl =>
+                new ElSelectorOutput<long> {Value = sl.ModuleId, Label = sl.ModuleName, Data = new {sl.Icon, sl.Status}})
             .ToList();
-    }
-
-    /// <summary>
-    /// 获取模块分页列表
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    [HttpPost]
-    [ApiInfo("获取模块分页列表", HttpRequestActionEnum.Paged)]
-    [Permission(PermissionConst.Menu.Paged)]
-    public async Task<PagedResult<QueryModulePagedOutput>> QueryModulePaged(QueryModulePagedInput input)
-    {
-        return await _repository.Entities.LeftJoin<ApplicationModel>((t1, t2) => t1.AppId == t2.AppId)
-            .WhereIF(input.AppId != null, t1 => t1.AppId == input.AppId)
-            .WhereIF(input.ViewType != null, t1 => t1.ViewType == input.ViewType)
-            .WhereIF(input.Status != null, t1 => t1.Status == input.Status)
-            .OrderBy(t1 => t1.Sort)
-            .Select((t1, t2) => new QueryModulePagedOutput
-            {
-                ModuleId = t1.ModuleId,
-                AppName = t2.AppName,
-                ModuleName = t1.ModuleName,
-                Icon = t1.Icon,
-                Color = t1.Color,
-                ViewType = t1.ViewType,
-                Sort = t1.Sort,
-                Status = t1.Status,
-                DepartmentName = t1.DepartmentName,
-                CreatedUserName = t1.CreatedUserName,
-                CreatedTime = t1.CreatedTime,
-                UpdatedUserName = t1.UpdatedUserName,
-                UpdatedTime = t1.UpdatedTime,
-                RowVersion = t1.RowVersion
-            })
-            .ToPagedListAsync(input);
     }
 
     /// <summary>

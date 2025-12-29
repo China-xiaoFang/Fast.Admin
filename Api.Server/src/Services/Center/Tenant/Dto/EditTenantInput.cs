@@ -63,7 +63,7 @@ public class EditTenantInput : UpdateVersionInput
     /// <summary>
     /// 版本
     /// </summary>
-    [EnumRequired(ErrorMessage = "版本不能为空")]
+    [EnumRequired(ErrorMessage = "版本不能为空", AllowZero = true)]
     public EditionEnum Edition { get; set; }
 
     /// <summary>

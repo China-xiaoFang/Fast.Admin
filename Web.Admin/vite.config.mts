@@ -2,11 +2,13 @@ import { resolve } from "path";
 import legacyPlugin from "@vitejs/plugin-legacy";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import { buildSvgIcon, cdnImport, versionUpdatePlugin } from "fast-vite-plugins";
+import { buildSvgIcon, cdnImport, componentAutoImport, buildRouterPath, versionUpdatePlugin } from "fast-vite-plugins";
 // import { visualizer } from "rollup-plugin-visualizer";
 import { loadEnv } from "vite";
 import viteCompression from "vite-plugin-compression";
 import type { ConfigEnv, ProxyOptions, UserConfig } from "vite";
+import { rollupManualChunks } from "./vite.rollup";
+import { getCdnModules } from "./vite.cdn";
 
 const pathResolve = (dir: string): any => {
 	return resolve(__dirname, ".", dir);
@@ -110,65 +112,7 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 						}
 					},
 					manualChunks(id) {
-						if (/[/\\]node_modules[/\\]/.test(id)) {
-							return;
-						}
-
-						for (const { path, file } of [
-							{
-								path: "/src/components",
-								file: "_components",
-							},
-							{
-								path: "/src/icons",
-								file: "_icons",
-							},
-							{
-								path: "/src/router",
-								file: "_router",
-							},
-							{
-								path: "/src/stores",
-								file: "_stores",
-							},
-							{
-								path: "/src/utils",
-								file: "_utils",
-							},
-							{
-								path: "/src/views/common",
-								file: "_view_common",
-							},
-							{
-								path: "/src/views/{0}/{1}",
-								file: "_view_{0}_{1}",
-							},
-							{
-								path: "/src/views/{0}",
-								file: "_view_{0}",
-							},
-							{
-								path: ["/src/App.vue", "/src/main.ts", "/src/plugins/"],
-								file: "_main",
-							},
-						]) {
-							const paths = Array.isArray(path) ? path : [path];
-							for (const pattern of paths) {
-								// 去掉查询参数 ?xxx，去掉 index.vue
-								const normalizedId = id.split("?")[0].replace(/\/index\.vue$/, "");
-								// 将配置中的占位符 {n} 转为正则捕获组 ([^/]+)
-								const regexStr = pattern.replace(/\{(\d+)\}/g, "([^/]+)");
-								const regex = new RegExp(regexStr);
-								const match = normalizedId.match(regex);
-								if (match) {
-									// 用捕获到的组替换文件名模板中的 {n}
-									const fileName = file.replace(/\{(\d+)\}/g, (_, index) => {
-										return match[Number(index) + 1] || "";
-									});
-									return fileName;
-								}
-							}
-						}
+						return rollupManualChunks(id);
 					},
 				},
 			},
@@ -178,10 +122,14 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 			vue(),
 			// vue 可以使用 jsx/tsx 语法
 			vueJsx(),
-			// 版本号
-			versionUpdatePlugin(viteEnv.VITE_APP_VERSION),
 			/** 本地 SVG 图标 */
 			buildSvgIcon("src/assets/icons/", "src/icons"),
+			/** 组件自动导入 */
+			componentAutoImport(),
+			/** 路由路径 */
+			buildRouterPath(),
+			/** 版本号 */
+			versionUpdatePlugin(viteEnv.VITE_APP_VERSION),
 			/** 兼容旧版 Chrome 和 IE浏览器 */
 			legacyPlugin({
 				/** 需要兼容的目标列表，可以设置多个 */
@@ -208,75 +156,7 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 				// 开发环境使用 CDN
 				enableInDevMode: false,
 				prodUrl: viteEnv.VITE_CDN_URL,
-				modules: [
-					{
-						name: "vue",
-						var: "Vue",
-						path: viteDev ? "dist/vue.runtime.global.js" : "dist/vue.runtime.global.prod.js",
-					},
-					{
-						name: "vue-demi",
-						var: "VueDemi",
-						path: "lib/index.iife.js",
-					},
-					{
-						name: "@vueuse/shared",
-						var: "VueUse",
-						path: "index.iife.min.js",
-					},
-					{
-						name: "@vueuse/core",
-						var: "VueUse",
-						path: "index.iife.min.js",
-					},
-					{
-						name: "vue-router",
-						var: "VueRouter",
-						path: viteDev ? "dist/vue-router.global.js" : "dist/vue-router.global.prod.js",
-					},
-					{
-						name: "dayjs",
-						var: "dayjs",
-						path: ["dayjs.min.js", "locale/zh-cn.js"],
-					},
-					{
-						name: "@element-plus/icons-vue",
-						var: "ElementPlusIconsVue",
-						path: "dist/index.iife.min.js",
-					},
-					{
-						name: "element-plus",
-						var: "ElementPlus",
-						path: ["dist/index.full.min.js", "dist/locale/zh-cn.min.js"],
-						css: ["dist/index.css", "theme-chalk/dark/css-vars.css"],
-					},
-					{
-						name: "@fast-china/utils",
-						var: "FastUtils",
-						path: "dist/index.global.min.js",
-					},
-					{
-						name: "pinia",
-						var: "Pinia",
-						path: "dist/pinia.iife.prod.js",
-					},
-					{
-						name: "pinia-plugin-persistedstate",
-						var: "piniaPluginPersistedstate",
-						path: "dist/index.global.js",
-					},
-					{
-						name: "nprogress",
-						var: "NProgress",
-						path: "nprogress.js",
-						css: "nprogress.css",
-					},
-					{
-						name: "lodash",
-						var: "_",
-						path: "lodash.min.js",
-					},
-				],
+				modules: getCdnModules(viteDev),
 			}),
 			// visualizer({
 			// 	filename: "analysis.html",

@@ -49,6 +49,42 @@ public class AccountService : IDynamicApplication
     }
 
     /// <summary>
+    /// 账号选择器
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("账号选择器", HttpRequestActionEnum.Query)]
+    public async Task<PagedResult<ElSelectorOutput<long>>> AccountSelector(PagedInput input)
+    {
+        var data = await _repository.Entities.OrderBy(ob => ob.Mobile)
+            .Select(sl => new
+            {
+                sl.AccountId,
+                sl.Mobile,
+                sl.Email,
+                sl.AccountKey,
+                sl.NickName,
+                sl.Avatar,
+                sl.Sex
+            })
+            .ToPagedListAsync(input);
+
+        return data.ToPagedData(sl => new ElSelectorOutput<long>
+        {
+            Value = sl.AccountId,
+            Label = sl.Mobile,
+            Data = new
+            {
+                sl.Email,
+                sl.AccountKey,
+                sl.NickName,
+                sl.Avatar,
+                sl.Sex
+            }
+        });
+    }
+
+    /// <summary>
     /// 获取账号分页列表
     /// </summary>
     /// <param name="input"></param>

@@ -1,5 +1,5 @@
 <template>
-	<FaDialog ref="faDialogRef" width="80vw" fillHeight title="高级配置" confirmButtonText="保存" @confirm-click="handleConfirm">
+	<FaDialog ref="faDialogRef" width="80vw" fullHeight title="高级配置" confirmButtonText="保存" @confirm-click="handleConfirm">
 		<el-tabs type="border-card" v-model="state.activeTab">
 			<el-tab-pane :name="1" label="基础配置">
 				<el-scrollbar>
@@ -259,6 +259,8 @@
 								<el-radio value="el-time-select">时间选择器下拉框</el-radio>
 								<el-radio value="el-switch">开关</el-radio>
 								<el-radio value="slot">插槽</el-radio>
+								<el-radio value="TenantSelectPage">租户</el-radio>
+								<el-radio value="AccountSelectPage">账号</el-radio>
 							</el-radio-group>
 						</el-form-item>
 
