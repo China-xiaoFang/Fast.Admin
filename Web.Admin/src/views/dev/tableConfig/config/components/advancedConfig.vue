@@ -47,7 +47,11 @@
 										stepStrictly
 										:controls="false"
 										placeholder="请输入宽度"
-									/>
+									>
+										<template #suffix>
+											<span>px</span>
+										</template>
+									</el-input-number>
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
@@ -59,7 +63,11 @@
 										stepStrictly
 										:controls="false"
 										placeholder="请输入最小宽度"
-									/>
+									>
+										<template #suffix>
+											<span>px</span>
+										</template>
+									</el-input-number>
 								</el-form-item>
 							</el-col>
 						</el-row>
