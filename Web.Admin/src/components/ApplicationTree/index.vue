@@ -8,11 +8,11 @@
 		:requestApi="applicationApi.applicationSelector"
 		@change="(value) => emit('change', value)"
 	>
-		<template #label="{ data }: { data: ElSelectorOutput }">
+		<template #label="{ data }: { data: ElSelectorOutput<number | string> }">
 			<FaAvatar style="margin-right: 5px" :src="data.data.logoUrl" thumb size="small" />
 			<span>{{ data.label }}</span>
 		</template>
-		<template #default="{ data }: { data: ElSelectorOutput }">
+		<template #default="{ data }: { data: ElSelectorOutput<number | string> }">
 			<Tag size="small" effect="plain" name="EditionEnum" :value="data.data.edition" />
 		</template>
 	</FaTree>
@@ -35,7 +35,7 @@ const props = defineProps<{
 const emit = defineEmits({
 	"update:modelValue": (value: number | string) => true,
 	"update:appName": (value: string) => true,
-	change: (value: ElSelectorOutput) => true,
+	change: (value: ElSelectorOutput<number | string>) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: true });

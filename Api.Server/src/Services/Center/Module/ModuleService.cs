@@ -129,7 +129,7 @@ public class Module : IDynamicApplication
             AppId = input.AppId,
             ModuleName = input.ModuleName,
             Icon = input.Icon,
-            Color = input.Color,
+            Color = input.Color?.ToUpper(),
             ViewType = input.ViewType,
             Sort = input.Sort,
             Status = CommonStatusEnum.Enable
@@ -167,7 +167,7 @@ public class Module : IDynamicApplication
 
         moduleModel.ModuleName = input.ModuleName;
         moduleModel.Icon = input.Icon;
-        moduleModel.Color = input.Color;
+        moduleModel.Color = input.Color?.ToUpper();
         moduleModel.ViewType = input.ViewType;
         moduleModel.Sort = input.Sort;
         moduleModel.Status = input.Status;

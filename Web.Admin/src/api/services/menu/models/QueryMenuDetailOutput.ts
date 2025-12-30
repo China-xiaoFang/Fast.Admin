@@ -45,6 +45,10 @@ export interface QueryMenuDetailOutput {
    */
   menuTitle?: string;
   /**
+   * 父级Id
+   */
+  parentId?: number;
+  /**
    * 
    */
   menuType?: MenuTypeEnum;

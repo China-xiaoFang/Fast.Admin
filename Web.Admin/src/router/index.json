@@ -35,6 +35,7 @@
   "/src/views/login/index.vue": "Login",
   "/src/views/system/account/edit/index.vue": "SystemAccountEdit",
   "/src/views/system/account/index.vue": "SystemAccount",
+  "/src/views/system/application/edit/applicationOpenIdEdit.vue": "SystemApplicationOpenIdEdit",
   "/src/views/system/application/edit/index.vue": "SystemApplicationEdit",
   "/src/views/system/application/index.vue": "SystemApplication",
   "/src/views/system/file/index.vue": "SystemFile",

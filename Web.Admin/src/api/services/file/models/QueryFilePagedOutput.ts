@@ -27,9 +27,17 @@ export interface QueryFilePagedOutput {
    */
   fileSizeKb?: number;
   /**
+   * 存储路径
+   */
+  filePath?: string;
+  /**
    * 访问地址
    */
   fileLocation?: string;
+  /**
+   * 文件哈希
+   */
+  fileHash?: string;
   /**
    * 上传设备
    */

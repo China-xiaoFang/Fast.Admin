@@ -10,14 +10,23 @@
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
-		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled" cols="2" labelWidth="150">
+		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled" cols="2" labelWidth="100">
+			<FaFormItem prop="appId" label="应用">
+				<ApplicationSelect v-model="state.formData.appId" v-model:appName="state.formData.appName" />
+			</FaFormItem>
 			<FaFormItem prop="moduleId" label="模块">
-				<ModuleSelect v-model="state.formData.moduleId" v-model:moduleName="state.formData.moduleName" @change="handleModuleChange" />
+				<ModuleSelect
+					:disabled="!state.formData?.appId"
+					:appId="state.formData.appId"
+					v-model="state.formData.moduleId"
+					v-model:moduleName="state.formData.moduleName"
+					@change="handleModuleChange"
+				/>
 			</FaFormItem>
 			<FaFormItem prop="menuType" label="菜单类型">
 				<RadioGroup name="MenuTypeEnum" v-model="state.formData.menuType" />
 			</FaFormItem>
-			<FaFormItem prop="parentId" label="父级" span="2">
+			<FaFormItem prop="parentId" label="父级">
 				<el-cascader
 					:disabled="!state.formData?.moduleId"
 					v-model="state.formData.parentId"
@@ -58,25 +67,7 @@
 			</FaFormItem>
 			<template v-if="state.formData.hasWeb">
 				<FaFormItem prop="webIcon" label="图标">
-					<el-cascader
-						v-model="state.formData.webIcon"
-						:options="state.iconList"
-						placeholder="请选择Web端图标"
-						:showAllLevels="false"
-						filterable
-						clearable
-						:props="{ emitPath: false }"
-					>
-						<template #prefix>
-							<FaIcon v-if="state.formData.webIcon" size="16" :name="state.formData.webIcon" />
-						</template>
-						<template #default="{ node, data }: { node: CascaderNode; data: ElSelectorOutput<string> }">
-							<div style="display: flex; align-items: center; gap: 3px">
-								<FaIcon v-if="node.isLeaf" size="16" :name="data.value" />
-								<span>{{ data.label }}</span>
-							</div>
-						</template>
-					</el-cascader>
+					<IconSelect v-model="state.formData.webIcon" placeholder="请选择Web端图标" :showAllLevels="false" :props="{ emitPath: false }" />
 				</FaFormItem>
 				<template v-if="state.formData.menuType === MenuTypeEnum.Menu">
 					<FaFormItem prop="webComponent" label="组件地址">
@@ -246,7 +237,7 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from "vue";
-import { CascaderNode, CascaderValue, ElMessage, type FormRules } from "element-plus";
+import { CascaderValue, ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import type { ElSelectorOutput, FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import { EditMenuInput } from "@/api/services/menu/models/EditMenuInput";
@@ -254,8 +245,6 @@ import { AddMenuInput } from "@/api/services/menu/models/AddMenuInput";
 import { menuApi } from "@/api/services/menu";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import { Plus } from "@element-plus/icons-vue";
-import * as ElementPlusIconsVue from "@element-plus/icons-vue";
-import * as FastElementPlusIconsVue from "@fast-element-plus/icons-vue";
 import routerPath from "@/router/index.json";
 import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
@@ -276,8 +265,9 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditMenuInput & AddMenuInput & { moduleName?: string }>({
+	formData: withDefineType<EditMenuInput & AddMenuInput & { appId?: number; appName?: string; moduleName?: string }>({
 		menuType: MenuTypeEnum.Catalog,
+		edition: EditionEnum.None,
 		visible: YesOrNotEnum.Y,
 		hasWeb: true,
 		webTab: false,
@@ -313,26 +303,6 @@ const state = reactive({
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("add"),
 	dialogTitle: "菜单",
-	iconList: withDefineType<ElSelectorOutput<string>[]>([
-		{
-			value: "el-icon",
-			label: "el-icon",
-			children: Object.keys(ElementPlusIconsVue).map((item) => ({
-				value: `el-icon-${item}`,
-				label: item,
-			})),
-		},
-		{
-			value: "fa-icon",
-			label: "fa-icon",
-			children: Object.keys(FastElementPlusIconsVue)
-				.filter((f) => f !== "default")
-				.map((item) => ({
-					value: `fa-icon-${item}`,
-					label: item,
-				})),
-		},
-	]),
 	componentList: withDefineType<ElSelectorOutput<string>[]>([]),
 	componentValue: [],
 	menuList: withDefineType<ElSelectorOutput<number>[]>([]),
