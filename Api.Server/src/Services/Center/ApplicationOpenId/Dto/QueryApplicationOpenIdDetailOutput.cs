@@ -20,189 +20,131 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Entity;
+namespace Fast.Center.Service.ApplicationOpenId.Dto;
 
 /// <summary>
-/// <see cref="ApplicationOpenIdModel"/> 应用标识表Model类
+/// <see cref="QueryApplicationOpenIdDetailOutput"/> 获取应用标识详情输出
 /// </summary>
-[SugarTable("ApplicationOpenId", "应用标识表")]
-[SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(OpenId), OrderByType.Asc, true)]
-public class ApplicationOpenIdModel : BaseEntity, IUpdateVersion
+public class QueryApplicationOpenIdDetailOutput : PagedOutput
 {
     /// <summary>
     /// 记录Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "记录Id", IsPrimaryKey = true)]
     public long RecordId { get; set; }
 
     /// <summary>
     /// 应用Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用Id")]
     public long AppId { get; set; }
+
+    /// <summary>
+    /// 应用名称
+    /// </summary>
+    public string AppName { get; set; }
 
     /// <summary>
     /// 应用标识
     /// </summary>
-    [SugarSearchValue]
-    [Required]
-    [SugarColumn(ColumnDescription = "应用标识", Length = 50)]
     public string OpenId { get; set; }
-
-    /// <summary>
-    /// 开放平台密钥
-    /// </summary>
-    [SugarColumn(ColumnDescription = "开放平台密钥", Length = 32)]
-    public string OpenSecret { get; set; }
 
     /// <summary>
     /// 应用类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "应用类型")]
     public AppEnvironmentEnum AppType { get; set; }
+
+    /// <summary>
+    /// 开放平台密钥
+    /// </summary>
+    public string OpenSecret { get; set; }
 
     /// <summary>
     /// 环境类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "环境类型")]
     public EnvironmentTypeEnum EnvironmentType { get; set; }
 
     /// <summary>
     /// 登录组件
     /// </summary>
-    [SugarColumn(ColumnDescription = "登录组件", Length = 50)]
     public string LoginComponent { get; set; }
 
     /// <summary>
     /// WebSocket地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "WebSocket地址", Length = 50)]
     public string WebSocketUrl { get; set; }
 
     /// <summary>
     /// 请求超时时间（毫秒）
     /// </summary>
-    [SugarColumn(ColumnDescription = "请求超时时间（毫秒）")]
     public int RequestTimeout { get; set; }
 
     /// <summary>
     /// 请求加密
     /// </summary>
-    [SugarColumn(ColumnDescription = "请求加密")]
     public bool RequestEncipher { get; set; }
 
     /// <summary>
     /// 状态栏图片地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "状态栏图片地址", Length = 200)]
     public string StatusBarImageUrl { get; set; }
 
     /// <summary>
     /// 联系电话
     /// </summary>
-    [SugarColumn(ColumnDescription = "联系电话", Length = 20)]
     public string ContactPhone { get; set; }
 
     /// <summary>
     /// 纬度
     /// </summary>
-    [SugarColumn(ColumnDescription = "纬度", Length = 20, DecimalDigits = 7)]
     public decimal? Latitude { get; set; }
 
     /// <summary>
     /// 经度
     /// </summary>
-    [SugarColumn(ColumnDescription = "经度", Length = 20, DecimalDigits = 7)]
     public decimal? Longitude { get; set; }
 
     /// <summary>
     /// 地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "地址", Length = 100)]
     public string Address { get; set; }
 
     /// <summary>
     /// Banner图
     /// </summary>
-    [SugarColumn(ColumnDescription = "Banner图", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
+    [SugarColumn(IsJson = true)]
     public List<string> BannerImages { get; set; }
 
     /// <summary>
     /// 微信商户号Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "微信商户号Id")]
     public long? WeChatMerchantId { get; set; }
 
     /// <summary>
     /// 微信商户号
     /// </summary>
-    [SugarColumn(ColumnDescription = "微信商户号", Length = 32)]
     public string WeChatMerchantNo { get; set; }
 
     /// <summary>
     /// 支付宝商户号Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "支付宝商户号Id")]
     public long? AlipayMerchantId { get; set; }
 
     /// <summary>
     /// 支付宝商户号
     /// </summary>
-    [SugarColumn(ColumnDescription = "支付宝商户号", Length = 32)]
     public string AlipayMerchantNo { get; set; }
-
-    /// <summary>
-    /// 微信 AccessToken
-    /// </summary>
-    [SugarColumn(ColumnDescription = "微信 AccessToken", Length = 512)]
-    public string WeChatAccessToken { get; set; }
-
-    /// <summary>
-    /// 微信 AccessToken 过期时间，单位秒
-    /// </summary>
-    [SugarColumn(ColumnDescription = "微信 AccessToken 过期时间，单位秒")]
-    public int? WeChatAccessTokenExpiresIn { get; set; }
 
     /// <summary>
     /// 微信 AccessToken 刷新时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "微信 AccessToken 刷新时间")]
     public DateTime? WeChatAccessTokenRefreshTime { get; set; }
-
-    /// <summary>
-    /// 微信 JsApi Ticket
-    /// </summary>
-    [SugarColumn(ColumnDescription = "微信 JsApi Ticket", Length = 200)]
-    public string WeChatJsApiTicket { get; set; }
-
-    /// <summary>
-    /// 微信 JsApi Ticket 过期时间，单位秒
-    /// </summary>
-    [SugarColumn(ColumnDescription = "微信 JsApi Ticket 过期时间，单位秒")]
-    public int? WeChatJsApiTicketExpiresIn { get; set; }
 
     /// <summary>
     /// 微信 JsApi Ticket 刷新时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "微信 JsApi Ticket 刷新时间")]
     public DateTime? WeChatJsApiTicketRefreshTime { get; set; }
 
     /// <summary>
     /// 备注
     /// </summary>
-    [SugarColumn(ColumnDescription = "备注", Length = 200)]
     public string Remark { get; set; }
-
-    /// <summary>
-    /// 更新版本控制字段
-    /// </summary>
-    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
-    public long RowVersion { get; set; }
-
-    /// <summary>
-    /// 应用
-    /// </summary>
-    [Navigate(NavigateType.OneToOne, nameof(AppId), nameof(ApplicationModel.AppId))]
-    public ApplicationModel Application { get; set; }
 }

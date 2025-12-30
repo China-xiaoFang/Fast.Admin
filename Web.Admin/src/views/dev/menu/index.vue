@@ -11,11 +11,11 @@
 					@change="handleModuleChange"
 					@node-contextmenu="handleModuleContextmenu"
 				>
-					<template #label="{ data }: { data: ElSelectorOutput }">
+					<template #label="{ data }: { data: ElSelectorOutput<number> }">
 						<FaIcon v-if="data.data?.icon" style="margin-right: 5px" size="16" :name="data.data.icon" />
 						<span>{{ data.label }}</span>
 					</template>
-					<template #default="{ data }: { data: ElSelectorOutput }">
+					<template #default="{ data }: { data: ElSelectorOutput<number> }">
 						<Tag size="small" effect="plain" name="CommonStatusEnum" :value="data.data.status" />
 					</template>
 				</FaTree>
@@ -145,7 +145,7 @@ const state = reactive({
 });
 
 /** 应用更改 */
-const handleApplicationChange = (data: ElSelectorOutput) => {
+const handleApplicationChange = (data: ElSelectorOutput<number>) => {
 	fastTableRef.value.searchParam.appId = data.value;
 	fastTableRef.value.searchParam.moduleId = undefined;
 	moduleTreeRef.value.refresh();
@@ -153,12 +153,12 @@ const handleApplicationChange = (data: ElSelectorOutput) => {
 };
 
 /** 模块更改 */
-const handleModuleChange = (data: ElSelectorOutput) => {
+const handleModuleChange = (data: ElSelectorOutput<number>) => {
 	fastTableRef.value.searchParam.moduleId = data.value;
 	fastTableRef.value.refresh();
 };
 
-const handleModuleContextmenu = (event: MouseEvent, data: ElSelectorOutput) => {
+const handleModuleContextmenu = (event: MouseEvent, data: ElSelectorOutput<number>) => {
 	if (data.all) {
 		state.contextMenuList[0].hide = false;
 		state.contextMenuList[1].hide = true;

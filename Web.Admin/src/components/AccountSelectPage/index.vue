@@ -48,7 +48,7 @@ const emit = defineEmits({
 	"update:mobile": (value: string) => true,
 	"update:email": (value: string) => true,
 	"update:accountKey": (value: string) => true,
-	change: (value: ElSelectorOutput) => true,
+	change: (value: ElSelectorOutput<number | string>) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: true });

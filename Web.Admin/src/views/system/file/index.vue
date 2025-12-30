@@ -6,7 +6,7 @@
 				<TenantSelectPage
 					width="280"
 					@change="
-						(value: ElSelectorOutput) => {
+						(value: ElSelectorOutput<number>) => {
 							if (value) {
 								fastTableRef.searchParam.tenantId = value.value;
 							} else {

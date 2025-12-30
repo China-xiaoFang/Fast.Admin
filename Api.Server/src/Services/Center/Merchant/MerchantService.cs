@@ -43,18 +43,20 @@ public class MerchantService : IDynamicApplication
     /// <summary>
     /// 商户号选择器
     /// </summary>
+    /// <param name="merchantType"></param>
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("商户号选择器", HttpRequestActionEnum.Query)]
-    public async Task<List<ElSelectorOutput<long>>> MerchantSelector()
+    public async Task<List<ElSelectorOutput<long>>> MerchantSelector(PaymentChannelEnum? merchantType)
     {
-        var data = await _repository.Entities.OrderBy(ob => ob.MerchantNo)
-            .Select(sl => new {sl.MerchantId, sl.MerchantNo, sl.MerchantType, sl.Remark})
+        var data = await _repository.Entities.WhereIF(merchantType != null, wh => wh.MerchantType == merchantType)
+            .OrderBy(ob => ob.MerchantNo)
+            .Select(sl => new {sl.MerchantId, sl.MerchantNo, sl.MerchantType})
             .ToListAsync();
 
         return data.Select(sl => new ElSelectorOutput<long>
             {
-                Value = sl.MerchantId, Label = sl.MerchantNo, Data = new {sl.MerchantType, sl.Remark}
+                Value = sl.MerchantId, Label = sl.MerchantNo, Data = new {sl.MerchantType}
             })
             .ToList();
     }

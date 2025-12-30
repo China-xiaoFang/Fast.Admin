@@ -1,12 +1,11 @@
 import { axiosUtil } from "@fast-china/axios";
-import { ElSelectorOutput, PagedInput, PagedResult } from "fast-element-plus";
+import { ElSelectorOutput, PagedResult } from "fast-element-plus";
 import { QueryApplicationPagedOutput } from "./models/QueryApplicationPagedOutput";
 import { QueryApplicationPagedInput } from "./models/QueryApplicationPagedInput";
 import { QueryApplicationDetailOutput } from "./models/QueryApplicationDetailOutput";
 import { AddApplicationInput } from "./models/AddApplicationInput";
 import { EditApplicationInput } from "./models/EditApplicationInput";
 import { AppIdInput } from "./models/AppIdInput";
-import { ApiInfoModel } from "./models/ApiInfoModel";
 
 /**
  * Fast.Center.Service.Application.ApplicationService 应用服务Api
@@ -77,17 +76,6 @@ export const applicationApi = {
       method: "post",
       data,
       requestType: "delete",
-    });
-  },
-  /**
-   * 获取接口分页列表
-   */
-  queryApiPaged(data: PagedInput) {
-    return axiosUtil.request<PagedResult<ApiInfoModel>>({
-      url: "/application/queryApiPaged",
-      method: "post",
-      data,
-      requestType: "query",
     });
   },
 };

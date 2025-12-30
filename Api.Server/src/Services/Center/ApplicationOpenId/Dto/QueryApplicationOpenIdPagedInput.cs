@@ -20,80 +20,25 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Service.Application.Dto;
+namespace Fast.Center.Service.ApplicationOpenId.Dto;
 
 /// <summary>
-/// <see cref="QueryApplicationDetailOutput"/> 获取应用详情输出
+/// <see cref="QueryApplicationOpenIdPagedInput"/> 获取应用标识分页列表输入
 /// </summary>
-public class QueryApplicationDetailOutput : PagedOutput
+public class QueryApplicationOpenIdPagedInput : PagedInput
 {
     /// <summary>
     /// 应用Id
     /// </summary>
-    public long AppId { get; set; }
+    public long? AppId { get; set; }
 
     /// <summary>
-    /// 版本
+    /// 应用类型
     /// </summary>
-    public EditionEnum Edition { get; set; }
+    public AppEnvironmentEnum? AppType { get; set; }
 
     /// <summary>
-    /// 应用编号
+    /// 环境类型
     /// </summary>
-    public string AppNo { get; set; }
-
-    /// <summary>
-    /// 应用名称
-    /// </summary>
-    public string AppName { get; set; }
-
-    /// <summary>
-    /// LogoUrl
-    /// </summary>
-    public string LogoUrl { get; set; }
-
-    /// <summary>
-    /// 主题色
-    /// </summary>
-    public string ThemeColor { get; set; }
-
-    /// <summary>
-    /// ICP备案号
-    /// </summary>
-    public string ICPSecurityCode { get; set; }
-
-    /// <summary>
-    /// 公安备案号
-    /// </summary>
-    public string PublicSecurityCode { get; set; }
-
-    /// <summary>
-    /// 用户协议
-    /// </summary>
-    public string UserAgreement { get; set; }
-
-    /// <summary>
-    /// 隐私协议
-    /// </summary>
-    public string PrivacyAgreement { get; set; }
-
-    /// <summary>
-    /// 服务协议
-    /// </summary>
-    public string ServiceAgreement { get; set; }
-
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public string Remark { get; set; }
-
-    /// <summary>
-    /// 租户Id
-    /// </summary>
-    public long? TenantId { get; set; }
-
-    /// <summary>
-    /// 租户名称
-    /// </summary>
-    public string TenantName { get; set; }
+    public EnvironmentTypeEnum? EnvironmentType { get; set; }
 }

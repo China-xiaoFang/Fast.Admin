@@ -1,0 +1,63 @@
+<template>
+	<el-cascader v-bind="$attrs" v-model="modelValue" :options="iconList" :placeholder="props.placeholder" filterable clearable>
+		<template #prefix>
+			<FaIcon v-if="modelValue" size="16" :name="modelValue" />
+		</template>
+		<template #default="{ node, data }: { node: CascaderNode; data: ElSelectorOutput<string> }">
+			<div style="display: flex; align-items: center; gap: 3px">
+				<FaIcon v-if="node.isLeaf" size="16" :name="data.value" />
+				<span>{{ data.label }}</span>
+			</div>
+		</template>
+	</el-cascader>
+</template>
+
+<script lang="ts" setup>
+import { useVModel } from "@vueuse/core";
+import * as ElementPlusIconsVue from "@element-plus/icons-vue";
+import * as FastElementPlusIconsVue from "@fast-element-plus/icons-vue";
+import { withDefineType } from "@fast-china/utils";
+import { ElSelectorOutput } from "fast-element-plus";
+import { CascaderNode } from "element-plus";
+
+defineOptions({
+	name: "IconSelect",
+});
+
+const props = withDefaults(
+	defineProps<{
+		modelValue?: string;
+		placeholder?: string;
+	}>(),
+	{
+		placeholder: "请选择图标",
+	}
+);
+
+const emit = defineEmits({
+	"update:modelValue": (value: number | string) => true,
+});
+
+const iconList = withDefineType<ElSelectorOutput<string>[]>([
+	{
+		value: "el-icon",
+		label: "el-icon",
+		children: Object.keys(ElementPlusIconsVue).map((item) => ({
+			value: `el-icon-${item}`,
+			label: item,
+		})),
+	},
+	{
+		value: "fa-icon",
+		label: "fa-icon",
+		children: Object.keys(FastElementPlusIconsVue)
+			.filter((f) => f !== "default")
+			.map((item) => ({
+				value: `fa-icon-${item}`,
+				label: item,
+			})),
+	},
+]);
+
+const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+</script>

@@ -6,6 +6,7 @@ import { QueryMerchantDetailOutput } from "./models/QueryMerchantDetailOutput";
 import { AddMerchantInput } from "./models/AddMerchantInput";
 import { EditMerchantInput } from "./models/EditMerchantInput";
 import { MerchantIdInput } from "./models/MerchantIdInput";
+import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 
 /**
  * Fast.Center.Service.Merchant.MerchantService 商户号服务Api
@@ -14,10 +15,13 @@ export const merchantApi = {
   /**
    * 商户号选择器
    */
-  merchantSelector() {
+  merchantSelector(merchantType: PaymentChannelEnum) {
     return axiosUtil.request<ElSelectorOutput<number>[]>({
       url: "/merchant/merchantSelector",
       method: "get",
+      params: {
+        merchantType,
+      },
       requestType: "query",
     });
   },

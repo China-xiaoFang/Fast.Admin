@@ -44,7 +44,7 @@ const props = withDefaults(
 const emit = defineEmits({
 	"update:modelValue": (value: number | string) => true,
 	"update:appName": (value: string) => true,
-	change: (value: ElSelectorOutput) => true,
+	change: (value: ElSelectorOutput<number | string>) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: true });

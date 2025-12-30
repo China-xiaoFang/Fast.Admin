@@ -2,13 +2,17 @@ import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 
 /**
- * Fast.Center.Service.Application.Dto.EditApplicationInput.EditApplicationOpenIdDto 编辑应用开放平台Dto
+ * Fast.Center.Service.ApplicationOpenId.Dto.EditApplicationOpenIdInput 编辑应用标识输入
  */
-export interface EditApplicationOpenIdDto {
+export interface EditApplicationOpenIdInput {
   /**
    * 记录Id
    */
   recordId?: number;
+  /**
+   * 应用Id
+   */
+  appId?: number;
   /**
    * 应用标识
    */
@@ -85,5 +89,9 @@ export interface EditApplicationOpenIdDto {
    * 备注
    */
   remark?: string;
+  /**
+   * 
+   */
+  rowVersion?: number;
 }
 

@@ -2,17 +2,17 @@ import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 
 /**
- * Fast.Center.Service.Application.Dto.QueryApplicationDetailOutput.QueryApplicationOpenIdDetailDto 获取应用开放平台详情Dto
+ * Fast.Center.Service.ApplicationOpenId.Dto.AddApplicationOpenIdInput 添加应用标识输入
  */
-export interface QueryApplicationOpenIdDetailDto {
-  /**
-   * 记录Id
-   */
-  recordId?: number;
+export interface AddApplicationOpenIdInput {
   /**
    * 应用标识
    */
   openId?: string;
+  /**
+   * 应用Id
+   */
+  appId?: number;
   /**
    * 
    */
@@ -81,14 +81,6 @@ export interface QueryApplicationOpenIdDetailDto {
    * 支付宝商户号
    */
   alipayMerchantNo?: string;
-  /**
-   * 微信 AccessToken 刷新时间
-   */
-  weChatAccessTokenRefreshTime?: Date;
-  /**
-   * 微信 JsApi Ticket 刷新时间
-   */
-  weChatJsApiTicketRefreshTime?: Date;
   /**
    * 备注
    */

@@ -17,28 +17,10 @@
 				<el-input v-model="state.formData.moduleName" maxlength="20" placeholder="请输入模块名称" />
 			</FaFormItem>
 			<FaFormItem prop="icon" label="图标">
-				<el-cascader
-					v-model="state.formData.icon"
-					:options="state.iconList"
-					placeholder="请选择Web端图标"
-					:showAllLevels="false"
-					filterable
-					clearable
-					:props="{ emitPath: false }"
-				>
-					<template #prefix>
-						<FaIcon v-if="state.formData.icon" size="16" :name="state.formData.icon" />
-					</template>
-					<template #default="{ node, data }: { node: CascaderNode; data: ElSelectorOutput<string> }">
-						<div style="display: flex; align-items: center; gap: 3px">
-							<FaIcon v-if="node.isLeaf" size="16" :name="data.value" />
-							<span>{{ data.label }}</span>
-						</div>
-					</template>
-				</el-cascader>
+				<IconSelect v-model="state.formData.icon" placeholder="请选择Web端图标" :showAllLevels="false" :props="{ emitPath: false }" />
 			</FaFormItem>
-			<FaFormItem prop="viewType" label="颜色">
-				<el-color-picker style="width: 32px" v-model="state.formData.color" :predefine="state.predefineColorList" />
+			<FaFormItem prop="color" label="颜色">
+				<ColorPicker style="width: 32px" v-model="state.formData.color" />
 			</FaFormItem>
 			<FaFormItem prop="viewType" label="查看类型">
 				<RadioGroup name="ModuleViewTypeEnum" v-model="state.formData.viewType" />
@@ -55,16 +37,13 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import { CascaderNode, ElMessage, type FormRules } from "element-plus";
+import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { ElSelectorOutput, FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import * as ElementPlusIconsVue from "@element-plus/icons-vue";
-import * as FastElementPlusIconsVue from "@fast-element-plus/icons-vue";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import { EditModuleInput } from "@/api/services/module/models/EditModuleInput";
 import { AddModuleInput } from "@/api/services/module/models/AddModuleInput";
 import { ModuleViewTypeEnum } from "@/api/enums/ModuleViewTypeEnum";
 import { moduleApi } from "@/api/services/module";
-import { defaultThemeColor } from "@/stores";
 
 defineOptions({
 	name: "DevModuleEdit",
@@ -88,38 +67,6 @@ const state = reactive({
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("add"),
 	dialogTitle: "模块",
-	iconList: withDefineType<ElSelectorOutput<string>[]>([
-		{
-			value: "el-icon",
-			label: "el-icon",
-			children: Object.keys(ElementPlusIconsVue).map((item) => ({
-				value: `el-icon-${item}`,
-				label: item,
-			})),
-		},
-		{
-			value: "fa-icon",
-			label: "fa-icon",
-			children: Object.keys(FastElementPlusIconsVue)
-				.filter((f) => f !== "default")
-				.map((item) => ({
-					value: `fa-icon-${item}`,
-					label: item,
-				})),
-		},
-	]),
-	predefineColorList: [
-		defaultThemeColor,
-		"#4488FE",
-		"#2A3A93",
-		"#EB4537", // 红色
-		"#FF8225", // 橙色
-		"#FAC230", // 黄色
-		"#55AF7B", // 绿色
-		"#FF4191", // 粉色
-		"#4286F3", // 蓝色
-		"#AD6DEF", // 紫色
-	],
 });
 
 const handleConfirm = () => {
