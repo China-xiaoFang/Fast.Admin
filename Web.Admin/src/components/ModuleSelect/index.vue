@@ -1,6 +1,7 @@
 <template>
 	<FaSelect
 		v-bind="$attrs"
+		:initParam="props.appId"
 		:requestApi="moduleApi.moduleSelector"
 		v-model="modelValue"
 		v-model:label="moduleName"
@@ -31,6 +32,7 @@ const props = withDefaults(
 	defineProps<{
 		modelValue?: number | string;
 		moduleName?: string;
+		appId?: number | string;
 	}>(),
 	{}
 );
@@ -38,7 +40,7 @@ const props = withDefaults(
 const emit = defineEmits({
 	"update:modelValue": (value: number | string) => true,
 	"update:moduleName": (value: string) => true,
-	change: (value: ElSelectorOutput) => true,
+	change: (value: ElSelectorOutput<number | string>) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: true });

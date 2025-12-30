@@ -20,39 +20,16 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Entity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Fast.Center.Service.Api;
+namespace Fast.Center.Service.ApplicationOpenId.Dto;
 
 /// <summary>
-/// <see cref="ApiService"/> Api
+/// <see cref="RecordIdInput"/> 记录Id输入
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "api")]
-public class ApiService : IDynamicApplication
+public class RecordIdInput : UpdateVersionInput
 {
-    private readonly ISqlSugarRepository<ApiInfoModel> _repository;
-
-    public ApiService(ISqlSugarRepository<ApiInfoModel> repository)
-    {
-        _repository = repository;
-    }
-
     /// <summary>
-    /// 获取接口分页列表
+    /// 记录Id
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    [HttpPost]
-    [ApiInfo("获取接口分页列表", HttpRequestActionEnum.Paged)]
-    [Permission(PermissionConst.ApiPaged)]
-    public async Task<PagedResult<ApiInfoModel>> QueryApiPaged(PagedInput input)
-    {
-        return await _repository.Entities.OrderByDescending(ob => ob.Sort)
-            .OrderBy(ob => ob.ServiceName)
-            .OrderBy(ob => ob.GroupName)
-            .OrderBy(ob => ob.ModuleName)
-            .ToPagedListAsync(input);
-    }
+    [StringRequired(ErrorMessage = "记录Id不能为空")]
+    public long RecordId { get; set; }
 }

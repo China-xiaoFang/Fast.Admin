@@ -62,7 +62,7 @@ public class TenantOnlineUserModel : IBaseTEntity
     /// 应用名称
     /// </summary>
     [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "应用名称", Length = 20)]
+    [SugarColumn(ColumnDescription = "应用名称", Length = 30)]
     public string AppName { get; set; }
 
     /// <summary>

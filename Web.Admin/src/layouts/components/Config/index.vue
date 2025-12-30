@@ -40,7 +40,7 @@
 			<div class="main__box">
 				<div class="box-item">
 					<span>主题颜色</span>
-					<el-color-picker v-model="configStore.layout.themeColor" :predefine="predefineColorList" @change="configStore.setTheme" />
+					<ColorPicker v-model="configStore.layout.themeColor" @change="configStore.setTheme" />
 				</div>
 				<div class="box-item">
 					<span>
@@ -204,7 +204,7 @@ import { withDefineType } from "@fast-china/utils";
 import type { IAnimationName } from "@/stores";
 import type { componentSizes } from "element-plus";
 import type { ElSelectorOutput, FaDrawerInstance, FaTableDataRange } from "fast-element-plus";
-import { defaultThemeColor, useConfig } from "@/stores";
+import { useConfig } from "@/stores";
 
 defineOptions({
 	name: "LayoutConfig",
@@ -251,19 +251,6 @@ const animationList: Readonly<ElSelectorOutput<IAnimationName>> = [
 		label: "底部放大",
 		value: "el-zoom-in-bottom",
 	},
-];
-
-const predefineColorList = [
-	defaultThemeColor,
-	"#4488FE",
-	"#2A3A93",
-	"#EB4537", // 红色
-	"#FF8225", // 橙色
-	"#FAC230", // 黄色
-	"#55AF7B", // 绿色
-	"#FF4191", // 粉色
-	"#4286F3", // 蓝色
-	"#AD6DEF", // 紫色
 ];
 
 const layoutSizeList: Readonly<ElSelectorOutput<(typeof componentSizes)[number]>[]> = [
