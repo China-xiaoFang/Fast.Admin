@@ -1,29 +1,121 @@
 <template>
-	<FaDialog
-		ref="faDialogRef"
-		width="500"
-		:title="state.dialogTitle"
-		:showConfirmButton="!state.formDisabled"
-		:showBeforeClose="!state.formDisabled"
-		confirmButtonText="保存"
-		@confirm-click="handleConfirm"
-		@close="faFormRef.resetFields()"
-	>
-		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled">
-			<FaFormItem prop="prefix" label="前缀">
-				<el-input v-model="state.formData.prefix" maxlength="5" placeholder="请输入前缀" />
+	<FaDialog ref="faDialogRef" width="1000" :title="state.dialogTitle" :showConfirmButton="false" confirmButtonText="保存">
+		<el-row>
+			<el-col :span="4" style="text-align: center">
+				<FaImage style="height: 100px; width: 100px" :src="state.formData.avatar" />
+			</el-col>
+
+			<el-col :span="20">
+				<FaForm :model="state.formData" disabled detailForm cols="2">
+					<FaFormItem prop="mobile" label="手机">
+						<el-text type="primary">{{ state.formData.mobile }}</el-text>
+					</FaFormItem>
+					<FaFormItem prop="email" label="邮箱">
+						<el-text type="primary">{{ state.formData.email }}</el-text>
+					</FaFormItem>
+					<FaFormItem prop="nickName" label="昵称">
+						{{ state.formData.nickName }}
+					</FaFormItem>
+					<FaFormItem prop="phone" label="电话">
+						{{ state.formData.phone }}
+					</FaFormItem>
+					<FaFormItem prop="status" label="状态">
+						<Text name="CommonStatusEnum" :value="state.formData.status" />
+					</FaFormItem>
+					<FaFormItem prop="sex" label="性别">
+						<Text name="GenderEnum" :value="state.formData.sex" />
+					</FaFormItem>
+					<FaFormItem prop="birthday" label="生日">
+						<el-text>{{ state.formData.birthday }}</el-text>
+					</FaFormItem>
+					<FaFormItem prop="createdTime" label="创建时间">
+						{{ dayjs(state.formData.createdTime).format("YYYY-MM-DD HH:mm:ss") }}
+					</FaFormItem>
+					<FaFormItem prop="updatedTime" label="更新时间">
+						<template v-if="state.formData.updatedTime">
+							{{ dayjs(state.formData.updatedTime).format("YYYY-MM-DD HH:mm:ss") }}
+						</template>
+						<template v-else>-</template>
+					</FaFormItem>
+				</FaForm>
+			</el-col>
+		</el-row>
+
+		<FaForm :model="state.formData" disabled detailForm cols="2">
+			<FaFormItem span="2" labelWidth="0">
+				<el-divider contentPosition="left">初次登录信息</el-divider>
 			</FaFormItem>
-			<FaFormItem v-if="state.dialogState === 'add'" prop="ruleType" label="规则类型">
-				<RadioGroup name="SerialRuleTypeEnum" v-model="state.formData.ruleType" />
+			<FaFormItem prop="firstLoginTenantName" label="租户">
+				<el-text type="primary">{{ state.formData.firstLoginTenantName }}</el-text>
 			</FaFormItem>
-			<FaFormItem prop="dateType" label="时间类型">
-				<RadioGroup name="SerialDateTypeEnum" v-model="state.formData.dateType" />
+			<FaFormItem prop="firstLoginIp" label="Ip">
+				<el-text type="success">{{ state.formData.firstLoginIp }}</el-text>
 			</FaFormItem>
-			<FaFormItem prop="spacer" label="分隔符">
-				<RadioGroup name="SerialSpacerEnum" v-model="state.formData.spacer" />
+			<FaFormItem prop="firstLoginDevice" label="设备">
+				{{ state.formData.firstLoginDevice }}
 			</FaFormItem>
-			<FaFormItem prop="length" label="长度">
-				<el-input-number v-model="state.formData.length" :min="1" :max="6" placeholder="请输入长度" />
+			<FaFormItem prop="firstLoginOS" label="操作系统">
+				{{ state.formData.firstLoginOS }}
+			</FaFormItem>
+			<FaFormItem prop="firstLoginBrowser" label="浏览器">
+				{{ state.formData.firstLoginBrowser }}
+			</FaFormItem>
+			<FaFormItem prop="firstLoginProvince" label="地区">
+				{{ state.formData.firstLoginProvince }} - {{ state.formData.firstLoginCity }}
+			</FaFormItem>
+			<FaFormItem prop="firstLoginTime" label="时间">
+				<template v-if="state.formData.firstLoginTime">
+					{{ dayjs(state.formData.firstLoginTime).format("YYYY-MM-DD HH:mm:ss") }}
+				</template>
+				<template v-else>-</template>
+			</FaFormItem>
+
+			<FaFormItem span="2" labelWidth="0">
+				<el-divider contentPosition="left">最后登录信息</el-divider>
+			</FaFormItem>
+			<FaFormItem prop="lastLoginTenantName" label="租户">
+				<el-text type="primary">{{ state.formData.lastLoginTenantName }}</el-text>
+			</FaFormItem>
+			<FaFormItem prop="lastLoginIp" label="Ip">
+				<el-text type="success">{{ state.formData.lastLoginIp }}</el-text>
+			</FaFormItem>
+			<FaFormItem prop="lastLoginDevice" label="设备">
+				{{ state.formData.lastLoginDevice }}
+			</FaFormItem>
+			<FaFormItem prop="lastLoginOS" label="操作系统">
+				{{ state.formData.lastLoginOS }}
+			</FaFormItem>
+			<FaFormItem prop="lastLoginBrowser" label="浏览器">
+				{{ state.formData.lastLoginBrowser }}
+			</FaFormItem>
+			<FaFormItem prop="lastLoginProvince" label="地区">
+				{{ state.formData.lastLoginProvince }} - {{ state.formData.lastLoginCity }}
+			</FaFormItem>
+			<FaFormItem prop="lastLoginTime" label="时间">
+				<template v-if="state.formData.lastLoginTime">
+					{{ dayjs(state.formData.lastLoginTime).format("YYYY-MM-DD HH:mm:ss") }}
+				</template>
+				<template v-else>-</template>
+			</FaFormItem>
+
+			<FaFormItem span="2" labelWidth="0">
+				<el-divider contentPosition="left">验证信息</el-divider>
+			</FaFormItem>
+			<FaFormItem prop="passwordErrorTime" label="错误次数">
+				<template v-if="state.formData.passwordErrorTime > 0">
+					<el-text type="warning">{{ state.formData.passwordErrorTime }}次</el-text>
+				</template>
+				<template v-else>-</template>
+			</FaFormItem>
+			<FaFormItem prop="lockStartTime" label="锁定时间">
+				<template v-if="state.formData.lockStartTime">
+					<el-text type="warning">
+						{{ dayjs(state.formData.lockStartTime).format("YYYY-MM-DD HH:mm:ss") }}
+						~
+						{{ dayjs(state.formData.lockEndTime).format("YYYY-MM-DD HH:mm:ss") }}
+					</el-text>
+				</template>
+				<template v-else>-</template>
 			</FaFormItem>
 		</FaForm>
 	</FaDialog>
@@ -31,15 +123,11 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { serialApi } from "@/api/services/serial";
-import { SerialRuleTypeEnum } from "@/api/enums/SerialRuleTypeEnum";
-import { SerialDateTypeEnum } from "@/api/enums/SerialDateTypeEnum";
-import { SerialSpacerEnum } from "@/api/enums/SerialSpacerEnum";
-import { EditSerialRuleInput } from "@/api/services/serial/models/EditSerialRuleInput";
-import { AddSerialRuleInput } from "@/api/services/serial/models/AddSerialRuleInput";
+import type { FaDialogInstance } from "fast-element-plus";
+import { QueryAccountDetailOutput } from "@/api/services/account/models/QueryAccountDetailOutput";
+import { accountApi } from "@/api/services/account";
+import { dayjs } from "element-plus";
 
 defineOptions({
 	name: "SystemAccountEdit",
@@ -48,66 +136,17 @@ defineOptions({
 const emit = defineEmits(["ok"]);
 
 const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditSerialRuleInput & AddSerialRuleInput>({
-		ruleType: SerialRuleTypeEnum.EmployeeNo,
-		dateType: SerialDateTypeEnum.Year,
-		spacer: SerialSpacerEnum.None,
-	}),
-	formRules: withDefineType<FormRules>({
-		ruleType: [{ required: true, message: "请选择规则类型", trigger: "change" }],
-		dateType: [{ required: true, message: "请选择时间类型", trigger: "change" }],
-		spacer: [{ required: true, message: "请选择分隔符", trigger: "change" }],
-		length: [{ required: true, message: "请输入长度", trigger: "blur" }],
-	}),
-	formDisabled: false,
-	dialogState: withDefineType<IPageStateType>("add"),
-	dialogTitle: "序号",
+	formData: withDefineType<QueryAccountDetailOutput>({}),
+	dialogTitle: "账号",
 });
 
-const handleConfirm = () => {
-	faDialogRef.value.close(async () => {
-		await faFormRef.value.validateScrollToField();
-		switch (state.dialogState) {
-			case "add":
-				await serialApi.addSerialRule(state.formData);
-				ElMessage.success("新增成功！");
-				break;
-			case "edit":
-				await serialApi.editSerialRule(state.formData);
-				ElMessage.success("保存成功！");
-				break;
-		}
-		emit("ok");
-	});
-};
-
-const detail = (serialRuleId: number) => {
+const detail = (accountId: number) => {
 	faDialogRef.value.open(async () => {
-		state.formDisabled = true;
-		const apiRes = await serialApi.querySerialRuleDetail(serialRuleId);
+		const apiRes = await accountApi.queryAccountDetail(accountId);
 		state.formData = apiRes;
-		state.dialogTitle = `序号详情`;
-	});
-};
-
-const add = () => {
-	faDialogRef.value.open(() => {
-		state.dialogState = "add";
-		state.dialogTitle = "添加序号";
-		state.formDisabled = false;
-	});
-};
-
-const edit = (serialRuleId: number) => {
-	faDialogRef.value.open(async () => {
-		state.dialogState = "edit";
-		state.formDisabled = false;
-		const apiRes = await serialApi.querySerialRuleDetail(serialRuleId);
-		state.formData = apiRes;
-		state.dialogTitle = `编辑序号`;
+		state.dialogTitle = `账号详情 - ${apiRes.mobile}`;
 	});
 };
 
@@ -115,7 +154,5 @@ const edit = (serialRuleId: number) => {
 defineExpose({
 	element: faDialogRef,
 	detail,
-	add,
-	edit,
 });
 </script>

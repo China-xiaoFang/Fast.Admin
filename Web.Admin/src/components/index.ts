@@ -52,6 +52,9 @@ export type TenantSelectPageInstance = InstanceType<typeof TenantSelectPage>;
 import Tendril from "./Tendril/index.vue";
 export { Tendril };
 export type TendrilInstance = InstanceType<typeof Tendril>;
+import Text from "./Text/index.vue";
+export { Text };
+export type TextInstance = InstanceType<typeof Text>;
 import Watermark from "./Watermark/index.vue";
 export { Watermark };
 export type WatermarkInstance = InstanceType<typeof Watermark>;
@@ -73,6 +76,7 @@ export function registerComponents(app: App): void {
 	app.component(Tag.name, Tag);
 	app.component(TenantSelectPage.name, TenantSelectPage);
 	app.component(Tendril.name, Tendril);
+	app.component(Text.name, Text);
 	app.component(Watermark.name, Watermark);
 }
 

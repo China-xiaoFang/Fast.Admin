@@ -1,9 +1,22 @@
 <template>
 	<ElRadioGroup v-bind="elRadioGroupProps" v-model="modelValue" @change="(value: string | number | boolean) => emit('change', value)">
-		<ElRadio v-if="!props.button" v-for="(item, index) in dictionaries" :key="index" :value="item.value" :disabled="item.disabled">
+		<ElRadio
+			v-if="!props.button"
+			v-for="(item, index) in dictionaries"
+			:key="index"
+			:value="item.value"
+			:disabled="props.disabled || item.disabled"
+		>
 			{{ item.label }}
 		</ElRadio>
-		<ElRadioButton v-if="props.button" v-for="(item, index) in dictionaries" :key="index" :value="item.value" :disabled="item.disabled" border>
+		<ElRadioButton
+			v-if="props.button"
+			v-for="(item, index) in dictionaries"
+			:key="index"
+			:value="item.value"
+			:disabled="props.disabled || item.disabled"
+			border
+		>
 			{{ item.label }}
 		</ElRadioButton>
 	</ElRadioGroup>
