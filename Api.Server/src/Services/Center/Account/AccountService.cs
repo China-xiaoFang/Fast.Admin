@@ -141,7 +141,9 @@ public class AccountService : IDynamicApplication
                 PasswordErrorTime = t1.PasswordErrorTime,
                 LockStartTime = t1.LockStartTime,
                 LockEndTime = t1.LockEndTime,
-                IsLock = t1.LockEndTime != null && t1.LockEndTime >= dateTime,
+                IsLock = SqlFunc.IF(t1.LockEndTime != null && t1.LockEndTime >= dateTime)
+                    .Return(true)
+                    .End(false),
                 CreatedTime = t1.CreatedTime,
                 UpdatedTime = t1.UpdatedTime,
                 RowVersion = t1.RowVersion
