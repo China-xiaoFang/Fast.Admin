@@ -1,5 +1,3 @@
-import { SugarParameter } from "./SugarParameter";
-
 /**
  * Fast.CenterLog.Entity.SqlExecutionLogModel Sql执行日志Model类
  */
@@ -25,13 +23,17 @@ export interface SqlExecutionLogModel {
    */
   nickName?: string;
   /**
+   * 执行秒数
+   */
+  executeSeconds?: number;
+  /**
    * 原始Sql
    */
   rawSql?: string;
   /**
    * Sql参数
    */
-  parameters?: Array<SugarParameter>;
+  parameters?: string;
   /**
    * 纯Sql，参数化之后的Sql
    */

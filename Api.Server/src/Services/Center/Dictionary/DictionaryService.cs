@@ -54,7 +54,7 @@ public class DictionaryService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取字典", HttpRequestActionEnum.Query)]
-    [AllowAnonymous]
+    [AllowAnonymous, DisabledRequestLog]
     public async Task<Dictionary<string, List<FaTableEnumColumnCtx>>> QueryDictionary()
     {
         var dictionaryTypeList = await _centerCache.GetAndSetAsync(CacheConst.Center.Dictionary, async () =>
