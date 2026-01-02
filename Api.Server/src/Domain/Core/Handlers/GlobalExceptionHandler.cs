@@ -73,10 +73,6 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
 
         try
         {
-            //// 判断请求是否已经取消
-            //if (!httpContext.RequestAborted.IsCancellationRequested)
-            //{
-            //}
             message.AppendLine(context.Exception.Message);
             message.AppendLine(
                 $"请求Url：{httpContext.Request.Method}, {httpContext.Request.Scheme}://{httpContext.Request.Host}{httpContext.Request.Path}");
@@ -191,14 +187,14 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
                 Message = context.Exception.Message,
                 Source = context.Exception.Source,
                 StackTrace = context.Exception.StackTrace,
-                ParamsObj = context.Exception.TargetSite?.GetParameters()
-                    .ToString(),
+                ParamsObj = context.Exception.TargetSite?.GetParameters(),
                 DepartmentId = _user?.DepartmentId,
                 DepartmentName = _user?.DepartmentName,
                 CreatedUserId = _user?.UserId,
                 CreatedUserName = _user?.EmployeeName,
                 CreatedTime = DateTime.Now,
-                TenantId = _user?.TenantId ?? 0
+                TenantId = _user?.TenantId,
+                TenantName = _user?.TenantName
             };
             exceptionLogModel.RecordCreate(httpContext);
 

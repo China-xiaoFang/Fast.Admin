@@ -18,10 +18,6 @@ export interface QueryEmployeePagedOutput {
    */
   employeeId?: number;
   /**
-   * 登录用户Id
-   */
-  userId?: number;
-  /**
    * 工号
    */
   employeeNo?: string;

@@ -83,7 +83,7 @@ public class TenantDatabaseService : ITenantDatabaseService, ITransientDependenc
         var newDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(new ConnectionSettingsOptions
         {
             ConnectionId = databaseModel.MainId.ToString(),
-            DbType = databaseModel.DbType,
+            DbType = databaseModel.DbType.ToDbType(),
             ServiceIp = FastContext.HostEnvironment.IsDevelopment()
                 // 开发环境使用公网地址
                 ? databaseModel.PublicIp

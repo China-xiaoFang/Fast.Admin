@@ -77,17 +77,27 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         // 设置授权用户信息
         DeviceType = authUserInfo.DeviceType;
         DeviceId = authUserInfo.DeviceId;
+
         AppNo = authUserInfo.AppNo;
         AppName = authUserInfo.AppName;
+
+        // 账号
         AccountId = authUserInfo.AccountId;
         AccountKey = authUserInfo.AccountKey;
         Mobile = authUserInfo.Mobile;
         NickName = authUserInfo.NickName;
         Avatar = authUserInfo.Avatar;
+
+        // 微信用户
+        WeChatId = authUserInfo.WeChatId;
+        WeChatOpenId = authUserInfo.WeChatOpenId;
+
+        // 租户
         TenantId = authUserInfo.TenantId;
         TenantNo = authUserInfo.TenantNo;
         TenantName = authUserInfo.TenantName;
         TenantCode = authUserInfo.TenantCode;
+
         UserId = authUserInfo.UserId;
         UserKey = authUserInfo.UserKey;
         Account = authUserInfo.Account;
@@ -235,7 +245,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
+        if (string.IsNullOrWhiteSpace(authUserInfo.WeChatOpenId))
         {
             throw new UnauthorizedAccessException("用户信息不存在！");
         }
@@ -251,7 +261,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                 {nameof(DeviceId), authUserInfo.DeviceId},
                 {nameof(AppNo), authUserInfo.AppNo},
                 {nameof(TenantNo), authUserInfo.TenantNo},
-                {nameof(EmployeeNo), authUserInfo.EmployeeNo},
+                {nameof(EmployeeNo), authUserInfo.WeChatOpenId},
                 {nameof(LastLoginIp), authUserInfo.LastLoginIp},
                 {nameof(LastLoginTime), authUserInfo.LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")}
             };
@@ -267,7 +277,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
 
             // 获取缓存Key
             var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
-                authUserInfo.DeviceType.ToString(), authUserInfo.EmployeeNo);
+                authUserInfo.DeviceType.ToString(), authUserInfo.WeChatOpenId);
 
             // 设置缓存信息
             await _authCache.SetAsync(cacheKey, authUserInfo);
@@ -290,6 +300,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// <summary>
     /// 机器人登录
     /// </summary>
+    /// <param name="input"></param>
     /// <remarks>非调度作业请勿使用</remarks>
     /// <returns></returns>
     public async Task<string> RobotLogin()
@@ -323,40 +334,35 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// <summary>
     /// 刷新授权信息
     /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <param name="input"></param>
     /// <returns></returns>
-    public async Task RefreshAuth(AuthUserInfo authUserInfo)
+    public async Task RefreshAuth(RefreshAuthDto input)
     {
-        if (authUserInfo == null || string.IsNullOrWhiteSpace(authUserInfo.Mobile))
-        {
-            throw new UnauthorizedAccessException("账号信息不存在！");
-        }
-
-        if (string.IsNullOrWhiteSpace(authUserInfo.AppNo))
+        if (string.IsNullOrWhiteSpace(input.AppNo))
         {
             throw new UnauthorizedAccessException("未知的应用！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
+        if (string.IsNullOrWhiteSpace(input.TenantNo))
         {
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
+        if (string.IsNullOrWhiteSpace(input.EmployeeNo))
         {
             throw new UnauthorizedAccessException("员工信息不存在！");
         }
 
         // 设置授权用户信息
-        RoleIdList = authUserInfo.RoleIdList;
-        RoleNameList = authUserInfo.RoleNameList;
-        DataScopeType = authUserInfo.DataScopeType;
-        MenuCodeList = authUserInfo.MenuCodeList;
-        ButtonCodeList = authUserInfo.ButtonCodeList;
+        RoleIdList = input.RoleIdList;
+        RoleNameList = input.RoleNameList;
+        DataScopeType = input.DataScopeType;
+        MenuCodeList = input.MenuCodeList;
+        ButtonCodeList = input.ButtonCodeList;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
-            authUserInfo.DeviceType.ToString(), authUserInfo.EmployeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
+            input.EmployeeNo);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -365,38 +371,38 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// <summary>
     /// 刷新账号信息
     /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <param name="input"></param>
     /// <returns></returns>
-    public async Task RefreshAccount(AuthUserInfo authUserInfo)
+    public async Task RefreshAccount(RefreshAccountDto input)
     {
-        if (authUserInfo == null || string.IsNullOrWhiteSpace(authUserInfo.Mobile))
+        if (string.IsNullOrWhiteSpace(input.Mobile))
         {
             throw new UnauthorizedAccessException("账号信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.AppNo))
+        if (string.IsNullOrWhiteSpace(input.AppNo))
         {
             throw new UnauthorizedAccessException("未知的应用！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
+        if (string.IsNullOrWhiteSpace(input.TenantNo))
         {
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
+        if (string.IsNullOrWhiteSpace(input.EmployeeNo))
         {
             throw new UnauthorizedAccessException("员工信息不存在！");
         }
 
         // 设置授权用户信息
-        Mobile = authUserInfo.Mobile;
-        NickName = authUserInfo.NickName;
-        Avatar = authUserInfo.Avatar;
+        Mobile = input.Mobile;
+        NickName = input.NickName;
+        Avatar = input.Avatar;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
-            authUserInfo.DeviceType.ToString(), authUserInfo.EmployeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo,
+            input.DeviceType.ToString(), input.EmployeeNo);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -405,40 +411,33 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// <summary>
     /// 刷新微信用户信息
     /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <param name="input"></param>
     /// <returns></returns>
-    public async Task RefreshWeChatUser(AuthUserInfo authUserInfo)
+    public async Task RefreshWeChatUser(RefreshWeChatUserDto input)
     {
-        if (authUserInfo == null)
-        {
-            throw new UnauthorizedAccessException("账号信息不存在！");
-        }
-
-        if (string.IsNullOrWhiteSpace(authUserInfo.AppNo))
+        if (string.IsNullOrWhiteSpace(input.AppNo))
         {
             throw new UnauthorizedAccessException("未知的应用！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
+        if (string.IsNullOrWhiteSpace(input.TenantNo))
         {
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
+        if (string.IsNullOrWhiteSpace(input.WeChatOpenId))
         {
-            throw new UnauthorizedAccessException("员工信息不存在！");
+            throw new UnauthorizedAccessException("用户信息不存在！");
         }
 
         // 设置授权用户信息
-        Mobile = authUserInfo.Mobile;
-        NickName = authUserInfo.NickName;
-        Avatar = authUserInfo.Avatar;
-        Account = authUserInfo.Account;
-        EmployeeName = authUserInfo.EmployeeName;
+        Mobile = input.Mobile;
+        NickName = input.NickName;
+        Avatar = input.Avatar;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
-            authUserInfo.DeviceType.ToString(), authUserInfo.EmployeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo,
+            input.DeviceType.ToString(), input.WeChatOpenId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -447,41 +446,36 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// <summary>
     /// 刷新职员信息
     /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <param name="input"></param>
     /// <returns></returns>
-    public async Task RefreshEmployee(AuthUserInfo authUserInfo)
+    public async Task RefreshEmployee(RefreshEmployeeDto input)
     {
-        if (authUserInfo == null || string.IsNullOrWhiteSpace(authUserInfo.Mobile))
-        {
-            throw new UnauthorizedAccessException("账号信息不存在！");
-        }
-
-        if (string.IsNullOrWhiteSpace(authUserInfo.AppNo))
+        if (string.IsNullOrWhiteSpace(input.AppNo))
         {
             throw new UnauthorizedAccessException("未知的应用！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.TenantNo))
+        if (string.IsNullOrWhiteSpace(input.TenantNo))
         {
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.EmployeeNo))
+        if (string.IsNullOrWhiteSpace(input.EmployeeNo))
         {
             throw new UnauthorizedAccessException("员工信息不存在！");
         }
 
         // 设置授权用户信息
-        EmployeeName = authUserInfo.EmployeeName;
-        DepartmentId = authUserInfo.DepartmentId;
-        DepartmentName = authUserInfo.DepartmentName;
-        RoleIdList = authUserInfo.RoleIdList;
-        RoleNameList = authUserInfo.RoleNameList;
-        DataScopeType = authUserInfo.DataScopeType;
+        EmployeeName = input.EmployeeName;
+        DepartmentId = input.DepartmentId;
+        DepartmentName = input.DepartmentName;
+        RoleIdList = input.RoleIdList;
+        RoleNameList = input.RoleNameList;
+        DataScopeType = input.DataScopeType;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
-            authUserInfo.DeviceType.ToString(), authUserInfo.EmployeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo,
+            input.DeviceType.ToString(), input.EmployeeNo);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);

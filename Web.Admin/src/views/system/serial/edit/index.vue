@@ -63,7 +63,7 @@ const state = reactive({
 		length: [{ required: true, message: "请输入长度", trigger: "blur" }],
 	}),
 	formDisabled: false,
-	dialogState: withDefineType<IPageStateType>("add"),
+	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "序号",
 });
 

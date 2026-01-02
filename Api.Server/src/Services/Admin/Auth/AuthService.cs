@@ -260,16 +260,12 @@ public class AuthService : IDynamicApplication
         }
 
         // 刷新缓存
-        await _user.RefreshAuth(new AuthUserInfo
+        await _user.RefreshAuth(new RefreshAuthDto
         {
             DeviceType = _user.DeviceType,
-            DeviceId = _user.DeviceId,
             AppNo = _user.AppNo,
-            Mobile = _user.Mobile,
             TenantNo = _user.TenantNo,
             EmployeeNo = _user.EmployeeNo,
-            IsSuperAdmin = _user.IsSuperAdmin,
-            IsAdmin = _user.IsAdmin,
             RoleIdList = roleIds,
             RoleNameList = result.RoleNameList,
             DataScopeType = (int) result.DataScopeType,

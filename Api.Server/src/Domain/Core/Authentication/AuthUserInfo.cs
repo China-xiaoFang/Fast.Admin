@@ -54,6 +54,13 @@ public class AuthUserInfo
     public virtual string AppName { get; set; }
 
     /// <summary>
+    /// 应用标识
+    /// </summary>
+    public virtual string AppOpenId { get; set; }
+
+    #region 账号
+
+    /// <summary>
     /// 账号Id
     /// </summary>
     public virtual long AccountId { get; set; }
@@ -78,6 +85,24 @@ public class AuthUserInfo
     /// </summary>
     public string Avatar { get; set; }
 
+    #endregion
+
+    #region 微信用户
+
+    /// <summary>
+    /// 微信用户Id
+    /// </summary>
+    public virtual long WeChatId { get; set; }
+
+    /// <summary>
+    /// 微信唯一用户标识
+    /// </summary>
+    public virtual string WeChatOpenId { get; set; }
+
+    #endregion
+
+    #region 租户
+
     /// <summary>
     /// 租户Id
     /// </summary>
@@ -98,6 +123,8 @@ public class AuthUserInfo
     /// </summary>
     public virtual string TenantCode { get; set; }
 
+    #endregion
+
     /// <summary>
     /// 用户Id/职员Id
     /// </summary>
@@ -114,7 +141,7 @@ public class AuthUserInfo
     public virtual string Account { get; set; }
 
     /// <summary>
-    /// 工号/客户端为OpenId
+    /// 工号
     /// </summary>
     public virtual string EmployeeNo { get; set; }
 

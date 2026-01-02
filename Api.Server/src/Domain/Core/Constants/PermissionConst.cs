@@ -221,7 +221,7 @@ public partial class PermissionConst
     public const string SqlExceptionLogPaged = "SqlExceptionLog:Paged";
 
     /// <summary>Sql超时日志列表</summary>
-    public const string SqlTimeoutLogModelPaged = "SqlTimeoutLog:Paged";
+    public const string SqlTimeoutLogPaged = "SqlTimeoutLog:Paged";
 
     /// <summary>Sql执行日志列表</summary>
     public const string SqlExecutionLogPaged = "SqlExecutionLog:Paged";

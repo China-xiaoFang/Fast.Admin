@@ -1,12 +1,12 @@
 import { axiosUtil } from "@fast-china/axios";
 import { ElSelectorOutput, PagedResult } from "fast-element-plus";
+import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 import { QueryMerchantPagedOutput } from "./models/QueryMerchantPagedOutput";
 import { QueryMerchantPagedInput } from "./models/QueryMerchantPagedInput";
 import { QueryMerchantDetailOutput } from "./models/QueryMerchantDetailOutput";
 import { AddMerchantInput } from "./models/AddMerchantInput";
 import { EditMerchantInput } from "./models/EditMerchantInput";
 import { MerchantIdInput } from "./models/MerchantIdInput";
-import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 
 /**
  * Fast.Center.Service.Merchant.MerchantService 商户号服务Api

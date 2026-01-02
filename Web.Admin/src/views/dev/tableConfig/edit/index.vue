@@ -45,7 +45,7 @@ const state = reactive({
 		tableName: [{ required: true, message: "请输入表格名称", trigger: "blur" }],
 	}),
 	formDisabled: false,
-	dialogState: withDefineType<IPageStateType>("add"),
+	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "表格",
 	copyTableId: withDefineType<number>(undefined),
 });

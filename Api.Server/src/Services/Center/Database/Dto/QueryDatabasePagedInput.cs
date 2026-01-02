@@ -35,7 +35,7 @@ public class QueryDatabasePagedInput : PagedInput
     /// <summary>
     /// 数据库类型，用于区分使用的是那个类型的数据库
     /// </summary>
-    public DbType? DbType { get; set; }
+    public SugarDbType? DbType { get; set; }
 
     /// <summary>
     /// 租户Id

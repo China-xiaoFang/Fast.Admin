@@ -1,5 +1,5 @@
 import { DatabaseTypeEnum } from "@/api/enums/DatabaseTypeEnum";
-import { DbType } from "@/api/enums/DbType";
+import { SugarDbType } from "@/api/enums/SugarDbType";
 import { QuerySlaveDatabaseOutput } from "./QuerySlaveDatabaseOutput";
 
 /**
@@ -17,7 +17,7 @@ export interface QueryDatabasePagedOutput {
   /**
    * 
    */
-  dbType?: DbType;
+  dbType?: SugarDbType;
   /**
    * 公网Ip地址
    */
