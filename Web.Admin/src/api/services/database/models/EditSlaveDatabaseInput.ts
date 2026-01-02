@@ -1,5 +1,3 @@
-import { DbType } from "@/api/enums/DbType";
-
 /**
  * Fast.Center.Service.Database.Dto.EditSlaveDatabaseInput 编辑从数据库输入
  */
@@ -8,10 +6,6 @@ export interface EditSlaveDatabaseInput {
    * 从库Id
    */
   slaveId?: number;
-  /**
-   * 
-   */
-  dbType?: DbType;
   /**
    * 公网Ip地址
    */

@@ -53,6 +53,8 @@ public interface IUser
     /// </summary>
     string AppName { get; set; }
 
+    #region 账号
+
     /// <summary>
     /// 账号Id
     /// </summary>
@@ -78,6 +80,24 @@ public interface IUser
     /// </summary>
     string Avatar { get; set; }
 
+    #endregion
+
+    #region 微信用户
+
+    /// <summary>
+    /// 微信用户Id
+    /// </summary>
+    long WeChatId { get; set; }
+
+    /// <summary>
+    /// 微信唯一用户标识
+    /// </summary>
+    string WeChatOpenId { get; set; }
+
+    #endregion
+
+    #region 租户
+
     /// <summary>
     /// 租户Id
     /// </summary>
@@ -98,6 +118,8 @@ public interface IUser
     /// </summary>
     string TenantCode { get; set; }
 
+    #endregion
+
     /// <summary>
     /// 用户Id/职员Id
     /// </summary>
@@ -114,7 +136,7 @@ public interface IUser
     string Account { get; set; }
 
     /// <summary>
-    /// 工号/客户端为OpenId
+    /// 工号
     /// </summary>
     string EmployeeNo { get; set; }
 
@@ -245,30 +267,30 @@ public interface IUser
     /// <summary>
     /// 刷新授权信息
     /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <param name="input"></param>
     /// <returns></returns>
-    Task RefreshAuth(AuthUserInfo authUserInfo);
+    Task RefreshAuth(RefreshAuthDto input);
 
     /// <summary>
     /// 刷新账号信息
     /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <param name="input"></param>
     /// <returns></returns>
-    Task RefreshAccount(AuthUserInfo authUserInfo);
+    Task RefreshAccount(RefreshAccountDto input);
 
     /// <summary>
     /// 刷新微信用户信息
     /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <param name="input"></param>
     /// <returns></returns>
-    Task RefreshWeChatUser(AuthUserInfo authUserInfo);
+    Task RefreshWeChatUser(RefreshWeChatUserDto input);
 
     /// <summary>
     /// 刷新职员信息
     /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
+    /// <param name="input"></param>
     /// <returns></returns>
-    Task RefreshEmployee(AuthUserInfo authUserInfo);
+    Task RefreshEmployee(RefreshEmployeeDto input);
 
     /// <summary>
     /// 统一退出登录

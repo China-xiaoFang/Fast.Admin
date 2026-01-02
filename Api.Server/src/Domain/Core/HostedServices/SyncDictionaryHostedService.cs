@@ -168,18 +168,6 @@ public class SyncDictionaryHostedService : IHostedService
                         });
                     }
 
-                    #region 额外的枚举
-
-                    enumTypes.Insert(0,
-                        new
-                        {
-                            Type = typeof(DbType),
-                            FastEnumAttribute = (FastEnumAttribute) null,
-                            FlagsAttribute = (FlagsAttribute) null
-                        });
-
-                    #endregion
-
                     // 循环所有枚举类型
                     foreach (var enumType in enumTypes)
                     {

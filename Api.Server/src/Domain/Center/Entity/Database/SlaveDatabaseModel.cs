@@ -42,12 +42,6 @@ public class SlaveDatabaseModel : BaseTEntity
     public long MainId { get; set; }
 
     /// <summary>
-    /// 数据库类型，用于区分使用的是那个类型的数据库
-    /// </summary>
-    [SugarColumn(ColumnDescription = "数据库类型")]
-    public DbType DbType { get; set; }
-
-    /// <summary>
     /// 公网Ip地址
     /// </summary>
     /// <remarks>为空则使用主库的</remarks>

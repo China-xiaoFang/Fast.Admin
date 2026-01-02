@@ -78,7 +78,6 @@ public class EmployeeService : IDynamicApplication
             .Select((t1, t2) => new QueryEmployeePagedOutput
             {
                 EmployeeId = t1.EmployeeId,
-                UserId = t1.UserId,
                 EmployeeNo = t1.EmployeeNo,
                 EmployeeName = t1.EmployeeName,
                 Mobile = t1.Mobile,
@@ -117,8 +116,7 @@ public class EmployeeService : IDynamicApplication
             })
             .ToPagedListAsync(input);
 
-        var userIds = result.Rows.Where(wh => wh.UserId != null)
-            .Select(sl => sl.UserId)
+        var userIds = result.Rows.Select(sl => sl.EmployeeId)
             .ToList();
 
         var userList = await _centerRepository.Queryable<TenantUserModel>()
@@ -138,15 +136,16 @@ public class EmployeeService : IDynamicApplication
 
         foreach (var item in result.Rows)
         {
-            if (item.UserId == null)
-                continue;
-            var userInfo = userList.Single(s => s.UserId == item.UserId);
-            item.Account = userInfo.Account;
-            item.AccountStatus = userInfo.Status;
-            item.AccountMobile = userInfo.Mobile;
-            item.AccountEmail = userInfo.Email;
-            item.AccountNickName = userInfo.NickName;
-            item.LastLoginTime = userInfo.LastLoginTime;
+            var userInfo = userList.SingleOrDefault(s => s.UserId == item.EmployeeId);
+            if (userInfo != null)
+            {
+                item.Account = userInfo.Account;
+                item.AccountStatus = userInfo.Status;
+                item.AccountMobile = userInfo.Mobile;
+                item.AccountEmail = userInfo.Email;
+                item.AccountNickName = userInfo.NickName;
+                item.LastLoginTime = userInfo.LastLoginTime;
+            }
         }
 
         return result;
@@ -166,7 +165,6 @@ public class EmployeeService : IDynamicApplication
             .Select(sl => new QueryEmployeeDetailOutput
             {
                 EmployeeId = sl.EmployeeId,
-                UserId = sl.UserId,
                 EmployeeNo = sl.EmployeeNo,
                 EmployeeName = sl.EmployeeName,
                 Mobile = sl.Mobile,
@@ -573,15 +571,10 @@ public class EmployeeService : IDynamicApplication
         await _centerRepository.Ado.BeginTranAsync();
         try
         {
-            if (employeeModel.UserId != null)
+            var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
+                .InSingleAsync(employeeModel.EmployeeId);
+            if (tenantUserModel != null)
             {
-                var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
-                    .InSingleAsync(employeeModel.UserId);
-                if (tenantUserModel == null)
-                {
-                    throw new UserFriendlyException("数据不存在！");
-                }
-
                 tenantUserModel.Status = CommonStatusEnum.Disable;
                 await _centerRepository.Updateable(tenantUserModel)
                     .ExecuteCommandAsync();
@@ -628,7 +621,8 @@ public class EmployeeService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        if (employeeModel.UserId != null)
+        if (await _centerRepository.Queryable<TenantUserModel>()
+                .AnyAsync(a => a.UserId == employeeModel.EmployeeId))
         {
             throw new UserFriendlyException("已存在登录账号！");
         }
@@ -647,7 +641,6 @@ public class EmployeeService : IDynamicApplication
         var employeeOrgModel = await _repository.Queryable<EmployeeOrgModel>()
             .SingleAsync(s => s.EmployeeId == employeeModel.EmployeeId && s.IsPrimary == YesOrNotEnum.Y);
 
-        employeeModel.UserId = YitIdHelper.NextId();
         if (string.IsNullOrWhiteSpace(employeeModel.Email))
         {
             employeeModel.Email = input.Email;
@@ -708,8 +701,8 @@ public class EmployeeService : IDynamicApplication
 
             var tenantUserModel = new TenantUserModel
             {
-                UserId = employeeModel.UserId.Value,
-                UserKey = NumberUtil.IdToCodeByLong(employeeModel.UserId.Value),
+                UserId = employeeModel.EmployeeId,
+                UserKey = NumberUtil.IdToCodeByLong(employeeModel.EmployeeId),
                 AccountId = accountModel.AccountId,
                 Account = account,
                 EmployeeNo = employeeModel.EmployeeNo,
@@ -754,21 +747,16 @@ public class EmployeeService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        if (employeeModel.UserId == null)
-        {
-            throw new UserFriendlyException("未绑定登录账号！");
-        }
-
         if (employeeModel.Status == EmployeeStatusEnum.Resigned)
         {
             throw new UserFriendlyException("禁止操作已离职的职员！");
         }
 
         var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
-            .InSingleAsync(employeeModel.UserId);
+            .InSingleAsync(employeeModel.EmployeeId);
         if (tenantUserModel == null)
         {
-            throw new UserFriendlyException("数据不存在！");
+            throw new UserFriendlyException("未绑定登录账号！");
         }
 
         tenantUserModel.Status = tenantUserModel.Status switch

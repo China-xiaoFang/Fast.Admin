@@ -1,5 +1,3 @@
-import { DbType } from "@/api/enums/DbType";
-
 /**
  * Fast.Center.Service.Database.Dto.QuerySlaveDatabaseOutput 获取从数据库输出
  */
@@ -12,10 +10,6 @@ export interface QuerySlaveDatabaseOutput {
    * 主库Id
    */
   mainId?: number;
-  /**
-   * 
-   */
-  dbType?: DbType;
   /**
    * 公网Ip地址
    */

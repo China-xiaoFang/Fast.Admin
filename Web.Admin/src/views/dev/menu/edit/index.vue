@@ -131,8 +131,8 @@
 				</FaFormItem>
 			</template>
 
-			<FaLayoutGridItem span="2" v-if="state.formData.menuType === MenuTypeEnum.Menu">
-				<FaTable v-if="state.dialogState !== 'add'" height="300" rowKey="buttonId" :data="state.formData.buttonList" span="2">
+			<FaLayoutGridItem span="2" v-if="state.formData.menuType === MenuTypeEnum.Menu && state.dialogState !== 'add'">
+				<FaTable height="300" rowKey="buttonId" :data="state.formData.buttonList" span="2">
 					<!-- 表格按钮操作区域 -->
 					<template #header>
 						<el-button type="primary" :icon="Plus" @click="handleButtonAdd">新增</el-button>
@@ -301,14 +301,14 @@ const state = reactive({
 		status: [{ required: true, message: "请选择状态", trigger: "change" }],
 	}),
 	formDisabled: false,
-	dialogState: withDefineType<IPageStateType>("add"),
+	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "菜单",
 	componentList: withDefineType<ElSelectorOutput<string>[]>([]),
 	componentValue: [],
 	menuList: withDefineType<ElSelectorOutput<number>[]>([]),
 });
 
-const handleModuleChange = async (value: ElSelectorOutput<number>) => {
+const handleModuleChange = async (value: ElSelectorOutput) => {
 	state.menuList = await menuApi.menuSelector(value?.value);
 };
 

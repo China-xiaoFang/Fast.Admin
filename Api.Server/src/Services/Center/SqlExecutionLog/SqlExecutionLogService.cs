@@ -69,7 +69,7 @@ public class SqlExecutionLogService : IDynamicApplication
             queryable = queryable.Where(wh => wh.TenantId == _user.TenantId);
         }
 
-        return await queryable.OrderByDescending(ob => ob.CreatedTime).SplitTable()
+        return await queryable.SplitTable().OrderByDescending(ob => ob.CreatedTime)
             .ToPagedListAsync(input);
     }
 

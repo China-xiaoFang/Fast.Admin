@@ -1,6 +1,6 @@
 import { PagedInput } from "fast-element-plus";
 import { DatabaseTypeEnum } from "@/api/enums/DatabaseTypeEnum";
-import { DbType } from "@/api/enums/DbType";
+import { SugarDbType } from "@/api/enums/SugarDbType";
 
 /**
  * Fast.Center.Service.Database.Dto.QueryDatabasePagedInput 获取数据库分页列表输入
@@ -13,7 +13,7 @@ export interface QueryDatabasePagedInput extends PagedInput  {
   /**
    * 
    */
-  dbType?: DbType;
+  dbType?: SugarDbType;
   /**
    * 租户Id
    */

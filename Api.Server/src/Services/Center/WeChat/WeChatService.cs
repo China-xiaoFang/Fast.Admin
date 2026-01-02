@@ -117,7 +117,7 @@ public class WeChatService : IDynamicApplication
         // 根据 OpenId 获取微信用户信息
         var result = await _repository.Queryable<WeChatUserModel>()
             .Where(wh => wh.AppId == applicationModel.AppId)
-            .Where(wh => wh.WeChatId == _user.UserId)
+            .Where(wh => wh.WeChatId == _user.WeChatId)
             .Select(sl => new QueryWeChatUserDetailOutput
             {
                 WeChatId = sl.WeChatId,
@@ -181,7 +181,7 @@ public class WeChatService : IDynamicApplication
 
         var weChatUserModel = await _repository.Queryable<WeChatUserModel>()
             .Where(wh => wh.AppId == applicationModel.AppId)
-            .Where(wh => wh.WeChatId == _user.UserId)
+            .Where(wh => wh.WeChatId == _user.WeChatId)
             .SingleAsync();
 
         if (weChatUserModel == null)
@@ -208,18 +208,15 @@ public class WeChatService : IDynamicApplication
         await _repository.UpdateAsync(weChatUserModel);
 
         // 刷新缓存
-        await _user.RefreshWeChatUser(new AuthUserInfo
+        await _user.RefreshWeChatUser(new RefreshWeChatUserDto
         {
             DeviceType = _user.DeviceType,
-            DeviceId = _user.DeviceId,
             AppNo = _user.AppNo,
             Mobile = weChatUserModel.PurePhoneNumber,
-            TenantNo = _user.TenantNo,
-            EmployeeNo = _user.EmployeeNo,
             NickName = weChatUserModel.NickName,
             Avatar = weChatUserModel.Avatar,
-            Account = weChatUserModel.PurePhoneNumber,
-            EmployeeName = weChatUserModel.NickName
+            TenantNo = _user.TenantNo,
+            WeChatOpenId = weChatUserModel.OpenId,
         });
     }
 

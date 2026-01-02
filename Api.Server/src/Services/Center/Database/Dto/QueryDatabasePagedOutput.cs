@@ -22,6 +22,7 @@
 
 using Fast.Serialization;
 using Newtonsoft.Json;
+using DbType = SqlSugar.DbType;
 
 namespace Fast.Center.Service.Database.Dto;
 
@@ -43,7 +44,7 @@ public class QueryDatabasePagedOutput : PagedOutput
     /// <summary>
     /// 数据库类型，用于区分使用的是那个类型的数据库
     /// </summary>
-    public DbType DbType { get; set; }
+    public SugarDbType DbType { get; set; }
 
     /// <summary>
     /// 公网Ip地址
@@ -107,9 +108,4 @@ public class QueryDatabasePagedOutput : PagedOutput
     /// 租户名称
     /// </summary>
     public string TenantName { get; set; }
-
-    /// <summary>
-    /// 从数据库集合
-    /// </summary>
-    public List<QuerySlaveDatabaseOutput> Children { get; set; }
 }

@@ -36,11 +36,6 @@ public class QueryEmployeeDetailOutput
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 登录用户Id
-    /// </summary>
-    public long? UserId { get; set; }
-
-    /// <summary>
     /// 工号
     /// </summary>
     public string EmployeeNo { get; set; }

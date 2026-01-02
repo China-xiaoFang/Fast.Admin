@@ -122,7 +122,8 @@ public class RequestActionFilter : IAsyncActionFilter
             CreatedUserId = _user?.UserId,
             CreatedUserName = _user?.EmployeeName,
             CreatedTime = dateTime,
-            TenantId = _user?.TenantId ?? 0
+            TenantId = _user?.TenantId,
+            TenantName = _user?.TenantName,
         };
         requestLogModel.RecordCreate(httpContext);
 

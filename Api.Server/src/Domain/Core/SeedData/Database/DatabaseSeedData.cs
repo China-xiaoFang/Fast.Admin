@@ -44,6 +44,9 @@ public static class DatabaseSeedData
     public static async Task SystemDatabaseSeedData(ISqlSugarClient db, long tenantId, string tenantCode, DateTime dateTime)
     {
         var isDevelopment = FastContext.HostEnvironment.IsDevelopment();
+        var dbType = SqlSugarContext.ConnectionSettings.DbType != null
+            ? SqlSugarContext.ConnectionSettings.DbType.Value.ToSugarDbType()
+            : SugarDbType.SqlServer;
         await db.Insertable(new List<MainDatabaseModel>
             {
                 // 初始化日志库
@@ -51,7 +54,7 @@ public static class DatabaseSeedData
                 {
                     MainId = YitIdHelper.NextId(),
                     DatabaseType = DatabaseTypeEnum.CenterLog,
-                    DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
+                    DbType = dbType,
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
@@ -71,7 +74,7 @@ public static class DatabaseSeedData
                 {
                     MainId = YitIdHelper.NextId(),
                     DatabaseType = DatabaseTypeEnum.Gateway,
-                    DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
+                    DbType = dbType,
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
@@ -91,7 +94,7 @@ public static class DatabaseSeedData
                 {
                     MainId = YitIdHelper.NextId(),
                     DatabaseType = DatabaseTypeEnum.Deploy,
-                    DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
+                    DbType = dbType,
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
@@ -111,7 +114,7 @@ public static class DatabaseSeedData
                 {
                     MainId = YitIdHelper.NextId(),
                     DatabaseType = DatabaseTypeEnum.Admin,
-                    DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
+                    DbType = dbType,
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
@@ -131,7 +134,7 @@ public static class DatabaseSeedData
                 {
                     MainId = YitIdHelper.NextId(),
                     DatabaseType = DatabaseTypeEnum.AdminLog,
-                    DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
+                    DbType = dbType,
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
@@ -161,6 +164,9 @@ public static class DatabaseSeedData
     public static async Task TenantDatabaseSeedData(ISqlSugarClient db, long tenantId, string tenantCode, DateTime dateTime)
     {
         var isDevelopment = FastContext.HostEnvironment.IsDevelopment();
+        var dbType = SqlSugarContext.ConnectionSettings.DbType != null
+            ? SqlSugarContext.ConnectionSettings.DbType.Value.ToSugarDbType()
+            : SugarDbType.SqlServer;
         await db.Insertable(new List<MainDatabaseModel>
             {
                 // 初始化业务库
@@ -168,7 +174,7 @@ public static class DatabaseSeedData
                 {
                     MainId = YitIdHelper.NextId(),
                     DatabaseType = DatabaseTypeEnum.Admin,
-                    DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
+                    DbType = dbType,
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
@@ -188,7 +194,7 @@ public static class DatabaseSeedData
                 {
                     MainId = YitIdHelper.NextId(),
                     DatabaseType = DatabaseTypeEnum.AdminLog,
-                    DbType = SqlSugarContext.ConnectionSettings.DbType ?? DbType.SqlServer,
+                    DbType = dbType,
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,

@@ -65,7 +65,7 @@ const state = reactive({
 		sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
 	}),
 	formDisabled: false,
-	dialogState: withDefineType<IPageStateType>("add"),
+	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "模块",
 });
 

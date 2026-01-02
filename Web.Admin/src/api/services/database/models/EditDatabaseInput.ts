@@ -1,4 +1,4 @@
-import { DbType } from "@/api/enums/DbType";
+import { SugarDbType } from "@/api/enums/SugarDbType";
 import { EditSlaveDatabaseInput } from "./EditSlaveDatabaseInput";
 
 /**
@@ -12,7 +12,7 @@ export interface EditDatabaseInput {
   /**
    * 
    */
-  dbType?: DbType;
+  dbType?: SugarDbType;
   /**
    * 公网Ip地址
    */

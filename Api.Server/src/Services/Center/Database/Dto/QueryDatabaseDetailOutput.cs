@@ -40,7 +40,7 @@ public class QueryDatabaseDetailOutput : PagedOutput
     /// <summary>
     /// 数据库类型，用于区分使用的是那个类型的数据库
     /// </summary>
-    public DbType DbType { get; set; }
+    public SugarDbType DbType { get; set; }
 
     /// <summary>
     /// 公网Ip地址
@@ -117,5 +117,5 @@ public class QueryDatabaseDetailOutput : PagedOutput
     /// <summary>
     /// 从数据库集合
     /// </summary>
-    public List<QuerySlaveDatabaseOutput> Children { get; set; }
+    public List<QuerySlaveDatabaseOutput> SlaveDatabaseList { get; set; }
 }

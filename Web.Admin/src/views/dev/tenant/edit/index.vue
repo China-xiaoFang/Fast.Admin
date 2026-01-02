@@ -88,7 +88,7 @@ const state = reactive({
 		logoUrl: [{ required: true, message: "请上传Logo", trigger: "change" }],
 	}),
 	formDisabled: false,
-	dialogState: withDefineType<IPageStateType>("add"),
+	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "租户",
 });
 

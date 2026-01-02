@@ -263,7 +263,8 @@ public class LoginService : IDynamicApplication
             CreatedUserId = _user.UserId,
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
-            TenantId = _user.TenantId
+            TenantId = _user.TenantId,
+            TenantName = _user.TenantName
         };
         visitLogModel.RecordCreate(_httpContext);
         await _httpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>()
@@ -887,7 +888,8 @@ public class LoginService : IDynamicApplication
                 CreatedUserId = _user.UserId,
                 CreatedUserName = _user.EmployeeName,
                 CreatedTime = DateTime.Now,
-                TenantId = _user.TenantId
+                TenantId = _user.TenantId,
+                TenantName = _user.TenantName
             };
             visitLogModel.RecordCreate(_httpContext);
             await _httpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>()
@@ -1126,9 +1128,9 @@ public class LoginService : IDynamicApplication
             TenantName = applicationModel.Application.TenantName,
             TenantCode = tenantMode?.TenantCode ?? "",
             UserId = weChatUserModel.WeChatId,
-            Account = weChatUserModel.PurePhoneNumber,
-            EmployeeNo = weChatUserModel.OpenId,
             EmployeeName = weChatUserModel.NickName,
+            WeChatId = weChatUserModel.WeChatId,
+            WeChatOpenId = weChatUserModel.OpenId,
             IsSuperAdmin = false,
             IsAdmin = false,
             LastLoginDevice = weChatUserModel.LastLoginDevice,

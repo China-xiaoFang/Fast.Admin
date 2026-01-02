@@ -20,6 +20,8 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using System.Reflection;
+
 namespace Fast.CenterLog.Entity;
 
 /// <summary>
@@ -97,12 +99,24 @@ public class ExceptionLogModel : BaseRecordEntity
     /// <summary>
     /// 参数对象
     /// </summary>
-    [SugarColumn(ColumnDescription = "参数对象", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string ParamsObj { get; set; }
+    [SugarColumn(ColumnDescription = "参数对象", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
+    public ParameterInfo[] ParamsObj { get; set; }
+
+    /// <summary>
+    /// 异常时间
+    /// </summary>
+    [Required, SugarSearchTime, SugarColumn(ColumnDescription = "异常时间", CreateTableFieldSort = 993)]
+    public override DateTime? CreatedTime { get; set; }
 
     /// <summary>
     /// 租户Id
     /// </summary>
     [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
     public long? TenantId { get; set; }
+
+    /// <summary>
+    /// 租户名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "租户名称", Length = 30, CreateTableFieldSort = 997)]
+    public string TenantName { get; set; }
 }

@@ -31,7 +31,7 @@ namespace Fast.CenterLog.Entity;
 [SugarIndex($"IX_{{table}}_{nameof(CreatedUserId)}", nameof(CreatedUserId), OrderByType.Asc)]
 [SugarIndex($"IX_{{table}}_{nameof(CreatedTime)}", nameof(CreatedTime), OrderByType.Asc)]
 [SugarIndex($"IX_{{table}}_{nameof(TenantId)}", nameof(TenantId), OrderByType.Asc)]
-public class RequestLogModel : BaseRecordEntity, IBaseTEntity
+public class RequestLogModel : BaseRecordEntity
 {
     /// <summary>
     /// 记录Id
@@ -99,6 +99,7 @@ public class RequestLogModel : BaseRecordEntity, IBaseTEntity
     /// <summary>
     /// 请求地址
     /// </summary>
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "请求地址", Length = 500)]
     public string Location { get; set; }
 
@@ -149,5 +150,11 @@ public class RequestLogModel : BaseRecordEntity, IBaseTEntity
     /// 租户Id
     /// </summary>
     [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]
-    public long TenantId { get; set; }
+    public long? TenantId { get; set; }
+
+    /// <summary>
+    /// 租户名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "租户名称", Length = 30, CreateTableFieldSort = 997)]
+    public string TenantName { get; set; }
 }

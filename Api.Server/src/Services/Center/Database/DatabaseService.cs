@@ -82,26 +82,6 @@ public class DatabaseService : IDynamicApplication
                 UpdatedUserName = t1.UpdatedUserName,
                 UpdatedTime = t1.UpdatedTime,
                 RowVersion = t1.RowVersion,
-                Children = t1.SlaveDatabaseList.Select(sl => new QuerySlaveDatabaseOutput
-                    {
-                        SlaveId = sl.SlaveId,
-                        MainId = sl.MainId,
-                        DbType = sl.DbType,
-                        PublicIp = sl.PublicIp,
-                        IntranetIp = sl.IntranetIp,
-                        Port = sl.Port,
-                        DbName = sl.DbName,
-                        DbUser = sl.DbUser,
-                        DbPwd = sl.DbPwd,
-                        CustomConnectionStr = sl.CustomConnectionStr,
-                        HitRate = sl.HitRate,
-                        DepartmentName = sl.DepartmentName,
-                        CreatedUserName = sl.CreatedUserName,
-                        CreatedTime = sl.CreatedTime,
-                        UpdatedUserName = sl.UpdatedUserName,
-                        UpdatedTime = sl.UpdatedTime
-                    })
-                    .ToList()
             })
             .ToPagedListAsync(input);
     }
@@ -145,11 +125,10 @@ public class DatabaseService : IDynamicApplication
                 UpdatedUserName = t1.UpdatedUserName,
                 UpdatedTime = t1.UpdatedTime,
                 RowVersion = t1.RowVersion,
-                Children = t1.SlaveDatabaseList.Select(dSl => new QuerySlaveDatabaseOutput
+                SlaveDatabaseList = t1.SlaveDatabaseList.Select(dSl => new QuerySlaveDatabaseOutput
                     {
                         SlaveId = dSl.SlaveId,
                         MainId = dSl.MainId,
-                        DbType = dSl.DbType,
                         PublicIp = dSl.PublicIp,
                         IntranetIp = dSl.IntranetIp,
                         Port = dSl.Port,
@@ -194,7 +173,7 @@ public class DatabaseService : IDynamicApplication
         var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(new ConnectionSettingsOptions
         {
             ConnectionId = DateTime.Now.ToShortTimeString(),
-            DbType = input.DbType,
+            DbType = input.DbType.ToDbType(),
             ServiceIp = FastContext.HostEnvironment.IsDevelopment() ? input.PublicIp : input.IntranetIp,
             Port = input.Port,
             DbName = input.DbName,
@@ -278,7 +257,7 @@ public class DatabaseService : IDynamicApplication
         var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(new ConnectionSettingsOptions
         {
             ConnectionId = DateTime.Now.ToShortTimeString(),
-            DbType = input.DbType,
+            DbType = input.DbType.ToDbType(),
             ServiceIp = FastContext.HostEnvironment.IsDevelopment() ? input.PublicIp : input.IntranetIp,
             Port = input.Port,
             DbName = input.DbName,
@@ -350,7 +329,6 @@ public class DatabaseService : IDynamicApplication
                 slaveDatabaseModel = new SlaveDatabaseModel
                 {
                     MainId = mainDatabaseModel.MainId,
-                    DbType = item.DbType,
                     PublicIp = item.PublicIp,
                     IntranetIp = item.IntranetIp,
                     Port = item.Port,
@@ -371,7 +349,6 @@ public class DatabaseService : IDynamicApplication
                     throw new UserFriendlyException("数据不存在！");
                 }
 
-                slaveDatabaseModel.DbType = item.DbType;
                 slaveDatabaseModel.PublicIp = item.PublicIp;
                 slaveDatabaseModel.IntranetIp = item.IntranetIp;
                 slaveDatabaseModel.Port = item.Port;

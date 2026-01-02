@@ -33,12 +33,6 @@ public class EditSlaveDatabaseInput
     public long? SlaveId { get; set; }
 
     /// <summary>
-    /// 数据库类型，用于区分使用的是那个类型的数据库
-    /// </summary>
-    [EnumRequired(ErrorMessage = "数据库类型不能为空")]
-    public DbType DbType { get; set; }
-
-    /// <summary>
     /// 公网Ip地址
     /// </summary>
     [StringRequired(ErrorMessage = "公网Ip地址不能为空")]

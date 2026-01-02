@@ -19,10 +19,6 @@ export interface QueryEmployeeDetailOutput {
    */
   employeeId?: number;
   /**
-   * 登录用户Id
-   */
-  userId?: number;
-  /**
    * 工号
    */
   employeeNo?: string;

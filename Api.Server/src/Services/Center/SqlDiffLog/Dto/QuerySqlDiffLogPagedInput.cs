@@ -20,6 +20,8 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.CenterLog.Enum;
+
 namespace Fast.Center.Service.SqlDiffLog.Dto;
 
 /// <summary>
@@ -31,6 +33,11 @@ public class QuerySqlDiffLogPagedInput : PagedInput
     /// 账号Id
     /// </summary>
     public long? AccountId { get; set; }
+
+    /// <summary>
+    /// 差异日志类型
+    /// </summary>
+    public DiffLogTypeEnum? DiffType { get; set; }
 
     /// <summary>
     /// 租户Id

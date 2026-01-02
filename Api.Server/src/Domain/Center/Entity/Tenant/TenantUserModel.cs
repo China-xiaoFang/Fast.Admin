@@ -33,6 +33,7 @@ public class TenantUserModel : IBaseTEntity, IUpdateVersion
     /// <summary>
     /// 用户Id
     /// </summary>
+    /// <remarks>绑定 Admin 库 Employee 表主键Id</remarks>
     [SugarColumn(ColumnDescription = "用户Id", IsPrimaryKey = true)]
     public long UserId { get; set; }
 

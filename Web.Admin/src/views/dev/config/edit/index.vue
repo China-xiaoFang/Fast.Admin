@@ -52,7 +52,7 @@ const state = reactive({
 		configValue: [{ required: true, message: "请输入配置值", trigger: "blur" }],
 	}),
 	formDisabled: false,
-	dialogState: withDefineType<IPageStateType>("add"),
+	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "配置",
 });
 
