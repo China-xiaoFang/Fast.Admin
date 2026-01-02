@@ -68,8 +68,8 @@ public class OperateLogService : IDynamicApplication
             queryable = queryable.Where(wh => wh.EmployeeId == _user.UserId);
         }
 
-        return await queryable.OrderByDescending(ob => ob.CreatedTime)
-            .SplitTable()
+        return await queryable.SplitTable()
+            .OrderByDescending(ob => ob.CreatedTime)
             .ToPagedListAsync(input);
     }
 
@@ -91,14 +91,14 @@ public class OperateLogService : IDynamicApplication
         var tableNames = _repository.SplitHelper<OperateLogModel>()
             .GetTables();
 
-        await _repository.Deleteable<OperateLogModel>()
-            .Where(wh => wh.CreatedTime < dateTime)
-            .SplitTable()
-            .ExecuteCommandAsync();
-
         // 删除空数据的表
         foreach (var tableInfo in tableNames)
         {
+            await _repository.Deleteable<OperateLogModel>()
+                .AS(tableInfo.TableName)
+                .Where(wh => wh.CreatedTime < dateTime)
+                .ExecuteCommandAsync();
+
             if (!await _repository.Entities.AS(tableInfo.TableName)
                     .AnyAsync())
             {

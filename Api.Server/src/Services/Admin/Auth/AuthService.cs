@@ -53,7 +53,7 @@ public class AuthService : IDynamicApplication
     /// <returns></returns>
     [HttpGet("/getLoginUserInfo")]
     [ApiInfo("获取登录用户信息", HttpRequestActionEnum.Auth)]
-    [AllowForbidden]
+    [AllowForbidden, DisabledRequestLog]
     public async Task<GetLoginUserInfoOutput> GetLoginUserInfo()
     {
         // 查询应用信息

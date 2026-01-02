@@ -1,5 +1,3 @@
-import { SugarParameter } from "./SugarParameter";
-
 /**
  * Fast.CenterLog.Entity.SqlExceptionLogModel Sql异常日志Model类
  */
@@ -55,7 +53,7 @@ export interface SqlExceptionLogModel {
   /**
    * Sql参数
    */
-  parameters?: Array<SugarParameter>;
+  parameters?: string;
   /**
    * 纯Sql，参数化之后的Sql
    */

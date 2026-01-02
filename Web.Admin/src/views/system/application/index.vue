@@ -84,7 +84,7 @@ const state = reactive({
 });
 
 /** 应用更改 */
-const handleApplicationChange = (data: ElSelectorOutput<number>) => {
+const handleApplicationChange = (data: ElSelectorOutput) => {
 	openIdFastTableRef.value.searchParam.appId = data.value;
 	openIdFastTableRef.value.refresh();
 };

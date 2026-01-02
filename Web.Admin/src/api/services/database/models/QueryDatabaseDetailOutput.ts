@@ -77,7 +77,7 @@ export interface QueryDatabaseDetailOutput {
   /**
    * 从数据库集合
    */
-  children?: Array<QuerySlaveDatabaseOutput>;
+  slaveDatabaseList?: Array<QuerySlaveDatabaseOutput>;
   /**
    * 
    */

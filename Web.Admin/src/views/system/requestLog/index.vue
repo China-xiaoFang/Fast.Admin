@@ -1,19 +1,19 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="15USXWYRJ4" rowKey="recordId" :requestApi="sqlExecutionLogApi.querySqlExecutionLogPaged" stripe>
+		<FastTable ref="fastTableRef" tableKey="157RY61K1T" rowKey="recordId" :requestApi="requestLogApi.queryRequestLogPaged" stripe>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
 			</template>
-			<template #rawSql="{ row }: { row?: SqlExecutionLogModel }">
+			<template #param="{ row }: { row?: RequestLogModel }">
 				<el-tag
-					v-if="row.rawSql"
+					v-if="row.param"
 					type="info"
 					style="cursor: pointer"
 					@click="
 						() => {
-							state.title = '原始Sql';
-							state.content = row.rawSql || '';
+							state.title = '请求参数';
+							state.content = row.param || '';
 							state.visible = true;
 						}
 					"
@@ -22,32 +22,15 @@
 				</el-tag>
 				<span v-else>--</span>
 			</template>
-			<template #parameters="{ row }: { row?: SqlExecutionLogModel }">
+			<template #result="{ row }: { row?: RequestLogModel }">
 				<el-tag
-					v-if="row.parameters"
+					v-if="row.result"
 					type="info"
 					style="cursor: pointer"
 					@click="
 						() => {
-							state.title = 'Sql参数';
-							state.content = row.parameters || '';
-							state.visible = true;
-						}
-					"
-				>
-					查看
-				</el-tag>
-				<span v-else>--</span>
-			</template>
-			<template #pureSql="{ row }: { row?: SqlExecutionLogModel }">
-				<el-tag
-					v-if="row.pureSql"
-					type="info"
-					style="cursor: pointer"
-					@click="
-						() => {
-							state.title = '纯Sql';
-							state.content = row.pureSql || '';
+							state.title = '返回结果';
+							state.content = row.result || '';
 							state.visible = true;
 						}
 					"
@@ -66,15 +49,15 @@
 </template>
 
 <script lang="ts" setup>
-import { sqlExecutionLogApi } from "@/api/services/sqlExecutionLog";
-import { SqlExecutionLogModel } from "@/api/services/sqlExecutionLog/models/SqlExecutionLogModel";
-import { reactive, ref } from "vue";
+import { requestLogApi } from "@/api/services/requestLog";
+import { RequestLogModel } from "@/api/services/requestLog/models/RequestLogModel";
+import { FastTableInstance } from "@/components";
 import { Delete } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { FastTableInstance } from "@/components";
+import { reactive, ref } from "vue";
 
 defineOptions({
-	name: "DevSqlExecutionLog",
+	name: "SystemRequestLog",
 });
 
 const fastTableRef = ref<FastTableInstance>();
@@ -87,10 +70,10 @@ const state = reactive({
 
 /** 处理删除日志 */
 const handleDeleteLog = () => {
-	ElMessageBox.confirm("确定要删除90天前的执行日志？", {
+	ElMessageBox.confirm("确定要删除90天前的请求日志？", {
 		type: "warning",
 		async beforeClose(action, instance, done) {
-			await sqlExecutionLogApi.deleteSqlExecutionLog();
+			await requestLogApi.deleteRequestLog();
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();
 		},

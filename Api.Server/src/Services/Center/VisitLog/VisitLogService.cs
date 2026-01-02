@@ -20,7 +20,6 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Service.RequestLog.Dto;
 using Fast.Center.Service.VisitLog.Dto;
 using Fast.CenterLog.Entity;
 using Microsoft.AspNetCore.Authorization;
@@ -70,7 +69,8 @@ public class VisitLogService : IDynamicApplication
             queryable = queryable.Where(wh => wh.TenantId == _user.TenantId);
         }
 
-        return await queryable.OrderByDescending(ob => ob.CreatedTime)
+        return await queryable.SplitTable()
+            .OrderByDescending(ob => ob.CreatedTime)
             .ToPagedListAsync(input);
     }
 
@@ -92,14 +92,14 @@ public class VisitLogService : IDynamicApplication
         var tableNames = _repository.SplitHelper<VisitLogModel>()
             .GetTables();
 
-        await _repository.Deleteable<VisitLogModel>()
-            .Where(wh => wh.CreatedTime < dateTime)
-            .SplitTable()
-            .ExecuteCommandAsync();
-
         // 删除空数据的表
         foreach (var tableInfo in tableNames)
         {
+            await _repository.Deleteable<VisitLogModel>()
+                .AS(tableInfo.TableName)
+                .Where(wh => wh.CreatedTime < dateTime)
+                .ExecuteCommandAsync();
+
             if (!await _repository.Entities.AS(tableInfo.TableName)
                     .AnyAsync())
             {

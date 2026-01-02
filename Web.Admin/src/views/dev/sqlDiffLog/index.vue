@@ -1,13 +1,150 @@
 <template>
 	<div>
-		<FastTable tableKey="15U9JVNPS8" rowKey="recordId" :requestApi="sqlDiffLogApi.querySqlDiffLogPaged" />
+		<FastTable ref="fastTableRef" tableKey="15U9JVNPS8" rowKey="recordId" :requestApi="sqlDiffLogApi.querySqlDiffLogPaged" stripe>
+			<!-- 表格按钮操作区域 -->
+			<template #header>
+				<el-button plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
+			</template>
+			<template #beforeColumnList="{ row }: { row?: SqlDiffLogModel }">
+				<el-tag
+					v-if="row.beforeColumnList"
+					type="info"
+					style="cursor: pointer"
+					@click="
+						() => {
+							state.title = '旧的列信息';
+							state.content = JSON.stringify(row.beforeColumnList) || '';
+							state.visible = true;
+						}
+					"
+				>
+					查看
+				</el-tag>
+				<span v-else>--</span>
+			</template>
+			<template #afterColumnList="{ row }: { row?: SqlDiffLogModel }">
+				<el-tag
+					v-if="row.afterColumnList"
+					type="info"
+					style="cursor: pointer"
+					@click="
+						() => {
+							state.title = '新的列信息';
+							state.content = JSON.stringify(row.afterColumnList) || '';
+							state.visible = true;
+						}
+					"
+				>
+					查看
+				</el-tag>
+				<span v-else>--</span>
+			</template>
+			<template #rawSql="{ row }: { row?: SqlDiffLogModel }">
+				<el-tag
+					v-if="row.rawSql"
+					type="info"
+					style="cursor: pointer"
+					@click="
+						() => {
+							state.title = '原始Sql';
+							state.content = row.rawSql || '';
+							state.visible = true;
+						}
+					"
+				>
+					查看
+				</el-tag>
+				<span v-else>--</span>
+			</template>
+			<template #parameters="{ row }: { row?: SqlDiffLogModel }">
+				<el-tag
+					v-if="row.parameters"
+					type="info"
+					style="cursor: pointer"
+					@click="
+						() => {
+							state.title = 'Sql参数';
+							state.content = row.parameters || '';
+							state.visible = true;
+						}
+					"
+				>
+					查看
+				</el-tag>
+				<span v-else>--</span>
+			</template>
+			<template #pureSql="{ row }: { row?: SqlDiffLogModel }">
+				<el-tag
+					v-if="row.pureSql"
+					type="info"
+					style="cursor: pointer"
+					@click="
+						() => {
+							state.title = '纯Sql';
+							state.content = row.pureSql || '';
+							state.visible = true;
+						}
+					"
+				>
+					查看
+				</el-tag>
+				<span v-else>--</span>
+			</template>
+			<template #businessData="{ row }: { row?: SqlDiffLogModel }">
+				<el-tag
+					v-if="row.businessData"
+					type="info"
+					style="cursor: pointer"
+					@click="
+						() => {
+							state.title = '业务数据';
+							state.content = JSON.stringify(row.businessData) || '';
+							state.visible = true;
+						}
+					"
+				>
+					查看
+				</el-tag>
+				<span v-else>--</span>
+			</template>
+		</FastTable>
+		<el-dialog v-model="state.visible" :title="state.title" width="700px" alignCenter draggable destroyOnClose>
+			<el-scrollbar>
+				<div style="max-height: 500px; padding-bottom: 20px; padding-right: 10px" v-html="state.content" />
+			</el-scrollbar>
+		</el-dialog>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { sqlDiffLogApi } from "@/api/services/sqlDiffLog";
+import { SqlDiffLogModel } from "@/api/services/sqlDiffLog/models/SqlDiffLogModel";
+import { FastTableInstance } from "@/components";
+import { Delete } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { reactive, ref } from "vue";
 
 defineOptions({
 	name: "DevSqlDiffLog",
 });
+
+const fastTableRef = ref<FastTableInstance>();
+
+const state = reactive({
+	visible: false,
+	title: "日志",
+	content: "",
+});
+
+/** 处理删除日志 */
+const handleDeleteLog = () => {
+	ElMessageBox.confirm("确定要删除90天前的差异日志？", {
+		type: "warning",
+		async beforeClose(action, instance, done) {
+			await sqlDiffLogApi.deleteSqlDiffLog();
+			ElMessage.success("删除成功！");
+			fastTableRef.value?.refresh();
+		},
+	});
+};
 </script>
