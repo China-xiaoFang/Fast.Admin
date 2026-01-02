@@ -281,18 +281,15 @@ public class AccountService : IDynamicApplication
         }, ex => throw ex);
 
         // 刷新缓存
-        await _user.RefreshAccount(new AuthUserInfo
+        await _user.RefreshAccount(new RefreshAccountDto
         {
             DeviceType = _user.DeviceType,
-            DeviceId = _user.DeviceId,
             AppNo = _user.AppNo,
             Mobile = accountModel.Mobile,
+            NickName = input.NickName,
+            Avatar = input.Avatar,
             TenantNo = _user.TenantNo,
             EmployeeNo = _user.EmployeeNo,
-            IsSuperAdmin = _user.IsSuperAdmin,
-            IsAdmin = _user.IsAdmin,
-            NickName = input.NickName,
-            Avatar = input.Avatar
         });
     }
 
@@ -341,7 +338,8 @@ public class AccountService : IDynamicApplication
             CreatedUserId = _user.UserId,
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
-            TenantId = _user.TenantId
+            TenantId = _user.TenantId,
+            TenantName = _user.TenantName,
         };
         visitLogModel.RecordCreate(FastContext.HttpContext);
 

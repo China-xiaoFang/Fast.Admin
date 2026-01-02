@@ -1,5 +1,5 @@
 import { DatabaseTypeEnum } from "@/api/enums/DatabaseTypeEnum";
-import { DbType } from "@/api/enums/DbType";
+import { SugarDbType } from "@/api/enums/SugarDbType";
 
 /**
  * Fast.Center.Service.Database.Dto.AddDatabaseInput 添加数据库输入
@@ -12,7 +12,7 @@ export interface AddDatabaseInput {
   /**
    * 
    */
-  dbType?: DbType;
+  dbType?: SugarDbType;
   /**
    * 公网Ip地址
    */

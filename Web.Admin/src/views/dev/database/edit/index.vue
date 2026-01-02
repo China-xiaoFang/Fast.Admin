@@ -2,6 +2,7 @@
 	<FaDialog
 		ref="faDialogRef"
 		width="1000"
+		:fullHeight="state.dialogState !== 'add'"
 		:title="state.dialogTitle"
 		:showConfirmButton="!state.formDisabled"
 		:showBeforeClose="!state.formDisabled"
@@ -32,7 +33,7 @@
 				<el-input-number v-model="state.formData.port" :min="1" :max="65535" placeholder="请输入端口号" />
 			</FaFormItem>
 			<FaFormItem prop="dbType" label="Db类型" span="2">
-				<RadioGroup name="DbType" v-model="state.formData.dbType" />
+				<RadioGroup name="SugarDbType" v-model="state.formData.dbType" />
 			</FaFormItem>
 			<FaFormItem prop="dbUser" label="数据库用户">
 				<el-input v-model="state.formData.dbUser" maxlength="20" placeholder="请输入数据库用户" autocomplete="off" />
@@ -72,6 +73,116 @@
 			<FaFormItem prop="disableAop" label="禁用Aop">
 				<RadioGroup button name="BooleanEnum" v-model="state.formData.disableAop" />
 			</FaFormItem>
+
+			<FaLayoutGridItem span="2" v-if="state.dialogState !== 'add'">
+				<FaTable height="300" rowKey="buttonId" :data="state.formData.slaveDatabaseList" span="2">
+					<!-- 表格按钮操作区域 -->
+					<template #header>
+						<el-button type="primary" :icon="Plus" @click="handleSlaveDatabaseAdd">新增</el-button>
+					</template>
+					<FaTableColumn prop="hitRate" label="命中率" width="100">
+						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`slaveDatabaseList.${$index}.hitRate`"
+								:rules="[{ required: true, message: '请输入从库命中率', trigger: 'blur' }]"
+							>
+								<el-input-number v-model="row.hitRate" :min="1" :max="100" placeholder="请输入从库命中率" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="publicIp" label="公网Ip地址" width="220">
+						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`slaveDatabaseList.${$index}.publicIp`"
+								:rules="[{ required: true, message: '请输入公网Ip地址', trigger: 'blur' }]"
+							>
+								<el-input v-model="row.publicIp" maxlength="15" placeholder="请输入公网Ip地址" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="intranetIp" label="内网Ip地址" width="220">
+						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`slaveDatabaseList.${$index}.intranetIp`"
+								:rules="[{ required: true, message: '请输入内网Ip地址', trigger: 'blur' }]"
+							>
+								<el-input v-model="row.intranetIp" maxlength="15" placeholder="请输入内网Ip地址" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="port" label="端口号" width="150">
+						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`slaveDatabaseList.${$index}.port`"
+								:rules="[{ required: true, message: '请输入端口号', trigger: 'blur' }]"
+							>
+								<el-input-number v-model="row.port" :min="1" :max="65535" placeholder="请输入端口号" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="dbName" label="数据库名称" width="280">
+						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`slaveDatabaseList.${$index}.dbName`"
+								:rules="[{ required: true, message: '请输入数据库名称', trigger: 'blur' }]"
+							>
+								<el-input v-model="row.dbName" maxlength="50" placeholder="请输入数据库名称" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="dbUser" label="数据库用户" width="220">
+						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`slaveDatabaseList.${$index}.dbUser`"
+								:rules="[{ required: true, message: '请输入数据库用户', trigger: 'blur' }]"
+							>
+								<el-input v-model="row.dbUser" maxlength="20" placeholder="请输入数据库用户" />
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="dbPwd" label="数据库密码" width="280">
+						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
+							<el-form-item
+								labelWidth="0"
+								:prop="`slaveDatabaseList.${$index}.dbPwd`"
+								:rules="[{ required: true, message: '请输入数据库密码', trigger: 'blur' }]"
+							>
+								<el-input
+									type="password"
+									v-model="row.dbPwd"
+									showPassword
+									maxlength="20"
+									placeholder="请输入数据库密码"
+									autocomplete="new-password"
+								/>
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<FaTableColumn prop="customConnectionStr" label="自定义连接字符串" width="300">
+						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
+							<el-form-item labelWidth="0" :prop="`slaveDatabaseList.${$index}.customConnectionStr`">
+								<el-input
+									type="textarea"
+									v-model="row.customConnectionStr"
+									:rows="2"
+									maxlength="100"
+									placeholder="请输入自定义连接字符串"
+								/>
+							</el-form-item>
+						</template>
+					</FaTableColumn>
+					<!-- 表格操作 -->
+					<template #operation="{ $index }: { $index: number }">
+						<el-button size="small" plain type="danger" @click="handleSlaveDatabaseDelete($index)">删除</el-button>
+					</template>
+				</FaTable>
+			</FaLayoutGridItem>
 		</FaForm>
 	</FaDialog>
 </template>
@@ -84,9 +195,11 @@ import type { AddDatabaseInput } from "@/api/services/database/models/AddDatabas
 import type { EditDatabaseInput } from "@/api/services/database/models/EditDatabaseInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import { DatabaseTypeEnum } from "@/api/enums/DatabaseTypeEnum";
-import { DbType } from "@/api/enums/DbType";
 import { databaseApi } from "@/api/services/database";
 import { QueryDatabaseDetailOutput } from "@/api/services/database/models/QueryDatabaseDetailOutput";
+import { SugarDbType } from "@/api/enums/SugarDbType";
+import { Plus } from "@element-plus/icons-vue";
+import { EditSlaveDatabaseInput } from "@/api/services/database/models/EditSlaveDatabaseInput";
 
 defineOptions({
 	name: "DevDatabaseEdit",
@@ -100,12 +213,15 @@ const faFormRef = ref<FaFormInstance>();
 const state = reactive({
 	formData: withDefineType<EditDatabaseInput & AddDatabaseInput & QueryDatabaseDetailOutput>({
 		databaseType: DatabaseTypeEnum.Admin,
-		dbType: DbType.SqlServer,
+		dbType: SugarDbType.SqlServer,
+		publicIp: "127.0.0.1",
+		intranetIp: "127.0.0.1",
 		port: 1433,
 		commandTimeOut: 30,
 		sugarSqlExecMaxSeconds: 60,
 		diffLog: true,
 		disableAop: false,
+		slaveDatabaseList: [],
 	}),
 	formRules: withDefineType<FormRules>({
 		tenantId: [{ required: true, message: "请选择租户", trigger: "change" }],
@@ -123,9 +239,19 @@ const state = reactive({
 		disableAop: [{ required: true, message: "请选择禁用Aop", trigger: "change" }],
 	}),
 	formDisabled: false,
-	dialogState: withDefineType<IPageStateType>("add"),
+	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "数据库",
 });
+
+const handleSlaveDatabaseAdd = () => {
+	state.formData.slaveDatabaseList.push({
+		hitRate: 10,
+	});
+};
+
+const handleSlaveDatabaseDelete = (index: number) => {
+	state.formData.slaveDatabaseList.splice(index, 1);
+};
 
 const handleConfirm = () => {
 	faDialogRef.value.close(async () => {

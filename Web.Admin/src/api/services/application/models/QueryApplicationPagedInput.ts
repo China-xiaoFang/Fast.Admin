@@ -9,9 +9,5 @@ export interface QueryApplicationPagedInput extends PagedInput  {
    * 
    */
   edition?: EditionEnum;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
 }
 

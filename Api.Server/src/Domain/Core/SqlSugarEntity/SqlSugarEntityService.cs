@@ -91,54 +91,53 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
         {
             var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
-            var result = await db.Queryable<MainDatabaseModel>()
+            var data = await db.Queryable<MainDatabaseModel>()
                 .Includes(e => e.SlaveDatabaseList)
                 .Where(wh => wh.TenantId == tenantId && wh.DatabaseType == databaseType)
-                .Select(sl => new ConnectionSettingsOptions
-                {
-                    ConnectionId = sl.MainId.ToString(),
-                    DbType = sl.DbType,
-                    ServiceIp = _hostEnvironment.IsDevelopment()
-                        // 开发环境使用公网地址
-                        ? sl.PublicIp
-                        // 生产环境使用内网地址
-                        : sl.IntranetIp,
-                    Port = sl.Port,
-                    DbName = sl.DbName,
-                    DbUser = sl.DbUser,
-                    DbPwd = sl.DbPwd,
-                    CustomConnectionStr = sl.CustomConnectionStr,
-                    CommandTimeOut = sl.CommandTimeOut,
-                    SugarSqlExecMaxSeconds = sl.SugarSqlExecMaxSeconds,
-                    DiffLog = sl.DiffLog,
-                    DisableAop = sl.DisableAop,
-                    SlaveConnectionList = sl.SlaveDatabaseList.Select(dSl => new SlaveConnectionInfo
-                        {
-                            ServiceIp = _hostEnvironment.IsDevelopment()
-                                // 开发环境使用公网地址
-                                ? string.IsNullOrWhiteSpace(dSl.PublicIp) ? sl.PublicIp : dSl.PublicIp
-                                // 生产环境使用内网地址
-                                :
-                                string.IsNullOrWhiteSpace(dSl.IntranetIp) ? sl.IntranetIp : dSl.IntranetIp,
-                            Port = dSl.Port ?? sl.Port,
-                            DbName = string.IsNullOrWhiteSpace(dSl.DbName) ? sl.DbName : dSl.DbName,
-                            DbUser = string.IsNullOrWhiteSpace(dSl.DbUser) ? sl.DbUser : dSl.DbUser,
-                            DbPwd = string.IsNullOrWhiteSpace(dSl.DbPwd) ? sl.DbPwd : dSl.DbPwd,
-                            CustomConnectionStr = sl.CustomConnectionStr,
-                            HitRate = dSl.HitRate
-                        })
-                        .ToList()
-                })
                 .SingleAsync();
 
-            if (result == null)
+            if (data == null)
             {
                 var message = $"未能找到对应类型【{databaseType.ToString()}】所存在的 Database 信息！";
                 _logger.LogError($"TenantId：{tenantId}；TenantNo：{tenantNo}；{message}");
                 throw new UserFriendlyException(message);
             }
 
-            return result;
+            return new ConnectionSettingsOptions
+            {
+                ConnectionId = data.MainId.ToString(),
+                DbType = data.DbType.ToDbType(),
+                ServiceIp = _hostEnvironment.IsDevelopment()
+                    // 开发环境使用公网地址
+                    ? data.PublicIp
+                    // 生产环境使用内网地址
+                    : data.IntranetIp,
+                Port = data.Port,
+                DbName = data.DbName,
+                DbUser = data.DbUser,
+                DbPwd = data.DbPwd,
+                CustomConnectionStr = data.CustomConnectionStr,
+                CommandTimeOut = data.CommandTimeOut,
+                SugarSqlExecMaxSeconds = data.SugarSqlExecMaxSeconds,
+                DiffLog = data.DiffLog,
+                DisableAop = data.DisableAop,
+                SlaveConnectionList = data.SlaveDatabaseList.Select(dSl => new SlaveConnectionInfo
+                    {
+                        ServiceIp = _hostEnvironment.IsDevelopment()
+                            // 开发环境使用公网地址
+                            ? string.IsNullOrWhiteSpace(dSl.PublicIp) ? data.PublicIp : dSl.PublicIp
+                            // 生产环境使用内网地址
+                            :
+                            string.IsNullOrWhiteSpace(dSl.IntranetIp) ? data.IntranetIp : dSl.IntranetIp,
+                        Port = dSl.Port ?? data.Port,
+                        DbName = string.IsNullOrWhiteSpace(dSl.DbName) ? data.DbName : dSl.DbName,
+                        DbUser = string.IsNullOrWhiteSpace(dSl.DbUser) ? data.DbUser : dSl.DbUser,
+                        DbPwd = string.IsNullOrWhiteSpace(dSl.DbPwd) ? data.DbPwd : dSl.DbPwd,
+                        CustomConnectionStr = data.CustomConnectionStr,
+                        HitRate = dSl.HitRate
+                    })
+                    .ToList()
+            };
         });
 
         if (FastContext.HttpContext != null)

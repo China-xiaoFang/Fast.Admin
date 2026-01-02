@@ -35,15 +35,9 @@ public class EmployeeModel : IUpdateVersion
     /// <summary>
     /// 职员Id
     /// </summary>
+    /// <remarks>绑定 Center 库 TenantUser 表主键Id</remarks>
     [SugarColumn(ColumnDescription = "职员Id", IsPrimaryKey = true)]
     public long EmployeeId { get; set; }
-
-    /// <summary>
-    /// 登录用户Id
-    /// </summary>
-    /// <remarks>绑定 Center 库 TenantUser 表主键Id</remarks>
-    [SugarColumn(ColumnDescription = "登录用户Id")]
-    public long? UserId { get; set; }
 
     /// <summary>
     /// 工号

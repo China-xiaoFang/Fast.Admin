@@ -85,7 +85,6 @@ export const fileApi = {
       method: "post",
       data,
       requestType: "upload",
-      cancelDuplicateRequest: false,
     });
   },
 };

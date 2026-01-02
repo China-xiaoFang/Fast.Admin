@@ -20,6 +20,8 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.AdminLog.Enum;
+
 namespace Fast.AdminLog.Entity;
 
 /// <summary>
@@ -43,12 +45,6 @@ public class OperateLogModel : BaseRecordEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "职员Id")]
     public long EmployeeId { get; set; }
-
-    /// <summary>
-    /// 用户Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "用户Id")]
-    public long UserId { get; set; }
 
     /// <summary>
     /// 工号
@@ -80,10 +76,10 @@ public class OperateLogModel : BaseRecordEntity
     public string Title { get; set; }
 
     /// <summary>
-    /// 类型
+    /// 操作类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "类型")]
-    public HttpRequestActionEnum Type { get; set; }
+    [SugarColumn(ColumnDescription = "操作类型")]
+    public OperateLogTypeEnum OperateType { get; set; }
 
     /// <summary>
     /// 业务Id

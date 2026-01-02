@@ -90,7 +90,7 @@ const state = reactive({
 		status: [{ required: true, message: "请选择状态", trigger: "change" }],
 	}),
 	formDisabled: false,
-	dialogState: withDefineType<IPageStateType>("add"),
+	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "数据字典项",
 	tableIndex: withDefineType<number>(),
 });

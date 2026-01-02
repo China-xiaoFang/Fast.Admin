@@ -140,7 +140,7 @@ const state = reactive({
 		requestEncipher: [{ required: true, message: "请选择请求加密", trigger: "change" }],
 	}),
 	formDisabled: false,
-	dialogState: withDefineType<IPageStateType>("add"),
+	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "应用OpenId",
 });
 

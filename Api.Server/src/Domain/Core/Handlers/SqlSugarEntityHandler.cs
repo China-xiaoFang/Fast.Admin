@@ -133,7 +133,8 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             CreatedUserId = _user.UserId,
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
-            TenantId = _user.TenantId
+            TenantId = _user.TenantId,
+            TenantName = _user.TenantName,
         };
         sqlExecutionLogModel.RecordCreate(_httpContext);
 
@@ -199,7 +200,8 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             CreatedUserId = _user.UserId,
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
-            TenantId = _user.TenantId
+            TenantId = _user.TenantId,
+            TenantName = _user.TenantName
         };
         sqlTimeoutLogModel.RecordCreate(_httpContext);
 
@@ -278,7 +280,8 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             CreatedUserId = _user.UserId,
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
-            TenantId = _user.TenantId
+            TenantId = _user.TenantId,
+            TenantName = _user.TenantName
         };
         sqlDiffLogModel.RecordCreate(_httpContext);
 
@@ -345,7 +348,8 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             CreatedUserId = _user.UserId,
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
-            TenantId = _user.TenantId
+            TenantId = _user.TenantId,
+            TenantName = _user.TenantName
         };
         sqlExceptionLogModel.RecordCreate(_httpContext);
 
