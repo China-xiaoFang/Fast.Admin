@@ -92,14 +92,14 @@ public class SqlDiffLogService : IDynamicApplication
         var tableNames = _repository.SplitHelper<SqlDiffLogModel>()
             .GetTables();
 
-        await _repository.Deleteable<SqlDiffLogModel>()
-            .Where(wh => wh.CreatedTime < dateTime)
-            .SplitTable()
-            .ExecuteCommandAsync();
-
         // 删除空数据的表
         foreach (var tableInfo in tableNames)
         {
+            await _repository.Deleteable<SqlDiffLogModel>()
+                .AS(tableInfo.TableName)
+                .Where(wh => wh.CreatedTime < dateTime)
+                .ExecuteCommandAsync();
+
             if (!await _repository.Entities.AS(tableInfo.TableName)
                     .AnyAsync())
             {

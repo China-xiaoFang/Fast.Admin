@@ -473,6 +473,7 @@ public class TableService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取表格列配置", HttpRequestActionEnum.Query)]
+    [DisabledRequestLog]
     public async Task<QueryTableColumnConfigOutput> QueryTableColumnConfig([Required(ErrorMessage = "表格Key不能为空")] string tableKey)
     {
         var tableConfigModel = await QueryTableConfigCache(tableKey);

@@ -99,8 +99,8 @@ public class ExceptionLogModel : BaseRecordEntity
     /// <summary>
     /// 参数对象
     /// </summary>
-    [SugarColumn(ColumnDescription = "参数对象", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
-    public ParameterInfo[] ParamsObj { get; set; }
+    [SugarColumn(ColumnDescription = "参数对象", ColumnDataType = StaticConfig.CodeFirst_BigString)]
+    public string ParamsObj { get; set; }
 
     /// <summary>
     /// 异常时间

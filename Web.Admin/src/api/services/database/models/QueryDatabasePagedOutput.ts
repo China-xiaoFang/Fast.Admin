@@ -1,6 +1,5 @@
 import { DatabaseTypeEnum } from "@/api/enums/DatabaseTypeEnum";
 import { SugarDbType } from "@/api/enums/SugarDbType";
-import { QuerySlaveDatabaseOutput } from "./QuerySlaveDatabaseOutput";
 
 /**
  * Fast.Center.Service.Database.Dto.QueryDatabasePagedOutput 获取数据库分页列表输出
@@ -66,10 +65,6 @@ export interface QueryDatabasePagedOutput {
    * 租户名称
    */
   tenantName?: string;
-  /**
-   * 从数据库集合
-   */
-  children?: Array<QuerySlaveDatabaseOutput>;
   /**
    * 
    */

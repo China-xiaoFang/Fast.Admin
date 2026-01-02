@@ -97,8 +97,8 @@ public class SqlTimeoutLogModel : BaseRecordEntity
     /// <summary>
     /// Sql参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
-    public SugarParameter[] Parameters { get; set; }
+    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString)]
+    public string Parameters { get; set; }
 
     /// <summary>
     /// 纯Sql，参数化之后的Sql

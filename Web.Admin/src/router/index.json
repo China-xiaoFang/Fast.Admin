@@ -44,6 +44,9 @@
   "/src/views/system/application/edit/index.vue": "SystemApplicationEdit",
   "/src/views/system/application/index.vue": "SystemApplication",
   "/src/views/system/file/index.vue": "SystemFile",
+  "/src/views/system/operateLog/index.vue": "SystemOperateLog",
+  "/src/views/system/requestLog/index.vue": "SystemRequestLog",
   "/src/views/system/serial/edit/index.vue": "SystemSerialEdit",
-  "/src/views/system/serial/index.vue": "SystemSerial"
+  "/src/views/system/serial/index.vue": "SystemSerial",
+  "/src/views/system/visitLog/index.vue": "SystemVisitLog"
 }

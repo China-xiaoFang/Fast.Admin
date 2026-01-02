@@ -1,5 +1,3 @@
-import { SugarParameter } from "./SugarParameter";
-
 /**
  * Fast.CenterLog.Entity.SqlTimeoutLogModel Sql超时日志Model类
  */
@@ -47,7 +45,7 @@ export interface SqlTimeoutLogModel {
   /**
    * Sql参数
    */
-  parameters?: Array<SugarParameter>;
+  parameters?: string;
   /**
    * 纯Sql，参数化之后的Sql
    */

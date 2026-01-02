@@ -1,5 +1,4 @@
 import { DiffLogTypeEnum } from "@/api/enums/DiffLogTypeEnum";
-import { SugarParameter } from "./SugarParameter";
 
 /**
  * Fast.CenterLog.Entity.SqlDiffLogModel Sql差异日志Model类
@@ -60,7 +59,7 @@ export interface SqlDiffLogModel {
   /**
    * Sql参数
    */
-  parameters?: Array<SugarParameter>;
+  parameters?: string;
   /**
    * 纯Sql，参数化之后的Sql
    */

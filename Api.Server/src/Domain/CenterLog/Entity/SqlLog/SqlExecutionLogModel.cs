@@ -65,6 +65,12 @@ public class SqlExecutionLogModel : BaseRecordEntity
     public string NickName { get; set; }
 
     /// <summary>
+    /// 执行秒数
+    /// </summary>
+    [SugarColumn(ColumnDescription = "执行秒数")]
+    public double? ExecuteSeconds { get; set; }
+
+    /// <summary>
     /// 原始Sql
     /// </summary>
     [SugarSearchValue]
@@ -74,8 +80,8 @@ public class SqlExecutionLogModel : BaseRecordEntity
     /// <summary>
     /// Sql参数
     /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
-    public SugarParameter[] Parameters { get; set; }
+    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString)]
+    public string Parameters { get; set; }
 
     /// <summary>
     /// 纯Sql，参数化之后的Sql

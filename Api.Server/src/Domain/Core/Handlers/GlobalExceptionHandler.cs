@@ -187,7 +187,13 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
                 Message = context.Exception.Message,
                 Source = context.Exception.Source,
                 StackTrace = context.Exception.StackTrace,
-                ParamsObj = context.Exception.TargetSite?.GetParameters(),
+                ParamsObj = context.Exception.TargetSite?.GetParameters()
+                    .Select(sl => new
+                    {
+                        PropertyName = sl.Name, TypeName = sl.ParameterType.Name, TypeFullName = sl.ParameterType.FullName,
+                    })
+                    .ToList()
+                    .ToJsonString(),
                 DepartmentId = _user?.DepartmentId,
                 DepartmentName = _user?.DepartmentName,
                 CreatedUserId = _user?.UserId,
