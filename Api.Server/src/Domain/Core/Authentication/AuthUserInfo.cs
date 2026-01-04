@@ -53,11 +53,6 @@ public class AuthUserInfo
     /// </summary>
     public virtual string AppName { get; set; }
 
-    /// <summary>
-    /// 应用标识
-    /// </summary>
-    public virtual string AppOpenId { get; set; }
-
     #region 账号
 
     /// <summary>
