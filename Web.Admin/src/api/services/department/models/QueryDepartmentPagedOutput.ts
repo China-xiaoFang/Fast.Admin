@@ -11,6 +11,10 @@ export interface QueryDepartmentPagedOutput {
    */
   orgId?: number;
   /**
+   * 机构名称
+   */
+  orgName?: string;
+  /**
    * 父级Id
    */
   parentId?: number;

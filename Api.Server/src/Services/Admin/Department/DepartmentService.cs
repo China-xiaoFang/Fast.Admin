@@ -45,18 +45,21 @@ public class DepartmentService : IDynamicApplication
     }
 
     /// <summary>
-    /// 部门树形列表
+    /// 部门选择器
     /// </summary>
+    /// <param name="orgId"></param>
     /// <returns></returns>
     [HttpGet]
-    [ApiInfo("部门树形列表", HttpRequestActionEnum.Query)]
-    public async Task<List<ElTreeOutput<long>>> DepartmentTree()
+    [ApiInfo("部门选择器", HttpRequestActionEnum.Query)]
+    public async Task<List<ElSelectorOutput<long>>> DepartmentSelector(long? orgId)
     {
-        var data = await _repository.Entities.OrderBy(ob => ob.Sort)
+        var data = await _repository.Entities.WhereIF(orgId != null, wh => wh.OrgId == orgId)
+            .OrderBy(ob => ob.Sort)
             .Select(sl => new
             {
                 sl.DepartmentId,
                 sl.OrgId,
+                sl.OrgName,
                 sl.ParentId,
                 sl.ParentName,
                 sl.ParentIds,
@@ -68,7 +71,7 @@ public class DepartmentService : IDynamicApplication
             })
             .ToListAsync();
 
-        return data.Select(sl => new ElTreeOutput<long>
+        return data.Select(sl => new ElSelectorOutput<long>
             {
                 Value = sl.DepartmentId,
                 Label = sl.DepartmentName,
@@ -76,6 +79,7 @@ public class DepartmentService : IDynamicApplication
                 Data = new
                 {
                     sl.OrgId,
+                    sl.OrgName,
                     sl.ParentName,
                     sl.ParentIds,
                     sl.ParentNames,
@@ -89,51 +93,21 @@ public class DepartmentService : IDynamicApplication
     }
 
     /// <summary>
-    /// 获取部门分页列表
+    /// 获取部门列表
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    [ApiInfo("获取部门分页列表", HttpRequestActionEnum.Paged)]
+    [ApiInfo("获取部门列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Department.Paged)]
-    public async Task<PagedResult<QueryDepartmentPagedOutput>> QueryDepartmentPaged(QueryDepartmentPagedInput input)
+    public async Task<List<QueryDepartmentPagedOutput>> QueryDepartmentPaged(QueryDepartmentPagedInput input)
     {
-        var result = await _repository.Entities.Where(wh => wh.ParentId == 0)
-            .WhereIF(input.OrgId != null, wh => wh.OrgId == input.OrgId)
-            .ToPagedListAsync(input,
-                sl => new QueryDepartmentPagedOutput
-                {
-                    DepartmentId = sl.DepartmentId,
-                    OrgId = sl.OrgId,
-                    ParentId = sl.ParentId,
-                    ParentName = sl.ParentName,
-                    ParentIds = sl.ParentIds,
-                    ParentNames = sl.ParentNames,
-                    DepartmentName = sl.DepartmentName,
-                    DepartmentCode = sl.DepartmentCode,
-                    Contacts = sl.Contacts,
-                    Phone = sl.Phone,
-                    Email = sl.Email,
-                    Sort = sl.Sort,
-                    Remark = sl.Remark,
-                    CreatedUserName = sl.CreatedUserName,
-                    CreatedTime = sl.CreatedTime,
-                    UpdatedUserName = sl.UpdatedUserName,
-                    UpdatedTime = sl.UpdatedTime,
-                    RowVersion = sl.RowVersion
-                });
-
-        var parentIds = result.Rows.Select(sl => sl.DepartmentId)
-            .ToList();
-
-        var childrenData = await _repository.Entities.Where(wh => wh.ParentIds.Any(a => parentIds.Contains(a)))
-            .PagedWhere(input)
-            .PagedSearch(input.SearchList)
-            .PagedOrderBy(input.SortList)
+        var data = await _repository.Entities.WhereIF(input.OrgId != null, wh => wh.OrgId == input.OrgId)
             .Select(sl => new QueryDepartmentPagedOutput
             {
                 DepartmentId = sl.DepartmentId,
                 OrgId = sl.OrgId,
+                OrgName = sl.OrgName,
                 ParentId = sl.ParentId,
                 ParentName = sl.ParentName,
                 ParentIds = sl.ParentIds,
@@ -151,33 +125,30 @@ public class DepartmentService : IDynamicApplication
                 UpdatedTime = sl.UpdatedTime,
                 RowVersion = sl.RowVersion
             })
+            .PagedWhere(input)
+            .PagedSearch(input.SearchList)
+            .PagedOrderBy(input.SortList)
             .ToListAsync();
 
-        var allData = result.Rows.Concat(childrenData)
-            .ToList();
-
-        var treeData = new TreeBuildUtil<QueryDepartmentPagedOutput, long>().Build(allData);
-
-        result.Rows = treeData;
-
-        return result;
+        return new TreeBuildUtil<QueryDepartmentPagedOutput, long>().Build(data);
     }
 
     /// <summary>
     /// 获取部门详情
     /// </summary>
-    /// <param name="orgId"></param>
+    /// <param name="departmentId"></param>
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取部门详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Department.Detail)]
-    public async Task<QueryDepartmentDetailOutput> QueryDepartmentDetail([Required(ErrorMessage = "部门Id不能为空")] long? orgId)
+    public async Task<QueryDepartmentDetailOutput> QueryDepartmentDetail([Required(ErrorMessage = "部门Id不能为空")] long? departmentId)
     {
-        var result = await _repository.Entities.Where(wh => wh.OrgId == orgId)
+        var result = await _repository.Entities.Where(wh => wh.DepartmentId == departmentId)
             .Select(sl => new QueryDepartmentDetailOutput
             {
                 DepartmentId = sl.DepartmentId,
                 OrgId = sl.OrgId,
+                OrgName = sl.OrgName,
                 ParentId = sl.ParentId,
                 ParentName = sl.ParentName,
                 ParentIds = sl.ParentIds,
@@ -280,7 +251,7 @@ public class DepartmentService : IDynamicApplication
     [Permission(PermissionConst.Department.Edit)]
     public async Task EditDepartment(EditDepartmentInput input)
     {
-        if (input.ParentId == input.OrgId)
+        if (input.ParentId == input.DepartmentId)
         {
             throw new UserFriendlyException("不能将自己设为父部门！");
         }
@@ -295,7 +266,7 @@ public class DepartmentService : IDynamicApplication
             throw new UserFriendlyException("部门编码重复！");
         }
 
-        var departmentModel = await _repository.SingleOrDefaultAsync(input.OrgId);
+        var departmentModel = await _repository.SingleOrDefaultAsync(input.DepartmentId);
         if (departmentModel == null)
         {
             throw new UserFriendlyException("数据不存在！");

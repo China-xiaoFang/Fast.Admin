@@ -78,4 +78,9 @@ public class QueryEmployeePagedInput : PagedInput
     /// 学位
     /// </summary>
     public DegreeEnum? Degree { get; set; }
+
+    /// <summary>
+    /// 部门Id
+    /// </summary>
+    public long? DepartmentId { get; set; }
 }

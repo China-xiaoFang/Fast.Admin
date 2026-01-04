@@ -1,6 +1,5 @@
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { QueryMenuButtonDetailDto } from "./QueryMenuButtonDetailDto";
 
@@ -105,9 +104,9 @@ export interface QueryMenuDetailOutput {
    */
   link?: string;
   /**
-   * 
+   * 是否显示
    */
-  visible?: YesOrNotEnum;
+  visible?: boolean;
   /**
    * 排序
    */

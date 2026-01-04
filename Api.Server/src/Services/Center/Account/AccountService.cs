@@ -54,6 +54,7 @@ public class AccountService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("账号选择器", HttpRequestActionEnum.Query)]
+    [Permission(PermissionConst.Account.Paged)]
     public async Task<PagedResult<ElSelectorOutput<long>>> AccountSelector(PagedInput input)
     {
         var data = await _repository.Entities.OrderBy(ob => ob.Mobile)

@@ -57,7 +57,6 @@ import type { EditDictionaryItemInput } from "@/api/services/dictionary/models/E
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 
 defineOptions({
 	name: "DevDictionaryEditItemEdit",
@@ -78,7 +77,7 @@ const faFormRef = ref<FaFormInstance>();
 const state = reactive({
 	formData: withDefineType<EditDictionaryItemInput>({
 		type: TagTypeEnum.Primary,
-		visible: YesOrNotEnum.Y,
+		visible: true,
 		status: CommonStatusEnum.Enable,
 	}),
 	formRules: withDefineType<FormRules>({

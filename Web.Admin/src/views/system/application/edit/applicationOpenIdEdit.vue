@@ -47,7 +47,7 @@
 			</FaFormItem>
 
 			<FaLayoutGridItem span="2">
-				<el-divider span="2" contentPosition="left">支付相关</el-divider>
+				<el-divider contentPosition="left">支付相关</el-divider>
 			</FaLayoutGridItem>
 			<FaFormItem prop="weChatMerchantId" label="微信商户号">
 				<MerchantSelect
@@ -69,7 +69,7 @@
 			</FaFormItem>
 
 			<FaLayoutGridItem span="2">
-				<el-divider span="2" contentPosition="left">联系信息</el-divider>
+				<el-divider contentPosition="left">联系信息</el-divider>
 			</FaLayoutGridItem>
 			<FaFormItem prop="contactPhone" label="联系电话">
 				<el-input v-model="state.formData.contactPhone" maxlength="20" placeholder="请输入联系电话" />
@@ -85,7 +85,7 @@
 			</FaFormItem>
 
 			<FaLayoutGridItem span="2">
-				<el-divider span="2" contentPosition="left">图片相关</el-divider>
+				<el-divider contentPosition="left">图片相关</el-divider>
 			</FaLayoutGridItem>
 			<FaFormItem prop="statusBarImageUrl" label="状态栏图片">
 				<FaUploadImage v-model="state.formData.statusBarImageUrl" :uploadApi="fileApi.uploadFile" />

@@ -68,7 +68,7 @@ public class DictionaryTypeModel : BaseEntity, IUpdateVersion
     /// Flags枚举
     /// </summary>
     [SugarColumn(ColumnDescription = "Flags枚举")]
-    public YesOrNotEnum HasFlags { get; set; }
+    public bool HasFlags { get; set; }
 
     /// <summary>
     /// 状态

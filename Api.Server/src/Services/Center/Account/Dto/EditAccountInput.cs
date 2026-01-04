@@ -58,7 +58,7 @@ public class EditAccountInput : UpdateVersionInput
     /// <summary>
     /// 性别
     /// </summary>
-    [EnumRequired(ErrorMessage = "性别不能为空")]
+    [EnumRequired(ErrorMessage = "性别不能为空", AllowZero = true)]
     public GenderEnum Sex { get; set; }
 
     /// <summary>

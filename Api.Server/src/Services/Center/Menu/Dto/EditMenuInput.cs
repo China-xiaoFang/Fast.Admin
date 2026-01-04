@@ -150,7 +150,7 @@ public class EditMenuInput : UpdateVersionInput
     /// 是否显示
     /// </summary>
     [EnumRequired(ErrorMessage = "是否显示不能为空")]
-    public YesOrNotEnum Visible { get; set; }
+    public bool Visible { get; set; }
 
     /// <summary>
     /// 排序

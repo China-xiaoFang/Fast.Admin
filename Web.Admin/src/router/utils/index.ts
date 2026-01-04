@@ -6,7 +6,6 @@ import { layoutRoute } from "../modules/layoutRoute";
 import type { AuthMenuInfoDto } from "@/api/services/auth/models/AuthMenuInfoDto";
 import type { NavigationFailure, RouteLocationNormalized, RouteLocationRaw, RouteRecordRaw, Router } from "vue-router";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import router from "@/router";
 import { useUserInfo } from "@/stores";
 
@@ -62,7 +61,7 @@ const packageMenu = (menuList: AuthMenuInfoDto[]): RouteRecordRaw[] => {
 				title: item.menuTitle || item.menuName,
 				icon: item.icon,
 				tab: item.tab,
-				hide: item.visible == YesOrNotEnum.N,
+				hide: item.visible,
 				keepAlive: item.keepAlive,
 			},
 			children: [],

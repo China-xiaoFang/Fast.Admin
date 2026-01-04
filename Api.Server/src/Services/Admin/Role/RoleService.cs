@@ -231,6 +231,11 @@ public class RoleService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
+        if (roleModel.RoleType == RoleTypeEnum.Admin)
+        {
+            throw new UserFriendlyException("禁止删除管理员角色！");
+        }
+
         await _repository.Ado.UseTranAsync(async () =>
         {
             // 删除角色菜单关联

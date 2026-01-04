@@ -47,6 +47,7 @@ public class MerchantService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("商户号选择器", HttpRequestActionEnum.Query)]
+    [Permission(PermissionConst.Merchant.Paged)]
     public async Task<List<ElSelectorOutput<long>>> MerchantSelector(PaymentChannelEnum? merchantType)
     {
         var data = await _repository.Entities.WhereIF(merchantType != null, wh => wh.MerchantType == merchantType)

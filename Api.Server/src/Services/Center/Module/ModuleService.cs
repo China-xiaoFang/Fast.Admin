@@ -48,6 +48,7 @@ public class Module : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("模块选择器", HttpRequestActionEnum.Query)]
+    [Permission(PermissionConst.Menu.Detail)]
     public async Task<List<ElSelectorOutput<long>>> ModuleSelector(long? appId)
     {
         var data = await _repository.Entities.WhereIF(appId != null, wh => wh.AppId == appId)
