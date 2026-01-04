@@ -158,10 +158,7 @@ public class ChatHub : Hub<IChatClient>
 
         // 获取在线用户信息
         var tenantOnlineUserModel = await _repository.Queryable<TenantOnlineUserModel>()
-            .Where(wh => wh.DeviceId == authUserInfo.DeviceId)
-            .Where(wh => wh.AppNo == authUserInfo.AppNo)
-            .Where(wh => wh.UserId == authUserInfo.UserId)
-            .Where(wh => wh.TenantId == authUserInfo.TenantId)
+            .Where(wh => wh.ConnectionId == Context.ConnectionId)
             .SingleAsync();
 
         if (tenantOnlineUserModel != null)
@@ -244,7 +241,6 @@ public class ChatHub : Hub<IChatClient>
                 DeviceId = authUserInfo.DeviceId,
                 AppNo = authUserInfo.AppNo,
                 AppName = authUserInfo.AppName,
-                AppOpenId = authUserInfo.AppOpenId,
                 AccountId = authUserInfo.AccountId,
                 AccountKey = authUserInfo.AccountKey,
                 Mobile = authUserInfo.Mobile,

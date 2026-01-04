@@ -66,13 +66,6 @@ public class TenantOnlineUserModel : IBaseTEntity
     public string AppName { get; set; }
 
     /// <summary>
-    /// 应用标识
-    /// </summary>
-    [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "应用标识", Length = 50)]
-    public string AppOpenId { get; set; }
-
-    /// <summary>
     /// 账号Id
     /// </summary>
     [SugarColumn(ColumnDescription = "账号Id")]
