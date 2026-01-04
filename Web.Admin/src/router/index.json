@@ -53,6 +53,8 @@
   "/src/views/system/file/index.vue": "SystemFile",
   "/src/views/system/jobLevel/edit/index.vue": "SystemJobLevelEdit",
   "/src/views/system/jobLevel/index.vue": "SystemJobLevel",
+  "/src/views/system/merchant/edit/index.vue": "DevConfigEdit",
+  "/src/views/system/merchant/index.vue": "SystemMerchant",
   "/src/views/system/operateLog/index.vue": "SystemOperateLog",
   "/src/views/system/position/edit/index.vue": "SystemPositionEdit",
   "/src/views/system/position/index.vue": "SystemPosition",
@@ -61,5 +63,6 @@
   "/src/views/system/role/index.vue": "SystemRole",
   "/src/views/system/serial/edit/index.vue": "SystemSerialEdit",
   "/src/views/system/serial/index.vue": "SystemSerial",
+  "/src/views/system/tenantOnlineUser/index.vue": "SystemTenantOnlineUser",
   "/src/views/system/visitLog/index.vue": "SystemVisitLog"
 }

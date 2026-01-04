@@ -2,21 +2,24 @@
 	<div>
 		<FastTable ref="fastTableRef" tableKey="146GLML9MD" rowKey="accountId" :requestApi="accountApi.queryAccountPaged" hideSearchTime>
 			<template #mobile="{ row }: { row?: QueryAccountPagedOutput }">
-				<el-button link type="primary" @click="editFormRef.detail(row.accountId)">{{ row.mobile }}</el-button>
+				<el-button link type="primary" @click="editFormRef.detail(row.accountId)">{{ row.nickName }}</el-button>
+				<br />
+				手机：<span v-iconCopy="row.mobile">{{ row.mobile }}</span>
 				<br />
 				邮箱：<span v-iconCopy="row.email">{{ row.email }}</span>
 			</template>
+
 			<template #firstLoginTime="{ row }: { row?: QueryAccountPagedOutput }">
 				<span>地区：{{ row.firstLoginProvince }} - {{ row.firstLoginCity }}</span>
 				<br />
 				<span>Ip：{{ row.firstLoginIp }}</span>
 				<br />
 				<span>时间：{{ dayjs(row.firstLoginTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
-				<br />
 				<el-tag v-if="row.firstLoginTime" type="info" round effect="light" size="small">
 					{{ dateUtil.dateTimeFix(String(row.firstLoginTime)) }}
 				</el-tag>
 			</template>
+
 			<template #firstLoginOS="{ row }: { row?: QueryAccountPagedOutput }">
 				<span>设备：{{ row.firstLoginDevice }}</span>
 				<br />
@@ -24,17 +27,18 @@
 				<br />
 				<span>浏览器：{{ row.firstLoginBrowser }}</span>
 			</template>
+
 			<template #lastLoginTime="{ row }: { row?: QueryAccountPagedOutput }">
 				<span>地区：{{ row.lastLoginProvince }} - {{ row.lastLoginCity }}</span>
 				<br />
 				<span>Ip：{{ row.lastLoginIp }}</span>
 				<br />
-				<span>时间：{{ dayjs(row.lockEndTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
-				<br />
+				<span>时间：{{ dayjs(row.lastLoginTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.lastLoginTime" type="info" round effect="light" size="small">
 					{{ dateUtil.dateTimeFix(String(row.lastLoginTime)) }}
 				</el-tag>
 			</template>
+
 			<template #lastLoginOS="{ row }: { row?: QueryAccountPagedOutput }">
 				<span>设备：{{ row.lastLoginDevice }}</span>
 				<br />
@@ -42,6 +46,7 @@
 				<br />
 				<span>浏览器：{{ row.lastLoginTime }}</span>
 			</template>
+
 			<template #lockStartTime="{ row }: { row?: QueryAccountPagedOutput }">
 				<template v-if="row.isLock">
 					<el-tag type="warning">已锁定</el-tag>
@@ -56,6 +61,7 @@
 					<el-tag type="info">未锁定</el-tag>
 				</template>
 			</template>
+
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryAccountPagedOutput }">
 				<el-button size="small" plain @click="editFormRef.detail(row.accountId)">详情</el-button>

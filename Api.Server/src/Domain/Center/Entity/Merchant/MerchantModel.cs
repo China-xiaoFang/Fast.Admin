@@ -59,19 +59,19 @@ public class MerchantModel : BaseTEntity, IUpdateVersion
     /// <summary>
     /// 公钥序号
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台公钥序号", Length = 200)]
+    [SugarColumn(ColumnDescription = "公钥序号", Length = 200)]
     public string PublicSerialNum { get; set; }
 
     /// <summary>
     /// 公钥
     /// </summary>
-    [SugarColumn(ColumnDescription = "平台公钥", ColumnDataType = StaticConfig.CodeFirst_BigString)]
+    [SugarColumn(ColumnDescription = "公钥", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string PublicKey { get; set; }
 
     /// <summary>
     /// 证书序号
     /// </summary>
-    [SugarColumn(ColumnDescription = "商户证书序号", Length = 200)]
+    [SugarColumn(ColumnDescription = "证书序号", Length = 200)]
     public string CertSerialNum { get; set; }
 
     /// <summary>
