@@ -36,8 +36,8 @@ public class AddJobLevelInput
     /// <summary>
     /// 职级等级
     /// </summary>
-    [IntRequired(ErrorMessage = "职级等级不能为空")]
-    public int Level { get; set; }
+    [StringRequired(ErrorMessage = "职级等级不能为空")]
+    public string Level { get; set; }
 
     /// <summary>
     /// 备注

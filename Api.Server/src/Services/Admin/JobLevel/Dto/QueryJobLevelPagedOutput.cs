@@ -40,7 +40,7 @@ public class QueryJobLevelPagedOutput : PagedOutput
     /// <summary>
     /// 职级等级
     /// </summary>
-    public int Level { get; set; }
+    public string Level { get; set; }
 
     /// <summary>
     /// 备注

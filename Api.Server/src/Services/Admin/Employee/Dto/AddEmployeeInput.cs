@@ -49,7 +49,7 @@ public class AddEmployeeInput
     /// <summary>
     /// 性别
     /// </summary>
-    [EnumRequired(ErrorMessage = "性别不能为空")]
+    [EnumRequired(ErrorMessage = "性别不能为空", AllowZero = true)]
     public GenderEnum Sex { get; set; }
 
     /// <summary>
@@ -210,6 +210,6 @@ public class AddEmployeeInput
     /// <summary>
     /// 是否为负责人
     /// </summary>
-    [EnumRequired(ErrorMessage = "是否为负责人不能为空")]
-    public YesOrNotEnum IsPrincipal { get; set; }
+    [Required(ErrorMessage = "是否为负责人不能为空")]
+    public bool IsPrincipal { get; set; }
 }

@@ -3,7 +3,6 @@
 		<FaTable
 			ref="faTableRef"
 			rowKey="dictionaryId"
-			:columns="tableColumns"
 			:requestApi="dictionaryApi.queryDictionaryPaged"
 			hideSearchTime
 			@custom-cell-click="(_, { row }: { row: QueryDictionaryPagedOutput }) => editFormRef.detail(row.dictionaryId)"
@@ -12,6 +11,70 @@
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
+			<FaTableColumn
+				prop="dictionaryKey"
+				label="字典Key"
+				fixed="left"
+				width="300"
+				smallWidth="280"
+				sortable
+				copy
+				link
+				:click="({ row }: { row: QueryDictionaryPagedOutput }) => editFormRef.detail(row.dictionaryId)"
+			/>
+			<FaTableColumn prop="dictionaryName" label="字典名称" width="300" smallWidth="280" sortable />
+			<FaTableColumn
+				prop="valueType"
+				label="值类型"
+				width="100"
+				smallWidth="80"
+				sortable
+				tag
+				:enum="[
+					{ label: '字符串', value: 1, type: 'info' },
+					{ label: 'Int', value: 2, type: 'success' },
+					{ label: 'Long', value: 4, type: 'primary' },
+					{ label: 'Boolean', value: 8, type: 'danger' },
+				]"
+			/>
+			<FaTableColumn
+				prop="hasFlags"
+				label="Flags枚举"
+				width="120"
+				smallWidth="100"
+				sortable
+				tag
+				:enum="[
+					{ label: '否', value: 0, type: 'danger' },
+					{ label: '是', value: 1, type: 'primary' },
+				]"
+			/>
+			<FaTableColumn
+				prop="status"
+				label="状态"
+				width="100"
+				smallWidth="80"
+				sortable
+				tag
+				:enum="[
+					{ label: '正常', value: 1, type: 'primary' },
+					{ label: '禁用', value: 2, type: 'danger' },
+				]"
+			/>
+			<FaTableColumn prop="remark" label="备注" width="200" smallWidth="180" sortable />
+			<FaTableColumn prop="createdTime" label="创建时间" type="timeInfo" width="240" smallWidth="220" sortable />
+			<FaTableColumn
+				prop="updatedTime"
+				label="更新时间"
+				type="timeInfo"
+				width="240"
+				smallWidth="220"
+				sortable
+				:timeInfoField="{
+					userName: 'updatedUserName',
+					time: 'updatedTime',
+				}"
+			/>
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryDictionaryPagedOutput }">
 				<el-button size="small" plain @click="editFormRef.detail(row.dictionaryId)">详情</el-button>
@@ -27,10 +90,9 @@
 import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import { withDefineType } from "@fast-china/utils";
 import DictionaryEdit from "./edit/index.vue";
 import type { QueryDictionaryPagedOutput } from "@/api/services/dictionary/models/QueryDictionaryPagedOutput";
-import type { FaTableColumnCtx, FaTableInstance } from "fast-element-plus";
+import type { FaTableInstance } from "fast-element-plus";
 import { dictionaryApi } from "@/api/services/dictionary";
 
 defineOptions({
@@ -52,92 +114,4 @@ const handleDelete = (row: QueryDictionaryPagedOutput) => {
 		},
 	});
 };
-
-const tableColumns = withDefineType<FaTableColumnCtx[]>([
-	{
-		prop: "dictionaryKey",
-		label: "字典Key",
-		sortable: true,
-		link: true,
-		click({ row }: { row: QueryDictionaryPagedOutput }) {
-			editFormRef.value.detail(row.dictionaryId);
-		},
-		copy: true,
-		fixed: "left",
-		width: 300,
-		minWidth: 280,
-	},
-	{
-		prop: "dictionaryName",
-		label: "字典名称",
-		sortable: true,
-		width: 300,
-		minWidth: 280,
-	},
-	{
-		prop: "valueType",
-		label: "值类型",
-		sortable: true,
-		tag: true,
-		enum: [
-			{ label: "字符串", value: 1, type: "info" },
-			{ label: "Int", value: 2, type: "success" },
-			{ label: "Long", value: 4, type: "primary" },
-			{ label: "Boolean", value: 8, type: "danger" },
-		],
-		width: 100,
-		minWidth: 80,
-	},
-	{
-		prop: "hasFlags",
-		label: "Flags枚举",
-		sortable: true,
-		tag: true,
-		enum: [
-			{ label: "否", value: 0, type: "danger" },
-			{ label: "是", value: 1, type: "primary" },
-		],
-		width: 120,
-		minWidth: 100,
-	},
-	{
-		prop: "status",
-		label: "状态",
-		sortable: true,
-		tag: true,
-		enum: [
-			{ label: "正常", value: 1, type: "primary" },
-			{ label: "禁用", value: 2, type: "danger" },
-		],
-		width: 100,
-		minWidth: 80,
-	},
-	{
-		prop: "remark",
-		label: "备注",
-		sortable: true,
-		width: 200,
-		minWidth: 180,
-	},
-	{
-		type: "timeInfo",
-		prop: "createdTime",
-		label: "创建时间",
-		sortable: true,
-		width: 240,
-		minWidth: 220,
-	},
-	{
-		type: "timeInfo",
-		prop: "updatedTime",
-		label: "更新时间",
-		sortable: true,
-		timeInfoField: {
-			userName: "updatedUserName",
-			time: "updatedTime",
-		},
-		width: 240,
-		minWidth: 220,
-	},
-]);
 </script>

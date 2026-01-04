@@ -76,7 +76,7 @@
 			</el-card>
 		</el-aside>
 		<el-main>
-			<FaTable rowKey="jobName" :columns="tableColumns" :data="state.schedulerJobList" :toolBtn="false">
+			<FaTable rowKey="jobName" :data="state.schedulerJobList" :toolBtn="false">
 				<!-- 表格顶部操作区域 -->
 				<template #topHeader>
 					<el-menu :defaultActive="`${state.activeJobGroup}`" mode="horizontal" :ellipsis="false">
@@ -94,43 +94,99 @@
 				<template #header>
 					<el-button type="primary" :icon="Plus" @click="editFormRef.add(state.tenantId, state.activeJobGroup)">添加作业</el-button>
 				</template>
-
-				<template #requestUrl="{ row }: { row?: SchedulerJobInfoDto }">
-					<Tag v-if="row.requestMethod" name="HttpRequestMethodEnum" :value="row.requestMethod" />
-					<br v-if="row.requestUrl" />
-					<span v-if="row.requestUrl">{{ row.requestUrl }}</span>
-					<span v-else>--</span>
-				</template>
-
-				<template #exception="{ row }: { row?: SchedulerJobInfoDto }">
-					<el-tag
-						v-if="row.exception"
-						type="danger"
-						style="cursor: pointer"
-						closable
-						@click="handleShowException(row)"
-						@close="handleDelException(row)"
-					>
-						查看
-					</el-tag>
-					<span v-else>--</span>
-				</template>
-
-				<template #fireTime="{ row }: { row?: SchedulerJobInfoDto }">
-					<el-text v-if="row.previousFireTime" type="info">{{ row.previousFireTime }}</el-text>
-					<span v-else>- -</span>
-					<br />
-					<el-text v-if="row.nextFireTime" type="primary">{{ row.nextFireTime }}</el-text>
-					<span v-else>- -</span>
-				</template>
-
-				<template #time="{ row }: { row?: SchedulerJobInfoDto }">
-					<el-text type="info">{{ row.beginTime }}</el-text>
-					<br />
-					<el-text v-if="row.endTime" type="primary">{{ row.endTime }}</el-text>
-					<span v-else>- -</span>
-				</template>
-
+				<FaTableColumn prop="jobName" label="作业名称" fixed="left" width="300" smallWidth="280" />
+				<FaTableColumn
+					prop="triggerState"
+					label="状态"
+					width="100"
+					smallWidth="80"
+					tag
+					:enum="[
+						{
+							label: '正常',
+							value: TriggerState.Normal,
+						},
+						{
+							label: '暂停',
+							value: TriggerState.Paused,
+						},
+						{
+							label: '完成',
+							value: TriggerState.Complete,
+						},
+						{
+							label: '异常',
+							value: TriggerState.Error,
+						},
+						{
+							label: '阻塞',
+							value: TriggerState.Blocked,
+						},
+						{
+							label: '不存在',
+							value: TriggerState.None,
+						},
+					]"
+				/>
+				<FaTableColumn prop="runNumber" label="触发次数" width="100" smallWidth="80" />
+				<FaTableColumn
+					prop="jobType"
+					label="任务类型"
+					width="100"
+					smallWidth="80"
+					tag
+					:enum="appStore.getDictionary('SchedulerJobTypeEnum')"
+				/>
+				<FaTableColumn prop="requestUrl" label="请求地址" width="300" smallWidth="280">
+					<template #default="{ row }: { row?: SchedulerJobInfoDto }">
+						<Tag v-if="row.requestMethod" name="HttpRequestMethodEnum" :value="row.requestMethod" />
+						<br v-if="row.requestUrl" />
+						<span v-if="row.requestUrl">{{ row.requestUrl }}</span>
+						<span v-else>--</span>
+					</template>
+				</FaTableColumn>
+				<FaTableColumn prop="exception" label="异常信息" width="100" smallWidth="80">
+					<template #default="{ row }: { row?: SchedulerJobInfoDto }">
+						<el-tag
+							v-if="row.exception"
+							type="danger"
+							style="cursor: pointer"
+							closable
+							@click="handleShowException(row)"
+							@close="handleDelException(row)"
+						>
+							查看
+						</el-tag>
+						<span v-else>--</span>
+					</template>
+				</FaTableColumn>
+				<FaTableColumn
+					prop="triggerType"
+					label="触发器类型"
+					width="120"
+					smallWidth="100"
+					tag
+					:enum="appStore.getDictionary('TriggerTypeEnum')"
+				/>
+				<FaTableColumn prop="fireTime" label="执行时间" width="180" smallWidth="160">
+					<template #default="{ row }: { row?: SchedulerJobInfoDto }">
+						<el-text v-if="row.previousFireTime" type="info">{{ row.previousFireTime }}</el-text>
+						<span v-else>- -</span>
+						<br />
+						<el-text v-if="row.nextFireTime" type="primary">{{ row.nextFireTime }}</el-text>
+						<span v-else>- -</span>
+					</template>
+				</FaTableColumn>
+				<FaTableColumn prop="time" label="开始结束时间" width="180" smallWidth="160">
+					<template #default="{ row }: { row?: SchedulerJobInfoDto }">
+						<el-text type="info">{{ row.beginTime }}</el-text>
+						<br />
+						<el-text v-if="row.endTime" type="primary">{{ row.endTime }}</el-text>
+						<span v-else>- -</span>
+					</template>
+				</FaTableColumn>
+				<FaTableColumn prop="interval" label="执行计划" width="150" smallWidth="130" />
+				<FaTableColumn prop="description" label="描述" width="300" smallWidth="280" />
 				<!-- 表格操作 -->
 				<template #operation="{ row }: { row: SchedulerJobInfoDto }">
 					<div class="mb5">
@@ -167,7 +223,6 @@ import { withDefineType } from "@fast-china/utils";
 import SchedulerEdit from "./edit/index.vue";
 import type { QuerySchedulerDetailOutput } from "@/api/services/scheduler/models/QuerySchedulerDetailOutput";
 import type { SchedulerJobInfoDto } from "@/api/services/scheduler/models/SchedulerJobInfoDto";
-import type { FaTableColumnCtx, FaTableEnumColumnCtx } from "fast-element-plus";
 import { SchedulerJobGroupEnum } from "@/api/enums/SchedulerJobGroupEnum";
 import { TriggerState } from "@/api/enums/TriggerState";
 import { schedulerApi } from "@/api/services/scheduler";
@@ -182,32 +237,6 @@ const appStore = useApp();
 const editFormRef = ref<InstanceType<typeof SchedulerEdit>>();
 
 const schedulerJobGroupEnum = appStore.getDictionary("SchedulerJobGroupEnum");
-const triggerState = withDefineType<FaTableEnumColumnCtx[]>([
-	{
-		label: "正常",
-		value: TriggerState.Normal,
-	},
-	{
-		label: "暂停",
-		value: TriggerState.Paused,
-	},
-	{
-		label: "完成",
-		value: TriggerState.Complete,
-	},
-	{
-		label: "异常",
-		value: TriggerState.Error,
-	},
-	{
-		label: "阻塞",
-		value: TriggerState.Blocked,
-	},
-	{
-		label: "不存在",
-		value: TriggerState.None,
-	},
-]);
 
 const state = reactive({
 	/** 加载状态 */
@@ -398,85 +427,6 @@ const handleDelJob = async (row: SchedulerJobInfoDto) => {
 	});
 };
 
-const tableColumns = withDefineType<FaTableColumnCtx[]>([
-	{
-		prop: "jobName",
-		label: "作业名称",
-		fixed: "left",
-		width: 300,
-		minWidth: 280,
-	},
-	{
-		prop: "triggerState",
-		label: "状态",
-		tag: true,
-		enum: triggerState,
-		width: 100,
-		minWidth: 80,
-	},
-	{
-		prop: "runNumber",
-		label: "触发次数",
-		width: 100,
-		minWidth: 80,
-	},
-	{
-		prop: "jobType",
-		label: "任务类型",
-		tag: true,
-		enum: appStore.getDictionary("SchedulerJobTypeEnum"),
-		width: 100,
-		minWidth: 80,
-	},
-	{
-		prop: "requestUrl",
-		label: "请求地址",
-		slot: "requestUrl",
-		width: 300,
-		minWidth: 280,
-	},
-	{
-		prop: "exception",
-		label: "异常信息",
-		slot: "exception",
-		width: 100,
-		minWidth: 80,
-	},
-	{
-		prop: "triggerType",
-		label: "触发器类型",
-		tag: true,
-		enum: appStore.getDictionary("TriggerTypeEnum"),
-		width: 120,
-		minWidth: 100,
-	},
-	{
-		prop: "fireTime",
-		label: "执行时间",
-		slot: "fireTime",
-		width: 180,
-		minWidth: 160,
-	},
-	{
-		prop: "time",
-		label: "开始结束时间",
-		slot: "time",
-		width: 180,
-		minWidth: 160,
-	},
-	{
-		prop: "interval",
-		label: "执行计划",
-		width: 150,
-		minWidth: 130,
-	},
-	{
-		prop: "description",
-		label: "描述",
-		width: 300,
-		minWidth: 280,
-	},
-]);
 onMounted(async () => {
 	state.loading = true;
 	[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()])

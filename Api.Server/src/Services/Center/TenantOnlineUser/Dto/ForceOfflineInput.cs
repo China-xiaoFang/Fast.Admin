@@ -20,25 +20,16 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Shared;
+namespace Fast.Center.Service.TenantOnlineUser.Dto;
 
 /// <summary>
-/// <see cref="YesOrNotEnum"/> 是否枚举
+/// <see cref="ForceOfflineInput"/> 强制下线输入
 /// </summary>
-[FastEnum("是否枚举")]
-public enum YesOrNotEnum : byte
+public class ForceOfflineInput
 {
     /// <summary>
-    /// 是
+    /// 连接Id
     /// </summary>
-    [TagType(TagTypeEnum.Primary)]
-    [Description("是")]
-    Y = 1,
-
-    /// <summary>
-    /// 否
-    /// </summary>
-    [TagType(TagTypeEnum.Danger)]
-    [Description("否")]
-    N = 0
+    [StringRequired(ErrorMessage = "连接Id不能为空")]
+    public string ConnectionId { get; set; }
 }

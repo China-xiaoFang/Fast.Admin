@@ -8,6 +8,7 @@ import { authApi } from "@/api/services/auth";
 import { loginApi } from "@/api/services/login";
 import router from "@/router";
 import { closeWebSocket } from "@/signalR";
+import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 
 type IState = {
 	/** Token */
@@ -28,6 +29,7 @@ export const useUserInfo = defineStore(
 			avatar: "",
 			tenantNo: "",
 			tenantName: "",
+			tenantCode: "",
 			userKey: "",
 			account: "",
 			employeeNo: "",
@@ -38,6 +40,7 @@ export const useUserInfo = defineStore(
 			isAdmin: false,
 			roleNameList: [],
 			buttonCodeList: [],
+			dataScopeType: DataScopeTypeEnum.All,
 			menuList: [],
 		});
 

@@ -134,7 +134,7 @@ public class SyncDictionaryHostedService : IHostedService
                             ServiceName = serviceName,
                             DictionaryName = "Boolean类型枚举",
                             ValueType = DictionaryValueTypeEnum.Boolean,
-                            HasFlags = YesOrNotEnum.N,
+                            HasFlags = false,
                             Status = CommonStatusEnum.Enable,
                             Remark = null,
                             CreatedTime = dateTime
@@ -149,7 +149,7 @@ public class SyncDictionaryHostedService : IHostedService
                                 Value = "true",
                                 Type = TagTypeEnum.Primary,
                                 Order = 1,
-                                Visible = YesOrNotEnum.Y,
+                                Visible = true,
                                 Status = CommonStatusEnum.Enable,
                                 CreatedTime = dateTime
                             },
@@ -160,8 +160,8 @@ public class SyncDictionaryHostedService : IHostedService
                                 Label = "否",
                                 Value = "false",
                                 Type = TagTypeEnum.Danger,
-                                Order = 1,
-                                Visible = YesOrNotEnum.Y,
+                                Order = 2,
+                                Visible = true,
                                 Status = CommonStatusEnum.Enable,
                                 CreatedTime = dateTime
                             }
@@ -172,12 +172,6 @@ public class SyncDictionaryHostedService : IHostedService
                     foreach (var enumType in enumTypes)
                     {
                         var enumItemList = enumType.Type.EnumToList<long>();
-
-                        if (enumType.Type.Name == nameof(YesOrNotEnum))
-                        {
-                            enumItemList = enumItemList.OrderByDescending(ob => ob.Value)
-                                .ToList();
-                        }
 
                         var dictionaryTypeInfo = dictionaryTypeList.SingleOrDefault(s => s.DictionaryKey == enumType.Type.Name);
 
@@ -190,7 +184,7 @@ public class SyncDictionaryHostedService : IHostedService
                             ValueType = Enum.GetUnderlyingType(enumType.Type) == typeof(long)
                                 ? DictionaryValueTypeEnum.Long
                                 : DictionaryValueTypeEnum.Int,
-                            HasFlags = enumType.FlagsAttribute != null ? YesOrNotEnum.Y : YesOrNotEnum.N,
+                            HasFlags = enumType.FlagsAttribute != null,
                             Status = CommonStatusEnum.Enable,
                             Remark = enumType.FastEnumAttribute?.Remark,
                             UpdatedTime = dateTime
@@ -234,7 +228,7 @@ public class SyncDictionaryHostedService : IHostedService
                                     Value = enumItem.Value.ToString(),
                                     Type = tagType?.TagType ?? TagTypeEnum.Primary,
                                     Order = orderIndex,
-                                    Visible = YesOrNotEnum.Y,
+                                    Visible = true,
                                     Status = CommonStatusEnum.Enable,
                                     UpdatedTime = dateTime
                                 };
@@ -287,7 +281,7 @@ public class SyncDictionaryHostedService : IHostedService
                                     Value = enumItem.Value.ToString(),
                                     Type = tagType?.TagType ?? TagTypeEnum.Primary,
                                     Order = orderIndex,
-                                    Visible = YesOrNotEnum.Y,
+                                    Visible = true,
                                     Status = CommonStatusEnum.Enable,
                                     CreatedTime = dateTime,
                                     UpdatedTime = dateTime

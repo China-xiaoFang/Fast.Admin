@@ -40,6 +40,11 @@ public class QueryDepartmentPagedOutput : ITreeNode<long>
     public long OrgId { get; set; }
 
     /// <summary>
+    /// 机构名称
+    /// </summary>
+    public string OrgName { get; set; }
+
+    /// <summary>
     /// 父级Id
     /// </summary>
     public long ParentId { get; set; }

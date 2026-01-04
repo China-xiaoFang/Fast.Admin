@@ -67,7 +67,7 @@ public class QueryMenuPagedInput : PagedInput
     /// <summary>
     /// 是否显示
     /// </summary>
-    public YesOrNotEnum? Visible { get; set; }
+    public bool? Visible { get; set; }
 
     /// <summary>
     /// 状态

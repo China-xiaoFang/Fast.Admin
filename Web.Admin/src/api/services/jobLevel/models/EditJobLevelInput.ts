@@ -13,7 +13,7 @@ export interface EditJobLevelInput {
   /**
    * 职级等级
    */
-  level?: number;
+  level?: string;
   /**
    * 备注
    */

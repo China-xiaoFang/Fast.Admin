@@ -145,7 +145,7 @@ const state = reactive({
 });
 
 /** 应用更改 */
-const handleApplicationChange = (data: ElSelectorOutput<number>) => {
+const handleApplicationChange = (data: ElSelectorOutput) => {
 	fastTableRef.value.searchParam.appId = data.value;
 	fastTableRef.value.searchParam.moduleId = undefined;
 	moduleTreeRef.value.refresh();
