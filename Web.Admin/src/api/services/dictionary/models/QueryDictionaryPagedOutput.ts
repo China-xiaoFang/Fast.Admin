@@ -1,5 +1,4 @@
 import { DictionaryValueTypeEnum } from "@/api/enums/DictionaryValueTypeEnum";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
@@ -23,9 +22,9 @@ export interface QueryDictionaryPagedOutput {
    */
   valueType?: DictionaryValueTypeEnum;
   /**
-   * 
+   * Flags枚举
    */
-  hasFlags?: YesOrNotEnum;
+  hasFlags?: boolean;
   /**
    * 
    */

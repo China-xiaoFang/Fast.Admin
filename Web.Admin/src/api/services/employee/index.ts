@@ -1,5 +1,5 @@
 import { axiosUtil } from "@fast-china/axios";
-import { PagedResult } from "fast-element-plus";
+import { ElSelectorOutput, PagedInput, PagedResult } from "fast-element-plus";
 import { QueryEmployeePagedOutput } from "./models/QueryEmployeePagedOutput";
 import { QueryEmployeePagedInput } from "./models/QueryEmployeePagedInput";
 import { QueryEmployeeDetailOutput } from "./models/QueryEmployeeDetailOutput";
@@ -15,6 +15,17 @@ import { EmployeeAuthInput } from "./models/EmployeeAuthInput";
  * Fast.Admin.Service.Employee.EmployeeService 职员服务Api
  */
 export const employeeApi = {
+  /**
+   * 职员选择器
+   */
+  employeeSelector(data: PagedInput) {
+    return axiosUtil.request<PagedResult<ElSelectorOutput<number>>>({
+      url: "/employee/employeeSelector",
+      method: "post",
+      data,
+      requestType: "query",
+    });
+  },
   /**
    * 获取职员分页列表
    */

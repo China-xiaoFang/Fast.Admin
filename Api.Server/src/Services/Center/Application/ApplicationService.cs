@@ -48,6 +48,7 @@ public class ApplicationService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("应用选择器", HttpRequestActionEnum.Query)]
+    [Permission(PermissionConst.App.Paged)]
     public async Task<List<ElSelectorOutput<long>>> ApplicationSelector()
     {
         var queryable = _repository.Entities;

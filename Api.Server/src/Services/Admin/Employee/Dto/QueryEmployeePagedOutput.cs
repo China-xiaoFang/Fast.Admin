@@ -213,7 +213,7 @@ public class QueryEmployeePagedOutput
     /// <summary>
     /// 是否为负责人
     /// </summary>
-    public YesOrNotEnum? IsPrincipal { get; set; }
+    public bool? IsPrincipal { get; set; }
 
     /// <summary>
     /// 账户

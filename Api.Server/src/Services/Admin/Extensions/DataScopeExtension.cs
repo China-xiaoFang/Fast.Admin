@@ -134,7 +134,7 @@ public static class DataScopeExtension
                 .Where(wh => wh.OrgId
                              == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                  // 主部门
-                                 .Where(e => e.EmployeeId == employeeId && e.IsPrimary == YesOrNotEnum.Y)
+                                 .Where(e => e.EmployeeId == employeeId && e.IsPrimary)
                                  .Where(e => e.OrgId == wh.OrgId)
                                  .Select(sl => sl.OrgId))
                 .Select(sl => new DepartmentModel {DepartmentId = sl.DepartmentId});

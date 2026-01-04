@@ -244,6 +244,7 @@ public class ChatHub : Hub<IChatClient>
                 DeviceId = authUserInfo.DeviceId,
                 AppNo = authUserInfo.AppNo,
                 AppName = authUserInfo.AppName,
+                AppOpenId = authUserInfo.AppOpenId,
                 AccountId = authUserInfo.AccountId,
                 AccountKey = authUserInfo.AccountKey,
                 Mobile = authUserInfo.Mobile,

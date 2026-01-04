@@ -77,7 +77,7 @@ internal static partial class MenuSeedData
             HasMobile = false,
             MobileIcon = "fa-icon-api",
             MobileRouter = null,
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -111,7 +111,7 @@ internal static partial class MenuSeedData
             HasMobile = false,
             MobileIcon = null,
             MobileRouter = null,
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -160,7 +160,7 @@ internal static partial class MenuSeedData
                     MobileIcon = null,
                     MobileRouter = null,
                     Link = "http://127.0.0.1:38081",
-                    Visible = YesOrNotEnum.Y,
+                    Visible = true,
                     Sort = menuSort,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
@@ -188,7 +188,7 @@ internal static partial class MenuSeedData
                     MobileIcon = null,
                     MobileRouter = null,
                     Link = "http://127.0.0.1:38081/knife4j",
-                    Visible = YesOrNotEnum.Y,
+                    Visible = true,
                     Sort = menuSort,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
@@ -219,7 +219,7 @@ internal static partial class MenuSeedData
             HasMobile = false,
             MobileIcon = "fa-icon-organization",
             MobileRouter = null,
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -252,7 +252,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/user.png",
             MobileRouter = "pages_dev/tenant/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -366,7 +366,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/database.png",
             MobileRouter = "pages_dev/database/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -480,7 +480,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/database.png",
             MobileRouter = "pages_dev/config/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -560,7 +560,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "fa-icon-terminal",
             MobileRouter = null,
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -593,7 +593,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/menu.png",
             MobileRouter = "pages_dev/menu/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -722,7 +722,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/menu.png",
             MobileRouter = "pages_dev/sysSerial/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -821,7 +821,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/menu.png",
             MobileRouter = "pages_dev/dictionary/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -950,7 +950,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/menu.png",
             MobileRouter = "pages_dev/tableConfig/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -1064,7 +1064,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/menu.png",
             MobileRouter = "pages_dev/scheduler/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -1253,7 +1253,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
                 MobileIcon = "https://image.fastdotnet.com/menu/mobile/database.png",
                 MobileRouter = "pages_dev/systemMonitor/page/index",
-                Visible = YesOrNotEnum.Y,
+                Visible = true,
                 Sort = menuSort,
                 Status = CommonStatusEnum.Enable,
                 CreatedTime = dateTime
@@ -1283,7 +1283,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "fa-icon-accountSafe",
             MobileRouter = null,
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -1316,7 +1316,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/passwordMap.png",
             MobileRouter = "pages_dev/passwordMap/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -1367,7 +1367,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/passwordMap.png",
             MobileRouter = "pages_dev/passwordRecord/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -1414,7 +1414,7 @@ internal static partial class MenuSeedData
             HasMobile = false,
             MobileIcon = "fa-icon-Odometer",
             MobileRouter = null,
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -1447,7 +1447,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/user.png",
             MobileRouter = "pages_dev/exceptionLog/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -1501,7 +1501,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/user.png",
             MobileRouter = "pages_dev/sqlExceptionLog/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -1555,7 +1555,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/user.png",
             MobileRouter = "pages_dev/sqlTimeoutLog/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -1609,7 +1609,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/user.png",
             MobileRouter = "pages_dev/sqlExecutionLog/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
@@ -1663,7 +1663,7 @@ internal static partial class MenuSeedData
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/user.png",
             MobileRouter = "pages_dev/sqlDiffLog/page/index",
-            Visible = YesOrNotEnum.Y,
+            Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime

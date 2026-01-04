@@ -269,6 +269,7 @@
 								<el-radio value="slot">插槽</el-radio>
 								<el-radio value="TenantSelectPage">租户</el-radio>
 								<el-radio value="AccountSelectPage">账号</el-radio>
+								<el-radio value="EmployeeSelectPage">职员</el-radio>
 							</el-radio-group>
 						</el-form-item>
 

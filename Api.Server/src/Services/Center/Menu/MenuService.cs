@@ -47,6 +47,7 @@ public class MenuService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("菜单选择器", HttpRequestActionEnum.Query)]
+    [Permission(PermissionConst.Menu.Paged)]
     public async Task<List<ElSelectorOutput<long>>> MenuSelector(long? moduleId)
     {
         var data = await _repository.Entities.WhereIF(moduleId != null, wh => wh.ModuleId == moduleId)

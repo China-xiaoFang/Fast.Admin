@@ -52,7 +52,7 @@ public class QueryDictionaryPagedOutput : PagedOutput
     /// <summary>
     /// Flags枚举
     /// </summary>
-    public YesOrNotEnum HasFlags { get; set; }
+    public bool HasFlags { get; set; }
 
     /// <summary>
     /// 状态

@@ -75,7 +75,7 @@ public class EmployeeOrgModel : IDatabaseEntity
     /// 是否为主部门
     /// </summary>
     [SugarColumn(ColumnDescription = "是否为主部门")]
-    public YesOrNotEnum IsPrimary { get; set; }
+    public bool IsPrimary { get; set; }
 
     /// <summary>
     /// 职位Id
@@ -93,7 +93,7 @@ public class EmployeeOrgModel : IDatabaseEntity
     /// 职级Id
     /// </summary>
     [SugarColumn(ColumnDescription = "职级Id")]
-    public long? JobLevelId { get; set; }
+    public long JobLevelId { get; set; }
 
     /// <summary>
     /// 职级名称
@@ -105,5 +105,5 @@ public class EmployeeOrgModel : IDatabaseEntity
     /// 是否为负责人
     /// </summary>
     [SugarColumn(ColumnDescription = "是否为负责人")]
-    public YesOrNotEnum IsPrincipal { get; set; }
+    public bool IsPrincipal { get; set; }
 }

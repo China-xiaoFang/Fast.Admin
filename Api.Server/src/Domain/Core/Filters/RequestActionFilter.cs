@@ -105,7 +105,7 @@ public class RequestActionFilter : IAsyncActionFilter
             Account = _user?.Account,
             Mobile = _user?.Mobile,
             NickName = _user?.NickName,
-            Success = actionContext.Exception == null ? YesOrNotEnum.Y : YesOrNotEnum.N,
+            IsSuccess = actionContext.Exception == null,
             OperationAction = apiInfoAttribute?.Action ?? HttpRequestActionEnum.None,
             OperationName = apiInfoAttribute?.Name,
             ClassName = context.Controller.ToString(),

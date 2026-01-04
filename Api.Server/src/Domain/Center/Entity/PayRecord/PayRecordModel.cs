@@ -108,7 +108,7 @@ public class PayRecordModel : IUpdateVersion
     /// 是否已支付
     /// </summary>
     [SugarColumn(ColumnDescription = "是否已支付")]
-    public YesOrNotEnum IsPaid { get; set; }
+    public bool IsPaid { get; set; }
 
     /// <summary>
     /// 支付过期时间
@@ -120,7 +120,7 @@ public class PayRecordModel : IUpdateVersion
     /// 是否已关闭
     /// </summary>
     [SugarColumn(ColumnDescription = "是否已关闭")]
-    public YesOrNotEnum IsClosed { get; set; }
+    public bool IsClosed { get; set; }
 
     /// <summary>
     /// 关闭时间

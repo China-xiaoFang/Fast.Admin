@@ -52,5 +52,9 @@ export interface QueryEmployeePagedInput extends PagedInput  {
    * 
    */
   degree?: DegreeEnum;
+  /**
+   * 部门Id
+   */
+  departmentId?: number;
 }
 

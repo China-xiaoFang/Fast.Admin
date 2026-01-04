@@ -182,6 +182,7 @@ public class TenantDatabaseService : ITenantDatabaseService, ITransientDependenc
                     OrgId = YitIdHelper.NextId(),
                     ParentId = 0,
                     ParentIds = [0],
+                    ParentNames = [],
                     OrgName = tenantModel.TenantName,
                     OrgCode = $"{tenantModel.TenantCode.ToLower()}_hq",
                     Contacts = tenantModel.AdminName,

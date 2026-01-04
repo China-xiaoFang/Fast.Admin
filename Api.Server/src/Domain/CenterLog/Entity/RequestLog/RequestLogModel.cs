@@ -69,7 +69,7 @@ public class RequestLogModel : BaseRecordEntity
     /// 是否执行成功
     /// </summary>
     [SugarColumn(ColumnDescription = "是否执行成功")]
-    public YesOrNotEnum Success { get; set; }
+    public bool IsSuccess { get; set; }
 
     /// <summary>
     /// 操作行为

@@ -50,6 +50,7 @@ public class TenantService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("租户选择器", HttpRequestActionEnum.Query)]
+    [Permission(PermissionConst.Tenant.Paged)]
     public async Task<PagedResult<ElSelectorOutput<long>>> TenantSelector(PagedInput input)
     {
         var data = await _repository.Entities.OrderBy(ob => ob.TenantName)

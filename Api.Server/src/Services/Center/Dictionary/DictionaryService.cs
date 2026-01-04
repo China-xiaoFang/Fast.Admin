@@ -95,7 +95,7 @@ public class DictionaryService : IDynamicApplication
                 {
                     Label = iSl.Label,
                     Value = localValue,
-                    Show = iSl.Visible == YesOrNotEnum.Y,
+                    Show = iSl.Visible,
                     Disabled = iSl.Status == CommonStatusEnum.Disable,
                     Tips = iSl.Tips,
                     Type = iSl.Type.GetDescription()
@@ -227,7 +227,7 @@ public class DictionaryService : IDynamicApplication
             DictionaryKey = input.DictionaryKey,
             DictionaryName = input.DictionaryName,
             ValueType = input.ValueType,
-            HasFlags = YesOrNotEnum.N,
+            HasFlags = false,
             Status = CommonStatusEnum.Enable,
             Remark = input.Remark
         };

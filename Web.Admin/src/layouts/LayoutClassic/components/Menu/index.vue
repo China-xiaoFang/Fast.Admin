@@ -22,7 +22,6 @@ import { computed } from "vue";
 import { addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
 import MenuItem from "../MenuItem/index.vue";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import { useConfig, useNavTabs, useUserInfo } from "@/stores";
 
 defineOptions({
@@ -39,7 +38,7 @@ const activeMenu = computed(() => router.currentRoute.value.path);
 const menuList = computed(() => {
 	const activeModuleId = navTabStore.activeModuleId || userInfoStore.menuList[0].moduleId;
 	const _menuList = userInfoStore.menuList.find((f) => f.moduleId === activeModuleId) ?? userInfoStore.menuList[0];
-	return (_menuList?.children ?? []).filter((f) => f.visible === YesOrNotEnum.Y);
+	return (_menuList?.children ?? []).filter((f) => f.visible);
 });
 </script>
 

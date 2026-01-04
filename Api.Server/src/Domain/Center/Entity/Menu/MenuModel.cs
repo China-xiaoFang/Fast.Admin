@@ -179,7 +179,7 @@ public class MenuModel : BaseEntity, IUpdateVersion
     /// 是否显示
     /// </summary>
     [SugarColumn(ColumnDescription = "是否显示")]
-    public YesOrNotEnum Visible { get; set; }
+    public bool Visible { get; set; }
 
     /// <summary>
     /// 排序

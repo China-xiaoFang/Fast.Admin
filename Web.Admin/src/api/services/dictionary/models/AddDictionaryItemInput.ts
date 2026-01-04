@@ -1,5 +1,4 @@
 import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 
 /**
  * Fast.Center.Service.Dictionary.Dto.AddDictionaryInput.AddDictionaryItemInput 添加字典项输入
@@ -26,8 +25,8 @@ export interface AddDictionaryItemInput {
    */
   tips?: string;
   /**
-   * 
+   * 是否显示
    */
-  visible?: YesOrNotEnum;
+  visible?: boolean;
 }
 

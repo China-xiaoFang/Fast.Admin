@@ -41,12 +41,12 @@ public class OrganizationService : IDynamicApplication
     }
 
     /// <summary>
-    /// 机构树形列表
+    /// 机构选择器
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    [ApiInfo("机构树形列表", HttpRequestActionEnum.Query)]
-    public async Task<List<ElTreeOutput<long>>> OrganizationTree()
+    [ApiInfo("机构选择器", HttpRequestActionEnum.Query)]
+    public async Task<List<ElSelectorOutput<long>>> OrganizationSelector()
     {
         var data = await _repository.Entities.OrderBy(ob => ob.Sort)
             .Select(sl => new
@@ -63,7 +63,7 @@ public class OrganizationService : IDynamicApplication
             })
             .ToListAsync();
 
-        return data.Select(sl => new ElTreeOutput<long>
+        return data.Select(sl => new ElSelectorOutput<long>
             {
                 Value = sl.OrgId,
                 Label = sl.OrgName,

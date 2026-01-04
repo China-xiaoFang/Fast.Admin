@@ -1,5 +1,4 @@
 import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
@@ -31,9 +30,9 @@ export interface EditDictionaryItemInput {
    */
   tips?: string;
   /**
-   * 
+   * 是否显示
    */
-  visible?: YesOrNotEnum;
+  visible?: boolean;
   /**
    * 
    */

@@ -1,5 +1,3 @@
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
-
 /**
  * Fast.Admin.Entity.EmployeeOrgModel 职员机构表Model类
  */
@@ -33,9 +31,9 @@ export interface EmployeeOrgModel {
    */
   departmentNames?: Array<string>;
   /**
-   * 
+   * 是否为主部门
    */
-  isPrimary?: YesOrNotEnum;
+  isPrimary?: boolean;
   /**
    * 职位Id
    */
@@ -53,8 +51,8 @@ export interface EmployeeOrgModel {
    */
   jobLevelName?: string;
   /**
-   * 
+   * 是否为负责人
    */
-  isPrincipal?: YesOrNotEnum;
+  isPrincipal?: boolean;
 }
 

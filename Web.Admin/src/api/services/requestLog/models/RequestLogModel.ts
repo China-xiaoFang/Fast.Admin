@@ -1,4 +1,3 @@
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import { HttpRequestActionEnum } from "@/api/enums/HttpRequestActionEnum";
 import { HttpRequestMethodEnum } from "@/api/enums/HttpRequestMethodEnum";
 
@@ -27,9 +26,9 @@ export interface RequestLogModel {
    */
   nickName?: string;
   /**
-   * 
+   * 是否执行成功
    */
-  success?: YesOrNotEnum;
+  isSuccess?: boolean;
   /**
    * 
    */

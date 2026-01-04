@@ -58,7 +58,7 @@ public class RequestLogService : IDynamicApplication
         }
 
         var queryable = _repository.Entities.WhereIF(input.AccountId != null, wh => wh.AccountId == input.AccountId)
-            .WhereIF(input.Success != null, wh => wh.Success == input.Success)
+            .WhereIF(input.IsSuccess != null, wh => wh.IsSuccess == input.IsSuccess)
             .WhereIF(input.OperationAction != null, wh => wh.OperationAction == input.OperationAction)
             .WhereIF(input.RequestMethod != null, wh => wh.RequestMethod == input.RequestMethod);
 

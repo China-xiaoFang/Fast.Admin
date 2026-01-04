@@ -13,6 +13,8 @@ declare module "@vue/runtime-core" {
 		ApplicationTree: (typeof import("../src/components/ApplicationTree/index.vue"))["default"];
 		ColorPicker: (typeof import("../src/components/ColorPicker/index.vue"))["default"];
 		Editor: (typeof import("../src/components/Editor/index.vue"))["default"];
+		EmployeeDialogSelect: (typeof import("../src/components/EmployeeDialogSelect/index.vue"))["default"];
+		EmployeeSelectPage: (typeof import("../src/components/EmployeeSelectPage/index.vue"))["default"];
 		FastTable: (typeof import("../src/components/FastTable/index.tsx"))["default"];
 		Footer: (typeof import("../src/components/Footer/index.vue"))["default"];
 		IconSelect: (typeof import("../src/components/IconSelect/index.vue"))["default"];

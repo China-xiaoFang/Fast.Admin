@@ -1,17 +1,36 @@
 <template>
 	<div>
-		<FaTable
-			v-show="!state.isEdit"
-			ref="faTableRef"
-			rowKey="tableId"
-			:columns="tableColumns"
-			:requestApi="tableApi.queryTableConfigPaged"
-			hideSearchTime
-		>
+		<FaTable v-show="!state.isEdit" ref="faTableRef" rowKey="tableId" :requestApi="tableApi.queryTableConfigPaged" hideSearchTime>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
+			<FaTableColumn
+				prop="tableKey"
+				label="表格Key"
+				fixed="left"
+				width="200"
+				smallWidth="180"
+				sortable
+				copy
+				link
+				:click="({ row }: { row: QueryTableConfigPagedOutput }) => editFormRef.detail(row.tableId)"
+			/>
+			<FaTableColumn prop="tableName" label="表格名称" width="400" smallWidth="380" sortable />
+			<FaTableColumn prop="remark" label="备注" width="200" smallWidth="180" sortable />
+			<FaTableColumn prop="createdTime" label="创建时间" type="timeInfo" width="240" smallWidth="220" sortable />
+			<FaTableColumn
+				prop="updatedTime"
+				label="更新时间"
+				type="timeInfo"
+				width="240"
+				smallWidth="220"
+				sortable
+				:timeInfoField="{
+					userName: 'updatedUserName',
+					time: 'updatedTime',
+				}"
+			/>
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryTableConfigPagedOutput }">
 				<el-button size="small" plain @click="editFormRef.detail(row.tableId)">详情</el-button>
@@ -30,11 +49,10 @@
 import { reactive, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import { withDefineType } from "@fast-china/utils";
 import TableColumnConfig from "./config/index.vue";
 import TableConfigEdit from "./edit/index.vue";
 import type { QueryTableConfigPagedOutput } from "@/api/services/table/models/QueryTableConfigPagedOutput";
-import type { FaTableColumnCtx, FaTableInstance } from "fast-element-plus";
+import type { FaTableInstance } from "fast-element-plus";
 import { tableApi } from "@/api/services/table";
 
 defineOptions({
@@ -73,54 +91,4 @@ const handleDelete = (row: QueryTableConfigPagedOutput) => {
 		},
 	});
 };
-
-const tableColumns = withDefineType<FaTableColumnCtx[]>([
-	{
-		prop: "tableKey",
-		label: "表格Key",
-		sortable: true,
-		link: true,
-		click({ row }: { row: QueryTableConfigPagedOutput }) {
-			editFormRef.value.detail(row.tableId);
-		},
-		copy: true,
-		fixed: "left",
-		width: 200,
-		minWidth: 180,
-	},
-	{
-		prop: "tableName",
-		label: "表格名称",
-		sortable: true,
-		width: 400,
-		minWidth: 380,
-	},
-	{
-		prop: "remark",
-		label: "备注",
-		sortable: true,
-		width: 200,
-		minWidth: 180,
-	},
-	{
-		type: "timeInfo",
-		prop: "createdTime",
-		label: "创建时间",
-		sortable: true,
-		width: 240,
-		minWidth: 220,
-	},
-	{
-		type: "timeInfo",
-		prop: "updatedTime",
-		label: "更新时间",
-		sortable: true,
-		timeInfoField: {
-			userName: "updatedUserName",
-			time: "updatedTime",
-		},
-		width: 240,
-		minWidth: 220,
-	},
-]);
 </script>

@@ -105,8 +105,8 @@ public class EditDictionaryInput : UpdateVersionInput
         /// <summary>
         /// 是否显示
         /// </summary>
-        [EnumRequired(ErrorMessage = "是否显示不能为空")]
-        public YesOrNotEnum Visible { get; set; }
+        [Required(ErrorMessage = "是否显示不能为空")]
+        public bool Visible { get; set; }
 
         /// <summary>
         /// 状态

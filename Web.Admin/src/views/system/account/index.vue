@@ -2,55 +2,55 @@
 	<div>
 		<FastTable ref="fastTableRef" tableKey="146GLML9MD" rowKey="accountId" :requestApi="accountApi.queryAccountPaged" hideSearchTime>
 			<template #mobile="{ row }: { row?: QueryAccountPagedOutput }">
-				<div>
-					<ElIcon class="fa__copy-icon" title="复制" v-copy="row.mobile">
-						<CopyDocument />
-					</ElIcon>
-					手机：
-					<el-text class="el-link is-hover-underline fa-table__link-column__text" @click="editFormRef.detail(row.accountId)">
-						{{ row.mobile }}
-					</el-text>
-				</div>
-				<div>
-					<ElIcon class="fa__copy-icon" title="复制" v-copy="row.email">
-						<CopyDocument />
-					</ElIcon>
-					邮箱：
-					{{ row.email }}
-				</div>
+				<el-button link type="primary" @click="editFormRef.detail(row.accountId)">{{ row.mobile }}</el-button>
+				<br />
+				邮箱：<span v-iconCopy="row.email">{{ row.email }}</span>
 			</template>
 			<template #firstLoginTime="{ row }: { row?: QueryAccountPagedOutput }">
-				<div>地区：{{ row.firstLoginProvince }} - {{ row.firstLoginCity }}</div>
-				<div>Ip：{{ row.firstLoginIp }}</div>
-				<div>时间：{{ dayjs(row.firstLoginTime).format("YYYY-MM-DD HH:mm:ss") }}</div>
+				<span>地区：{{ row.firstLoginProvince }} - {{ row.firstLoginCity }}</span>
+				<br />
+				<span>Ip：{{ row.firstLoginIp }}</span>
+				<br />
+				<span>时间：{{ dayjs(row.firstLoginTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
+				<br />
 				<el-tag v-if="row.firstLoginTime" type="info" round effect="light" size="small">
 					{{ dateUtil.dateTimeFix(String(row.firstLoginTime)) }}
 				</el-tag>
 			</template>
 			<template #firstLoginOS="{ row }: { row?: QueryAccountPagedOutput }">
-				<div>设备：{{ row.firstLoginDevice }}</div>
-				<div>操作系统：{{ row.firstLoginOS }}</div>
-				<div>浏览器：{{ row.firstLoginBrowser }}</div>
+				<span>设备：{{ row.firstLoginDevice }}</span>
+				<br />
+				<span>操作系统：{{ row.firstLoginOS }}</span>
+				<br />
+				<span>浏览器：{{ row.firstLoginBrowser }}</span>
 			</template>
 			<template #lastLoginTime="{ row }: { row?: QueryAccountPagedOutput }">
-				<div>地区：{{ row.lastLoginProvince }} - {{ row.lastLoginCity }}</div>
-				<div>Ip：{{ row.lastLoginIp }}</div>
-				<div>时间：{{ dayjs(row.lockEndTime).format("YYYY-MM-DD HH:mm:ss") }}</div>
+				<span>地区：{{ row.lastLoginProvince }} - {{ row.lastLoginCity }}</span>
+				<br />
+				<span>Ip：{{ row.lastLoginIp }}</span>
+				<br />
+				<span>时间：{{ dayjs(row.lockEndTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
+				<br />
 				<el-tag v-if="row.lastLoginTime" type="info" round effect="light" size="small">
 					{{ dateUtil.dateTimeFix(String(row.lastLoginTime)) }}
 				</el-tag>
 			</template>
 			<template #lastLoginOS="{ row }: { row?: QueryAccountPagedOutput }">
-				<div>设备：{{ row.lastLoginDevice }}</div>
-				<div>操作系统：{{ row.lastLoginOS }}</div>
-				<div>浏览器：{{ row.lastLoginTime }}</div>
+				<span>设备：{{ row.lastLoginDevice }}</span>
+				<br />
+				<span>操作系统：{{ row.lastLoginOS }}</span>
+				<br />
+				<span>浏览器：{{ row.lastLoginTime }}</span>
 			</template>
 			<template #lockStartTime="{ row }: { row?: QueryAccountPagedOutput }">
 				<template v-if="row.isLock">
 					<el-tag type="warning">已锁定</el-tag>
-					<div>错误次数：{{ row.passwordErrorTime }}次</div>
-					<div>开始时间：{{ dayjs(row.lockStartTime).format("YYYY-MM-DD HH:mm:ss") }}</div>
-					<div>结束时间：{{ dayjs(row.lockEndTime).format("YYYY-MM-DD HH:mm:ss") }}</div>
+					<br />
+					<span>错误次数：{{ row.passwordErrorTime }}次</span>
+					<br />
+					<span>开始时间：{{ dayjs(row.lockStartTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
+					<br />
+					<span>结束时间：{{ dayjs(row.lockEndTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				</template>
 				<template v-else>
 					<el-tag type="info">未锁定</el-tag>

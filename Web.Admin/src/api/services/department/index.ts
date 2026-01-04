@@ -1,5 +1,5 @@
 import { axiosUtil } from "@fast-china/axios";
-import { ElTreeOutput, PagedResult } from "fast-element-plus";
+import { ElSelectorOutput } from "fast-element-plus";
 import { QueryDepartmentPagedOutput } from "./models/QueryDepartmentPagedOutput";
 import { QueryDepartmentPagedInput } from "./models/QueryDepartmentPagedInput";
 import { QueryDepartmentDetailOutput } from "./models/QueryDepartmentDetailOutput";
@@ -12,20 +12,23 @@ import { DepartmentIdInput } from "./models/DepartmentIdInput";
  */
 export const departmentApi = {
   /**
-   * 部门树形列表
+   * 部门选择器
    */
-  departmentTree() {
-    return axiosUtil.request<ElTreeOutput<number>[]>({
-      url: "/department/departmentTree",
+  departmentSelector(orgId: number) {
+    return axiosUtil.request<ElSelectorOutput<number>[]>({
+      url: "/department/departmentSelector",
       method: "get",
+      params: {
+        orgId,
+      },
       requestType: "query",
     });
   },
   /**
-   * 获取部门分页列表
+   * 获取部门列表
    */
   queryDepartmentPaged(data: QueryDepartmentPagedInput) {
-    return axiosUtil.request<PagedResult<QueryDepartmentPagedOutput>>({
+    return axiosUtil.request<QueryDepartmentPagedOutput[]>({
       url: "/department/queryDepartmentPaged",
       method: "post",
       data,
@@ -35,12 +38,12 @@ export const departmentApi = {
   /**
    * 获取部门详情
    */
-  queryDepartmentDetail(orgId: number) {
+  queryDepartmentDetail(departmentId: number) {
     return axiosUtil.request<QueryDepartmentDetailOutput>({
       url: "/department/queryDepartmentDetail",
       method: "get",
       params: {
-        orgId,
+        departmentId,
       },
       requestType: "query",
     });

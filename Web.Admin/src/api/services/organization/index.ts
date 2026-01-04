@@ -1,5 +1,5 @@
 import { axiosUtil } from "@fast-china/axios";
-import { ElTreeOutput } from "fast-element-plus";
+import { ElSelectorOutput } from "fast-element-plus";
 import { QueryOrganizationDetailOutput } from "./models/QueryOrganizationDetailOutput";
 import { AddOrganizationInput } from "./models/AddOrganizationInput";
 import { EditOrganizationInput } from "./models/EditOrganizationInput";
@@ -10,11 +10,11 @@ import { OrganizationIdInput } from "./models/OrganizationIdInput";
  */
 export const organizationApi = {
   /**
-   * 机构树形列表
+   * 机构选择器
    */
-  organizationTree() {
-    return axiosUtil.request<ElTreeOutput<number>[]>({
-      url: "/organization/organizationTree",
+  organizationSelector() {
+    return axiosUtil.request<ElSelectorOutput<number>[]>({
+      url: "/organization/organizationSelector",
       method: "get",
       requestType: "query",
     });

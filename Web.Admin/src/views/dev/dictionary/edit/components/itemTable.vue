@@ -1,9 +1,49 @@
 <template>
-	<FaTable rowKey="dictionaryItemId" :columns="tableColumns" :data="modelValue">
+	<FaTable rowKey="dictionaryItemId" :data="modelValue">
 		<!-- 表格按钮操作区域 -->
 		<template #header>
 			<el-button :disabled="props.disabled" type="primary" :icon="Plus" @click="editFormRef.add()">新增字典项</el-button>
 		</template>
+		<FaTableColumn prop="label" label="字典项名称" width="120" smallWidth="100" />
+		<FaTableColumn prop="value" label="字典项值" width="120" smallWidth="100" />
+		<FaTableColumn
+			prop="type"
+			label="标签类型"
+			width="100"
+			smallWidth="80"
+			tag
+			:enum="[
+				{ label: 'Primary', value: 1, type: 'primary' },
+				{ label: 'Success', value: 2, type: 'success' },
+				{ label: 'Info', value: 4, type: 'info' },
+				{ label: 'Warning', value: 8, type: 'warning' },
+				{ label: 'Danger', value: 16, type: 'danger' },
+			]"
+		/>
+		<FaTableColumn prop="order" label="排序" width="100" smallWidth="80" />
+		<FaTableColumn
+			prop="visible"
+			label="显示"
+			width="100"
+			smallWidth="80"
+			tag
+			:enum="[
+				{ label: '隐藏', value: 0, type: 'danger' },
+				{ label: '显示', value: 1, type: 'primary' },
+			]"
+		/>
+		<FaTableColumn
+			prop="status"
+			label="状态"
+			width="100"
+			smallWidth="80"
+			tag
+			:enum="[
+				{ label: '正常', value: 1, type: 'primary' },
+				{ label: '禁用', value: 2, type: 'danger' },
+			]"
+		/>
+		<FaTableColumn prop="tips" label="提示" width="120" smallWidth="100" sortable />
 		<!-- 表格操作 -->
 		<template #operation="{ row, $index }: { row: EditDictionaryItemInput; $index: number }">
 			<el-button size="small" plain @click="editFormRef.detail(row)">详情</el-button>
@@ -18,11 +58,10 @@
 import { ref } from "vue";
 import { ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import { definePropType, withDefineType } from "@fast-china/utils";
+import { definePropType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
 import DictionaryEditItemEdit from "./itemEdit.vue";
 import type { EditDictionaryItemInput } from "@/api/services/dictionary/models/EditDictionaryItemInput";
-import type { FaTableColumnCtx } from "fast-element-plus";
 
 defineOptions({
 	name: "DevDictionaryEditItemTable",
@@ -49,68 +88,4 @@ const handleDelete = (row: EditDictionaryItemInput, index: number) => {
 		},
 	});
 };
-
-const tableColumns = withDefineType<FaTableColumnCtx[]>([
-	{
-		prop: "label",
-		label: "字典项名称",
-		width: 120,
-		minWidth: 100,
-	},
-	{
-		prop: "value",
-		label: "字典项值",
-		width: 120,
-		minWidth: 100,
-	},
-	{
-		prop: "type",
-		label: "标签类型",
-		tag: true,
-		enum: [
-			{ label: "Primary", value: 1, type: "primary" },
-			{ label: "Success", value: 2, type: "success" },
-			{ label: "Info", value: 4, type: "info" },
-			{ label: "Warning", value: 8, type: "warning" },
-			{ label: "Danger", value: 16, type: "danger" },
-		],
-		width: 100,
-		minWidth: 80,
-	},
-	{
-		prop: "order",
-		label: "排序",
-		width: 100,
-		minWidth: 80,
-	},
-	{
-		prop: "visible",
-		label: "显示",
-		tag: true,
-		enum: [
-			{ label: "隐藏", value: 0, type: "danger" },
-			{ label: "显示", value: 1, type: "primary" },
-		],
-		width: 100,
-		minWidth: 80,
-	},
-	{
-		prop: "status",
-		label: "状态",
-		tag: true,
-		enum: [
-			{ label: "正常", value: 1, type: "primary" },
-			{ label: "禁用", value: 2, type: "danger" },
-		],
-		width: 100,
-		minWidth: 80,
-	},
-	{
-		prop: "tips",
-		label: "提示",
-		sortable: true,
-		width: 120,
-		minWidth: 100,
-	},
-]);
 </script>

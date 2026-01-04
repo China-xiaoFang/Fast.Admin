@@ -52,6 +52,33 @@ public class EmployeeService : IDynamicApplication
     }
 
     /// <summary>
+    /// 职员选择器
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("职员选择器", HttpRequestActionEnum.Query)]
+    [Permission(PermissionConst.Employee.Paged)]
+    public async Task<PagedResult<ElSelectorOutput<long>>> EmployeeSelector(PagedInput input)
+    {
+        var data = await _repository.Entities.OrderBy(ob => ob.EmployeeName)
+            .Select(sl => new
+            {
+                sl.EmployeeId,
+                sl.EmployeeNo,
+                sl.EmployeeName,
+                sl.Mobile,
+                sl.IdPhoto
+            })
+            .ToPagedListAsync(input);
+
+        return data.ToPagedData(sl => new ElSelectorOutput<long>
+        {
+            Value = sl.EmployeeId, Label = sl.EmployeeName, Data = new {sl.EmployeeNo, sl.Mobile, sl.IdPhoto}
+        });
+    }
+
+    /// <summary>
     /// 获取职员分页列表
     /// </summary>
     /// <param name="input"></param>
@@ -62,7 +89,7 @@ public class EmployeeService : IDynamicApplication
     public async Task<PagedResult<QueryEmployeePagedOutput>> QueryEmployeePaged(QueryEmployeePagedInput input)
     {
         var result = await _repository.Entities
-            .LeftJoin<EmployeeOrgModel>((t1, t2) => t1.EmployeeId == t2.EmployeeId && t2.IsPrimary == YesOrNotEnum.Y)
+            .LeftJoin<EmployeeOrgModel>((t1, t2) => t1.EmployeeId == t2.EmployeeId && t2.IsPrimary)
             .WhereIF(input.Status != null, t1 => t1.Status == input.Status)
             .WhereIF(input.Sex != null, t1 => t1.Sex == input.Sex)
             .WhereIF(input.Nation != null, t1 => t1.Nation == input.Nation)
@@ -74,6 +101,7 @@ public class EmployeeService : IDynamicApplication
             .WhereIF(input.AcademicQualifications != null, t1 => t1.AcademicQualifications == input.AcademicQualifications)
             .WhereIF(input.AcademicSystem != null, t1 => t1.AcademicSystem == input.AcademicSystem)
             .WhereIF(input.Degree != null, t1 => t1.Degree == input.Degree)
+            .WhereIF(input.DepartmentId != null, (t1, t2) => t2.DepartmentId == input.DepartmentId)
             .OrderByDescending(t1 => t1.CreatedTime)
             .Select((t1, t2) => new QueryEmployeePagedOutput
             {
@@ -255,11 +283,11 @@ public class EmployeeService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        JobLevelModel jobLevelModel = null;
-        if (input.JobLevelId != null)
-        {
-            jobLevelModel = await _repository.Queryable<JobLevelModel>()
+        var jobLevelModel = await _repository.Queryable<JobLevelModel>()
                 .SingleAsync(s => s.JobLevelId == input.JobLevelId);
+        if (jobLevelModel == null)
+        {
+            throw new UserFriendlyException("数据不存在！");
         }
 
         var employeeModel = new EmployeeModel
@@ -306,11 +334,11 @@ public class EmployeeService : IDynamicApplication
             DepartmentId = departmentModel.DepartmentId,
             DepartmentName = departmentModel.DepartmentName,
             DepartmentNames = [..departmentModel.ParentNames, departmentModel.DepartmentName],
-            IsPrimary = YesOrNotEnum.Y,
+            IsPrimary = true,
             PositionId = positionModel.PositionId,
             PositionName = positionModel.PositionName,
-            JobLevelId = jobLevelModel?.JobLevelId,
-            JobLevelName = jobLevelModel?.JobLevelName,
+            JobLevelId = jobLevelModel.JobLevelId,
+            JobLevelName = jobLevelModel.JobLevelName,
             IsPrincipal = input.IsPrincipal
         };
 
@@ -346,7 +374,7 @@ public class EmployeeService : IDynamicApplication
             throw new UserFriendlyException("请至少填写一个部门！");
         }
 
-        if (input.OrgList.Count(c => c.IsPrimary == YesOrNotEnum.Y) > 1)
+        if (input.OrgList.Count(c => c.IsPrimary) > 1)
         {
             throw new UserFriendlyException("只能存在一个主部门！");
         }
@@ -403,8 +431,7 @@ public class EmployeeService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        var jobLevelId = input.OrgList.Where(wh => wh.JobLevelId != null)
-            .Select(sl => sl.JobLevelId)
+        var jobLevelId = input.OrgList.Select(sl => sl.JobLevelId)
             .Distinct()
             .ToList();
         var jobLevelList = await _repository.Queryable<JobLevelModel>()
@@ -458,11 +485,7 @@ public class EmployeeService : IDynamicApplication
             var organizationModel = organizationList.Single(s => s.OrgId == item.OrgId);
             var departmentModel = departmentList.Single(s => s.DepartmentId == item.DepartmentId);
             var positionModel = positionList.Single(s => s.PositionId == item.PositionId);
-            JobLevelModel jobLevelModel = null;
-            if (item.JobLevelId != null)
-            {
-                jobLevelModel = jobLevelList.Single(s => s.JobLevelId == item.JobLevelId);
-            }
+            var jobLevelModel = jobLevelList.Single(s => s.JobLevelId == item.JobLevelId);
 
             employeeOrgList.Add(new EmployeeOrgModel
             {
@@ -473,11 +496,11 @@ public class EmployeeService : IDynamicApplication
                 DepartmentId = departmentModel.DepartmentId,
                 DepartmentName = departmentModel.DepartmentName,
                 DepartmentNames = [.. departmentModel.ParentNames, departmentModel.DepartmentName],
-                IsPrimary = YesOrNotEnum.Y,
+                IsPrimary = item.IsPrimary,
                 PositionId = positionModel.PositionId,
                 PositionName = positionModel.PositionName,
-                JobLevelId = jobLevelModel?.JobLevelId,
-                JobLevelName = jobLevelModel?.JobLevelName,
+                JobLevelId = jobLevelModel.JobLevelId,
+                JobLevelName = jobLevelModel.JobLevelName,
                 IsPrincipal = item.IsPrincipal
             });
         }
@@ -504,13 +527,13 @@ public class EmployeeService : IDynamicApplication
                 .ExecuteCommandAsync();
 
             // 处理部门负责人
-            var principalDepartmentIds = employeeOrgList.Where(wh => wh.IsPrincipal == YesOrNotEnum.Y)
+            var principalDepartmentIds = employeeOrgList.Where(wh => wh.IsPrincipal == true)
                 .Select(sl => sl.DepartmentId)
                 .ToList();
             if (principalDepartmentIds.Any())
             {
                 await _repository.Updateable<EmployeeOrgModel>()
-                    .SetColumns(_ => new EmployeeOrgModel {IsPrincipal = YesOrNotEnum.N})
+                    .SetColumns(_ => new EmployeeOrgModel {IsPrincipal = false})
                     .Where(wh => principalDepartmentIds.Contains(wh.DepartmentId))
                     .ExecuteCommandAsync();
             }
@@ -542,6 +565,12 @@ public class EmployeeService : IDynamicApplication
         if (employeeModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
+        }
+
+        if (employeeModel.ResignDate != null)
+        {
+            employeeModel.ResignDate = null;
+            employeeModel.ResignReason = null;
         }
 
         employeeModel.Status = input.Status;
@@ -639,7 +668,7 @@ public class EmployeeService : IDynamicApplication
         }
 
         var employeeOrgModel = await _repository.Queryable<EmployeeOrgModel>()
-            .SingleAsync(s => s.EmployeeId == employeeModel.EmployeeId && s.IsPrimary == YesOrNotEnum.Y);
+            .SingleAsync(s => s.EmployeeId == employeeModel.EmployeeId && s.IsPrimary);
 
         if (string.IsNullOrWhiteSpace(employeeModel.Email))
         {
@@ -713,7 +742,7 @@ public class EmployeeService : IDynamicApplication
                 UserType = UserTypeEnum.None,
                 Status = CommonStatusEnum.Enable
             };
-            await _centerRepository.Updateable(tenantUserModel)
+            await _centerRepository.Insertable(tenantUserModel)
                 .ExecuteCommandAsync();
 
             await _repository.UpdateAsync(employeeModel);
@@ -757,6 +786,11 @@ public class EmployeeService : IDynamicApplication
         if (tenantUserModel == null)
         {
             throw new UserFriendlyException("未绑定登录账号！");
+        }
+
+        if (_user.AccountId == tenantUserModel.AccountId)
+        {
+            throw new UserFriendlyException("禁止更改当前登录账号状态！");
         }
 
         tenantUserModel.Status = tenantUserModel.Status switch

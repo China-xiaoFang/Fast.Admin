@@ -6,7 +6,6 @@ import { PoliticalStatusEnum } from "@/api/enums/PoliticalStatusEnum";
 import { AcademicQualificationsEnum } from "@/api/enums/AcademicQualificationsEnum";
 import { AcademicSystemEnum } from "@/api/enums/AcademicSystemEnum";
 import { DegreeEnum } from "@/api/enums/DegreeEnum";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
@@ -154,9 +153,9 @@ export interface QueryEmployeePagedOutput {
    */
   jobLevelName?: string;
   /**
-   * 
+   * 是否为负责人
    */
-  isPrincipal?: YesOrNotEnum;
+  isPrincipal?: boolean;
   /**
    * 账户
    */

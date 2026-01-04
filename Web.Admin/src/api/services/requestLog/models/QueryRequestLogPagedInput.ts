@@ -1,5 +1,4 @@
 import { PagedInput } from "fast-element-plus";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import { HttpRequestActionEnum } from "@/api/enums/HttpRequestActionEnum";
 import { HttpRequestMethodEnum } from "@/api/enums/HttpRequestMethodEnum";
 
@@ -12,9 +11,9 @@ export interface QueryRequestLogPagedInput extends PagedInput  {
    */
   accountId?: number;
   /**
-   * 
+   * 是否执行成功
    */
-  success?: YesOrNotEnum;
+  isSuccess?: boolean;
   /**
    * 
    */

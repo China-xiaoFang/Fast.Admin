@@ -48,6 +48,9 @@ internal static class ApplicationSeedData
             AppName = "Fast.Admin",
             LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
             ThemeColor = "#409EFF",
+            UserAgreement = "<p><br></p>",
+            PrivacyAgreement = "<p><br></p>",
+            ServiceAgreement = "<p><br></p>",
             CreatedTime = dateTime
         };
         applicationModel = await db.Insertable(applicationModel)

@@ -47,9 +47,8 @@ public class JobLevelModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 职级等级
     /// </summary>
-    /// <remarks>从大到小</remarks>
-    [SugarColumn(ColumnDescription = "职级等级")]
-    public int Level { get; set; }
+    [SugarColumn(ColumnDescription = "职级等级", Length = 5)]
+    public string Level { get; set; }
 
     /// <summary>
     /// 备注
