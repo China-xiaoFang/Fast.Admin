@@ -22,7 +22,6 @@
 
 using Fast.Serialization;
 using Newtonsoft.Json;
-using DbType = SqlSugar.DbType;
 
 namespace Fast.Center.Service.Database.Dto;
 

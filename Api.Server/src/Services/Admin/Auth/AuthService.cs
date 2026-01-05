@@ -57,15 +57,7 @@ public class AuthService : IDynamicApplication
     public async Task<GetLoginUserInfoOutput> GetLoginUserInfo()
     {
         // 查询应用信息
-        var applicationModel = await _repository.Queryable<ApplicationOpenIdModel>()
-            .Includes(e => e.Application)
-            .Where(wh => wh.OpenId == GlobalContext.Origin)
-            .SingleAsync();
-
-        if (applicationModel == null)
-        {
-            throw new UserFriendlyException("未知的应用！");
-        }
+        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
 
         if (applicationModel.AppType != GlobalContext.DeviceType)
         {
@@ -80,6 +72,7 @@ public class AuthService : IDynamicApplication
 
         var result = new GetLoginUserInfoOutput
         {
+            AccountId = _user.AccountId,
             AccountKey = _user.AccountKey,
             Mobile = _user.Mobile,
             NickName = _user.NickName,
@@ -87,6 +80,7 @@ public class AuthService : IDynamicApplication
             TenantNo = _user.TenantNo,
             TenantName = _user.TenantName,
             TenantCode = _user.TenantCode,
+            UserId = _user.UserId,
             UserKey = _user.UserKey,
             Account = _user.Account,
             EmployeeNo = _user.EmployeeNo,
@@ -98,14 +92,7 @@ public class AuthService : IDynamicApplication
         };
 
         // 查询租户信息
-        var tenantModel = await _repository.Queryable<TenantModel>()
-            .Where(wh => wh.TenantId == _user.TenantId)
-            .SingleAsync();
-
-        if (tenantModel == null)
-        {
-            throw new UserFriendlyException("租户不存在！");
-        }
+        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
 
         if (tenantModel.Status == CommonStatusEnum.Disable)
         {
@@ -182,7 +169,7 @@ public class AuthService : IDynamicApplication
         // 查询所有菜单
         var menuList = await menuQueryable.Clone()
             .InnerJoin(moduleQueryable.Clone(), (t1, t2) => t1.ModuleId == t2.ModuleId)
-            .OrderByDescending(t1 => t1.Sort)
+            .OrderBy(t1 => t1.Sort)
             .Select((t1, t2) => new AuthMenuInfoDto
             {
                 MenuId = t1.MenuId,

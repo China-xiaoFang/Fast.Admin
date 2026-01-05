@@ -46,10 +46,26 @@
 							valueKey="userKey"
 							:props="{ label: 'tenantName' }"
 							:lazy="false"
+							moreDetail
 							:requestApi="() => loginApi.queryLoginUserByAccount(userInfoStore.accountKey)"
 							@change="handleTenantChange"
 							@data-change-call-back="() => faTenantSelectRef.setSelection(userInfoStore.userKey)"
-						/>
+						>
+							<template #default="data: LoginTenantOutput">
+								<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%">
+									<FaAvatar :src="data.idPhoto" thumb size="small" />
+									<div style="flex: 1">
+										<span>{{ data.tenantName }}</span>
+										<span style="display: flex; justify-content: space-between; width: 100%">
+											<span style="font-size: var(--el-font-size-extra-small); padding-right: 8px">{{
+												data.employeeName
+											}}</span>
+											<span style="font-size: var(--el-font-size-extra-small)">{{ data.employeeNo }}</span>
+										</span>
+									</div>
+								</div>
+							</template>
+						</FaSelect>
 						<LayoutScreenFull />
 						<el-dropdown
 							class="avatar"
@@ -60,14 +76,14 @@
 						>
 							<div class="user-info">
 								<FaAvatar original :size="24" :src="userInfoStore.avatar" :icon="UserFilled" />
-								<span class="nick-name">{{ userInfoStore.employeeName || userInfoStore.nickName }}</span>
+								<span class="nick-name">{{ userInfoStore.nickName }}（{{ userInfoStore.employeeName }}）</span>
 							</div>
 							<template #dropdown>
 								<el-dropdown-menu>
 									<el-dropdown-item :icon="User" @click="routerUtil.routePushSafe(router, { path: '/settings/account' })">
 										个人信息
 									</el-dropdown-item>
-									<!-- <el-dropdown-item @click="changePasswordRef.open()">修改密码</el-dropdown-item> -->
+									<el-dropdown-item :icon="Key" @click="changePasswordRef.open()">修改密码</el-dropdown-item>
 									<el-dropdown-item :icon="Refresh" @click="handleRefreshSystem">刷新系统</el-dropdown-item>
 									<el-dropdown-item divided :icon="Lock" @click="handleScreenLock">锁定屏幕</el-dropdown-item>
 									<el-dropdown-item :icon="SwitchButton" @click="handleLogout">退出系统</el-dropdown-item>
@@ -105,7 +121,7 @@
 <script setup lang="ts">
 import { inject, KeepAlive, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { Expand, Fold, Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
+import { Expand, Fold, Key, Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
 import { Local, addUnit } from "@fast-china/utils";
 import { RouterView, useRouter } from "vue-router";
 import LayoutMenu from "./components/Menu/index.vue";
@@ -113,7 +129,7 @@ import type { LoginTenantOutput } from "@/api/services/login/models/LoginTenantO
 import type { FaSelectInstance } from "fast-element-plus";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/login";
-import { layoutConfigKey } from "@/layouts";
+import { changePasswordKey, layoutConfigKey } from "@/layouts";
 import LayoutBreadcrumb from "@/layouts/components/Breadcrumb/index.vue";
 import LayoutLogo from "@/layouts/components/Logo/index.vue";
 import LayoutNavTab from "@/layouts/components/NavTab/index.vue";
@@ -132,6 +148,7 @@ const navTabsStore = useNavTabs();
 const userInfoStore = useUserInfo();
 
 const layoutConfigRef = inject(layoutConfigKey);
+const changePasswordRef = inject(changePasswordKey);
 const faTenantSelectRef = ref<FaSelectInstance>();
 
 const handleRefreshSystem = () => {

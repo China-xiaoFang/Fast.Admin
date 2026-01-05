@@ -312,11 +312,6 @@ public class LoginService : IDynamicApplication
         // 查询应用信息
         var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
 
-        if (applicationModel == null)
-        {
-            throw new UserFriendlyException("未知的应用！");
-        }
-
         if (applicationModel.AppType != GlobalContext.DeviceType)
         {
             throw new UserFriendlyException("应用类型不匹配！");
@@ -490,11 +485,6 @@ public class LoginService : IDynamicApplication
 
         // 查询应用信息
         var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
-
-        if (applicationModel == null)
-        {
-            throw new UserFriendlyException("未知的应用！");
-        }
 
         if (applicationModel.AppType != GlobalContext.DeviceType)
         {
@@ -677,11 +667,6 @@ public class LoginService : IDynamicApplication
         // 查询应用信息
         var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
 
-        if (applicationModel == null)
-        {
-            throw new UserFriendlyException("未知的应用！");
-        }
-
         if (applicationModel.AppType != GlobalContext.DeviceType)
         {
             throw new UserFriendlyException("应用类型不匹配！");
@@ -767,11 +752,6 @@ public class LoginService : IDynamicApplication
         // 查询应用信息
         var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
 
-        if (applicationModel == null)
-        {
-            throw new UserFriendlyException("未知的应用！");
-        }
-
         if (applicationModel.AppType != GlobalContext.DeviceType)
         {
             throw new UserFriendlyException("应用类型不匹配！");
@@ -829,11 +809,6 @@ public class LoginService : IDynamicApplication
     {
         // 查询应用信息
         var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
-
-        if (applicationModel == null)
-        {
-            throw new UserFriendlyException("未知的应用！");
-        }
 
         if (applicationModel.AppType != GlobalContext.DeviceType)
         {
@@ -911,11 +886,6 @@ public class LoginService : IDynamicApplication
     {
         // 查询应用信息
         var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
-
-        if (applicationModel == null)
-        {
-            throw new UserFriendlyException("未知的应用！");
-        }
 
         if (applicationModel.AppType != GlobalContext.DeviceType)
         {

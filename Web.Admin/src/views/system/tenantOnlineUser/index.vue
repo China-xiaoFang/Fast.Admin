@@ -71,7 +71,7 @@ const fastTableRef = ref<FastTableInstance>();
 /** 处理重置密码 */
 const handleForceOffline = (row: TenantOnlineUserModel) => {
 	const { connectionId, mobile } = row;
-	ElMessageBox.confirm(`确定踢掉账号：【${mobile}】？`, {
+	ElMessageBox.confirm(`确定踢掉账号：【${mobile}】`, {
 		type: "warning",
 		async beforeClose(action, instance, done) {
 			await tenantOnlineUserApi.forceOffline({

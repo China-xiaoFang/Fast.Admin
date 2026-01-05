@@ -53,7 +53,14 @@ public class Module : IDynamicApplication
     {
         var data = await _repository.Entities.WhereIF(appId != null, wh => wh.AppId == appId)
             .OrderBy(ob => ob.Sort)
-            .Select(sl => new {sl.ModuleId, sl.ModuleName, sl.Icon, sl.Status,sl.RowVersion})
+            .Select(sl => new
+            {
+                sl.ModuleId,
+                sl.ModuleName,
+                sl.Icon,
+                sl.Status,
+                sl.RowVersion
+            })
             .ToListAsync();
 
         return data.Select(sl =>

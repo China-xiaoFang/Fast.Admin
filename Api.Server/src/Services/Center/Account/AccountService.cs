@@ -290,7 +290,7 @@ public class AccountService : IDynamicApplication
             NickName = input.NickName,
             Avatar = input.Avatar,
             TenantNo = _user.TenantNo,
-            EmployeeNo = _user.EmployeeNo,
+            EmployeeNo = _user.EmployeeNo
         });
     }
 
@@ -340,7 +340,7 @@ public class AccountService : IDynamicApplication
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
             TenantId = _user.TenantId,
-            TenantName = _user.TenantName,
+            TenantName = _user.TenantName
         };
         visitLogModel.RecordCreate(FastContext.HttpContext);
 

@@ -135,8 +135,8 @@
 				<FaLayoutGridItem span="2">
 					<el-divider contentPosition="left">按钮</el-divider>
 				</FaLayoutGridItem>
-				<FaLayoutGridItem span="2">
-					<FaTable height="300" rowKey="buttonId" :data="state.formData.buttonList">
+				<FaLayoutGridItem span="2" style="min-height: 300px">
+					<FaTable rowKey="buttonId" :data="state.formData.buttonList">
 						<!-- 表格按钮操作区域 -->
 						<template #header>
 							<el-button type="primary" :icon="Plus" @click="handleButtonAdd">新增</el-button>

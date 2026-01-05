@@ -37,6 +37,7 @@ import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import { EditRoleInput } from "@/api/services/role/models/EditRoleInput";
 import { AddRoleInput } from "@/api/services/role/models/AddRoleInput";
 import { roleApi } from "@/api/services/role";
+import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 
 defineOptions({
 	name: "SystemRoleEdit",
@@ -49,6 +50,7 @@ const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
 	formData: withDefineType<EditRoleInput & AddRoleInput>({
+		dataScopeType: DataScopeTypeEnum.All,
 		sort: 1,
 	}),
 	formRules: withDefineType<FormRules>({

@@ -190,7 +190,7 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
                 ParamsObj = context.Exception.TargetSite?.GetParameters()
                     .Select(sl => new
                     {
-                        PropertyName = sl.Name, TypeName = sl.ParameterType.Name, TypeFullName = sl.ParameterType.FullName,
+                        PropertyName = sl.Name, TypeName = sl.ParameterType.Name, TypeFullName = sl.ParameterType.FullName
                     })
                     .ToList()
                     .ToJsonString(),

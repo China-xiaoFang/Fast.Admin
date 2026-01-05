@@ -90,4 +90,25 @@ export const roleApi = {
       requestType: "edit",
     });
   },
+  /**
+   * 获取角色授权菜单
+   */
+  queryRoleAuthMenu(data: RoleIdInput) {
+    return axiosUtil.request<RoleAuthInput>({
+      url: "/role/queryRoleAuthMenu",
+      method: "post",
+      data,
+      requestType: "query",
+    });
+  },
+  /**
+   * 获取授权菜单
+   */
+  queryAuthMenu() {
+    return axiosUtil.request<ElSelectorOutput<number>[]>({
+      url: "/role/queryAuthMenu",
+      method: "get",
+      requestType: "query",
+    });
+  },
 };
