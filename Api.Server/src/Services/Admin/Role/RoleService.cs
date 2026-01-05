@@ -20,10 +20,12 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Dm.util;
 using Fast.Admin.Entity;
 using Fast.Admin.Enum;
 using Fast.Admin.Service.Role.Dto;
 using Fast.Center.Entity;
+using Fast.Center.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,11 +37,13 @@ namespace Fast.Admin.Service.Role;
 [ApiDescriptionSettings(ApiGroupConst.Admin, Name = "role")]
 public class RoleService : IDynamicApplication
 {
+    private readonly IUser _user;
     private readonly ISqlSugarRepository<RoleModel> _repository;
     private readonly ISqlSugarClient _centerRepository;
 
-    public RoleService(ISqlSugarRepository<RoleModel> repository, ISqlSugarClient centerRepository)
+    public RoleService(IUser user, ISqlSugarRepository<RoleModel> repository, ISqlSugarClient centerRepository)
     {
+        _user = user;
         _repository = repository;
         _centerRepository = centerRepository;
     }
@@ -333,5 +337,187 @@ public class RoleService : IDynamicApplication
                     .ExecuteCommandAsync();
             }
         }, ex => throw ex);
+    }
+
+    /// <summary>
+    /// 获取角色授权菜单
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("获取角色授权菜单", HttpRequestActionEnum.Query)]
+    [Permission(PermissionConst.Role.Edit)]
+    public async Task<RoleAuthInput> QueryRoleAuthMenu(RoleIdInput input)
+    {
+        var roleModel = await _repository.SingleOrDefaultAsync(input.RoleId);
+        if (roleModel == null)
+        {
+            throw new UserFriendlyException("角色不存在！");
+        }
+
+        if (roleModel.RoleType == RoleTypeEnum.Admin)
+        {
+            throw new UserFriendlyException("禁止操作管理员角色！");
+        }
+
+        var result = new RoleAuthInput
+        {
+            RoleId = roleModel.RoleId,
+            RoleName = roleModel.RoleName,
+            RowVersion = roleModel.RowVersion,
+            MenuIds = await _repository.Queryable<RoleMenuModel>()
+                .Where(wh => wh.RoleId == roleModel.RoleId)
+                .Select(sl => sl.MenuId)
+                .ToListAsync(),
+            ButtonIds = await _repository.Queryable<RoleButtonModel>()
+                .Where(wh => wh.RoleId == roleModel.RoleId)
+                .Select(sl => sl.ButtonId)
+                .ToListAsync()
+        };
+
+        return result;
+    }
+
+    /// <summary>
+    /// 获取授权菜单
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [ApiInfo("获取授权菜单", HttpRequestActionEnum.Query)]
+    [Permission(PermissionConst.Role.Edit, PermissionConst.Employee.Edit)]
+    public async Task<List<ElSelectorOutput<long>>> QueryAuthMenu()
+    {
+        // 查询应用信息
+        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+
+        if (applicationModel.AppType != GlobalContext.DeviceType)
+        {
+            throw new UserFriendlyException("应用类型不匹配！");
+        }
+
+        // 查询租户信息
+        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
+
+        var roleIds = _user.RoleIdList ?? [];
+
+        var moduleQueryable = _centerRepository.Queryable<ModuleModel>()
+            .Where(wh => wh.AppId == applicationModel.AppId)
+            .Where(wh => wh.Status == CommonStatusEnum.Enable);
+
+        var menuQueryable = _centerRepository.Queryable<MenuModel>()
+            .Where(wh => wh.AppId == applicationModel.AppId)
+            .Where(wh => wh.Status == CommonStatusEnum.Enable)
+            .Where(wh => tenantModel.Edition >= wh.Edition)
+            .Where(wh => wh.MenuType != MenuTypeEnum.Catalog);
+
+        var buttonQueryable = _centerRepository.Queryable<ButtonModel>()
+            .Where(wh => wh.AppId == applicationModel.AppId)
+            .Where(wh => wh.Status == CommonStatusEnum.Enable)
+            .Where(wh => tenantModel.Edition >= wh.Edition);
+
+        if (_user.IsSuperAdmin)
+        {
+            moduleQueryable = moduleQueryable.Where(wh =>
+                (wh.ViewType & (ModuleViewTypeEnum.SuperAdmin | ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
+        }
+        else if (_user.IsAdmin)
+        {
+            moduleQueryable =
+                moduleQueryable.Where(wh => (wh.ViewType & (ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
+        }
+        else
+        {
+            moduleQueryable = moduleQueryable.Where(wh => (wh.ViewType & ModuleViewTypeEnum.All) != 0);
+            // 查询当前用户角色对应的菜单Id
+            var roleMenuIds = await _repository.Queryable<RoleMenuModel>()
+                .Where(wh => roleIds.Contains(wh.RoleId))
+                .Select(sl => sl.MenuId)
+                .ToListAsync();
+            // 查询当前用户对应的菜单Id
+            var userMenuIds = await _repository.Queryable<EmployeeMenuModel>()
+                .Where(wh => wh.EmployeeId == _user.UserId)
+                .Select(sl => sl.MenuId)
+                .ToListAsync();
+            var menuIds = new List<long>();
+            menuIds.AddRange(roleMenuIds);
+            menuIds.AddRange(userMenuIds);
+            menuIds = menuIds.Distinct()
+                .ToList();
+            menuQueryable = menuQueryable.Where(wh => menuIds.Contains(wh.MenuId));
+
+            // 查询当前用户角色对应的按钮Id
+            var roleButtonIds = await _repository.Queryable<RoleButtonModel>()
+                .Where(wh => roleIds.Contains(wh.RoleId))
+                .Select(sl => sl.ButtonId)
+                .ToListAsync();
+            // 查询当前用户对应的按钮Id
+            var userButtonIds = await _repository.Queryable<EmployeeButtonModel>()
+                .Where(wh => wh.EmployeeId == _user.UserId)
+                .Select(sl => sl.ButtonId)
+                .ToListAsync();
+            var buttonIds = new List<long>();
+            buttonIds.AddRange(roleButtonIds);
+            buttonIds.AddRange(userButtonIds);
+            buttonIds = buttonIds.Distinct()
+                .ToList();
+            buttonQueryable = buttonQueryable.Where(wh => buttonIds.Contains(wh.ButtonId));
+        }
+
+        // 查询所有菜单
+        var menuList = await menuQueryable.Clone()
+            .InnerJoin(moduleQueryable.Clone(), (t1, t2) => t1.ModuleId == t2.ModuleId)
+            .OrderBy(t1 => t1.Sort)
+            .Select((t1, t2) => new
+            {
+                t1.MenuId,
+                t1.ModuleId,
+                t1.MenuName,
+                t1.HasMobile,
+                t1.HasWeb,
+                t1.HasDesktop
+            })
+            .ToListAsync();
+
+        // 查询所有按钮
+        var buttonList = await buttonQueryable.Clone()
+            .InnerJoin(menuQueryable.Clone(), (t1, t2) => t1.MenuId == t2.MenuId)
+            .OrderBy(t1 => t1.Sort)
+            .Select(t1 => new
+            {
+                t1.ButtonId,
+                t1.MenuId,
+                t1.ButtonName,
+                t1.HasMobile,
+                t1.HasWeb,
+                t1.HasDesktop
+            })
+            .ToListAsync();
+
+        var result = new List<ElSelectorOutput<long>>();
+
+        foreach (var menuInfo in menuList.ToList())
+        {
+            var item = new ElSelectorOutput<long>
+            {
+                Value = menuInfo.MenuId,
+                Label = menuInfo.MenuName,
+                Data = new {menuInfo.HasMobile, menuInfo.HasWeb, menuInfo.HasDesktop},
+                Children = []
+            };
+            foreach (var buttonInfo in buttonList.Where(wh => wh.MenuId == menuInfo.MenuId)
+                         .ToList())
+            {
+                item.Children.Add(new ElSelectorOutput<long>
+                {
+                    Value = buttonInfo.ButtonId,
+                    Label = buttonInfo.ButtonName,
+                    Data = new {buttonInfo.HasMobile, buttonInfo.HasWeb, buttonInfo.HasDesktop}
+                });
+            }
+
+            result.add(item);
+        }
+
+        return result;
     }
 }

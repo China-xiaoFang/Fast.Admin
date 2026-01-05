@@ -30,6 +30,11 @@ namespace Fast.Admin.Service.Auth.Dto;
 public class GetLoginUserInfoOutput
 {
     /// <summary>
+    /// 账号Id
+    /// </summary>
+    public long AccountId { get; set; }
+
+    /// <summary>
     /// 账号Key
     /// </summary>
     public string AccountKey { get; set; }
@@ -63,6 +68,11 @@ public class GetLoginUserInfoOutput
     /// 租户编码
     /// </summary>
     public string TenantCode { get; set; }
+
+    /// <summary>
+    /// 用户Id/职员Id
+    /// </summary>
+    public long UserId { get; set; }
 
     /// <summary>
     /// 用户Key

@@ -284,7 +284,7 @@ public class EmployeeService : IDynamicApplication
         }
 
         var jobLevelModel = await _repository.Queryable<JobLevelModel>()
-                .SingleAsync(s => s.JobLevelId == input.JobLevelId);
+            .SingleAsync(s => s.JobLevelId == input.JobLevelId);
         if (jobLevelModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
@@ -457,8 +457,6 @@ public class EmployeeService : IDynamicApplication
         employeeModel.Email = input.Email;
         employeeModel.Sex = input.Sex;
         employeeModel.IdPhoto = input.IdPhoto;
-        employeeModel.FirstWorkDate = input.FirstWorkDate;
-        employeeModel.EntryDate = input.EntryDate;
         employeeModel.Nation = input.Nation;
         employeeModel.NativePlace = input.NativePlace;
         employeeModel.FamilyAddress = input.FamilyAddress;
@@ -466,53 +464,59 @@ public class EmployeeService : IDynamicApplication
         employeeModel.Birthday = input.Birthday;
         employeeModel.IdType = input.IdType;
         employeeModel.IdNumber = input.IdNumber;
-        employeeModel.EducationLevel = input.EducationLevel;
-        employeeModel.PoliticalStatus = input.PoliticalStatus;
-        employeeModel.GraduationCollege = input.GraduationCollege;
-        employeeModel.AcademicQualifications = input.AcademicQualifications;
-        employeeModel.AcademicSystem = input.AcademicSystem;
-        employeeModel.Degree = input.Degree;
         employeeModel.FamilyPhone = input.FamilyPhone;
         employeeModel.OfficePhone = input.OfficePhone;
         employeeModel.EmergencyContact = input.EmergencyContact;
         employeeModel.EmergencyPhone = input.EmergencyPhone;
         employeeModel.EmergencyAddress = input.EmergencyAddress;
-        employeeModel.Remark = input.Remark;
 
         var employeeOrgList = new List<EmployeeOrgModel>();
-        foreach (var item in input.OrgList)
-        {
-            var organizationModel = organizationList.Single(s => s.OrgId == item.OrgId);
-            var departmentModel = departmentList.Single(s => s.DepartmentId == item.DepartmentId);
-            var positionModel = positionList.Single(s => s.PositionId == item.PositionId);
-            var jobLevelModel = jobLevelList.Single(s => s.JobLevelId == item.JobLevelId);
-
-            employeeOrgList.Add(new EmployeeOrgModel
-            {
-                EmployeeId = employeeModel.EmployeeId,
-                OrgId = organizationModel.OrgId,
-                OrgName = organizationModel.OrgName,
-                OrgNames = [.. organizationModel.ParentNames, organizationModel.OrgName],
-                DepartmentId = departmentModel.DepartmentId,
-                DepartmentName = departmentModel.DepartmentName,
-                DepartmentNames = [.. departmentModel.ParentNames, departmentModel.DepartmentName],
-                IsPrimary = item.IsPrimary,
-                PositionId = positionModel.PositionId,
-                PositionName = positionModel.PositionName,
-                JobLevelId = jobLevelModel.JobLevelId,
-                JobLevelName = jobLevelModel.JobLevelName,
-                IsPrincipal = item.IsPrincipal
-            });
-        }
-
         var employeeRoleList = new List<EmployeeRoleModel>();
-        foreach (var item in input.RoleList)
+        if (employeeModel.EmployeeId != _user.UserId)
         {
-            var roleModel = roleList.Single(s => s.RoleId == item.RoleId);
-            employeeRoleList.Add(new EmployeeRoleModel
+            employeeModel.FirstWorkDate = input.FirstWorkDate;
+            employeeModel.EntryDate = input.EntryDate;
+            employeeModel.EducationLevel = input.EducationLevel;
+            employeeModel.PoliticalStatus = input.PoliticalStatus;
+            employeeModel.GraduationCollege = input.GraduationCollege;
+            employeeModel.AcademicQualifications = input.AcademicQualifications;
+            employeeModel.AcademicSystem = input.AcademicSystem;
+            employeeModel.Degree = input.Degree;
+            employeeModel.Remark = input.Remark;
+
+            foreach (var item in input.OrgList)
             {
-                EmployeeId = employeeModel.EmployeeId, RoleId = roleModel.RoleId, RoleName = roleModel.RoleName
-            });
+                var organizationModel = organizationList.Single(s => s.OrgId == item.OrgId);
+                var departmentModel = departmentList.Single(s => s.DepartmentId == item.DepartmentId);
+                var positionModel = positionList.Single(s => s.PositionId == item.PositionId);
+                var jobLevelModel = jobLevelList.Single(s => s.JobLevelId == item.JobLevelId);
+
+                employeeOrgList.Add(new EmployeeOrgModel
+                {
+                    EmployeeId = employeeModel.EmployeeId,
+                    OrgId = organizationModel.OrgId,
+                    OrgName = organizationModel.OrgName,
+                    OrgNames = [.. organizationModel.ParentNames, organizationModel.OrgName],
+                    DepartmentId = departmentModel.DepartmentId,
+                    DepartmentName = departmentModel.DepartmentName,
+                    DepartmentNames = [.. departmentModel.ParentNames, departmentModel.DepartmentName],
+                    IsPrimary = item.IsPrimary,
+                    PositionId = positionModel.PositionId,
+                    PositionName = positionModel.PositionName,
+                    JobLevelId = jobLevelModel.JobLevelId,
+                    JobLevelName = jobLevelModel.JobLevelName,
+                    IsPrincipal = item.IsPrincipal
+                });
+            }
+
+            foreach (var item in input.RoleList)
+            {
+                var roleModel = roleList.Single(s => s.RoleId == item.RoleId);
+                employeeRoleList.Add(new EmployeeRoleModel
+                {
+                    EmployeeId = employeeModel.EmployeeId, RoleId = roleModel.RoleId, RoleName = roleModel.RoleName
+                });
+            }
         }
 
         await _repository.Ado.UseTranAsync(async () =>
@@ -527,7 +531,7 @@ public class EmployeeService : IDynamicApplication
                 .ExecuteCommandAsync();
 
             // 处理部门负责人
-            var principalDepartmentIds = employeeOrgList.Where(wh => wh.IsPrincipal == true)
+            var principalDepartmentIds = employeeOrgList.Where(wh => wh.IsPrincipal)
                 .Select(sl => sl.DepartmentId)
                 .ToList();
             if (principalDepartmentIds.Any())
@@ -904,5 +908,60 @@ public class EmployeeService : IDynamicApplication
                     .ExecuteCommandAsync();
             }
         }, ex => throw ex);
+    }
+
+    /// <summary>
+    /// 获取职员授权菜单
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("获取职员授权菜单", HttpRequestActionEnum.Query)]
+    [Permission(PermissionConst.Employee.Edit)]
+    public async Task<EmployeeAuthInput> QueryEmployeeAuthMenu(EmployeeIdInput input)
+    {
+        if (input.EmployeeId == _user.UserId)
+        {
+            throw new UserFriendlyException("禁止操作！");
+        }
+
+        var employeeModel = await _repository.SingleOrDefaultAsync(input.EmployeeId);
+        if (employeeModel == null)
+        {
+            throw new UserFriendlyException("数据不存在！");
+        }
+
+        // 查询职员绑定角色
+        var roleIds = await _repository.Queryable<EmployeeRoleModel>()
+            .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
+            .Select(sl => sl.RoleId)
+            .ToListAsync();
+
+        var result = new EmployeeAuthInput
+        {
+            EmployeeId = employeeModel.EmployeeId,
+            EmployeeName = employeeModel.EmployeeName,
+            RowVersion = employeeModel.RowVersion,
+            RoleMenuIds = await _repository.Queryable<RoleMenuModel>()
+                .Where(wh => roleIds.Contains(wh.RoleId))
+                .Select(sl => sl.MenuId)
+                .Distinct()
+                .ToListAsync(),
+            RoleButtonIds = await _repository.Queryable<RoleButtonModel>()
+                .Where(wh => roleIds.Contains(wh.RoleId))
+                .Select(sl => sl.ButtonId)
+                .Distinct()
+                .ToListAsync(),
+            MenuIds = await _repository.Queryable<EmployeeMenuModel>()
+                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
+                .Select(sl => sl.MenuId)
+                .ToListAsync(),
+            ButtonIds = await _repository.Queryable<EmployeeButtonModel>()
+                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
+                .Select(sl => sl.ButtonId)
+                .ToListAsync()
+        };
+
+        return result;
     }
 }

@@ -23,6 +23,7 @@ export const useUserInfo = defineStore(
 		const state = reactive<IState & GetLoginUserInfoOutput>({
 			token: "",
 			refreshToken: "",
+			accountId: undefined,
 			accountKey: "",
 			mobile: "",
 			nickName: "",
@@ -30,6 +31,7 @@ export const useUserInfo = defineStore(
 			tenantNo: "",
 			tenantName: "",
 			tenantCode: "",
+			userId: undefined,
 			userKey: "",
 			account: "",
 			employeeNo: "",

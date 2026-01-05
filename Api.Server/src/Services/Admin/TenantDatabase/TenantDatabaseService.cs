@@ -288,6 +288,7 @@ public class TenantDatabaseService : ITenantDatabaseService, ITransientDependenc
                     })
                     .ExecuteCommandAsync();
             }
+
             await db.Updateable(tenantModel)
                 .ExecuteCommandAsync();
         }

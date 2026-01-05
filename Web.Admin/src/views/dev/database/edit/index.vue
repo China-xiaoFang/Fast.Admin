@@ -74,8 +74,8 @@
 				<RadioGroup button name="BooleanEnum" v-model="state.formData.disableAop" />
 			</FaFormItem>
 
-			<FaLayoutGridItem span="2" v-if="state.dialogState !== 'add'">
-				<FaTable height="300" rowKey="buttonId" :data="state.formData.slaveDatabaseList" span="2">
+			<FaLayoutGridItem span="2" v-if="state.dialogState !== 'add'" style="min-height: 300px">
+				<FaTable rowKey="buttonId" :data="state.formData.slaveDatabaseList" span="2">
 					<!-- 表格按钮操作区域 -->
 					<template #header>
 						<el-button type="primary" :icon="Plus" @click="handleSlaveDatabaseAdd">新增</el-button>

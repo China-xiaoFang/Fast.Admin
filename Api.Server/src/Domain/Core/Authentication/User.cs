@@ -401,8 +401,8 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         Avatar = input.Avatar;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo,
-            input.DeviceType.ToString(), input.EmployeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
+            input.EmployeeNo);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -436,8 +436,8 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         Avatar = input.Avatar;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo,
-            input.DeviceType.ToString(), input.WeChatOpenId);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
+            input.WeChatOpenId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -474,8 +474,8 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         DataScopeType = input.DataScopeType;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo,
-            input.DeviceType.ToString(), input.EmployeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
+            input.EmployeeNo);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);

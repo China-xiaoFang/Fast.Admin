@@ -28,12 +28,27 @@ namespace Fast.Admin.Service.Employee.Dto;
 public class EmployeeAuthInput : EmployeeIdInput
 {
     /// <summary>
+    /// 职员名称
+    /// </summary>
+    public string EmployeeName { get; set; }
+
+    /// <summary>
     /// 菜单Id集合
     /// </summary>
     public List<long> MenuIds { get; set; }
 
     /// <summary>
+    /// 角色菜单Id集合
+    /// </summary>
+    public List<long> RoleMenuIds { get; set; }
+
+    /// <summary>
     /// 按钮Id集合
     /// </summary>
     public List<long> ButtonIds { get; set; }
+
+    /// <summary>
+    /// 角色按钮Id集合
+    /// </summary>
+    public List<long> RoleButtonIds { get; set; }
 }

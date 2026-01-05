@@ -123,7 +123,7 @@ public class RequestActionFilter : IAsyncActionFilter
             CreatedUserName = _user?.EmployeeName,
             CreatedTime = dateTime,
             TenantId = _user?.TenantId,
-            TenantName = _user?.TenantName,
+            TenantName = _user?.TenantName
         };
         requestLogModel.RecordCreate(httpContext);
 

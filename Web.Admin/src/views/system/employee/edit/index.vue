@@ -111,7 +111,7 @@
 				<FaLayoutGridItem span="3">
 					<el-divider contentPosition="left">角色信息</el-divider>
 				</FaLayoutGridItem>
-				<FaFormItem prop="roleList" label="角色">
+				<FaFormItem prop="roleList" label="角色" span="3">
 					<el-checkbox-group v-model="state.roleIds" @change="handleRoleChange">
 						<el-checkbox v-for="(item, index) of state.roleList" :key="index" :value="item.value">
 							{{ item.label }}
@@ -188,8 +188,8 @@
 				<FaLayoutGridItem span="3">
 					<el-divider contentPosition="left">组织架构</el-divider>
 				</FaLayoutGridItem>
-				<FaLayoutGridItem span="3">
-					<FaTable height="300" :data="state.formData.orgList">
+				<FaLayoutGridItem span="3" style="min-height: 300px">
+					<FaTable :data="state.formData.orgList">
 						<!-- 表格按钮操作区域 -->
 						<template #header>
 							<el-button type="primary" :icon="Plus" @click="handleOrgAdd">新增</el-button>
@@ -425,6 +425,7 @@ const edit = (employeeId: number) => {
 		state.formDisabled = false;
 		const apiRes = await employeeApi.queryEmployeeDetail(employeeId);
 		state.formData = apiRes;
+		state.roleIds = apiRes.roleList.map((m) => m.roleId);
 		state.dialogTitle = `编辑职员 - ${apiRes.employeeName}`;
 		state.roleList = await roleApi.roleSelector();
 	});

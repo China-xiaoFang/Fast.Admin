@@ -180,7 +180,8 @@ public class SyncDictionaryHostedService : IHostedService
                             DictionaryKey = enumType.Type.Name,
                             ServiceName = serviceName,
                             DictionaryName =
-                                enumType.FastEnumAttribute?.ChName ?? enumType.FastEnumAttribute?.EnName ?? enumType.Type.Name,
+                                enumType.FastEnumAttribute?.ChName
+                                ?? enumType.FastEnumAttribute?.EnName ?? enumType.Type.Name,
                             ValueType = Enum.GetUnderlyingType(enumType.Type) == typeof(long)
                                 ? DictionaryValueTypeEnum.Long
                                 : DictionaryValueTypeEnum.Int,

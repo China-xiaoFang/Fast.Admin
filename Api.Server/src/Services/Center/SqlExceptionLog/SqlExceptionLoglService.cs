@@ -20,7 +20,6 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Service.SqlDiffLog.Dto;
 using Fast.Center.Service.SqlExceptionLog.Dto;
 using Fast.CenterLog.Entity;
 using Microsoft.AspNetCore.Authorization;

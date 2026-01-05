@@ -11,15 +11,17 @@
 		</template>
 	</suspense>
 	<LayoutConfig ref="layoutConfigRef" />
+	<ChangePassword ref="changePasswordRef" />
 </template>
 
 <script setup lang="ts">
 import { defineAsyncComponent, provide, ref } from "vue";
 import { withDefineType } from "@fast-china/utils";
-import { layoutConfigKey } from "./index";
+import { changePasswordKey, layoutConfigKey } from "./index";
 import type { IModeName } from "@/stores";
 import type { Component } from "vue";
 import LayoutConfig from "@/layouts/components/Config/index.vue";
+import ChangePassword from "@/layouts/components/ChangePassword/index.vue";
 import { useConfig } from "@/stores";
 
 defineOptions({
@@ -29,7 +31,9 @@ defineOptions({
 const configStore = useConfig();
 
 const layoutConfigRef = ref<InstanceType<typeof LayoutConfig>>();
+const changePasswordRef = ref<InstanceType<typeof ChangePassword>>();
 provide(layoutConfigKey, layoutConfigRef);
+provide(changePasswordKey, changePasswordRef);
 
 const layoutComponents = withDefineType<Record<IModeName, Component>>({
 	Classic: defineAsyncComponent(() => import("@/layouts/LayoutClassic/index.vue")),

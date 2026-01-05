@@ -28,6 +28,11 @@ namespace Fast.Admin.Service.Role.Dto;
 public class RoleAuthInput : RoleIdInput
 {
     /// <summary>
+    /// 角色名称
+    /// </summary>
+    public string RoleName { get; set; }
+
+    /// <summary>
     /// 菜单Id集合
     /// </summary>
     public List<long> MenuIds { get; set; }
