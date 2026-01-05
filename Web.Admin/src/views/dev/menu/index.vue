@@ -15,10 +15,12 @@
 						<FaIcon v-if="data.data?.icon" style="margin-right: 5px" size="16" :name="data.data.icon" />
 						<span>{{ data.label }}</span>
 					</template>
+
 					<template #default="{ data }: { data: ElSelectorOutput<number> }">
 						<Tag size="small" effect="plain" name="CommonStatusEnum" :value="data.data.status" />
 					</template>
 				</FaTree>
+
 				<FastTable
 					ref="fastTableRef"
 					tableKey="1HD88SK728"
@@ -32,10 +34,12 @@
 					<template #header>
 						<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 					</template>
+
 					<template #menuName="{ row }: { row?: QueryMenuPagedOutput }">
 						<FaIcon v-if="row.webIcon" style="margin-right: 5px" size="16" :name="row.webIcon" />
 						<span>{{ row.menuName }}</span>
 					</template>
+
 					<template #web="{ row }: { row?: QueryMenuPagedOutput }">
 						<div style="display: flex; align-items: center; gap: 5px">
 							<Tag size="small" name="CommonStatusEnum" :value="row.hasWeb ? CommonStatusEnum.Enable : CommonStatusEnum.Disable" />
@@ -44,6 +48,7 @@
 						</div>
 						<el-tag v-if="row.webComponent" type="info" effect="plain">{{ row.webComponent }}</el-tag>
 					</template>
+
 					<template #mobile="{ row }: { row?: QueryMenuPagedOutput }">
 						<div style="display: flex; align-items: center; gap: 5px">
 							<Tag size="small" name="CommonStatusEnum" :value="row.hasMobile ? CommonStatusEnum.Enable : CommonStatusEnum.Disable" />
@@ -56,6 +61,7 @@
 						</div>
 						<el-tag v-if="row.mobileRouter" type="info" effect="plain">{{ row.mobileRouter }}</el-tag>
 					</template>
+
 					<template #desktop="{ row }: { row?: QueryMenuPagedOutput }">
 						<div style="display: flex; align-items: center; gap: 5px">
 							<Tag size="small" name="CommonStatusEnum" :value="row.hasDesktop ? CommonStatusEnum.Enable : CommonStatusEnum.Disable" />
@@ -63,9 +69,11 @@
 						</div>
 						<el-tag v-if="row.desktopRouter" type="info" effect="plain">{{ row.desktopRouter }}</el-tag>
 					</template>
+
 					<template #link="{ row }: { row?: QueryMenuPagedOutput }">
 						<el-link type="info" target="_blank" :href="row.link">{{ row.link }}</el-link>
 					</template>
+
 					<!-- 表格操作 -->
 					<template #operation="{ row }: { row: QueryMenuPagedOutput }">
 						<el-button size="small" plain type="primary" @click="editFormRef.edit(row.menuId)">编辑</el-button>

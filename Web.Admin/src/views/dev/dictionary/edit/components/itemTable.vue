@@ -76,7 +76,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+const modelValue = useVModel(props, "modelValue", emit);
 
 const editFormRef = ref<InstanceType<typeof DictionaryEditItemEdit>>();
 

@@ -14,7 +14,7 @@
 				sortable
 				copy
 				link
-				:click="({ row }: { row: QueryTableConfigPagedOutput }) => editFormRef.detail(row.tableId)"
+				:click="({ row }) => editFormRef.detail(row.tableId)"
 			/>
 			<FaTableColumn prop="tableName" label="表格名称" width="400" smallWidth="380" sortable />
 			<FaTableColumn prop="remark" label="备注" width="200" smallWidth="180" sortable />

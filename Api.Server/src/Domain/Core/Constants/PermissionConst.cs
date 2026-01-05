@@ -41,44 +41,6 @@ public partial class PermissionConst
     /// <summary>Knife4j</summary>
     public const string ApiKnife4j = "Api:Knife4j";
 
-    /// <summary><see cref="Tenant"/> 租户</summary>
-    public class Tenant
-    {
-        /// <summary>租户列表</summary>
-        public const string Paged = "Tenant:Paged";
-
-        /// <summary>租户详情</summary>
-        public const string Detail = "Tenant:Detail";
-
-        /// <summary>租户新增</summary>
-        public const string Add = "Tenant:Add";
-
-        /// <summary>租户编辑</summary>
-        public const string Edit = "Tenant:Edit";
-
-        /// <summary>租户状态更改</summary>
-        public const string Status = "Tenant:Status";
-    }
-
-    /// <summary><see cref="Database"/> 数据库</summary>
-    public class Database
-    {
-        /// <summary>数据库列表</summary>
-        public const string Paged = "Database:Paged";
-
-        /// <summary>数据库详情</summary>
-        public const string Detail = "Database:Detail";
-
-        /// <summary>数据库新增</summary>
-        public const string Add = "Database:Add";
-
-        /// <summary>数据库编辑</summary>
-        public const string Edit = "Database:Edit";
-
-        /// <summary>数据库删除</summary>
-        public const string Delete = "Database:Delete";
-    }
-
     /// <summary><see cref="Config"/> 配置</summary>
     public class Config
     {
@@ -205,12 +167,6 @@ public partial class PermissionConst
         public const string StopJob = "Scheduler:StopJob";
     }
 
-    /// <summary>系统监控</summary>
-    public const string SystemMonitor = "System:Monitor";
-
-    /// <summary>密码映射列表</summary>
-    public const string PasswordMapPaged = "PasswordMap:Paged";
-
     /// <summary>密码记录列表</summary>
     public const string PasswordRecordPaged = "PasswordRecord:Paged";
 
@@ -229,8 +185,50 @@ public partial class PermissionConst
     /// <summary>Sql差异日志列表</summary>
     public const string SqlDiffLogPaged = "SqlDiffLog:Paged";
 
+
+    /// <summary>系统监控</summary>
+    public const string SystemMonitor = "System:Monitor";
+
     /// <summary>文件列表</summary>
     public const string FilePaged = "File:Paged";
+
+    /// <summary><see cref="Tenant"/> 租户</summary>
+    public class Tenant
+    {
+        /// <summary>租户列表</summary>
+        public const string Paged = "Tenant:Paged";
+
+        /// <summary>租户详情</summary>
+        public const string Detail = "Tenant:Detail";
+
+        /// <summary>租户新增</summary>
+        public const string Add = "Tenant:Add";
+
+        /// <summary>租户编辑</summary>
+        public const string Edit = "Tenant:Edit";
+
+        /// <summary>租户状态更改</summary>
+        public const string Status = "Tenant:Status";
+    }
+
+    /// <summary><see cref="Database"/> 数据库</summary>
+    public class Database
+    {
+        /// <summary>数据库列表</summary>
+        public const string Paged = "Database:Paged";
+
+        /// <summary>数据库详情</summary>
+        public const string Detail = "Database:Detail";
+
+        /// <summary>数据库新增</summary>
+        public const string Add = "Database:Add";
+
+        /// <summary>数据库编辑</summary>
+        public const string Edit = "Database:Edit";
+
+        /// <summary>数据库删除</summary>
+        public const string Delete = "Database:Delete";
+    }
 
     /// <summary><see cref="App"/> 应用</summary>
     public class App

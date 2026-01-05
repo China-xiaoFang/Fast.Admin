@@ -4,7 +4,7 @@ import { QueryPasswordRecordPagedOutput } from "./models/QueryPasswordRecordPage
 import { QueryPasswordRecordPagedInput } from "./models/QueryPasswordRecordPagedInput";
 
 /**
- * Fast.Center.Service.PasswordRecord.PasswordRecordService 密码映射服务Api
+ * Fast.Center.Service.PasswordRecord.PasswordRecordService 密码记录服务Api
  */
 export const passwordRecordApi = {
   /**

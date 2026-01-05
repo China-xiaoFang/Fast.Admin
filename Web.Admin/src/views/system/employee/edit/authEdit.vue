@@ -113,32 +113,6 @@ const handleMenuChange = (menuId: number, val: CheckboxValueType) => {
 	}
 };
 
-const handleButtonAllChange = (menuId: number, val: CheckboxValueType) => {
-	const menu = state.menuList.find((item) => item.value === menuId);
-	if (!menu) {
-		return;
-	}
-
-	const allButtonIds = menu.children.map((item) => item.value);
-
-	if (val) {
-		// 全选：将该菜单下所有按钮 ID 添加到 buttonIds
-		const newButtonIds = allButtonIds.filter((id) => !state.formData.buttonIds?.includes(id));
-		state.formData.buttonIds = [...(state.formData.buttonIds || []), ...newButtonIds];
-
-		// 同时选中菜单
-		if (!state.formData.menuIds?.includes(menuId)) {
-			state.formData.menuIds = [...(state.formData.menuIds || []), menuId];
-		}
-	} else {
-		// 取消全选：移除该菜单下所有按钮 ID
-		state.formData.buttonIds = state.formData.buttonIds?.filter((id) => !allButtonIds.includes(id)) || [];
-
-		// 同时取消选中菜单
-		state.formData.menuIds = state.formData.menuIds?.filter((id) => id !== menuId) || [];
-	}
-};
-
 const handleConfirm = () => {
 	faDialogRef.value.close(async () => {
 		await employeeApi.employeeAuth(state.formData);

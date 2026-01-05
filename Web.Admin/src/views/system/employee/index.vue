@@ -5,6 +5,7 @@
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
+
 			<template #employeeName="{ row }: { row?: QueryEmployeePagedOutput }">
 				<el-button link type="primary" @click="editFormRef.detail(row.employeeId)">{{ row.employeeName }}</el-button>
 				<br />
@@ -14,6 +15,7 @@
 				<br />
 				邮箱：<span v-iconCopy="row.email">{{ row.email }}</span>
 			</template>
+
 			<template #account="{ row }: { row?: QueryEmployeePagedOutput }">
 				<template v-if="row.account">
 					<span>昵称：{{ row.accountNickName }}</span>
@@ -33,6 +35,7 @@
 					<el-text type="info">未绑定登录账号</el-text>
 				</template>
 			</template>
+
 			<template #departmentName="{ row }: { row?: QueryEmployeePagedOutput }">
 				机构：<span>{{ row.orgName }}</span>
 				<br />
@@ -42,11 +45,13 @@
 					<el-tag type="primary">负责人</el-tag>
 				</template>
 			</template>
+
 			<template #positionName="{ row }: { row?: QueryEmployeePagedOutput }">
 				职位：<span>{{ row.positionName }}</span>
 				<br />
 				职级：<span>{{ row.jobLevelName }}</span>
 			</template>
+
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryEmployeePagedOutput }">
 				<div class="mb5">

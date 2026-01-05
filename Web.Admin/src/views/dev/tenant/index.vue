@@ -5,12 +5,13 @@
 			tableKey="1HZJB6Y5UZ"
 			rowKey="tenantId"
 			:requestApi="tenantApi.queryTenantPaged"
-			@custom-cell-click="(_, { row }: { row: QueryTenantPagedOutput }) => editFormRef.detail(row.tenantId)"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
+
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryTenantPagedOutput }">
 				<el-button size="small" plain @click="editFormRef.detail(row.tenantId)">详情</el-button>
@@ -41,6 +42,10 @@ defineOptions({
 
 const fastTableRef = ref<FastTableInstance>();
 const editFormRef = ref<InstanceType<typeof TenantEdit>>();
+
+const handleCustomCellClick = (_, { row }: { row: QueryTenantPagedOutput }) => {
+	editFormRef.value.detail(row.tenantId);
+};
 
 /** 处理状态变更 */
 const handleChangeStatus = (row: QueryTenantPagedOutput) => {

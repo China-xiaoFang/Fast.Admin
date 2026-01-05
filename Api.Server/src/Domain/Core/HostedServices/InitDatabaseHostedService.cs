@@ -208,40 +208,6 @@ public class InitDatabaseHostedService : IHostedService
 
             #endregion
 
-            #region PasswordMap
-
-            // 初始化密码映射表
-            await db.Insertable(new List<PasswordMapModel>
-                {
-                    new()
-                    {
-                        Type = PasswordTypeEnum.MD5,
-                        Plaintext = CommonConst.Default.AdminPassword,
-                        Ciphertext = CryptoUtil.MD5Encrypt(CommonConst.Default.AdminPassword)
-                    },
-                    new()
-                    {
-                        Type = PasswordTypeEnum.SHA1,
-                        Plaintext = CommonConst.Default.AdminPassword,
-                        Ciphertext = CryptoUtil.SHA1Encrypt(CommonConst.Default.AdminPassword)
-                    },
-                    new()
-                    {
-                        Type = PasswordTypeEnum.MD5,
-                        Plaintext = CommonConst.Default.Password,
-                        Ciphertext = CryptoUtil.MD5Encrypt(CommonConst.Default.Password)
-                    },
-                    new()
-                    {
-                        Type = PasswordTypeEnum.SHA1,
-                        Plaintext = CommonConst.Default.Password,
-                        Ciphertext = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
-                    }
-                })
-                .ExecuteCommandAsync(cancellationToken);
-
-            #endregion
-
             // 系统数据库
             await DatabaseSeedData.SystemDatabaseSeedData(db, systemTenantModel.TenantId, systemTenantModel.TenantCode, dateTime);
 

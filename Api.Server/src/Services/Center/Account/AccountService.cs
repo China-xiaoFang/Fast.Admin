@@ -22,6 +22,7 @@
 
 using System.Text.RegularExpressions;
 using Fast.Center.Entity;
+using Fast.Center.Enum;
 using Fast.Center.Service.Account.Dto;
 using Fast.CenterLog.Entity;
 using Fast.CenterLog.Enum;
@@ -347,6 +348,14 @@ public class AccountService : IDynamicApplication
         await _repository.Ado.UseTranAsync(async () =>
         {
             await _repository.UpdateAsync(accountModel);
+            await _repository.Insertable(new PasswordRecordModel
+                {
+                    AccountId = _user.AccountId,
+                    OperationType = PasswordOperationTypeEnum.Change,
+                    Type = PasswordTypeEnum.SHA1,
+                    Password = accountModel.Password
+                })
+                .ExecuteCommandAsync();
             await _visitLogRepository.InsertAsync(visitLogModel);
         }, ex => throw ex);
 
@@ -412,7 +421,18 @@ public class AccountService : IDynamicApplication
             .ToUpper();
         accountModel.RowVersion = input.RowVersion;
 
-        await _repository.UpdateAsync(accountModel);
+        await _repository.Ado.UseTranAsync(async () =>
+        {
+            await _repository.UpdateAsync(accountModel);
+            await _repository.Insertable(new PasswordRecordModel
+                {
+                    AccountId = _user.AccountId,
+                    OperationType = PasswordOperationTypeEnum.Reset,
+                    Type = PasswordTypeEnum.SHA1,
+                    Password = accountModel.Password
+                })
+                .ExecuteCommandAsync();
+        }, ex => throw ex);
     }
 
     /// <summary>

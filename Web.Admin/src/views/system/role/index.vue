@@ -6,12 +6,13 @@
 			rowKey="roleId"
 			:requestApi="roleApi.queryRolePaged"
 			hideSearchTime
-			@custom-cell-click="(_, { row }: { row: QueryRolePagedOutput }) => editFormRef.detail(row.roleId)"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
+
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryRolePagedOutput }">
 				<el-button size="small" plain @click="editFormRef.detail(row.roleId)">详情</el-button>
@@ -45,6 +46,10 @@ defineOptions({
 const fastTableRef = ref<FastTableInstance>();
 const editFormRef = ref<InstanceType<typeof RoleEdit>>();
 const authEditRef = ref<InstanceType<typeof AuthEdit>>();
+
+const handleCustomCellClick = (_, { row }: { row: QueryRolePagedOutput }) => {
+	editFormRef.value.detail(row.roleId);
+};
 
 /** 处理删除 */
 const handleDelete = (row: QueryRolePagedOutput) => {

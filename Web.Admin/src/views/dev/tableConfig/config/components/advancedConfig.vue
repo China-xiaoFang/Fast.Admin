@@ -267,6 +267,7 @@
 								<el-radio value="el-time-select">时间选择器下拉框</el-radio>
 								<el-radio value="el-switch">开关</el-radio>
 								<el-radio value="slot">插槽</el-radio>
+								<el-radio value="ApplicationSelect">应用</el-radio>
 								<el-radio value="TenantSelectPage">租户</el-radio>
 								<el-radio value="AccountSelectPage">账号</el-radio>
 								<el-radio value="EmployeeSelectPage">职员</el-radio>

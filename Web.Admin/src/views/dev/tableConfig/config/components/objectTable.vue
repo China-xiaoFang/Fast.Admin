@@ -48,7 +48,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+const modelValue = useVModel(props, "modelValue", emit);
 
 /** 处理新增行 */
 const handleTableRowAdd = () => {

@@ -6,13 +6,14 @@
 			rowKey="configId"
 			:requestApi="configApi.queryConfigPaged"
 			hideSearchTime
-			@custom-cell-click="(_, { row }: { row: QueryConfigPagedOutput }) => editFormRef.detail(row.configId)"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 				<el-button plain type="warning" :icon="Delete" @click="handleDeleteAll">删除全部缓存</el-button>
 			</template>
+
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryConfigPagedOutput }">
 				<el-button size="small" plain @click="editFormRef.detail(row.configId)">详情</el-button>
@@ -39,6 +40,10 @@ defineOptions({
 
 const fastTableRef = ref<FastTableInstance>();
 const editFormRef = ref<InstanceType<typeof ConfigEdit>>();
+
+const handleCustomCellClick = (_, { row }: { row: QueryConfigPagedOutput }) => {
+	editFormRef.value.detail(row.configId);
+};
 
 /** 处理删除缓存 */
 const handleDelete = (row: QueryConfigPagedOutput) => {

@@ -86,7 +86,6 @@ import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { QueryAccountPagedOutput } from "@/api/services/account/models/QueryAccountPagedOutput";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
-import { CopyDocument } from "@element-plus/icons-vue";
 
 defineOptions({
 	name: "SystemAccount",

@@ -5,6 +5,34 @@
 			<template #header>
 				<el-button plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
 			</template>
+
+			<template #mobile="{ row }: { row?: SqlExecutionLogModel }">
+				{{ row.nickName }}
+				<br />
+				手机：<span v-iconCopy="row.mobile">{{ row.mobile }}</span>
+				<br />
+				账号：<span v-iconCopy="row.account">{{ row.account }}</span>
+			</template>
+
+			<template #os="{ row }: { row?: SqlExecutionLogModel }">
+				<span>设备：{{ row.device }}</span>
+				<br />
+				<span>操作系统：{{ row.os }}</span>
+				<br />
+				<span>浏览器：{{ row.browser }}</span>
+			</template>
+
+			<template #createdTime="{ row }: { row?: SqlExecutionLogModel }">
+				<span>地区：{{ row.province }} - {{ row.city }}</span>
+				<br />
+				<span>Ip：{{ row.ip }}</span>
+				<br />
+				<span>时间：{{ dayjs(row.createdTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
+				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small">
+					{{ dateUtil.dateTimeFix(String(row.createdTime)) }}
+				</el-tag>
+			</template>
+
 			<template #rawSql="{ row }: { row?: SqlExecutionLogModel }">
 				<el-tag
 					v-if="row.rawSql"
@@ -22,6 +50,7 @@
 				</el-tag>
 				<span v-else>--</span>
 			</template>
+
 			<template #parameters="{ row }: { row?: SqlExecutionLogModel }">
 				<el-tag
 					v-if="row.parameters"
@@ -39,6 +68,7 @@
 				</el-tag>
 				<span v-else>--</span>
 			</template>
+
 			<template #pureSql="{ row }: { row?: SqlExecutionLogModel }">
 				<el-tag
 					v-if="row.pureSql"
@@ -70,8 +100,9 @@ import { sqlExecutionLogApi } from "@/api/services/sqlExecutionLog";
 import { SqlExecutionLogModel } from "@/api/services/sqlExecutionLog/models/SqlExecutionLogModel";
 import { reactive, ref } from "vue";
 import { Delete } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 import { FastTableInstance } from "@/components";
+import { dateUtil } from "@fast-china/utils";
 
 defineOptions({
 	name: "DevSqlExecutionLog",

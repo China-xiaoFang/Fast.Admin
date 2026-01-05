@@ -6,7 +6,7 @@
 				<TenantSelectPage
 					width="280"
 					@change="
-						(value: ElSelectorOutput<number>) => {
+						(value: ElSelectorOutput) => {
 							if (value) {
 								fastTableRef.searchParam.tenantId = value.value;
 							} else {
@@ -17,6 +17,7 @@
 					"
 				/>
 			</template>
+
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryFilePagedOutput }">
 				<el-button v-if="state.imageMimeType.includes(row.fileMimeType)" size="small" plain @click="state.previewSrc = row.fileLocation">

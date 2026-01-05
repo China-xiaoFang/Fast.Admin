@@ -28,7 +28,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.PasswordRecord;
 
 /// <summary>
-/// <see cref="PasswordRecordService"/> 密码映射服务
+/// <see cref="PasswordRecordService"/> 密码记录服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "passwordRecord")]
 public class PasswordRecordService : IDynamicApplication
@@ -65,7 +65,7 @@ public class PasswordRecordService : IDynamicApplication
                 Mobile = t2.Mobile,
                 Email = t2.Email,
                 NickName = t2.NickName,
-                Avatar = t2.Avatar,
+                Avatar = t2.Avatar
             })
             .MergeTable()
             .OrderByDescending(ob => ob.CreatedTime)

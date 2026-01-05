@@ -147,7 +147,7 @@ public class SyncDictionaryHostedService : IHostedService
                                 DictionaryId = dictionaryId,
                                 Label = "是",
                                 Value = "true",
-                                Type = TagTypeEnum.Primary,
+                                Type = TagTypeEnum.Success,
                                 Order = 1,
                                 Visible = true,
                                 Status = CommonStatusEnum.Enable,

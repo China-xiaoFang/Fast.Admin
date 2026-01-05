@@ -6,12 +6,13 @@
 			rowKey="merchantId"
 			:requestApi="merchantApi.queryMerchantPaged"
 			hideSearchTime
-			@custom-cell-click="(_, { row }: { row: QueryMerchantPagedOutput }) => editFormRef.detail(row.merchantId)"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
+
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryMerchantPagedOutput }">
 				<el-button size="small" plain @click="editFormRef.detail(row.merchantId)">详情</el-button>
@@ -38,6 +39,10 @@ defineOptions({
 
 const fastTableRef = ref<FastTableInstance>();
 const editFormRef = ref<InstanceType<typeof ConfigEdit>>();
+
+const handleCustomCellClick = (_, { row }: { row: QueryMerchantPagedOutput }) => {
+	editFormRef.value.detail(row.merchantId);
+};
 
 /** 处理删除缓存 */
 const handleDelete = (row: QueryMerchantPagedOutput) => {

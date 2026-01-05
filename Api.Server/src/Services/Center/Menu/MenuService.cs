@@ -319,6 +319,23 @@ public class MenuService : IDynamicApplication
             .Where(wh => wh.MenuId == input.MenuId)
             .ToListAsync();
 
+        if (input.ParentId > 0)
+        {
+            var parentMenu = await _repository.SingleOrDefaultAsync(s => s.MenuId == input.ParentId);
+            if (parentMenu == null)
+            {
+                throw new UserFriendlyException("数据不存在！");
+            }
+
+            menuModel.ParentId = parentMenu.MenuId;
+            menuModel.ParentIds = [.. parentMenu.ParentIds, parentMenu.MenuId];
+        }
+        else
+        {
+            menuModel.ParentId = 0;
+            menuModel.ParentIds = [0];
+        }
+
         menuModel.Edition = input.Edition;
         menuModel.AppId = moduleModel.AppId;
         menuModel.ModuleId = moduleModel.ModuleId;

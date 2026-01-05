@@ -119,7 +119,6 @@ const emit = defineEmits(["ok"]);
 
 const appStore = useApp();
 const appEnvironmentEnum = appStore.getDictionary("AppEnvironmentEnum");
-const environmentTypeEnum = appStore.getDictionary("EnvironmentTypeEnum");
 
 const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();

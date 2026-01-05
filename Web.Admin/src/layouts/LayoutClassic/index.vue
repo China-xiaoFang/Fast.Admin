@@ -119,7 +119,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, KeepAlive, ref } from "vue";
+import { inject, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Expand, Fold, Key, Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
 import { Local, addUnit } from "@fast-china/utils";

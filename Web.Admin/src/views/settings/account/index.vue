@@ -159,14 +159,14 @@
 			</template>
 		</el-scrollbar>
 		<div style="margin-top: 20px; padding: 20px; display: flex; align-items: center; justify-content: center; border-top: var(--el-border)">
-			<el-button type="primary" @click="emitter.emit(openChangePassword)">修改密码</el-button>
+			<el-button type="primary" @click="changePasswordRef.open()">修改密码</el-button>
 			<FaButton type="primary" @click="handleConfirm">保存</FaButton>
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from "vue";
+import { inject, onMounted, reactive, ref } from "vue";
 import { dayjs, ElMessage, type FormRules } from "element-plus";
 import { dateUtil, withDefineType } from "@fast-china/utils";
 import type { FaFormInstance } from "fast-element-plus";
@@ -177,6 +177,7 @@ import { useApp, useUserInfo } from "@/stores";
 import { EditAccountInput } from "@/api/services/account/models/EditAccountInput";
 import { QueryAccountDetailOutput } from "@/api/services/account/models/QueryAccountDetailOutput";
 import { accountApi } from "@/api/services/account";
+import { changePasswordKey } from "@/layouts";
 
 defineOptions({
 	name: "SettingsAccount",
@@ -187,6 +188,7 @@ const userInfoStore = useUserInfo();
 
 const accountFaFormRef = ref<FaFormInstance>();
 const employeeFaFormRef = ref<FaFormInstance>();
+const changePasswordRef = inject(changePasswordKey);
 
 const state = reactive({
 	loading: false,
