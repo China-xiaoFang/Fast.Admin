@@ -6,6 +6,10 @@ import { AuthModuleInfoDto } from "./AuthModuleInfoDto";
  */
 export interface GetLoginUserInfoOutput {
   /**
+   * 账号Id
+   */
+  accountId?: number;
+  /**
    * 账号Key
    */
   accountKey?: string;
@@ -33,6 +37,10 @@ export interface GetLoginUserInfoOutput {
    * 租户编码
    */
   tenantCode?: string;
+  /**
+   * 用户Id/职员Id
+   */
+  userId?: number;
   /**
    * 用户Key
    */

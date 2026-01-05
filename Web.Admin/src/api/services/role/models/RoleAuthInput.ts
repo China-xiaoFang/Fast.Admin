@@ -3,6 +3,10 @@
  */
 export interface RoleAuthInput {
   /**
+   * 角色名称
+   */
+  roleName?: string;
+  /**
    * 菜单Id集合
    */
   menuIds?: Array<number>;

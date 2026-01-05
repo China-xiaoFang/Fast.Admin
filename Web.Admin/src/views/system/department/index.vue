@@ -24,12 +24,13 @@
 				hideSearchTime
 				:pagination="false"
 				defaultExpandAll
-				@custom-cell-click="(_, { row }: { row: QueryDepartmentPagedOutput }) => editFormRef.detail(row.departmentId)"
+				@custom-cell-click="handleCustomCellClick"
 			>
 				<!-- 表格按钮操作区域 -->
 				<template #header>
 					<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 				</template>
+
 				<!-- 表格操作 -->
 				<template #operation="{ row }: { row: QueryDepartmentPagedOutput }">
 					<el-button size="small" plain @click="editFormRef.detail(row.departmentId)">详情</el-button>
@@ -102,6 +103,10 @@ const state = reactive({
 		},
 	]),
 });
+
+const handleCustomCellClick = (_, { row }: { row: QueryDepartmentPagedOutput }) => {
+	editFormRef.value.detail(row.departmentId);
+};
 
 /** 机构更改 */
 const handleOrgChange = (data: ElTreeOutput<number>) => {

@@ -8,6 +8,11 @@
 		clearable
 		moreDetail
 		@change="handleChange"
+		@clear="
+			() => {
+				console.log(1);
+			}
+		"
 	>
 		<template #default="data">
 			<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%">
@@ -51,10 +56,10 @@ const emit = defineEmits({
 	change: (value: ElSelectorOutput<number | string>) => true,
 });
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: true });
-const mobile = useVModel(props, "mobile", emit, { passive: true });
-const email = useVModel(props, "email", emit, { passive: true });
-const accountKey = useVModel(props, "accountKey", emit, { passive: true });
+const modelValue = useVModel(props, "modelValue", emit);
+const mobile = useVModel(props, "mobile", emit);
+const email = useVModel(props, "email", emit);
+const accountKey = useVModel(props, "accountKey", emit);
 
 const handleChange = (value: ElSelectorOutput<number | string>) => {
 	if (value) {

@@ -55,6 +55,40 @@ internal static partial class MenuSeedData
         systemModuleModel = await db.Insertable(systemModuleModel)
             .ExecuteReturnEntityAsync();
 
+        #region 系统监控
+
+        await db.Insertable(new MenuModel
+            {
+                MenuId = YitIdHelper.NextId(),
+                Edition = EditionEnum.Internal,
+                AppId = applicationModel.AppId,
+                ModuleId = systemModuleModel.ModuleId,
+                MenuCode = PermissionConst.SystemMonitor,
+                MenuName = "系统监控",
+                MenuTitle = "系统监控",
+                ParentId = 0,
+                ParentIds = [0],
+                MenuType = MenuTypeEnum.Menu,
+                HasDesktop = true,
+                DesktopIcon = "test",
+                HasWeb = true,
+                WebIcon = "fa-icon-Test",
+                WebRouter = "/system/systemMonitor",
+                WebComponent = "system/systemMonitor/index",
+                WebTab = true,
+                WebKeepAlive = true,
+                HasMobile = true,
+                MobileIcon = "https://image.fastdotnet.com/menu/mobile/database.png",
+                MobileRouter = "pages_dev/systemMonitor/page/index",
+                Visible = true,
+                Sort = menuSort,
+                Status = CommonStatusEnum.Enable,
+                CreatedTime = dateTime
+            })
+            .ExecuteCommandAsync();
+
+        #endregion
+
         #region 文件存储
 
         var fileMenuModel = new MenuModel
@@ -141,6 +175,234 @@ internal static partial class MenuSeedData
         };
         systemCLMenuModel = await db.Insertable(systemCLMenuModel)
             .ExecuteReturnEntityAsync();
+
+        #region 租户管理
+
+        var tenantMenuModel = new MenuModel
+        {
+            MenuId = YitIdHelper.NextId(),
+            Edition = EditionEnum.Internal,
+            AppId = applicationModel.AppId,
+            ModuleId = systemModuleModel.ModuleId,
+            MenuCode = PermissionConst.Tenant.Paged,
+            MenuName = "租户管理",
+            MenuTitle = "租户管理",
+            ParentId = systemCLMenuModel.MenuId,
+            ParentIds = [0, systemCLMenuModel.MenuId],
+            MenuType = MenuTypeEnum.Menu,
+            HasDesktop = true,
+            DesktopIcon = "tenant",
+            HasWeb = true,
+            WebIcon = "fa-icon-Tenant",
+            WebRouter = "/system/tenant",
+            WebComponent = "system/tenant/index",
+            WebTab = true,
+            WebKeepAlive = true,
+            HasMobile = true,
+            MobileIcon = "https://image.fastdotnet.com/menu/mobile/user.png",
+            MobileRouter = "pages_system/tenant/page/index",
+            Visible = true,
+            Sort = menuSort,
+            Status = CommonStatusEnum.Enable,
+            CreatedTime = dateTime
+        };
+        tenantMenuModel = await db.Insertable(tenantMenuModel)
+            .ExecuteReturnEntityAsync();
+        await db.Insertable(new List<ButtonModel>
+            {
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Internal,
+                    AppId = applicationModel.AppId,
+                    MenuId = tenantMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Tenant.Paged,
+                    ButtonName = "列表",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Internal,
+                    AppId = applicationModel.AppId,
+                    MenuId = tenantMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Tenant.Detail,
+                    ButtonName = "详情",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Internal,
+                    AppId = applicationModel.AppId,
+                    MenuId = tenantMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Tenant.Add,
+                    ButtonName = "新增",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Internal,
+                    AppId = applicationModel.AppId,
+                    MenuId = tenantMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Tenant.Edit,
+                    ButtonName = "编辑",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Internal,
+                    AppId = applicationModel.AppId,
+                    MenuId = tenantMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Tenant.Status,
+                    ButtonName = "状态更改",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                }
+            })
+            .ExecuteCommandAsync();
+
+        #endregion
+
+        #region 数据库配置
+
+        var dbMenuModel = new MenuModel
+        {
+            MenuId = YitIdHelper.NextId(),
+            Edition = EditionEnum.Internal,
+            AppId = applicationModel.AppId,
+            ModuleId = systemModuleModel.ModuleId,
+            MenuCode = PermissionConst.Database.Paged,
+            MenuName = "数据库配置",
+            MenuTitle = "数据库配置",
+            ParentId = systemCLMenuModel.MenuId,
+            ParentIds = [0, systemCLMenuModel.MenuId],
+            MenuType = MenuTypeEnum.Menu,
+            HasDesktop = true,
+            DesktopIcon = "database",
+            HasWeb = true,
+            WebIcon = "fa-icon-Database",
+            WebRouter = "/system/database",
+            WebComponent = "system/database/index",
+            WebTab = true,
+            WebKeepAlive = true,
+            HasMobile = true,
+            MobileIcon = "https://image.fastdotnet.com/menu/mobile/database.png",
+            MobileRouter = "pages_system/database/page/index",
+            Visible = true,
+            Sort = menuSort,
+            Status = CommonStatusEnum.Enable,
+            CreatedTime = dateTime
+        };
+        dbMenuModel = await db.Insertable(dbMenuModel)
+            .ExecuteReturnEntityAsync();
+        await db.Insertable(new List<ButtonModel>
+            {
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Internal,
+                    AppId = applicationModel.AppId,
+                    MenuId = dbMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Database.Paged,
+                    ButtonName = "列表",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Internal,
+                    AppId = applicationModel.AppId,
+                    MenuId = dbMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Database.Detail,
+                    ButtonName = "详情",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Internal,
+                    AppId = applicationModel.AppId,
+                    MenuId = dbMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Database.Add,
+                    ButtonName = "新增",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Internal,
+                    AppId = applicationModel.AppId,
+                    MenuId = dbMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Database.Edit,
+                    ButtonName = "编辑",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Internal,
+                    AppId = applicationModel.AppId,
+                    MenuId = dbMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Database.Delete,
+                    ButtonName = "删除",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
+                }
+            })
+            .ExecuteCommandAsync();
+
+        #endregion
 
         #region 应用管理
 

@@ -6,12 +6,13 @@
 			rowKey="positionId"
 			:requestApi="positionApi.queryPositionPaged"
 			hideSearchTime
-			@custom-cell-click="(_, { row }: { row: QueryPositionPagedOutput }) => editFormRef.detail(row.positionId)"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
+
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryPositionPagedOutput }">
 				<el-button size="small" plain @click="editFormRef.detail(row.positionId)">详情</el-button>
@@ -38,6 +39,10 @@ defineOptions({
 
 const fastTableRef = ref<FastTableInstance>();
 const editFormRef = ref<InstanceType<typeof PositionEdit>>();
+
+const handleCustomCellClick = (_, { row }: { row: QueryPositionPagedOutput }) => {
+	editFormRef.value.detail(row.positionId);
+};
 
 /** 处理删除 */
 const handleDelete = (row: QueryPositionPagedOutput) => {

@@ -25,10 +25,6 @@ export interface TenantOnlineUserModel {
    */
   appName?: string;
   /**
-   * 应用标识
-   */
-  appOpenId?: string;
-  /**
    * 账号Id
    */
   accountId?: number;

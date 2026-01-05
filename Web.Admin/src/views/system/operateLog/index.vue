@@ -5,15 +5,44 @@
 			<template #header>
 				<el-button plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
 			</template>
+
+			<template #mobile="{ row }: { row?: OperateLogModel }">
+				{{ row.employeeName }}
+				<br />
+				工号：<span v-iconCopy="row.employeeNo">{{ row.employeeNo }}</span>
+				<br />
+				手机：<span v-iconCopy="row.mobile">{{ row.mobile }}</span>
+			</template>
+
+			<template #os="{ row }: { row?: OperateLogModel }">
+				<span>设备：{{ row.device }}</span>
+				<br />
+				<span>操作系统：{{ row.os }}</span>
+				<br />
+				<span>浏览器：{{ row.browser }}</span>
+			</template>
+
+			<template #createdTime="{ row }: { row?: OperateLogModel }">
+				<span>地区：{{ row.province }} - {{ row.city }}</span>
+				<br />
+				<span>Ip：{{ row.ip }}</span>
+				<br />
+				<span>时间：{{ dayjs(row.createdTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
+				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small">
+					{{ dateUtil.dateTimeFix(String(row.createdTime)) }}
+				</el-tag>
+			</template>
 		</FastTable>
 	</div>
 </template>
 
 <script lang="ts" setup>
 import { operateLogApi } from "@/api/services/operateLog";
+import { OperateLogModel } from "@/api/services/operateLog/models/OperateLogModel";
 import { FastTableInstance } from "@/components";
 import { Delete } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { dateUtil } from "@fast-china/utils";
+import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
 
 defineOptions({
