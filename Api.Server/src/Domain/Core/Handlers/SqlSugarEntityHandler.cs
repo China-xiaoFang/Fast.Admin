@@ -26,7 +26,6 @@ using Fast.SqlSugar;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using SqlSugar;
-using System.Data;
 using Yitter.IdGenerator;
 
 namespace Fast.Core;
@@ -146,7 +145,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
             TenantId = _user.TenantId,
-            TenantName = _user.TenantName,
+            TenantName = _user.TenantName
         };
         sqlExecutionLogModel.RecordCreate(_httpContext);
 
@@ -206,14 +205,16 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             TimeoutSeconds = executeTime.TotalSeconds,
             RawSql = rawSql,
             Parameters = parameters.Select(sl => new
-            {
-                sl.ParameterName,
-                sl.Value,
-                DbType = sl.DbType.ToString(),
-                sl.IsNullable,
-                sl.IsJson,
-                sl.IsArray
-            }).ToList().ToJsonString(),
+                {
+                    sl.ParameterName,
+                    sl.Value,
+                    DbType = sl.DbType.ToString(),
+                    sl.IsNullable,
+                    sl.IsJson,
+                    sl.IsArray
+                })
+                .ToList()
+                .ToJsonString(),
             PureSql = handlerSql,
             DepartmentId = _user.DepartmentId,
             DepartmentName = _user.DepartmentName,
@@ -294,14 +295,16 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             ExecuteSeconds = executeTime?.TotalSeconds,
             RawSql = rawSql,
             Parameters = parameters.Select(sl => new
-            {
-                sl.ParameterName,
-                sl.Value,
-                DbType = sl.DbType.ToString(),
-                sl.IsNullable,
-                sl.IsJson,
-                sl.IsArray
-            }).ToList().ToJsonString(),
+                {
+                    sl.ParameterName,
+                    sl.Value,
+                    DbType = sl.DbType.ToString(),
+                    sl.IsNullable,
+                    sl.IsJson,
+                    sl.IsArray
+                })
+                .ToList()
+                .ToJsonString(),
             PureSql = handlerSql,
             DepartmentId = _user.DepartmentId,
             DepartmentName = _user.DepartmentName,
@@ -370,14 +373,16 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             StackTrace = exception.StackTrace,
             RawSql = rawSql,
             Parameters = parameters.Select(sl => new
-            {
-                sl.ParameterName,
-                sl.Value,
-                DbType = sl.DbType.ToString(),
-                sl.IsNullable,
-                sl.IsJson,
-                sl.IsArray
-            }).ToList().ToJsonString(),
+                {
+                    sl.ParameterName,
+                    sl.Value,
+                    DbType = sl.DbType.ToString(),
+                    sl.IsNullable,
+                    sl.IsJson,
+                    sl.IsArray
+                })
+                .ToList()
+                .ToJsonString(),
             PureSql = handlerSql,
             DepartmentId = _user.DepartmentId,
             DepartmentName = _user.DepartmentName,

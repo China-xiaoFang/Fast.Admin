@@ -71,7 +71,8 @@ public class RequestLogService : IDynamicApplication
             queryable = queryable.Where(wh => wh.TenantId == _user.TenantId);
         }
 
-        return await queryable.SplitTable().OrderByDescending(ob => ob.CreatedTime)
+        return await queryable.SplitTable()
+            .OrderByDescending(ob => ob.CreatedTime)
             .ToPagedListAsync(input);
     }
 
@@ -96,7 +97,6 @@ public class RequestLogService : IDynamicApplication
         // 删除空数据的表
         foreach (var tableInfo in tableNames)
         {
-
             await _repository.Deleteable<RequestLogModel>()
                 .AS(tableInfo.TableName)
                 .Where(wh => wh.CreatedTime < dateTime)

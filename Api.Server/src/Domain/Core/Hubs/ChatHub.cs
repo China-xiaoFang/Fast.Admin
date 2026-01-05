@@ -22,6 +22,7 @@
 
 using Fast.Center.Entity;
 using Fast.JwtBearer;
+using Fast.SqlSugar;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -158,7 +159,9 @@ public class ChatHub : Hub<IChatClient>
 
         // 获取在线用户信息
         var tenantOnlineUserModel = await _repository.Queryable<TenantOnlineUserModel>()
+            .ClearFilter<IBaseTEntity>()
             .Where(wh => wh.ConnectionId == Context.ConnectionId)
+            .Where(wh => wh.TenantId == authUserInfo.TenantId)
             .SingleAsync();
 
         if (tenantOnlineUserModel != null)
@@ -229,7 +232,9 @@ public class ChatHub : Hub<IChatClient>
 
         // 获取在线用户信息
         var tenantOnlineUserModel = await _repository.Queryable<TenantOnlineUserModel>()
+            .ClearFilter<IBaseTEntity>()
             .Where(wh => wh.ConnectionId == Context.ConnectionId)
+            .Where(wh => wh.TenantId == authUserInfo.TenantId)
             .SingleAsync();
 
         if (tenantOnlineUserModel == null)
@@ -291,6 +296,7 @@ public class ChatHub : Hub<IChatClient>
         if (singleLogin)
         {
             var connectionIdList = await _repository.Queryable<TenantOnlineUserModel>()
+                .ClearFilter<IBaseTEntity>()
                 .Where(wh => wh.AppNo == authUserInfo.AppNo)
                 .Where(wh => wh.UserId == authUserInfo.UserId)
                 .Where(wh => wh.TenantId == authUserInfo.TenantId)

@@ -69,8 +69,8 @@ public class SqlDiffLogService : IDynamicApplication
             queryable = queryable.Where(wh => wh.TenantId == _user.TenantId);
         }
 
-        return await queryable
-            .SplitTable().OrderByDescending(ob => ob.CreatedTime)
+        return await queryable.SplitTable()
+            .OrderByDescending(ob => ob.CreatedTime)
             .ToPagedListAsync(input);
     }
 

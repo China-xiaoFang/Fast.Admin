@@ -81,7 +81,7 @@ public class DatabaseService : IDynamicApplication
                 CreatedTime = t1.CreatedTime,
                 UpdatedUserName = t1.UpdatedUserName,
                 UpdatedTime = t1.UpdatedTime,
-                RowVersion = t1.RowVersion,
+                RowVersion = t1.RowVersion
             })
             .ToPagedListAsync(input);
     }

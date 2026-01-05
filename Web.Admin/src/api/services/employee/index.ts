@@ -127,4 +127,15 @@ export const employeeApi = {
       requestType: "edit",
     });
   },
+  /**
+   * 获取职员授权菜单
+   */
+  queryEmployeeAuthMenu(data: EmployeeIdInput) {
+    return axiosUtil.request<EmployeeAuthInput>({
+      url: "/employee/queryEmployeeAuthMenu",
+      method: "post",
+      data,
+      requestType: "query",
+    });
+  },
 };

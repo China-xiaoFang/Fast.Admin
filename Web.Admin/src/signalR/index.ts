@@ -5,6 +5,7 @@ import { HttpTransportType, HubConnectionBuilder, HubConnectionState, LogLevel }
 import type { HubConnection } from "@microsoft/signalr";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { useApp, useUserInfo } from "@/stores";
+import { TenantOnlineUserModel } from "@/api/services/tenantOnlineUser/models/TenantOnlineUserModel";
 
 /**
  * SignalR 对象
@@ -159,7 +160,7 @@ const initWebSocket = async (): Promise<void> => {
 				consoleWarn("WebSocket", "其他地方登录", data);
 
 				const message = `账号于【${dayjs(data.lastLoginTime).format("YYYY-MM-DD HH:mm:ss")}】在【${data.lastLoginOS} ${data.lastLoginBrowser}(${
-					data.lastLoginIP
+					data.lastLoginIp
 				})】设备登录，如非本人操作，请及时修改密码！`;
 
 				// 退出登录
@@ -170,24 +171,31 @@ const initWebSocket = async (): Promise<void> => {
 			});
 
 			// 强制下线监听
-			await connection.on("ForceOffline", async (data: ForceOfflineOutput) => {
-				consoleWarn("WebSocket", "强制下线", data);
+			await connection.on(
+				"ForceOffline",
+				async (data: { isAdmin: boolean; nickName: string; employeeNo: string; offlineTime: string; message: string }) => {
+					consoleWarn("WebSocket", "强制下线", data);
 
-				let message = "您已被";
+					let message = "您已被";
 
-				if (data.isAdmin) {
-					message += `管理员【${data.nickName}（${data.employeeNo}）】`;
-				} else {
-					message += `用户【${data.nickName}（${data.employeeNo}）】`;
+					if (data.isAdmin) {
+						message += `管理员【${data.nickName}（${data.employeeNo}）】`;
+					} else {
+						message += `用户【${data.nickName}（${data.employeeNo}）】`;
+					}
+
+					message += `于【${dayjs(data.offlineTime).format("YYYY-MM-DD HH:mm:ss")}】被强制下线！`;
+
+					if (data.message) {
+						message += `\r\n原因：${data.message}`;
+					}
+
+					await userInfoStore.logout({
+						type: 1,
+						message: message,
+					});
 				}
-
-				message += `于【${dayjs(data.offlineTime).format("YYYY-MM-DD HH:mm:ss")}】被强制下线！`;
-
-				await userInfoStore.logout({
-					type: 1,
-					message,
-				});
-			});
+			);
 		}
 	} catch (error) {
 		consoleError("WebSocket", error);
