@@ -18,7 +18,6 @@
   "/src/views/dev/menu/edit/index.vue": "DevMenuEdit",
   "/src/views/dev/menu/edit/moduleEdit.vue": "DevModuleEdit",
   "/src/views/dev/menu/index.vue": "DevMenu",
-  "/src/views/dev/passwordMap/index.vue": "DevPasswordMap",
   "/src/views/dev/passwordRecord/index.vue": "DevPasswordRecord",
   "/src/views/dev/scheduler/edit/index.vue": "DevSchedulerEdit",
   "/src/views/dev/scheduler/index.vue": "DevScheduler",

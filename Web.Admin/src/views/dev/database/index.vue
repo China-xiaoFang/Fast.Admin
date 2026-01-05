@@ -6,12 +6,13 @@
 			rowKey="mainId"
 			:requestApi="databaseApi.queryDatabasePaged"
 			hideSearchTime
-			@custom-cell-click="(_, { row }: { row: QueryDatabasePagedOutput }) => editFormRef.detail(row.mainId)"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
+
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryDatabasePagedOutput }">
 				<el-button size="small" plain @click="editFormRef.detail(row.mainId)">详情</el-button>
@@ -40,6 +41,10 @@ defineOptions({
 
 const fastTableRef = ref<FastTableInstance>();
 const editFormRef = ref<InstanceType<typeof DatabaseEdit>>();
+
+const handleCustomCellClick = (_, { row }: { row: QueryDatabasePagedOutput }) => {
+	editFormRef.value.detail(row.mainId);
+};
 
 /** 处理删除 */
 const handleDelete = (row: QueryDatabasePagedOutput) => {

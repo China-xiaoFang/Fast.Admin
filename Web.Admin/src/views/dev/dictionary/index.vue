@@ -5,7 +5,7 @@
 			rowKey="dictionaryId"
 			:requestApi="dictionaryApi.queryDictionaryPaged"
 			hideSearchTime
-			@custom-cell-click="(_, { row }: { row: QueryDictionaryPagedOutput }) => editFormRef.detail(row.dictionaryId)"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
@@ -20,7 +20,7 @@
 				sortable
 				copy
 				link
-				:click="({ row }: { row: QueryDictionaryPagedOutput }) => editFormRef.detail(row.dictionaryId)"
+				:click="({ row }) => editFormRef.detail(row.dictionaryId)"
 			/>
 			<FaTableColumn prop="dictionaryName" label="字典名称" width="300" smallWidth="280" sortable />
 			<FaTableColumn
@@ -101,6 +101,10 @@ defineOptions({
 
 const faTableRef = ref<FaTableInstance>();
 const editFormRef = ref<InstanceType<typeof DictionaryEdit>>();
+
+const handleCustomCellClick = (_, { row }: { row: QueryDictionaryPagedOutput }) => {
+	editFormRef.value.detail(row.dictionaryId);
+};
 
 /** 处理删除 */
 const handleDelete = (row: QueryDictionaryPagedOutput) => {

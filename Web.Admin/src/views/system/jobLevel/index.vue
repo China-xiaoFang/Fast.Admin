@@ -6,12 +6,13 @@
 			rowKey="jobLevelId"
 			:requestApi="jobLevelApi.queryJobLevelPaged"
 			hideSearchTime
-			@custom-cell-click="(_, { row }: { row: QueryJobLevelPagedOutput }) => editFormRef.detail(row.jobLevelId)"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
+
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryJobLevelPagedOutput }">
 				<el-button size="small" plain @click="editFormRef.detail(row.jobLevelId)">详情</el-button>
@@ -38,6 +39,10 @@ defineOptions({
 
 const fastTableRef = ref<FastTableInstance>();
 const editFormRef = ref<InstanceType<typeof JobLevelEdit>>();
+
+const handleCustomCellClick = (_, { row }: { row: QueryJobLevelPagedOutput }) => {
+	editFormRef.value.detail(row.jobLevelId);
+};
 
 /** 处理删除 */
 const handleDelete = (row: QueryJobLevelPagedOutput) => {

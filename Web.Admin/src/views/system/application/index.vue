@@ -8,7 +8,7 @@
 					rowKey="appId"
 					:requestApi="applicationApi.queryApplicationPaged"
 					hideSearchTime
-					@custom-cell-click="(_, { row }: { row: QueryApplicationPagedOutput }) => editFormRef.detail(row.appId)"
+					@custom-cell-click="handleCustomCellClick1"
 				>
 					<!-- 表格按钮操作区域 -->
 					<template #header>
@@ -19,6 +19,7 @@
 							{{ row.themeColor }}
 						</el-tag>
 					</template>
+
 					<!-- 表格操作 -->
 					<template #operation="{ row }: { row: QueryApplicationPagedOutput }">
 						<el-button size="small" plain @click="editFormRef.detail(row.appId)">详情</el-button>
@@ -36,12 +37,13 @@
 						rowKey="recordId"
 						:requestApi="applicationOpenIdApi.queryApplicationOpenIdPaged"
 						hideSearchTime
-						@custom-cell-click="(_, { row }: { row: QueryApplicationOpenIdPagedOutput }) => openIdEditFormRef.detail(row.recordId)"
+						@custom-cell-click="handleCustomCellClick2"
 					>
 						<!-- 表格按钮操作区域 -->
 						<template #header>
 							<el-button type="primary" :icon="Plus" @click="openIdEditFormRef.add()">新增</el-button>
 						</template>
+
 						<!-- 表格操作 -->
 						<template #operation="{ row }: { row: QueryApplicationOpenIdPagedOutput }">
 							<el-button size="small" plain @click="openIdEditFormRef.detail(row.recordId)">详情</el-button>
@@ -82,6 +84,14 @@ const openIdEditFormRef = ref<InstanceType<typeof ApplicationOpenIdEdit>>();
 const state = reactive({
 	activeTab: "application",
 });
+
+const handleCustomCellClick1 = (_, { row }: { row: QueryApplicationPagedOutput }) => {
+	editFormRef.value.detail(row.appId);
+};
+
+const handleCustomCellClick2 = (_, { row }: { row: QueryApplicationOpenIdPagedOutput }) => {
+	openIdEditFormRef.value.detail(row.recordId);
+};
 
 /** 应用更改 */
 const handleApplicationChange = (data: ElSelectorOutput) => {

@@ -149,7 +149,7 @@ public class EditMenuInput : UpdateVersionInput
     /// <summary>
     /// 是否显示
     /// </summary>
-    [EnumRequired(ErrorMessage = "是否显示不能为空")]
+    [Required(ErrorMessage = "是否显示不能为空")]
     public bool Visible { get; set; }
 
     /// <summary>
