@@ -67,12 +67,14 @@ public class AddTenantInput
     /// 租户管理员手机
     /// </summary>
     [StringRequired(ErrorMessage = "租户管理员手机不能为空")]
+    [RegularExpression(RegexConst.Mobile, ErrorMessage = "手机格式不正确")]
     public string AdminMobile { get; set; }
 
     /// <summary>
     /// 租户管理员邮箱
     /// </summary>
     [StringRequired(ErrorMessage = "租户管理员邮箱不能为空")]
+    [RegularExpression(RegexConst.EmailAddress, ErrorMessage = "邮箱格式不正确")]
     public string AdminEmail { get; set; }
 
     /// <summary>

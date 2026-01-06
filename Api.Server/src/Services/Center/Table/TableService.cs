@@ -414,8 +414,7 @@ public class TableService : IDynamicApplication
         var deleteTableColumnList = tableColumnList.Where(wh => !columnIds.Contains(wh.ColumnId))
             .ToList();
 
-        // TODO：记得修改
-        //tableConfigModel.RowVersion = input.RowVersion;
+        tableConfigModel.RowVersion = input.RowVersion;
 
         await _tableRepository.Ado.UseTranAsync(async () =>
         {

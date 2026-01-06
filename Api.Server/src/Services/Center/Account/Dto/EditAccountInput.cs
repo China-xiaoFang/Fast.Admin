@@ -31,12 +31,14 @@ public class EditAccountInput : UpdateVersionInput
     /// 手机
     /// </summary>
     [StringRequired(ErrorMessage = "手机不能为空")]
+    [RegularExpression(RegexConst.Mobile, ErrorMessage = "手机格式不正确")]
     public string Mobile { get; set; }
 
     /// <summary>
     /// 邮箱
     /// </summary>
     [StringRequired(ErrorMessage = "邮箱不能为空")]
+    [RegularExpression(RegexConst.EmailAddress, ErrorMessage = "邮箱格式不正确")]
     public string Email { get; set; }
 
     /// <summary>

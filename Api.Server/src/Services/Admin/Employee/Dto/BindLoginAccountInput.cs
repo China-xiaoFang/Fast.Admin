@@ -37,17 +37,20 @@ public class BindLoginAccountInput : UpdateVersionInput
     /// 账号
     /// </summary>
     [StringRequired(ErrorMessage = "账号不能为空")]
+    [RegularExpression(RegexConst.Account, ErrorMessage = "账号格式不正确")]
     public string Account { get; set; }
 
     /// <summary>
     /// 手机
     /// </summary>
     [StringRequired(ErrorMessage = "手机不能为空")]
+    [RegularExpression(RegexConst.Mobile, ErrorMessage = "手机格式不正确")]
     public string Mobile { get; set; }
 
     /// <summary>
     /// 邮箱
     /// </summary>
     [StringRequired(ErrorMessage = "邮箱不能为空")]
+    [RegularExpression(RegexConst.EmailAddress, ErrorMessage = "邮箱格式不正确")]
     public string Email { get; set; }
 }

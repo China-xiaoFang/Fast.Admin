@@ -45,16 +45,16 @@ public class DictionaryTypeModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 字典Key
     /// </summary>
-    [SugarSearchValue]
     [Required]
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "字典Key", Length = 50)]
     public string DictionaryKey { get; set; }
 
     /// <summary>
     /// 字典名称
     /// </summary>
-    [SugarSearchValue]
     [Required]
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "字典名称", Length = 50)]
     public string DictionaryName { get; set; }
 

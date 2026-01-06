@@ -46,6 +46,7 @@ public class EditEmployeeInput : UpdateVersionInput
     /// 手机
     /// </summary>
     [StringRequired(ErrorMessage = "手机不能为空")]
+    [RegularExpression(RegexConst.Mobile, ErrorMessage = "手机格式不正确")]
     public string Mobile { get; set; }
 
     /// <summary>

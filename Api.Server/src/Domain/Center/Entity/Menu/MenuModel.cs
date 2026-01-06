@@ -59,16 +59,16 @@ public class MenuModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 菜单编码
     /// </summary>
-    [SugarSearchValue]
     [Required]
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "菜单编码", Length = 50)]
     public string MenuCode { get; set; }
 
     /// <summary>
     /// 菜单名称
     /// </summary>
-    [SugarSearchValue]
     [Required]
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "菜单名称", Length = 20)]
     public string MenuName { get; set; }
 
