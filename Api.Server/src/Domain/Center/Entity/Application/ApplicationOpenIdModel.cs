@@ -45,8 +45,8 @@ public class ApplicationOpenIdModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 应用标识
     /// </summary>
-    [SugarSearchValue]
     [Required]
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "应用标识", Length = 50)]
     public string OpenId { get; set; }
 

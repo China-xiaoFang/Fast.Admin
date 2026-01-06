@@ -63,8 +63,8 @@ public class OperateLogModel : BaseRecordEntity
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarSearchValue]
     [Required]
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
