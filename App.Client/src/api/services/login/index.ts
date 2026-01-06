@@ -22,6 +22,8 @@ export const loginApi = {
       method: "post",
       data,
       requestType: "auth",
+			loading: true,
+			loadingText: "登录中...",
     });
   },
   /**
@@ -46,6 +48,8 @@ export const loginApi = {
       method: "post",
       data,
       requestType: "auth",
+			loading: true,
+			loadingText: "租户登录中...",
     });
   },
   /**
@@ -57,6 +61,8 @@ export const loginApi = {
       method: "post",
       data,
       requestType: "auth",
+			loading: true,
+			loadingText: "登录中...",
     });
   },
   /**
@@ -68,6 +74,8 @@ export const loginApi = {
       method: "post",
       data,
       requestType: "auth",
+			loading: true,
+			loadingText: "登录中...",
     });
   },
   /**
@@ -79,6 +87,7 @@ export const loginApi = {
       method: "post",
       data,
       requestType: "auth",
+			showCodeMessage: false,
     });
   },
   /**
@@ -89,6 +98,7 @@ export const loginApi = {
       url: "/logout",
       method: "post",
       requestType: "auth",
+			loading: true,
     });
   },
   /**
@@ -100,6 +110,8 @@ export const loginApi = {
       method: "post",
       data,
       requestType: "auth",
+			loading: true,
+			loadingText: "登录中...",
     });
   },
 };
