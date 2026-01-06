@@ -24,18 +24,20 @@
 				hideSearchTime
 				:pagination="false"
 				defaultExpandAll
-				@custom-cell-click="handleCustomCellClick"
+				@customCellClick="handleCustomCellClick"
 			>
 				<!-- 表格按钮操作区域 -->
 				<template #header>
-					<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
+					<el-button v-auth="'Department:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 				</template>
 
 				<!-- 表格操作 -->
 				<template #operation="{ row }: { row: QueryDepartmentPagedOutput }">
-					<el-button size="small" plain @click="editFormRef.detail(row.departmentId)">详情</el-button>
-					<el-button size="small" plain type="primary" @click="editFormRef.edit(row.departmentId)">编辑</el-button>
-					<el-button size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
+					<el-button v-auth="'Department:Detail'" size="small" plain @click="editFormRef.detail(row.departmentId)">详情</el-button>
+					<el-button v-auth="'Department:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.departmentId)">
+						编辑
+					</el-button>
+					<el-button v-auth="'Department:Delete'" size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
 				</template>
 			</FastTable>
 		</div>

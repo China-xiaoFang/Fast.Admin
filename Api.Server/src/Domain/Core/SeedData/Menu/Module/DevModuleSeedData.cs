@@ -656,21 +656,6 @@ internal static partial class MenuSeedData
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
-                new()
-                {
-                    ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
-                    AppId = applicationModel.AppId,
-                    MenuId = dictionaryMenuModel.MenuId,
-                    ButtonCode = PermissionConst.Dictionary.Status,
-                    ButtonName = "状态更改",
-                    HasDesktop = true,
-                    HasWeb = true,
-                    HasMobile = true,
-                    Sort = buttonSort,
-                    Status = CommonStatusEnum.Enable,
-                    CreatedTime = dateTime
-                }
             })
             .ExecuteCommandAsync();
 
@@ -1033,7 +1018,7 @@ internal static partial class MenuSeedData
         var logCLMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Professional,
+            Edition = EditionEnum.Internal,
             AppId = applicationModel.AppId,
             ModuleId = devModuleModel.ModuleId,
             MenuCode = "DevSystemLog:Catalog",

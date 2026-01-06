@@ -6,19 +6,19 @@
 			rowKey="configId"
 			:requestApi="configApi.queryConfigPaged"
 			hideSearchTime
-			@custom-cell-click="handleCustomCellClick"
+			@customCellClick="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
-				<el-button plain type="warning" :icon="Delete" @click="handleDeleteAll">删除全部缓存</el-button>
+				<el-button v-auth="'Config:Edit'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
+				<el-button v-auth="'Config:Edit'" plain type="warning" :icon="Delete" @click="handleDeleteAll">删除全部缓存</el-button>
 			</template>
 
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryConfigPagedOutput }">
-				<el-button size="small" plain @click="editFormRef.detail(row.configId)">详情</el-button>
-				<el-button size="small" plain type="primary" @click="editFormRef.edit(row.configId)">编辑</el-button>
-				<el-button size="small" plain type="warning" @click="handleDelete(row)">删除缓存</el-button>
+				<el-button v-auth="'Config:Detail'" size="small" plain @click="editFormRef.detail(row.configId)">详情</el-button>
+				<el-button v-auth="'Config:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.configId)">编辑</el-button>
+				<el-button v-auth="'Config:Edit'" size="small" plain type="warning" @click="handleDelete(row)">删除缓存</el-button>
 			</template>
 		</FastTable>
 		<ConfigEdit ref="editFormRef" @ok="fastTableRef.refresh()" />

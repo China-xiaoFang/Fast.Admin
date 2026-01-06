@@ -6,18 +6,18 @@
 			rowKey="positionId"
 			:requestApi="positionApi.queryPositionPaged"
 			hideSearchTime
-			@custom-cell-click="handleCustomCellClick"
+			@customCellClick="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
+				<el-button v-auth="'Position:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
 
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryPositionPagedOutput }">
-				<el-button size="small" plain @click="editFormRef.detail(row.positionId)">详情</el-button>
-				<el-button size="small" plain type="primary" @click="editFormRef.edit(row.positionId)">编辑</el-button>
-				<el-button size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
+				<el-button v-auth="'Position:Detail'" size="small" plain @click="editFormRef.detail(row.positionId)">详情</el-button>
+				<el-button v-auth="'Position:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.positionId)">编辑</el-button>
+				<el-button v-auth="'Position:Delete'" size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
 			</template>
 		</FastTable>
 		<PositionEdit ref="editFormRef" @ok="fastTableRef.refresh()" />
