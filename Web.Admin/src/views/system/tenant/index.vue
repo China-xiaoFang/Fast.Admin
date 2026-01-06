@@ -2,7 +2,7 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1HZJB6Y5UZ"
+			tableKey="1D1FT74TNX"
 			rowKey="tenantId"
 			:requestApi="tenantApi.queryTenantPaged"
 			@custom-cell-click="handleCustomCellClick"
@@ -37,7 +37,7 @@ import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { tenantApi } from "@/api/services/tenant";
 
 defineOptions({
-	name: "DevTenant",
+	name: "SystemTenant",
 });
 
 const fastTableRef = ref<FastTableInstance>();

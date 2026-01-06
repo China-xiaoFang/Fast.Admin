@@ -2,7 +2,7 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1HZ2DHR41G"
+			tableKey="1D11JKRR5Q"
 			rowKey="configId"
 			:requestApi="configApi.queryConfigPaged"
 			hideSearchTime

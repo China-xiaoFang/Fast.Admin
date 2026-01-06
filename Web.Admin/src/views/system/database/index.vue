@@ -2,7 +2,7 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1HZQY5LNNZ"
+			tableKey="1D1F3QYJST"
 			rowKey="mainId"
 			:requestApi="databaseApi.queryDatabasePaged"
 			hideSearchTime
@@ -36,7 +36,7 @@ import { databaseApi } from "@/api/services/database";
 import { tenantDatabaseApi } from "@/api/services/tenantDatabase";
 
 defineOptions({
-	name: "DevDatabase",
+	name: "SystemDatabase",
 });
 
 const fastTableRef = ref<FastTableInstance>();

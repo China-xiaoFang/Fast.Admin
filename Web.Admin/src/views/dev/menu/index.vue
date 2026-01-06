@@ -23,7 +23,7 @@
 
 				<FastTable
 					ref="fastTableRef"
-					tableKey="1HD88SK728"
+					tableKey="1D11Q5S4P2"
 					rowKey="menuId"
 					:requestApi="menuApi.queryMenuPaged"
 					hideSearchTime

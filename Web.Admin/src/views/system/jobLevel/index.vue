@@ -2,7 +2,7 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="151ZD236PK"
+			tableKey="1D1KRB5KK9"
 			rowKey="jobLevelId"
 			:requestApi="jobLevelApi.queryJobLevelPaged"
 			hideSearchTime

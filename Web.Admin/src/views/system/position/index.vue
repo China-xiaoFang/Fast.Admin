@@ -2,7 +2,7 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="151MCNV95D"
+			tableKey="1D1KR8WZ6U"
 			rowKey="positionId"
 			:requestApi="positionApi.queryPositionPaged"
 			hideSearchTime

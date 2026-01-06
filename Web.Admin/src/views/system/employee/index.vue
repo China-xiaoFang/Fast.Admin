@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1DVP335LNW" rowKey="employeeId" :requestApi="employeeApi.queryEmployeePaged" hideSearchTime>
+		<FastTable ref="fastTableRef" tableKey="1D1KVW17SY" rowKey="employeeId" :requestApi="employeeApi.queryEmployeePaged" hideSearchTime>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>

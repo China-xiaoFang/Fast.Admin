@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1HDRYP6NFH" rowKey="serialRuleId" :requestApi="sysSerialApi.querySysSerialRulePaged" hideSearchTime>
+		<FastTable ref="fastTableRef" tableKey="1D11MFM59S" rowKey="serialRuleId" :requestApi="sysSerialApi.querySysSerialRulePaged" hideSearchTime>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>

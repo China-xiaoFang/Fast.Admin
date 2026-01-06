@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="146GLML9MD" rowKey="accountId" :requestApi="accountApi.queryAccountPaged" hideSearchTime>
+		<FastTable ref="fastTableRef" tableKey="1D1FXFM1GH" rowKey="accountId" :requestApi="accountApi.queryAccountPaged" hideSearchTime>
 			<template #mobile="{ row }: { row?: QueryAccountPagedOutput }">
 				<el-button link type="primary" @click="editFormRef.detail(row.accountId)">{{ row.nickName }}</el-button>
 				<br />

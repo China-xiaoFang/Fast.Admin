@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1DQ2CVT2XJ" rowKey="complaintId" :requestApi="complaintApi.queryTenantComplaintPaged" hideSearchTime>
+		<FastTable ref="fastTableRef" tableKey="1D1KQSM6QW" rowKey="complaintId" :requestApi="complaintApi.queryTenantComplaintPaged" hideSearchTime>
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryComplaintPagedOutput }">
 				<el-button v-if="!row.handleTime" size="small" plain type="primary" @click="editFormRef.open(row.complaintId)">处理</el-button>

@@ -18,7 +18,7 @@
 			</FaTree>
 			<FastTable
 				ref="fastTableRef"
-				tableKey="1DGHHUL3RL"
+				tableKey="1D1KGFUXKQ"
 				rowKey="departmentId"
 				:requestApi="departmentApi.queryDepartmentPaged"
 				hideSearchTime
