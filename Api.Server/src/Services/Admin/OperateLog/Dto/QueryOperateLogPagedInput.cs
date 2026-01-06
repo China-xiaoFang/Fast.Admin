@@ -22,7 +22,7 @@
 
 using Fast.AdminLog.Enum;
 
-namespace Fast.Center.Service.RequestLog.Dto;
+namespace Fast.Admin.Service.OperateLog.Dto;
 
 /// <summary>
 /// <see cref="QueryOperateLogPagedInput"/> 获取操作日志分页列表输入
