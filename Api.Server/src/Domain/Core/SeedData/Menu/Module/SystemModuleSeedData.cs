@@ -1624,7 +1624,7 @@ internal static partial class MenuSeedData
         await db.Insertable(new ButtonModel
             {
                 ButtonId = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
+                Edition = EditionEnum.Professional,
                 AppId = applicationModel.AppId,
                 MenuId = payRecordMenuModel.MenuId,
                 ButtonCode = PermissionConst.PayRecordPaged,

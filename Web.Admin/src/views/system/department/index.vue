@@ -7,7 +7,7 @@
 				width="240"
 				:requestApi="organizationApi.organizationSelector"
 				@change="handleOrgChange"
-				@node-contextmenu="handleOrgContextmenu"
+				@node-contextmenu="(event, data) => handleOrgContextmenu(event as MouseEvent, data)"
 			>
 				<template #label="{ data }: { data: ElTreeOutput<number> }">
 					<span>{{ data.label }}</span>

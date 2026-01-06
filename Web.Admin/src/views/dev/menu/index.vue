@@ -9,7 +9,7 @@
 					width="180"
 					:requestApi="() => moduleApi.moduleSelector(fastTableRef?.searchParam?.appId)"
 					@change="handleModuleChange"
-					@node-contextmenu="handleModuleContextmenu"
+					@node-contextmenu="(event, data) => handleModuleContextmenu(event as MouseEvent, data)"
 				>
 					<template #label="{ data }: { data: ElSelectorOutput<number> }">
 						<FaIcon v-if="data.data?.icon" style="margin-right: 5px" size="16" :name="data.data.icon" />

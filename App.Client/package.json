@@ -28,14 +28,14 @@
 		"lint": "pnpm lint:eslint && pnpm lint:prettier"
 	},
 	"dependencies": {
-		"@dcloudio/uni-app": "3.0.0-alpha-4080620251107001",
-		"@dcloudio/uni-app-plus": "3.0.0-alpha-4080620251107001",
-		"@dcloudio/uni-mp-weixin": "3.0.0-alpha-4080620251107001",
+		"@dcloudio/uni-app": "3.0.0-alpha-5000020260104004",
+		"@dcloudio/uni-app-plus": "3.0.0-alpha-5000020260104004",
+		"@dcloudio/uni-mp-weixin": "3.0.0-alpha-5000020260104004",
 		"@fast-china/axios": "^1",
 		"@fast-china/utils": "^1",
 		"axios": "^1",
 		"dayjs": "^1",
-		"decimal.js": "^10.5.0",
+		"decimal.js": "^10.6",
 		"lodash": "^4.17",
 		"lodash-es": "^4.17",
 		"lodash-unified": "^1",
@@ -47,10 +47,10 @@
 		"z-paging": "^2.8"
 	},
 	"devDependencies": {
-		"@dcloudio/types": "latest",
-		"@dcloudio/uni-cli-shared": "3.0.0-alpha-4080620251107001",
-		"@dcloudio/uni-stacktracey": "3.0.0-alpha-4080620251107001",
-		"@dcloudio/vite-plugin-uni": "3.0.0-alpha-4080620251107001",
+		"@dcloudio/types": "^3.4",
+		"@dcloudio/uni-cli-shared": "3.0.0-alpha-5000020260104004",
+		"@dcloudio/uni-stacktracey": "3.0.0-alpha-5000020260104004",
+		"@dcloudio/vite-plugin-uni": "3.0.0-alpha-5000020260104004",
 		"@fast-china/eslint-config": "^1",
 		"@types/lodash": "latest",
 		"@types/lodash-es": "latest",
