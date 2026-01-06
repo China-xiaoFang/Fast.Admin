@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1HDVBM7PR8" rowKey="fileId" :requestApi="fileApi.queryFilePaged">
+		<FastTable ref="fastTableRef" tableKey="1D11KCYJJ9" rowKey="fileId" :requestApi="fileApi.queryFilePaged">
 			<!-- 表格按钮操作区域 -->
 			<template #header v-if="userInfoStore.isSuperAdmin">
 				<TenantSelectPage

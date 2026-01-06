@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="15U9JVNPS8" rowKey="recordId" :requestApi="sqlDiffLogApi.querySqlDiffLogPaged" stripe>
+		<FastTable ref="fastTableRef" tableKey="1D11BD21TV" rowKey="recordId" :requestApi="sqlDiffLogApi.querySqlDiffLogPaged" stripe>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>

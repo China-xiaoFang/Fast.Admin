@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable tableKey="1DQUW3H5ZD" rowKey="weChatId" :requestApi="weChatApi.queryWeChatUserPaged" stripe>
+		<FastTable tableKey="1D1KL4GV24" rowKey="weChatId" :requestApi="weChatApi.queryWeChatUserPaged" stripe>
 			<template #lastLoginOS="{ row }: { row?: QueryWeChatUserPagedOutput }">
 				<span>设备：{{ row.lastLoginDevice }}</span>
 				<br />

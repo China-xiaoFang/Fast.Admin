@@ -202,7 +202,7 @@ import { Plus } from "@element-plus/icons-vue";
 import { EditSlaveDatabaseInput } from "@/api/services/database/models/EditSlaveDatabaseInput";
 
 defineOptions({
-	name: "DevDatabaseEdit",
+	name: "SystemDatabaseEdit",
 });
 
 const emit = defineEmits(["ok"]);

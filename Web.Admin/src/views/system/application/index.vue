@@ -4,7 +4,7 @@
 			<el-tab-pane label="应用" name="application" lazy>
 				<FastTable
 					ref="fastTableRef"
-					tableKey="1HDSRS5N8D"
+					tableKey="1D1F9HNVPQ"
 					rowKey="appId"
 					:requestApi="applicationApi.queryApplicationPaged"
 					hideSearchTime
@@ -33,7 +33,7 @@
 					<ApplicationTree @change="handleApplicationChange" />
 					<FastTable
 						ref="openIdFastTableRef"
-						tableKey="1HDSZF8FRW"
+						tableKey="1D1FCQZ5KT"
 						rowKey="recordId"
 						:requestApi="applicationOpenIdApi.queryApplicationOpenIdPaged"
 						hideSearchTime

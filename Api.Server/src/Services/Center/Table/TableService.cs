@@ -63,7 +63,7 @@ public class TableService : IDynamicApplication
     [Permission(PermissionConst.Table.Paged)]
     public async Task<PagedResult<QueryTableConfigPagedOutput>> QueryTableConfigPaged(PagedInput input)
     {
-        return await _tableRepository.Entities.OrderBy(ob => ob.CreatedTime)
+        return await _tableRepository.Entities.OrderByDescending(ob => ob.CreatedTime)
             .ToPagedListAsync(input,
                 sl => new QueryTableConfigPagedOutput
                 {
@@ -233,6 +233,7 @@ public class TableService : IDynamicApplication
 
         // 查询表格所有列
         var columnConfigList = await _columnRepository.Entities.Where(wh => wh.TableId == input.TableId)
+            .OrderBy(ob => ob.Order)
             .ToListAsync();
 
         // 重置列Id和表格Id

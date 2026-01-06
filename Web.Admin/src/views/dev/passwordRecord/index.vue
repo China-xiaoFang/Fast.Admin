@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable tableKey="1HDT1KXNTZ" rowKey="recordId" :requestApi="passwordRecordApi.queryPasswordRecordPaged" />
+		<FastTable tableKey="1DFGFQQD95" rowKey="recordId" :requestApi="passwordRecordApi.queryPasswordRecordPaged" />
 	</div>
 </template>
 
