@@ -1,9 +1,14 @@
+import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 import { AuthModuleInfoDto } from "./AuthModuleInfoDto";
 
 /**
  * Fast.Admin.Service.Auth.Dto.GetLoginUserInfoOutput 获取登录用户信息输出
  */
 export interface GetLoginUserInfoOutput {
+  /**
+   * 账号Id
+   */
+  accountId?: number;
   /**
    * 账号Key
    */
@@ -28,6 +33,14 @@ export interface GetLoginUserInfoOutput {
    * 租户名称
    */
   tenantName?: string;
+  /**
+   * 租户编码
+   */
+  tenantCode?: string;
+  /**
+   * 用户Id/职员Id
+   */
+  userId?: number;
   /**
    * 用户Key
    */
@@ -64,6 +77,10 @@ export interface GetLoginUserInfoOutput {
    * 角色名称集合
    */
   roleNameList?: Array<string>;
+  /**
+   * 
+   */
+  dataScopeType?: DataScopeTypeEnum;
   /**
    * 按钮编码集合
    */

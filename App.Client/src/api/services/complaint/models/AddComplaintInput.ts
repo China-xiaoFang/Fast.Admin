@@ -21,7 +21,7 @@ export interface AddComplaintInput {
    */
   description?: string;
   /**
-   * 附件截图
+   * 附件图片
    */
   attachmentImages?: Array<string>;
 }

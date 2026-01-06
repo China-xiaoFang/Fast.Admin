@@ -1,5 +1,4 @@
 import { EditionEnum } from "@/api/enums/EditionEnum";
-import { QueryApplicationOpenIdDetailDto } from "./QueryApplicationOpenIdDetailDto";
 
 /**
  * Fast.Center.Service.Application.Dto.QueryApplicationDetailOutput 获取应用详情输出
@@ -61,10 +60,6 @@ export interface QueryApplicationDetailOutput {
    * 租户名称
    */
   tenantName?: string;
-  /**
-   * 开放平台信息
-   */
-  openIdList?: Array<QueryApplicationOpenIdDetailDto>;
   /**
    * 
    */
