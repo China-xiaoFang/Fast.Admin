@@ -8,12 +8,13 @@
 					rowKey="appId"
 					:requestApi="applicationApi.queryApplicationPaged"
 					hideSearchTime
-					@custom-cell-click="handleCustomCellClick1"
+					@customCellClick="handleCustomCellClick1"
 				>
 					<!-- 表格按钮操作区域 -->
 					<template #header>
-						<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
+						<el-button v-auth="'App:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 					</template>
+
 					<template #themeColor="{ row }: { row?: QueryApplicationPagedOutput }">
 						<el-tag v-if="row?.themeColor" effect="dark" :color="row.themeColor" :style="{ borderColor: row.themeColor }">
 							{{ row.themeColor }}
@@ -22,9 +23,9 @@
 
 					<!-- 表格操作 -->
 					<template #operation="{ row }: { row: QueryApplicationPagedOutput }">
-						<el-button size="small" plain @click="editFormRef.detail(row.appId)">详情</el-button>
-						<el-button size="small" plain type="primary" @click="editFormRef.edit(row.appId)">编辑</el-button>
-						<el-button size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
+						<el-button v-auth="'App:Detail'" size="small" plain @click="editFormRef.detail(row.appId)">详情</el-button>
+						<el-button v-auth="'App:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.appId)">编辑</el-button>
+						<el-button v-auth="'App:Delete'" size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
 					</template>
 				</FastTable>
 			</el-tab-pane>
@@ -37,18 +38,20 @@
 						rowKey="recordId"
 						:requestApi="applicationOpenIdApi.queryApplicationOpenIdPaged"
 						hideSearchTime
-						@custom-cell-click="handleCustomCellClick2"
+						@customCellClick="handleCustomCellClick2"
 					>
 						<!-- 表格按钮操作区域 -->
 						<template #header>
-							<el-button type="primary" :icon="Plus" @click="openIdEditFormRef.add()">新增</el-button>
+							<el-button v-auth="'App:Add'" type="primary" :icon="Plus" @click="openIdEditFormRef.add()">新增</el-button>
 						</template>
 
 						<!-- 表格操作 -->
 						<template #operation="{ row }: { row: QueryApplicationOpenIdPagedOutput }">
-							<el-button size="small" plain @click="openIdEditFormRef.detail(row.recordId)">详情</el-button>
-							<el-button size="small" plain type="primary" @click="openIdEditFormRef.edit(row.recordId)">编辑</el-button>
-							<el-button size="small" plain type="danger" @click="handleOpenIdDelete(row)">删除</el-button>
+							<el-button v-auth="'App:Detail'" size="small" plain @click="openIdEditFormRef.detail(row.recordId)">详情</el-button>
+							<el-button v-auth="'App:Edit'" size="small" plain type="primary" @click="openIdEditFormRef.edit(row.recordId)">
+								编辑
+							</el-button>
+							<el-button v-auth="'App:Delete'" size="small" plain type="danger" @click="handleOpenIdDelete(row)">删除</el-button>
 						</template>
 					</FastTable>
 				</div>

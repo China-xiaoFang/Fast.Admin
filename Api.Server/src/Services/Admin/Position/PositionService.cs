@@ -66,7 +66,7 @@ public class PositionService : IDynamicApplication
     [Permission(PermissionConst.Position.Paged)]
     public async Task<PagedResult<QueryPositionPagedOutput>> QueryPositionPaged(PagedInput input)
     {
-        return await _repository.Entities.OrderByDescending(ob => ob.CreatedTime)
+        return await _repository.Entities.OrderBy(ob => ob.Sort)
             .ToPagedListAsync(input,
                 sl => new QueryPositionPagedOutput
                 {

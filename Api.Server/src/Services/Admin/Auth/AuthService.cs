@@ -116,6 +116,7 @@ public class AuthService : IDynamicApplication
         var menuQueryable = _repository.Queryable<MenuModel>()
             .Where(wh => wh.AppId == applicationModel.AppId)
             .Where(wh => wh.Status == CommonStatusEnum.Enable)
+            .Where(wh => wh.MenuType != MenuTypeEnum.Catalog)
             .Where(wh => tenantModel.Edition >= wh.Edition)
             .WhereIF(hasDesktop, wh => wh.HasDesktop)
             .WhereIF(hasWeb, wh => wh.HasWeb)
@@ -128,7 +129,7 @@ public class AuthService : IDynamicApplication
             moduleQueryable = moduleQueryable.Where(wh =>
                 (wh.ViewType & (ModuleViewTypeEnum.SuperAdmin | ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
         }
-        else if (_user.IsAdmin)
+        else if (_user.IsAdmin || roleList.Any(a => a.RoleType == RoleTypeEnum.Admin))
         {
             result.DataScopeType = DataScopeTypeEnum.All;
 
@@ -196,8 +197,50 @@ public class AuthService : IDynamicApplication
             })
             .ToListAsync();
 
+        // 查询所有父级
+        var parentMenuIds = menuList.Select(sl => sl.ParentId)
+            .Distinct()
+            .ToList();
+
+        var parentMenuList = await _repository.Queryable<MenuModel>()
+            .Where(wh => wh.AppId == applicationModel.AppId)
+            .Where(wh => wh.Status == CommonStatusEnum.Enable)
+            .Where(wh => tenantModel.Edition >= wh.Edition)
+            .WhereIF(hasDesktop, wh => wh.HasDesktop)
+            .WhereIF(hasWeb, wh => wh.HasWeb)
+            .WhereIF(hasMobile, wh => wh.HasMobile)
+            .Where(wh => parentMenuIds.Contains(wh.MenuId))
+            .Select(t1 => new AuthMenuInfoDto
+            {
+                MenuId = t1.MenuId,
+                ModuleId = t1.ModuleId,
+                MenuCode = t1.MenuCode,
+                MenuName = t1.MenuName,
+                MenuTitle = t1.MenuTitle,
+                ParentId = t1.ParentId,
+                MenuType = t1.MenuType,
+                Icon = hasDesktop ? t1.DesktopIcon :
+                    hasWeb ? t1.WebIcon :
+                    hasMobile ? t1.MobileIcon : null,
+                Router = hasDesktop ? t1.DesktopRouter :
+                    hasWeb ? t1.WebRouter :
+                    hasMobile ? t1.MobileRouter : null,
+                Component = hasWeb ? t1.WebComponent : null,
+                // ReSharper disable once SimplifyConditionalTernaryExpression
+                Tab = hasWeb ? t1.WebTab : false,
+                // ReSharper disable once SimplifyConditionalTernaryExpression
+                KeepAlive = hasWeb ? t1.WebKeepAlive : false,
+                Link = t1.Link,
+                Visible = t1.Visible,
+                Sort = t1.Sort
+            })
+            .ToListAsync();
+
+        menuList.AddRange(parentMenuList);
+
         // 组建菜单树形
-        var menuTreeList = new TreeBuildUtil<AuthMenuInfoDto, long>().Build(menuList);
+        var menuTreeList = new TreeBuildUtil<AuthMenuInfoDto, long>().Build(menuList.Distinct()
+            .ToList());
 
         // 组装菜单
         foreach (var item in moduleList)

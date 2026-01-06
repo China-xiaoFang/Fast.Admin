@@ -109,9 +109,6 @@ public partial class PermissionConst
 
         /// <summary>字典删除</summary>
         public const string Delete = "Dictionary:Delete";
-
-        /// <summary>字典状态更改</summary>
-        public const string Status = "Dictionary:Status";
     }
 
     /// <summary><see cref="Table"/> 表格</summary>
@@ -416,9 +413,6 @@ public partial class PermissionConst
     {
         /// <summary>微信用户列表</summary>
         public const string Paged = "WeChat:Paged";
-
-        /// <summary>微信用户详情</summary>
-        public const string Detail = "WeChat:Detail";
     }
 
     /// <summary><see cref="Complaint"/> 投诉</summary>
@@ -438,6 +432,9 @@ public partial class PermissionConst
 
         /// <summary>用户投诉详情</summary>
         public const string TenantDetail = "Complaint:TenantDetail";
+
+        /// <summary>处理用户投诉</summary>
+        public const string TenantHandle = "Complaint:TenantHandle";
     }
 
     /// <summary>访问日志列表</summary>

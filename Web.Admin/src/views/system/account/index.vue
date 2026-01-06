@@ -64,13 +64,20 @@
 
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryAccountPagedOutput }">
-				<el-button size="small" plain @click="editFormRef.detail(row.accountId)">详情</el-button>
-				<el-button size="small" plain type="warning" @click="handleResetPassword(row)">重置密码</el-button>
-				<el-button v-if="row.isLock" size="small" plain type="warning" @click="handleUnlock(row)">解锁</el-button>
-				<el-button v-if="row.status == CommonStatusEnum.Enable" size="small" plain type="danger" @click="handleChangeStatus(row)">
+				<el-button v-auth="'Account:Detail'" size="small" plain @click="editFormRef.detail(row.accountId)">详情</el-button>
+				<el-button v-auth="'Account:ResetPassword'" size="small" plain type="warning" @click="handleResetPassword(row)">重置密码</el-button>
+				<el-button v-if="row.isLock" v-auth="'Account:Unlock'" size="small" plain type="warning" @click="handleUnlock(row)">解锁</el-button>
+				<el-button
+					v-if="row.status == CommonStatusEnum.Enable"
+					v-auth="'Account:Status'"
+					size="small"
+					plain
+					type="danger"
+					@click="handleChangeStatus(row)"
+				>
 					禁用
 				</el-button>
-				<el-button v-else size="small" plain type="warning" @click="handleChangeStatus(row)">启用</el-button>
+				<el-button v-else v-auth="'Account:Status'" size="small" plain type="warning" @click="handleChangeStatus(row)">启用</el-button>
 			</template>
 		</FastTable>
 		<AccountEdit ref="editFormRef" @ok="fastTableRef.refresh()" />

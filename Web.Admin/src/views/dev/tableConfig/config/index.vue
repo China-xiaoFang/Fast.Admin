@@ -223,7 +223,7 @@ const handleSave = () => {
 			});
 			state.change = false;
 			ElMessage.success("保存成功！");
-			// handleBack();
+			handleBack();
 			emit("ok");
 		},
 	});

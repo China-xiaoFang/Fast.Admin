@@ -234,6 +234,14 @@ public class ApplicationService : IDynamicApplication
         applicationModel.RowVersion = input.RowVersion;
 
         await _repository.UpdateAsync(applicationModel);
+
+        foreach (var openId in await _repository.Queryable<ApplicationOpenIdModel>()
+                     .Select(sl => sl.OpenId)
+                     .ToListAsync())
+        {
+            // 删除缓存
+            await ApplicationContext.DeleteApplication(openId);
+        }
     }
 
     /// <summary>

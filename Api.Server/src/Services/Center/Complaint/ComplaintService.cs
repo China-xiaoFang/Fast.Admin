@@ -192,7 +192,7 @@ public class ComplaintService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("处理投诉", HttpRequestActionEnum.Edit)]
-    [Permission(PermissionConst.Complaint.Handle)]
+    [Permission(PermissionConst.Complaint.Handle, PermissionConst.Complaint.TenantHandle)]
     public async Task HandleComplaint(HandleComplaintInput input)
     {
         var complaintModel = await _repository.SingleOrDefaultAsync(input.ComplaintId);

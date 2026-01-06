@@ -6,18 +6,18 @@
 			rowKey="jobLevelId"
 			:requestApi="jobLevelApi.queryJobLevelPaged"
 			hideSearchTime
-			@custom-cell-click="handleCustomCellClick"
+			@customCellClick="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
+				<el-button v-auth="'JobLevel:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
 
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryJobLevelPagedOutput }">
-				<el-button size="small" plain @click="editFormRef.detail(row.jobLevelId)">详情</el-button>
-				<el-button size="small" plain type="primary" @click="editFormRef.edit(row.jobLevelId)">编辑</el-button>
-				<el-button size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
+				<el-button v-auth="'JobLevel:Detail'" size="small" plain @click="editFormRef.detail(row.jobLevelId)">详情</el-button>
+				<el-button v-auth="'JobLevel:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.jobLevelId)">编辑</el-button>
+				<el-button v-auth="'JobLevel:Delete'" size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
 			</template>
 		</FastTable>
 		<JobLevelEdit ref="editFormRef" @ok="fastTableRef.refresh()" />

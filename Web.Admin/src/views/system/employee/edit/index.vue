@@ -10,7 +10,7 @@
 		@close="faFormRef.resetFields()"
 	>
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled" cols="3">
-			<template v-if="state.dialogTitle === 'add'">
+			<template v-if="state.dialogState === 'add'">
 				<FaLayoutGridItem span="3">
 					<el-divider contentPosition="left">组织架构</el-divider>
 				</FaLayoutGridItem>
@@ -107,7 +107,7 @@
 				<FaUploadImage v-model="state.formData.idPhoto" :uploadApi="fileApi.uploadIdPhoto" />
 			</FaFormItem>
 
-			<template v-if="state.dialogTitle !== 'add'">
+			<template v-if="state.dialogState !== 'add'">
 				<FaLayoutGridItem span="3">
 					<el-divider contentPosition="left">角色信息</el-divider>
 				</FaLayoutGridItem>
@@ -184,7 +184,7 @@
 				<el-input type="textarea" v-model="state.formData.emergencyAddress" :rows="2" maxlength="200" placeholder="请输入紧急联系地址" />
 			</FaFormItem>
 
-			<template v-if="state.dialogTitle !== 'add'">
+			<template v-if="state.dialogState !== 'add'">
 				<FaLayoutGridItem span="3">
 					<el-divider contentPosition="left">组织架构</el-divider>
 				</FaLayoutGridItem>

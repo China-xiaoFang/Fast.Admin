@@ -5,12 +5,13 @@
 			rowKey="dictionaryId"
 			:requestApi="dictionaryApi.queryDictionaryPaged"
 			hideSearchTime
-			@custom-cell-click="handleCustomCellClick"
+			@customCellClick="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
+				<el-button v-auth="'Dictionary:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
+
 			<FaTableColumn
 				prop="dictionaryKey"
 				label="字典Key"
@@ -77,9 +78,9 @@
 			/>
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryDictionaryPagedOutput }">
-				<el-button size="small" plain @click="editFormRef.detail(row.dictionaryId)">详情</el-button>
-				<el-button size="small" plain type="primary" @click="editFormRef.edit(row.dictionaryId)">编辑</el-button>
-				<el-button size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
+				<el-button v-auth="'Dictionary:Detail'" size="small" plain @click="editFormRef.detail(row.dictionaryId)">详情</el-button>
+				<el-button v-auth="'Dictionary:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.dictionaryId)">编辑</el-button>
+				<el-button v-auth="'Dictionary:Delete'" size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
 			</template>
 		</FaTable>
 		<DictionaryEdit ref="editFormRef" @ok="faTableRef.refresh()" />

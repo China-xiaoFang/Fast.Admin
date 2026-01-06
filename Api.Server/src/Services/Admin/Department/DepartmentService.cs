@@ -54,6 +54,7 @@ public class DepartmentService : IDynamicApplication
     public async Task<List<ElSelectorOutput<long>>> DepartmentSelector(long? orgId)
     {
         var data = await _repository.Entities.WhereIF(orgId != null, wh => wh.OrgId == orgId)
+            .DataScope()
             .OrderBy(ob => ob.Sort)
             .Select(sl => new
             {
@@ -103,6 +104,7 @@ public class DepartmentService : IDynamicApplication
     public async Task<List<QueryDepartmentPagedOutput>> QueryDepartmentPaged(QueryDepartmentPagedInput input)
     {
         var data = await _repository.Entities.WhereIF(input.OrgId != null, wh => wh.OrgId == input.OrgId)
+            .DataScope()
             .Select(sl => new QueryDepartmentPagedOutput
             {
                 DepartmentId = sl.DepartmentId,

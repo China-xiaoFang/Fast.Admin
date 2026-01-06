@@ -48,7 +48,9 @@
 
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: TenantOnlineUserModel }">
-				<el-button size="small" plain type="warning" @click="handleForceOffline(row)">强制下线</el-button>
+				<el-button v-auth="'TenantOnlineUser:ForceOffline'" size="small" plain type="warning" @click="handleForceOffline(row)">
+					强制下线
+				</el-button>
 			</template>
 		</FastTable>
 	</div>

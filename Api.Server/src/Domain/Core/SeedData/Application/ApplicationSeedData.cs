@@ -43,7 +43,7 @@ internal static class ApplicationSeedData
         var applicationModel = new ApplicationModel
         {
             AppId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.None,
             AppNo = "App201801",
             AppName = "Fast.Admin",
             LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",

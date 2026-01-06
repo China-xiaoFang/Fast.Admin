@@ -24,6 +24,7 @@
 								<el-text tag="b">{{ state.schedulerDetail.schedulerStatus }}</el-text>
 								<el-button
 									v-if="state.schedulerDetail.schedulerInStandbyMode"
+									v-auth="'Scheduler:Start'"
 									class="ml10"
 									size="small"
 									plain
@@ -32,7 +33,9 @@
 								>
 									启动
 								</el-button>
-								<el-button v-else class="ml10" size="small" plain type="danger" @click="handleStop">待机</el-button>
+								<el-button v-else v-auth="'Scheduler:Stop'" class="ml10" size="small" plain type="danger" @click="handleStop">
+									待机
+								</el-button>
 							</div>
 						</el-form-item>
 						<el-form-item label="集群">
@@ -93,7 +96,9 @@
 				<!-- 表格按钮操作区域 -->
 				<template #header>
 					<TenantSelectPage class="pr12" width="280px" v-model="state.tenantId" />
-					<el-button type="primary" :icon="Plus" @click="editFormRef.add(state.tenantId, state.activeJobGroup)">添加作业</el-button>
+					<el-button v-auth="'Scheduler:Add'" type="primary" :icon="Plus" @click="editFormRef.add(state.tenantId, state.activeJobGroup)">
+						添加作业
+					</el-button>
 				</template>
 
 				<FaTableColumn prop="jobName" label="作业名称" fixed="left" width="300" smallWidth="280" />
@@ -189,19 +194,39 @@
 				</FaTableColumn>
 				<FaTableColumn prop="interval" label="执行计划" width="150" smallWidth="130" />
 				<FaTableColumn prop="description" label="描述" width="300" smallWidth="280" />
+
 				<!-- 表格操作 -->
 				<template #operation="{ row }: { row: SchedulerJobInfoDto }">
 					<div class="mb5">
-						<el-button size="small" @click="editFormRef.edit(state.tenantId, row.jobName, state.activeJobGroup)">编辑</el-button>
-						<el-button size="small" @click="editFormRef.copy(state.tenantId, row.jobName, state.activeJobGroup)">复制</el-button>
-						<el-button v-if="row.triggerState == TriggerState.Paused" size="small" plain type="primary" @click="handleResumeJob(row)">
+						<el-button
+							v-auth="'Scheduler:Edit'"
+							size="small"
+							@click="editFormRef.edit(state.tenantId, row.jobName, state.activeJobGroup)"
+						>
+							编辑
+						</el-button>
+						<el-button
+							v-auth="'Scheduler:Edit'"
+							size="small"
+							@click="editFormRef.copy(state.tenantId, row.jobName, state.activeJobGroup)"
+						>
+							复制
+						</el-button>
+						<el-button
+							v-if="row.triggerState == TriggerState.Paused"
+							v-auth="'Scheduler:ResumeJob'"
+							size="small"
+							plain
+							type="primary"
+							@click="handleResumeJob(row)"
+						>
 							恢复
 						</el-button>
-						<el-button v-else size="small" plain type="warning" @click="handleStopJob(row)">暂停</el-button>
+						<el-button v-else v-auth="'Scheduler:StopJob'" size="small" plain type="warning" @click="handleStopJob(row)">暂停</el-button>
 					</div>
-					<el-button size="small" plain type="info" @click="handleLogs(row)">日志</el-button>
-					<el-button size="small" plain type="warning" @click="handleTriggerJob(row)">执行</el-button>
-					<el-button size="small" plain type="danger" @click="handleDelJob(row)">删除</el-button>
+					<el-button v-auth="'Scheduler:Detail'" size="small" plain type="info" @click="handleLogs(row)">日志</el-button>
+					<el-button v-auth="'Scheduler:Trigger'" size="small" plain type="warning" @click="handleTriggerJob(row)">执行</el-button>
+					<el-button v-auth="'Scheduler:Delete'" size="small" plain type="danger" @click="handleDelJob(row)">删除</el-button>
 				</template>
 			</FaTable>
 			<el-dialog v-model="state.exp.visible" :title="state.exp.title" width="700px" alignCenter draggable destroyOnClose>

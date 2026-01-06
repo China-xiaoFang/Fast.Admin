@@ -6,19 +6,21 @@
 			rowKey="mainId"
 			:requestApi="databaseApi.queryDatabasePaged"
 			hideSearchTime
-			@custom-cell-click="handleCustomCellClick"
+			@customCellClick="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
+				<el-button v-auth="'Database:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
 
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryDatabasePagedOutput }">
-				<el-button size="small" plain @click="editFormRef.detail(row.mainId)">详情</el-button>
-				<el-button size="small" plain type="primary" @click="editFormRef.edit(row.mainId)">编辑</el-button>
-				<el-button size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
-				<el-button v-if="!row.isInitialized" size="small" plain type="warning" @click="handleInitDatabase(row)">初始化</el-button>
+				<el-button v-auth="'Database:Detail'" size="small" plain @click="editFormRef.detail(row.mainId)">详情</el-button>
+				<el-button v-auth="'Database:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.mainId)">编辑</el-button>
+				<el-button v-auth="'Database:Delete'" size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
+				<el-button v-if="!row.isInitialized" v-auth="'Database:Edit'" size="small" plain type="warning" @click="handleInitDatabase(row)">
+					初始化
+				</el-button>
 			</template>
 		</FastTable>
 		<DatabaseEdit ref="editFormRef" @ok="fastTableRef.refresh()" />

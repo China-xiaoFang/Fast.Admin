@@ -3,7 +3,7 @@
 		<FastTable ref="fastTableRef" tableKey="1D1KVW17SY" rowKey="employeeId" :requestApi="employeeApi.queryEmployeePaged" hideSearchTime>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
+				<el-button v-auth="'Employee:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
 
 			<template #employeeName="{ row }: { row?: QueryEmployeePagedOutput }">
@@ -55,9 +55,9 @@
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryEmployeePagedOutput }">
 				<div class="mb5">
-					<el-button size="small" plain @click="editFormRef.detail(row.employeeId)">详情</el-button>
-					<el-button size="small" plain type="primary" @click="editFormRef.edit(row.employeeId)">编辑</el-button>
-					<el-dropdown class="pl12" trigger="click">
+					<el-button v-auth="'Employee:Detail'" size="small" plain @click="editFormRef.detail(row.employeeId)">详情</el-button>
+					<el-button v-auth="'Employee:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.employeeId)">编辑</el-button>
+					<el-dropdown v-auth="'Employee:Status'" class="pl12" trigger="click">
 						<el-button size="small" plain type="primary">
 							更多
 							<el-icon class="el-icon--right"><ArrowDown /></el-icon>
@@ -107,10 +107,11 @@
 						</template>
 					</el-dropdown>
 				</div>
-				<el-button size="small" plain type="success" @click="authEditRef.open(row.employeeId)">授权</el-button>
+				<el-button v-auth="'Employee:Edit'" size="small" plain type="success" @click="authEditRef.open(row.employeeId)">授权</el-button>
 				<template v-if="row.account">
 					<el-button
 						v-if="row.accountStatus == CommonStatusEnum.Enable"
+						v-auth="'Employee:Status'"
 						size="small"
 						plain
 						type="danger"
@@ -118,10 +119,14 @@
 					>
 						禁用账号
 					</el-button>
-					<el-button v-else size="small" plain type="warning" @click="handleChangeAccountStatus(row)">启用账号</el-button>
+					<el-button v-else v-auth="'Employee:Status'" size="small" plain type="warning" @click="handleChangeAccountStatus(row)">
+						启用账号
+					</el-button>
 				</template>
 				<template v-else>
-					<el-button size="small" plain type="primary" @click="bindAccountFormRef.open(row.employeeId)">绑定登录账号</el-button>
+					<el-button v-auth="'Employee:Edit'" size="small" plain type="primary" @click="bindAccountFormRef.open(row.employeeId)">
+						绑定登录账号
+					</el-button>
 				</template>
 			</template>
 		</FastTable>

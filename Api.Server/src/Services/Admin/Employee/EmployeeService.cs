@@ -521,31 +521,35 @@ public class EmployeeService : IDynamicApplication
 
         await _repository.Ado.UseTranAsync(async () =>
         {
-            // 删除旧的部门数据
-            await _repository.Deleteable<EmployeeOrgModel>()
-                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
-                .ExecuteCommandAsync();
-            // 删除旧的角色数据
-            await _repository.Deleteable<EmployeeRoleModel>()
-                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
-                .ExecuteCommandAsync();
-
-            // 处理部门负责人
-            var principalDepartmentIds = employeeOrgList.Where(wh => wh.IsPrincipal)
-                .Select(sl => sl.DepartmentId)
-                .ToList();
-            if (principalDepartmentIds.Any())
+            if (employeeModel.EmployeeId != _user.UserId)
             {
-                await _repository.Updateable<EmployeeOrgModel>()
-                    .SetColumns(_ => new EmployeeOrgModel {IsPrincipal = false})
-                    .Where(wh => principalDepartmentIds.Contains(wh.DepartmentId))
+                // 删除旧的部门数据
+                await _repository.Deleteable<EmployeeOrgModel>()
+                    .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
+                    .ExecuteCommandAsync();
+                // 删除旧的角色数据
+                await _repository.Deleteable<EmployeeRoleModel>()
+                    .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
+                    .ExecuteCommandAsync();
+
+                // 处理部门负责人
+                var principalDepartmentIds = employeeOrgList.Where(wh => wh.IsPrincipal)
+                    .Select(sl => sl.DepartmentId)
+                    .ToList();
+                if (principalDepartmentIds.Any())
+                {
+                    await _repository.Updateable<EmployeeOrgModel>()
+                        .SetColumns(_ => new EmployeeOrgModel { IsPrincipal = false })
+                        .Where(wh => principalDepartmentIds.Contains(wh.DepartmentId))
+                        .ExecuteCommandAsync();
+                }
+
+                await _repository.Insertable(employeeOrgList)
+                    .ExecuteCommandAsync();
+                await _repository.Insertable(employeeRoleList)
                     .ExecuteCommandAsync();
             }
 
-            await _repository.Insertable(employeeOrgList)
-                .ExecuteCommandAsync();
-            await _repository.Insertable(employeeRoleList)
-                .ExecuteCommandAsync();
             await _repository.UpdateAsync(employeeModel);
         }, ex => throw ex);
     }
@@ -590,7 +594,7 @@ public class EmployeeService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("职员离职", HttpRequestActionEnum.Edit)]
-    [Permission(PermissionConst.Employee.Edit)]
+    [Permission(PermissionConst.Employee.Status)]
     public async Task EmployeeResigned(EmployeeResignedInput input)
     {
         var employeeModel = await _repository.SingleOrDefaultAsync(input.EmployeeId);

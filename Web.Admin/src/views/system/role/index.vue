@@ -6,21 +6,28 @@
 			rowKey="roleId"
 			:requestApi="roleApi.queryRolePaged"
 			hideSearchTime
-			@custom-cell-click="handleCustomCellClick"
+			@customCellClick="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
+				<el-button v-auth="'Role:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
 
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryRolePagedOutput }">
-				<el-button size="small" plain @click="editFormRef.detail(row.roleId)">详情</el-button>
-				<el-button size="small" plain type="primary" @click="editFormRef.edit(row.roleId)">编辑</el-button>
-				<el-button v-if="row.roleType === RoleTypeEnum.Normal" size="small" plain type="success" @click="authEditRef.open(row.roleId)">
+				<el-button v-auth="'Role:Detail'" size="small" plain @click="editFormRef.detail(row.roleId)">详情</el-button>
+				<el-button v-auth="'Role:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.roleId)">编辑</el-button>
+				<el-button
+					v-if="row.roleType === RoleTypeEnum.Normal"
+					v-auth="'Role:Edit'"
+					size="small"
+					plain
+					type="success"
+					@click="authEditRef.open(row.roleId)"
+				>
 					授权
 				</el-button>
-				<el-button size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
+				<el-button v-auth="'Role:Delete'" size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
 			</template>
 		</FastTable>
 		<RoleEdit ref="editFormRef" @ok="fastTableRef.refresh()" />

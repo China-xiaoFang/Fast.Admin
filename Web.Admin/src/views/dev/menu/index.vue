@@ -32,7 +32,7 @@
 				>
 					<!-- 表格按钮操作区域 -->
 					<template #header>
-						<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
+						<el-button v-auth="'Menu:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 					</template>
 
 					<template #menuName="{ row }: { row?: QueryMenuPagedOutput }">
@@ -76,12 +76,19 @@
 
 					<!-- 表格操作 -->
 					<template #operation="{ row }: { row: QueryMenuPagedOutput }">
-						<el-button size="small" plain type="primary" @click="editFormRef.edit(row.menuId)">编辑</el-button>
-						<el-button size="small" plain type="warning" @click="handleDelete(row)">删除</el-button>
-						<el-button v-if="row.status == CommonStatusEnum.Enable" size="small" plain type="danger" @click="handleChangeStatus(row)">
+						<el-button v-auth="'Menu:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.menuId)">编辑</el-button>
+						<el-button v-auth="'Menu:Delete'" size="small" plain type="warning" @click="handleDelete(row)">删除</el-button>
+						<el-button
+							v-auth="'Menu:Status'"
+							v-if="row.status == CommonStatusEnum.Enable"
+							size="small"
+							plain
+							type="danger"
+							@click="handleChangeStatus(row)"
+						>
 							禁用
 						</el-button>
-						<el-button v-else size="small" plain type="warning" @click="handleChangeStatus(row)">启用</el-button>
+						<el-button v-auth="'Menu:Status'" v-else size="small" plain type="warning" @click="handleChangeStatus(row)">启用</el-button>
 					</template>
 				</FastTable>
 			</div>
