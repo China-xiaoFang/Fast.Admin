@@ -45,8 +45,8 @@ public class MerchantModel : BaseTEntity, IUpdateVersion
     /// <summary>
     /// 商户号
     /// </summary>
-    [SugarSearchValue]
     [Required]
+    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "商户号", Length = 32)]
     public string MerchantNo { get; set; }
 
