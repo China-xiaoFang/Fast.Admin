@@ -20,13 +20,12 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Admin.Service;
+using Fast.Admin.Service.OperateLog.Dto;
 using Fast.AdminLog.Entity;
-using Fast.Center.Service.RequestLog.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fast.Center.Service.OperateLog;
+namespace Fast.Admin.Service.OperateLog;
 
 /// <summary>
 /// <see cref="OperateLogService"/> 操作日志服务

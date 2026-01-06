@@ -277,7 +277,9 @@ public class MailService : IMailService, ISingletonDependency
                 throw new ArgumentException("发件邮箱授权码为空！");
 
             // 显示名称
-            var displayName = string.IsNullOrWhiteSpace(_mailSettingsOptions.DisplayName) ? "掘慧科技" : _mailSettingsOptions.DisplayName;
+            var displayName = string.IsNullOrWhiteSpace(_mailSettingsOptions.DisplayName)
+                ? "FastDotNet"
+                : _mailSettingsOptions.DisplayName;
 
             // 创建邮件内容
             var message = new MimeMessage();
