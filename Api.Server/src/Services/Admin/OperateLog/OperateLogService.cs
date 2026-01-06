@@ -20,6 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.Admin.Service;
 using Fast.AdminLog.Entity;
 using Fast.Center.Service.RequestLog.Dto;
 using Microsoft.AspNetCore.Authorization;
@@ -68,7 +69,8 @@ public class OperateLogService : IDynamicApplication
             queryable = queryable.Where(wh => wh.EmployeeId == _user.UserId);
         }
 
-        return await queryable.SplitTable()
+        return await queryable.DataScope()
+            .SplitTable()
             .OrderByDescending(ob => ob.CreatedTime)
             .ToPagedListAsync(input);
     }

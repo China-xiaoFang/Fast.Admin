@@ -91,10 +91,12 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             case DatabaseTypeEnum.Center:
                 return SqlSugarContext.ConnectionSettings;
             case DatabaseTypeEnum.CenterLog:
-            case DatabaseTypeEnum.Admin:
-            case DatabaseTypeEnum.AdminLog:
             case DatabaseTypeEnum.Gateway:
             case DatabaseTypeEnum.Deploy:
+                return await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
+                    CommonConst.Default.TenantNo, databaseType);
+            case DatabaseTypeEnum.Admin:
+            case DatabaseTypeEnum.AdminLog:
                 return await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId, _user.TenantNo, databaseType);
             default:
                 throw new SqlSugarException("未知的 Database 类型！");

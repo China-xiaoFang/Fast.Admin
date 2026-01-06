@@ -22,6 +22,7 @@
 
 using Fast.Admin.Entity;
 using Fast.Admin.Service.JobLevel.Dto;
+using Fast.AdminLog.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -138,6 +139,16 @@ public class JobLevelService : IDynamicApplication
         var jobLevelModel = new JobLevelModel {JobLevelName = input.JobLevelName, Level = input.Level, Remark = input.Remark};
 
         await _repository.InsertAsync(jobLevelModel);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "添加职级",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = jobLevelModel.JobLevelId,
+            BizNo = null,
+            Description = $"添加职级：{jobLevelModel.JobLevelName}"
+        });
     }
 
     /// <summary>
@@ -172,6 +183,16 @@ public class JobLevelService : IDynamicApplication
             .SetColumns(_ => new EmployeeOrgModel {JobLevelName = jobLevelModel.JobLevelName})
             .Where(wh => wh.JobLevelId == jobLevelModel.JobLevelId)
             .ExecuteCommandAsync();
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "编辑职级",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = jobLevelModel.JobLevelId,
+            BizNo = null,
+            Description = $"编辑职级：{jobLevelModel.JobLevelName}"
+        });
     }
 
     /// <summary>
@@ -198,5 +219,15 @@ public class JobLevelService : IDynamicApplication
         }
 
         await _repository.DeleteAsync(jobLevelModel);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "删除职级",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = jobLevelModel.JobLevelId,
+            BizNo = null,
+            Description = $"删除职级：{jobLevelModel.JobLevelName}"
+        });
     }
 }

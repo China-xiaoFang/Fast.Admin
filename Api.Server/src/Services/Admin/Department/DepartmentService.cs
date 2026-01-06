@@ -22,6 +22,7 @@
 
 using Fast.Admin.Entity;
 using Fast.Admin.Service.Department.Dto;
+using Fast.AdminLog.Enum;
 using Fast.Center.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -241,6 +242,16 @@ public class DepartmentService : IDynamicApplication
         }
 
         await _repository.InsertAsync(departmentModel);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "添加部门",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = departmentModel.DepartmentId,
+            BizNo = null,
+            Description = $"添加部门：{departmentModel.DepartmentName}"
+        });
     }
 
     /// <summary>
@@ -282,6 +293,8 @@ public class DepartmentService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
+        var description = $"编辑部门：{input.DepartmentName}";
+
         departmentModel.OrgId = organizationModel.OrgId;
         departmentModel.OrgName = organizationModel.OrgName;
         departmentModel.DepartmentName = input.DepartmentName;
@@ -301,6 +314,11 @@ public class DepartmentService : IDynamicApplication
                 throw new UserFriendlyException("数据不存在！");
             }
 
+            if (departmentModel.ParentId != input.ParentId)
+            {
+                description += $"父级部门 -> {parentDepartment.DepartmentName}";
+            }
+
             departmentModel.ParentId = parentDepartment.DepartmentId;
             departmentModel.ParentName = parentDepartment.DepartmentName;
             departmentModel.ParentIds = [.. parentDepartment.ParentIds, parentDepartment.DepartmentId];
@@ -308,6 +326,11 @@ public class DepartmentService : IDynamicApplication
         }
         else
         {
+            if (departmentModel.ParentId != input.ParentId)
+            {
+                description += "删除父级部门";
+            }
+
             departmentModel.ParentId = 0;
             departmentModel.ParentName = null;
             departmentModel.ParentIds = [0];
@@ -358,6 +381,16 @@ public class DepartmentService : IDynamicApplication
             .SetColumns(_ => new TenantUserModel {DepartmentName = departmentModel.DepartmentName})
             .Where(wh => wh.DepartmentId == departmentModel.DepartmentId)
             .ExecuteCommandAsync();
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "编辑部门",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = departmentModel.DepartmentId,
+            BizNo = null,
+            Description = description
+        });
     }
 
     /// <summary>
@@ -389,5 +422,15 @@ public class DepartmentService : IDynamicApplication
         }
 
         await _repository.DeleteAsync(departmentModel);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "删除部门",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = departmentModel.DepartmentId,
+            BizNo = null,
+            Description = $"删除部门：{departmentModel.DepartmentName}"
+        });
     }
 }
