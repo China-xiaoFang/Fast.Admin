@@ -24,6 +24,7 @@ using Dm.util;
 using Fast.Admin.Entity;
 using Fast.Admin.Enum;
 using Fast.Admin.Service.Role.Dto;
+using Fast.AdminLog.Enum;
 using Fast.Center.Entity;
 using Fast.Center.Enum;
 using Microsoft.AspNetCore.Authorization;
@@ -164,6 +165,16 @@ public class RoleService : IDynamicApplication
         };
 
         await _repository.InsertAsync(roleModel);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "添加角色",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = roleModel.RoleId,
+            BizNo = null,
+            Description = $"添加角色：{roleModel.RoleName}"
+        });
     }
 
     /// <summary>
@@ -210,6 +221,16 @@ public class RoleService : IDynamicApplication
             .SetColumns(_ => new EmployeeRoleModel {RoleName = roleModel.RoleName})
             .Where(wh => wh.RoleId == roleModel.RoleId)
             .ExecuteCommandAsync();
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "编辑角色",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = roleModel.RoleId,
+            BizNo = null,
+            Description = $"编辑角色：{roleModel.RoleName}"
+        });
     }
 
     /// <summary>
@@ -255,6 +276,16 @@ public class RoleService : IDynamicApplication
             // 删除角色
             await _repository.DeleteAsync(roleModel);
         }, ex => throw ex);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "删除角色",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = roleModel.RoleId,
+            BizNo = null,
+            Description = $"删除角色：{roleModel.RoleName}"
+        });
     }
 
     /// <summary>
@@ -337,6 +368,16 @@ public class RoleService : IDynamicApplication
                     .ExecuteCommandAsync();
             }
         }, ex => throw ex);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "角色授权",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = roleModel.RoleId,
+            BizNo = null,
+            Description = $"角色授权：{roleModel.RoleName}"
+        });
     }
 
     /// <summary>

@@ -45,11 +45,5 @@ public enum OperateLogTypeEnum : long
     /// 财务管理
     /// </summary>
     [Description("财务管理")]
-    Finance = 1 << 2,
-
-    /// <summary>
-    /// 平台管理
-    /// </summary>
-    [Description("平台管理")]
-    Platform = 1 << 3
+    Finance = 1 << 2
 }

@@ -655,7 +655,7 @@ internal static partial class MenuSeedData
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
-                },
+                }
             })
             .ExecuteCommandAsync();
 

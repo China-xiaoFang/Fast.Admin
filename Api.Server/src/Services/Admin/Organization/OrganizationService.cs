@@ -22,6 +22,7 @@
 
 using Fast.Admin.Entity;
 using Fast.Admin.Service.Organization.Dto;
+using Fast.AdminLog.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -177,6 +178,16 @@ public class OrganizationService : IDynamicApplication
         }
 
         await _repository.InsertAsync(organizationModel);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "添加机构",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = organizationModel.OrgId,
+            BizNo = null,
+            Description = $"添加机构：{organizationModel.OrgName}"
+        });
     }
 
     /// <summary>
@@ -210,6 +221,8 @@ public class OrganizationService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
+        var description = $"编辑机构：{input.OrgName}";
+
         organizationModel.OrgName = input.OrgName;
         organizationModel.OrgCode = input.OrgCode;
         organizationModel.Contacts = input.Contacts;
@@ -227,6 +240,11 @@ public class OrganizationService : IDynamicApplication
                 throw new UserFriendlyException("数据不存在！");
             }
 
+            if (organizationModel.ParentId != input.ParentId)
+            {
+                description += $"父级机构 -> {parentOrganization.OrgName}";
+            }
+
             organizationModel.ParentId = parentOrganization.OrgId;
             organizationModel.ParentName = parentOrganization.OrgName;
             organizationModel.ParentIds = [.. parentOrganization.ParentIds, parentOrganization.OrgId];
@@ -234,6 +252,11 @@ public class OrganizationService : IDynamicApplication
         }
         else
         {
+            if (organizationModel.ParentId != input.ParentId)
+            {
+                description += "删除父级机构";
+            }
+
             organizationModel.ParentId = 0;
             organizationModel.ParentName = null;
             organizationModel.ParentIds = [0];
@@ -284,6 +307,16 @@ public class OrganizationService : IDynamicApplication
             })
             .Where(wh => wh.OrgId == organizationModel.OrgId)
             .ExecuteCommandAsync();
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "编辑机构",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = organizationModel.OrgId,
+            BizNo = null,
+            Description = description
+        });
     }
 
     /// <summary>
@@ -322,5 +355,15 @@ public class OrganizationService : IDynamicApplication
         }
 
         await _repository.DeleteAsync(organizationModel);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "删除机构",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = organizationModel.OrgId,
+            BizNo = null,
+            Description = $"删除机构：{organizationModel.OrgName}"
+        });
     }
 }
