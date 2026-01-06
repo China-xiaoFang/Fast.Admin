@@ -1,11 +1,9 @@
 import { type App } from "vue";
+import { vAuth } from "./modules/auth";
 
 /** 挂载自定义指令 */
 export function loadDirectives(app: App): void {
-	const directivesList: any = {};
+	const directivesList = [vAuth];
 
-	Object.keys(directivesList).forEach((key) => {
-		// 注册所有自定义指令
-		app.directive(key, directivesList[key]);
-	});
+	directivesList.forEach((d) => app.use(d));
 }

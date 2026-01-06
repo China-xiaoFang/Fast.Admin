@@ -26,6 +26,7 @@ using Fast.Admin.Enum;
 using Fast.Admin.Service.TenantDatabase.Dto;
 using Fast.Center.Entity;
 using Fast.Center.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Yitter.IdGenerator;
@@ -320,6 +321,7 @@ public class TenantDatabaseService : ITenantDatabaseService, ITransientDependenc
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("初始化数据库", HttpRequestActionEnum.Submit)]
+    [Permission(PermissionConst.Database.Edit)]
     public async Task InitDatabase(InitDatabaseInput input)
     {
         if (_user?.IsSuperAdmin == false)

@@ -3,8 +3,9 @@
 		<FaTable v-show="!state.isEdit" ref="faTableRef" rowKey="tableId" :requestApi="tableApi.queryTableConfigPaged" hideSearchTime>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
+				<el-button v-auth="'Table:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
+
 			<FaTableColumn
 				prop="tableKey"
 				label="表格Key"
@@ -33,11 +34,11 @@
 			/>
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QueryTableConfigPagedOutput }">
-				<el-button size="small" plain @click="editFormRef.detail(row.tableId)">详情</el-button>
-				<el-button size="small" plain type="primary" @click="editFormRef.edit(row.tableId)">编辑</el-button>
-				<el-button size="small" plain type="info" @click="editFormRef.copy(row.tableId)">复制</el-button>
-				<el-button size="small" plain type="success" @click="handleColumnConfigClick(row)">配置列</el-button>
-				<el-button size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
+				<el-button v-auth="'Table:Detail'" size="small" plain @click="editFormRef.detail(row.tableId)">详情</el-button>
+				<el-button v-auth="'Table:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.tableId)">编辑</el-button>
+				<el-button v-auth="'Table:Edit'" size="small" plain type="info" @click="editFormRef.copy(row.tableId)">复制</el-button>
+				<el-button v-auth="'Table:Edit'" size="small" plain type="success" @click="handleColumnConfigClick(row)">配置列</el-button>
+				<el-button v-auth="'Table:Delete'" size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
 			</template>
 		</FaTable>
 		<TableColumnConfig v-show="state.isEdit" ref="tableColumnConfigRef" @back="handleBack" @ok="faTableRef.refresh()" />

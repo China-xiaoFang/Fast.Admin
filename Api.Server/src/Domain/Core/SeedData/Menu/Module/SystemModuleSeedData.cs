@@ -60,7 +60,7 @@ internal static partial class MenuSeedData
         await db.Insertable(new MenuModel
             {
                 MenuId = YitIdHelper.NextId(),
-                Edition = EditionEnum.Internal,
+                Edition = EditionEnum.Enterprise,
                 AppId = applicationModel.AppId,
                 ModuleId = systemModuleModel.ModuleId,
                 MenuCode = PermissionConst.SystemMonitor,
@@ -94,7 +94,7 @@ internal static partial class MenuSeedData
         var fileMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.Basic,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.FilePaged,
@@ -409,7 +409,7 @@ internal static partial class MenuSeedData
         var appMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.Enterprise,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.App.Paged,
@@ -441,7 +441,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Enterprise,
                     AppId = applicationModel.AppId,
                     MenuId = appMenuModel.MenuId,
                     ButtonCode = PermissionConst.App.Paged,
@@ -456,7 +456,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Enterprise,
                     AppId = applicationModel.AppId,
                     MenuId = appMenuModel.MenuId,
                     ButtonCode = PermissionConst.App.Detail,
@@ -486,7 +486,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Enterprise,
                     AppId = applicationModel.AppId,
                     MenuId = appMenuModel.MenuId,
                     ButtonCode = PermissionConst.App.Edit,
@@ -1594,7 +1594,7 @@ internal static partial class MenuSeedData
         var payRecordMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.Professional,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.PayRecordPaged,
@@ -1680,7 +1680,7 @@ internal static partial class MenuSeedData
         var wechatUserMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.Professional,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.WeChat.Paged,
@@ -1712,26 +1712,11 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Professional,
                     AppId = applicationModel.AppId,
                     MenuId = wechatUserMenuModel.MenuId,
                     ButtonCode = PermissionConst.WeChat.Paged,
                     ButtonName = "列表",
-                    HasDesktop = true,
-                    HasWeb = true,
-                    HasMobile = true,
-                    Sort = buttonSort,
-                    Status = CommonStatusEnum.Enable,
-                    CreatedTime = dateTime
-                },
-                new()
-                {
-                    ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
-                    AppId = applicationModel.AppId,
-                    MenuId = wechatUserMenuModel.MenuId,
-                    ButtonCode = PermissionConst.WeChat.Detail,
-                    ButtonName = "详情",
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
@@ -1891,6 +1876,21 @@ internal static partial class MenuSeedData
                     Sort = buttonSort,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
+                },
+                new()
+                {
+                    ButtonId = YitIdHelper.NextId(),
+                    Edition = EditionEnum.Internal,
+                    AppId = applicationModel.AppId,
+                    MenuId = tenantComplaintMenuModel.MenuId,
+                    ButtonCode = PermissionConst.Complaint.TenantHandle,
+                    ButtonName = "处理",
+                    HasDesktop = true,
+                    HasWeb = true,
+                    HasMobile = true,
+                    Sort = buttonSort,
+                    Status = CommonStatusEnum.Enable,
+                    CreatedTime = dateTime
                 }
             })
             .ExecuteCommandAsync();
@@ -1904,7 +1904,7 @@ internal static partial class MenuSeedData
         var logCLMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Professional,
+            Edition = EditionEnum.Trial,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = "Log:Catalog",
@@ -1937,7 +1937,7 @@ internal static partial class MenuSeedData
         var visitLogMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.Trial,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.VisitLogPaged,
@@ -1969,7 +1969,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Trial,
                     AppId = applicationModel.AppId,
                     MenuId = visitLogMenuModel.MenuId,
                     ButtonCode = PermissionConst.VisitLogPaged,
@@ -1991,7 +1991,7 @@ internal static partial class MenuSeedData
         var operateLogMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.Basic,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.OperateLogPaged,
@@ -2023,7 +2023,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Basic,
                     AppId = applicationModel.AppId,
                     MenuId = operateLogMenuModel.MenuId,
                     ButtonCode = PermissionConst.OperateLogPaged,
@@ -2045,7 +2045,7 @@ internal static partial class MenuSeedData
         var requestLogMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Internal,
+            Edition = EditionEnum.Professional,
             AppId = applicationModel.AppId,
             ModuleId = systemModuleModel.ModuleId,
             MenuCode = PermissionConst.RequestLogPaged,
@@ -2077,7 +2077,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Professional,
                     AppId = applicationModel.AppId,
                     MenuId = requestLogMenuModel.MenuId,
                     ButtonCode = PermissionConst.RequestLogPaged,

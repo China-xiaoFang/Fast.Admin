@@ -3,13 +3,13 @@
 		<FastTable ref="fastTableRef" tableKey="1D1F6WM7DG" rowKey="serialRuleId" :requestApi="serialApi.querySerialRulePaged" hideSearchTime>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
+				<el-button v-auth="'Serial:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
 			</template>
 
 			<!-- 表格操作 -->
 			<template #operation="{ row }: { row: QuerySerialRulePagedOutput }">
-				<el-button size="small" plain @click="editFormRef.detail(row.serialRuleId)">详情</el-button>
-				<el-button size="small" plain type="primary" @click="editFormRef.edit(row.serialRuleId)">编辑</el-button>
+				<el-button v-auth="'Serial:Detail'" size="small" plain @click="editFormRef.detail(row.serialRuleId)">详情</el-button>
+				<el-button v-auth="'Serial:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.serialRuleId)">编辑</el-button>
 			</template>
 		</FastTable>
 		<SerialEdit ref="editFormRef" @ok="fastTableRef.refresh()" />
