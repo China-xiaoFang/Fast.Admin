@@ -11,6 +11,17 @@ import { AccountIdInput } from "./models/AccountIdInput";
  */
 export const accountApi = {
   /**
+   * 账号选择器
+   */
+  accountSelector(data: PagedInput) {
+    return axiosUtil.request<PagedResult<ElSelectorOutput<number>>>({
+      url: "/account/accountSelector",
+      method: "post",
+      data,
+      requestType: "query",
+    });
+  },
+  /**
    * 获取账号分页列表
    */
   queryAccountPaged(data: QueryAccountPagedInput) {
@@ -68,7 +79,7 @@ export const accountApi = {
     });
   },
   /**
-   * 账号解除锁定
+   * 账号重置密码
    */
   resetPassword(data: AccountIdInput) {
     return axiosUtil.request({

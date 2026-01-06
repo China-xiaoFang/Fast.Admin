@@ -3,7 +3,7 @@ import { Local, consoleDebug, cryptoUtil, useIdentity } from "@fast-china/utils"
 import type { ApiResponse } from "@fast-china/axios";
 import type { AxiosHeaders, AxiosResponse } from "axios";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
-import { useLoading, useMessageBox, useToast } from "@/hooks";
+import { useLoading, useToast } from "@/hooks";
 import { useApp, useUserInfo } from "@/stores";
 
 /** 加载实例 */
@@ -27,16 +27,10 @@ const handleReloadLogin = (response: AxiosResponse): boolean => {
 	if (code && [401].includes(code)) {
 		if (!loginCallBack) {
 			loginCallBack = true;
-			useMessageBox
-				.alert({
-					msg: "登录已失效，请重新登录！",
-					confirmButtonText: "重新登录",
-				})
-				.then(() => {
-					loginCallBack = false;
-					const userInfoStore = useUserInfo();
-					userInfoStore.login();
-				});
+			const userInfoStore = useUserInfo();
+			userInfoStore.login().finally(() => {
+				loginCallBack = false;
+			});
 		}
 		return true;
 	}
