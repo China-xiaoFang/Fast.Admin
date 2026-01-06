@@ -20,8 +20,14 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.CenterLog.Entity;
+using Fast.CenterLog.Enum;
 using Fast.JwtBearer;
+using Fast.SqlSugar;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using SqlSugar;
+using Yitter.IdGenerator;
 
 namespace Fast.Core;
 
@@ -521,6 +527,39 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                     var authUserInfo = await _authCache.GetAsync<AuthUserInfo>(cacheKey);
                     if (authUserInfo != null)
                     {
+                        // 添加登出日志
+                        var visitLogModel = new VisitLogModel
+                        {
+                            RecordId = YitIdHelper.NextId(),
+                            AccountId = authUserInfo.AccountId,
+                            Account = authUserInfo.Account,
+                            Mobile = authUserInfo.Mobile,
+                            NickName = authUserInfo.NickName,
+                            VisitType = VisitTypeEnum.Logout,
+                            DepartmentId = authUserInfo.DepartmentId,
+                            DepartmentName = authUserInfo.DepartmentName,
+                            CreatedUserId = authUserInfo.UserId,
+                            CreatedUserName = authUserInfo.EmployeeName,
+                            CreatedTime = DateTime.Now,
+                            TenantId = authUserInfo.TenantId,
+                            TenantName = authUserInfo.TenantName
+                        };
+                        visitLogModel.RecordCreate(_httpContext);
+
+                        // 获取 CenterLog 库的连接字符串配置
+                        var connectionSetting = await _httpContext.RequestServices.GetService<ISqlSugarEntityService>()
+                            .GetConnectionSetting(CommonConst.Default.TenantId, CommonConst.Default.TenantNo,
+                                DatabaseTypeEnum.CenterLog);
+                        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+
+                        // 这里不能使用Aop
+                        var db = new SqlSugarClient(connectionConfig);
+
+                        // 异步不等待
+                        await db.Insertable(visitLogModel)
+                            .SplitTable()
+                            .ExecuteCommandAsync();
+
                         // 判断缓存中的设备信息是否和当前 AccessToken 中的相同
                         if (authUserInfo.DeviceId == deviceId && authUserInfo.DeviceType.ToString() == deviceType)
                         {

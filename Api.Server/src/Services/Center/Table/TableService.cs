@@ -193,6 +193,7 @@ public class TableService : IDynamicApplication
         await _tableRepository.Ado.UseTranAsync(async () =>
         {
             await _columnCacheRepository.DeleteAsync(wh => wh.TableId == tableConfigModel.TableId);
+            await _columnRepository.DeleteAsync(wh => wh.TableId == tableConfigModel.TableId);
             await _tableRepository.DeleteAsync(tableConfigModel);
         }, ex => throw ex);
 

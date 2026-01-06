@@ -45,8 +45,8 @@
 				sortable
 				tag
 				:enum="[
-					{ label: '否', value: 0, type: 'danger' },
-					{ label: '是', value: 1, type: 'primary' },
+					{ label: '是', value: true, type: 'success' },
+					{ label: '否', value: false, type: 'danger' },
 				]"
 			/>
 			<FaTableColumn
