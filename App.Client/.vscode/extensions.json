@@ -1,9 +1,7 @@
 {
 	"recommendations": [
 		"dbaeumer.vscode-eslint",
-		"editorconfig.editorconfig",
 		"esbenp.prettier-vscode",
-		"heybourn.headwind",
 		"maggie.eslint-rules-zh-plugin",
 		"mikestead.dotenv",
 		"PKief.material-icon-theme",
@@ -11,7 +9,6 @@
 		"Vue.volar",
 		"Wiensss.region-highlighter",
 		"Zignd.html-css-class-completion",
-		"streetsidesoftware.code-spell-checker",
 		"uni-helper.uni-helper-vscode"
 	]
 }
