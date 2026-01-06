@@ -22,6 +22,7 @@
 
 using Fast.Admin.Entity;
 using Fast.Admin.Service.Position.Dto;
+using Fast.AdminLog.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -135,6 +136,16 @@ public class PositionService : IDynamicApplication
         var positionModel = new PositionModel {PositionName = input.PositionName, Sort = input.Sort, Remark = input.Remark};
 
         await _repository.InsertAsync(positionModel);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "添加职位",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = positionModel.PositionId,
+            BizNo = null,
+            Description = $"添加职位：{positionModel.PositionName}"
+        });
     }
 
     /// <summary>
@@ -169,6 +180,16 @@ public class PositionService : IDynamicApplication
             .SetColumns(_ => new EmployeeOrgModel {PositionName = positionModel.PositionName})
             .Where(wh => wh.PositionId == positionModel.PositionId)
             .ExecuteCommandAsync();
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "编辑职位",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = positionModel.PositionId,
+            BizNo = null,
+            Description = $"编辑职位：{positionModel.PositionName}"
+        });
     }
 
     /// <summary>
@@ -195,5 +216,15 @@ public class PositionService : IDynamicApplication
         }
 
         await _repository.DeleteAsync(positionModel);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "删除职位",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = positionModel.PositionId,
+            BizNo = null,
+            Description = $"删除职位：{positionModel.PositionName}"
+        });
     }
 }

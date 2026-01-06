@@ -24,6 +24,7 @@ using System.Text.RegularExpressions;
 using Fast.Admin.Entity;
 using Fast.Admin.Enum;
 using Fast.Admin.Service.Employee.Dto;
+using Fast.AdminLog.Enum;
 using Fast.Center.Entity;
 using Fast.Center.Enum;
 using Microsoft.AspNetCore.Authorization;
@@ -61,7 +62,8 @@ public class EmployeeService : IDynamicApplication
     [Permission(PermissionConst.Employee.Paged)]
     public async Task<PagedResult<ElSelectorOutput<long>>> EmployeeSelector(PagedInput input)
     {
-        var data = await _repository.Entities.OrderBy(ob => ob.EmployeeName)
+        var data = await _repository.Entities.DataScope()
+            .OrderBy(ob => ob.EmployeeName)
             .Select(sl => new
             {
                 sl.EmployeeId,
@@ -142,6 +144,8 @@ public class EmployeeService : IDynamicApplication
                 JobLevelName = t2.JobLevelName,
                 IsPrincipal = t2.IsPrincipal
             })
+            .MergeTable()
+            .DataScope()
             .ToPagedListAsync(input);
 
         var userIds = result.Rows.Select(sl => sl.EmployeeId)
@@ -352,6 +356,17 @@ public class EmployeeService : IDynamicApplication
             await _repository.Insertable(employeeOrgModel)
                 .ExecuteCommandAsync();
         }, ex => throw ex);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "添加职员",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = employeeModel.EmployeeId,
+            BizNo = employeeModel.EmployeeNo,
+            Description =
+                $"职员名称：{employeeModel.EmployeeName}，职员手机：{employeeModel.Mobile}，职员邮箱：{employeeModel.Email}，职员部门：{employeeOrgModel.DepartmentName}"
+        });
     }
 
     /// <summary>
@@ -539,7 +554,7 @@ public class EmployeeService : IDynamicApplication
                 if (principalDepartmentIds.Any())
                 {
                     await _repository.Updateable<EmployeeOrgModel>()
-                        .SetColumns(_ => new EmployeeOrgModel { IsPrincipal = false })
+                        .SetColumns(_ => new EmployeeOrgModel {IsPrincipal = false})
                         .Where(wh => principalDepartmentIds.Contains(wh.DepartmentId))
                         .ExecuteCommandAsync();
                 }
@@ -552,6 +567,16 @@ public class EmployeeService : IDynamicApplication
 
             await _repository.UpdateAsync(employeeModel);
         }, ex => throw ex);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "编辑职员",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = employeeModel.EmployeeId,
+            BizNo = employeeModel.EmployeeNo,
+            Description = employeeModel.EmployeeName
+        });
     }
 
     /// <summary>
@@ -585,6 +610,16 @@ public class EmployeeService : IDynamicApplication
         employeeModel.RowVersion = input.RowVersion;
 
         await _repository.UpdateAsync(employeeModel);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "更改职员状态",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = employeeModel.EmployeeId,
+            BizNo = employeeModel.EmployeeNo,
+            Description = $"职员：{employeeModel.EmployeeName}，状态 -> {employeeModel.Status.GetDescription()}"
+        });
     }
 
     /// <summary>
@@ -635,6 +670,16 @@ public class EmployeeService : IDynamicApplication
             await _centerRepository.Ado.RollbackTranAsync();
             throw;
         }
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "职员离职",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = employeeModel.EmployeeId,
+            BizNo = employeeModel.EmployeeNo,
+            Description = $"职员：{employeeModel.EmployeeName}，离职 -> {employeeModel.ResignDate:yyyy-MM-dd HH:mm:ss}"
+        });
     }
 
     /// <summary>
@@ -766,6 +811,16 @@ public class EmployeeService : IDynamicApplication
             await _centerRepository.Ado.RollbackTranAsync();
             throw;
         }
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "职员绑定登录账号",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = employeeModel.EmployeeId,
+            BizNo = employeeModel.EmployeeNo,
+            Description = $"职员：{employeeModel.EmployeeName}，绑定登录账号：{account}，手机：{input.Mobile}，邮箱：{input.Email}"
+        });
     }
 
     /// <summary>
@@ -835,6 +890,16 @@ public class EmployeeService : IDynamicApplication
                     });
             }
         }
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "职员更改登录账号",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = employeeModel.EmployeeId,
+            BizNo = employeeModel.EmployeeNo,
+            Description = $"职员：{employeeModel.EmployeeName}，{tenantUserModel.Status.GetDescription()}登录账号"
+        });
     }
 
     /// <summary>
@@ -912,6 +977,16 @@ public class EmployeeService : IDynamicApplication
                     .ExecuteCommandAsync();
             }
         }, ex => throw ex);
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "职员授权",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = employeeModel.EmployeeId,
+            BizNo = employeeModel.EmployeeNo,
+            Description = null
+        });
     }
 
     /// <summary>
