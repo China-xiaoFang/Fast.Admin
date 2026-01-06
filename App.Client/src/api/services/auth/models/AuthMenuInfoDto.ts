@@ -1,5 +1,4 @@
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 
 /**
  * Fast.Admin.Service.Auth.Dto.AuthMenuInfoDto 授权菜单信息Dto
@@ -46,13 +45,21 @@ export interface AuthMenuInfoDto {
    */
   component?: string;
   /**
+   * 导航栏显示
+   */
+  tab?: boolean;
+  /**
+   * 缓存页面
+   */
+  keepAlive?: boolean;
+  /**
    * 内链/外链地址
    */
   link?: string;
   /**
-   * 
+   * 是否显示
    */
-  visible?: YesOrNotEnum;
+  visible?: boolean;
   /**
    * 排序
    */

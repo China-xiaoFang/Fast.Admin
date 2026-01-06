@@ -1,4 +1,5 @@
 import { axiosUtil } from "@fast-china/axios";
+import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 import { QueryMerchantPagedOutput } from "./models/QueryMerchantPagedOutput";
 import { QueryMerchantPagedInput } from "./models/QueryMerchantPagedInput";
 import { QueryMerchantDetailOutput } from "./models/QueryMerchantDetailOutput";
@@ -10,6 +11,19 @@ import { MerchantIdInput } from "./models/MerchantIdInput";
  * Fast.Center.Service.Merchant.MerchantService 商户号服务Api
  */
 export const merchantApi = {
+  /**
+   * 商户号选择器
+   */
+  merchantSelector(merchantType: PaymentChannelEnum) {
+    return axiosUtil.request<ElSelectorOutput<number>[]>({
+      url: "/merchant/merchantSelector",
+      method: "get",
+      params: {
+        merchantType,
+      },
+      requestType: "query",
+    });
+  },
   /**
    * 获取商户号分页列表
    */

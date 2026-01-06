@@ -1,6 +1,5 @@
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditMenuButtonDto } from "./EditMenuButtonDto";
 
@@ -69,6 +68,14 @@ export interface EditMenuInput {
    */
   webComponent?: string;
   /**
+   * Web端页面是否在导航栏显示
+   */
+  webTab?: boolean;
+  /**
+   * Web端页面是否缓存
+   */
+  webKeepAlive?: boolean;
+  /**
    * 是否移动端
    */
   hasMobile?: boolean;
@@ -85,9 +92,9 @@ export interface EditMenuInput {
    */
   link?: string;
   /**
-   * 
+   * 是否显示
    */
-  visible?: YesOrNotEnum;
+  visible?: boolean;
   /**
    * 排序
    */
