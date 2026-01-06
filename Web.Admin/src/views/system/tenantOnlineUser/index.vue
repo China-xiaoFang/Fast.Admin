@@ -2,7 +2,7 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1DCSB95TCW"
+			tableKey="1D1K3NW4XY"
 			rowKey="connectionId"
 			:requestApi="tenantOnlineUserApi.queryTenantOnlineUserPaged"
 			hideSearchTime

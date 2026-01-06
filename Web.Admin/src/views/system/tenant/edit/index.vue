@@ -62,7 +62,7 @@ import { fileApi } from "@/api/services/file";
 import { tenantApi } from "@/api/services/tenant";
 
 defineOptions({
-	name: "DevTenantEdit",
+	name: "SystemTenantEdit",
 });
 
 const emit = defineEmits(["ok"]);

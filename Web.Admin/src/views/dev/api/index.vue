@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1HZ9ZTWD4S" rowKey="apiId" :requestApi="apiApi.queryApiPaged" hideSearchTime>
+		<FastTable ref="fastTableRef" tableKey="1D11YYQH9M" rowKey="apiId" :requestApi="apiApi.queryApiPaged" hideSearchTime>
 			<template #tags="{ row }: { row?: ApiInfoModel }">
 				<el-tag v-for="(item, index) in row.tags" :key="index" type="info" effect="dark">{{ item }}</el-tag>
 			</template>

@@ -2,7 +2,7 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1DCFF16K5C"
+			tableKey="1D1KYCMJCP"
 			rowKey="merchantId"
 			:requestApi="merchantApi.queryMerchantPaged"
 			hideSearchTime
