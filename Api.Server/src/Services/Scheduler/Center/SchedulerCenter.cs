@@ -507,8 +507,11 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
             await StartScheduler();
 
             var tenantList = await db.Queryable<TenantModel>()
-                .Where(wh => wh.Status == CommonStatusEnum.Enable)
-                .Select(sl => new {sl.TenantId, sl.TenantNo, sl.TenantCode, sl.TenantName})
+                // 数据库已经初始化的
+                .LeftJoin<MainDatabaseModel>((t1, t2) => t1.TenantId == t2.TenantId && t2.DatabaseType == DatabaseTypeEnum.Admin)
+                .Where((t1, t2) => t2.IsInitialized)
+                .Where(t1 => t1.Status == CommonStatusEnum.Enable)
+                .Select(t1 => new {t1.TenantId, t1.TenantNo, t1.TenantCode, t1.TenantName})
                 .ToListAsync();
 
             foreach (var item in tenantList)
@@ -558,10 +561,13 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
             SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
             var tenantList = await db.Queryable<TenantModel>()
-                .Where(wh => wh.Status == CommonStatusEnum.Enable)
-                .Where(wh => !SchedulerContext.SchedulerTenantList.Keys.ToList()
-                    .Contains(wh.TenantId))
-                .Select(sl => new {sl.TenantId, sl.TenantNo, sl.TenantCode, sl.TenantName})
+                // 数据库已经初始化的
+                .LeftJoin<MainDatabaseModel>((t1, t2) => t1.TenantId == t2.TenantId && t2.DatabaseType == DatabaseTypeEnum.Admin)
+                .Where((t1, t2) => t2.IsInitialized)
+                .Where(t1 => t1.Status == CommonStatusEnum.Enable)
+                .Where(t1 => !SchedulerContext.SchedulerTenantList.Keys.ToList()
+                    .Contains(t1.TenantId))
+                .Select(t1 => new {t1.TenantId, t1.TenantNo, t1.TenantCode, t1.TenantName})
                 .ToListAsync();
 
             foreach (var item in tenantList)

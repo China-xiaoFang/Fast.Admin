@@ -92,8 +92,10 @@
 				</template>
 				<!-- 表格按钮操作区域 -->
 				<template #header>
+					<TenantSelectPage class="pr12" width="280px" v-model="state.tenantId" />
 					<el-button type="primary" :icon="Plus" @click="editFormRef.add(state.tenantId, state.activeJobGroup)">添加作业</el-button>
 				</template>
+
 				<FaTableColumn prop="jobName" label="作业名称" fixed="left" width="300" smallWidth="280" />
 				<FaTableColumn
 					prop="triggerState"

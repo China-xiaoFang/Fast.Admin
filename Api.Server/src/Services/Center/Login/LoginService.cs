@@ -847,30 +847,6 @@ public class LoginService : IDynamicApplication
     [AllowAnonymous]
     public async Task Logout()
     {
-        if (!string.IsNullOrWhiteSpace(_user.Account) && !string.IsNullOrWhiteSpace(_user.Mobile))
-        {
-            // 添加登出日志
-            var visitLogModel = new VisitLogModel
-            {
-                RecordId = YitIdHelper.NextId(),
-                AccountId = _user.AccountId,
-                Account = _user.Account,
-                Mobile = _user.Mobile,
-                NickName = _user.NickName,
-                VisitType = VisitTypeEnum.Logout,
-                DepartmentId = _user.DepartmentId,
-                DepartmentName = _user.DepartmentName,
-                CreatedUserId = _user.UserId,
-                CreatedUserName = _user.EmployeeName,
-                CreatedTime = DateTime.Now,
-                TenantId = _user.TenantId,
-                TenantName = _user.TenantName
-            };
-            visitLogModel.RecordCreate(_httpContext);
-            await _httpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>()
-                .InsertAsync(visitLogModel);
-        }
-
         await _user.Logout();
     }
 

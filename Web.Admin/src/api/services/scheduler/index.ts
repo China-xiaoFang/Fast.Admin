@@ -16,7 +16,7 @@ export const schedulerApi = {
    */
   runVerifyCron(cron: string) {
     return axiosUtil.request<string[]>({
-      url: "/scheduler/runVerifyCron",
+      url: "http://127.0.0.1:38082/scheduler/runVerifyCron",
       method: "get",
       params: {
         cron,
@@ -29,7 +29,7 @@ export const schedulerApi = {
    */
   querySchedulerDetail(tenantId: number) {
     return axiosUtil.request<QuerySchedulerDetailOutput>({
-      url: "/scheduler/querySchedulerDetail",
+      url: "http://127.0.0.1:38082/scheduler/querySchedulerDetail",
       method: "get",
       params: {
         tenantId,
@@ -42,7 +42,7 @@ export const schedulerApi = {
    */
   startScheduler(tenantId: number) {
     return axiosUtil.request({
-      url: "/scheduler/startScheduler",
+      url: "http://127.0.0.1:38082/scheduler/startScheduler",
       method: "post",
       params: {
         tenantId,
@@ -55,7 +55,7 @@ export const schedulerApi = {
    */
   stopScheduler(tenantId: number) {
     return axiosUtil.request({
-      url: "/scheduler/stopScheduler",
+      url: "http://127.0.0.1:38082/scheduler/stopScheduler",
       method: "post",
       params: {
         tenantId,
@@ -68,7 +68,7 @@ export const schedulerApi = {
    */
   stopSchedulerJob(tenantId: number, data: SchedulerJobKeyInput) {
     return axiosUtil.request({
-      url: "/scheduler/stopSchedulerJob",
+      url: "http://127.0.0.1:38082/scheduler/stopSchedulerJob",
       method: "post",
       params: {
         tenantId,
@@ -82,7 +82,7 @@ export const schedulerApi = {
    */
   resumeSchedulerJob(tenantId: number, data: SchedulerJobKeyInput) {
     return axiosUtil.request({
-      url: "/scheduler/resumeSchedulerJob",
+      url: "http://127.0.0.1:38082/scheduler/resumeSchedulerJob",
       method: "post",
       params: {
         tenantId,
@@ -96,7 +96,7 @@ export const schedulerApi = {
    */
   triggerSchedulerJob(tenantId: number, data: SchedulerJobKeyInput) {
     return axiosUtil.request({
-      url: "/scheduler/triggerSchedulerJob",
+      url: "http://127.0.0.1:38082/scheduler/triggerSchedulerJob",
       method: "post",
       params: {
         tenantId,
@@ -110,7 +110,7 @@ export const schedulerApi = {
    */
   querySchedulerJobLogs(tenantId: number, data: SchedulerJobKeyInput) {
     return axiosUtil.request<string[]>({
-      url: "/scheduler/querySchedulerJobLogs",
+      url: "http://127.0.0.1:38082/scheduler/querySchedulerJobLogs",
       method: "post",
       params: {
         tenantId,
@@ -124,7 +124,7 @@ export const schedulerApi = {
    */
   querySchedulerJobRunNumber(tenantId: number, data: SchedulerJobKeyInput) {
     return axiosUtil.request<number>({
-      url: "/scheduler/querySchedulerJobRunNumber",
+      url: "http://127.0.0.1:38082/scheduler/querySchedulerJobRunNumber",
       method: "post",
       params: {
         tenantId,
@@ -138,7 +138,7 @@ export const schedulerApi = {
    */
   queryAllSchedulerJob(jobGroup: SchedulerJobGroupEnum, tenantId: number) {
     return axiosUtil.request<QueryAllSchedulerJobOutput[]>({
-      url: "/scheduler/queryAllSchedulerJob",
+      url: "http://127.0.0.1:38082/scheduler/queryAllSchedulerJob",
       method: "get",
       params: {
         jobGroup,
@@ -152,7 +152,7 @@ export const schedulerApi = {
    */
   querySchedulerJob(tenantId: number, data: SchedulerJobKeyInput) {
     return axiosUtil.request<SchedulerJobInfo>({
-      url: "/scheduler/querySchedulerJob",
+      url: "http://127.0.0.1:38082/scheduler/querySchedulerJob",
       method: "post",
       params: {
         tenantId,
@@ -166,7 +166,7 @@ export const schedulerApi = {
    */
   addSchedulerJob(data: AddSchedulerJobInput) {
     return axiosUtil.request({
-      url: "/scheduler/addSchedulerJob",
+      url: "http://127.0.0.1:38082/scheduler/addSchedulerJob",
       method: "post",
       data,
       requestType: "add",
@@ -177,7 +177,7 @@ export const schedulerApi = {
    */
   editSchedulerJob(data: EditSchedulerJobInput) {
     return axiosUtil.request({
-      url: "/scheduler/editSchedulerJob",
+      url: "http://127.0.0.1:38082/scheduler/editSchedulerJob",
       method: "post",
       data,
       requestType: "edit",
@@ -188,7 +188,7 @@ export const schedulerApi = {
    */
   deleteSchedulerJob(tenantId: number, data: SchedulerJobKeyInput) {
     return axiosUtil.request({
-      url: "/scheduler/deleteSchedulerJob",
+      url: "http://127.0.0.1:38082/scheduler/deleteSchedulerJob",
       method: "post",
       params: {
         tenantId,
@@ -202,7 +202,7 @@ export const schedulerApi = {
    */
   deleteSchedulerJobException(tenantId: number, data: SchedulerJobKeyInput) {
     return axiosUtil.request({
-      url: "/scheduler/deleteSchedulerJobException",
+      url: "http://127.0.0.1:38082/scheduler/deleteSchedulerJobException",
       method: "post",
       params: {
         tenantId,
