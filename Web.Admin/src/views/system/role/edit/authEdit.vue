@@ -177,7 +177,7 @@ defineExpose({
 		&:nth-child(n + 2) {
 			margin-top: 20px;
 		}
-		:deep {
+		:deep() {
 			.el-collapse-item__header {
 				border: none;
 				padding-left: 20px;

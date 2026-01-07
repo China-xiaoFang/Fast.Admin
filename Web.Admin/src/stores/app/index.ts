@@ -4,7 +4,7 @@ import { useFastAxios } from "@fast-china/axios";
 import { consoleError, consoleLog } from "@fast-china/utils";
 import { useTitle } from "@vueuse/core";
 import { defineStore } from "pinia";
-import { useConfig } from "../config";
+import { useConfig } from "@/stores/config";
 import type { LaunchOutput } from "@/api/services/app/models/LaunchOutput";
 import type { FaTableColumnCtx, FaTableEnumColumnCtx } from "fast-element-plus";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
