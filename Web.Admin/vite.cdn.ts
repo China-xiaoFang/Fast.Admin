@@ -14,12 +14,12 @@ export const getCdnModules = (viteDev: boolean): CdnImportOptions["modules"] => 
 	{
 		name: "@vueuse/shared",
 		var: "VueUse",
-		path: "index.iife.min.js",
+		path: "dist/index.iife.min.js",
 	},
 	{
 		name: "@vueuse/core",
 		var: "VueUse",
-		path: "index.iife.min.js",
+		path: "dist/index.iife.min.js",
 	},
 	{
 		name: "vue-router",
@@ -65,7 +65,7 @@ export const getCdnModules = (viteDev: boolean): CdnImportOptions["modules"] => 
 	{
 		name: "pinia-plugin-persistedstate",
 		var: "piniaPluginPersistedstate",
-		path: "dist/index.global.js",
+		path: "dist/index.iife.js",
 	},
 	{
 		name: "@microsoft/signalr",
