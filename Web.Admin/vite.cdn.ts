@@ -40,11 +40,21 @@ export const getCdnModules = (viteDev: boolean): CdnImportOptions["modules"] => 
 		name: "element-plus",
 		var: "ElementPlus",
 		path: ["dist/index.full.min.js", "dist/locale/zh-cn.min.js"],
-		css: ["dist/index.css", "theme-chalk/dark/css-vars.css"],
+		css: ["dist/index.min.css", "theme-chalk/dark/css-vars.css"],
 	},
 	{
 		name: "@fast-china/utils",
 		var: "FastUtils",
+		path: "dist/index.global.min.js",
+	},
+	{
+		name: "axios",
+		var: "axios",
+		path: "dist/axios.min.js",
+	},
+	{
+		name: "@fast-china/axios",
+		var: "FastAxios",
 		path: "dist/index.global.min.js",
 	},
 	{
@@ -58,6 +68,22 @@ export const getCdnModules = (viteDev: boolean): CdnImportOptions["modules"] => 
 		path: "dist/index.global.js",
 	},
 	{
+		name: "@microsoft/signalr",
+		var: "signalR",
+		path: "dist/browser/signalr.min.js",
+	},
+	{
+		name: "@wangeditor/editor",
+		var: "WangEditor",
+		path: "dist/index.min.js",
+		css: "dist/css/style.min.css",
+	},
+	{
+		name: "@wangeditor/editor-for-vue",
+		var: "WangEditorVue",
+		path: "dist/index.min.js",
+	},
+	{
 		name: "nprogress",
 		var: "NProgress",
 		path: "nprogress.js",
@@ -67,5 +93,16 @@ export const getCdnModules = (viteDev: boolean): CdnImportOptions["modules"] => 
 		name: "lodash",
 		var: "_",
 		path: "lodash.min.js",
+	},
+	{
+		name: "@fast-element-plus/icons-vue",
+		var: "FastElementPlusIconsVue",
+		path: "dist/index.iife.min.js",
+	},
+	{
+		name: "fast-element-plus",
+		var: "FastElementPlus",
+		path: "dist/index.full.min.js",
+		css: "dist/styles/index.css",
 	},
 ];
