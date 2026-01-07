@@ -1,5 +1,4 @@
 import { resolve } from "path";
-import legacyPlugin from "@vitejs/plugin-legacy";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import { buildSvgIcon, cdnImport, componentAutoImport, buildRouterPath, versionUpdatePlugin } from "fast-vite-plugins";
@@ -130,11 +129,6 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 			buildRouterPath(),
 			/** 版本号 */
 			versionUpdatePlugin(viteEnv.VITE_APP_VERSION),
-			/** 兼容旧版 Chrome 和 IE浏览器 */
-			legacyPlugin({
-				/** 需要兼容的目标列表，可以设置多个 */
-				targets: ["defaults", "not IE 11", "chrome 86"],
-			}),
 			/** gzip静态资源压缩 */
 			viteCompression({
 				// 记录压缩文件及其压缩率。默认true
