@@ -40,7 +40,7 @@ export const getCdnModules = (viteDev: boolean): CdnImportOptions["modules"] => 
 		name: "element-plus",
 		var: "ElementPlus",
 		path: ["dist/index.full.min.js", "dist/locale/zh-cn.min.js"],
-		css: ["dist/index.min.css", "theme-chalk/dark/css-vars.css"],
+		css: ["dist/index.css", "theme-chalk/dark/css-vars.css"],
 	},
 	{
 		name: "@fast-china/utils",
