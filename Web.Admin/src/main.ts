@@ -21,14 +21,16 @@ loadPinia(app);
 loadPlugins(app);
 
 /** Launch */
-await useApp().launch();
+useApp()
+	.launch()
+	.then(() => {
+		/** 加载路由 */
+		app.use(router);
 
-/** 加载路由 */
-app.use(router);
+		/** 加载自定义指令 */
+		loadDirectives(app);
 
-/** 加载自定义指令 */
-loadDirectives(app);
-
-app.mount("#app");
+		app.mount("#app");
+	});
 
 checkVersionUpdate(`v${import.meta.env.VITE_APP_VERSION}`);

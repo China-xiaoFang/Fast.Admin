@@ -5,12 +5,28 @@ export const rollupManualChunks = (id: string) => {
 
 	for (const { path, file } of [
 		{
+			path: "/src/api/enums",
+			file: "_enums",
+		},
+		{
+			path: "/src/api/services",
+			file: "_services",
+		},
+		{
 			path: "/src/components",
 			file: "_components",
 		},
 		{
+			path: "/src/directives",
+			file: "_directives",
+		},
+		{
 			path: "/src/icons",
 			file: "_icons",
+		},
+		{
+			path: "/src/layouts",
+			file: "_layouts",
 		},
 		{
 			path: "/src/router",
