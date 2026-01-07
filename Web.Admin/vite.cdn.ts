@@ -75,13 +75,13 @@ export const getCdnModules = (viteDev: boolean): CdnImportOptions["modules"] => 
 	{
 		name: "@wangeditor/editor",
 		var: "WangEditor",
-		path: "dist/index.min.js",
-		css: "dist/css/style.min.css",
+		path: "dist/index.js",
+		css: "dist/css/style.css",
 	},
 	{
 		name: "@wangeditor/editor-for-vue",
 		var: "WangEditorVue",
-		path: "dist/index.min.js",
+		path: "dist/index.js",
 	},
 	{
 		name: "nprogress",
