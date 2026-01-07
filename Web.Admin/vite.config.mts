@@ -78,9 +78,9 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 				},
 				format: {
 					/** 删除注释 */
-					comments: viteDev,
+					comments: !viteDev,
 					/** 格式化代码 */
-					beautify: viteDev,
+					beautify: !viteDev,
 				},
 				/** 混淆变量名 */
 				mangle: !viteDev,
