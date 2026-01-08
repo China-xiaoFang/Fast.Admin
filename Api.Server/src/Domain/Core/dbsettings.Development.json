@@ -6,7 +6,7 @@
     // 默认库端口号
     "Port": 1433,
     // 默认库数据库名称
-    "DbName": "FastCenter_Dev",
+    "DbName": "FaCenter_Dev",
     // 默认库数据库用户
     "DbUser": "admin",
     // 默认库数据库密码

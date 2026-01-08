@@ -223,50 +223,6 @@ public class InitDatabaseHostedService : IHostedService
             // 菜单
             await MenuSeedData.DefaultMenuSeedData(db, applicationModel, dateTime);
 
-            // 初始化普通租户
-            TenantModel defaultTenantModel;
-            // 开启事务
-            await db.Ado.BeginTranAsync();
-            try
-            {
-                var tenantNo = SysSerialContext.GenTenantNo(db);
-                defaultTenantModel = new TenantModel
-                {
-                    TenantId = YitIdHelper.NextId(),
-                    TenantNo = tenantNo,
-                    TenantCode = "FaK",
-                    Status = CommonStatusEnum.Enable,
-                    TenantName = "FastDotNet科技有限公司",
-                    ShortName = "FastDotNet科技",
-                    SpellName = "fast dotnet ke ji you xian gong si",
-                    Edition = EditionEnum.Flagship,
-                    AdminName = "管理员",
-                    AdminMobile = "15580001115",
-                    AdminEmail = "2875616188@qq.com",
-                    AdminPhone = null,
-                    RobotName = "Fast机器人",
-                    TenantType = TenantTypeEnum.Common,
-                    LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
-                    AllowDeleteData = true,
-                    CreatedTime = dateTime
-                };
-                await db.Insertable(defaultTenantModel)
-                    .ExecuteCommandAsync(cancellationToken);
-
-                // 提交事务
-                await db.Ado.CommitTranAsync();
-            }
-            catch
-            {
-                // 回滚事务
-                await db.Ado.RollbackTranAsync();
-                throw;
-            }
-
-            // 租户数据库
-            await DatabaseSeedData.TenantDatabaseSeedData(db, defaultTenantModel.TenantId, defaultTenantModel.TenantCode,
-                dateTime);
-
             {
                 var logSb = new StringBuilder();
                 logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
