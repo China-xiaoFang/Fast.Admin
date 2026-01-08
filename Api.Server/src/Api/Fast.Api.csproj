@@ -11,6 +11,7 @@
     <ItemGroup>
         <ProjectReference Include="$(SolutionDir)src\Services\Admin\Fast.Admin.Service.csproj" />
         <ProjectReference Include="$(SolutionDir)src\Services\Center\Fast.Center.Service.csproj" />
+        <ProjectReference Include="$(SolutionDir)src\Services\CenterLog\Fast.CenterLog.Service.csproj" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
