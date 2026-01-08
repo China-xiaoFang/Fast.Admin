@@ -8,7 +8,7 @@
     // 默认库端口号
     "Port": 1433,
     // 默认库数据库名称
-    "DbName": "FastCenter",
+    "DbName": "FaCenter",
     // 默认库数据库用户
     "DbUser": "admin",
     // 默认库数据库密码
@@ -32,7 +32,7 @@
     "Port": 6379,
     "DbName": 1,
     "DbPwd": "123456",
-    "Prefix": "Fast_",
+    "Prefix": "Fa_",
     "Services": [
       {
         "ServiceName": "Auth",
