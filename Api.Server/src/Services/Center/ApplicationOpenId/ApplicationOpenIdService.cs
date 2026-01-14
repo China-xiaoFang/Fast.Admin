@@ -51,7 +51,7 @@ public class ApplicationOpenIdService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取应用标识分页列表", HttpRequestActionEnum.Paged)]
-    [Permission(PermissionConst.App.Paged)]
+    [Permission(PermissionConst.AppOpenId.Paged)]
     public async Task<PagedResult<QueryApplicationOpenIdPagedOutput>> QueryApplicationOpenIdPaged(
         QueryApplicationOpenIdPagedInput input)
     {
@@ -96,7 +96,7 @@ public class ApplicationOpenIdService : IDynamicApplication
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取应用标识详情", HttpRequestActionEnum.Query)]
-    [Permission(PermissionConst.App.Detail)]
+    [Permission(PermissionConst.AppOpenId.Detail)]
     public async Task<QueryApplicationOpenIdDetailOutput> QueryApplicationOpenIdDetail(
         [Required(ErrorMessage = "记录Id不能为空")] long? recordId)
     {
@@ -152,7 +152,7 @@ public class ApplicationOpenIdService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加应用标识", HttpRequestActionEnum.Add)]
-    [Permission(PermissionConst.App.Add)]
+    [Permission(PermissionConst.AppOpenId.Add)]
     public async Task AddApplicationOpenId(AddApplicationOpenIdInput input)
     {
         if (await _repository.AnyAsync(a => a.OpenId == input.OpenId))
@@ -237,7 +237,7 @@ public class ApplicationOpenIdService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑应用标识", HttpRequestActionEnum.Edit)]
-    [Permission(PermissionConst.App.Edit)]
+    [Permission(PermissionConst.AppOpenId.Edit)]
     public async Task EditApplicationOpenId(EditApplicationOpenIdInput input)
     {
         if (await _repository.AnyAsync(a => a.OpenId == input.OpenId && a.RecordId != input.RecordId))
@@ -326,7 +326,7 @@ public class ApplicationOpenIdService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除应用标识", HttpRequestActionEnum.Delete)]
-    [Permission(PermissionConst.App.Delete)]
+    [Permission(PermissionConst.AppOpenId.Delete)]
     public async Task DeleteApplicationOpenId(RecordIdInput input)
     {
         var applicationOpenIdModel = await _repository.SingleOrDefaultAsync(input.RecordId);
