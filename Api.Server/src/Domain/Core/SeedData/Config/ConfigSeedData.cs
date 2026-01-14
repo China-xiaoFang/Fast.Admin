@@ -67,6 +67,15 @@ internal static class ConfigSeedData
                     ConfigValue = "True",
                     Remark = "True：打开；False：关闭；",
                     CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.GaoDeMapKey,
+                    ConfigName = "高德地图Key",
+                    ConfigValue = "",
+                    Remark = null,
+                    CreatedTime = dateTime
                 }
             })
             .ExecuteCommandAsync();
