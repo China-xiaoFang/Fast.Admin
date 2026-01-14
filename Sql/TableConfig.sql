@@ -26,7 +26,7 @@ INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [Depart
 GO
 INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [DepartmentId], [DepartmentName], [CreatedUserId], [CreatedUserName], [CreatedTime], [UpdatedUserId], [UpdatedUserName], [UpdatedTime], [RowVersion]) VALUES (759869359636550, N'1D1F9HNVPQ', N'系统应用_系统管理_应用管理_分页列表', NULL, NULL, NULL, NULL, N'超级管理员', '2025-12-30 00:02:11.927', NULL, N'超级管理员', '2025-12-30 02:02:11.927', 1);
 GO
-INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [DepartmentId], [DepartmentName], [CreatedUserId], [CreatedUserName], [CreatedTime], [UpdatedUserId], [UpdatedUserName], [UpdatedTime], [RowVersion]) VALUES (759869386256454, N'1D1FCQZ5KT', N'系统应用_系统管理_应用管理_应用标识_分页列表', NULL, NULL, NULL, NULL, N'超级管理员', '2025-12-30 00:10:33.090', NULL, N'超级管理员', '2025-12-30 02:10:33.090', 1);
+INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [DepartmentId], [DepartmentName], [CreatedUserId], [CreatedUserName], [CreatedTime], [UpdatedUserId], [UpdatedUserName], [UpdatedTime], [RowVersion]) VALUES (759869386256454, N'1D1FCQZ5KT', N'系统应用_系统管理_应用标识_分页列表', NULL, NULL, NULL, NULL, N'超级管理员', '2025-12-30 00:10:33.090', NULL, N'超级管理员', '2025-12-30 02:10:33.090', 1);
 GO
 INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [DepartmentId], [DepartmentName], [CreatedUserId], [CreatedUserName], [CreatedTime], [UpdatedUserId], [UpdatedUserName], [UpdatedTime], [RowVersion]) VALUES (759869427761222, N'1D1FXFM1GH', N'系统应用_系统管理_账号管理_分页列表', NULL, NULL, NULL, NULL, N'超级管理员', '2025-12-30 01:35:57.027', NULL, N'超级管理员', '2026-01-05 01:33:31.353', 1);
 GO

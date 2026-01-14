@@ -246,6 +246,25 @@ public partial class PermissionConst
         public const string Delete = "App:Delete";
     }
 
+    /// <summary><see cref="AppOpenId"/> 应用标识</summary>
+    public class AppOpenId
+    {
+        /// <summary>应用标识列表</summary>
+        public const string Paged = "AppOpenId:Paged";
+
+        /// <summary>应用标识详情</summary>
+        public const string Detail = "AppOpenId:Detail";
+
+        /// <summary>应用标识新增</summary>
+        public const string Add = "AppOpenId:Add";
+
+        /// <summary>应用标识编辑</summary>
+        public const string Edit = "AppOpenId:Edit";
+
+        /// <summary>应用标识删除</summary>
+        public const string Delete = "AppOpenId:Delete";
+    }
+
     /// <summary><see cref="Account"/> 账号</summary>
     public class Account
     {
