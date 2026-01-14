@@ -42,4 +42,9 @@ public class ConfigConst
     /// 登录验证码开关
     /// </summary>
     public const string LoginCaptchaOpen = "LOGIN_CAPTCHA_OPEN";
+
+    /// <summary>
+    /// 高德地图Key
+    /// </summary>
+    public const string GaoDeMapKey = "GAO_DE_MAP_KEY";
 }
