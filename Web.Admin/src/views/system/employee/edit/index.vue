@@ -344,7 +344,6 @@ const state = reactive({
 		employeeName: [{ required: true, message: "请输入职员名称", trigger: "blur" }],
 		mobile: [{ required: true, message: "请输入手机", trigger: "blur" }],
 		email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
-		sex: [{ required: true, message: "请选择性别", trigger: "change" }],
 		idPhoto: [{ required: true, message: "请上传证件照", trigger: "change" }],
 		firstWorkDate: [{ required: true, message: "请选择初次工作日期", trigger: "change" }],
 		entryDate: [{ required: true, message: "请选择入职日期", trigger: "change" }],

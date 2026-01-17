@@ -60,7 +60,6 @@ const state = reactive({
 	}),
 	formRules: withDefineType<FormRules>({
 		appId: [{ required: true, message: "请选择应用", trigger: "change" }],
-		viewType: [{ required: true, message: "请选择查看类型", trigger: "change" }],
 		moduleName: [{ required: true, message: "请输入模块名称", trigger: "blur" }],
 		sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
 	}),

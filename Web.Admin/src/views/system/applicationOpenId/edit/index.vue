@@ -133,10 +133,7 @@ const state = reactive({
 	formRules: withDefineType<FormRules>({
 		appId: [{ required: true, message: "请选择应用", trigger: "change" }],
 		openId: [{ required: true, message: "请输入应用标识", trigger: "blur" }],
-		appType: [{ required: true, message: "请选择应用类型", trigger: "change" }],
-		environmentType: [{ required: true, message: "请选择环境类型", trigger: "change" }],
 		requestTimeout: [{ required: true, message: "请输入请求超时时间", trigger: "blur" }],
-		requestEncipher: [{ required: true, message: "请选择请求加密", trigger: "change" }],
 	}),
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),

@@ -1,7 +1,7 @@
 <template>
 	<FaDialog
 		ref="faDialogRef"
-		width="1200"
+		:width="state.dialogState !== 'add' ? 1200 : 500"
 		:fullHeight="state.dialogState !== 'add'"
 		:title="state.dialogTitle"
 		:showConfirmButton="!state.formDisabled"
@@ -65,12 +65,11 @@ const faFormRef = ref<FaFormInstance>();
 const state = reactive({
 	formData: withDefineType<EditDictionaryInput & AddDictionaryInput>({
 		valueType: DictionaryValueTypeEnum.String,
+		status: 1,
 	}),
 	formRules: withDefineType<FormRules>({
 		dictionaryKey: [{ required: true, message: "请输入字典Key", trigger: "blur" }],
 		dictionaryName: [{ required: true, message: "请输入字典名称", trigger: "blur" }],
-		valueType: [{ required: true, message: "请选择值类型", trigger: "change" }],
-		status: [{ required: true, message: "请选择状态", trigger: "change" }],
 	}),
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),

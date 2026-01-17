@@ -65,7 +65,6 @@ const state = reactive({
 		merchantType: PaymentChannelEnum.WeChat,
 	}),
 	formRules: withDefineType<FormRules>({
-		merchantType: [{ required: true, message: "请选择商户类型", trigger: "change" }],
 		merchantNo: [{ required: true, message: "请输入商户号", trigger: "blur" }],
 	}),
 	formDisabled: false,

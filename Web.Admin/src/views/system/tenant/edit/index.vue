@@ -60,6 +60,7 @@ import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { fileApi } from "@/api/services/file";
 import { tenantApi } from "@/api/services/tenant";
+import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 defineOptions({
 	name: "SystemTenantEdit",
@@ -73,14 +74,13 @@ const faFormRef = ref<FaFormInstance>();
 const state = reactive({
 	formData: withDefineType<EditTenantInput & AddTenantInput>({
 		edition: EditionEnum.Trial,
+		status: CommonStatusEnum.Enable,
 	}),
 	formRules: withDefineType<FormRules>({
-		status: [{ required: true, message: "请选择状态", trigger: "change" }],
 		tenantName: [{ required: true, message: "请输入租户名称", trigger: "blur" }],
 		tenantCode: [{ required: true, message: "请输入租户编码", trigger: "blur" }],
 		shortName: [{ required: true, message: "请输入租户简称", trigger: "blur" }],
 		spellName: [{ required: true, message: "请输入租户英文名称", trigger: "blur" }],
-		edition: [{ required: true, message: "请选择版本", trigger: "change" }],
 		adminName: [{ required: true, message: "请输入管理员名称", trigger: "blur" }],
 		adminMobile: [{ required: true, message: "请输入管理员手机", trigger: "blur" }],
 		adminEmail: [{ required: true, message: "请输入管理员邮箱", trigger: "blur" }],
