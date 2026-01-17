@@ -15,11 +15,13 @@
 					<el-divider contentPosition="left">组织架构</el-divider>
 				</FaLayoutGridItem>
 				<FaFormItem prop="orgId" label="机构">
-					<FaSelect
+					<FaTreeSelect
 						:requestApi="organizationApi.organizationSelector"
 						v-model="state.formData.orgId"
 						v-model:label="state.formData.orgName"
 						placeholder="请选择机构"
+						check-strictly
+						filterable
 						clearable
 					/>
 				</FaFormItem>
@@ -32,7 +34,6 @@
 						v-model:label="state.formData.departmentName"
 						placeholder="请选择部门"
 						check-strictly
-						:render-after-expand="false"
 						filterable
 						clearable
 					/>
@@ -226,7 +227,6 @@
 										v-model:label="row.departmentName"
 										placeholder="请选择部门"
 										check-strictly
-										:render-after-expand="false"
 										filterable
 										clearable
 									/>

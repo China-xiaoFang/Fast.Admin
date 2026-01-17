@@ -17,7 +17,6 @@
 					v-model:label="state.formData.parentName"
 					placeholder="请选择父级机构"
 					check-strictly
-					:render-after-expand="false"
 					filterable
 					clearable
 				/>
