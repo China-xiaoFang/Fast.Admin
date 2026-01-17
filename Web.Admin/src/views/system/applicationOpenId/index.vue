@@ -30,7 +30,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
-import ApplicationEdit from "./edit/index.vue";
+import ApplicationOpenIdEdit from "./edit/index.vue";
 import type { FastTableInstance } from "@/components";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { QueryApplicationOpenIdPagedOutput } from "@/api/services/applicationOpenId/models/QueryApplicationOpenIdPagedOutput";
@@ -42,7 +42,7 @@ defineOptions({
 });
 
 const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof ApplicationEdit>>();
+const editFormRef = ref<InstanceType<typeof ApplicationOpenIdEdit>>();
 
 const handleCustomCellClick = (_, { row }: { row: QueryApplicationOpenIdPagedOutput }) => {
 	editFormRef.value.detail(row.recordId);
