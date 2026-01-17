@@ -288,7 +288,7 @@ const state = reactive({
 		menuName: [{ required: true, message: "请输入菜单名称", trigger: "blur" }],
 		menuTitle: [{ required: true, message: "请输入菜单标题", trigger: "blur" }],
 		// desktopIcon: [{ required: true, message: "请输入桌面端图标", trigger: "blur" }],
-		desktopRouter: [{ required: true, message: "请输入桌面端路由地址", trigger: "blur" }],
+		// desktopRouter: [{ required: true, message: "请输入桌面端路由地址", trigger: "blur" }],
 		// webIcon: [{ required: true, message: "请输入Web端图标", trigger: "blur" }],
 		webRouter: [{ required: true, message: "请输入Web端路由地址", trigger: "blur" }],
 		webComponent: [{ required: true, message: "请选择Web端组件地址", trigger: "change" }],

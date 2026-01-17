@@ -76,7 +76,9 @@ public class EmployeeService : IDynamicApplication
 
         return data.ToPagedData(sl => new ElSelectorOutput<long>
         {
-            Value = sl.EmployeeId, Label = sl.EmployeeName, Data = new {sl.EmployeeNo, sl.Mobile, sl.IdPhoto}
+            Value = sl.EmployeeId,
+            Label = sl.EmployeeName,
+            Data = new { sl.EmployeeNo, sl.Mobile, sl.IdPhoto }
         });
     }
 
@@ -104,7 +106,6 @@ public class EmployeeService : IDynamicApplication
             .WhereIF(input.AcademicSystem != null, t1 => t1.AcademicSystem == input.AcademicSystem)
             .WhereIF(input.Degree != null, t1 => t1.Degree == input.Degree)
             .WhereIF(input.DepartmentId != null, (t1, t2) => t2.DepartmentId == input.DepartmentId)
-            .OrderByDescending(t1 => t1.CreatedTime)
             .Select((t1, t2) => new QueryEmployeePagedOutput
             {
                 EmployeeId = t1.EmployeeId,
@@ -145,6 +146,7 @@ public class EmployeeService : IDynamicApplication
                 IsPrincipal = t2.IsPrincipal
             })
             .MergeTable()
+            .OrderByDescending(ob => ob.CreatedTime)
             .DataScope()
             .ToPagedListAsync(input);
 
@@ -334,10 +336,10 @@ public class EmployeeService : IDynamicApplication
             EmployeeId = employeeModel.EmployeeId,
             OrgId = organizationModel.OrgId,
             OrgName = organizationModel.OrgName,
-            OrgNames = [..organizationModel.ParentNames, organizationModel.OrgName],
+            OrgNames = [.. organizationModel.ParentNames, organizationModel.OrgName],
             DepartmentId = departmentModel.DepartmentId,
             DepartmentName = departmentModel.DepartmentName,
-            DepartmentNames = [..departmentModel.ParentNames, departmentModel.DepartmentName],
+            DepartmentNames = [.. departmentModel.ParentNames, departmentModel.DepartmentName],
             IsPrimary = true,
             PositionId = positionModel.PositionId,
             PositionName = positionModel.PositionName,
@@ -529,7 +531,9 @@ public class EmployeeService : IDynamicApplication
                 var roleModel = roleList.Single(s => s.RoleId == item.RoleId);
                 employeeRoleList.Add(new EmployeeRoleModel
                 {
-                    EmployeeId = employeeModel.EmployeeId, RoleId = roleModel.RoleId, RoleName = roleModel.RoleName
+                    EmployeeId = employeeModel.EmployeeId,
+                    RoleId = roleModel.RoleId,
+                    RoleName = roleModel.RoleName
                 });
             }
         }
@@ -554,7 +558,7 @@ public class EmployeeService : IDynamicApplication
                 if (principalDepartmentIds.Any())
                 {
                     await _repository.Updateable<EmployeeOrgModel>()
-                        .SetColumns(_ => new EmployeeOrgModel {IsPrincipal = false})
+                        .SetColumns(_ => new EmployeeOrgModel { IsPrincipal = false })
                         .Where(wh => principalDepartmentIds.Contains(wh.DepartmentId))
                         .ExecuteCommandAsync();
                 }
@@ -958,7 +962,7 @@ public class EmployeeService : IDynamicApplication
             if (menuIds.Any())
             {
                 await _repository.Insertable(menuIds
-                        .Select(menuId => new EmployeeMenuModel {EmployeeId = employeeModel.EmployeeId, MenuId = menuId})
+                        .Select(menuId => new EmployeeMenuModel { EmployeeId = employeeModel.EmployeeId, MenuId = menuId })
                         .ToList())
                     .ExecuteCommandAsync();
             }
@@ -972,7 +976,7 @@ public class EmployeeService : IDynamicApplication
             if (buttonIds.Any())
             {
                 await _repository.Insertable(buttonIds
-                        .Select(buttonId => new EmployeeButtonModel {EmployeeId = employeeModel.EmployeeId, ButtonId = buttonId})
+                        .Select(buttonId => new EmployeeButtonModel { EmployeeId = employeeModel.EmployeeId, ButtonId = buttonId })
                         .ToList())
                     .ExecuteCommandAsync();
             }
