@@ -225,8 +225,6 @@ const state = reactive({
 	}),
 	formRules: withDefineType<FormRules>({
 		tenantId: [{ required: true, message: "请选择租户", trigger: "change" }],
-		databaseType: [{ required: true, message: "请选择数据库类型", trigger: "change" }],
-		dbType: [{ required: true, message: "请选择Db类型", trigger: "change" }],
 		publicIp: [{ required: true, message: "请输入公网Ip地址", trigger: "blur" }],
 		intranetIp: [{ required: true, message: "请输入内网Ip地址", trigger: "blur" }],
 		port: [{ required: true, message: "请输入端口号", trigger: "blur" }],
@@ -235,8 +233,6 @@ const state = reactive({
 		dbPwd: [{ required: true, message: "请输入数据库密码", trigger: "blur" }],
 		commandTimeOut: [{ required: true, message: "请输入超时时间", trigger: "blur" }],
 		sugarSqlExecMaxSeconds: [{ required: true, message: "请输入警告时间", trigger: "blur" }],
-		diffLog: [{ required: true, message: "请选择差异日志", trigger: "change" }],
-		disableAop: [{ required: true, message: "请选择禁用Aop", trigger: "change" }],
 	}),
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),

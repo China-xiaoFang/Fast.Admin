@@ -76,7 +76,6 @@ const state = reactive({
 		serviceAgreement: "<p><br></p>",
 	}),
 	formRules: withDefineType<FormRules>({
-		edition: [{ required: true, message: "请选择版本", trigger: "change" }],
 		appName: [{ required: true, message: "请输入应用名称", trigger: "blur" }],
 		themeColor: [{ required: true, message: "请选择主题色", trigger: "blur" }],
 		logoUrl: [{ required: true, message: "请上传Logo", trigger: "change" }],

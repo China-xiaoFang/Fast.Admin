@@ -57,7 +57,6 @@ const state = reactive({
 		roleName: [{ required: true, message: "请输入角色名称", trigger: "blur" }],
 		roleCode: [{ required: true, message: "请输入角色编码", trigger: "blur" }],
 		sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
-		dataScopeType: [{ required: true, message: "请选择数据范围", trigger: "change" }],
 	}),
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),

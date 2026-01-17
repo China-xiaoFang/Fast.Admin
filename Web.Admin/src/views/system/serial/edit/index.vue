@@ -57,9 +57,6 @@ const state = reactive({
 		spacer: SerialSpacerEnum.None,
 	}),
 	formRules: withDefineType<FormRules>({
-		ruleType: [{ required: true, message: "请选择规则类型", trigger: "change" }],
-		dateType: [{ required: true, message: "请选择时间类型", trigger: "change" }],
-		spacer: [{ required: true, message: "请选择分隔符", trigger: "change" }],
 		length: [{ required: true, message: "请输入长度", trigger: "blur" }],
 	}),
 	formDisabled: false,

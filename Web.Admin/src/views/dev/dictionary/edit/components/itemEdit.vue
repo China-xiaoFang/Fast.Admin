@@ -83,10 +83,7 @@ const state = reactive({
 	formRules: withDefineType<FormRules>({
 		label: [{ required: true, message: "请输入字典项名称", trigger: "blur" }],
 		value: [{ required: true, message: "请输入字典项值", trigger: "blur" }],
-		type: [{ required: true, message: "请选择标签类型", trigger: "change" }],
 		order: [{ required: true, message: "请输入排序", trigger: "blur" }],
-		visible: [{ required: true, message: "请选择显示", trigger: "change" }],
-		status: [{ required: true, message: "请选择状态", trigger: "change" }],
 	}),
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),
