@@ -3,7 +3,7 @@
 		<div class="fa__display_lr-r">
 			<ApplicationTree @change="handleApplicationChange" />
 			<FastTable
-				ref="openIdFastTableRef"
+				ref="fastTableRef"
 				tableKey="1D1FCQZ5KT"
 				rowKey="recordId"
 				:requestApi="applicationOpenIdApi.queryApplicationOpenIdPaged"
