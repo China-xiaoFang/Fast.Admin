@@ -46,7 +46,7 @@ public class ApiInfoModel : IDatabaseEntity
     /// 分组名称
     /// </summary>
     [Required]
-    [SugarColumn(ColumnDescription = "分组名称", Length = 20)]
+    [SugarColumn(ColumnDescription = "分组名称", Length = 50)]
     public string GroupName { get; set; }
 
     /// <summary>
@@ -72,7 +72,7 @@ public class ApiInfoModel : IDatabaseEntity
     /// </summary>
     [Required]
     [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "模块名称", Length = 20)]
+    [SugarColumn(ColumnDescription = "模块名称", Length = 50)]
     public string ModuleName { get; set; }
 
     /// <summary>
