@@ -198,7 +198,7 @@ public class PayRecordModel : IUpdateVersion
     /// 创建时间
     /// </summary>
     [Required, SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
-    public DateTime CreatedTime { get; set; }
+    public DateTime? CreatedTime { get; set; }
 
     /// <summary>
     /// 更新时间
