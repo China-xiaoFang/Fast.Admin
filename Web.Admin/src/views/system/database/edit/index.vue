@@ -74,7 +74,7 @@
 				<RadioGroup button name="BooleanEnum" v-model="state.formData.disableAop" />
 			</FaFormItem>
 
-			<FaLayoutGridItem span="2" v-if="state.dialogState !== 'add'" style="min-height: 300px">
+			<FaLayoutGridItem span="2" v-if="state.dialogState !== 'add'" style="min-height: 300px; max-height: 500px">
 				<FaTable rowKey="buttonId" :data="state.formData.slaveDatabaseList" span="2">
 					<!-- 表格按钮操作区域 -->
 					<template #header>
@@ -301,3 +301,11 @@ defineExpose({
 	edit,
 });
 </script>
+
+<style scoped lang="scss">
+.el-table__cell {
+	.el-form-item {
+		margin-bottom: 0;
+	}
+}
+</style>
