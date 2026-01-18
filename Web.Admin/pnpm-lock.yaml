@@ -24,7 +24,7 @@ importers:
         version: 1.0.24(axios@1.13.2)
       '@fast-china/utils':
         specifier: ^1
-        version: 1.0.36(vue@3.5.26(typescript@5.9.3))
+        version: 1.0.37(vue@3.5.26(typescript@5.9.3))
       '@fast-element-plus/icons-vue':
         specifier: ^1
         version: 1.0.22(vue@3.5.26(typescript@5.9.3))
@@ -48,7 +48,7 @@ importers:
         version: 2.13.1(patch_hash=ab4e7ac1898854e02d6d4390c6528141578cd92dff6e0617a215b4e17b215d8e)(vue@3.5.26(typescript@5.9.3))
       fast-element-plus:
         specifier: ^1
-        version: 1.0.11(@element-plus/icons-vue@2.3.2(vue@3.5.26(typescript@5.9.3)))(@fast-china/utils@1.0.36(vue@3.5.26(typescript@5.9.3)))(@fast-element-plus/icons-vue@1.0.22(vue@3.5.26(typescript@5.9.3)))(@types/lodash-es@4.17.12)(element-plus@2.13.1(patch_hash=ab4e7ac1898854e02d6d4390c6528141578cd92dff6e0617a215b4e17b215d8e)(vue@3.5.26(typescript@5.9.3)))(vue@3.5.26(typescript@5.9.3))
+        version: 1.0.12(@element-plus/icons-vue@2.3.2(vue@3.5.26(typescript@5.9.3)))(@fast-china/utils@1.0.37(vue@3.5.26(typescript@5.9.3)))(@fast-element-plus/icons-vue@1.0.22(vue@3.5.26(typescript@5.9.3)))(@types/lodash-es@4.17.12)(element-plus@2.13.1(patch_hash=ab4e7ac1898854e02d6d4390c6528141578cd92dff6e0617a215b4e17b215d8e)(vue@3.5.26(typescript@5.9.3)))(vue@3.5.26(typescript@5.9.3))
       lodash:
         specifier: ^4.17
         version: 4.17.21
@@ -471,8 +471,8 @@ packages:
       eslint: ^9
       prettier: ^3
 
-  '@fast-china/utils@1.0.36':
-    resolution: {integrity: sha512-uTSHcjs2w0Ou2MS6z55DfpJczh5EpeNpaHrr5sDAv+vbJo1ebBIksvMkAXQoHTDMWknOshMN+gXXj9SySeX34A==}
+  '@fast-china/utils@1.0.37':
+    resolution: {integrity: sha512-Qb/ZmZ25XdJEIkhNMXVb0tQxvOQD06HsnCuVNvzFavDXNVfZTfATUvFNi5H2rwfAXGLMruYX4eMQTMVTOTk8kg==}
     peerDependencies:
       vue: ^2 || ^3
 
@@ -1605,8 +1605,8 @@ packages:
   fast-diff@1.3.0:
     resolution: {integrity: sha512-VxPP4NqbUjj6MaAOafWeUn2cXWLcCtljklUtZf0Ind4XQ+QPtmA0b18zZy0jIQx+ExRVCR/ZQpBmik5lXshNsw==}
 
-  fast-element-plus@1.0.11:
-    resolution: {integrity: sha512-giQzNROvmighySQzBQCjTF7n7BDhRhE9QTiszmaxQxAw6YMO0LYrr9pJPT3Mqy6Ai3B18Ydej20O1EJSQIN0Jw==}
+  fast-element-plus@1.0.12:
+    resolution: {integrity: sha512-CEEnpxYHS9DPhdGdiKiVY4xDPTeL1O5670oEkZNId29rvebUNqTu01ZBEsB9qqt1pDwT0RIRtiqzoAJykKwYqA==}
     peerDependencies:
       '@element-plus/icons-vue': ^2.3
       '@fast-china/utils': ^1
@@ -3206,7 +3206,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@fast-china/utils@1.0.36(vue@3.5.26(typescript@5.9.3))':
+  '@fast-china/utils@1.0.37(vue@3.5.26(typescript@5.9.3))':
     dependencies:
       '@types/crypto-js': 4.2.2
       '@types/lodash': 4.17.23
@@ -4537,10 +4537,10 @@ snapshots:
 
   fast-diff@1.3.0: {}
 
-  fast-element-plus@1.0.11(@element-plus/icons-vue@2.3.2(vue@3.5.26(typescript@5.9.3)))(@fast-china/utils@1.0.36(vue@3.5.26(typescript@5.9.3)))(@fast-element-plus/icons-vue@1.0.22(vue@3.5.26(typescript@5.9.3)))(@types/lodash-es@4.17.12)(element-plus@2.13.1(patch_hash=ab4e7ac1898854e02d6d4390c6528141578cd92dff6e0617a215b4e17b215d8e)(vue@3.5.26(typescript@5.9.3)))(vue@3.5.26(typescript@5.9.3)):
+  fast-element-plus@1.0.12(@element-plus/icons-vue@2.3.2(vue@3.5.26(typescript@5.9.3)))(@fast-china/utils@1.0.37(vue@3.5.26(typescript@5.9.3)))(@fast-element-plus/icons-vue@1.0.22(vue@3.5.26(typescript@5.9.3)))(@types/lodash-es@4.17.12)(element-plus@2.13.1(patch_hash=ab4e7ac1898854e02d6d4390c6528141578cd92dff6e0617a215b4e17b215d8e)(vue@3.5.26(typescript@5.9.3)))(vue@3.5.26(typescript@5.9.3)):
     dependencies:
       '@element-plus/icons-vue': 2.3.2(vue@3.5.26(typescript@5.9.3))
-      '@fast-china/utils': 1.0.36(vue@3.5.26(typescript@5.9.3))
+      '@fast-china/utils': 1.0.37(vue@3.5.26(typescript@5.9.3))
       '@fast-element-plus/icons-vue': 1.0.22(vue@3.5.26(typescript@5.9.3))
       '@vueuse/core': 14.1.0(vue@3.5.26(typescript@5.9.3))
       decimal.js: 10.6.0
