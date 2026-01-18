@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 using Fast.Center.Entity;
+using Fast.Center.Enum;
 using Fast.Center.Service.ApplicationOpenId.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -56,7 +57,8 @@ public class ApplicationOpenIdService : IDynamicApplication
         QueryApplicationOpenIdPagedInput input)
     {
         var queryable = _repository.Entities.Includes(e => e.Application);
-        if (!_user.IsSuperAdmin)
+        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
+        if (!_user.IsSuperAdmin && tenantModel.TenantType != TenantTypeEnum.System)
         {
             queryable = queryable.Where(wh => wh.Application.TenantId == _user.TenantId);
         }

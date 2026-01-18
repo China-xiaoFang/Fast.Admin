@@ -37,10 +37,12 @@ namespace Fast.Center.Service.Tenant;
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "tenant")]
 public class TenantService : IDynamicApplication
 {
+    private readonly IUser _user;
     private readonly ISqlSugarRepository<TenantModel> _repository;
 
-    public TenantService(ISqlSugarRepository<TenantModel> repository)
+    public TenantService(IUser user,ISqlSugarRepository<TenantModel> repository)
     {
+        _user = user;
         _repository = repository;
     }
 
@@ -53,7 +55,11 @@ public class TenantService : IDynamicApplication
     [Permission(PermissionConst.Tenant.Paged)]
     public async Task<PagedResult<ElSelectorOutput<long>>> TenantSelector(PagedInput input)
     {
-        var data = await _repository.Entities.OrderBy(ob => ob.TenantName)
+        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
+
+        var data = await _repository.Entities
+            .WhereIF(tenantModel.TenantType == TenantTypeEnum.Common, wh => wh.TenantId == _user.TenantId)
+            .OrderBy(ob => ob.TenantName)
             .Select(sl => new
             {
                 sl.TenantId,
