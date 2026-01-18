@@ -174,10 +174,16 @@ onLaunch(async (options) => {
 	configStore.initTheme();
 
 	// Launch
-	await appStore.launch().catch((error) => {
-		consoleError("Launcher", "launch接口异常");
-		consoleError("Launcher", error);
-	});
+	appStore
+		.launch()
+		.catch((error) => {
+			consoleError("Launcher", "launch接口异常");
+			consoleError("Launcher", error);
+		})
+		.finally(() => {
+			const configStore = useConfig();
+			configStore.setTheme(appStore.themeColor);
+		});
 
 	// #ifdef MP-WEIXIN
 	checkMiniAppVersion();

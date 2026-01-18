@@ -2,7 +2,6 @@ import { reactive, ref, toRefs } from "vue";
 import { useFastAxios } from "@fast-china/axios";
 import { Local, consoleError, consoleLog, useIdentity } from "@fast-china/utils";
 import { defineStore } from "pinia";
-import { useConfig } from "../config";
 import type { LaunchOutput } from "@/api/services/app/models/LaunchOutput";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
@@ -146,9 +145,6 @@ export const useApp = defineStore(
 
 				// 处理数据字典
 				await setDictionary();
-
-				const configStore = useConfig();
-				configStore.setTheme(state.themeColor);
 			}
 		};
 
@@ -162,7 +158,7 @@ export const useApp = defineStore(
 			if (isAll) {
 				result.unshift({
 					label: "全部",
-					value: 0,
+					value: null,
 				});
 			}
 			return result;

@@ -50,7 +50,7 @@
 						type="date"
 						label="时间"
 						v-model="state.searchTimeList"
-						:defaultValue="dateUtil.getDefaultTime().map((m) => m.getTime())"
+						:defaultValue="dateUtil.getDefaultTime(props.futureSearchTime).map((m) => m.getTime())"
 						alignRight
 						@confirm="handleDateTimeConfirm"
 					/>
@@ -121,6 +121,8 @@ const props = defineProps({
 	},
 	/** @description 隐藏搜索时间 */
 	hideSearchTime: Boolean,
+	/** @description 未来搜索时间 */
+	futureSearchTime: Boolean,
 });
 
 const emit = defineEmits({
@@ -213,31 +215,60 @@ const handleFilterClick = () => {
 const getDateTime = (dataRange: FaTableDataRange | "custom") => {
 	const end = new Date();
 	const start = new Date();
-	switch (dataRange) {
-		case "Past1D":
-			start.setDate(start.getDate() - 1);
-			break;
-		case "Past3D":
-			start.setDate(start.getDate() - 3);
-			break;
-		case "Past1W":
-			start.setDate(start.getDate() - 7);
-			break;
-		case "Past1M":
-			start.setMonth(start.getMonth() - 1);
-			break;
-		case "Past3M":
-			start.setMonth(start.getMonth() - 3);
-			break;
-		case "Past6M":
-			start.setMonth(start.getMonth() - 6);
-			break;
-		case "Past1Y":
-			start.setFullYear(start.getFullYear() - 1);
-			break;
-		case "Past3Y":
-			start.setFullYear(start.getFullYear() - 3);
-			break;
+	if (props.futureSearchTime) {
+		switch (dataRange) {
+			case "Past1D":
+				end.setDate(end.getDate() + 1);
+				break;
+			case "Past3D":
+				end.setDate(end.getDate() + 3);
+				break;
+			case "Past1W":
+				end.setDate(end.getDate() + 7);
+				break;
+			case "Past1M":
+				end.setMonth(end.getMonth() + 1);
+				break;
+			case "Past3M":
+				end.setMonth(end.getMonth() + 3);
+				break;
+			case "Past6M":
+				end.setMonth(end.getMonth() + 6);
+				break;
+			case "Past1Y":
+				end.setFullYear(end.getFullYear() + 1);
+				break;
+			case "Past3Y":
+				end.setFullYear(end.getFullYear() + 3);
+				break;
+		}
+	} else {
+		switch (dataRange) {
+			case "Past1D":
+				start.setDate(start.getDate() - 1);
+				break;
+			case "Past3D":
+				start.setDate(start.getDate() - 3);
+				break;
+			case "Past1W":
+				start.setDate(start.getDate() - 7);
+				break;
+			case "Past1M":
+				start.setMonth(start.getMonth() - 1);
+				break;
+			case "Past3M":
+				start.setMonth(start.getMonth() - 3);
+				break;
+			case "Past6M":
+				start.setMonth(start.getMonth() - 6);
+				break;
+			case "Past1Y":
+				start.setFullYear(start.getFullYear() - 1);
+				break;
+			case "Past3Y":
+				start.setFullYear(start.getFullYear() - 3);
+				break;
+		}
 	}
 	return {
 		start,
