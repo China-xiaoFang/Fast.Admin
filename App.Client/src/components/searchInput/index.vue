@@ -146,31 +146,31 @@ const emit = defineEmits({
 
 const dataSearchRangeList: ElSelectorOutput<FaTableDataRange>[] = [
 	{
-		label: "近1天",
+		label: props.futureSearchTime ? "后1天" : "近1天",
 		value: "Past1D",
 	},
 	{
-		label: "近3天",
+		label: props.futureSearchTime ? "后3天" : "近3天",
 		value: "Past3D",
 	},
 	{
-		label: "近1周",
+		label: props.futureSearchTime ? "后1周" : "近1周",
 		value: "Past1W",
 	},
 	{
-		label: "近1月",
+		label: props.futureSearchTime ? "后1月" : "近1月",
 		value: "Past1M",
 	},
 	{
-		label: "近3月",
+		label: props.futureSearchTime ? "后3月" : "近3月",
 		value: "Past3M",
 	},
 	{
-		label: "近6月",
+		label: props.futureSearchTime ? "后6月" : "近6月",
 		value: "Past6M",
 	},
 	{
-		label: "近1年",
+		label: props.futureSearchTime ? "后1年" : "近1年",
 		value: "Past1Y",
 	},
 ];
