@@ -64,6 +64,8 @@ public class LogContext
                 BizId = logDto.BizId,
                 BizNo = logDto.BizNo,
                 Description = logDto.Description?.GetNVarcharMaxLen(500, true),
+                DepartmentId = _user.DepartmentId,
+                DepartmentName = _user.DepartmentName,
                 CreatedUserId = _user.UserId,
                 CreatedUserName = _user.EmployeeName,
                 CreatedTime = DateTime.Now
