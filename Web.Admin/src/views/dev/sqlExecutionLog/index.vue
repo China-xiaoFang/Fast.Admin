@@ -3,7 +3,7 @@
 		<FastTable ref="fastTableRef" tableKey="1D11PB3CXH" rowKey="recordId" :requestApi="sqlExecutionLogApi.querySqlExecutionLogPaged" stripe>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
+				<el-button v-if="userInfoStore.isSuperAdmin" plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
 			</template>
 
 			<template #mobile="{ row }: { row?: SqlExecutionLogModel }">
@@ -103,10 +103,13 @@ import { Delete } from "@element-plus/icons-vue";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 import { FastTableInstance } from "@/components";
 import { dateUtil } from "@fast-china/utils";
+import { useUserInfo } from "@/stores";
 
 defineOptions({
 	name: "DevSqlExecutionLog",
 });
+
+const userInfoStore = useUserInfo();
 
 const fastTableRef = ref<FastTableInstance>();
 

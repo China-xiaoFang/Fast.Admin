@@ -117,7 +117,7 @@ public class AddSchedulerJobInput
     /// <summary>
     /// 邮件消息
     /// </summary>
-    [EnumRequired(ErrorMessage = "邮件消息不能为空", AllowZero = true)]
+    [EnumRequired(ErrorMessage = "邮件消息不能为空", AllowZero = true, FlagEnum = true)]
     public MailMessageEnum MailMessage { get; set; } = MailMessageEnum.Error;
 
     /// <summary>

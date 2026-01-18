@@ -3,7 +3,7 @@
 		<FastTable ref="fastTableRef" tableKey="1D1K2Z66L4" rowKey="recordId" :requestApi="visitLogApi.queryVisitLogPaged" stripe>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
+				<el-button v-if="userInfoStore.isSuperAdmin" plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
 			</template>
 
 			<template #mobile="{ row }: { row?: VisitLogModel }">
@@ -40,6 +40,7 @@
 import { visitLogApi } from "@/api/services/visitLog";
 import { VisitLogModel } from "@/api/services/visitLog/models/VisitLogModel";
 import { FastTableInstance } from "@/components";
+import { useUserInfo } from "@/stores";
 import { Delete } from "@element-plus/icons-vue";
 import { dateUtil } from "@fast-china/utils";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
@@ -48,6 +49,8 @@ import { ref } from "vue";
 defineOptions({
 	name: "SystemVisitLog",
 });
+
+const userInfoStore = useUserInfo();
 
 const fastTableRef = ref<FastTableInstance>();
 

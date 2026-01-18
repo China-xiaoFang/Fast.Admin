@@ -254,7 +254,7 @@
 									支持任何全局组件，如没有选项，请自行在代码中添加(src\views\dev\tableConfig\config\components\advancedConfig.vue)
 								</el-text>
 							</template>
-							<el-radio-group v-model="state.formData.searchEl">
+							<el-radio-group v-model="state.formData.searchEl" class="pr30" style="width: auto">
 								<el-radio value="">无</el-radio>
 								<el-radio value="el-input">输入框</el-radio>
 								<el-radio value="el-input-number">数字输入框</el-radio>
@@ -272,6 +272,7 @@
 								<el-radio value="AccountSelectPage">账号</el-radio>
 								<el-radio value="EmployeeSelectPage">职员</el-radio>
 							</el-radio-group>
+							<el-input v-model="state.formData.searchEl" placeholder="请输入搜索项" style="width: auto" />
 						</el-form-item>
 
 						<el-row :gutter="24">

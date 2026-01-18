@@ -3,7 +3,7 @@
 		<FastTable ref="fastTableRef" tableKey="1D11BD21TV" rowKey="recordId" :requestApi="sqlDiffLogApi.querySqlDiffLogPaged" stripe>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
+				<el-button v-if="userInfoStore.isSuperAdmin" plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
 			</template>
 
 			<template #mobile="{ row }: { row?: SqlDiffLogModel }">
@@ -153,6 +153,7 @@
 import { sqlDiffLogApi } from "@/api/services/sqlDiffLog";
 import { SqlDiffLogModel } from "@/api/services/sqlDiffLog/models/SqlDiffLogModel";
 import { FastTableInstance } from "@/components";
+import { useUserInfo } from "@/stores";
 import { Delete } from "@element-plus/icons-vue";
 import { dateUtil } from "@fast-china/utils";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
@@ -161,6 +162,8 @@ import { reactive, ref } from "vue";
 defineOptions({
 	name: "DevSqlDiffLog",
 });
+
+const userInfoStore = useUserInfo();
 
 const fastTableRef = ref<FastTableInstance>();
 

@@ -24,7 +24,6 @@
 			<FaFormItem prop="parentId" label="父级">
 				<FaTreeSelect
 					:requestApi="departmentApi.departmentSelector"
-					:disabled="!state.formData?.orgId"
 					:initParam="state.formData.orgId"
 					v-model="state.formData.parentId"
 					v-model:label="state.formData.parentName"

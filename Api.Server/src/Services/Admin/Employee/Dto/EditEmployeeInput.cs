@@ -52,6 +52,8 @@ public class EditEmployeeInput : UpdateVersionInput
     /// <summary>
     /// 邮箱
     /// </summary>
+    [StringRequired(ErrorMessage = "邮箱不能为空")]
+    [RegularExpression(RegexConst.EmailAddress, ErrorMessage = "邮箱格式不正确")]
     public string Email { get; set; }
 
     /// <summary>

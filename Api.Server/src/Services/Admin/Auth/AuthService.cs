@@ -263,7 +263,7 @@ public class AuthService : IDynamicApplication
                 .WhereIF(hasDesktop, wh => wh.HasDesktop)
                 .WhereIF(hasWeb, wh => wh.HasWeb)
                 .WhereIF(hasMobile, wh => wh.HasMobile);
-            if (!_user.IsAdmin)
+            if (!_user.IsAdmin && roleList.All(a => a.RoleType != RoleTypeEnum.Admin))
             {
                 // 查询当前用户角色对应的按钮Id
                 var roleButtonIds = await _empRepository.Queryable<RoleButtonModel>()

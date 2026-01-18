@@ -27,10 +27,6 @@ export enum WeekEnum {
    */
   Friday = 16,
   /**
-   * Workday
-   */
-  Workday = 31,
-  /**
    * 星期六
    */
   Saturday = 32,
@@ -38,12 +34,4 @@ export enum WeekEnum {
    * 星期日
    */
   Sunday = 64,
-  /**
-   * DayOff
-   */
-  DayOff = 96,
-  /**
-   * All
-   */
-  All = 127,
 }

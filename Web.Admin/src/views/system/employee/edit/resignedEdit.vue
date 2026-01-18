@@ -6,6 +6,7 @@
 					type="date"
 					v-model="state.formData.resignDate"
 					:disabledDate="dateUtil.getDisabledDate"
+					valueFormat="YYYY-MM-DD"
 					placeholder="请选择离职日期"
 				/>
 			</FaFormItem>

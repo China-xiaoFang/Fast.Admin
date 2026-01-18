@@ -57,15 +57,5 @@ public enum MailMessageEnum : byte
     /// <remarks>只有错误日志才发送邮件</remarks>
     [TagType(TagTypeEnum.Danger)]
     [Description("错误")]
-    Error = 4,
-
-    /// <summary>
-    /// 警告，错误
-    /// </summary>
-    WarnAndError = Warn | Error,
-
-    /// <summary>
-    /// 全部
-    /// </summary>
-    All = Info | Warn | Error
+    Error = 4
 }

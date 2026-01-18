@@ -8,11 +8,6 @@
 		clearable
 		moreDetail
 		@change="handleChange"
-		@clear="
-			() => {
-				console.log(1);
-			}
-		"
 	>
 		<template #default="data">
 			<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%">

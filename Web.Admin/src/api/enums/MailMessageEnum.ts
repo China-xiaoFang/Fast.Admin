@@ -18,12 +18,4 @@ export enum MailMessageEnum {
    * 错误
    */
   Error = 4,
-  /**
-   * WarnAndError
-   */
-  WarnAndError = 6,
-  /**
-   * All
-   */
-  All = 7,
 }
