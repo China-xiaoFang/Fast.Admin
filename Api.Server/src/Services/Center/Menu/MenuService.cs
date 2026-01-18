@@ -285,10 +285,10 @@ public class MenuService : IDynamicApplication
     [Permission(PermissionConst.Menu.Edit)]
     public async Task EditMenu(EditMenuInput input)
     {
-        var buttonIds = input.ButtonList.Select(sl => sl.ButtonId)
+        var buttonCodes = input.ButtonList.Select(sl => sl.ButtonCode)
             .Distinct()
             .ToList();
-        if (buttonIds.Count != input.ButtonList.Count)
+        if (buttonCodes.Count != input.ButtonList.Count)
         {
             throw new UserFriendlyException("按钮重复！");
         }
