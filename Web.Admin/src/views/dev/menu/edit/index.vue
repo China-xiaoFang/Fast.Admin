@@ -135,7 +135,7 @@
 				<FaLayoutGridItem span="2">
 					<el-divider contentPosition="left">按钮</el-divider>
 				</FaLayoutGridItem>
-				<FaLayoutGridItem span="2" style="min-height: 300px">
+				<FaLayoutGridItem span="2" style="min-height: 300px; max-height: 500px">
 					<FaTable rowKey="buttonId" :data="state.formData.buttonList">
 						<!-- 表格按钮操作区域 -->
 						<template #header>
@@ -425,3 +425,11 @@ defineExpose({
 	edit,
 });
 </script>
+
+<style scoped lang="scss">
+.el-table__cell {
+	.el-form-item {
+		margin-bottom: 0;
+	}
+}
+</style>

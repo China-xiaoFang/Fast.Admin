@@ -197,8 +197,8 @@
 				<FaLayoutGridItem span="3">
 					<el-divider contentPosition="left">组织架构</el-divider>
 				</FaLayoutGridItem>
-				<FaLayoutGridItem span="3" style="min-height: 300px">
-					<FaTable :data="state.formData.orgList">
+				<FaLayoutGridItem span="3" style="min-height: 300px; max-height: 500px">
+					<FaTable :data="state.formData.orgList" :pagination="false">
 						<!-- 表格按钮操作区域 -->
 						<template #header>
 							<el-button type="primary" :icon="Plus" @click="handleOrgAdd">新增</el-button>
@@ -445,3 +445,11 @@ defineExpose({
 	edit,
 });
 </script>
+
+<style scoped lang="scss">
+.el-table__cell {
+	.el-form-item {
+		margin-bottom: 0;
+	}
+}
+</style>

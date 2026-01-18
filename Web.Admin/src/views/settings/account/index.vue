@@ -147,8 +147,8 @@
 						</el-checkbox-group>
 					</FaFormItem>
 
-					<FaLayoutGridItem span="3" style="min-height: 300px">
-						<FaTable :data="state.employeeFormData.orgList" :headerCard="false">
+					<FaLayoutGridItem span="3" style="min-height: 300px; max-height: 500px">
+						<FaTable :data="state.employeeFormData.orgList" :pagination="false" :headerCard="false">
 							<FaTableColumn prop="orgName" label="机构" width="280" />
 							<FaTableColumn prop="departmentName" label="部门" width="280" />
 							<FaTableColumn prop="isPrimary" label="主部门" width="80" tag :enum="appStore.getDictionary('BooleanEnum')" />

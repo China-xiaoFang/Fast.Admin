@@ -1,5 +1,5 @@
 <template>
-	<FaTable :data="modelValue" :pagination="false" hideSearchTime>
+	<FaTable :data="modelValue" :pagination="false">
 		<!-- 表格按钮操作区域 -->
 		<template #header>
 			<el-button type="primary" :icon="Plus" @click="handleTableRowAdd">新增字段</el-button>
