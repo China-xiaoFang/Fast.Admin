@@ -34,33 +34,33 @@ public enum PaymentStatusEnum : byte
     /// </summary>
     [TagType(TagTypeEnum.Info)]
     [Description("待支付")]
-    Unpaid = 0,
+    Unpaid = 1,
 
     /// <summary>
     /// 已支付
     /// </summary>
     [TagType(TagTypeEnum.Success)]
     [Description("已支付")]
-    Paid = 1,
+    Paid = 2,
 
     /// <summary>
     /// 已关闭
     /// </summary>
     [TagType(TagTypeEnum.Info)]
     [Description("已关闭")]
-    Closed = 2,
+    Closed = 4,
 
     /// <summary>
     /// 已退款
     /// </summary>
     [TagType(TagTypeEnum.Danger)]
     [Description("已退款")]
-    Refunded = 4,
+    Refunded = 8,
 
     /// <summary>
     /// 部分退款
     /// </summary>
     [TagType(TagTypeEnum.Warning)]
     [Description("部分退款")]
-    PartRefunded = 8
+    PartRefunded = 16
 }
