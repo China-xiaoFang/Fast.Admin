@@ -75,22 +75,7 @@ public enum WeekEnum
     /// 星期日
     /// </summary>
     [Description("星期日")]
-    Sunday = 64,
-
-    /// <summary>
-    /// 全部
-    /// </summary>
-    All = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday,
-
-    /// <summary>
-    /// 工作日
-    /// </summary>
-    Workday = Monday | Tuesday | Wednesday | Thursday | Friday,
-
-    /// <summary>
-    /// 休息日
-    /// </summary>
-    DayOff = Saturday | Sunday
+    Sunday = 64
 }
 
 /// <summary>

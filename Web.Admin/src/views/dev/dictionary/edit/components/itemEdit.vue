@@ -27,8 +27,8 @@
 			</FaFormItem>
 			<FaFormItem prop="visible" label="显示">
 				<el-radio-group v-model="state.formData.visible">
-					<el-radio :value="1">显示</el-radio>
-					<el-radio :value="0">隐藏</el-radio>
+					<el-radio :value="true">显示</el-radio>
+					<el-radio :value="false">隐藏</el-radio>
 				</el-radio-group>
 			</FaFormItem>
 			<FaFormItem prop="order" label="排序" tips="从小到大">

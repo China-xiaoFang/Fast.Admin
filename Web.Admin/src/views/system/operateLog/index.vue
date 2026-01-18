@@ -3,7 +3,7 @@
 		<FastTable ref="fastTableRef" tableKey="1D1KHQS53T" rowKey="recordId" :requestApi="operateLogApi.queryOperateLogPaged" stripe>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
-				<el-button plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
+				<el-button v-if="userInfoStore.isAdmin" plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
 			</template>
 
 			<template #mobile="{ row }: { row?: OperateLogModel }">
@@ -40,6 +40,7 @@
 import { operateLogApi } from "@/api/services/operateLog";
 import { OperateLogModel } from "@/api/services/operateLog/models/OperateLogModel";
 import { FastTableInstance } from "@/components";
+import { useUserInfo } from "@/stores";
 import { Delete } from "@element-plus/icons-vue";
 import { dateUtil } from "@fast-china/utils";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
@@ -48,6 +49,8 @@ import { ref } from "vue";
 defineOptions({
 	name: "SystemOperateLog",
 });
+
+const userInfoStore = useUserInfo();
 
 const fastTableRef = ref<FastTableInstance>();
 

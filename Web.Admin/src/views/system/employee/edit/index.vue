@@ -81,6 +81,7 @@
 					type="date"
 					v-model="state.formData.firstWorkDate"
 					:disabledDate="dateUtil.getDisabledDate"
+					valueFormat="YYYY-MM-DD"
 					placeholder="请选择初次工作日期"
 				/>
 			</FaFormItem>
@@ -89,11 +90,18 @@
 					type="date"
 					v-model="state.formData.entryDate"
 					:disabledDate="dateUtil.getDisabledDate"
+					valueFormat="YYYY-MM-DD"
 					placeholder="请选择入职日期"
 				/>
 			</FaFormItem>
 			<FaFormItem prop="birthday" label="生日">
-				<el-date-picker type="date" v-model="state.formData.birthday" :disabledDate="dateUtil.getDisabledDate" placeholder="请选择生日" />
+				<el-date-picker
+					type="date"
+					v-model="state.formData.birthday"
+					:disabledDate="dateUtil.getDisabledDate"
+					valueFormat="YYYY-MM-DD"
+					placeholder="请选择生日"
+				/>
 			</FaFormItem>
 			<FaFormItem prop="idType" label="证件类型">
 				<FaSelect :data="appStore.getDictionary('IdTypeEnum')" v-model="state.formData.idType" placeholder="请选择证件类型" clearable />
@@ -221,7 +229,6 @@
 								>
 									<FaTreeSelect
 										:requestApi="departmentApi.departmentSelector"
-										:disabled="!row?.orgId"
 										:initParam="row.orgId"
 										v-model="row.departmentId"
 										v-model:label="row.departmentName"

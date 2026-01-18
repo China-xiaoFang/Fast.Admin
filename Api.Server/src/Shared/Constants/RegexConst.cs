@@ -32,7 +32,7 @@ public class RegexConst
     /// 账号
     /// </summary>
     /// <remarks>中文、英文、数字包括下划线（6 ~ 20位）</remarks>
-    public const string Account = "/^[\u4E00-\u9FA5A-Za-z0-9_]{6,20}$/";
+    public const string Account = "^[\u4E00-\u9FA5A-Za-z0-9_]{6,20}$";
 
     /// <summary>
     /// 中文
@@ -42,17 +42,17 @@ public class RegexConst
     /// <summary>
     /// Http地址判断
     /// </summary>
-    public const string HttpUrl = "/(http):\\/\\/([\\w.]+\\/?)\\S*/";
+    public const string HttpUrl = "^(http):\\/\\/([\\w.]+\\/?)\\S*$";
 
     /// <summary>
     /// Https地址判断
     /// </summary>
-    public const string HttpsUrl = "/(https):\\/\\/([\\w.]+\\/?)\\S*/";
+    public const string HttpsUrl = "^(https):\\/\\/([\\w.]+\\/?)\\S*$";
 
     /// <summary>
     /// Http或者Https地址判断
     /// </summary>
-    public const string HttpOrHttpsUrl = "/(http|https):\\/\\/([\\w.]+\\/?)\\S*/";
+    public const string HttpOrHttpsUrl = "^(http|https):\\/\\/([\\w.]+\\/?)\\S*$";
 
     /// <summary>
     /// 邮箱地址判断

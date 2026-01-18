@@ -28,8 +28,8 @@
 			smallWidth="80"
 			tag
 			:enum="[
-				{ label: '隐藏', value: 0, type: 'danger' },
-				{ label: '显示', value: 1, type: 'primary' },
+				{ label: '显示', value: true, type: 'primary' },
+				{ label: '隐藏', value: false, type: 'danger' },
 			]"
 		/>
 		<FaTableColumn

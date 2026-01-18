@@ -98,7 +98,7 @@ const state = reactive({
 					async beforeClose(action, instance, done) {
 						await organizationApi.deleteOrganization({ orgId: data.value, rowVersion: data.data?.rowVersion });
 						ElMessage.success("删除成功！");
-						fastTableRef.value?.refresh();
+						orgTreeRef.value?.refresh();
 					},
 				});
 			},

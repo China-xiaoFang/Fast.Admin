@@ -76,9 +76,7 @@ public class EmployeeService : IDynamicApplication
 
         return data.ToPagedData(sl => new ElSelectorOutput<long>
         {
-            Value = sl.EmployeeId,
-            Label = sl.EmployeeName,
-            Data = new { sl.EmployeeNo, sl.Mobile, sl.IdPhoto }
+            Value = sl.EmployeeId, Label = sl.EmployeeName, Data = new {sl.EmployeeNo, sl.Mobile, sl.IdPhoto}
         });
     }
 
@@ -531,15 +529,25 @@ public class EmployeeService : IDynamicApplication
                 var roleModel = roleList.Single(s => s.RoleId == item.RoleId);
                 employeeRoleList.Add(new EmployeeRoleModel
                 {
-                    EmployeeId = employeeModel.EmployeeId,
-                    RoleId = roleModel.RoleId,
-                    RoleName = roleModel.RoleName
+                    EmployeeId = employeeModel.EmployeeId, RoleId = roleModel.RoleId, RoleName = roleModel.RoleName
                 });
             }
         }
 
-        await _repository.Ado.UseTranAsync(async () =>
+        // 开启事务
+        await _repository.Ado.BeginTranAsync();
+        await _centerRepository.Ado.BeginTranAsync();
+        try
         {
+            var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
+                .Where(wh => wh.UserId == employeeModel.EmployeeId)
+                .SingleAsync();
+            if (tenantUserModel != null)
+            {
+                tenantUserModel.EmployeeName = employeeModel.EmployeeName;
+                tenantUserModel.IdPhoto = employeeModel.IdPhoto;
+            }
+
             if (employeeModel.EmployeeId != _user.UserId)
             {
                 // 删除旧的部门数据
@@ -558,7 +566,7 @@ public class EmployeeService : IDynamicApplication
                 if (principalDepartmentIds.Any())
                 {
                     await _repository.Updateable<EmployeeOrgModel>()
-                        .SetColumns(_ => new EmployeeOrgModel { IsPrincipal = false })
+                        .SetColumns(_ => new EmployeeOrgModel {IsPrincipal = false})
                         .Where(wh => principalDepartmentIds.Contains(wh.DepartmentId))
                         .ExecuteCommandAsync();
                 }
@@ -567,10 +575,35 @@ public class EmployeeService : IDynamicApplication
                     .ExecuteCommandAsync();
                 await _repository.Insertable(employeeRoleList)
                     .ExecuteCommandAsync();
+
+                if (tenantUserModel != null)
+                {
+                    tenantUserModel.DepartmentId = employeeOrgList.Single(s => s.IsPrimary)
+                        .DepartmentId;
+                    tenantUserModel.DepartmentName = employeeOrgList.Single(s => s.IsPrimary)
+                        .DepartmentName;
+                }
+            }
+
+            if (tenantUserModel != null)
+            {
+                await _centerRepository.Updateable(tenantUserModel)
+                    .ExecuteCommandAsync();
             }
 
             await _repository.UpdateAsync(employeeModel);
-        }, ex => throw ex);
+
+            // 提交事务
+            await _repository.Ado.CommitTranAsync();
+            await _centerRepository.Ado.CommitTranAsync();
+        }
+        catch
+        {
+            // 回滚事务
+            await _repository.Ado.RollbackTranAsync();
+            await _centerRepository.Ado.RollbackTranAsync();
+            throw;
+        }
 
         // 操作日志
         LogContext.OperateLog(new OperateLogDto
@@ -579,7 +612,7 @@ public class EmployeeService : IDynamicApplication
             OperateType = OperateLogTypeEnum.Organization,
             BizId = employeeModel.EmployeeId,
             BizNo = employeeModel.EmployeeNo,
-            Description = employeeModel.EmployeeName
+            Description = $"编辑职员：{employeeModel.EmployeeName}"
         });
     }
 
@@ -962,7 +995,7 @@ public class EmployeeService : IDynamicApplication
             if (menuIds.Any())
             {
                 await _repository.Insertable(menuIds
-                        .Select(menuId => new EmployeeMenuModel { EmployeeId = employeeModel.EmployeeId, MenuId = menuId })
+                        .Select(menuId => new EmployeeMenuModel {EmployeeId = employeeModel.EmployeeId, MenuId = menuId})
                         .ToList())
                     .ExecuteCommandAsync();
             }
@@ -976,7 +1009,7 @@ public class EmployeeService : IDynamicApplication
             if (buttonIds.Any())
             {
                 await _repository.Insertable(buttonIds
-                        .Select(buttonId => new EmployeeButtonModel { EmployeeId = employeeModel.EmployeeId, ButtonId = buttonId })
+                        .Select(buttonId => new EmployeeButtonModel {EmployeeId = employeeModel.EmployeeId, ButtonId = buttonId})
                         .ToList())
                     .ExecuteCommandAsync();
             }

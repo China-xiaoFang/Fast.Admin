@@ -45,7 +45,14 @@ public class TestDailyLocalJob : ISchedulerJob
             EndTime = null,
             TriggerType = TriggerTypeEnum.Daily,
             Cron = null,
-            Week = WeekEnum.All,
+            Week =
+                WeekEnum.Monday
+                | WeekEnum.Tuesday
+                | WeekEnum.Wednesday
+                | WeekEnum.Thursday
+                | WeekEnum.Friday
+                | WeekEnum.Saturday
+                | WeekEnum.Sunday,
             DailyStartTime = new TimeSpan(0, 0, 0),
             DailyEndTime = new TimeSpan(23, 59, 59),
             IntervalSecond = 60,

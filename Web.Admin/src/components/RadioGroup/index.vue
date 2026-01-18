@@ -5,7 +5,7 @@
 			v-for="(item, index) in dictionaries"
 			:key="index"
 			:value="item.value"
-			:disabled="props.disabled || item.disabled"
+			:disabled="item.disabled === false ? undefined : item.disabled"
 		>
 			{{ item.label }}
 		</ElRadio>
@@ -14,7 +14,7 @@
 			v-for="(item, index) in dictionaries"
 			:key="index"
 			:value="item.value"
-			:disabled="props.disabled || item.disabled"
+			:disabled="item.disabled === false ? undefined : item.disabled"
 			border
 		>
 			{{ item.label }}
@@ -63,5 +63,5 @@ const modelValue = useVModel(props, "modelValue", emit);
 
 const appStore = useApp();
 /** 字典 */
-const dictionaries = computed(() => (props.name ? appStore.getDictionary(props.name) : []));
+const dictionaries = computed(() => (props.name ? appStore.getDictionary(props.name).filter((f) => f.show) : []));
 </script>

@@ -23,6 +23,7 @@
 						type="date"
 						v-model="state.accountFormData.birthday"
 						:disabledDate="dateUtil.getDisabledDate"
+						valueFormat="YYYY-MM-DD"
 						placeholder="请选择生日"
 					/>
 				</FaFormItem>
@@ -60,6 +61,7 @@
 							type="date"
 							v-model="state.employeeFormData.birthday"
 							:disabledDate="dateUtil.getDisabledDate"
+							valueFormat="YYYY-MM-DD"
 							placeholder="请选择生日"
 						/>
 					</FaFormItem>
@@ -149,10 +151,10 @@
 						<FaTable :data="state.employeeFormData.orgList" :headerCard="false">
 							<FaTableColumn prop="orgName" label="机构" width="280" />
 							<FaTableColumn prop="departmentName" label="部门" width="280" />
-							<FaTableColumn prop="isPrimary" label="主部门" width="80" tag enum="BooleanEnum" />
+							<FaTableColumn prop="isPrimary" label="主部门" width="80" tag :enum="appStore.getDictionary('BooleanEnum')" />
 							<FaTableColumn prop="positionName" label="职位" width="280" />
 							<FaTableColumn prop="jobLevelName" label="职级" width="280" />
-							<FaTableColumn prop="isPrincipal" label="负责人" width="80" tag enum="BooleanEnum" />
+							<FaTableColumn prop="isPrincipal" label="负责人" width="80" tag :enum="appStore.getDictionary('BooleanEnum')" />
 						</FaTable>
 					</FaLayoutGridItem>
 				</FaForm>
