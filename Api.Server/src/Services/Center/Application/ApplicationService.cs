@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 using Fast.Center.Entity;
+using Fast.Center.Enum;
 using Fast.Center.Service.Application.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,7 +53,8 @@ public class ApplicationService : IDynamicApplication
     public async Task<List<ElSelectorOutput<long>>> ApplicationSelector()
     {
         var queryable = _repository.Entities;
-        if (!_user.IsSuperAdmin)
+        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
+        if (!_user.IsSuperAdmin && tenantModel.TenantType != TenantTypeEnum.System)
         {
             queryable = queryable.Where(wh => wh.TenantId == _user.TenantId);
         }
@@ -86,7 +88,8 @@ public class ApplicationService : IDynamicApplication
     public async Task<PagedResult<QueryApplicationPagedOutput>> QueryApplicationPaged(QueryApplicationPagedInput input)
     {
         var queryable = _repository.Entities;
-        if (!_user.IsSuperAdmin)
+        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
+        if (!_user.IsSuperAdmin && tenantModel.TenantType != TenantTypeEnum.System)
         {
             queryable = queryable.Where(wh => wh.TenantId == _user.TenantId);
         }
