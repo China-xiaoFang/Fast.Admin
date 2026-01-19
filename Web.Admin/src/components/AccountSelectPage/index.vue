@@ -51,10 +51,10 @@ const emit = defineEmits({
 	change: (value: ElSelectorOutput<number | string>) => true,
 });
 
-const modelValue = useVModel(props, "modelValue", emit);
-const mobile = useVModel(props, "mobile", emit);
-const email = useVModel(props, "email", emit);
-const accountKey = useVModel(props, "accountKey", emit);
+const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+const mobile = useVModel(props, "mobile", emit, { passive: true });
+const email = useVModel(props, "email", emit, { passive: true });
+const accountKey = useVModel(props, "accountKey", emit, { passive: true });
 
 const handleChange = (value: ElSelectorOutput<number | string>) => {
 	if (value) {

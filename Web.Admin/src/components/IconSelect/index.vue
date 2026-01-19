@@ -59,5 +59,5 @@ const iconList = withDefineType<ElSelectorOutput<string>[]>([
 	},
 ]);
 
-const modelValue = useVModel(props, "modelValue", emit);
+const modelValue = useVModel(props, "modelValue", emit, { passive: true });
 </script>

@@ -11,6 +11,7 @@ declare module "@vue/runtime-core" {
 		AccountSelectPage: (typeof import("../src/components/AccountSelectPage/index.vue"))["default"];
 		ApplicationSelect: (typeof import("../src/components/ApplicationSelect/index.vue"))["default"];
 		ApplicationTree: (typeof import("../src/components/ApplicationTree/index.vue"))["default"];
+		CitySelect: (typeof import("../src/components/CitySelect/index.vue"))["default"];
 		ColorPicker: (typeof import("../src/components/ColorPicker/index.vue"))["default"];
 		Editor: (typeof import("../src/components/Editor/index.vue"))["default"];
 		EmployeeDialogSelect: (typeof import("../src/components/EmployeeDialogSelect/index.vue"))["default"];
@@ -21,7 +22,9 @@ declare module "@vue/runtime-core" {
 		Loading: (typeof import("../src/components/Loading/index.vue"))["default"];
 		MerchantSelect: (typeof import("../src/components/MerchantSelect/index.vue"))["default"];
 		ModuleSelect: (typeof import("../src/components/ModuleSelect/index.vue"))["default"];
+		ProvinceSelect: (typeof import("../src/components/ProvinceSelect/index.vue"))["default"];
 		RadioGroup: (typeof import("../src/components/RadioGroup/index.vue"))["default"];
+		RegionSelect: (typeof import("../src/components/RegionSelect/index.vue"))["default"];
 		Tag: (typeof import("../src/components/Tag/index.vue"))["default"];
 		TenantSelectPage: (typeof import("../src/components/TenantSelectPage/index.vue"))["default"];
 		Tendril: (typeof import("../src/components/Tendril/index.vue"))["default"];

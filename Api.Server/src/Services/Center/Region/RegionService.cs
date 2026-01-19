@@ -59,7 +59,8 @@ public class RegionService : IDynamicApplication
                 sl.AreaCode,
                 sl.PostalCode,
                 sl.Latitude,
-                sl.Longitude
+                sl.Longitude,
+                sl.FullRegionName
             })
             .ToListAsync();
 
@@ -74,7 +75,8 @@ public class RegionService : IDynamicApplication
                     sl.AreaCode,
                     sl.PostalCode,
                     sl.Latitude,
-                    sl.Longitude
+                    sl.Longitude,
+                    sl.FullRegionName
                 }
             })
             .ToList()
@@ -98,7 +100,8 @@ public class RegionService : IDynamicApplication
                 sl.RegionCode,
                 sl.RegionName,
                 sl.Latitude,
-                sl.Longitude
+                sl.Longitude,
+                sl.FullRegionName
             })
             .ToListAsync();
 
@@ -107,7 +110,7 @@ public class RegionService : IDynamicApplication
                 Value = sl.RegionId,
                 Label = sl.RegionName,
                 ParentId = sl.ParentId,
-                Data = new {sl.RegionCode, sl.Latitude, sl.Longitude}
+                Data = new {sl.RegionCode, sl.Latitude, sl.Longitude, sl.FullRegionName}
             })
             .ToList()
             .Build();
@@ -133,7 +136,8 @@ public class RegionService : IDynamicApplication
                 sl.AreaCode,
                 sl.PostalCode,
                 sl.Latitude,
-                sl.Longitude
+                sl.Longitude,
+                sl.FullRegionName
             })
             .ToListAsync();
 
@@ -148,7 +152,8 @@ public class RegionService : IDynamicApplication
                     sl.AreaCode,
                     sl.PostalCode,
                     sl.Latitude,
-                    sl.Longitude
+                    sl.Longitude,
+                    sl.FullRegionName
                 }
             })
             .ToList()
