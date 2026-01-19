@@ -80,7 +80,7 @@ const emit = defineEmits({
 // 编辑器实例，必须用 shallowRef，重要！
 const editorRef = shallowRef<IDomEditor>();
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+const modelValue = useVModel(props, "modelValue", emit, { passive: false });
 
 // 获取 el-form 组件上下文
 const formContext = inject(formContextKey, undefined);

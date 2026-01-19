@@ -46,7 +46,7 @@ const emit = defineEmits({
 	change: (data: QueryEmployeePagedOutput) => true,
 });
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+const modelValue = useVModel(props, "modelValue", emit, { passive: false });
 const employeeName = useVModel(props, "employeeName", emit, { passive: true });
 const employeeNo = useVModel(props, "employeeNo", emit, { passive: true });
 const mobile = useVModel(props, "mobile", emit, { passive: true });
