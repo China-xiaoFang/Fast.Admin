@@ -73,17 +73,6 @@ export const getCdnModules = (viteDev: boolean): CdnImportOptions["modules"] => 
 		path: "dist/browser/signalr.min.js",
 	},
 	{
-		name: "@wangeditor/editor",
-		var: "WangEditor",
-		path: "dist/index.js",
-		css: "dist/css/style.css",
-	},
-	{
-		name: "@wangeditor/editor-for-vue",
-		var: "WangEditorVue",
-		path: "dist/index.js",
-	},
-	{
 		name: "nprogress",
 		var: "NProgress",
 		path: "nprogress.js",
