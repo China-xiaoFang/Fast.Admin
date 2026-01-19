@@ -283,9 +283,8 @@ public class AuthService : IDynamicApplication
                 buttonQueryable = buttonQueryable.Where(wh => buttonIds.Contains(wh.ButtonId));
             }
 
-            result.ButtonCodeList = await buttonQueryable.InnerJoin(menuQueryable.Clone(), (t1, t2) => t1.MenuId == t2.MenuId)
-                .OrderBy(t1 => t1.Sort)
-                .Select(t1 => t1.ButtonCode)
+            result.ButtonCodeList = await buttonQueryable.OrderBy(ob => ob.Sort)
+                .Select(sl => sl.ButtonCode)
                 .ToListAsync();
         }
 
