@@ -72,6 +72,7 @@ const initWebSocket = async (): Promise<void> => {
 						type: "error",
 						position: "top-right",
 					});
+					consoleWarn("WebSocket", "服务器已断线...");
 					if (!reLoadingInstance) {
 						reLoadingInstance = ElLoading.service({
 							fullscreen: true,
@@ -90,65 +91,50 @@ const initWebSocket = async (): Promise<void> => {
 					ElMessage.success("服务重连成功");
 					consoleWarn("WebSocket", "服务重连成功...");
 				});
+			}
 
-				loadingInstance = ElLoading.service({
-					fullscreen: true,
-					lock: true,
-					text: "服务连接中...",
-					background: "rgba(0, 0, 0, 0.7)",
+			loadingInstance = ElLoading.service({
+				fullscreen: true,
+				lock: true,
+				text: "服务连接中...",
+				background: "rgba(0, 0, 0, 0.7)",
+			});
+
+			// 连接成功监听
+			connection.on("ConnectSuccess", async () => {
+				loadingInstance?.close();
+				ElNotification({
+					message: `服务连接成功`,
+					type: "success",
+					duration: 1000,
 				});
+				consoleLog("WebSocket", "服务连接成功...", userInfoStore.employeeName);
 
-				/**
-				 * 开始连接
-				 */
-				await connection.start();
-
-				// 移除连接成功监听
-				await connection.off("ConnectSuccess");
-
-				// 连接成功监听
-				connection.on("ConnectSuccess", async () => {
-					loadingInstance?.close();
+				try {
+					loadingInstance = ElLoading.service({
+						fullscreen: true,
+						lock: true,
+						text: "系统连接中...",
+						background: "rgba(0, 0, 0, 0.7)",
+					});
+					// WebSocket 登录
+					await connection.invoke("Login");
 					ElNotification({
-						message: `服务连接成功`,
+						message: `系统连接成功`,
 						type: "success",
 						duration: 1000,
 					});
-					consoleLog("WebSocket", "服务连接成功...", userInfoStore.employeeName);
-
-					try {
-						loadingInstance = ElLoading.service({
-							fullscreen: true,
-							lock: true,
-							text: "系统连接中...",
-							background: "rgba(0, 0, 0, 0.7)",
-						});
-						// WebSocket 登录
-						await connection.invoke("Login");
-						ElNotification({
-							message: `系统连接成功`,
-							type: "success",
-							duration: 1000,
-						});
-						consoleLog("WebSocket", "系统连接成功...");
-					} catch (error) {
-						consoleError("WebSocket", error);
-						throw error;
-					} finally {
-						loadingInstance?.close();
-					}
-				});
-			}
-
-			// 移除登录失败监听
-			await connection.off("LoginFail");
-			// 移除其他地方登录监听
-			await connection.off("ElsewhereLogin");
-			// 移除强制下线监听
-			await connection.off("ForceOffline");
+					consoleLog("WebSocket", "系统连接成功...");
+				} catch (error) {
+					consoleError("WebSocket", error);
+					throw error;
+				} finally {
+					loadingInstance?.close();
+				}
+			});
 
 			// 登录失败监听
-			await connection.on("LoginFail", async (message: string) => {
+			connection.on("LoginFail", async (message: string) => {
 				userInfoStore.logoutClear();
 				ElMessageBox.alert(message, {
 					type: "warning",
@@ -156,7 +142,7 @@ const initWebSocket = async (): Promise<void> => {
 			});
 
 			// 其他地方登录监听
-			await connection.on("ElsewhereLogin", async (data: TenantOnlineUserModel) => {
+			connection.on("ElsewhereLogin", async (data: TenantOnlineUserModel) => {
 				consoleWarn("WebSocket", "其他地方登录", data);
 
 				const message = `账号于【${dayjs(data.lastLoginTime).format("YYYY-MM-DD HH:mm:ss")}】在【${data.lastLoginOS} ${data.lastLoginBrowser}(${
@@ -171,7 +157,7 @@ const initWebSocket = async (): Promise<void> => {
 			});
 
 			// 强制下线监听
-			await connection.on(
+			connection.on(
 				"ForceOffline",
 				async (data: { isAdmin: boolean; nickName: string; employeeNo: string; offlineTime: string; message: string }) => {
 					consoleWarn("WebSocket", "强制下线", data);
@@ -196,6 +182,11 @@ const initWebSocket = async (): Promise<void> => {
 					});
 				}
 			);
+
+			/**
+			 * 开始连接
+			 */
+			await connection.start();
 		}
 	} catch (error) {
 		consoleError("WebSocket", error);
