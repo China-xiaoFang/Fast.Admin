@@ -69,6 +69,6 @@ const handleChange = (val: CascaderValue) => {
 };
 
 onMounted(async () => {
-	state.regionList = await regionApi.citySelector();
+	state.regionList = await regionApi.regionSelector();
 });
 </script>
