@@ -39,7 +39,7 @@ const emit = defineEmits({
 	change: (value: ElSelectorOutput<number | string>) => true,
 });
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+const modelValue = useVModel(props, "modelValue", emit);
 const provinceName = useVModel(props, "provinceName", emit, { passive: true });
 const cityName = useVModel(props, "cityName", emit, { passive: true });
 
@@ -54,10 +54,12 @@ const handleChange = (val: CascaderValue) => {
 		provinceName.value = provinceInfo.label;
 		const cityInfo = provinceInfo?.children?.find((f) => f.value === value[1]);
 		cityName.value = cityInfo?.label;
+		emit("update:modelValue", value[1]);
 		emit("change", cityInfo);
 	} else {
 		provinceName.value = null;
 		cityName.value = null;
+		emit("update:modelValue", null);
 		emit("change", undefined);
 	}
 };
