@@ -33,6 +33,6 @@ const emit = defineEmits({
 	change: (value: ElSelectorOutput<number | string>) => true,
 });
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+const modelValue = useVModel(props, "modelValue", emit, { passive: false });
 const provinceName = useVModel(props, "provinceName", emit, { passive: true });
 </script>

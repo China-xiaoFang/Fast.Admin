@@ -34,5 +34,5 @@ const predefineColorList = [
 	"#AD6DEF", // 紫色
 ];
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+const modelValue = useVModel(props, "modelValue", emit, { passive: false });
 </script>

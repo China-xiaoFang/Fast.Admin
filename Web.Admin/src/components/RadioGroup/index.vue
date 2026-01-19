@@ -59,7 +59,7 @@ const emit = defineEmits({
 	...radioGroupEmits,
 });
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+const modelValue = useVModel(props, "modelValue", emit, { passive: false });
 
 const appStore = useApp();
 /** 字典 */
