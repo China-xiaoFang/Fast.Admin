@@ -1,12 +1,12 @@
 <template>
-	<FaDialog ref="faDialogRef" width="1000" :title="state.dialogTitle" :showConfirmButton="false" confirmButtonText="保存">
+	<FaDialog ref="faDialogRef" width="1000" :title="state.dialogTitle" :showConfirmButton="false">
 		<el-row>
 			<el-col :span="4" style="text-align: center">
 				<FaImage style="height: 100px; width: 100px" :src="state.formData.avatar" />
 			</el-col>
 
 			<el-col :span="20">
-				<FaForm :model="state.formData" disabled detailForm cols="2">
+				<FaForm :model="state.formData" detailForm cols="2">
 					<FaFormItem prop="mobile" label="手机">
 						<el-text type="primary">{{ state.formData.mobile }}</el-text>
 					</FaFormItem>
@@ -41,7 +41,7 @@
 			</el-col>
 		</el-row>
 
-		<FaForm :model="state.formData" disabled detailForm cols="2">
+		<FaForm :model="state.formData" detailForm cols="2">
 			<FaFormItem span="2" labelWidth="0">
 				<el-divider contentPosition="left">初次登录信息</el-divider>
 			</FaFormItem>
