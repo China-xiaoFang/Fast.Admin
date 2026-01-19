@@ -28,7 +28,7 @@
 				<span>Ip：{{ row.ip }}</span>
 				<br />
 				<span>时间：{{ dayjs(row.createdTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
-				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small">
+				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small" class="ml5">
 					{{ dateUtil.dateTimeFix(String(row.createdTime)) }}
 				</el-tag>
 			</template>

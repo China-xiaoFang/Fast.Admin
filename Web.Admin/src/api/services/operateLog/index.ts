@@ -4,7 +4,7 @@ import { OperateLogModel } from "./models/OperateLogModel";
 import { QueryOperateLogPagedInput } from "./models/QueryOperateLogPagedInput";
 
 /**
- * Fast.Center.Service.OperateLog.OperateLogService 操作日志服务Api
+ * Fast.Admin.Service.OperateLog.OperateLogService 操作日志服务Api
  */
 export const operateLogApi = {
   /**

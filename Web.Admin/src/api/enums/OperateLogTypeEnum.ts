@@ -14,8 +14,4 @@ export enum OperateLogTypeEnum {
    * 财务管理
    */
   Finance = "4",
-  /**
-   * 平台管理
-   */
-  Platform = "8",
 }

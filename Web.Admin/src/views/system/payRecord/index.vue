@@ -23,7 +23,7 @@
 				<span>Ip：{{ row.ip }}</span>
 				<br />
 				<span>时间：{{ dayjs(row.createdTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
-				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small">
+				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small" class="ml5">
 					{{ dateUtil.dateTimeFix(String(row.createdTime)) }}
 				</el-tag>
 			</template>
@@ -35,7 +35,7 @@
 				<br />
 				<template v-if="row.paymentTime">
 					<span>时间：{{ dayjs(row.paymentTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
-					<el-tag v-if="row.paymentTime" type="info" round effect="light" size="small">
+					<el-tag v-if="row.paymentTime" type="info" round effect="light" size="small" class="ml5">
 						{{ dateUtil.dateTimeFix(String(row.paymentTime)) }}
 					</el-tag>
 				</template>
@@ -47,7 +47,7 @@
 					<span>金额：￥{{ row.refundAmount.toFixed(2) }}</span>
 					<br />
 					<span>时间：{{ dayjs(row.refundTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
-					<el-tag v-if="row.refundTime" type="info" round effect="light" size="small">
+					<el-tag v-if="row.refundTime" type="info" round effect="light" size="small" class="ml5">
 						{{ dateUtil.dateTimeFix(String(row.refundTime)) }}
 					</el-tag>
 				</template>
@@ -63,7 +63,7 @@
 					<br />
 					<template v-if="row.closeTime">
 						<span>时间：{{ dayjs(row.closeTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
-						<el-tag v-if="row.closeTime" type="info" round effect="light" size="small">
+						<el-tag v-if="row.closeTime" type="info" round effect="light" size="small" class="ml5">
 							{{ dateUtil.dateTimeFix(String(row.closeTime)) }}
 						</el-tag>
 					</template>

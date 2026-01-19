@@ -33,7 +33,7 @@
 				<span>Ip：{{ row.lastLoginIp }}</span>
 				<br />
 				<span>时间：{{ dayjs(row.lastLoginTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
-				<el-tag v-if="row.lastLoginTime" type="info" round effect="light" size="small">
+				<el-tag v-if="row.lastLoginTime" type="info" round effect="light" size="small" class="ml5">
 					{{ dateUtil.dateTimeFix(String(row.lastLoginTime)) }}
 				</el-tag>
 			</template>
