@@ -5,18 +5,18 @@
 			<el-text>v{{ state.appVersion }}</el-text>
 		</div>
 		<div>
-			<a :href="`https://beian.mps.gov.cn/#/query/webSearch?code=${state.publicSecurityCode}`" target="_blank">
+			<a :href="`https://beian.mps.gov.cn/#/query/webSearch?code=${state.publicSecurityCode.replace(/\D+/g, '')}`" target="_blank">
 				<img src="https://www.beian.gov.cn/img/new/gongan.png" />
-				{{ state.publicSecurityText }}
+				{{ state.publicSecurityCode }}
 			</a>
 			<a href="https://beian.miit.gov.cn/" target="_blank">{{ state.icpText }}</a>
 		</div>
 	</template>
 	<template v-else>
 		<a href="http://fastdotnet.com" target="_blank">Copyright © {{ new Date().getFullYear() }} Fast All rights reserved.</a>
-		<a :href="`https://beian.mps.gov.cn/#/query/webSearch?code=${state.publicSecurityCode}`" target="_blank">
+		<a :href="`https://beian.mps.gov.cn/#/query/webSearch?code=${state.publicSecurityCode.replace(/\D+/g, '')}`" target="_blank">
 			<img src="https://www.beian.gov.cn/img/new/gongan.png" />
-			{{ state.publicSecurityText }}
+			{{ state.publicSecurityCode }}
 		</a>
 		<a href="https://beian.miit.gov.cn/" target="_blank">{{ state.icpText }}</a>
 		<el-text>v{{ state.appVersion }}</el-text>
@@ -26,6 +26,7 @@
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { useGlobalSize } from "element-plus";
+import { useApp } from "@/stores";
 
 defineOptions({
 	// eslint-disable-next-line vue/no-reserved-component-names
@@ -33,12 +34,12 @@ defineOptions({
 });
 
 const globalSize = useGlobalSize();
+const appStore = useApp();
 
 const state = reactive({
 	appVersion: import.meta.env.VITE_APP_VERSION,
-	publicSecurityCode: "62090202000584",
-	publicSecurityText: "甘公网安备 62090202000584号",
-	icpText: "陇ICP备2020003856号",
+	publicSecurityCode: appStore.publicSecurityCode,
+	icpText: appStore.icpSecurityCode,
 });
 </script>
 
