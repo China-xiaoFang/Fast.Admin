@@ -4,21 +4,25 @@
 			<a href="http://fastdotnet.com" target="_blank">Copyright © {{ new Date().getFullYear() }} Fast All rights reserved.</a>
 			<el-text>v{{ state.appVersion }}</el-text>
 		</div>
-		<div>
-			<a :href="`https://beian.mps.gov.cn/#/query/webSearch?code=${state.publicSecurityCode.replace(/\D+/g, '')}`" target="_blank">
+		<div v-if="state.publicSecurityCode">
+			<a :href="`https://beian.mps.gov.cn/#/query/webSearch?code=${state.publicSecurityCode?.replace(/\D+/g, '')}`" target="_blank">
 				<img src="https://www.beian.gov.cn/img/new/gongan.png" />
 				{{ state.publicSecurityCode }}
 			</a>
-			<a href="https://beian.miit.gov.cn/" target="_blank">{{ state.icpText }}</a>
+			<a v-if="state.icpText" href="https://beian.miit.gov.cn/" target="_blank">{{ state.icpText }}</a>
 		</div>
 	</template>
 	<template v-else>
 		<a href="http://fastdotnet.com" target="_blank">Copyright © {{ new Date().getFullYear() }} Fast All rights reserved.</a>
-		<a :href="`https://beian.mps.gov.cn/#/query/webSearch?code=${state.publicSecurityCode.replace(/\D+/g, '')}`" target="_blank">
+		<a
+			v-if="state.publicSecurityCode"
+			:href="`https://beian.mps.gov.cn/#/query/webSearch?code=${state.publicSecurityCode?.replace(/\D+/g, '')}`"
+			target="_blank"
+		>
 			<img src="https://www.beian.gov.cn/img/new/gongan.png" />
 			{{ state.publicSecurityCode }}
 		</a>
-		<a href="https://beian.miit.gov.cn/" target="_blank">{{ state.icpText }}</a>
+		<a v-if="state.icpText" href="https://beian.miit.gov.cn/" target="_blank">{{ state.icpText }}</a>
 		<el-text>v{{ state.appVersion }}</el-text>
 	</template>
 </template>
