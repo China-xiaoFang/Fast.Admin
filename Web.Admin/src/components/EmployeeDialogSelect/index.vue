@@ -9,8 +9,8 @@
 		placeholder="请选择职员"
 		@change="handleChange"
 	>
-		<FaTableColumn prop="idPhoto" label="头像" type="image" width="50" smallWidth="50" />
-		<FaTableColumn prop="employeeName" label="名称" width="200" smallWidth="180" sortable />
+		<FaTableColumn prop="idPhoto" label="头像" fixed type="image" width="50" smallWidth="50" />
+		<FaTableColumn prop="employeeName" label="名称" fixed width="200" smallWidth="180" sortable />
 		<FaTableColumn prop="employeeNo" label="工号" width="150" smallWidth="130" sortable />
 		<FaTableColumn prop="mobile" label="手机" width="150" smallWidth="130" sortable />
 		<FaTableColumn prop="departmentName" label="部门" width="150" smallWidth="130" sortable />
@@ -21,8 +21,8 @@
 
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
-import type { ElSelectorOutput } from "fast-element-plus";
 import { employeeApi } from "@/api/services/employee";
+import { QueryEmployeePagedOutput } from "@/api/services/employee/models/QueryEmployeePagedOutput";
 
 defineOptions({
 	name: "EmployeeDialogSelect",
@@ -43,19 +43,19 @@ const emit = defineEmits({
 	"update:employeeName": (value: string) => true,
 	"update:employeeNo": (value: string) => true,
 	"update:mobile": (value: string) => true,
-	change: (value: ElSelectorOutput<number | string>) => true,
+	change: (data: QueryEmployeePagedOutput) => true,
 });
 
-const modelValue = useVModel(props, "modelValue", emit);
-const employeeName = useVModel(props, "employeeName", emit);
-const employeeNo = useVModel(props, "employeeNo", emit);
-const mobile = useVModel(props, "mobile", emit);
+const modelValue = useVModel(props, "modelValue", emit, { passive: true });
+const employeeName = useVModel(props, "employeeName", emit, { passive: true });
+const employeeNo = useVModel(props, "employeeNo", emit, { passive: true });
+const mobile = useVModel(props, "mobile", emit, { passive: true });
 
-const handleChange = (value: ElSelectorOutput<number | string>) => {
-	if (value) {
-		employeeNo.value = value.data.email;
-		mobile.value = value.data.accountKey;
-		emit("change", value);
+const handleChange = (data: QueryEmployeePagedOutput) => {
+	if (data) {
+		employeeNo.value = data.employeeNo;
+		mobile.value = data.mobile;
+		emit("change", data);
 	} else {
 		employeeNo.value = undefined;
 		mobile.value = undefined;
