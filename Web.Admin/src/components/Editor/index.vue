@@ -40,9 +40,7 @@ import { useVModel } from "@vueuse/core";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import type { IDomEditor } from "@wangeditor/editor";
 import { fileApi } from "@/api/services/file";
-if (import.meta.env.DEV) {
-	await import("@wangeditor/editor/dist/css/style.css");
-}
+import "@wangeditor/editor/dist/css/style.css";
 
 defineOptions({
 	name: "Editor",
