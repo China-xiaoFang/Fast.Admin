@@ -165,7 +165,7 @@ public class DatabaseService : IDynamicApplication
     [Permission(PermissionConst.Database.Add)]
     public async Task AddDatabase(AddDatabaseInput input)
     {
-        if (await _repository.AnyAsync(a => a.DatabaseType == input.DatabaseType))
+        if (await _repository.Entities.ClearFilter<IBaseTEntity>().AnyAsync(a => a.TenantId == input.TenantId && a.DatabaseType == input.DatabaseType))
         {
             throw new UserFriendlyException("当前数据库类型已经存在主库信息！");
         }

@@ -223,6 +223,7 @@ public class TenantService : IDynamicApplication
             TenantId = YitIdHelper.NextId(),
             TenantCode = input.TenantCode,
             TenantName = input.TenantName,
+            Status = CommonStatusEnum.Enable,
             ShortName = input.ShortName,
             SpellName = input.SpellName,
             Edition = input.Edition,
