@@ -101,7 +101,6 @@ export const handleDynamicRoute = (): void => {
 		router.removeRoute(deepLayoutRoute.name);
 	}
 
-	console.log("动态路由：", deepLayoutRoute);
 	router.addRoute(deepLayoutRoute);
 };
 
