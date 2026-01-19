@@ -39,4 +39,9 @@ public class QueryOperateLogPagedInput : PagedInput
     /// </summary>
     [SugarColumn(ColumnDescription = "操作类型")]
     public OperateLogTypeEnum? OperateType { get; set; }
+
+    /// <summary>
+    /// 业务单号
+    /// </summary>
+    public long? BizId { get; set; }
 }

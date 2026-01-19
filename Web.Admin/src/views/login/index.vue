@@ -110,8 +110,8 @@ onMounted(() => {
 		const tenantList = Local.get<ITenantData[]>(state.cFormKey);
 		if (tenantList && tenantList.length > 0) {
 			state.tenantList = tenantList;
-			const { formData } = tenantList[tenantList.length - 1];
-			state.formData = { ...formData, userKey: tenantList[0].tenant.userKey };
+			const { formData, tenant } = tenantList[tenantList.length - 1];
+			state.formData = { ...formData, userKey: tenant.userKey };
 			state.formData.encryptPassword = formData.rememberMe;
 			state.formStep = "TenantAccount";
 		}

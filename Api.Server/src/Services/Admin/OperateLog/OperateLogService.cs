@@ -57,7 +57,8 @@ public class OperateLogService : IDynamicApplication
             throw new UserFriendlyException("请选择具体的时间范围！");
         }
 
-        var queryable = _repository.Entities.WhereIF(input.OperateType != null, wh => wh.OperateType == input.OperateType);
+        var queryable = _repository.Entities.WhereIF(input.OperateType != null, wh => wh.OperateType == input.OperateType)
+            .WhereIF(input.BizId != null, wh => wh.BizId == input.BizId);
 
         if (_user.IsAdmin)
         {
