@@ -154,12 +154,15 @@ export const useApp = defineStore(
 				consoleError("app", `字典 [${key}] 不存在`);
 				return;
 			}
-			const result = dictionary.value.get(key);
+			let result = dictionary.value.get(key);
 			if (isAll) {
-				result.unshift({
-					label: "全部",
-					value: null,
-				});
+				result = [
+					{
+						label: "全部",
+						value: null,
+					},
+					...result.slice(),
+				];
 			}
 			return result;
 		};

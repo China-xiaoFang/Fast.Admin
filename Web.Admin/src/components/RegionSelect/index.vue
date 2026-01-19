@@ -20,7 +20,7 @@ import type { ElSelectorOutput } from "fast-element-plus";
 import { onMounted, reactive } from "vue";
 
 defineOptions({
-	name: "CitySelect",
+	name: "RegionSelect",
 });
 
 const props = withDefaults(
