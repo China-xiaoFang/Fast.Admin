@@ -213,7 +213,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.None,
                     AppId = applicationModel.AppId,
                     MenuId = tenantMenuModel.MenuId,
                     ButtonCode = PermissionConst.Tenant.Paged,
