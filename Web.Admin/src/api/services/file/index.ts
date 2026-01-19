@@ -40,6 +40,7 @@ export const fileApi = {
       url: "/file/uploadLogo",
       method: "post",
       data,
+      cancelDuplicateRequest: false,
       requestType: "upload",
     });
   },
@@ -51,6 +52,7 @@ export const fileApi = {
       url: "/file/uploadAvatar",
       method: "post",
       data,
+      cancelDuplicateRequest: false,
       requestType: "upload",
     });
   },
@@ -62,6 +64,7 @@ export const fileApi = {
       url: "/file/uploadIdPhoto",
       method: "post",
       data,
+      cancelDuplicateRequest: false,
       requestType: "upload",
     });
   },
@@ -73,6 +76,7 @@ export const fileApi = {
       url: "/file/uploadEditor",
       method: "post",
       data,
+      cancelDuplicateRequest: false,
       requestType: "upload",
     });
   },
@@ -84,6 +88,7 @@ export const fileApi = {
       url: "/file/uploadFile",
       method: "post",
       data,
+      cancelDuplicateRequest: false,
       requestType: "upload",
     });
   },

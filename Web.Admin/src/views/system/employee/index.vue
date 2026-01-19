@@ -26,7 +26,7 @@
 					<br />
 					<span>
 						最后登陆时间：{{ row.lastLoginTime ?? "" }}
-						<el-tag v-if="row.lastLoginTime" type="info" round effect="light">
+						<el-tag v-if="row.lastLoginTime" type="info" round effect="light" class="ml5">
 							{{ dateUtil.dateTimeFix(row.lastLoginTime) }}
 						</el-tag>
 					</span>

@@ -40,7 +40,7 @@ public class TenantService : IDynamicApplication
     private readonly IUser _user;
     private readonly ISqlSugarRepository<TenantModel> _repository;
 
-    public TenantService(IUser user,ISqlSugarRepository<TenantModel> repository)
+    public TenantService(IUser user, ISqlSugarRepository<TenantModel> repository)
     {
         _user = user;
         _repository = repository;
