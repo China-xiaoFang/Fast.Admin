@@ -61,22 +61,21 @@ public class EmployeeService : IDynamicApplication
     [ApiInfo("职员选择器", HttpRequestActionEnum.Query)]
     public async Task<PagedResult<ElSelectorOutput<long>>> EmployeeSelector(PagedInput input)
     {
-        var data = await _repository.Entities.Select(sl => new EmployeeModel
-        {
-            EmployeeId = sl.EmployeeId,
-            EmployeeNo = sl.EmployeeNo,
-            EmployeeName = sl.EmployeeName,
-            Mobile = sl.Mobile,
-            IdPhoto = sl.IdPhoto
-        })
+        var data = await _repository.Entities.Where(wh => wh.Status != EmployeeStatusEnum.Resigned)
+            .Select(sl => new EmployeeModel
+            {
+                EmployeeId = sl.EmployeeId,
+                EmployeeNo = sl.EmployeeNo,
+                EmployeeName = sl.EmployeeName,
+                Mobile = sl.Mobile,
+                IdPhoto = sl.IdPhoto
+            })
             .OrderBy(ob => ob.EmployeeName)
             .ToPagedListAsync(input);
 
         return data.ToPagedData(sl => new ElSelectorOutput<long>
         {
-            Value = sl.EmployeeId,
-            Label = sl.EmployeeName,
-            Data = new { sl.EmployeeNo, sl.Mobile, sl.IdPhoto }
+            Value = sl.EmployeeId, Label = sl.EmployeeName, Data = new {sl.EmployeeNo, sl.Mobile, sl.IdPhoto}
         });
     }
 
