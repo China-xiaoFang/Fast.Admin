@@ -247,6 +247,37 @@ public class AccountService : IDynamicApplication
     }
 
     /// <summary>
+    /// 获取编辑账号详情
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    [ApiInfo("获取编辑账号详情", HttpRequestActionEnum.Query)]
+    public async Task<EditAccountInput> QueryEditAccountDetail()
+    {
+        var result = await _repository.Queryable<AccountModel>()
+            .Where(wh => wh.AccountId == _user.AccountId)
+            .Select(sl => new EditAccountInput
+            {
+                Mobile = sl.Mobile,
+                Email = sl.Email,
+                NickName = sl.NickName,
+                Avatar = sl.Avatar,
+                Phone = sl.Phone,
+                Sex = sl.Sex,
+                Birthday = sl.Birthday,
+                RowVersion = sl.RowVersion
+            })
+            .SingleAsync();
+
+        if (result == null)
+        {
+            throw new UserFriendlyException("数据不存在！");
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// 编辑账号
     /// </summary>
     /// <param name="input"></param>

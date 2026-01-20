@@ -47,6 +47,16 @@ export const accountApi = {
     });
   },
   /**
+   * 获取编辑账号详情
+   */
+  queryEditAccountDetail() {
+    return axiosUtil.request<EditAccountInput>({
+      url: "/account/queryEditAccountDetail",
+      method: "get",
+      requestType: "query",
+    });
+  },
+  /**
    * 编辑账号
    */
   editAccount(data: EditAccountInput) {
