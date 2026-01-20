@@ -1994,7 +1994,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Internal,
+                    Edition = EditionEnum.Professional,
                     AppId = applicationModel.AppId,
                     MenuId = tenantComplaintMenuModel.MenuId,
                     ButtonCode = PermissionConst.Complaint.TenantHandle,
