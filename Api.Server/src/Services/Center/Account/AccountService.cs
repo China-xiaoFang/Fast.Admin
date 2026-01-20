@@ -55,35 +55,69 @@ public class AccountService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("账号选择器", HttpRequestActionEnum.Query)]
-    [Permission(PermissionConst.Account.Paged)]
     public async Task<PagedResult<ElSelectorOutput<long>>> AccountSelector(PagedInput input)
     {
-        var data = await _repository.Entities.OrderBy(ob => ob.Mobile)
-            .Select(sl => new
-            {
-                sl.AccountId,
-                sl.Mobile,
-                sl.Email,
-                sl.AccountKey,
-                sl.NickName,
-                sl.Avatar,
-                sl.Sex
-            })
-            .ToPagedListAsync(input);
-
-        return data.ToPagedData(sl => new ElSelectorOutput<long>
+        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
+        if (tenantModel.TenantType == TenantTypeEnum.System)
         {
-            Value = sl.AccountId,
-            Label = sl.Mobile,
-            Data = new
+            var data = await _repository.Entities.OrderBy(ob => ob.Mobile)
+                .Select(sl => new
+                {
+                    sl.AccountId,
+                    sl.Mobile,
+                    sl.Email,
+                    sl.AccountKey,
+                    sl.NickName,
+                    sl.Avatar,
+                    sl.Sex
+                })
+                .ToPagedListAsync(input);
+
+            return data.ToPagedData(sl => new ElSelectorOutput<long>
             {
-                sl.Email,
-                sl.AccountKey,
-                sl.NickName,
-                sl.Avatar,
-                sl.Sex
-            }
-        });
+                Value = sl.AccountId,
+                Label = sl.Mobile,
+                Data = new
+                {
+                    sl.Email,
+                    sl.AccountKey,
+                    sl.NickName,
+                    sl.Avatar,
+                    sl.Sex
+                }
+            });
+        }
+        else
+        {
+            var data = await _repository.Queryable<TenantUserModel>()
+                .InnerJoin<AccountModel>((t1, t2) => t1.AccountId == t2.AccountId)
+                .Select((t1, t2) => new
+                {
+                    t2.AccountId,
+                    t2.Mobile,
+                    t2.Email,
+                    t2.AccountKey,
+                    t2.NickName,
+                    t2.Avatar,
+                    t2.Sex
+                })
+                .Distinct()
+                .ToPagedListAsync(input);
+
+            return data.ToPagedData(sl => new ElSelectorOutput<long>
+            {
+                Value = sl.AccountId,
+                Label = sl.Mobile,
+                Data = new
+                {
+                    sl.Email,
+                    sl.AccountKey,
+                    sl.NickName,
+                    sl.Avatar,
+                    sl.Sex
+                }
+            });
+        }
     }
 
     /// <summary>
