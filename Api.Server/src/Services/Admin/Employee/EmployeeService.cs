@@ -528,9 +528,7 @@ public class EmployeeService : IDynamicApplication
                 var roleModel = roleList.Single(s => s.RoleId == item.RoleId);
                 employeeRoleList.Add(new EmployeeRoleModel
                 {
-                    EmployeeId = employeeModel.EmployeeId,
-                    RoleId = roleModel.RoleId,
-                    RoleName = roleModel.RoleName
+                    EmployeeId = employeeModel.EmployeeId, RoleId = roleModel.RoleId, RoleName = roleModel.RoleName
                 });
             }
         }
@@ -567,7 +565,7 @@ public class EmployeeService : IDynamicApplication
                 if (principalDepartmentIds.Any())
                 {
                     await _repository.Updateable<EmployeeOrgModel>()
-                        .SetColumns(_ => new EmployeeOrgModel { IsPrincipal = false })
+                        .SetColumns(_ => new EmployeeOrgModel {IsPrincipal = false})
                         .Where(wh => principalDepartmentIds.Contains(wh.DepartmentId))
                         .ExecuteCommandAsync();
                 }
@@ -996,7 +994,7 @@ public class EmployeeService : IDynamicApplication
             if (menuIds.Any())
             {
                 await _repository.Insertable(menuIds
-                        .Select(menuId => new EmployeeMenuModel { EmployeeId = employeeModel.EmployeeId, MenuId = menuId })
+                        .Select(menuId => new EmployeeMenuModel {EmployeeId = employeeModel.EmployeeId, MenuId = menuId})
                         .ToList())
                     .ExecuteCommandAsync();
             }
@@ -1010,7 +1008,7 @@ public class EmployeeService : IDynamicApplication
             if (buttonIds.Any())
             {
                 await _repository.Insertable(buttonIds
-                        .Select(buttonId => new EmployeeButtonModel { EmployeeId = employeeModel.EmployeeId, ButtonId = buttonId })
+                        .Select(buttonId => new EmployeeButtonModel {EmployeeId = employeeModel.EmployeeId, ButtonId = buttonId})
                         .ToList())
                     .ExecuteCommandAsync();
             }
