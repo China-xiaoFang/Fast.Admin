@@ -59,15 +59,15 @@ public class TenantService : IDynamicApplication
         var data = await _repository.Entities
             .WhereIF(tenantModel.TenantType == TenantTypeEnum.Common, wh => wh.TenantId == _user.TenantId)
             .OrderBy(ob => ob.TenantName)
-            .Select(sl => new
+            .Select(sl => new TenantModel
             {
-                sl.TenantId,
-                sl.TenantName,
-                sl.TenantNo,
-                sl.TenantCode,
-                sl.ShortName,
-                sl.Edition,
-                sl.LogoUrl
+                TenantId = sl.TenantId,
+                TenantName = sl.TenantName,
+                TenantNo = sl.TenantNo,
+                TenantCode = sl.TenantCode,
+                ShortName = sl.ShortName,
+                Edition = sl.Edition,
+                LogoUrl = sl.LogoUrl
             })
             .ToPagedListAsync(input);
 

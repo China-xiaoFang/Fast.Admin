@@ -61,15 +61,15 @@ public class AccountService : IDynamicApplication
         if (tenantModel.TenantType == TenantTypeEnum.System)
         {
             var data = await _repository.Entities.OrderBy(ob => ob.Mobile)
-                .Select(sl => new
+                .Select(sl => new AccountModel
                 {
-                    sl.AccountId,
-                    sl.Mobile,
-                    sl.Email,
-                    sl.AccountKey,
-                    sl.NickName,
-                    sl.Avatar,
-                    sl.Sex
+                    AccountId = sl.AccountId,
+                    Mobile = sl.Mobile,
+                    Email = sl.Email,
+                    AccountKey = sl.AccountKey,
+                    NickName = sl.NickName,
+                    Avatar = sl.Avatar,
+                    Sex = sl.Sex
                 })
                 .ToPagedListAsync(input);
 
@@ -91,15 +91,15 @@ public class AccountService : IDynamicApplication
         {
             var data = await _repository.Queryable<TenantUserModel>()
                 .InnerJoin<AccountModel>((t1, t2) => t1.AccountId == t2.AccountId)
-                .Select((t1, t2) => new
+                .Select((t1, t2) => new AccountModel
                 {
-                    t2.AccountId,
-                    t2.Mobile,
-                    t2.Email,
-                    t2.AccountKey,
-                    t2.NickName,
-                    t2.Avatar,
-                    t2.Sex
+                    AccountId = t2.AccountId,
+                    Mobile = t2.Mobile,
+                    Email = t2.Email,
+                    AccountKey = t2.AccountKey,
+                    NickName = t2.NickName,
+                    Avatar = t2.Avatar,
+                    Sex = t2.Sex
                 })
                 .Distinct()
                 .ToPagedListAsync(input);
@@ -414,12 +414,12 @@ public class AccountService : IDynamicApplication
         {
             await _repository.UpdateAsync(accountModel);
             await _repository.Insertable(new PasswordRecordModel
-                {
-                    AccountId = _user.AccountId,
-                    OperationType = PasswordOperationTypeEnum.Change,
-                    Type = PasswordTypeEnum.SHA1,
-                    Password = accountModel.Password
-                })
+            {
+                AccountId = _user.AccountId,
+                OperationType = PasswordOperationTypeEnum.Change,
+                Type = PasswordTypeEnum.SHA1,
+                Password = accountModel.Password
+            })
                 .ExecuteCommandAsync();
             await _visitLogRepository.InsertAsync(visitLogModel);
         }, ex => throw ex);
@@ -490,12 +490,12 @@ public class AccountService : IDynamicApplication
         {
             await _repository.UpdateAsync(accountModel);
             await _repository.Insertable(new PasswordRecordModel
-                {
-                    AccountId = _user.AccountId,
-                    OperationType = PasswordOperationTypeEnum.Reset,
-                    Type = PasswordTypeEnum.SHA1,
-                    Password = accountModel.Password
-                })
+            {
+                AccountId = _user.AccountId,
+                OperationType = PasswordOperationTypeEnum.Reset,
+                Type = PasswordTypeEnum.SHA1,
+                Password = accountModel.Password
+            })
                 .ExecuteCommandAsync();
         }, ex => throw ex);
     }
