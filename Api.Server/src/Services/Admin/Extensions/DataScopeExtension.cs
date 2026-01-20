@@ -168,7 +168,8 @@ public static class DataScopeExtension
         var rightParameter = Expression.Parameter(typeof(DepartmentModel), "tDS");
         var rightProperty = Expression.Property(rightParameter, nameof(DepartmentModel.DepartmentId));
 
-        var equal = Expression.Equal(leftUnaryOperand, Expression.Convert(rightProperty, typeof(long)));
+        var equal = Expression.Equal(Expression.Convert(leftUnaryOperand, typeof(long?)),
+            Expression.Convert(rightProperty, typeof(long?)));
         var joinLambda = Expression.Lambda<Func<TEntity, DepartmentModel, bool>>(equal, leftParameter, rightParameter);
 
         return queryable.InnerJoin(dataScopeQueryable, joinLambda);
