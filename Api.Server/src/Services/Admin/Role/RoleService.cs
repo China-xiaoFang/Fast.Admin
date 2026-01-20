@@ -439,7 +439,13 @@ public class RoleService : IDynamicApplication
         // 查询租户信息
         var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
 
+        // 查询角色
         var roleIds = _user.RoleIdList ?? [];
+        var roleTypeList = await _repository.Queryable<RoleModel>()
+            .Where(wh => roleIds.Contains(wh.RoleId))
+            .Select(sl => sl.RoleType)
+            .Distinct()
+            .ToListAsync();
 
         var moduleQueryable = _centerRepository.Queryable<ModuleModel>()
             .Where(wh => wh.AppId == applicationModel.AppId)
@@ -461,7 +467,7 @@ public class RoleService : IDynamicApplication
             moduleQueryable = moduleQueryable.Where(wh =>
                 (wh.ViewType & (ModuleViewTypeEnum.SuperAdmin | ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
         }
-        else if (_user.IsAdmin)
+        else if (_user.IsAdmin || roleTypeList.Any(a => a == RoleTypeEnum.Admin))
         {
             moduleQueryable =
                 moduleQueryable.Where(wh => (wh.ViewType & (ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
