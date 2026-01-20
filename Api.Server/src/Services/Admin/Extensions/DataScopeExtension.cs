@@ -136,7 +136,7 @@ public static class DataScopeExtension
                                  // 主部门
                                  .Where(e => e.EmployeeId == employeeId && e.IsPrimary)
                                  .Where(e => e.OrgId == wh.OrgId)
-                                 .Select(sl => sl.OrgId))
+                                 .Select(e => e.OrgId))
                 .Select(sl => new DepartmentModel {DepartmentId = sl.DepartmentId});
             return BuildInnerJoin(queryable, departmentIdFieldSelector, dataScopeQueryable);
         }
