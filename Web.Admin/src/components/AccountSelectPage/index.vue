@@ -52,7 +52,7 @@ const emit = defineEmits({
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const mobile = useVModel(props, "mobile", emit, { passive: true });
+const mobile = useVModel(props, "mobile", emit, { passive: false });
 const email = useVModel(props, "email", emit, { passive: true });
 const accountKey = useVModel(props, "accountKey", emit, { passive: true });
 
