@@ -25,7 +25,7 @@
 					邮箱：<span v-iconCopy="row.accountEmail">{{ row.accountEmail }}</span>
 					<br />
 					<span>
-						最后登陆时间：{{ row.lastLoginTime ?? "" }}
+						登陆时间：{{ row.lastLoginTime ?? "" }}
 						<el-tag v-if="row.lastLoginTime" type="info" round effect="light" class="ml5">
 							{{ dateUtil.dateTimeFix(row.lastLoginTime) }}
 						</el-tag>
