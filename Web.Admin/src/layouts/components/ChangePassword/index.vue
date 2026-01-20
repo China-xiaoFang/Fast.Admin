@@ -84,7 +84,7 @@ const handleConfirm = async () => {
 
 const open = () => {
 	faDialogRef.value.open(async () => {
-		const apiRes = await accountApi.queryAccountDetail(userInfoStore.accountId);
+		const apiRes = await accountApi.queryEditAccountDetail();
 		state.formData = {
 			rowVersion: apiRes.rowVersion,
 		};

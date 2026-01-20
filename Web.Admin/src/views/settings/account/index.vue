@@ -230,7 +230,7 @@ const handleConfirm = async (event: MouseEvent, done: () => void) => {
 onMounted(async () => {
 	state.loading = true;
 	try {
-		state.accountFormData = await accountApi.queryAccountDetail(userInfoStore.accountId);
+		state.accountFormData = await accountApi.queryEditAccountDetail();
 		if (!userInfoStore.isSuperAdmin && !userInfoStore.isAdmin) {
 			state.employeeFormData = await employeeApi.queryEmployeeDetail(userInfoStore.userId);
 		}
