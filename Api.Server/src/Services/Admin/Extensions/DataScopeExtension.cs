@@ -112,7 +112,7 @@ public static class DataScopeExtension
         {
             var parameter = userIdFieldSelector.Parameters[0];
             var unaryOperand = userIdFieldSelector.Body is UnaryExpression unary ? unary.Operand : userIdFieldSelector.Body;
-            var equal = Expression.Equal(unaryOperand, Expression.Constant(employeeId));
+            var equal = Expression.Equal(Expression.Convert(unaryOperand, typeof(long?)), Expression.Constant(employeeId));
             return queryable.Where(Expression.Lambda<Func<TEntity, bool>>(equal, parameter));
         }
 
@@ -123,7 +123,7 @@ public static class DataScopeExtension
             var unaryOperand = departmentIdFieldSelector.Body is UnaryExpression unary
                 ? unary.Operand
                 : departmentIdFieldSelector.Body;
-            var equal = Expression.Equal(unaryOperand, Expression.Constant(departmentId));
+            var equal = Expression.Equal(Expression.Convert(unaryOperand, typeof(long?)), Expression.Constant(departmentId));
             return queryable.Where(Expression.Lambda<Func<TEntity, bool>>(equal, parameter));
         }
 
