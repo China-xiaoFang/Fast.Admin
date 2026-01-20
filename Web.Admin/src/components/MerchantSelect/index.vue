@@ -43,5 +43,5 @@ const emit = defineEmits({
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const merchantNo = useVModel(props, "merchantNo", emit, { passive: true });
+const merchantNo = useVModel(props, "merchantNo", emit, { passive: false });
 </script>

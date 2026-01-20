@@ -53,7 +53,7 @@ const emit = defineEmits({
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const tenantName = useVModel(props, "tenantName", emit, { passive: true });
+const tenantName = useVModel(props, "tenantName", emit, { passive: false });
 const tenantNo = useVModel(props, "tenantNo", emit, { passive: true });
 const tenantCode = useVModel(props, "tenantCode", emit, { passive: true });
 

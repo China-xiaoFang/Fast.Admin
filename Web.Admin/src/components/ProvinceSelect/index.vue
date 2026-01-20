@@ -34,5 +34,5 @@ const emit = defineEmits({
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const provinceName = useVModel(props, "provinceName", emit, { passive: true });
+const provinceName = useVModel(props, "provinceName", emit, { passive: false });
 </script>

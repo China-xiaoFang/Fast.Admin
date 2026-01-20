@@ -48,5 +48,5 @@ const emit = defineEmits({
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const appName = useVModel(props, "appName", emit, { passive: true });
+const appName = useVModel(props, "appName", emit, { passive: false });
 </script>
