@@ -59,11 +59,10 @@ public class EmployeeService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("职员选择器", HttpRequestActionEnum.Query)]
-    [Permission(PermissionConst.Employee.Paged)]
     public async Task<PagedResult<ElSelectorOutput<long>>> EmployeeSelector(PagedInput input)
     {
-        var data = await _repository.Entities.DataScope()
-            .OrderBy(ob => ob.EmployeeName)
+        var data = await _repository.Entities
+            .LeftJoin<EmployeeOrgModel>((t1, t2) => t1.EmployeeId == t2.EmployeeId && t2.IsPrimary)
             .Select(sl => new
             {
                 sl.EmployeeId,
@@ -72,6 +71,7 @@ public class EmployeeService : IDynamicApplication
                 sl.Mobile,
                 sl.IdPhoto
             })
+            .OrderBy(ob => ob.EmployeeName)
             .ToPagedListAsync(input);
 
         return data.ToPagedData(sl => new ElSelectorOutput<long>
@@ -144,8 +144,8 @@ public class EmployeeService : IDynamicApplication
                 IsPrincipal = t2.IsPrincipal
             })
             .MergeTable()
+            .DataScope(e => e.DepartmentId, e => e.EmployeeId)
             .OrderByDescending(ob => ob.CreatedTime)
-            .DataScope()
             .ToPagedListAsync(input);
 
         var userIds = result.Rows.Select(sl => sl.EmployeeId)
