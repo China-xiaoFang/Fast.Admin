@@ -61,9 +61,7 @@ public class EmployeeService : IDynamicApplication
     [ApiInfo("职员选择器", HttpRequestActionEnum.Query)]
     public async Task<PagedResult<ElSelectorOutput<long>>> EmployeeSelector(PagedInput input)
     {
-        var data = await _repository.Entities
-            .LeftJoin<EmployeeOrgModel>((t1, t2) => t1.EmployeeId == t2.EmployeeId && t2.IsPrimary)
-            .Select(sl => new
+        var data = await _repository.Entities.Select(sl => new
             {
                 sl.EmployeeId,
                 sl.EmployeeNo,
