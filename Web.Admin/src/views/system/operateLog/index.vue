@@ -6,7 +6,7 @@
 				<el-button v-if="userInfoStore.isAdmin" plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
 			</template>
 
-			<template #mobile="{ row }: { row?: OperateLogModel }">
+			<template #employeeNo="{ row }: { row?: OperateLogModel }">
 				{{ row.employeeName }}
 				<br />
 				工号：<span v-iconCopy="row.employeeNo">{{ row.employeeNo }}</span>

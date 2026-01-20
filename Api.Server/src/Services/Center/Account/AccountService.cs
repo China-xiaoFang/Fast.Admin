@@ -414,12 +414,12 @@ public class AccountService : IDynamicApplication
         {
             await _repository.UpdateAsync(accountModel);
             await _repository.Insertable(new PasswordRecordModel
-            {
-                AccountId = _user.AccountId,
-                OperationType = PasswordOperationTypeEnum.Change,
-                Type = PasswordTypeEnum.SHA1,
-                Password = accountModel.Password
-            })
+                {
+                    AccountId = _user.AccountId,
+                    OperationType = PasswordOperationTypeEnum.Change,
+                    Type = PasswordTypeEnum.SHA1,
+                    Password = accountModel.Password
+                })
                 .ExecuteCommandAsync();
             await _visitLogRepository.InsertAsync(visitLogModel);
         }, ex => throw ex);
@@ -490,12 +490,12 @@ public class AccountService : IDynamicApplication
         {
             await _repository.UpdateAsync(accountModel);
             await _repository.Insertable(new PasswordRecordModel
-            {
-                AccountId = _user.AccountId,
-                OperationType = PasswordOperationTypeEnum.Reset,
-                Type = PasswordTypeEnum.SHA1,
-                Password = accountModel.Password
-            })
+                {
+                    AccountId = _user.AccountId,
+                    OperationType = PasswordOperationTypeEnum.Reset,
+                    Type = PasswordTypeEnum.SHA1,
+                    Password = accountModel.Password
+                })
                 .ExecuteCommandAsync();
         }, ex => throw ex);
     }
