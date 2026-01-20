@@ -145,7 +145,7 @@ public class EmployeeService : IDynamicApplication
             })
             .MergeTable()
             .DataScope(e => e.DepartmentId, e => e.EmployeeId)
-            .OrderByDescending(ob => ob.CreatedTime)
+            .OrderByDescending(e => e.CreatedTime)
             .ToPagedListAsync(input);
 
         var userIds = result.Rows.Select(sl => sl.EmployeeId)
