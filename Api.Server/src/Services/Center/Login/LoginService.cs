@@ -673,10 +673,10 @@ public class LoginService : IDynamicApplication
         }
 
         // 解析微信Code，获取OpenId
-        var client = WechatApiClientBuilder
+        var apiClient = WechatApiClientBuilder
             .Create(new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret})
             .Build();
-        var response = await client.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.WeChatCode});
+        var response = await apiClient.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.WeChatCode});
         if (!response.IsSuccessful())
         {
             throw new UserFriendlyException(
@@ -758,10 +758,10 @@ public class LoginService : IDynamicApplication
         }
 
         // 解析微信Code，获取OpenId
-        var client = WechatApiClientBuilder
+        var apiClient = WechatApiClientBuilder
             .Create(new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret})
             .Build();
-        var response = await client.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.WeChatCode});
+        var response = await apiClient.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.WeChatCode});
         if (!response.IsSuccessful())
         {
             throw new UserFriendlyException(
@@ -779,7 +779,7 @@ public class LoginService : IDynamicApplication
         }
 
         // 换取用户手机号
-        var phoneNumberResponse = await client.ExecuteWxaBusinessGetUserPhoneNumberAsync(
+        var phoneNumberResponse = await apiClient.ExecuteWxaBusinessGetUserPhoneNumberAsync(
             new WxaBusinessGetUserPhoneNumberRequest {AccessToken = applicationModel.WeChatAccessToken, Code = input.Code});
         if (!phoneNumberResponse.IsSuccessful())
         {
@@ -868,7 +868,7 @@ public class LoginService : IDynamicApplication
             throw new UserFriendlyException("应用类型不匹配！");
         }
 
-        var client = WechatApiClientBuilder
+        var apiClient = WechatApiClientBuilder
             .Create(new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret})
             .Build();
 
@@ -878,7 +878,8 @@ public class LoginService : IDynamicApplication
         if (applicationModel.AppType == AppEnvironmentEnum.WeChatMiniProgram)
         {
             // 解析微信Code，获取OpenId
-            var response = await client.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.WeChatCode});
+            var response =
+                await apiClient.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.WeChatCode});
             if (!response.IsSuccessful())
             {
                 throw new UserFriendlyException(
@@ -943,7 +944,7 @@ public class LoginService : IDynamicApplication
             if (!string.IsNullOrWhiteSpace(input.Code))
             {
                 // 换取用户手机号
-                var phoneNumberResponse = await client.ExecuteWxaBusinessGetUserPhoneNumberAsync(
+                var phoneNumberResponse = await apiClient.ExecuteWxaBusinessGetUserPhoneNumberAsync(
                     new WxaBusinessGetUserPhoneNumberRequest
                     {
                         AccessToken = applicationModel.WeChatAccessToken, Code = input.Code
@@ -969,7 +970,7 @@ public class LoginService : IDynamicApplication
         {
             // 根据 Code 换取用户 AccessToken
             var tokenResponse =
-                await client.ExecuteSnsOAuth2AccessTokenAsync(new SnsOAuth2AccessTokenRequest {Code = input.WeChatCode});
+                await apiClient.ExecuteSnsOAuth2AccessTokenAsync(new SnsOAuth2AccessTokenRequest {Code = input.WeChatCode});
             if (!tokenResponse.IsSuccessful())
             {
                 return new WeChatClientLoginOutput
@@ -980,7 +981,7 @@ public class LoginService : IDynamicApplication
                 };
             }
 
-            var response = await client.ExecuteSnsUserInfoAsync(new SnsUserInfoRequest
+            var response = await apiClient.ExecuteSnsUserInfoAsync(new SnsUserInfoRequest
             {
                 AccessToken = tokenResponse.AccessToken, OpenId = tokenResponse.OpenId
             });

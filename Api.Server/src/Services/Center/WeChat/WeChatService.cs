@@ -228,12 +228,12 @@ public class WeChatService : IDynamicApplication
             throw new UserFriendlyException("应用类型不匹配！");
         }
 
-        var client = WechatApiClientBuilder
+        var apiClient = WechatApiClientBuilder
             .Create(new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret})
             .Build();
 
         // 解析微信Code，获取OpenId
-        var response = await client.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.Code});
+        var response = await apiClient.ExecuteSnsJsCode2SessionAsync(new SnsJsCode2SessionRequest {JsCode = input.Code});
         if (!response.IsSuccessful())
         {
             throw new UserFriendlyException(
@@ -294,12 +294,12 @@ public class WeChatService : IDynamicApplication
             throw new UserFriendlyException("应用类型不匹配！");
         }
 
-        var client = WechatApiClientBuilder
+        var apiClient = WechatApiClientBuilder
             .Create(new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret})
             .Build();
 
         // 换取用户手机号
-        var response = await client.ExecuteWxaBusinessGetUserPhoneNumberAsync(
+        var response = await apiClient.ExecuteWxaBusinessGetUserPhoneNumberAsync(
             new WxaBusinessGetUserPhoneNumberRequest {AccessToken = applicationModel.WeChatAccessToken, Code = input.Code});
 
         if (!response.IsSuccessful())
