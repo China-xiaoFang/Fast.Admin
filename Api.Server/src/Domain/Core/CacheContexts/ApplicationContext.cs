@@ -46,8 +46,9 @@ public class ApplicationContext
     /// 获取应用
     /// </summary>
     /// <param name="openId"><see cref="string"/> 应用标识</param>
+    /// <param name="throwError"><see cref="bool"/> 抛出错误</param>
     /// <returns></returns>
-    public static ApplicationOpenIdModel GetApplicationSync(string openId)
+    public static ApplicationOpenIdModel GetApplicationSync(string openId, bool throwError = true)
     {
         if (string.IsNullOrWhiteSpace(openId))
         {
@@ -74,7 +75,7 @@ public class ApplicationContext
                 .Where(wh => wh.OpenId == openId)
                 .Single();
 
-            if (result == null)
+            if (result == null && throwError)
             {
                 var message = $"未能找到对应应用【{openId}】信息！";
                 logger.LogError($"OpenId：{openId}；{message}");
@@ -98,8 +99,9 @@ public class ApplicationContext
     /// 获取应用
     /// </summary>
     /// <param name="openId"><see cref="string"/> 应用标识</param>
+    /// <param name="throwError"><see cref="bool"/> 抛出错误</param>
     /// <returns></returns>
-    public static async Task<ApplicationOpenIdModel> GetApplication(string openId)
+    public static async Task<ApplicationOpenIdModel> GetApplication(string openId, bool throwError = true)
     {
         if (string.IsNullOrWhiteSpace(openId))
         {
@@ -126,7 +128,7 @@ public class ApplicationContext
                 .Where(wh => wh.OpenId == openId)
                 .SingleAsync();
 
-            if (result == null)
+            if (result == null && throwError)
             {
                 var message = $"未能找到对应应用【{openId}】信息！";
                 logger.LogError($"OpenId：{openId}；{message}");
