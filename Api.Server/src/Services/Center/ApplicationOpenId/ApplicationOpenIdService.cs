@@ -195,10 +195,10 @@ public class ApplicationOpenIdService : IDynamicApplication
 
         if (!string.IsNullOrWhiteSpace(input.OpenSecret))
         {
-            var options = new WechatApiClientOptions {AppId = input.OpenId, AppSecret = input.OpenSecret};
-            var client = WechatApiClientBuilder.Create(options)
+            var apiClient = WechatApiClientBuilder
+                .Create(new WechatApiClientOptions {AppId = input.OpenId, AppSecret = input.OpenSecret})
                 .Build();
-            var response = await client.ExecuteCgibinStableTokenAsync(new CgibinStableTokenRequest());
+            var response = await apiClient.ExecuteCgibinStableTokenAsync(new CgibinStableTokenRequest());
             if (!response.IsSuccessful())
             {
                 throw new UserFriendlyException(
@@ -211,7 +211,7 @@ public class ApplicationOpenIdService : IDynamicApplication
 
             if (input.AppType == AppEnvironmentEnum.WeChatServiceAccount)
             {
-                var ticketResponse = await client.ExecuteCgibinTicketGetTicketAsync(new CgibinTicketGetTicketRequest
+                var ticketResponse = await apiClient.ExecuteCgibinTicketGetTicketAsync(new CgibinTicketGetTicketRequest
                 {
                     AccessToken = response.AccessToken
                 });
@@ -284,10 +284,10 @@ public class ApplicationOpenIdService : IDynamicApplication
 
         if (!string.IsNullOrWhiteSpace(input.OpenSecret))
         {
-            var options = new WechatApiClientOptions {AppId = input.OpenId, AppSecret = input.OpenSecret};
-            var client = WechatApiClientBuilder.Create(options)
+            var apiClient = WechatApiClientBuilder
+                .Create(new WechatApiClientOptions {AppId = input.OpenId, AppSecret = input.OpenSecret})
                 .Build();
-            var response = await client.ExecuteCgibinStableTokenAsync(new CgibinStableTokenRequest());
+            var response = await apiClient.ExecuteCgibinStableTokenAsync(new CgibinStableTokenRequest());
             if (!response.IsSuccessful())
             {
                 throw new UserFriendlyException(
@@ -300,7 +300,7 @@ public class ApplicationOpenIdService : IDynamicApplication
 
             if (input.AppType == AppEnvironmentEnum.WeChatServiceAccount)
             {
-                var ticketResponse = await client.ExecuteCgibinTicketGetTicketAsync(new CgibinTicketGetTicketRequest
+                var ticketResponse = await apiClient.ExecuteCgibinTicketGetTicketAsync(new CgibinTicketGetTicketRequest
                 {
                     AccessToken = response.AccessToken
                 });

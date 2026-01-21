@@ -82,10 +82,10 @@ public class RefreshWeChatAccessTokenLocalJob : ISchedulerJob
 
         foreach (var item in applicationOpenIdList)
         {
-            var options = new WechatApiClientOptions {AppId = item.OpenId, AppSecret = item.OpenSecret};
-            var client = WechatApiClientBuilder.Create(options)
+            var apiClient = WechatApiClientBuilder
+                .Create(new WechatApiClientOptions {AppId = item.OpenId, AppSecret = item.OpenSecret})
                 .Build();
-            var response = await client.ExecuteCgibinStableTokenAsync(new CgibinStableTokenRequest {ForceRefresh = true});
+            var response = await apiClient.ExecuteCgibinStableTokenAsync(new CgibinStableTokenRequest {ForceRefresh = true});
             if (!response.IsSuccessful())
             {
                 var message = $"调用刷新AccessToken接口失败。ErrorCode：{response.ErrorCode}。ErrorMessage：{response.ErrorMessage}";
@@ -107,7 +107,7 @@ public class RefreshWeChatAccessTokenLocalJob : ISchedulerJob
 
             if (item.AppType == AppEnvironmentEnum.WeChatServiceAccount)
             {
-                var ticketResponse = await client.ExecuteCgibinTicketGetTicketAsync(new CgibinTicketGetTicketRequest
+                var ticketResponse = await apiClient.ExecuteCgibinTicketGetTicketAsync(new CgibinTicketGetTicketRequest
                 {
                     AccessToken = response.AccessToken
                 });
