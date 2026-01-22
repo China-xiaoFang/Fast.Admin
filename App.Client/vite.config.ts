@@ -32,8 +32,6 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 			/** 在打包代码时移除 console.log、debugger 和 注释 */
 			terserOptions: {
 				compress: {
-					/** 移除所有 console.* 调用 */
-					drop_console: !viteDev,
 					/** 移除 debugger 语句 */
 					drop_debugger: !viteDev,
 				},
