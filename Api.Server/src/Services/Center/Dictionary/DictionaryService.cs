@@ -182,7 +182,7 @@ public class DictionaryService : IDynamicApplication
                 UpdatedTime = sl.UpdatedTime,
                 RowVersion = sl.RowVersion,
                 DictionaryItemList = sl.DictionaryItemList.OrderBy(ob => ob.Order)
-                    .Select(iSl => new QueryDictionaryDetailOutput.QueryDictionaryItemDetailDto
+                    .Select(iSl => new EditDictionaryItemInput
                     {
                         DictionaryItemId = iSl.DictionaryItemId,
                         Label = iSl.Label,

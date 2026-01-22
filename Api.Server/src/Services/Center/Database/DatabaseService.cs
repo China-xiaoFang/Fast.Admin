@@ -125,10 +125,9 @@ public class DatabaseService : IDynamicApplication
                 UpdatedUserName = t1.UpdatedUserName,
                 UpdatedTime = t1.UpdatedTime,
                 RowVersion = t1.RowVersion,
-                SlaveDatabaseList = t1.SlaveDatabaseList.Select(dSl => new QuerySlaveDatabaseOutput
-                    {
+                SlaveDatabaseList = t1.SlaveDatabaseList.Select(dSl => new EditSlaveDatabaseInput
+                {
                         SlaveId = dSl.SlaveId,
-                        MainId = dSl.MainId,
                         PublicIp = dSl.PublicIp,
                         IntranetIp = dSl.IntranetIp,
                         Port = dSl.Port,
@@ -136,12 +135,7 @@ public class DatabaseService : IDynamicApplication
                         DbUser = dSl.DbUser,
                         DbPwd = dSl.DbPwd,
                         CustomConnectionStr = dSl.CustomConnectionStr,
-                        HitRate = dSl.HitRate,
-                        DepartmentName = dSl.DepartmentName,
-                        CreatedUserName = dSl.CreatedUserName,
-                        CreatedTime = dSl.CreatedTime,
-                        UpdatedUserName = dSl.UpdatedUserName,
-                        UpdatedTime = dSl.UpdatedTime
+                        HitRate = dSl.HitRate
                     })
                     .ToList()
             })

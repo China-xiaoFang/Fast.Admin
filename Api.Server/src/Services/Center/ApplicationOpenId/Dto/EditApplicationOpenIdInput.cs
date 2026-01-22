@@ -20,6 +20,8 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.Center.Enum;
+
 namespace Fast.Center.Service.ApplicationOpenId.Dto;
 
 /// <summary>
@@ -138,4 +140,32 @@ public class EditApplicationOpenIdInput : UpdateVersionInput
     /// 备注
     /// </summary>
     public string Remark { get; set; }
+
+    /// <summary>
+    /// 模板Id信息
+    /// </summary>
+    public List<EditApplicationTemplateIdInput> TemplateIdList { get; set; }
+
+    /// <summary>
+    /// <see cref="EditApplicationTemplateIdInput"/> 编辑应用模板Id输入
+    /// </summary>
+    public class EditApplicationTemplateIdInput
+    {
+        /// <summary>
+        /// 记录Id
+        /// </summary>
+        public long? RecordId { get; set; }
+
+        /// <summary>
+        /// 模板类型
+        /// </summary>
+        [StringRequired(ErrorMessage = "模板类型不能为空")]
+        public ApplicationTemplateTypeEnum TemplateType { get; set; }
+
+        /// <summary>
+        /// 模板Id
+        /// </summary>
+        [StringRequired(ErrorMessage = "模板Id不能为空")]
+        public string TemplateId { get; set; }
+    }
 }

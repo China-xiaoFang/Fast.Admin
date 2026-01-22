@@ -2,9 +2,9 @@ import { EditionEnum } from "@/api/enums/EditionEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
- * Fast.Center.Service.Menu.Dto.QueryMenuDetailOutput.QueryMenuButtonDetailDto 获取菜单按钮详情Dto
+ * Fast.Center.Service.Menu.Dto.EditMenuButtonInput 编辑菜单按钮输入
  */
-export interface QueryMenuButtonDetailDto {
+export interface EditMenuButtonInput {
   /**
    * 按钮Id
    */

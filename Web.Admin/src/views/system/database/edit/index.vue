@@ -83,7 +83,6 @@
 					<FaTableColumn prop="hitRate" label="命中率" width="100">
 						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
 							<el-form-item
-								labelWidth="0"
 								:prop="`slaveDatabaseList.${$index}.hitRate`"
 								:rules="[{ required: true, message: '请输入从库命中率', trigger: 'blur' }]"
 							>
@@ -94,7 +93,6 @@
 					<FaTableColumn prop="publicIp" label="公网Ip地址" width="220">
 						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
 							<el-form-item
-								labelWidth="0"
 								:prop="`slaveDatabaseList.${$index}.publicIp`"
 								:rules="[{ required: true, message: '请输入公网Ip地址', trigger: 'blur' }]"
 							>
@@ -105,7 +103,6 @@
 					<FaTableColumn prop="intranetIp" label="内网Ip地址" width="220">
 						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
 							<el-form-item
-								labelWidth="0"
 								:prop="`slaveDatabaseList.${$index}.intranetIp`"
 								:rules="[{ required: true, message: '请输入内网Ip地址', trigger: 'blur' }]"
 							>
@@ -116,7 +113,6 @@
 					<FaTableColumn prop="port" label="端口号" width="150">
 						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
 							<el-form-item
-								labelWidth="0"
 								:prop="`slaveDatabaseList.${$index}.port`"
 								:rules="[{ required: true, message: '请输入端口号', trigger: 'blur' }]"
 							>
@@ -127,7 +123,6 @@
 					<FaTableColumn prop="dbName" label="数据库名称" width="280">
 						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
 							<el-form-item
-								labelWidth="0"
 								:prop="`slaveDatabaseList.${$index}.dbName`"
 								:rules="[{ required: true, message: '请输入数据库名称', trigger: 'blur' }]"
 							>
@@ -138,7 +133,6 @@
 					<FaTableColumn prop="dbUser" label="数据库用户" width="220">
 						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
 							<el-form-item
-								labelWidth="0"
 								:prop="`slaveDatabaseList.${$index}.dbUser`"
 								:rules="[{ required: true, message: '请输入数据库用户', trigger: 'blur' }]"
 							>
@@ -149,7 +143,6 @@
 					<FaTableColumn prop="dbPwd" label="数据库密码" width="280">
 						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
 							<el-form-item
-								labelWidth="0"
 								:prop="`slaveDatabaseList.${$index}.dbPwd`"
 								:rules="[{ required: true, message: '请输入数据库密码', trigger: 'blur' }]"
 							>
@@ -166,7 +159,7 @@
 					</FaTableColumn>
 					<FaTableColumn prop="customConnectionStr" label="自定义连接字符串" width="300">
 						<template #default="{ row, $index }: { row: EditSlaveDatabaseInput; $index: number }">
-							<el-form-item labelWidth="0" :prop="`slaveDatabaseList.${$index}.customConnectionStr`">
+							<el-form-item :prop="`slaveDatabaseList.${$index}.customConnectionStr`">
 								<el-input
 									type="textarea"
 									v-model="row.customConnectionStr"

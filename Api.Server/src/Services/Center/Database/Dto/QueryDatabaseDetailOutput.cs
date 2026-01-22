@@ -117,5 +117,5 @@ public class QueryDatabaseDetailOutput : PagedOutput
     /// <summary>
     /// 从数据库集合
     /// </summary>
-    public List<QuerySlaveDatabaseOutput> SlaveDatabaseList { get; set; }
+    public List<EditSlaveDatabaseInput> SlaveDatabaseList { get; set; }
 }

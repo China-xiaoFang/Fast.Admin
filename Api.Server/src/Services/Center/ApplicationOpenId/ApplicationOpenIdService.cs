@@ -144,6 +144,14 @@ public class ApplicationOpenIdService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
+        result.TemplateIdList = await _repository.Queryable<ApplicationTemplateIdModel>()
+            .Where(wh => wh.OpenId == result.OpenId)
+            .Select(sl => new EditApplicationOpenIdInput.EditApplicationTemplateIdInput
+            {
+                RecordId = sl.RecordId, TemplateType = sl.TemplateType, TemplateId = sl.TemplateId
+            })
+            .ToListAsync();
+
         return result;
     }
 
@@ -247,6 +255,28 @@ public class ApplicationOpenIdService : IDynamicApplication
             throw new UserFriendlyException("应用标识重复！");
         }
 
+        var templateIds = input.TemplateIdList.Select(sl => sl.TemplateId)
+            .Distinct()
+            .ToList();
+        if (templateIds.Count != input.TemplateIdList.Count)
+        {
+            throw new UserFriendlyException("模板Id重复！");
+        }
+
+        var templateTypes = input.TemplateIdList.Select(sl => sl.TemplateType)
+            .Distinct()
+            .ToList();
+        if (templateTypes.Count != input.TemplateIdList.Count)
+        {
+            throw new UserFriendlyException("模板类型重复！");
+        }
+
+        if (await _repository.Queryable<ApplicationTemplateIdModel>()
+                .AnyAsync(a => templateIds.Contains(a.TemplateId) && a.OpenId != input.OpenId))
+        {
+            throw new UserFriendlyException("模板Id重复！");
+        }
+
         var applicationModel = await _repository.Queryable<ApplicationModel>()
             .InSingleAsync(input.AppId);
         if (applicationModel == null)
@@ -259,6 +289,10 @@ public class ApplicationOpenIdService : IDynamicApplication
         {
             throw new UserFriendlyException("数据不存在！");
         }
+
+        var templateIdList = await _repository.Queryable<ApplicationTemplateIdModel>()
+            .Where(wh => wh.OpenId == input.OpenId)
+            .ToListAsync();
 
         applicationOpenIdModel.OpenId = input.OpenId;
         applicationOpenIdModel.AppId = applicationModel.AppId;
@@ -316,7 +350,53 @@ public class ApplicationOpenIdService : IDynamicApplication
             }
         }
 
-        await _repository.UpdateAsync(applicationOpenIdModel);
+        var addApplicationTemplateIdList = new List<ApplicationTemplateIdModel>();
+        var updateApplicationTemplateIdList = new List<ApplicationTemplateIdModel>();
+        foreach (var item in input.TemplateIdList)
+        {
+            ApplicationTemplateIdModel applicationTemplateIdModel;
+            if (item.RecordId == null)
+            {
+                // 新增的
+                applicationTemplateIdModel = new ApplicationTemplateIdModel
+                {
+                    AppId = applicationOpenIdModel.AppId,
+                    OpenId = applicationOpenIdModel.OpenId,
+                    TemplateType = item.TemplateType,
+                    TemplateId = item.TemplateId
+                };
+                addApplicationTemplateIdList.Add(applicationTemplateIdModel);
+            }
+            else
+            {
+                // 更新的
+                applicationTemplateIdModel = templateIdList.SingleOrDefault(s => s.RecordId == item.RecordId);
+                if (applicationTemplateIdModel == null)
+                {
+                    throw new UserFriendlyException("数据不存在！");
+                }
+
+                applicationTemplateIdModel.TemplateType = item.TemplateType;
+                applicationTemplateIdModel.TemplateId = item.TemplateId;
+                updateApplicationTemplateIdList.Add(applicationTemplateIdModel);
+            }
+        }
+
+        // 删除的
+        var deleteApplicationTemplateIdList = templateIdList.Where(wh => input.TemplateIdList.All(a => a.RecordId != wh.RecordId))
+            .ToList();
+
+        await _repository.Ado.UseTranAsync(async () =>
+        {
+            await _repository.UpdateAsync(applicationOpenIdModel);
+            await _repository.Deleteable(deleteApplicationTemplateIdList)
+                .ExecuteCommandAsync();
+            await _repository.Updateable(updateApplicationTemplateIdList)
+                .ExecuteCommandAsync();
+            await _repository.Insertable(addApplicationTemplateIdList)
+                .ExecuteCommandAsync();
+        }, ex => throw ex);
+
         // 删除缓存
         await ApplicationContext.DeleteApplication(applicationOpenIdModel.OpenId);
     }

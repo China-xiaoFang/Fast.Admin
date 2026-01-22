@@ -48,7 +48,7 @@ public class EditSlaveDatabaseInput
     /// 端口号
     /// </summary>
     [IntRequired(ErrorMessage = "端口号不能为空")]
-    public int Port { get; set; }
+    public int? Port { get; set; }
 
     /// <summary>
     /// 数据库名称

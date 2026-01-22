@@ -1,7 +1,7 @@
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { QueryMenuButtonDetailDto } from "./QueryMenuButtonDetailDto";
+import { EditMenuButtonInput } from "./EditMenuButtonInput";
 
 /**
  * Fast.Center.Service.Menu.Dto.QueryMenuDetailOutput 获取菜单详情输出
@@ -118,7 +118,7 @@ export interface QueryMenuDetailOutput {
   /**
    * 按钮信息
    */
-  buttonList?: Array<QueryMenuButtonDetailDto>;
+  buttonList?: Array<EditMenuButtonInput>;
   /**
    * 
    */

@@ -20,52 +20,63 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Enum;
-
-namespace Fast.Center.Service.Dictionary.Dto;
+namespace Fast.Center.Service.Menu.Dto;
 
 /// <summary>
-/// <see cref="QueryDictionaryDetailOutput"/> 获取字典详情输出
+/// <see cref="EditMenuButtonInput"/> 编辑菜单按钮输入
 /// </summary>
-public class QueryDictionaryDetailOutput : PagedOutput
+public class EditMenuButtonInput
 {
     /// <summary>
-    /// 字典Id
+    /// 按钮Id
     /// </summary>
-    public long DictionaryId { get; set; }
+    public long? ButtonId { get; set; }
 
     /// <summary>
-    /// 字典Key
+    /// 版本
     /// </summary>
-    public string DictionaryKey { get; set; }
+    [EnumRequired(ErrorMessage = "版本不能为空", AllowZero = true)]
+    public EditionEnum Edition { get; set; }
 
     /// <summary>
-    /// 字典名称
+    /// 按钮编码
     /// </summary>
-    public string DictionaryName { get; set; }
+    [StringRequired(ErrorMessage = "按钮编码不能为空")]
+    public string ButtonCode { get; set; }
 
     /// <summary>
-    /// 字典值类型
+    /// 按钮名称
     /// </summary>
-    public DictionaryValueTypeEnum ValueType { get; set; }
+    [StringRequired(ErrorMessage = "按钮名称不能为空")]
+    public string ButtonName { get; set; }
 
     /// <summary>
-    /// Flags枚举
+    /// 是否桌面端
     /// </summary>
-    public bool HasFlags { get; set; }
+    [Required(ErrorMessage = "是否桌面端不能为空")]
+    public bool HasDesktop { get; set; }
+
+    /// <summary>
+    /// 是否Web端
+    /// </summary>
+    [Required(ErrorMessage = "是否Web端不能为空")]
+    public bool HasWeb { get; set; }
+
+    /// <summary>
+    /// 是否移动端
+    /// </summary>
+    [Required(ErrorMessage = "是否移动端不能为空")]
+    public bool HasMobile { get; set; }
+
+    /// <summary>
+    /// 排序
+    /// </summary>
+    [IntRequired(ErrorMessage = "排序不能为空")]
+    public int Sort { get; set; }
 
     /// <summary>
     /// 状态
     /// </summary>
+    [EnumRequired(ErrorMessage = "状态不能为空")]
     public CommonStatusEnum Status { get; set; }
-
-    /// <summary>
-    /// 备注
-    /// </summary>
-    public string Remark { get; set; }
-
-    /// <summary>
-    /// 字典项集合
-    /// </summary>
-    public List<EditDictionaryItemInput> DictionaryItemList { get; set; }
 }

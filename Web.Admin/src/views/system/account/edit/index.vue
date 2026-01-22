@@ -42,9 +42,9 @@
 		</el-row>
 
 		<FaForm :model="state.formData" detailForm cols="2">
-			<FaFormItem span="2" labelWidth="0">
+			<FaLayoutGridItem span="2">
 				<el-divider contentPosition="left">初次登录信息</el-divider>
-			</FaFormItem>
+			</FaLayoutGridItem>
 			<FaFormItem prop="firstLoginTenantName" label="租户">
 				<el-text type="primary">{{ state.formData.firstLoginTenantName }}</el-text>
 			</FaFormItem>
@@ -70,9 +70,9 @@
 				<template v-else>-</template>
 			</FaFormItem>
 
-			<FaFormItem span="2" labelWidth="0">
+			<FaLayoutGridItem span="2">
 				<el-divider contentPosition="left">最后登录信息</el-divider>
-			</FaFormItem>
+			</FaLayoutGridItem>
 			<FaFormItem prop="lastLoginTenantName" label="租户">
 				<el-text type="primary">{{ state.formData.lastLoginTenantName }}</el-text>
 			</FaFormItem>
@@ -98,9 +98,9 @@
 				<template v-else>-</template>
 			</FaFormItem>
 
-			<FaFormItem span="2" labelWidth="0">
+			<FaLayoutGridItem span="2">
 				<el-divider contentPosition="left">验证信息</el-divider>
-			</FaFormItem>
+			</FaLayoutGridItem>
 			<FaFormItem prop="passwordErrorTime" label="错误次数">
 				<template v-if="state.formData.passwordErrorTime > 0">
 					<el-text type="warning">{{ state.formData.passwordErrorTime }}次</el-text>

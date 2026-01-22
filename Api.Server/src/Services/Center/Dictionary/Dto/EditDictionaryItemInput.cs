@@ -20,60 +20,56 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Service.Database.Dto;
+namespace Fast.Center.Service.Dictionary.Dto;
 
 /// <summary>
-/// <see cref="QuerySlaveDatabaseOutput"/> 获取从数据库输出
+/// <see cref="EditDictionaryItemInput"/> 编辑字典项输入
 /// </summary>
-public class QuerySlaveDatabaseOutput : PagedOutput
+public class EditDictionaryItemInput
 {
     /// <summary>
-    /// 从库Id
+    /// 字典项Id
     /// </summary>
-    public long SlaveId { get; set; }
+    public long? DictionaryItemId { get; set; }
 
     /// <summary>
-    /// 主库Id
+    /// 字典项名称
     /// </summary>
-    public long MainId { get; set; }
+    [StringRequired(ErrorMessage = "字典项名称不能为空")]
+    public string Label { get; set; }
 
     /// <summary>
-    /// 公网Ip地址
+    /// 字典项值
     /// </summary>
-    public string PublicIp { get; set; }
+    [StringRequired(ErrorMessage = "字典项值不能为空")]
+    public string Value { get; set; }
 
     /// <summary>
-    /// 内网Ip地址
+    /// 标签类型
     /// </summary>
-    public string IntranetIp { get; set; }
+    [EnumRequired(ErrorMessage = "标签类型不能为空")]
+    public TagTypeEnum Type { get; set; }
 
     /// <summary>
-    /// 端口号
+    /// 排序
     /// </summary>
-    public int? Port { get; set; }
+    [IntRequired(ErrorMessage = "排序不能为空")]
+    public int Order { get; set; }
 
     /// <summary>
-    /// 数据库名称
+    /// 提示
     /// </summary>
-    public string DbName { get; set; }
+    public string Tips { get; set; }
 
     /// <summary>
-    /// 数据库用户
+    /// 是否显示
     /// </summary>
-    public string DbUser { get; set; }
+    [Required(ErrorMessage = "是否显示不能为空")]
+    public bool Visible { get; set; }
 
     /// <summary>
-    /// 数据库密码
+    /// 状态
     /// </summary>
-    public string DbPwd { get; set; }
-
-    /// <summary>
-    /// 自定义连接字符串
-    /// </summary>
-    public string CustomConnectionStr { get; set; }
-
-    /// <summary>
-    /// 从库命中率
-    /// </summary>
-    public int HitRate { get; set; }
+    [EnumRequired(ErrorMessage = "状态不能为空")]
+    public CommonStatusEnum Status { get; set; }
 }
