@@ -1,5 +1,5 @@
 import { createFastAxios } from "@fast-china/axios";
-import { Local, consoleDebug, cryptoUtil, useIdentity } from "@fast-china/utils";
+import { Local, cryptoUtil, useIdentity } from "@fast-china/utils";
 import type { ApiResponse } from "@fast-china/axios";
 import type { AxiosHeaders, AxiosResponse } from "axios";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
@@ -91,13 +91,14 @@ export function loadFastAxios(): void {
 	fastAxios.message.error.use((message) => message && useToast.error(message));
 
 	fastAxios.cache.get.use((key) => Local.get(`HTTP_CACHE_${key}`, null));
-	fastAxios.cache.set.use((key, value) => Local.set(`HTTP_CACHE_${key}`, value, null, null));
+	fastAxios.cache.set.use((key, value) => Local.set(`HTTP_CACHE_${key}`, value, 24 * 60, null));
 
 	fastAxios.crypto.encrypt.use((config, timestamp) => {
 		let requestData = config.data || config.params;
 		const dataStr = JSON.stringify(requestData);
 		if (dataStr != null && dataStr != "" && dataStr != "{}") {
-			consoleDebug("Axios", `HTTP request data("${config.url}")`, requestData);
+			// eslint-disable-next-line no-console
+			console.debug("Fast-Axios", `HTTP request data("${config.url}")`, requestData);
 			const decryptData = cryptoUtil.aes.encrypt(dataStr, `${timestamp}`, `FIV${timestamp}`);
 			// 组装请求格式
 			requestData = {
@@ -138,7 +139,8 @@ export function loadFastAxios(): void {
 			if (typeof restfulData.data === "string" && restfulData.data.startsWith('"') && restfulData.data.endsWith('"')) {
 				restfulData.data = restfulData.data.replace(/"/g, "");
 			}
-			consoleDebug("axiosUtil", `HTTP response data("${response.config.url}")`, restfulData.data);
+			// eslint-disable-next-line no-console
+			console.debug("Fast-Axios", `HTTP response data("${response.config.url}")`, restfulData.data);
 		}
 		return restfulData;
 	});
