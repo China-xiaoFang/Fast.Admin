@@ -31,7 +31,7 @@ importers:
         version: 3.0.0-alpha-4080620251107001(postcss@8.5.6)(rollup@4.56.0)(vue@3.5.13(typescript@5.9.3))
       '@fast-china/axios':
         specifier: ^1
-        version: 1.0.24(axios@1.13.2)
+        version: 1.0.25(axios@1.13.2)
       '@fast-china/utils':
         specifier: ^1
         version: 1.0.37(vue@3.5.13(typescript@5.9.3))
@@ -955,8 +955,8 @@ packages:
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@fast-china/axios@1.0.24':
-    resolution: {integrity: sha512-4ctZMiCwjkBL+PTAHc1w43L6h0SbECR9mjj6Tw+rYGKdCmgxCqzDkSnZSKdR0zTwXdY2cCvz1GUhoay+ktYFPw==}
+  '@fast-china/axios@1.0.25':
+    resolution: {integrity: sha512-2oeD+O4s9xhBPZeMt9VvJU4j9+Jwyo8AB2Vmib8jyf5Fv3DBALAgq8ptj1aJ9tcNKeg34dmjunlN9TLTpRFJww==}
     peerDependencies:
       axios: ^1.9
 
@@ -5344,7 +5344,7 @@ snapshots:
       '@eslint/core': 0.17.0
       levn: 0.4.1
 
-  '@fast-china/axios@1.0.24(axios@1.13.2)':
+  '@fast-china/axios@1.0.25(axios@1.13.2)':
     dependencies:
       '@types/lodash': 4.17.23
       '@types/lodash-es': 4.17.12
