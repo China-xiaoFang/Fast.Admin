@@ -93,6 +93,44 @@
 			<FaFormItem prop="bannerImages" label="Banner图" span="2">
 				<FaUploadImages v-model="state.formData.bannerImages" :uploadApi="fileApi.uploadFile" />
 			</FaFormItem>
+
+			<template v-if="state.dialogState !== 'add'">
+				<FaLayoutGridItem span="2">
+					<el-divider contentPosition="left">模板Id</el-divider>
+				</FaLayoutGridItem>
+				<FaLayoutGridItem span="2" style="min-height: 300px; max-height: 500px">
+					<FaTable rowKey="buttonId" :data="state.formData.templateIdList">
+						<!-- 表格按钮操作区域 -->
+						<template #header>
+							<el-button type="primary" :icon="Plus" @click="handleTemplateIdAdd">新增</el-button>
+						</template>
+						<FaTableColumn prop="templateId" label="模板Id" width="300">
+							<template #default="{ row, $index }: { row: EditApplicationTemplateIdInput; $index: number }">
+								<el-form-item
+									:prop="`templateIdList.${$index}.templateId`"
+									:rules="[{ required: true, message: '请输入模板Id', trigger: 'blur' }]"
+								>
+									<el-input v-model="row.templateId" maxlength="50" placeholder="请输入模板Id" />
+								</el-form-item>
+							</template>
+						</FaTableColumn>
+						<FaTableColumn prop="templateType" label="模板类型" width="280">
+							<template #default="{ row, $index }: { row: EditApplicationTemplateIdInput; $index: number }">
+								<el-form-item
+									:prop="`templateIdList.${$index}.templateType`"
+									:rules="[{ required: true, message: '请选择模板类型', trigger: 'change' }]"
+								>
+									<FaSelect :data="applicationTemplateTypeEnum" v-model="row.templateType" />
+								</el-form-item>
+							</template>
+						</FaTableColumn>
+						<!-- 表格操作 -->
+						<template #operation="{ $index }: { $index: number }">
+							<el-button size="small" plain type="danger" @click="handleTemplateIdDelete($index)">删除</el-button>
+						</template>
+					</FaTable>
+				</FaLayoutGridItem>
+			</template>
 		</FaForm>
 	</FaDialog>
 </template>
@@ -110,6 +148,8 @@ import { useApp } from "@/stores";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
+import { Plus } from "@element-plus/icons-vue";
+import { EditApplicationTemplateIdInput } from "@/api/services/applicationOpenId/models/EditApplicationTemplateIdInput";
 
 defineOptions({
 	name: "SystemApplicationOpenIdEdit",
@@ -119,6 +159,7 @@ const emit = defineEmits(["ok"]);
 
 const appStore = useApp();
 const appEnvironmentEnum = appStore.getDictionary("AppEnvironmentEnum");
+const applicationTemplateTypeEnum = appStore.getDictionary("ApplicationTemplateTypeEnum");
 
 const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
@@ -129,6 +170,7 @@ const state = reactive({
 		environmentType: EnvironmentTypeEnum.Production,
 		requestTimeout: 60000,
 		requestEncipher: true,
+		templateIdList: [],
 	}),
 	formRules: withDefineType<FormRules>({
 		appId: [{ required: true, message: "请选择应用", trigger: "change" }],
@@ -139,6 +181,14 @@ const state = reactive({
 	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "应用OpenId",
 });
+
+const handleTemplateIdAdd = () => {
+	state.formData.templateIdList.push({});
+};
+
+const handleTemplateIdDelete = (index: number) => {
+	state.formData.templateIdList.splice(index, 1);
+};
 
 const handleConfirm = () => {
 	faDialogRef.value.close(async () => {

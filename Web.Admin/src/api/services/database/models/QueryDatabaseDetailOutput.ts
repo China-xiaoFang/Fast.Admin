@@ -1,6 +1,6 @@
 import { DatabaseTypeEnum } from "@/api/enums/DatabaseTypeEnum";
 import { SugarDbType } from "@/api/enums/SugarDbType";
-import { QuerySlaveDatabaseOutput } from "./QuerySlaveDatabaseOutput";
+import { EditSlaveDatabaseInput } from "./EditSlaveDatabaseInput";
 
 /**
  * Fast.Center.Service.Database.Dto.QueryDatabaseDetailOutput 获取数据库详情输出
@@ -77,7 +77,7 @@ export interface QueryDatabaseDetailOutput {
   /**
    * 从数据库集合
    */
-  slaveDatabaseList?: Array<QuerySlaveDatabaseOutput>;
+  slaveDatabaseList?: Array<EditSlaveDatabaseInput>;
   /**
    * 
    */

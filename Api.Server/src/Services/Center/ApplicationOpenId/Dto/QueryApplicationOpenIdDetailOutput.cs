@@ -147,4 +147,9 @@ public class QueryApplicationOpenIdDetailOutput : PagedOutput
     /// 备注
     /// </summary>
     public string Remark { get; set; }
+
+    /// <summary>
+    /// 模板Id信息
+    /// </summary>
+    public List<EditApplicationOpenIdInput.EditApplicationTemplateIdInput> TemplateIdList { get; set; }
 }

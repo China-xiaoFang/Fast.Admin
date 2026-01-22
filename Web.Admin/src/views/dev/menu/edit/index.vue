@@ -59,9 +59,9 @@
 				<RadioGroup button name="CommonStatusEnum" v-model="state.formData.status" />
 			</FaFormItem>
 
-			<FaFormItem span="2" labelWidth="0">
+			<FaLayoutGridItem span="2">
 				<el-divider contentPosition="left">Web端</el-divider>
-			</FaFormItem>
+			</FaLayoutGridItem>
 			<FaFormItem prop="hasWeb" label="Web端">
 				<el-checkbox v-model="state.formData.hasWeb">Web端</el-checkbox>
 			</FaFormItem>
@@ -142,9 +142,8 @@
 							<el-button type="primary" :icon="Plus" @click="handleButtonAdd">新增</el-button>
 						</template>
 						<FaTableColumn prop="buttonName" label="按钮名称" width="200">
-							<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`buttonList.${$index}.buttonName`"
 									:rules="[{ required: true, message: '请输入按钮名称', trigger: 'blur' }]"
 								>
@@ -153,9 +152,8 @@
 							</template>
 						</FaTableColumn>
 						<FaTableColumn prop="buttonCode" label="按钮编码" width="280">
-							<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`buttonList.${$index}.buttonCode`"
 									:rules="[{ required: true, message: '请输入按钮编码', trigger: 'blur' }]"
 								>
@@ -164,9 +162,8 @@
 							</template>
 						</FaTableColumn>
 						<FaTableColumn prop="edition" label="版本" width="120">
-							<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`buttonList.${$index}.edition`"
 									:rules="[{ required: true, message: '请选择版本', trigger: 'change' }]"
 								>
@@ -175,9 +172,8 @@
 							</template>
 						</FaTableColumn>
 						<FaTableColumn prop="hasWeb" label="Web端" width="80">
-							<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`buttonList.${$index}.hasWeb`"
 									:rules="[{ required: true, message: '请选择是否Web端', trigger: 'change' }]"
 								>
@@ -186,9 +182,8 @@
 							</template>
 						</FaTableColumn>
 						<FaTableColumn prop="hasMobile" label="移动端" width="80">
-							<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`buttonList.${$index}.hasMobile`"
 									:rules="[{ required: true, message: '请选择是否移动端', trigger: 'change' }]"
 								>
@@ -197,9 +192,8 @@
 							</template>
 						</FaTableColumn>
 						<FaTableColumn prop="hasDesktop" label="桌面端" width="80">
-							<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`buttonList.${$index}.hasDesktop`"
 									:rules="[{ required: true, message: '请选择是否桌面端', trigger: 'change' }]"
 								>
@@ -208,9 +202,8 @@
 							</template>
 						</FaTableColumn>
 						<FaTableColumn prop="sort" label="排序" width="100">
-							<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`buttonList.${$index}.sort`"
 									:rules="[{ required: true, message: '请输入排序', trigger: 'blur' }]"
 								>
@@ -219,9 +212,8 @@
 							</template>
 						</FaTableColumn>
 						<FaTableColumn prop="sort" label="状态" width="150">
-							<template #default="{ row, $index }: { row: EditMenuButtonDto; $index: number }">
+							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`buttonList.${$index}.status`"
 									:rules="[{ required: true, message: '请选择状态', trigger: 'change' }]"
 								>
@@ -252,7 +244,7 @@ import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import { Plus } from "@element-plus/icons-vue";
 import routerPath from "@/router/index.json";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { EditMenuButtonDto } from "@/api/services/menu/models/EditMenuButtonDto";
+import { EditMenuButtonInput } from "@/api/services/menu/models/EditMenuButtonInput";
 import { useApp } from "@/stores";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 

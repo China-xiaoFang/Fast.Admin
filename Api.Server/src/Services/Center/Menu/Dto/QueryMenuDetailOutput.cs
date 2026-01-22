@@ -167,56 +167,5 @@ public class QueryMenuDetailOutput : PagedOutput
     /// <summary>
     /// 按钮信息
     /// </summary>
-    public List<QueryMenuButtonDetailDto> ButtonList { get; set; }
-
-    /// <summary>
-    /// <see cref="QueryMenuButtonDetailDto"/> 获取菜单按钮详情Dto
-    /// </summary>
-    public class QueryMenuButtonDetailDto
-    {
-        /// <summary>
-        /// 按钮Id
-        /// </summary>
-        public long ButtonId { get; set; }
-
-        /// <summary>
-        /// 版本
-        /// </summary>
-        public EditionEnum Edition { get; set; }
-
-        /// <summary>
-        /// 按钮编码
-        /// </summary>
-        public string ButtonCode { get; set; }
-
-        /// <summary>
-        /// 按钮名称
-        /// </summary>
-        public string ButtonName { get; set; }
-
-        /// <summary>
-        /// 是否桌面端
-        /// </summary>
-        public bool HasDesktop { get; set; }
-
-        /// <summary>
-        /// 是否Web端
-        /// </summary>
-        public bool HasWeb { get; set; }
-
-        /// <summary>
-        /// 是否移动端
-        /// </summary>
-        public bool HasMobile { get; set; }
-
-        /// <summary>
-        /// 排序
-        /// </summary>
-        public int Sort { get; set; }
-
-        /// <summary>
-        /// 状态
-        /// </summary>
-        public CommonStatusEnum Status { get; set; }
-    }
+    public List<EditMenuButtonInput> ButtonList { get; set; }
 }

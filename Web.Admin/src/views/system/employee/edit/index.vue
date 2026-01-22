@@ -206,7 +206,6 @@
 						<FaTableColumn prop="orgId" label="机构" width="280">
 							<template #default="{ row, $index }: { row: EmployeeOrgModel; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`orgList.${$index}.orgId`"
 									:rules="[{ required: true, message: '请选择机构', trigger: 'change' }]"
 								>
@@ -223,7 +222,6 @@
 						<FaTableColumn prop="departmentId" label="部门" width="280">
 							<template #default="{ row, $index }: { row: EmployeeOrgModel; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`orgList.${$index}.departmentId`"
 									:rules="[{ required: true, message: '请选择部门', trigger: 'change' }]"
 								>
@@ -243,7 +241,6 @@
 						<FaTableColumn prop="isPrimary" label="主部门" width="80">
 							<template #default="{ row, $index }: { row: EmployeeOrgModel; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`orgList.${$index}.isPrimary`"
 									:rules="[{ required: true, message: '请选择是否为主部门', trigger: 'change' }]"
 								>
@@ -254,7 +251,6 @@
 						<FaTableColumn prop="positionId" label="职位" width="280">
 							<template #default="{ row, $index }: { row: EmployeeOrgModel; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`orgList.${$index}.positionId`"
 									:rules="[{ required: true, message: '请选择职位', trigger: 'change' }]"
 								>
@@ -271,7 +267,6 @@
 						<FaTableColumn prop="jobLevelId" label="职级" width="280">
 							<template #default="{ row, $index }: { row: EmployeeOrgModel; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`orgList.${$index}.jobLevelId`"
 									:rules="[{ required: true, message: '请选择职级', trigger: 'change' }]"
 								>
@@ -288,7 +283,6 @@
 						<FaTableColumn prop="isPrincipal" label="负责人" width="80">
 							<template #default="{ row, $index }: { row: EmployeeOrgModel; $index: number }">
 								<el-form-item
-									labelWidth="0"
 									:prop="`orgList.${$index}.isPrincipal`"
 									:rules="[{ required: true, message: '请选择是否为负责人', trigger: 'change' }]"
 								>

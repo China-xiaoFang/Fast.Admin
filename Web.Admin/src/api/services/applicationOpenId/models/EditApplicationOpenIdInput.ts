@@ -1,5 +1,6 @@
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
+import { EditApplicationTemplateIdInput } from "./EditApplicationTemplateIdInput";
 
 /**
  * Fast.Center.Service.ApplicationOpenId.Dto.EditApplicationOpenIdInput 编辑应用标识输入
@@ -89,6 +90,10 @@ export interface EditApplicationOpenIdInput {
    * 备注
    */
   remark?: string;
+  /**
+   * 模板Id信息
+   */
+  templateIdList?: Array<EditApplicationTemplateIdInput>;
   /**
    * 
    */

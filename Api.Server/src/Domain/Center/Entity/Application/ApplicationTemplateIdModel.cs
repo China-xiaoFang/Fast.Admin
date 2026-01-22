@@ -29,7 +29,7 @@ namespace Fast.Center.Entity;
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(OpenId), OrderByType.Asc)]
 [SugarIndex($"IX_{{table}}_{nameof(TemplateId)}", nameof(TemplateId), OrderByType.Asc, true)]
-public class ApplicationTemplateIdModel : BaseEntity, IUpdateVersion
+public class ApplicationTemplateIdModel : BaseEntity
 {
     /// <summary>
     /// 记录Id
@@ -64,16 +64,4 @@ public class ApplicationTemplateIdModel : BaseEntity, IUpdateVersion
     [SugarSearchValue]
     [SugarColumn(ColumnDescription = "模板Id", Length = 50)]
     public string TemplateId { get; set; }
-
-    /// <summary>
-    /// 备注
-    /// </summary>
-    [SugarColumn(ColumnDescription = "备注", Length = 200)]
-    public string Remark { get; set; }
-
-    /// <summary>
-    /// 更新版本控制字段
-    /// </summary>
-    [SugarColumn(ColumnDescription = "更新版本控制字段", IsEnableUpdateVersionValidation = true, CreateTableFieldSort = 998)]
-    public long RowVersion { get; set; }
 }

@@ -32,7 +32,8 @@ public enum ApplicationTemplateTypeEnum : long
     /// <summary>
     /// 无
     /// </summary>
-    None = 1 << 0
+    [Description("无")]
+    None = 1L << 0
 
     /* 业务模板类型 */
 }

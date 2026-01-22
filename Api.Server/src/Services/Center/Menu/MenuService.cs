@@ -188,7 +188,7 @@ public class MenuService : IDynamicApplication
         result.ButtonList = await _repository.Queryable<ButtonModel>()
             .Where(wh => wh.MenuId == menuId)
             .OrderBy(ob => ob.Sort)
-            .Select(sl => new QueryMenuDetailOutput.QueryMenuButtonDetailDto
+            .Select(sl => new EditMenuButtonInput
             {
                 ButtonId = sl.ButtonId,
                 Edition = sl.Edition,
