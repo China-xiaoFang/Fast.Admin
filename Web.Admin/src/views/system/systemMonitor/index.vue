@@ -70,7 +70,7 @@
 						<el-form-item label="框架版本">
 							<el-text>{{ state.programDetail.frameworkVersion }}</el-text>
 						</el-form-item>
-						<el-form-item label="运行时版本">
+						<el-form-item label="运行版本">
 							<el-text>{{ state.programDetail.runtimeVersion }}</el-text>
 						</el-form-item>
 						<el-form-item label="运行时长">
