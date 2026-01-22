@@ -13,6 +13,7 @@ export const regionApi = {
       url: "/region/regionSelector",
       method: "get",
       requestType: "query",
+      cache: true,
     });
   },
   /**
@@ -23,6 +24,7 @@ export const regionApi = {
       url: "/region/provinceSelector",
       method: "get",
       requestType: "query",
+      cache: true,
     });
   },
   /**
@@ -33,6 +35,7 @@ export const regionApi = {
       url: "/region/citySelector",
       method: "get",
       requestType: "query",
+      cache: true,
     });
   },
 };

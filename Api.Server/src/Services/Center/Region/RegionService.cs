@@ -20,6 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.Cache;
 using Fast.Center.Entity;
 using Fast.Center.Enum;
 using Microsoft.AspNetCore.Mvc;
@@ -32,10 +33,12 @@ namespace Fast.Center.Service.Region;
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "region")]
 public class RegionService : IDynamicApplication
 {
+    private readonly ICache<CenterCCL> _cache;
     private readonly ISqlSugarRepository<RegionModel> _repository;
 
-    public RegionService(ISqlSugarRepository<RegionModel> repository)
+    public RegionService(ICache<CenterCCL> cache, ISqlSugarRepository<RegionModel> repository)
     {
+        _cache = cache;
         _repository = repository;
     }
 
@@ -47,40 +50,43 @@ public class RegionService : IDynamicApplication
     [ApiInfo("地区选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> RegionSelector()
     {
-        var data = await _repository.Entities.Where(wh =>
-                (wh.RegionLevel & (RegionLevelEnum.Province | RegionLevelEnum.City | RegionLevelEnum.District)) != 0)
-            .OrderBy(ob => ob.RegionName)
-            .Select(sl => new
-            {
-                sl.RegionId,
-                sl.ParentId,
-                sl.RegionCode,
-                sl.RegionName,
-                sl.AreaCode,
-                sl.PostalCode,
-                sl.Latitude,
-                sl.Longitude,
-                sl.FullRegionName
-            })
-            .ToListAsync();
-
-        return data.Select(sl => new ElSelectorOutput<long>
-            {
-                Value = sl.RegionId,
-                Label = sl.RegionName,
-                ParentId = sl.ParentId,
-                Data = new
+        return await _cache.GetAndSetAsync(CacheConst.Center.Region, async () =>
+        {
+            var data = await _repository.Entities.Where(wh =>
+                    (wh.RegionLevel & (RegionLevelEnum.Province | RegionLevelEnum.City | RegionLevelEnum.District)) != 0)
+                .OrderBy(ob => ob.RegionName)
+                .Select(sl => new
                 {
+                    sl.RegionId,
+                    sl.ParentId,
                     sl.RegionCode,
+                    sl.RegionName,
                     sl.AreaCode,
                     sl.PostalCode,
                     sl.Latitude,
                     sl.Longitude,
                     sl.FullRegionName
-                }
-            })
-            .ToList()
-            .Build();
+                })
+                .ToListAsync();
+
+            return data.Select(sl => new ElSelectorOutput<long>
+                {
+                    Value = sl.RegionId,
+                    Label = sl.RegionName,
+                    ParentId = sl.ParentId,
+                    Data = new
+                    {
+                        sl.RegionCode,
+                        sl.AreaCode,
+                        sl.PostalCode,
+                        sl.Latitude,
+                        sl.Longitude,
+                        sl.FullRegionName
+                    }
+                })
+                .ToList()
+                .Build();
+        });
     }
 
     /// <summary>
@@ -91,29 +97,32 @@ public class RegionService : IDynamicApplication
     [ApiInfo("省份选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> ProvinceSelector()
     {
-        var data = await _repository.Entities.Where(wh => wh.RegionLevel == RegionLevelEnum.Province)
-            .OrderBy(ob => ob.RegionName)
-            .Select(sl => new
-            {
-                sl.RegionId,
-                sl.ParentId,
-                sl.RegionCode,
-                sl.RegionName,
-                sl.Latitude,
-                sl.Longitude,
-                sl.FullRegionName
-            })
-            .ToListAsync();
+        return await _cache.GetAndSetAsync(CacheConst.Center.Province, async () =>
+        {
+            var data = await _repository.Entities.Where(wh => wh.RegionLevel == RegionLevelEnum.Province)
+                .OrderBy(ob => ob.RegionName)
+                .Select(sl => new
+                {
+                    sl.RegionId,
+                    sl.ParentId,
+                    sl.RegionCode,
+                    sl.RegionName,
+                    sl.Latitude,
+                    sl.Longitude,
+                    sl.FullRegionName
+                })
+                .ToListAsync();
 
-        return data.Select(sl => new ElSelectorOutput<long>
-            {
-                Value = sl.RegionId,
-                Label = sl.RegionName,
-                ParentId = sl.ParentId,
-                Data = new {sl.RegionCode, sl.Latitude, sl.Longitude, sl.FullRegionName}
-            })
-            .ToList()
-            .Build();
+            return data.Select(sl => new ElSelectorOutput<long>
+                {
+                    Value = sl.RegionId,
+                    Label = sl.RegionName,
+                    ParentId = sl.ParentId,
+                    Data = new {sl.RegionCode, sl.Latitude, sl.Longitude, sl.FullRegionName}
+                })
+                .ToList()
+                .Build();
+        });
     }
 
     /// <summary>
@@ -124,39 +133,42 @@ public class RegionService : IDynamicApplication
     [ApiInfo("城市选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> CitySelector()
     {
-        var data = await _repository.Entities.Where(wh =>
-                (wh.RegionLevel & (RegionLevelEnum.Province | RegionLevelEnum.City)) != 0)
-            .OrderBy(ob => ob.RegionName)
-            .Select(sl => new
-            {
-                sl.RegionId,
-                sl.ParentId,
-                sl.RegionCode,
-                sl.RegionName,
-                sl.AreaCode,
-                sl.PostalCode,
-                sl.Latitude,
-                sl.Longitude,
-                sl.FullRegionName
-            })
-            .ToListAsync();
-
-        return data.Select(sl => new ElSelectorOutput<long>
-            {
-                Value = sl.RegionId,
-                Label = sl.RegionName,
-                ParentId = sl.ParentId,
-                Data = new
+        return await _cache.GetAndSetAsync(CacheConst.Center.City, async () =>
+        {
+            var data = await _repository.Entities.Where(wh =>
+                    (wh.RegionLevel & (RegionLevelEnum.Province | RegionLevelEnum.City)) != 0)
+                .OrderBy(ob => ob.RegionName)
+                .Select(sl => new
                 {
+                    sl.RegionId,
+                    sl.ParentId,
                     sl.RegionCode,
+                    sl.RegionName,
                     sl.AreaCode,
                     sl.PostalCode,
                     sl.Latitude,
                     sl.Longitude,
                     sl.FullRegionName
-                }
-            })
-            .ToList()
-            .Build();
+                })
+                .ToListAsync();
+
+            return data.Select(sl => new ElSelectorOutput<long>
+                {
+                    Value = sl.RegionId,
+                    Label = sl.RegionName,
+                    ParentId = sl.ParentId,
+                    Data = new
+                    {
+                        sl.RegionCode,
+                        sl.AreaCode,
+                        sl.PostalCode,
+                        sl.Latitude,
+                        sl.Longitude,
+                        sl.FullRegionName
+                    }
+                })
+                .ToList()
+                .Build();
+        });
     }
 }

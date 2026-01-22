@@ -102,5 +102,20 @@ public class CacheConst
         /// </summary>
         /// <remarks>{0}表格Key，{1}租户编号, {2}工号</remarks>
         public const string UserTableConfigCache = "TableConfig:{0}:{1}:{2}";
+
+        /// <summary>
+        /// 地区
+        /// </summary>
+        public const string Region = "Region";
+
+        /// <summary>
+        /// 省份
+        /// </summary>
+        public const string Province = "Province";
+
+        /// <summary>
+        /// 城市
+        /// </summary>
+        public const string City = "City";
     }
 }
