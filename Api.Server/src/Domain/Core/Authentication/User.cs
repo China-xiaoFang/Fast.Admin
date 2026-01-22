@@ -306,7 +306,6 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// <summary>
     /// 机器人登录
     /// </summary>
-    /// <param name="input"></param>
     /// <remarks>非调度作业请勿使用</remarks>
     /// <returns></returns>
     public async Task<string> RobotLogin()
