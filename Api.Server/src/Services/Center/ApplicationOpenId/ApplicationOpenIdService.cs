@@ -146,7 +146,7 @@ public class ApplicationOpenIdService : IDynamicApplication
 
         result.TemplateIdList = await _repository.Queryable<ApplicationTemplateIdModel>()
             .Where(wh => wh.OpenId == result.OpenId)
-            .Select(sl => new EditApplicationOpenIdInput.EditApplicationTemplateIdInput
+            .Select(sl => new EditApplicationTemplateIdInput
             {
                 RecordId = sl.RecordId, TemplateType = sl.TemplateType, TemplateId = sl.TemplateId
             })

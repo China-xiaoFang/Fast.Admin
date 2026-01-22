@@ -145,27 +145,4 @@ public class EditApplicationOpenIdInput : UpdateVersionInput
     /// 模板Id信息
     /// </summary>
     public List<EditApplicationTemplateIdInput> TemplateIdList { get; set; }
-
-    /// <summary>
-    /// <see cref="EditApplicationTemplateIdInput"/> 编辑应用模板Id输入
-    /// </summary>
-    public class EditApplicationTemplateIdInput
-    {
-        /// <summary>
-        /// 记录Id
-        /// </summary>
-        public long? RecordId { get; set; }
-
-        /// <summary>
-        /// 模板类型
-        /// </summary>
-        [StringRequired(ErrorMessage = "模板类型不能为空")]
-        public ApplicationTemplateTypeEnum TemplateType { get; set; }
-
-        /// <summary>
-        /// 模板Id
-        /// </summary>
-        [StringRequired(ErrorMessage = "模板Id不能为空")]
-        public string TemplateId { get; set; }
-    }
 }
