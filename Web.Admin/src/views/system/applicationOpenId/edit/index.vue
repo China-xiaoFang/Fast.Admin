@@ -104,7 +104,7 @@
 						<template #header>
 							<el-button type="primary" :icon="Plus" @click="handleTemplateIdAdd">新增</el-button>
 						</template>
-						<FaTableColumn prop="templateId" label="模板Id" width="300">
+						<FaTableColumn prop="templateId" label="模板Id" width="400">
 							<template #default="{ row, $index }: { row: EditApplicationTemplateIdInput; $index: number }">
 								<el-form-item
 									:prop="`templateIdList.${$index}.templateId`"
@@ -114,7 +114,7 @@
 								</el-form-item>
 							</template>
 						</FaTableColumn>
-						<FaTableColumn prop="templateType" label="模板类型" width="280">
+						<FaTableColumn prop="templateType" label="模板类型" width="180">
 							<template #default="{ row, $index }: { row: EditApplicationTemplateIdInput; $index: number }">
 								<el-form-item
 									:prop="`templateIdList.${$index}.templateType`"
