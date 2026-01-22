@@ -151,5 +151,5 @@ public class QueryApplicationOpenIdDetailOutput : PagedOutput
     /// <summary>
     /// 模板Id信息
     /// </summary>
-    public List<EditApplicationOpenIdInput.EditApplicationTemplateIdInput> TemplateIdList { get; set; }
+    public List<EditApplicationTemplateIdInput> TemplateIdList { get; set; }
 }
