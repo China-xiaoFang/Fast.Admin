@@ -126,7 +126,7 @@ public class DatabaseService : IDynamicApplication
                 UpdatedTime = t1.UpdatedTime,
                 RowVersion = t1.RowVersion,
                 SlaveDatabaseList = t1.SlaveDatabaseList.Select(dSl => new EditSlaveDatabaseInput
-                {
+                    {
                         SlaveId = dSl.SlaveId,
                         PublicIp = dSl.PublicIp,
                         IntranetIp = dSl.IntranetIp,
