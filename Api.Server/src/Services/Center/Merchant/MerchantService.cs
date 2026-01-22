@@ -52,12 +52,12 @@ public class MerchantService : IDynamicApplication
     {
         var data = await _repository.Entities.WhereIF(merchantType != null, wh => wh.MerchantType == merchantType)
             .OrderBy(ob => ob.MerchantNo)
-            .Select(sl => new {sl.MerchantId, sl.MerchantNo, sl.MerchantType})
+            .Select(sl => new {sl.MerchantId, sl.MerchantName, sl.MerchantNo, sl.MerchantType})
             .ToListAsync();
 
         return data.Select(sl => new ElSelectorOutput<long>
             {
-                Value = sl.MerchantId, Label = sl.MerchantNo, Data = new {sl.MerchantType}
+                Value = sl.MerchantId, Label = sl.MerchantNo, Data = new {sl.MerchantName, sl.MerchantType}
             })
             .ToList();
     }
@@ -79,6 +79,7 @@ public class MerchantService : IDynamicApplication
                 {
                     MerchantId = sl.MerchantId,
                     MerchantType = sl.MerchantType,
+                    MerchantName = sl.MerchantName,
                     MerchantNo = sl.MerchantNo,
                     Remark = sl.Remark,
                     DepartmentName = sl.DepartmentName,
@@ -105,6 +106,7 @@ public class MerchantService : IDynamicApplication
             {
                 MerchantId = sl.MerchantId,
                 MerchantType = sl.MerchantType,
+                MerchantName = sl.MerchantName,
                 MerchantNo = sl.MerchantNo,
                 MerchantSecret = sl.MerchantSecret,
                 PublicSerialNum = sl.PublicSerialNum,
@@ -148,6 +150,7 @@ public class MerchantService : IDynamicApplication
         var merchantModel = new MerchantModel
         {
             MerchantType = input.MerchantType,
+            MerchantName = input.MerchantName,
             MerchantNo = input.MerchantNo,
             MerchantSecret = input.MerchantSecret,
             PublicSerialNum = input.PublicSerialNum,
@@ -183,6 +186,7 @@ public class MerchantService : IDynamicApplication
         }
 
         merchantModel.MerchantType = input.MerchantType;
+        merchantModel.MerchantName = input.MerchantName;
         merchantModel.MerchantNo = input.MerchantNo;
         merchantModel.MerchantSecret = input.MerchantSecret;
         merchantModel.PublicSerialNum = input.PublicSerialNum;

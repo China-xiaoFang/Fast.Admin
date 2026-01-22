@@ -34,6 +34,12 @@ public class AddMerchantInput
     public PaymentChannelEnum MerchantType { get; set; }
 
     /// <summary>
+    /// 商户名称
+    /// </summary>
+    [StringRequired(ErrorMessage = "商户名称不能为空")]
+    public string MerchantName { get; set; }
+
+    /// <summary>
     /// 商户号
     /// </summary>
     [StringRequired(ErrorMessage = "商户号不能为空")]

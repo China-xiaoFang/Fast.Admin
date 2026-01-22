@@ -11,8 +11,11 @@
 		@change="(value) => emit('change', value)"
 	>
 		<template #default="data">
-			<span>{{ data.label }}</span>
-			<Tag name="PaymentChannelEnum" :value="data.data?.merchantType" size="small" />
+			<span>{{ data.data?.merchantName }}</span>
+			<span style="display: flex; justify-content: space-between; width: 100%">
+				<span style="font-size: var(--el-font-size-extra-small); padding-right: 8px">{{ data.label }}</span>
+				<Tag name="PaymentChannelEnum" :value="data.data?.merchantType" size="small" />
+			</span>
 		</template>
 	</FaSelect>
 </template>

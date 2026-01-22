@@ -43,6 +43,14 @@ public class MerchantModel : BaseTEntity, IUpdateVersion
     public PaymentChannelEnum MerchantType { get; set; }
 
     /// <summary>
+    /// 商户名称
+    /// </summary>
+    [Required]
+    [SugarSearchValue]
+    [SugarColumn(ColumnDescription = "商户名称", Length = 30)]
+    public string MerchantName { get; set; }
+
+    /// <summary>
     /// 商户号
     /// </summary>
     [Required]

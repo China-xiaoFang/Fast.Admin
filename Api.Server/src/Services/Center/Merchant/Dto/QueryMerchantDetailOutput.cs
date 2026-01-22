@@ -38,6 +38,11 @@ public class QueryMerchantDetailOutput : PagedOutput
     public PaymentChannelEnum MerchantType { get; set; }
 
     /// <summary>
+    /// 商户名称
+    /// </summary>
+    public string MerchantName { get; set; }
+
+    /// <summary>
     /// 商户号
     /// </summary>
     public string MerchantNo { get; set; }

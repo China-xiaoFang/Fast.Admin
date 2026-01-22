@@ -13,6 +13,9 @@
 			<FaFormItem prop="merchantType" label="商户类型">
 				<RadioGroup name="PaymentChannelEnum" v-model="state.formData.merchantType" />
 			</FaFormItem>
+			<FaFormItem prop="merchantName" label="商户名称">
+				<el-input v-model="state.formData.merchantName" maxlength="30" placeholder="请输入商户名称" />
+			</FaFormItem>
 			<FaFormItem prop="merchantNo" label="商户号">
 				<el-input v-model="state.formData.merchantNo" maxlength="32" placeholder="请输入商户号" />
 			</FaFormItem>
@@ -65,6 +68,7 @@ const state = reactive({
 		merchantType: PaymentChannelEnum.WeChat,
 	}),
 	formRules: withDefineType<FormRules>({
+		merchantName: [{ required: true, message: "请输入商户名称", trigger: "blur" }],
 		merchantNo: [{ required: true, message: "请输入商户号", trigger: "blur" }],
 	}),
 	formDisabled: false,
