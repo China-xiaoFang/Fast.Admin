@@ -102,33 +102,34 @@ public class TenantService : IDynamicApplication
             .WhereIF(!string.IsNullOrWhiteSpace(input.AdminEmail), wh => wh.AdminEmail.Contains(input.AdminEmail))
             .WhereIF(input.TenantType != null, wh => wh.TenantType == input.TenantType)
             .OrderByDescending(ob => ob.CreatedTime)
-            .ToPagedListAsync(input,
-                sl => new QueryTenantPagedOutput
-                {
-                    TenantId = sl.TenantId,
-                    TenantNo = sl.TenantNo,
-                    TenantCode = sl.TenantCode,
-                    Status = sl.Status,
-                    TenantName = sl.TenantName,
-                    ShortName = sl.ShortName,
-                    SpellName = sl.SpellName,
-                    Edition = sl.Edition,
-                    AdminAccountId = sl.AdminAccountId,
-                    AdminName = sl.AdminName,
-                    AdminMobile = sl.AdminMobile,
-                    AdminEmail = sl.AdminEmail,
-                    AdminPhone = sl.AdminPhone,
-                    RobotName = sl.RobotName,
-                    TenantType = sl.TenantType,
-                    LogoUrl = sl.LogoUrl,
-                    AllowDeleteData = sl.AllowDeleteData,
-                    DepartmentName = sl.DepartmentName,
-                    CreatedUserName = sl.CreatedUserName,
-                    CreatedTime = sl.CreatedTime,
-                    UpdatedUserName = sl.UpdatedUserName,
-                    UpdatedTime = sl.UpdatedTime,
-                    RowVersion = sl.RowVersion
-                });
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
+            .Select(sl => new QueryTenantPagedOutput
+            {
+                TenantId = sl.TenantId,
+                TenantNo = sl.TenantNo,
+                TenantCode = sl.TenantCode,
+                Status = sl.Status,
+                TenantName = sl.TenantName,
+                ShortName = sl.ShortName,
+                SpellName = sl.SpellName,
+                Edition = sl.Edition,
+                AdminAccountId = sl.AdminAccountId,
+                AdminName = sl.AdminName,
+                AdminMobile = sl.AdminMobile,
+                AdminEmail = sl.AdminEmail,
+                AdminPhone = sl.AdminPhone,
+                RobotName = sl.RobotName,
+                TenantType = sl.TenantType,
+                LogoUrl = sl.LogoUrl,
+                AllowDeleteData = sl.AllowDeleteData,
+                DepartmentName = sl.DepartmentName,
+                CreatedUserName = sl.CreatedUserName,
+                CreatedTime = sl.CreatedTime,
+                UpdatedUserName = sl.UpdatedUserName,
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            })
+            .ToPagedListAsync(input);
     }
 
     /// <summary>

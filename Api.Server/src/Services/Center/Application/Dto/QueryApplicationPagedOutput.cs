@@ -40,11 +40,13 @@ public class QueryApplicationPagedOutput : PagedOutput
     /// <summary>
     /// 应用编号
     /// </summary>
+    [SugarSearchValue]
     public string AppNo { get; set; }
 
     /// <summary>
     /// 应用名称
     /// </summary>
+    [SugarSearchValue]
     public string AppName { get; set; }
 
     /// <summary>

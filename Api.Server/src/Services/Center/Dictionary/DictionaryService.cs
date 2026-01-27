@@ -114,7 +114,9 @@ public class DictionaryService : IDynamicApplication
     [Permission(PermissionConst.Dictionary.Paged)]
     public async Task<PagedResult<ElSelectorOutput<long>>> SelectorPaged(PagedInput input)
     {
-        var pagedData = await _typeRepository.Entities.OrderBy(ob => ob.DictionaryName)
+        var pagedData = await _typeRepository.Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
+                wh => wh.DictionaryName.Contains(input.SearchValue))
+            .OrderBy(ob => ob.DictionaryName)
             .Select(sl => new {sl.DictionaryName, sl.DictionaryId, sl.ValueType})
             .ToPagedListAsync(input);
 
@@ -134,24 +136,24 @@ public class DictionaryService : IDynamicApplication
     [Permission(PermissionConst.Dictionary.Paged)]
     public async Task<PagedResult<QueryDictionaryPagedOutput>> QueryDictionaryPaged(PagedInput input)
     {
-        return await _typeRepository.Entities.OrderByDescending(ob => ob.CreatedTime)
-            .ToPagedListAsync(input,
-                sl => new QueryDictionaryPagedOutput
-                {
-                    DictionaryId = sl.DictionaryId,
-                    DictionaryKey = sl.DictionaryKey,
-                    DictionaryName = sl.DictionaryName,
-                    ValueType = sl.ValueType,
-                    HasFlags = sl.HasFlags,
-                    Status = sl.Status,
-                    Remark = sl.Remark,
-                    DepartmentName = sl.DepartmentName,
-                    CreatedUserName = sl.CreatedUserName,
-                    CreatedTime = sl.CreatedTime,
-                    UpdatedUserName = sl.UpdatedUserName,
-                    UpdatedTime = sl.UpdatedTime,
-                    RowVersion = sl.RowVersion
-                });
+        return await _typeRepository.Entities.OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
+            .Select(sl => new QueryDictionaryPagedOutput
+            {
+                DictionaryId = sl.DictionaryId,
+                DictionaryKey = sl.DictionaryKey,
+                DictionaryName = sl.DictionaryName,
+                ValueType = sl.ValueType,
+                HasFlags = sl.HasFlags,
+                Status = sl.Status,
+                Remark = sl.Remark,
+                DepartmentName = sl.DepartmentName,
+                CreatedUserName = sl.CreatedUserName,
+                CreatedTime = sl.CreatedTime,
+                UpdatedUserName = sl.UpdatedUserName,
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            })
+            .ToPagedListAsync(input);
     }
 
     /// <summary>

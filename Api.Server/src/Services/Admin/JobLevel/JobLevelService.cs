@@ -70,21 +70,21 @@ public class JobLevelService : IDynamicApplication
     [Permission(PermissionConst.JobLevel.Paged)]
     public async Task<PagedResult<QueryJobLevelPagedOutput>> QueryJobLevelPaged(PagedInput input)
     {
-        return await _repository.Entities.OrderByDescending(ob => ob.Level)
-            .ToPagedListAsync(input,
-                sl => new QueryJobLevelPagedOutput
-                {
-                    JobLevelId = sl.JobLevelId,
-                    JobLevelName = sl.JobLevelName,
-                    Level = sl.Level,
-                    Remark = sl.Remark,
-                    DepartmentName = sl.DepartmentName,
-                    CreatedUserName = sl.CreatedUserName,
-                    CreatedTime = sl.CreatedTime,
-                    UpdatedUserName = sl.UpdatedUserName,
-                    UpdatedTime = sl.UpdatedTime,
-                    RowVersion = sl.RowVersion
-                });
+        return await _repository.Entities.OrderByIF(input.IsOrderBy, ob => ob.Level, OrderByType.Desc)
+            .Select(sl => new QueryJobLevelPagedOutput
+            {
+                JobLevelId = sl.JobLevelId,
+                JobLevelName = sl.JobLevelName,
+                Level = sl.Level,
+                Remark = sl.Remark,
+                DepartmentName = sl.DepartmentName,
+                CreatedUserName = sl.CreatedUserName,
+                CreatedTime = sl.CreatedTime,
+                UpdatedUserName = sl.UpdatedUserName,
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            })
+            .ToPagedListAsync(input);
     }
 
     /// <summary>

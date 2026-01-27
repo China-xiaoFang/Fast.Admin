@@ -119,6 +119,13 @@ public class SqlExceptionLogModel : BaseRecordEntity
     public string PureSql { get; set; }
 
     /// <summary>
+    /// 异常时间
+    /// </summary>
+    [SugarSearchTime]
+    [Required, SugarColumn(ColumnDescription = "异常时间", CreateTableFieldSort = 993)]
+    public override DateTime? CreatedTime { get; set; }
+
+    /// <summary>
     /// 租户Id
     /// </summary>
     [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]

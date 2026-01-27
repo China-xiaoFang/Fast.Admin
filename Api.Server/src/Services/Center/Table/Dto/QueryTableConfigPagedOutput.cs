@@ -35,11 +35,13 @@ public class QueryTableConfigPagedOutput : PagedOutput
     /// <summary>
     /// 表格Key
     /// </summary>
+    [SugarSearchValue]
     public string TableKey { get; set; }
 
     /// <summary>
     /// 表格名称
     /// </summary>
+    [SugarSearchValue]
     public string TableName { get; set; }
 
     /// <summary>

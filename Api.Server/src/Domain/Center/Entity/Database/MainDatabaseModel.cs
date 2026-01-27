@@ -53,7 +53,6 @@ public class MainDatabaseModel : BaseTEntity, IUpdateVersion
     /// 公网Ip地址
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "公网Ip地址", Length = 15)]
     public string PublicIp { get; set; }
 
@@ -74,7 +73,6 @@ public class MainDatabaseModel : BaseTEntity, IUpdateVersion
     /// 数据库名称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "数据库名称", Length = 50)]
     public string DbName { get; set; }
 

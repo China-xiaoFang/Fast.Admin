@@ -43,7 +43,6 @@ public class EmployeeModel : IUpdateVersion
     /// 工号
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "工号", Length = 20)]
     public string EmployeeNo { get; set; }
 
@@ -51,7 +50,6 @@ public class EmployeeModel : IUpdateVersion
     /// 姓名
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "姓名", Length = 20)]
     public string EmployeeName { get; set; }
 
@@ -59,7 +57,6 @@ public class EmployeeModel : IUpdateVersion
     /// 手机
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
@@ -72,7 +69,6 @@ public class EmployeeModel : IUpdateVersion
     /// <summary>
     /// 邮箱
     /// </summary>
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "邮箱", Length = 50)]
     public string Email { get; set; }
 
@@ -241,7 +237,7 @@ public class EmployeeModel : IUpdateVersion
     /// <summary>
     /// 创建时间
     /// </summary>
-    [Required, SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    [Required, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>

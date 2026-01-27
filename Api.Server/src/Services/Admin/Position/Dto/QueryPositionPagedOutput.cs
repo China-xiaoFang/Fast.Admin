@@ -35,6 +35,7 @@ public class QueryPositionPagedOutput : PagedOutput
     /// <summary>
     /// 职位名称
     /// </summary>
+    [SugarSearchValue]
     public string PositionName { get; set; }
 
     /// <summary>

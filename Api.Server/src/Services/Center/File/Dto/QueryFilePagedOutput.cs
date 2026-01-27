@@ -35,11 +35,13 @@ public class QueryFilePagedOutput
     /// <summary>
     /// 文件唯一标识
     /// </summary>
+    [SugarSearchValue]
     public string FileObjectName { get; set; }
 
     /// <summary>
     /// 文件名称（上传时候的文件名）
     /// </summary>
+    [SugarSearchValue]
     public string FileOriginName { get; set; }
 
     /// <summary>
@@ -70,6 +72,7 @@ public class QueryFilePagedOutput
     /// <summary>
     /// 文件哈希
     /// </summary>
+    [SugarSearchValue]
     public string FileHash { get; set; }
 
     /// <summary>
@@ -110,5 +113,6 @@ public class QueryFilePagedOutput
     /// <summary>
     /// 创建时间
     /// </summary>
+    [SugarSearchTime]
     public DateTime? CreatedTime { get; set; }
 }

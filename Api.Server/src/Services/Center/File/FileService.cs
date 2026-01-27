@@ -130,28 +130,28 @@ public class FileService : IDynamicApplication
             queryable = queryable.Where(wh => wh.CreatedUserId == _user.UserId);
         }
 
-        return await queryable.OrderByDescending(ob => ob.CreatedTime)
-            .ToPagedListAsync(input,
-                sl => new QueryFilePagedOutput
-                {
-                    FileId = sl.FileId,
-                    FileObjectName = sl.FileObjectName,
-                    FileOriginName = sl.FileOriginName,
-                    FileSuffix = sl.FileSuffix,
-                    FileMimeType = sl.FileMimeType,
-                    FileSizeKb = sl.FileSizeKb,
-                    FilePath = sl.FilePath,
-                    FileLocation = sl.FileLocation,
-                    FileHash = sl.FileHash,
-                    UploadDevice = sl.UploadDevice,
-                    UploadOS = sl.UploadOS,
-                    UploadBrowser = sl.UploadBrowser,
-                    UploadProvince = sl.UploadProvince,
-                    UploadCity = sl.UploadCity,
-                    UploadIp = sl.UploadIp,
-                    CreatedUserName = sl.CreatedUserName,
-                    CreatedTime = sl.CreatedTime
-                });
+        return await queryable.OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
+            .Select(sl => new QueryFilePagedOutput
+            {
+                FileId = sl.FileId,
+                FileObjectName = sl.FileObjectName,
+                FileOriginName = sl.FileOriginName,
+                FileSuffix = sl.FileSuffix,
+                FileMimeType = sl.FileMimeType,
+                FileSizeKb = sl.FileSizeKb,
+                FilePath = sl.FilePath,
+                FileLocation = sl.FileLocation,
+                FileHash = sl.FileHash,
+                UploadDevice = sl.UploadDevice,
+                UploadOS = sl.UploadOS,
+                UploadBrowser = sl.UploadBrowser,
+                UploadProvince = sl.UploadProvince,
+                UploadCity = sl.UploadCity,
+                UploadIp = sl.UploadIp,
+                CreatedUserName = sl.CreatedUserName,
+                CreatedTime = sl.CreatedTime
+            })
+            .ToPagedListAsync(input);
     }
 
     /// <summary>

@@ -53,26 +53,27 @@ public class ComplaintService : IDynamicApplication
     public async Task<PagedResult<QueryComplaintPagedOutput>> QueryComplaintPaged(QueryComplaintPagedInput input)
     {
         return await _repository.Entities.WhereIF(input.ComplaintType != null, wh => wh.ComplaintType == input.ComplaintType)
-            .ToPagedListAsync(input,
-                sl => new QueryComplaintPagedOutput
-                {
-                    ComplaintId = sl.ComplaintId,
-                    AppName = sl.AppName,
-                    OpenId = sl.OpenId,
-                    NickName = sl.NickName,
-                    ComplaintType = sl.ComplaintType,
-                    Mobile = sl.Mobile,
-                    ContactPhone = sl.ContactPhone,
-                    ContactEmail = sl.ContactEmail,
-                    Description = sl.Description,
-                    AttachmentImages = sl.AttachmentImages,
-                    HandleTime = sl.HandleTime,
-                    HandleDescription = sl.HandleDescription,
-                    Remark = sl.Remark,
-                    CreatedTime = sl.CreatedTime,
-                    TenantName = sl.TenantName,
-                    RowVersion = sl.RowVersion
-                });
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
+            .Select(sl => new QueryComplaintPagedOutput
+            {
+                ComplaintId = sl.ComplaintId,
+                AppName = sl.AppName,
+                OpenId = sl.OpenId,
+                NickName = sl.NickName,
+                ComplaintType = sl.ComplaintType,
+                Mobile = sl.Mobile,
+                ContactPhone = sl.ContactPhone,
+                ContactEmail = sl.ContactEmail,
+                Description = sl.Description,
+                AttachmentImages = sl.AttachmentImages,
+                HandleTime = sl.HandleTime,
+                HandleDescription = sl.HandleDescription,
+                Remark = sl.Remark,
+                CreatedTime = sl.CreatedTime,
+                TenantName = sl.TenantName,
+                RowVersion = sl.RowVersion
+            })
+            .ToPagedListAsync(input);
     }
 
     /// <summary>
@@ -87,26 +88,27 @@ public class ComplaintService : IDynamicApplication
     {
         return await _repository.Entities.Where(wh => wh.TenantId == _user.TenantId)
             .WhereIF(input.ComplaintType != null, wh => wh.ComplaintType == input.ComplaintType)
-            .ToPagedListAsync(input,
-                sl => new QueryComplaintPagedOutput
-                {
-                    ComplaintId = sl.ComplaintId,
-                    AppName = sl.AppName,
-                    OpenId = sl.OpenId,
-                    NickName = sl.NickName,
-                    ComplaintType = sl.ComplaintType,
-                    Mobile = sl.Mobile,
-                    ContactPhone = sl.ContactPhone,
-                    ContactEmail = sl.ContactEmail,
-                    Description = sl.Description,
-                    AttachmentImages = sl.AttachmentImages,
-                    HandleTime = sl.HandleTime,
-                    HandleDescription = sl.HandleDescription,
-                    Remark = sl.Remark,
-                    CreatedTime = sl.CreatedTime,
-                    TenantName = sl.TenantName,
-                    RowVersion = sl.RowVersion
-                });
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
+            .Select(sl => new QueryComplaintPagedOutput
+            {
+                ComplaintId = sl.ComplaintId,
+                AppName = sl.AppName,
+                OpenId = sl.OpenId,
+                NickName = sl.NickName,
+                ComplaintType = sl.ComplaintType,
+                Mobile = sl.Mobile,
+                ContactPhone = sl.ContactPhone,
+                ContactEmail = sl.ContactEmail,
+                Description = sl.Description,
+                AttachmentImages = sl.AttachmentImages,
+                HandleTime = sl.HandleTime,
+                HandleDescription = sl.HandleDescription,
+                Remark = sl.Remark,
+                CreatedTime = sl.CreatedTime,
+                TenantName = sl.TenantName,
+                RowVersion = sl.RowVersion
+            })
+            .ToPagedListAsync(input);
     }
 
     /// <summary>

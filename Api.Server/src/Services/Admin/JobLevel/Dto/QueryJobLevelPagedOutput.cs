@@ -35,6 +35,7 @@ public class QueryJobLevelPagedOutput : PagedOutput
     /// <summary>
     /// 职级名称
     /// </summary>
+    [SugarSearchValue]
     public string JobLevelName { get; set; }
 
     /// <summary>

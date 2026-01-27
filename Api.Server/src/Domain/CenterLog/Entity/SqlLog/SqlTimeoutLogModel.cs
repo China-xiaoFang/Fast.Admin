@@ -107,6 +107,13 @@ public class SqlTimeoutLogModel : BaseRecordEntity
     public string PureSql { get; set; }
 
     /// <summary>
+    /// 超时时间
+    /// </summary>
+    [SugarSearchTime]
+    [Required, SugarColumn(ColumnDescription = "超时时间", CreateTableFieldSort = 993)]
+    public override DateTime? CreatedTime { get; set; }
+
+    /// <summary>
     /// 租户Id
     /// </summary>
     [SugarColumn(ColumnDescription = "租户Id", CreateTableFieldSort = 997)]

@@ -40,7 +40,6 @@ public class JobLevelModel : BaseEntity, IUpdateVersion
     /// 职级名称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "职级名称", Length = 20)]
     public string JobLevelName { get; set; }
 

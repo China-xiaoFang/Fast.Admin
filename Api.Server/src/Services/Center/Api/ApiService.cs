@@ -49,10 +49,8 @@ public class ApiService : IDynamicApplication
     [Permission(PermissionConst.ApiPaged)]
     public async Task<PagedResult<ApiInfoModel>> QueryApiPaged(PagedInput input)
     {
-        return await _repository.Entities.OrderByDescending(ob => ob.Sort)
-            .OrderBy(ob => ob.ServiceName)
-            .OrderBy(ob => ob.GroupName)
-            .OrderBy(ob => ob.ModuleName)
+        return await _repository.Entities.OrderByIF(input.IsOrderBy, ob => ob.Sort, OrderByType.Desc)
+            .OrderByIF(input.IsOrderBy, ob => ob.ApiUrl)
             .ToPagedListAsync(input);
     }
 }

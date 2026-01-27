@@ -47,7 +47,6 @@ public class ApplicationModel : BaseEntity, IUpdateVersion
     /// 应用编号
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "应用编号", Length = 11)]
     public string AppNo { get; set; }
 
@@ -55,7 +54,6 @@ public class ApplicationModel : BaseEntity, IUpdateVersion
     /// 应用名称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "应用名称", Length = 30)]
     public string AppName { get; set; }
 

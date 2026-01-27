@@ -69,7 +69,7 @@ public class SqlExecutionLogService : IDynamicApplication
         }
 
         return await queryable.SplitTable()
-            .OrderByDescending(ob => ob.CreatedTime)
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .ToPagedListAsync(input);
     }
 

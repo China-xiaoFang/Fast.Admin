@@ -116,6 +116,7 @@ public class OperateLogModel : BaseRecordEntity
     /// 操作时间
     /// </summary>
     [SplitField]
-    [Required, SugarSearchTime, SugarColumn(ColumnDescription = "操作时间", CreateTableFieldSort = 993)]
+    [SugarSearchTime]
+    [Required, SugarColumn(ColumnDescription = "操作时间", CreateTableFieldSort = 993)]
     public override DateTime? CreatedTime { get; set; }
 }

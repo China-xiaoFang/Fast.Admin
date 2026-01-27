@@ -49,6 +49,7 @@ public class PayRecordService : IDynamicApplication
     [Permission(PermissionConst.PayRecordPaged)]
     public async Task<PagedResult<PayRecordModel>> QueryPasswordMapPaged(PagedInput input)
     {
-        return await _repository.Entities.ToPagedListAsync(input);
+        return await _repository.Entities.OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
+            .ToPagedListAsync(input);
     }
 }

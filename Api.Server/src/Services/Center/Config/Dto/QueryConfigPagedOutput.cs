@@ -35,11 +35,13 @@ public class QueryConfigPagedOutput : PagedOutput
     /// <summary>
     /// 配置编码
     /// </summary>
+    [SugarSearchValue]
     public string ConfigCode { get; set; }
 
     /// <summary>
     /// 配置名称
     /// </summary>
+    [SugarSearchValue]
     public string ConfigName { get; set; }
 
     /// <summary>

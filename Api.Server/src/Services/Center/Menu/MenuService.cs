@@ -84,7 +84,7 @@ public class MenuService : IDynamicApplication
             .WhereIF(input.Visible != null, t1 => t1.Visible == input.Visible)
             .WhereIF(input.HasMobile != null, t1 => t1.HasMobile == input.HasMobile)
             .WhereIF(input.Status != null, t1 => t1.Status == input.Status)
-            .OrderBy(t1 => t1.Sort)
+            .OrderByIF(input.IsOrderBy, t1 => t1.Sort)
             .Select((t1, t2, t3) => new QueryMenuPagedOutput
             {
                 MenuId = t1.MenuId,
@@ -121,9 +121,7 @@ public class MenuService : IDynamicApplication
                 UpdatedTime = t1.UpdatedTime,
                 RowVersion = t1.RowVersion
             })
-            .PagedWhere(input)
-            .PagedSearch(input.SearchList)
-            .PagedOrderBy(input.SortList)
+            .SugarPaged(input)
             .ToListAsync();
 
         return new TreeBuildUtil<QueryMenuPagedOutput, long>().Build(data);

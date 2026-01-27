@@ -47,16 +47,19 @@ public class QueryWeChatUserPagedOutput : PagedOutput
     /// <summary>
     /// 唯一用户标识
     /// </summary>
+    [SugarSearchValue]
     public string OpenId { get; set; }
 
     /// <summary>
     /// 统一用户标识
     /// </summary>
+    [SugarSearchValue]
     public string UnionId { get; set; }
 
     /// <summary>
     /// 用户纯手机号码
     /// </summary>
+    [SugarSearchValue]
     public string PurePhoneNumber { get; set; }
 
     /// <summary>
@@ -73,6 +76,7 @@ public class QueryWeChatUserPagedOutput : PagedOutput
     /// <summary>
     /// 微信昵称
     /// </summary>
+    [SugarSearchValue]
     public string NickName { get; set; }
 
     /// <summary>
@@ -144,4 +148,8 @@ public class QueryWeChatUserPagedOutput : PagedOutput
     /// 手机号更新时间
     /// </summary>
     public DateTime? MobileUpdateTime { get; set; }
+
+    /// <summary>创建时间</summary>
+    [SugarSearchTime]
+    public override DateTime? CreatedTime { get; set; }
 }

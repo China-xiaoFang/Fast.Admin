@@ -60,7 +60,11 @@ public class AccountService : IDynamicApplication
         var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
         if (tenantModel.TenantType == TenantTypeEnum.System)
         {
-            var data = await _repository.Entities.OrderBy(ob => ob.Mobile)
+            var data = await _repository.Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
+                    wh => wh.Mobile.Contains(input.SearchValue)
+                          || wh.Email.Contains(input.SearchValue)
+                          || wh.NickName.Contains(input.SearchValue))
+                .OrderBy(ob => ob.Mobile)
                 .Select(sl => new AccountModel
                 {
                     AccountId = sl.AccountId,
@@ -71,6 +75,7 @@ public class AccountService : IDynamicApplication
                     Avatar = sl.Avatar,
                     Sex = sl.Sex
                 })
+                .OrderBy(ob => ob.NickName)
                 .ToPagedListAsync(input);
 
             return data.ToPagedData(sl => new ElSelectorOutput<long>
@@ -91,6 +96,11 @@ public class AccountService : IDynamicApplication
         {
             var data = await _repository.Queryable<TenantUserModel>()
                 .InnerJoin<AccountModel>((t1, t2) => t1.AccountId == t2.AccountId)
+                .WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
+                    (t1, t2) => t2.Mobile.Contains(input.SearchValue)
+                                || t2.Email.Contains(input.SearchValue)
+                                || t2.NickName.Contains(input.SearchValue))
+                .OrderBy((t1, t2) => t2.NickName)
                 .Select((t1, t2) => new AccountModel
                 {
                     AccountId = t2.AccountId,
@@ -147,8 +157,8 @@ public class AccountService : IDynamicApplication
             .WhereIF(input.IsLock == true, t1 => t1.LockEndTime != null && t1.LockEndTime >= dateTime)
             .WhereIF(input.IsLock == false, t1 => t1.LockEndTime == null || t1.LockEndTime < dateTime);
 
-        return await queryable.OrderBy(t1 => t1.CreatedTime)
-            .Select((t1, t2, t3) => new QueryAccountPagedOutput
+        return await queryable.OrderByIF(input.IsOrderBy, t1 => t1.CreatedTime)
+            .SelectMergeTable((t1, t2, t3) => new QueryAccountPagedOutput
             {
                 AccountId = t1.AccountId,
                 Mobile = t1.Mobile,

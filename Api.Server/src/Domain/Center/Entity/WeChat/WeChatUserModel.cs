@@ -52,14 +52,12 @@ public class WeChatUserModel : IUpdateVersion
     /// 唯一用户标识
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "唯一用户标识", Length = 28)]
     public string OpenId { get; set; }
 
     /// <summary>
     /// 统一用户标识
     /// </summary>
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "统一用户标识", Length = 28)]
     public string UnionId { get; set; }
 
@@ -72,7 +70,6 @@ public class WeChatUserModel : IUpdateVersion
     /// <summary>
     /// 用户手机号码
     /// </summary>
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "用户手机号码", Length = 20)]
     public string PhoneNumber { get; set; }
 
@@ -91,7 +88,6 @@ public class WeChatUserModel : IUpdateVersion
     /// <summary>
     /// 微信昵称
     /// </summary>
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "微信昵称", Length = 20)]
     public string NickName { get; set; }
 
@@ -179,7 +175,7 @@ public class WeChatUserModel : IUpdateVersion
     /// <summary>
     /// 创建时间
     /// </summary>
-    [Required, SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    [Required, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>

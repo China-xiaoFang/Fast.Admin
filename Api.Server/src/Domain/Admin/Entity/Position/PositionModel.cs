@@ -40,7 +40,6 @@ public class PositionModel : BaseEntity, IUpdateVersion
     /// 职位名称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "职位名称", Length = 20)]
     public string PositionName { get; set; }
 
