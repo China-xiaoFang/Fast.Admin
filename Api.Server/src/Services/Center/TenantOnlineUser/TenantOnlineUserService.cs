@@ -52,7 +52,7 @@ public class TenantOnlineUserService : IDynamicApplication
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    [ApiInfo("租户选择器", HttpRequestActionEnum.Query)]
+    [ApiInfo("获取在线用户分页列表", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.TenantOnlineUser.Paged)]
     public async Task<PagedResult<TenantOnlineUserModel>> QueryTenantOnlineUserPaged(QueryTenantOnlineUserPagedInput input)
     {

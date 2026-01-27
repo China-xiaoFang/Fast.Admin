@@ -103,7 +103,9 @@ public class DepartmentService : IDynamicApplication
     [Permission(PermissionConst.Department.Paged)]
     public async Task<List<QueryDepartmentPagedOutput>> QueryDepartmentPaged(QueryDepartmentPagedInput input)
     {
-        var data = await _repository.Entities.WhereIF(input.OrgId != null, wh => wh.OrgId == input.OrgId)
+        var data = await _repository.Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
+                wh => wh.DepartmentName.Contains(input.SearchValue) || wh.DepartmentCode.Contains(input.SearchValue))
+            .WhereIF(input.OrgId != null, wh => wh.OrgId == input.OrgId)
             .OrderByIF(input.IsOrderBy, ob => ob.Sort)
             .Select(sl => new QueryDepartmentPagedOutput
             {
