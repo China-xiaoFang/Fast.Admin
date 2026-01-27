@@ -47,7 +47,6 @@ public class RegionModel : BaseEntity, IUpdateVersion
     /// 行政编码
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "行政编码", Length = 12)]
     public string RegionCode { get; set; }
 
@@ -55,7 +54,6 @@ public class RegionModel : BaseEntity, IUpdateVersion
     /// 区域名称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "区域名称", Length = 50)]
     public string RegionName { get; set; }
 
@@ -63,7 +61,6 @@ public class RegionModel : BaseEntity, IUpdateVersion
     /// 区号
     /// </summary>
     /// <remarks>地级市</remarks>
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "区号", Length = 4)]
     public string AreaCode { get; set; }
 
@@ -71,7 +68,6 @@ public class RegionModel : BaseEntity, IUpdateVersion
     /// 邮政编码
     /// </summary>
     /// <remarks>区/县/自治县</remarks>
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "邮政编码", Length = 6)]
     public string PostalCode { get; set; }
 
@@ -103,14 +99,12 @@ public class RegionModel : BaseEntity, IUpdateVersion
     /// 拼音首字母
     /// </summary>
     /// <remarks>大写</remarks>
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "拼音首字母", Length = 50)]
     public string PinYin { get; set; }
 
     /// <summary>
     /// 拼音全拼
     /// </summary>
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "拼音全拼", Length = 200)]
     public string PinYinFull { get; set; }
 

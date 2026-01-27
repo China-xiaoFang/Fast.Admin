@@ -77,7 +77,6 @@ public class DepartmentModel : IUpdateVersion
     /// 部门名称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "部门名称", Length = 20)]
     public string DepartmentName { get; set; }
 
@@ -85,7 +84,6 @@ public class DepartmentModel : IUpdateVersion
     /// 部门编码
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "部门编码", Length = 30)]
     public string DepartmentCode { get; set; }
 
@@ -135,7 +133,7 @@ public class DepartmentModel : IUpdateVersion
     /// <summary>
     /// 创建时间
     /// </summary>
-    [Required, SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    [Required, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>

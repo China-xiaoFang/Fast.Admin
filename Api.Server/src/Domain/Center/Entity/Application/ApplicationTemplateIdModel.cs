@@ -47,7 +47,6 @@ public class ApplicationTemplateIdModel : BaseEntity
     /// 应用标识
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "应用标识", Length = 50)]
     public string OpenId { get; set; }
 
@@ -61,7 +60,6 @@ public class ApplicationTemplateIdModel : BaseEntity
     /// 模板Id
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "模板Id", Length = 50)]
     public string TemplateId { get; set; }
 }

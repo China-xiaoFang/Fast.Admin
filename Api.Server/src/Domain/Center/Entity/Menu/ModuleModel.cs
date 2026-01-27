@@ -46,7 +46,6 @@ public class ModuleModel : BaseEntity, IUpdateVersion
     /// 模块名称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "模块名称", Length = 20)]
     public string ModuleName { get; set; }
 

@@ -65,7 +65,6 @@ public class OrganizationModel : BaseEntity, IUpdateVersion
     /// 机构名称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "机构名称", Length = 20)]
     public string OrgName { get; set; }
 
@@ -73,7 +72,6 @@ public class OrganizationModel : BaseEntity, IUpdateVersion
     /// 机构编码
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "机构编码", Length = 30)]
     public string OrgCode { get; set; }
 
