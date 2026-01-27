@@ -40,11 +40,13 @@ public class QueryMerchantPagedOutput : PagedOutput
     /// <summary>
     /// 商户名称
     /// </summary>
+    [SugarSearchValue]
     public string MerchantName { get; set; }
 
     /// <summary>
     /// 商户号
     /// </summary>
+    [SugarSearchValue]
     public string MerchantNo { get; set; }
 
     /// <summary>

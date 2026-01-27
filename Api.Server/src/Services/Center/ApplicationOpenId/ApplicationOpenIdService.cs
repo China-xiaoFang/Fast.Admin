@@ -66,29 +66,28 @@ public class ApplicationOpenIdService : IDynamicApplication
         return await queryable.WhereIF(input.AppId != null, wh => wh.AppId == input.AppId)
             .WhereIF(input.AppType != null, wh => wh.AppType == input.AppType)
             .WhereIF(input.EnvironmentType != null, wh => wh.EnvironmentType == input.EnvironmentType)
-            .OrderByDescending(ob => ob.AppId)
-            .OrderByDescending(ob => ob.CreatedTime)
-            .ToPagedListAsync(input,
-                sl => new QueryApplicationOpenIdPagedOutput
-                {
-                    RecordId = sl.RecordId,
-                    OpenId = sl.OpenId,
-                    AppType = sl.AppType,
-                    EnvironmentType = sl.EnvironmentType,
-                    RequestTimeout = sl.RequestTimeout,
-                    RequestEncipher = sl.RequestEncipher,
-                    WeChatMerchantNo = sl.WeChatMerchantNo,
-                    AlipayMerchantNo = sl.AlipayMerchantNo,
-                    WeChatAccessTokenRefreshTime = sl.WeChatAccessTokenRefreshTime,
-                    WeChatJsApiTicketRefreshTime = sl.WeChatJsApiTicketRefreshTime,
-                    Remark = sl.Remark,
-                    DepartmentName = sl.DepartmentName,
-                    CreatedUserName = sl.CreatedUserName,
-                    CreatedTime = sl.CreatedTime,
-                    UpdatedUserName = sl.UpdatedUserName,
-                    UpdatedTime = sl.UpdatedTime,
-                    RowVersion = sl.RowVersion
-                });
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
+            .Select(sl => new QueryApplicationOpenIdPagedOutput
+            {
+                RecordId = sl.RecordId,
+                OpenId = sl.OpenId,
+                AppType = sl.AppType,
+                EnvironmentType = sl.EnvironmentType,
+                RequestTimeout = sl.RequestTimeout,
+                RequestEncipher = sl.RequestEncipher,
+                WeChatMerchantNo = sl.WeChatMerchantNo,
+                AlipayMerchantNo = sl.AlipayMerchantNo,
+                WeChatAccessTokenRefreshTime = sl.WeChatAccessTokenRefreshTime,
+                WeChatJsApiTicketRefreshTime = sl.WeChatJsApiTicketRefreshTime,
+                Remark = sl.Remark,
+                DepartmentName = sl.DepartmentName,
+                CreatedUserName = sl.CreatedUserName,
+                CreatedTime = sl.CreatedTime,
+                UpdatedUserName = sl.UpdatedUserName,
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            })
+            .ToPagedListAsync(input);
     }
 
     /// <summary>

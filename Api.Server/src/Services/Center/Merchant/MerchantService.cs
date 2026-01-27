@@ -73,22 +73,22 @@ public class MerchantService : IDynamicApplication
     public async Task<PagedResult<QueryMerchantPagedOutput>> QueryMerchantPaged(QueryMerchantPagedInput input)
     {
         return await _repository.Entities.WhereIF(input.MerchantType != null, wh => wh.MerchantType == input.MerchantType)
-            .OrderByDescending(ob => ob.CreatedTime)
-            .ToPagedListAsync(input,
-                sl => new QueryMerchantPagedOutput
-                {
-                    MerchantId = sl.MerchantId,
-                    MerchantType = sl.MerchantType,
-                    MerchantName = sl.MerchantName,
-                    MerchantNo = sl.MerchantNo,
-                    Remark = sl.Remark,
-                    DepartmentName = sl.DepartmentName,
-                    CreatedUserName = sl.CreatedUserName,
-                    CreatedTime = sl.CreatedTime,
-                    UpdatedUserName = sl.UpdatedUserName,
-                    UpdatedTime = sl.UpdatedTime,
-                    RowVersion = sl.RowVersion
-                });
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
+            .Select(sl => new QueryMerchantPagedOutput
+            {
+                MerchantId = sl.MerchantId,
+                MerchantType = sl.MerchantType,
+                MerchantName = sl.MerchantName,
+                MerchantNo = sl.MerchantNo,
+                Remark = sl.Remark,
+                DepartmentName = sl.DepartmentName,
+                CreatedUserName = sl.CreatedUserName,
+                CreatedTime = sl.CreatedTime,
+                UpdatedUserName = sl.UpdatedUserName,
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            })
+            .ToPagedListAsync(input);
     }
 
     /// <summary>

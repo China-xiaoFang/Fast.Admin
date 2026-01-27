@@ -42,11 +42,13 @@ public class QueryRolePagedOutput : PagedOutput
     /// <summary>
     /// 角色名称
     /// </summary>
+    [SugarSearchValue]
     public string RoleName { get; set; }
 
     /// <summary>
     /// 角色编码
     /// </summary>
+    [SugarSearchValue]
     public string RoleCode { get; set; }
 
     /// <summary>

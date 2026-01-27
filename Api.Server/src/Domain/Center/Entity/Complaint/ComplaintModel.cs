@@ -44,7 +44,6 @@ public class ComplaintModel : IUpdateVersion
     /// <summary>
     /// 应用名称
     /// </summary>
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "应用名称", Length = 30)]
     public string AppName { get; set; }
 
@@ -63,7 +62,6 @@ public class ComplaintModel : IUpdateVersion
     /// <summary>
     /// 昵称
     /// </summary>
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "昵称", Length = 20)]
     public string NickName { get; set; }
 
@@ -76,7 +74,6 @@ public class ComplaintModel : IUpdateVersion
     /// <summary>
     /// 手机
     /// </summary>
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
@@ -84,14 +81,12 @@ public class ComplaintModel : IUpdateVersion
     /// 联系电话
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "联系电话", Length = 20)]
     public string ContactPhone { get; set; }
 
     /// <summary>
     /// 联系邮箱
     /// </summary>
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "联系邮箱", Length = 50)]
     public string ContactEmail { get; set; }
 
@@ -128,7 +123,7 @@ public class ComplaintModel : IUpdateVersion
     /// <summary>
     /// 创建时间
     /// </summary>
-    [Required, SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    [Required, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>

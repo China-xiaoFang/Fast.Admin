@@ -104,6 +104,7 @@ public class DepartmentService : IDynamicApplication
     public async Task<List<QueryDepartmentPagedOutput>> QueryDepartmentPaged(QueryDepartmentPagedInput input)
     {
         var data = await _repository.Entities.WhereIF(input.OrgId != null, wh => wh.OrgId == input.OrgId)
+            .OrderByIF(input.IsOrderBy, ob => ob.Sort)
             .Select(sl => new QueryDepartmentPagedOutput
             {
                 DepartmentId = sl.DepartmentId,
@@ -126,9 +127,7 @@ public class DepartmentService : IDynamicApplication
                 UpdatedTime = sl.UpdatedTime,
                 RowVersion = sl.RowVersion
             })
-            .PagedWhere(input)
-            .PagedSearch(input.SearchList)
-            .PagedOrderBy(input.SortList)
+            .SugarPaged(input)
             .ToListAsync();
 
         return new TreeBuildUtil<QueryDepartmentPagedOutput, long>().Build(data);

@@ -67,21 +67,21 @@ public class PositionService : IDynamicApplication
     [Permission(PermissionConst.Position.Paged)]
     public async Task<PagedResult<QueryPositionPagedOutput>> QueryPositionPaged(PagedInput input)
     {
-        return await _repository.Entities.OrderBy(ob => ob.Sort)
-            .ToPagedListAsync(input,
-                sl => new QueryPositionPagedOutput
-                {
-                    PositionId = sl.PositionId,
-                    PositionName = sl.PositionName,
-                    Sort = sl.Sort,
-                    Remark = sl.Remark,
-                    DepartmentName = sl.DepartmentName,
-                    CreatedUserName = sl.CreatedUserName,
-                    CreatedTime = sl.CreatedTime,
-                    UpdatedUserName = sl.UpdatedUserName,
-                    UpdatedTime = sl.UpdatedTime,
-                    RowVersion = sl.RowVersion
-                });
+        return await _repository.Entities.OrderByIF(input.IsOrderBy, ob => ob.Sort)
+            .Select(sl => new QueryPositionPagedOutput
+            {
+                PositionId = sl.PositionId,
+                PositionName = sl.PositionName,
+                Sort = sl.Sort,
+                Remark = sl.Remark,
+                DepartmentName = sl.DepartmentName,
+                CreatedUserName = sl.CreatedUserName,
+                CreatedTime = sl.CreatedTime,
+                UpdatedUserName = sl.UpdatedUserName,
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            })
+            .ToPagedListAsync(input);
     }
 
     /// <summary>

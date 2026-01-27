@@ -60,37 +60,37 @@ public class WeChatService : IDynamicApplication
         return await _repository.Entities.WhereIF(input.AppId != null, wh => wh.AppId == input.AppId)
             .WhereIF(input.UserType != null, wh => wh.UserType == input.UserType)
             .WhereIF(input.Sex != null, wh => wh.Sex == input.Sex)
-            .OrderByDescending(ob => ob.CreatedTime)
-            .ToPagedListAsync(input,
-                sl => new QueryWeChatUserPagedOutput
-                {
-                    WeChatId = sl.WeChatId,
-                    AppId = sl.AppId,
-                    UserType = sl.UserType,
-                    OpenId = sl.OpenId,
-                    UnionId = sl.UnionId,
-                    PurePhoneNumber = sl.PurePhoneNumber,
-                    PhoneNumber = sl.PhoneNumber,
-                    CountryCode = sl.CountryCode,
-                    NickName = sl.NickName,
-                    Avatar = sl.Avatar,
-                    Sex = sl.Sex,
-                    Country = sl.Country,
-                    Province = sl.Province,
-                    City = sl.City,
-                    Language = sl.Language,
-                    LastLoginDevice = sl.LastLoginDevice,
-                    LastLoginOS = sl.LastLoginOS,
-                    LastLoginBrowser = sl.LastLoginBrowser,
-                    LastLoginProvince = sl.LastLoginProvince,
-                    LastLoginCity = sl.LastLoginCity,
-                    LastLoginIp = sl.LastLoginIp,
-                    LastLoginTime = sl.LastLoginTime,
-                    MobileUpdateTime = sl.MobileUpdateTime,
-                    CreatedTime = sl.CreatedTime,
-                    UpdatedTime = sl.UpdatedTime,
-                    RowVersion = sl.RowVersion
-                });
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
+            .Select(sl => new QueryWeChatUserPagedOutput
+            {
+                WeChatId = sl.WeChatId,
+                AppId = sl.AppId,
+                UserType = sl.UserType,
+                OpenId = sl.OpenId,
+                UnionId = sl.UnionId,
+                PurePhoneNumber = sl.PurePhoneNumber,
+                PhoneNumber = sl.PhoneNumber,
+                CountryCode = sl.CountryCode,
+                NickName = sl.NickName,
+                Avatar = sl.Avatar,
+                Sex = sl.Sex,
+                Country = sl.Country,
+                Province = sl.Province,
+                City = sl.City,
+                Language = sl.Language,
+                LastLoginDevice = sl.LastLoginDevice,
+                LastLoginOS = sl.LastLoginOS,
+                LastLoginBrowser = sl.LastLoginBrowser,
+                LastLoginProvince = sl.LastLoginProvince,
+                LastLoginCity = sl.LastLoginCity,
+                LastLoginIp = sl.LastLoginIp,
+                LastLoginTime = sl.LastLoginTime,
+                MobileUpdateTime = sl.MobileUpdateTime,
+                CreatedTime = sl.CreatedTime,
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            })
+            .ToPagedListAsync(input);
     }
 
     /// <summary>

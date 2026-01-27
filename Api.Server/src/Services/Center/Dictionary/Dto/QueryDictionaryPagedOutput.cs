@@ -37,11 +37,13 @@ public class QueryDictionaryPagedOutput : PagedOutput
     /// <summary>
     /// 字典Key
     /// </summary>
+    [SugarSearchValue]
     public string DictionaryKey { get; set; }
 
     /// <summary>
     /// 字典名称
     /// </summary>
+    [SugarSearchValue]
     public string DictionaryName { get; set; }
 
     /// <summary>

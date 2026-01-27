@@ -58,8 +58,9 @@ public class DatabaseService : IDynamicApplication
             .WhereIF(input.DatabaseType != null, t1 => t1.DatabaseType == input.DatabaseType)
             .WhereIF(input.DbType != null, t1 => t1.DbType == input.DbType)
             .WhereIF(input.TenantId != null, t1 => t1.TenantId == input.TenantId)
-            .OrderByDescending(t1 => t1.TenantId)
-            .Select((t1, t2) => new QueryDatabasePagedOutput
+            .OrderByIF(input.IsOrderBy, t1 => t1.TenantId, OrderByType.Desc)
+            .OrderByIF(input.IsOrderBy, t1 => t1.DatabaseType)
+            .SelectMergeTable((t1, t2) => new QueryDatabasePagedOutput
             {
                 MainId = t1.MainId,
                 DatabaseType = t1.DatabaseType,

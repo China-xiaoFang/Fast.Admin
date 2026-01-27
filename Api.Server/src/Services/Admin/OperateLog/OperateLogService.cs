@@ -66,14 +66,8 @@ public class OperateLogService : IDynamicApplication
             .WhereIF(input.EmployeeId != null, wh => wh.EmployeeId == input.EmployeeId)
             .WhereIF(input.BizId != null, wh => wh.BizId == input.BizId);
 
-        if (_user.IsSuperAdmin || _user.IsAdmin)
-        {
-        }
-        else if (_user.DataScopeType == (int) DataScopeTypeEnum.All)
-        {
-        }
         // 仅本人数据
-        else if (_user.DataScopeType == (int) DataScopeTypeEnum.Self)
+        if (_user.DataScopeType == (int) DataScopeTypeEnum.Self)
         {
             queryable = queryable.Where(wh => wh.EmployeeId == _user.UserId);
         }
@@ -106,7 +100,7 @@ public class OperateLogService : IDynamicApplication
         }
 
         return await queryable.SplitTable()
-            .OrderByDescending(e => e.CreatedTime)
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .ToPagedListAsync(input);
     }
 

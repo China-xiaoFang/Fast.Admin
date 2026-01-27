@@ -41,7 +41,6 @@ public class TenantModel : BaseEntity, IUpdateVersion
     /// 租户编号
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "租户编号", Length = 11)]
     public string TenantNo { get; set; }
 
@@ -50,7 +49,6 @@ public class TenantModel : BaseEntity, IUpdateVersion
     /// </summary>
     /// <remarks>单号生成前缀</remarks>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "租户编码", ColumnDataType = "varchar(5)")]
     public string TenantCode { get; set; }
 
@@ -64,7 +62,6 @@ public class TenantModel : BaseEntity, IUpdateVersion
     /// 租户名称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "租户名称", Length = 30)]
     public string TenantName { get; set; }
 

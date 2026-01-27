@@ -61,7 +61,11 @@ public class EmployeeService : IDynamicApplication
     [ApiInfo("职员选择器", HttpRequestActionEnum.Query)]
     public async Task<PagedResult<ElSelectorOutput<long>>> EmployeeSelector(PagedInput input)
     {
-        var data = await _repository.Entities.Where(wh => wh.Status != EmployeeStatusEnum.Resigned)
+        var data = await _repository.Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
+                wh => wh.EmployeeNo.Contains(input.SearchValue)
+                      || wh.EmployeeName.Contains(input.SearchValue)
+                      || wh.Mobile.Contains(input.SearchValue))
+            .Where(wh => wh.Status != EmployeeStatusEnum.Resigned)
             .Select(sl => new EmployeeModel
             {
                 EmployeeId = sl.EmployeeId,
@@ -103,7 +107,8 @@ public class EmployeeService : IDynamicApplication
             .WhereIF(input.AcademicSystem != null, t1 => t1.AcademicSystem == input.AcademicSystem)
             .WhereIF(input.Degree != null, t1 => t1.Degree == input.Degree)
             .WhereIF(input.DepartmentId != null, (t1, t2) => t2.DepartmentId == input.DepartmentId)
-            .Select((t1, t2) => new QueryEmployeePagedOutput
+            .OrderByIF(input.IsOrderBy, t1 => t1.CreatedTime, OrderByType.Desc)
+            .SelectMergeTable((t1, t2) => new QueryEmployeePagedOutput
             {
                 EmployeeId = t1.EmployeeId,
                 EmployeeNo = t1.EmployeeNo,
@@ -142,9 +147,7 @@ public class EmployeeService : IDynamicApplication
                 JobLevelName = t2.JobLevelName,
                 IsPrincipal = t2.IsPrincipal
             })
-            .MergeTable()
             .DataScope(e => e.DepartmentId, e => e.EmployeeId)
-            .OrderByDescending(e => e.CreatedTime)
             .ToPagedListAsync(input);
 
         var userIds = result.Rows.Select(sl => sl.EmployeeId)

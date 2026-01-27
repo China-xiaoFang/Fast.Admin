@@ -37,6 +37,7 @@ public class QueryComplaintPagedOutput
     /// <summary>
     /// 应用名称
     /// </summary>
+    [SugarSearchValue]
     public string AppName { get; set; }
 
     /// <summary>
@@ -47,6 +48,7 @@ public class QueryComplaintPagedOutput
     /// <summary>
     /// 昵称
     /// </summary>
+    [SugarSearchValue]
     public string NickName { get; set; }
 
     /// <summary>
@@ -57,16 +59,19 @@ public class QueryComplaintPagedOutput
     /// <summary>
     /// 手机
     /// </summary>
+    [SugarSearchValue]
     public string Mobile { get; set; }
 
     /// <summary>
     /// 联系电话
     /// </summary>
+    [SugarSearchValue]
     public string ContactPhone { get; set; }
 
     /// <summary>
     /// 联系邮箱
     /// </summary>
+    [SugarSearchValue]
     public string ContactEmail { get; set; }
 
     /// <summary>
@@ -98,6 +103,7 @@ public class QueryComplaintPagedOutput
     /// <summary>
     /// 创建时间
     /// </summary>
+    [SugarSearchTime]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>

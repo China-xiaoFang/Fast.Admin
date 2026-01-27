@@ -77,24 +77,24 @@ public class RoleService : IDynamicApplication
     {
         return await _repository.Entities.WhereIF(input.RoleType != null, wh => wh.RoleType == input.RoleType)
             .WhereIF(input.DataScopeType != null, wh => wh.DataScopeType == input.DataScopeType)
-            .OrderBy(ob => ob.Sort)
-            .ToPagedListAsync(input,
-                sl => new QueryRolePagedOutput
-                {
-                    RoleId = sl.RoleId,
-                    RoleType = sl.RoleType,
-                    RoleName = sl.RoleName,
-                    RoleCode = sl.RoleCode,
-                    Sort = sl.Sort,
-                    DataScopeType = sl.DataScopeType,
-                    Remark = sl.Remark,
-                    DepartmentName = sl.DepartmentName,
-                    CreatedUserName = sl.CreatedUserName,
-                    CreatedTime = sl.CreatedTime,
-                    UpdatedUserName = sl.UpdatedUserName,
-                    UpdatedTime = sl.UpdatedTime,
-                    RowVersion = sl.RowVersion
-                });
+            .OrderByIF(input.IsOrderBy, ob => ob.Sort)
+            .Select(sl => new QueryRolePagedOutput
+            {
+                RoleId = sl.RoleId,
+                RoleType = sl.RoleType,
+                RoleName = sl.RoleName,
+                RoleCode = sl.RoleCode,
+                Sort = sl.Sort,
+                DataScopeType = sl.DataScopeType,
+                Remark = sl.Remark,
+                DepartmentName = sl.DepartmentName,
+                CreatedUserName = sl.CreatedUserName,
+                CreatedTime = sl.CreatedTime,
+                UpdatedUserName = sl.UpdatedUserName,
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            })
+            .ToPagedListAsync(input);
     }
 
     /// <summary>

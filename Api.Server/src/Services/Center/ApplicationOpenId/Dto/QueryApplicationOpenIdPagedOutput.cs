@@ -35,6 +35,7 @@ public class QueryApplicationOpenIdPagedOutput : PagedOutput
     /// <summary>
     /// 应用标识
     /// </summary>
+    [SugarSearchValue]
     public string OpenId { get; set; }
 
     /// <summary>

@@ -48,7 +48,6 @@ public class AccountModel : IUpdateVersion
     /// 手机
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
     public string Mobile { get; set; }
 
@@ -56,7 +55,6 @@ public class AccountModel : IUpdateVersion
     /// 邮箱
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "邮箱", Length = 50)]
     public string Email { get; set; }
 
@@ -83,7 +81,6 @@ public class AccountModel : IUpdateVersion
     /// 昵称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "昵称", Length = 20)]
     public string NickName { get; set; }
 
@@ -228,7 +225,7 @@ public class AccountModel : IUpdateVersion
     /// <summary>
     /// 创建时间
     /// </summary>
-    [Required, SugarSearchTime, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
+    [Required, SugarColumn(ColumnDescription = "创建时间", CreateTableFieldSort = 993)]
     public DateTime? CreatedTime { get; set; }
 
     /// <summary>

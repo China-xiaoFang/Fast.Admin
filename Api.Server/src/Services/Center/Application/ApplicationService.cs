@@ -94,27 +94,27 @@ public class ApplicationService : IDynamicApplication
         }
 
         return await queryable.WhereIF(input.Edition != null, wh => wh.Edition == input.Edition)
-            .OrderByDescending(ob => ob.CreatedTime)
-            .ToPagedListAsync(input,
-                sl => new QueryApplicationPagedOutput
-                {
-                    AppId = sl.AppId,
-                    Edition = sl.Edition,
-                    AppNo = sl.AppNo,
-                    AppName = sl.AppName,
-                    LogoUrl = sl.LogoUrl,
-                    ThemeColor = sl.ThemeColor,
-                    ICPSecurityCode = sl.ICPSecurityCode,
-                    PublicSecurityCode = sl.PublicSecurityCode,
-                    Remark = sl.Remark,
-                    TenantName = sl.TenantName,
-                    DepartmentName = sl.DepartmentName,
-                    CreatedUserName = sl.CreatedUserName,
-                    CreatedTime = sl.CreatedTime,
-                    UpdatedUserName = sl.UpdatedUserName,
-                    UpdatedTime = sl.UpdatedTime,
-                    RowVersion = sl.RowVersion
-                });
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
+            .Select(sl => new QueryApplicationPagedOutput
+            {
+                AppId = sl.AppId,
+                Edition = sl.Edition,
+                AppNo = sl.AppNo,
+                AppName = sl.AppName,
+                LogoUrl = sl.LogoUrl,
+                ThemeColor = sl.ThemeColor,
+                ICPSecurityCode = sl.ICPSecurityCode,
+                PublicSecurityCode = sl.PublicSecurityCode,
+                Remark = sl.Remark,
+                TenantName = sl.TenantName,
+                DepartmentName = sl.DepartmentName,
+                CreatedUserName = sl.CreatedUserName,
+                CreatedTime = sl.CreatedTime,
+                UpdatedUserName = sl.UpdatedUserName,
+                UpdatedTime = sl.UpdatedTime,
+                RowVersion = sl.RowVersion
+            })
+            .ToPagedListAsync(input);
     }
 
     /// <summary>

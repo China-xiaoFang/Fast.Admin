@@ -46,7 +46,6 @@ public class MerchantModel : BaseTEntity, IUpdateVersion
     /// 商户名称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "商户名称", Length = 30)]
     public string MerchantName { get; set; }
 
@@ -54,7 +53,6 @@ public class MerchantModel : BaseTEntity, IUpdateVersion
     /// 商户号
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "商户号", Length = 32)]
     public string MerchantNo { get; set; }
 

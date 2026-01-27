@@ -41,7 +41,6 @@ public class ConfigModel : BaseEntity, IUpdateVersion
     /// 配置编码
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "配置编码", Length = 50)]
     public string ConfigCode { get; set; }
 
@@ -49,7 +48,6 @@ public class ConfigModel : BaseEntity, IUpdateVersion
     /// 配置名称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "配置名称", Length = 50)]
     public string ConfigName { get; set; }
 

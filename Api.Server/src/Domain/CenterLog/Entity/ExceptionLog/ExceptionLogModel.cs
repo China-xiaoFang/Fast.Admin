@@ -103,7 +103,8 @@ public class ExceptionLogModel : BaseRecordEntity
     /// <summary>
     /// 异常时间
     /// </summary>
-    [Required, SugarSearchTime, SugarColumn(ColumnDescription = "异常时间", CreateTableFieldSort = 993)]
+    [SugarSearchTime]
+    [Required, SugarColumn(ColumnDescription = "异常时间", CreateTableFieldSort = 993)]
     public override DateTime? CreatedTime { get; set; }
 
     /// <summary>

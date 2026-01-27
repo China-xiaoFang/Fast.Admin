@@ -40,7 +40,6 @@ public class TableConfigModel : BaseEntity, IUpdateVersion
     /// 表格Key
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "表格Key", Length = 32)]
     public string TableKey { get; set; }
 
@@ -48,7 +47,6 @@ public class TableConfigModel : BaseEntity, IUpdateVersion
     /// 表格名称
     /// </summary>
     [Required]
-    [SugarSearchValue]
     [SugarColumn(ColumnDescription = "表格名称", Length = 50)]
     public string TableName { get; set; }
 

@@ -37,11 +37,13 @@ public class QueryTenantPagedOutput : PagedOutput
     /// <summary>
     /// 租户编号
     /// </summary>
+    [SugarSearchValue]
     public string TenantNo { get; set; }
 
     /// <summary>
     /// 租户编码
     /// </summary>
+    [SugarSearchValue]
     public string TenantCode { get; set; }
 
     /// <summary>
@@ -52,6 +54,7 @@ public class QueryTenantPagedOutput : PagedOutput
     /// <summary>
     /// 租户名称
     /// </summary>
+    [SugarSearchValue]
     public string TenantName { get; set; }
 
     /// <summary>
