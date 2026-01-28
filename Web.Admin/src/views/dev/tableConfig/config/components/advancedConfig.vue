@@ -324,7 +324,7 @@ import { StarFilled } from "@element-plus/icons-vue";
 import { FaDialog } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
 import DevTableConfigObjectTable from "./objectTable.vue";
-import type { FaTableColumnCtx } from "@/api/services/table/models/FaTableColumnCtx";
+import type { FaTableColumnCtx } from "@/api/services/Center/table/models/FaTableColumnCtx";
 import type { FaDialogInstance } from "fast-element-plus";
 
 defineOptions({

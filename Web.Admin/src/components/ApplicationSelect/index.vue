@@ -27,7 +27,7 @@
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
 import type { ElSelectorOutput } from "fast-element-plus";
-import { applicationApi } from "@/api/services/application";
+import { applicationApi } from "@/api/services/Center/application";
 
 defineOptions({
 	name: "ApplicationSelect",

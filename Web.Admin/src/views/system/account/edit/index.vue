@@ -125,8 +125,8 @@
 import { reactive, ref } from "vue";
 import { withDefineType } from "@fast-china/utils";
 import type { FaDialogInstance } from "fast-element-plus";
-import { QueryAccountDetailOutput } from "@/api/services/account/models/QueryAccountDetailOutput";
-import { accountApi } from "@/api/services/account";
+import { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
+import { accountApi } from "@/api/services/Center/account";
 import { dayjs } from "element-plus";
 
 defineOptions({

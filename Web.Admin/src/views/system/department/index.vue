@@ -54,11 +54,11 @@ import { Plus } from "@element-plus/icons-vue";
 import DepartmentEdit from "./edit/index.vue";
 import OrgEdit from "./edit/orgEdit.vue";
 import type { FastTableInstance } from "@/components";
-import { organizationApi } from "@/api/services/organization";
+import { organizationApi } from "@/api/services/Admin/organization";
 import { ElTreeOutput, FaContextMenuData, FaContextMenuInstance, FaTreeInstance } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
-import { departmentApi } from "@/api/services/department";
-import { QueryDepartmentPagedOutput } from "@/api/services/department/models/QueryDepartmentPagedOutput";
+import { departmentApi } from "@/api/services/Admin/department";
+import { QueryDepartmentPagedOutput } from "@/api/services/Admin/department/models/QueryDepartmentPagedOutput";
 
 defineOptions({
 	name: "SystemDepartment",

@@ -37,8 +37,8 @@
 </template>
 
 <script lang="ts" setup>
-import { visitLogApi } from "@/api/services/visitLog";
-import { VisitLogModel } from "@/api/services/visitLog/models/VisitLogModel";
+import { visitLogApi } from "@/api/services/Center/visitLog";
+import { VisitLogModel } from "@/api/services/Center/visitLog/models/VisitLogModel";
 import { FastTableInstance } from "@/components";
 import { useUserInfo } from "@/stores";
 import { Delete } from "@element-plus/icons-vue";

@@ -63,10 +63,10 @@ import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditDepartmentInput } from "@/api/services/department/models/EditDepartmentInput";
-import { AddDepartmentInput } from "@/api/services/department/models/AddDepartmentInput";
-import { departmentApi } from "@/api/services/department";
-import { organizationApi } from "@/api/services/organization";
+import { EditDepartmentInput } from "@/api/services/Admin/department/models/EditDepartmentInput";
+import { AddDepartmentInput } from "@/api/services/Admin/department/models/AddDepartmentInput";
+import { departmentApi } from "@/api/services/Admin/department";
+import { organizationApi } from "@/api/services/Admin/organization";
 
 defineOptions({
 	name: "SystemDepartmentEdit",

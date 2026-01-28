@@ -11,9 +11,9 @@
 </template>
 
 <script lang="ts" setup>
-import { regionApi } from "@/api/services/region";
 import { useVModel } from "@vueuse/core";
 import type { ElSelectorOutput } from "fast-element-plus";
+import { regionApi } from "@/api/services/Center/region";
 
 defineOptions({
 	name: "ProvinceSelect",

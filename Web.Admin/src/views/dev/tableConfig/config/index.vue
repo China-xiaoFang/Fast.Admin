@@ -112,10 +112,10 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { ArrowLeftBold, Close, Plus, Select, StarFilled } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
 import AdvancedConfigForm from "./components/advancedConfig.vue";
-import type { FaTableColumnCtx } from "@/api/services/table/models/FaTableColumnCtx";
+import type { FaTableColumnCtx } from "@/api/services/Center/table/models/FaTableColumnCtx";
 import type { FaTableInstance } from "fast-element-plus";
 import type { WatchHandle } from "vue";
-import { tableApi } from "@/api/services/table";
+import { tableApi } from "@/api/services/Center/table";
 
 defineOptions({
 	name: "DevTableColumnConfig",

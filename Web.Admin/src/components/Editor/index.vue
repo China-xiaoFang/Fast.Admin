@@ -39,7 +39,7 @@ import { addUnit, consoleError, definePropType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import type { IDomEditor } from "@wangeditor/editor";
-import { fileApi } from "@/api/services/file";
+import { fileApi } from "@/api/services/File";
 import "@wangeditor/editor/dist/css/style.css";
 
 defineOptions({

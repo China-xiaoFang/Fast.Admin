@@ -101,10 +101,10 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
-import type { QueryMenuPagedOutput } from "@/api/services/menu/models/QueryMenuPagedOutput";
+import type { QueryMenuPagedOutput } from "@/api/services/Center/menu/models/QueryMenuPagedOutput";
 import type { FastTableInstance } from "@/components";
-import { menuApi } from "@/api/services/menu";
-import { moduleApi } from "@/api/services/module";
+import { menuApi } from "@/api/services/Center/menu";
+import { moduleApi } from "@/api/services/Center/module";
 import { ElSelectorOutput, FaContextMenuData, FaContextMenuInstance, FaTreeInstance } from "fast-element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";

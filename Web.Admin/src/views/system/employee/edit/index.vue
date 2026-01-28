@@ -306,19 +306,19 @@ import { reactive, ref } from "vue";
 import { CheckboxValueType, ElMessage, type FormRules } from "element-plus";
 import { dateUtil, withDefineType } from "@fast-china/utils";
 import type { ElSelectorOutput, FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditEmployeeInput } from "@/api/services/employee/models/EditEmployeeInput";
-import { AddEmployeeInput } from "@/api/services/employee/models/AddEmployeeInput";
+import { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
+import { AddEmployeeInput } from "@/api/services/Admin/employee/models/AddEmployeeInput";
 import { GenderEnum } from "@/api/enums/GenderEnum";
-import { employeeApi } from "@/api/services/employee";
-import { fileApi } from "@/api/services/file";
+import { employeeApi } from "@/api/services/Admin/employee";
+import { fileApi } from "@/api/services/File";
 import { useApp } from "@/stores";
-import { departmentApi } from "@/api/services/department";
-import { organizationApi } from "@/api/services/organization";
-import { positionApi } from "@/api/services/position";
-import { jobLevelApi } from "@/api/services/jobLevel";
-import { roleApi } from "@/api/services/role";
+import { departmentApi } from "@/api/services/Admin/department";
+import { organizationApi } from "@/api/services/Admin/organization";
+import { positionApi } from "@/api/services/Admin/position";
+import { jobLevelApi } from "@/api/services/Admin/jobLevel";
+import { roleApi } from "@/api/services/Admin/role";
 import { Plus } from "@element-plus/icons-vue";
-import { EmployeeOrgModel } from "@/api/services/employee/models/EmployeeOrgModel";
+import { EmployeeOrgModel } from "@/api/services/Admin/employee/models/EmployeeOrgModel";
 
 defineOptions({
 	name: "SystemEmployeeEdit",

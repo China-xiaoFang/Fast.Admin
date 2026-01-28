@@ -30,8 +30,8 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import PositionEdit from "./edit/index.vue";
 import type { FastTableInstance } from "@/components";
-import { positionApi } from "@/api/services/position";
-import { QueryPositionPagedOutput } from "@/api/services/position/models/QueryPositionPagedOutput";
+import { positionApi } from "@/api/services/Admin/position";
+import { QueryPositionPagedOutput } from "@/api/services/Admin/position/models/QueryPositionPagedOutput";
 
 defineOptions({
 	name: "SystemPosition",

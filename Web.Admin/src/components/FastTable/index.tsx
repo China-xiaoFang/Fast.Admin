@@ -5,7 +5,7 @@ import { clickUtil, makeSlots, useEmits, useExpose, useProps, useRender, withDef
 import { isString } from "lodash";
 import type { FaTableColumnCtx, FaTableInstance, FaTableSlots } from "fast-element-plus";
 import type { VNode } from "vue";
-import { tableApi } from "@/api/services/table";
+import { tableApi } from "@/api/services/Center/table";
 import { useApp, useConfig } from "@/stores";
 
 export default defineComponent({

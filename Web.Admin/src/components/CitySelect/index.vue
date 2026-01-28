@@ -12,12 +12,12 @@
 </template>
 
 <script lang="ts" setup>
-import { regionApi } from "@/api/services/region";
 import { withDefineType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
 import { CascaderValue } from "element-plus";
 import type { ElSelectorOutput } from "fast-element-plus";
 import { onMounted, reactive } from "vue";
+import { regionApi } from "@/api/services/Center/region";
 
 defineOptions({
 	name: "CitySelect",

@@ -16,8 +16,8 @@ import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { HandleComplaintInput } from "@/api/services/complaint/models/HandleComplaintInput";
-import { complaintApi } from "@/api/services/complaint";
+import { HandleComplaintInput } from "@/api/services/Center/complaint/models/HandleComplaintInput";
+import { complaintApi } from "@/api/services/Center/complaint";
 
 defineOptions({
 	name: "SystemTenantComplaintEdit",

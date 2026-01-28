@@ -1,7 +1,7 @@
-import { SchedulerJobTypeEnum } from "@/api/enums/SchedulerJobTypeEnum";
-import { TriggerTypeEnum } from "@/api/enums/TriggerTypeEnum";
-import { HttpRequestMethodEnum } from "@/api/enums/HttpRequestMethodEnum";
-import { TriggerState } from "@/api/enums/TriggerState";
+import { SchedulerJobTypeEnum } from "@/api/enums/Scheduler/SchedulerJobTypeEnum";
+import { TriggerTypeEnum } from "@/api/enums/Scheduler/TriggerTypeEnum";
+import { HttpRequestMethodEnum } from "@/api/enums/Scheduler/HttpRequestMethodEnum";
+import { TriggerState } from "@/api/enums/Scheduler/TriggerState";
 
 /**
  * 调度作业信息

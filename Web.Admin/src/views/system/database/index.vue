@@ -32,10 +32,10 @@ import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import DatabaseEdit from "./edit/index.vue";
-import type { QueryDatabasePagedOutput } from "@/api/services/database/models/QueryDatabasePagedOutput";
+import type { QueryDatabasePagedOutput } from "@/api/services/Center/database/models/QueryDatabasePagedOutput";
 import type { FastTableInstance } from "@/components";
-import { databaseApi } from "@/api/services/database";
-import { tenantDatabaseApi } from "@/api/services/tenantDatabase";
+import { databaseApi } from "@/api/services/Center/database";
+import { tenantDatabaseApi } from "@/api/services/Admin/tenantDatabase";
 
 defineOptions({
 	name: "SystemDatabase",

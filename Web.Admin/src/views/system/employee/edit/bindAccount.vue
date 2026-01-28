@@ -21,8 +21,8 @@ import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { employeeApi } from "@/api/services/employee";
-import { BindLoginAccountInput } from "@/api/services/employee/models/BindLoginAccountInput";
+import { employeeApi } from "@/api/services/Admin/employee";
+import { BindLoginAccountInput } from "@/api/services/Admin/employee/models/BindLoginAccountInput";
 import { useUserInfo } from "@/stores";
 
 defineOptions({

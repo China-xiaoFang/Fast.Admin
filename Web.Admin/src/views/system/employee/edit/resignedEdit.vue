@@ -22,8 +22,8 @@ import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { dateUtil, withDefineType } from "@fast-china/utils";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { employeeApi } from "@/api/services/employee";
-import { EmployeeResignedInput } from "@/api/services/employee/models/EmployeeResignedInput";
+import { employeeApi } from "@/api/services/Admin/employee";
+import { EmployeeResignedInput } from "@/api/services/Admin/employee/models/EmployeeResignedInput";
 
 defineOptions({
 	name: "SystemEmployeeResignedEdit",

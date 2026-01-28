@@ -52,9 +52,9 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import TableColumnConfig from "./config/index.vue";
 import TableConfigEdit from "./edit/index.vue";
-import type { QueryTableConfigPagedOutput } from "@/api/services/table/models/QueryTableConfigPagedOutput";
+import type { QueryTableConfigPagedOutput } from "@/api/services/Center/table/models/QueryTableConfigPagedOutput";
 import type { FaTableInstance } from "fast-element-plus";
-import { tableApi } from "@/api/services/table";
+import { tableApi } from "@/api/services/Center/table";
 
 defineOptions({
 	name: "DevTableConfig",

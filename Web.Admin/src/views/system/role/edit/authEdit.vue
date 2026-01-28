@@ -55,8 +55,8 @@ import { reactive, ref } from "vue";
 import { CheckboxValueType, ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import type { ElSelectorOutput, FaDialogInstance } from "fast-element-plus";
-import { roleApi } from "@/api/services/role";
-import { RoleAuthInput } from "@/api/services/role/models/RoleAuthInput";
+import { roleApi } from "@/api/services/Admin/role";
+import { RoleAuthInput } from "@/api/services/Admin/role/models/RoleAuthInput";
 
 defineOptions({
 	name: "SystemRoleAuthEdit",

@@ -30,9 +30,9 @@ import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Delete, Plus } from "@element-plus/icons-vue";
 import ConfigEdit from "./edit/index.vue";
-import type { QueryConfigPagedOutput } from "@/api/services/config/models/QueryConfigPagedOutput";
+import type { QueryConfigPagedOutput } from "@/api/services/Center/config/models/QueryConfigPagedOutput";
 import type { FastTableInstance } from "@/components";
-import { configApi } from "@/api/services/config";
+import { configApi } from "@/api/services/Center/config";
 
 defineOptions({
 	name: "DevConfig",

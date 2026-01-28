@@ -20,9 +20,9 @@
 import { ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import SerialEdit from "./edit/index.vue";
-import type { QuerySerialRulePagedOutput } from "@/api/services/serial/models/QuerySerialRulePagedOutput";
+import type { QuerySerialRulePagedOutput } from "@/api/services/Admin/serial/models/QuerySerialRulePagedOutput";
 import type { FastTableInstance } from "@/components";
-import { serialApi } from "@/api/services/serial";
+import { serialApi } from "@/api/services/Admin/serial";
 
 defineOptions({
 	name: "SystemSerial",

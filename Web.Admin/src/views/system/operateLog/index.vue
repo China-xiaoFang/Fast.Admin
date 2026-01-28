@@ -37,8 +37,8 @@
 </template>
 
 <script lang="ts" setup>
-import { operateLogApi } from "@/api/services/operateLog";
-import { OperateLogModel } from "@/api/services/operateLog/models/OperateLogModel";
+import { operateLogApi } from "@/api/services/Admin/operateLog";
+import { OperateLogModel } from "@/api/services/Admin/operateLog/models/OperateLogModel";
 import { FastTableInstance } from "@/components";
 import { useUserInfo } from "@/stores";
 import { Delete } from "@element-plus/icons-vue";

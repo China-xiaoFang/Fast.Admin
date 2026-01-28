@@ -1,4 +1,4 @@
-import { SchedulerJobGroupEnum } from "@/api/enums/SchedulerJobGroupEnum";
+import { SchedulerJobGroupEnum } from "@/api/enums/Scheduler/SchedulerJobGroupEnum";
 
 /**
  * Fast.Scheduler.SchedulerJobKeyInput 调度作业Key输入

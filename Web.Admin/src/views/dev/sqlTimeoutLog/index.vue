@@ -91,8 +91,8 @@
 </template>
 
 <script lang="ts" setup>
-import { sqlTimeoutLogApi } from "@/api/services/sqlTimeoutLog";
-import { SqlTimeoutLogModel } from "@/api/services/sqlTimeoutLog/models/SqlTimeoutLogModel";
+import { sqlTimeoutLogApi } from "@/api/services/Center/sqlTimeoutLog";
+import { SqlTimeoutLogModel } from "@/api/services/Center/sqlTimeoutLog/models/SqlTimeoutLogModel";
 import { dateUtil } from "@fast-china/utils";
 import { dayjs } from "element-plus";
 import { reactive } from "vue";

@@ -34,12 +34,12 @@ import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { serialApi } from "@/api/services/serial";
+import { serialApi } from "@/api/services/Admin/serial";
 import { SerialRuleTypeEnum } from "@/api/enums/SerialRuleTypeEnum";
 import { SerialDateTypeEnum } from "@/api/enums/SerialDateTypeEnum";
 import { SerialSpacerEnum } from "@/api/enums/SerialSpacerEnum";
-import { EditSerialRuleInput } from "@/api/services/serial/models/EditSerialRuleInput";
-import { AddSerialRuleInput } from "@/api/services/serial/models/AddSerialRuleInput";
+import { EditSerialRuleInput } from "@/api/services/Admin/serial/models/EditSerialRuleInput";
+import { AddSerialRuleInput } from "@/api/services/Admin/serial/models/AddSerialRuleInput";
 
 defineOptions({
 	name: "SystemSerialEdit",

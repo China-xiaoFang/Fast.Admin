@@ -24,8 +24,8 @@
 </template>
 
 <script lang="ts" setup>
-import { weChatApi } from "@/api/services/weChat";
-import { QueryWeChatUserPagedOutput } from "@/api/services/weChat/models/QueryWeChatUserPagedOutput";
+import { weChatApi } from "@/api/services/Center/weChat";
+import { QueryWeChatUserPagedOutput } from "@/api/services/Center/weChat/models/QueryWeChatUserPagedOutput";
 import { dateUtil } from "@fast-china/utils";
 import { dayjs } from "element-plus";
 

@@ -53,11 +53,11 @@ import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditApplicationInput } from "@/api/services/application/models/EditApplicationInput";
-import { AddApplicationInput } from "@/api/services/application/models/AddApplicationInput";
-import { applicationApi } from "@/api/services/application";
+import { EditApplicationInput } from "@/api/services/Center/application/models/EditApplicationInput";
+import { AddApplicationInput } from "@/api/services/Center/application/models/AddApplicationInput";
+import { applicationApi } from "@/api/services/Center/application";
 import { EditionEnum } from "@/api/enums/EditionEnum";
-import { fileApi } from "@/api/services/file";
+import { fileApi } from "@/api/services/File";
 
 defineOptions({
 	name: "SystemApplicationEdit",

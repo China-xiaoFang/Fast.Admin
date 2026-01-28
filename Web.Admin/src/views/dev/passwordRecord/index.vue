@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { passwordRecordApi } from "@/api/services/passwordRecord";
+import { passwordRecordApi } from "@/api/services/Center/passwordRecord";
 
 defineOptions({
 	name: "DevPasswordRecord",

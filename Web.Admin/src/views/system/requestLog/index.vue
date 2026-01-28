@@ -78,8 +78,8 @@
 </template>
 
 <script lang="ts" setup>
-import { requestLogApi } from "@/api/services/requestLog";
-import { RequestLogModel } from "@/api/services/requestLog/models/RequestLogModel";
+import { requestLogApi } from "@/api/services/Center/requestLog";
+import { RequestLogModel } from "@/api/services/Center/requestLog/models/RequestLogModel";
 import { FastTableInstance } from "@/components";
 import { useUserInfo } from "@/stores";
 import { Delete } from "@element-plus/icons-vue";

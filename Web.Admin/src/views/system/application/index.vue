@@ -34,9 +34,9 @@
 import { ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import ApplicationEdit from "./edit/index.vue";
-import type { QueryApplicationPagedOutput } from "@/api/services/application/models/QueryApplicationPagedOutput";
+import type { QueryApplicationPagedOutput } from "@/api/services/Center/application/models/QueryApplicationPagedOutput";
 import type { FastTableInstance } from "@/components";
-import { applicationApi } from "@/api/services/application";
+import { applicationApi } from "@/api/services/Center/application";
 import { ElMessage, ElMessageBox } from "element-plus";
 
 defineOptions({
