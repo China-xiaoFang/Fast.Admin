@@ -42,7 +42,7 @@
 		"vue-router": "^4.5"
 	},
 	"devDependencies": {
-		"@fast-china/eslint-config": "^1.0.45",
+		"@fast-china/eslint-config": "^1",
 		"@types/lodash": "^4.17",
 		"@types/node": "^25",
 		"@types/nprogress": "^0.2",
