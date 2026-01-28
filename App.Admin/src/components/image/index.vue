@@ -20,13 +20,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from "vue";
 import { addUnit, useProps } from "@fast-china/utils";
 import { isNil } from "lodash-unified";
+import { computed, reactive } from "vue";
 import { imgProps } from "wot-design-uni/components/wd-img/types";
+import { useConfig } from "@/stores";
 import artwork from "./images/artwork.png";
 import notImage from "./images/notImage.png";
-import { useConfig } from "@/stores";
 
 defineOptions({
 	// eslint-disable-next-line vue/no-reserved-component-names

@@ -1,17 +1,17 @@
-import { reactive, ref, toRefs } from "vue";
 import { Local, base64Util, consoleError } from "@fast-china/utils";
 import { defineStore } from "pinia";
-import { useApp } from "../app";
-import type { GetLoginUserInfoOutput } from "@/api/services/auth/models/GetLoginUserInfoOutput";
-import type { LoginOutput } from "@/api/services/login/models/LoginOutput";
-import type { AxiosResponse } from "axios";
+import { reactive, ref, toRefs } from "vue";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
-import { authApi } from "@/api/services/auth";
-import { loginApi } from "@/api/services/login";
+import { authApi } from "@/api/services/Auth/auth";
+import { loginApi } from "@/api/services/Auth/login";
 import { CommonRoute } from "@/common";
 import { useMessageBox, useToast } from "@/hooks";
 import router from "@/router";
 import { closeWebSocket } from "@/signalR";
+import { useApp } from "../app";
+import type { GetLoginUserInfoOutput } from "@/api/services/Auth/auth/models/GetLoginUserInfoOutput";
+import type { LoginOutput } from "@/api/services/Auth/login/models/LoginOutput";
+import type { AxiosResponse } from "axios";
 
 type IState = {
 	/** Token */

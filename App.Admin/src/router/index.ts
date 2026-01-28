@@ -2,11 +2,11 @@
 import { consoleError, dateUtil, stringUtil } from "@fast-china/utils";
 import { createRouter } from "uni-mini-router";
 import { pages, subPackages } from "virtual:uni-pages";
-import type { PageMetaDatum } from "@uni-helper/vite-plugin-uni-pages";
 import { CommonRoute, TabBarRoute } from "@/common";
 import { useToast } from "@/hooks";
 import { initWebSocket } from "@/signalR";
 import { useUserInfo } from "@/stores";
+import type { PageMetaDatum } from "@uni-helper/vite-plugin-uni-pages";
 
 const generateRoutes = (): PageMetaDatum[] => {
 	const routes = pages.map((page) => {

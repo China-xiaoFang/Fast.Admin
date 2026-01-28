@@ -21,8 +21,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, reactive } from "vue";
 import { addUnit, consoleError, definePropType, execFunction, useProps } from "@fast-china/utils";
+import { computed, nextTick, reactive } from "vue";
 import { popupProps } from "wot-design-uni/components/wd-popup/types";
 import FaLoading from "../loading/index.vue";
 

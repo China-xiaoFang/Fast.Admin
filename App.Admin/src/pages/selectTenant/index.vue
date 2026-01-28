@@ -32,15 +32,15 @@
 
 <script setup lang="ts">
 import { onLoad, onPullDownRefresh } from "@dcloudio/uni-app";
-import { ref } from "vue";
 import { clickUtil } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
-import type { LoginTenantOutput } from "@/api/services/login/models/LoginTenantOutput";
+import { ref } from "vue";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
-import { loginApi } from "@/api/services/login";
+import { loginApi } from "@/api/services/Auth/login";
 import { CommonRoute } from "@/common";
 import { useLoading, useMessageBox } from "@/hooks";
 import { useUserInfo } from "@/stores";
+import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
 
 definePage({
 	name: "SelectTenant",

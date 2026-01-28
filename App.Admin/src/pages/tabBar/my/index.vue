@@ -138,9 +138,9 @@
 
 <script setup lang="ts">
 import { onPageScroll, onPullDownRefresh } from "@dcloudio/uni-app";
-import { reactive } from "vue";
 import { clickUtil } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
+import { reactive } from "vue";
 import { CommonRoute } from "@/common";
 import { useMessageBox, useToast } from "@/hooks";
 import { useApp, useConfig, useUserInfo } from "@/stores";

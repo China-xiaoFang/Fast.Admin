@@ -1,5 +1,5 @@
-import { reactive } from "vue";
 import { withDefineType } from "@fast-china/utils";
+import { reactive } from "vue";
 import type { Message, MessageOptions, MessageResult } from "wot-design-uni/components/wd-message-box/types";
 import type { NotifyProps } from "wot-design-uni/components/wd-notify/types";
 import type { Toast, ToastOptions } from "wot-design-uni/components/wd-toast/types";

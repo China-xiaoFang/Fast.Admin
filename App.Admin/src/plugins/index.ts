@@ -1,13 +1,13 @@
-import { type App } from "vue";
 import { consoleLog, useIdentity, useStorage } from "@fast-china/utils";
+import { type App } from "vue";
 import { dayjs } from "wot-design-uni";
-import { loadFastAxios } from "./axios";
-import { loadWotDesign } from "./wot-design-uni";
-import { loadZPaging } from "./z-paging";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { CommonUniApp } from "@/common";
 import { RegExps } from "@/constants";
 import { useApp } from "@/stores";
+import { loadFastAxios } from "./axios";
+import { loadWotDesign } from "./wot-design-uni";
+import { loadZPaging } from "./z-paging";
 import "dayjs/locale/zh-cn";
 
 export function loadPlugins(app: App): void {

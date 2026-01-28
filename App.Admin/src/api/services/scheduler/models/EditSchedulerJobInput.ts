@@ -1,14 +1,14 @@
-import { SchedulerJobGroupEnum } from "@/api/enums/SchedulerJobGroupEnum";
-import { SchedulerJobTypeEnum } from "@/api/enums/SchedulerJobTypeEnum";
-import { TriggerTypeEnum } from "@/api/enums/TriggerTypeEnum";
-import { WeekEnum } from "@/api/enums/WeekEnum";
-import { MailMessageEnum } from "@/api/enums/MailMessageEnum";
-import { HttpRequestMethodEnum } from "@/api/enums/HttpRequestMethodEnum";
+import { SchedulerJobGroupEnum } from "@/api/enums/Scheduler/SchedulerJobGroupEnum";
+import { SchedulerJobTypeEnum } from "@/api/enums/Scheduler/SchedulerJobTypeEnum";
+import { TriggerTypeEnum } from "@/api/enums/Scheduler/TriggerTypeEnum";
+import { WeekEnum } from "@/api/enums/Scheduler/WeekEnum";
+import { MailMessageEnum } from "@/api/enums/Scheduler/MailMessageEnum";
+import { HttpRequestMethodEnum } from "@/api/enums/Scheduler/HttpRequestMethodEnum";
 
 /**
- * Fast.Scheduler.UpdateSchedulerJobInput 更新调度作业输入
+ * Fast.Scheduler.EditSchedulerJobInput 编辑调度作业输入
  */
-export interface UpdateSchedulerJobInput {
+export interface EditSchedulerJobInput {
   /**
    * 旧的作业名称
    */
