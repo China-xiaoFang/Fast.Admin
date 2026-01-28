@@ -37,7 +37,7 @@ namespace Fast.Center.Service.File;
 /// <summary>
 /// <see cref="FileService"/> 文件服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "file", Order = 997)]
+[ApiDescriptionSettings(ApiGroupConst.File, Name = "file", Order = 997)]
 public class FileService : IDynamicApplication
 {
     private readonly IUser _user;

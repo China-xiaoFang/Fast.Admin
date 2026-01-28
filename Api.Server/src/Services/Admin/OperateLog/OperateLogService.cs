@@ -32,7 +32,7 @@ namespace Fast.Admin.Service.OperateLog;
 /// <summary>
 /// <see cref="OperateLogService"/> 操作日志服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "operateLog")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "operateLog")]
 public class OperateLogService : IDynamicApplication
 {
     private readonly IUser _user;
