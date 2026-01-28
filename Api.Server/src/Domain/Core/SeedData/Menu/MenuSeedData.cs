@@ -32,7 +32,6 @@ internal static partial class MenuSeedData
 {
     private static int _moduleSort = 1;
     private static int _menuSort = 1;
-    private static int _buttonSort = 1;
 
     /// <summary>
     /// 模块顺序
@@ -55,18 +54,6 @@ internal static partial class MenuSeedData
         {
             _menuSort++;
             return _menuSort;
-        }
-    }
-
-    /// <summary>
-    /// 按钮顺序
-    /// </summary>
-    private static int buttonSort
-    {
-        get
-        {
-            _buttonSort++;
-            return _buttonSort;
         }
     }
 
