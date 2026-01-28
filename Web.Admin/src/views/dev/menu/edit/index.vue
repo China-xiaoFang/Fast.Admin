@@ -261,18 +261,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditMenuInput & AddMenuInput & { appId?: number; appName?: string; moduleName?: string }>({
-		menuType: MenuTypeEnum.Catalog,
-		edition: EditionEnum.None,
-		visible: true,
-		hasWeb: true,
-		webTab: false,
-		webKeepAlive: false,
-		hasMobile: false,
-		hasDesktop: false,
-		status: CommonStatusEnum.Enable,
-		buttonList: [],
-	}),
+	formData: withDefineType<EditMenuInput & AddMenuInput & { appId?: number; appName?: string; moduleName?: string }>({}),
 	formRules: withDefineType<FormRules>({
 		moduleId: [{ required: true, message: "请选择模块", trigger: "change" }],
 		menuType: [{ required: true, message: "请选择菜单类型", trigger: "change" }],
@@ -358,6 +347,18 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加菜单";
 		state.formDisabled = false;
+		state.formData = {
+			menuType: MenuTypeEnum.Catalog,
+			edition: EditionEnum.None,
+			visible: true,
+			hasWeb: true,
+			webTab: false,
+			webKeepAlive: false,
+			hasMobile: false,
+			hasDesktop: false,
+			status: CommonStatusEnum.Enable,
+			buttonList: [],
+		};
 	});
 };
 

@@ -1,6 +1,4 @@
 import { axiosUtil } from "@fast-china/axios";
-import { QueryModulePagedOutput } from "./models/QueryModulePagedOutput";
-import { QueryModulePagedInput } from "./models/QueryModulePagedInput";
 import { QueryModuleDetailOutput } from "./models/QueryModuleDetailOutput";
 import { AddModuleInput } from "./models/AddModuleInput";
 import { EditModuleInput } from "./models/EditModuleInput";
@@ -20,17 +18,6 @@ export const moduleApi = {
       params: {
         appId,
       },
-      requestType: "query",
-    });
-  },
-  /**
-   * 获取模块分页列表
-   */
-  queryModulePaged(data: QueryModulePagedInput) {
-    return axiosUtil.request<PagedResult<QueryModulePagedOutput>>({
-      url: "/module/queryModulePaged",
-      method: "post",
-      data,
       requestType: "query",
     });
   },

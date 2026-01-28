@@ -40,6 +40,7 @@ export const fileApi = {
       method: "upload",
       name: "file",
       filePath,
+      cancelDuplicateRequest: false,
       requestType: "upload",
     });
   },
@@ -52,6 +53,7 @@ export const fileApi = {
       method: "upload",
       name: "file",
       filePath,
+      cancelDuplicateRequest: false,
       requestType: "upload",
     });
   },
@@ -64,6 +66,7 @@ export const fileApi = {
       method: "upload",
       name: "file",
       filePath,
+      cancelDuplicateRequest: false,
       requestType: "upload",
     });
   },
@@ -76,6 +79,7 @@ export const fileApi = {
       method: "upload",
       name: "file",
       filePath,
+      cancelDuplicateRequest: false,
       requestType: "upload",
     });
   },
@@ -88,6 +92,7 @@ export const fileApi = {
       method: "upload",
       name: "file",
       filePath,
+      cancelDuplicateRequest: false,
       requestType: "upload",
     });
   },

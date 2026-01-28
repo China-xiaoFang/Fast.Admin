@@ -49,10 +49,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditRoleInput & AddRoleInput>({
-		dataScopeType: DataScopeTypeEnum.All,
-		sort: 1,
-	}),
+	formData: withDefineType<EditRoleInput & AddRoleInput>({}),
 	formRules: withDefineType<FormRules>({
 		roleName: [{ required: true, message: "请输入角色名称", trigger: "blur" }],
 		roleCode: [{ required: true, message: "请输入角色编码", trigger: "blur" }],
@@ -94,6 +91,10 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加角色";
 		state.formDisabled = false;
+		state.formData = {
+			dataScopeType: DataScopeTypeEnum.All,
+			sort: 1,
+		};
 	});
 };
 

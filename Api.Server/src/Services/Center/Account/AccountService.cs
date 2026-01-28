@@ -157,8 +157,7 @@ public class AccountService : IDynamicApplication
             .WhereIF(input.IsLock == true, t1 => t1.LockEndTime != null && t1.LockEndTime >= dateTime)
             .WhereIF(input.IsLock == false, t1 => t1.LockEndTime == null || t1.LockEndTime < dateTime);
 
-        return await queryable.OrderByIF(input.IsOrderBy, t1 => t1.CreatedTime)
-            .SelectMergeTable((t1, t2, t3) => new QueryAccountPagedOutput
+        return await queryable.SelectMergeTable((t1, t2, t3) => new QueryAccountPagedOutput
             {
                 AccountId = t1.AccountId,
                 Mobile = t1.Mobile,
@@ -194,6 +193,7 @@ public class AccountService : IDynamicApplication
                 UpdatedTime = t1.UpdatedTime,
                 RowVersion = t1.RowVersion
             })
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .ToPagedListAsync(input);
     }
 

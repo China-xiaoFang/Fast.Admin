@@ -165,13 +165,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditApplicationOpenIdInput & AddApplicationOpenIdInput & { appName?: string }>({
-		appType: AppEnvironmentEnum.Web,
-		environmentType: EnvironmentTypeEnum.Production,
-		requestTimeout: 60000,
-		requestEncipher: true,
-		templateIdList: [],
-	}),
+	formData: withDefineType<EditApplicationOpenIdInput & AddApplicationOpenIdInput & { appName?: string }>({}),
 	formRules: withDefineType<FormRules>({
 		appId: [{ required: true, message: "请选择应用", trigger: "change" }],
 		openId: [{ required: true, message: "请输入应用标识", trigger: "blur" }],
@@ -221,6 +215,13 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加应用OpenId";
 		state.formDisabled = false;
+		state.formData = {
+			appType: AppEnvironmentEnum.Web,
+			environmentType: EnvironmentTypeEnum.Production,
+			requestTimeout: 60000,
+			requestEncipher: true,
+			templateIdList: [],
+		};
 	});
 };
 

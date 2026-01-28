@@ -11,6 +11,19 @@ import { MenuIdInput } from "./models/MenuIdInput";
  */
 export const menuApi = {
   /**
+   * 菜单选择器
+   */
+  menuSelector(moduleId: number) {
+    return axiosUtil.request<ElSelectorOutput<number>[]>({
+      url: "/menu/menuSelector",
+      method: "get",
+      params: {
+        moduleId,
+      },
+      requestType: "query",
+    });
+  },
+  /**
    * 获取菜单列表
    */
   queryMenuPaged(data: QueryMenuPagedInput) {

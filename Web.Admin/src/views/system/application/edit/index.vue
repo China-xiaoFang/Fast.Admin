@@ -69,12 +69,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditApplicationInput & AddApplicationInput>({
-		edition: EditionEnum.None,
-		userAgreement: "<p><br></p>",
-		privacyAgreement: "<p><br></p>",
-		serviceAgreement: "<p><br></p>",
-	}),
+	formData: withDefineType<EditApplicationInput & AddApplicationInput>({}),
 	formRules: withDefineType<FormRules>({
 		appName: [{ required: true, message: "请输入应用名称", trigger: "blur" }],
 		themeColor: [{ required: true, message: "请选择主题色", trigger: "blur" }],
@@ -116,6 +111,12 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加应用";
 		state.formDisabled = false;
+		state.formData = {
+			edition: EditionEnum.None,
+			userAgreement: "<p><br></p>",
+			privacyAgreement: "<p><br></p>",
+			serviceAgreement: "<p><br></p>",
+		};
 	});
 };
 

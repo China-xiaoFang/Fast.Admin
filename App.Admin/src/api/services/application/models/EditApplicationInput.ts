@@ -1,5 +1,4 @@
 import { EditionEnum } from "@/api/enums/EditionEnum";
-import { EditApplicationOpenIdDto } from "./EditApplicationOpenIdDto";
 
 /**
  * Fast.Center.Service.Application.Dto.EditApplicationInput 编辑应用输入
@@ -57,10 +56,6 @@ export interface EditApplicationInput {
    * 租户名称
    */
   tenantName?: string;
-  /**
-   * 开放平台信息
-   */
-  openIdList?: Array<EditApplicationOpenIdDto>;
   /**
    * 
    */

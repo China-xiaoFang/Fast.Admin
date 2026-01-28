@@ -204,18 +204,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditDatabaseInput & AddDatabaseInput & QueryDatabaseDetailOutput>({
-		databaseType: DatabaseTypeEnum.Admin,
-		dbType: SugarDbType.SqlServer,
-		publicIp: "127.0.0.1",
-		intranetIp: "127.0.0.1",
-		port: 1433,
-		commandTimeOut: 60,
-		sugarSqlExecMaxSeconds: 30,
-		diffLog: true,
-		disableAop: false,
-		slaveDatabaseList: [],
-	}),
+	formData: withDefineType<EditDatabaseInput & AddDatabaseInput & QueryDatabaseDetailOutput>({}),
 	formRules: withDefineType<FormRules>({
 		tenantId: [{ required: true, message: "请选择租户", trigger: "change" }],
 		publicIp: [{ required: true, message: "请输入公网Ip地址", trigger: "blur" }],
@@ -273,6 +262,18 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加数据库";
 		state.formDisabled = false;
+		state.formData = {
+			databaseType: DatabaseTypeEnum.Admin,
+			dbType: SugarDbType.SqlServer,
+			publicIp: "127.0.0.1",
+			intranetIp: "127.0.0.1",
+			port: 1433,
+			commandTimeOut: 60,
+			sugarSqlExecMaxSeconds: 30,
+			diffLog: true,
+			disableAop: false,
+			slaveDatabaseList: [],
+		};
 	});
 };
 

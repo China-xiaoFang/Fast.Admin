@@ -22,6 +22,7 @@
 
 using System.Security.Cryptography;
 using Fast.Center.Entity;
+using Fast.Center.Enum;
 using Fast.Center.Service.File.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -119,38 +120,42 @@ public class FileService : IDynamicApplication
     [Permission(PermissionConst.FilePaged)]
     public async Task<PagedResult<QueryFilePagedOutput>> QueryFilePaged(QueryFilePagedInput input)
     {
-        var queryable = _repository.Entities;
-        if (_user.IsSuperAdmin)
+        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
+
+        var queryable = _repository.Entities.LeftJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId);
+
+        if (tenantModel.TenantType == TenantTypeEnum.System)
         {
             queryable = queryable.ClearFilter<IBaseTEntity>()
-                .WhereIF(input.TenantId != null, wh => wh.TenantId == input.TenantId);
+                .WhereIF(input.TenantId != null, t1 => t1.TenantId == input.TenantId);
         }
         else if (!_user.IsAdmin)
         {
-            queryable = queryable.Where(wh => wh.CreatedUserId == _user.UserId);
+            queryable = queryable.Where(t1 => t1.CreatedUserId == _user.UserId);
         }
 
-        return await queryable.OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
-            .Select(sl => new QueryFilePagedOutput
+        return await queryable.SelectMergeTable((t1, t2) => new QueryFilePagedOutput
             {
-                FileId = sl.FileId,
-                FileObjectName = sl.FileObjectName,
-                FileOriginName = sl.FileOriginName,
-                FileSuffix = sl.FileSuffix,
-                FileMimeType = sl.FileMimeType,
-                FileSizeKb = sl.FileSizeKb,
-                FilePath = sl.FilePath,
-                FileLocation = sl.FileLocation,
-                FileHash = sl.FileHash,
-                UploadDevice = sl.UploadDevice,
-                UploadOS = sl.UploadOS,
-                UploadBrowser = sl.UploadBrowser,
-                UploadProvince = sl.UploadProvince,
-                UploadCity = sl.UploadCity,
-                UploadIp = sl.UploadIp,
-                CreatedUserName = sl.CreatedUserName,
-                CreatedTime = sl.CreatedTime
+                FileId = t1.FileId,
+                FileObjectName = t1.FileObjectName,
+                FileOriginName = t1.FileOriginName,
+                FileSuffix = t1.FileSuffix,
+                FileMimeType = t1.FileMimeType,
+                FileSizeKb = t1.FileSizeKb,
+                FilePath = t1.FilePath,
+                FileLocation = t1.FileLocation,
+                FileHash = t1.FileHash,
+                UploadDevice = t1.UploadDevice,
+                UploadOS = t1.UploadOS,
+                UploadBrowser = t1.UploadBrowser,
+                UploadProvince = t1.UploadProvince,
+                UploadCity = t1.UploadCity,
+                UploadIp = t1.UploadIp,
+                CreatedUserName = t1.CreatedUserName,
+                CreatedTime = t1.CreatedTime,
+                TenantName = t2.TenantName
             })
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .ToPagedListAsync(input);
     }
 

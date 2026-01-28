@@ -18,5 +18,9 @@ export interface QueryWeChatUserPagedInput extends PagedInput  {
    * 
    */
   sex?: GenderEnum;
+  /**
+   * 
+   */
+  readonly isOrderBy?: boolean;
 }
 

@@ -107,7 +107,6 @@ public class EmployeeService : IDynamicApplication
             .WhereIF(input.AcademicSystem != null, t1 => t1.AcademicSystem == input.AcademicSystem)
             .WhereIF(input.Degree != null, t1 => t1.Degree == input.Degree)
             .WhereIF(input.DepartmentId != null, (t1, t2) => t2.DepartmentId == input.DepartmentId)
-            .OrderByIF(input.IsOrderBy, t1 => t1.CreatedTime, OrderByType.Desc)
             .SelectMergeTable((t1, t2) => new QueryEmployeePagedOutput
             {
                 EmployeeId = t1.EmployeeId,
@@ -147,6 +146,7 @@ public class EmployeeService : IDynamicApplication
                 JobLevelName = t2.JobLevelName,
                 IsPrincipal = t2.IsPrincipal
             })
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .DataScope(e => e.DepartmentId, e => e.EmployeeId)
             .ToPagedListAsync(input);
 

@@ -279,7 +279,7 @@ public class LoginService : IDynamicApplication
             Avatar = accountModel.Avatar,
             TenantList =
             [
-                new LoginOutput.LoginTenantOutput
+                new LoginTenantOutput
                 {
                     UserKey = tenantUserModel.UserKey,
                     TenantName = tenantModel.TenantName,
@@ -321,7 +321,7 @@ public class LoginService : IDynamicApplication
         var isMobile = new Regex(RegexConst.Mobile).IsMatch(input.Account);
 
         AccountModel accountModel = null;
-        TenantUserModel tenantUserModel = null;
+        List<TenantUserModel> tenantUserList = [];
 
         if (isMobile)
         {
@@ -329,11 +329,16 @@ public class LoginService : IDynamicApplication
             accountModel = await _repository.Queryable<AccountModel>()
                 .Where(wh => wh.Mobile == input.Account)
                 .SingleAsync();
+
+            tenantUserList = await _repository.Queryable<TenantUserModel>()
+                .ClearFilter<IBaseTEntity>()
+                .Where(wh => wh.AccountId == accountModel.AccountId)
+                .ToListAsync();
         }
         else
         {
             // 根据账号或登录工号查询租户用户信息
-            tenantUserModel = await _repository.Queryable<TenantUserModel>()
+            var tenantUserModel = await _repository.Queryable<TenantUserModel>()
                 .ClearFilter<IBaseTEntity>()
                 .Where(wh => (!string.IsNullOrWhiteSpace(wh.Account) && wh.Account == input.Account)
                              || wh.EmployeeNo == input.Account)
@@ -344,6 +349,7 @@ public class LoginService : IDynamicApplication
                 accountModel = await _repository.Queryable<AccountModel>()
                     .Where(wh => wh.AccountId == tenantUserModel.AccountId)
                     .SingleAsync();
+                tenantUserList.Add(tenantUserModel);
             }
         }
 
@@ -357,24 +363,34 @@ public class LoginService : IDynamicApplication
         // 验证密码
         await VerifyPassword(accountModel, input.Password, dateTime);
 
+        if (tenantUserList.Count == 0)
+        {
+            throw new UserFriendlyException("账号未绑定任何租户！");
+        }
+
         // 单租户自动登录
         var autoLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleTenantWhenAutoLogin));
 
-        var tenantUserList = new List<LoginOutput.LoginTenantOutput>();
-        if (tenantUserModel != null)
+        // 单租户自动登录
+        if (tenantUserList.Count == 1 && autoLogin)
         {
-            // 单租户自动登录
-            if (autoLogin)
-            {
-                // 处理登录
-                return await HandleLogin(applicationModel.Application, accountModel, tenantUserModel, dateTime);
-            }
+            // 处理登录
+            return await HandleLogin(applicationModel.Application, accountModel, tenantUserList.Single(), dateTime);
+        }
 
-            // 查询租户
-            var tenantModel = await _repository.Queryable<TenantModel>()
-                .Where(wh => wh.TenantId == tenantUserModel.TenantId)
-                .SingleAsync();
-            tenantUserList.Add(new LoginOutput.LoginTenantOutput
+        var tenantIds = tenantUserList.Select(sl => sl.TenantId)
+            .Distinct()
+            .ToList();
+        var tenantList = await _repository.Queryable<TenantModel>()
+            .Where(wh => tenantIds.Contains(wh.TenantId))
+            .ToListAsync();
+
+        var resultTenantList = new List<LoginTenantOutput>();
+
+        foreach (var tenantUserModel in tenantUserList)
+        {
+            var tenantModel = tenantList.Single(s => s.TenantId == tenantUserModel.TenantId);
+            resultTenantList.Add(new LoginTenantOutput
             {
                 UserKey = tenantUserModel.UserKey,
                 TenantName = tenantModel.TenantName,
@@ -391,35 +407,6 @@ public class LoginService : IDynamicApplication
                 Status = tenantUserModel.Status
             });
         }
-        else
-        {
-            tenantUserList = await _repository.Queryable<TenantUserModel>()
-                .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
-                .ClearFilter<IBaseTEntity>()
-                .Where(t1 => t1.AccountId == accountModel.AccountId)
-                .Select((t1, t2) => new LoginOutput.LoginTenantOutput
-                {
-                    UserKey = t1.UserKey,
-                    TenantName = t2.TenantName,
-                    ShortName = t2.ShortName,
-                    SpellName = t2.SpellName,
-                    Edition = t2.Edition,
-                    LogoUrl = t2.LogoUrl,
-                    EmployeeNo = t1.EmployeeNo,
-                    EmployeeName = t1.EmployeeName,
-                    IdPhoto = t1.IdPhoto,
-                    DepartmentId = t1.DepartmentId,
-                    DepartmentName = t1.DepartmentName,
-                    UserType = t1.UserType,
-                    Status = t1.Status
-                })
-                .ToListAsync();
-        }
-
-        if (tenantUserList.Count == 0)
-        {
-            throw new UserFriendlyException("账号未绑定任何租户！");
-        }
 
         // 多个账号，或未开启单租户自动登录
         return new LoginOutput
@@ -429,7 +416,7 @@ public class LoginService : IDynamicApplication
             AccountKey = accountModel.AccountKey,
             NickName = accountModel.NickName,
             Avatar = accountModel.Avatar,
-            TenantList = tenantUserList
+            TenantList = resultTenantList
         };
     }
 
@@ -441,15 +428,14 @@ public class LoginService : IDynamicApplication
     [HttpGet("/queryLoginUserByAccount")]
     [ApiInfo("获取登录用户根据账号", HttpRequestActionEnum.Query)]
     [AllowAnonymous]
-    public async Task<List<LoginOutput.LoginTenantOutput>> QueryLoginUserByAccount(
-        [Required(ErrorMessage = "账号Key不能为空")] string accountKey)
+    public async Task<List<LoginTenantOutput>> QueryLoginUserByAccount([Required(ErrorMessage = "账号Key不能为空")] string accountKey)
     {
         return await _repository.Queryable<AccountModel>()
             .InnerJoin<TenantUserModel>((t1, t2) => t1.AccountId == t2.AccountId)
             .InnerJoin<TenantModel>((t1, t2, t3) => t2.TenantId == t3.TenantId)
             .ClearFilter<IBaseTEntity>()
             .Where(t1 => t1.AccountKey == accountKey)
-            .Select((t1, t2, t3) => new LoginOutput.LoginTenantOutput
+            .Select((t1, t2, t3) => new LoginTenantOutput
             {
                 UserKey = t2.UserKey,
                 TenantName = t3.TenantName,
@@ -598,18 +584,15 @@ public class LoginService : IDynamicApplication
             throw new UserFriendlyException("账号未绑定任何租户！");
         }
 
-        if (tenantUserList.Count == 1)
-        {
-            // 单租户自动登录
-            var autoLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleTenantWhenAutoLogin));
+        // 单租户自动登录
+        var autoLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleTenantWhenAutoLogin));
 
-            // 单租户自动登录
-            if (autoLogin)
-            {
-                var tenantUserModel = tenantUserList.First();
-                // 处理登录
-                return await HandleLogin(applicationModel, accountModel, tenantUserModel, dateTime);
-            }
+        // 单租户自动登录
+        if (tenantUserList.Count == 1 && autoLogin)
+        {
+            var tenantUserModel = tenantUserList.First();
+            // 处理登录
+            return await HandleLogin(applicationModel, accountModel, tenantUserModel, dateTime);
         }
 
         // 微信登录自动选择最后一次登录租户
@@ -635,7 +618,7 @@ public class LoginService : IDynamicApplication
                 .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
                 .ClearFilter<IBaseTEntity>()
                 .Where(t1 => t1.AccountId == accountModel.AccountId)
-                .Select((t1, t2) => new LoginOutput.LoginTenantOutput
+                .Select((t1, t2) => new LoginTenantOutput
                 {
                     UserKey = t1.UserKey,
                     TenantName = t2.TenantName,

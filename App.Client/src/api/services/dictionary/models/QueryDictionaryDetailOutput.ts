@@ -1,6 +1,6 @@
 import { DictionaryValueTypeEnum } from "@/api/enums/DictionaryValueTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { QueryDictionaryItemDetailDto } from "./QueryDictionaryItemDetailDto";
+import { EditDictionaryItemInput } from "./EditDictionaryItemInput";
 
 /**
  * Fast.Center.Service.Dictionary.Dto.QueryDictionaryDetailOutput 获取字典详情输出
@@ -37,7 +37,7 @@ export interface QueryDictionaryDetailOutput {
   /**
    * 字典项集合
    */
-  dictionaryItemList?: Array<QueryDictionaryItemDetailDto>;
+  dictionaryItemList?: Array<EditDictionaryItemInput>;
   /**
    * 
    */

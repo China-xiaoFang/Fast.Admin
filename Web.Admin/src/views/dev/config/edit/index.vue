@@ -87,6 +87,7 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加配置";
 		state.formDisabled = false;
+		state.formData = {};
 	});
 };
 

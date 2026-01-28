@@ -1,9 +1,8 @@
 import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
- * Fast.Center.Service.Dictionary.Dto.EditDictionaryInput.EditDictionaryItemInput 编辑字典项输入
+ * Fast.Center.Service.Dictionary.Dto.EditDictionaryItemInput 编辑字典项输入
  */
 export interface EditDictionaryItemInput {
   /**
@@ -31,9 +30,9 @@ export interface EditDictionaryItemInput {
    */
   tips?: string;
   /**
-   * 
+   * 是否显示
    */
-  visible?: YesOrNotEnum;
+  visible?: boolean;
   /**
    * 
    */

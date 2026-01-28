@@ -9,7 +9,7 @@ import { ForceOfflineInput } from "./models/ForceOfflineInput";
  */
 export const tenantOnlineUserApi = {
   /**
-   * 租户选择器
+   * 获取在线用户分页列表
    */
   queryTenantOnlineUserPaged(data: QueryTenantOnlineUserPagedInput) {
     return axiosUtil.request<PagedResult<TenantOnlineUserModel>>({

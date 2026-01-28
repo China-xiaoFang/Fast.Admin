@@ -13,5 +13,9 @@ export interface QueryPasswordRecordPagedInput extends PagedInput  {
    * 
    */
   operationType?: PasswordOperationTypeEnum;
+  /**
+   * 
+   */
+  readonly isOrderBy?: boolean;
 }
 

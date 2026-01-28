@@ -64,9 +64,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditMerchantInput & AddMerchantInput>({
-		merchantType: PaymentChannelEnum.WeChat,
-	}),
+	formData: withDefineType<EditMerchantInput & AddMerchantInput>({}),
 	formRules: withDefineType<FormRules>({
 		merchantName: [{ required: true, message: "请输入商户名称", trigger: "blur" }],
 		merchantNo: [{ required: true, message: "请输入商户号", trigger: "blur" }],
@@ -107,6 +105,9 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加商户号";
 		state.formDisabled = false;
+		state.formData = {
+			merchantType: PaymentChannelEnum.WeChat,
+		};
 	});
 };
 

@@ -110,6 +110,7 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加机构";
 		state.formDisabled = false;
+		state.formData = {};
 	});
 };
 
