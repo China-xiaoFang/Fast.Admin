@@ -53,7 +53,6 @@ public class PasswordRecordService : IDynamicApplication
         return await _repository.Entities.LeftJoin<AccountModel>((t1, t2) => t1.AccountId == t2.AccountId)
             .WhereIF(input.AccountId != null, t1 => t1.AccountId == input.AccountId)
             .WhereIF(input.OperationType != null, t1 => t1.OperationType == input.OperationType)
-            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .SelectMergeTable((t1, t2) => new QueryPasswordRecordPagedOutput
             {
                 RecordId = t1.RecordId,
@@ -68,6 +67,7 @@ public class PasswordRecordService : IDynamicApplication
                 NickName = t2.NickName,
                 Avatar = t2.Avatar
             })
+            .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .ToPagedListAsync(input);
     }
 }

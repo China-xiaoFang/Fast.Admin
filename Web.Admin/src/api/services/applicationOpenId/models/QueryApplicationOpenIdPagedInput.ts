@@ -18,5 +18,9 @@ export interface QueryApplicationOpenIdPagedInput extends PagedInput  {
    * 
    */
   environmentType?: EnvironmentTypeEnum;
+  /**
+   * 
+   */
+  readonly isOrderBy?: boolean;
 }
 

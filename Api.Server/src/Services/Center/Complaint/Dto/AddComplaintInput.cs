@@ -39,11 +39,13 @@ public class AddComplaintInput
     /// 联系电话
     /// </summary>
     [StringRequired(ErrorMessage = "联系电话不能为空")]
+    [RegularExpression(RegexConst.Mobile, ErrorMessage = "联系电话格式不正确")]
     public string ContactPhone { get; set; }
 
     /// <summary>
     /// 联系邮箱
     /// </summary>
+    [RegularExpression(RegexConst.EmailAddress, ErrorMessage = "联系邮箱格式不正确")]
     public string ContactEmail { get; set; }
 
     /// <summary>

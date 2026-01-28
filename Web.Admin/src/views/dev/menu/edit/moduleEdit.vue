@@ -55,9 +55,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditModuleInput & AddModuleInput & { appName?: string }>({
-		viewType: ModuleViewTypeEnum.All,
-	}),
+	formData: withDefineType<EditModuleInput & AddModuleInput & { appName?: string }>({}),
 	formRules: withDefineType<FormRules>({
 		appId: [{ required: true, message: "请选择应用", trigger: "change" }],
 		moduleName: [{ required: true, message: "请输入模块名称", trigger: "blur" }],
@@ -90,6 +88,9 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加模块";
 		state.formDisabled = false;
+		state.formData = {
+			viewType: ModuleViewTypeEnum.All,
+		};
 	});
 };
 

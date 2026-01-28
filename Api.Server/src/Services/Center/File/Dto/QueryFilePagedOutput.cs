@@ -115,4 +115,9 @@ public class QueryFilePagedOutput
     /// </summary>
     [SugarSearchTime]
     public DateTime? CreatedTime { get; set; }
+
+    /// <summary>
+    /// 租户名称
+    /// </summary>
+    public string TenantName { get; set; }
 }

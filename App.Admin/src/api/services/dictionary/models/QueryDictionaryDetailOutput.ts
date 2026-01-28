@@ -1,7 +1,6 @@
 import { DictionaryValueTypeEnum } from "@/api/enums/DictionaryValueTypeEnum";
-import { YesOrNotEnum } from "@/api/enums/YesOrNotEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { QueryDictionaryItemDetailDto } from "./QueryDictionaryItemDetailDto";
+import { EditDictionaryItemInput } from "./EditDictionaryItemInput";
 
 /**
  * Fast.Center.Service.Dictionary.Dto.QueryDictionaryDetailOutput 获取字典详情输出
@@ -24,9 +23,9 @@ export interface QueryDictionaryDetailOutput {
    */
   valueType?: DictionaryValueTypeEnum;
   /**
-   * 
+   * Flags枚举
    */
-  hasFlags?: YesOrNotEnum;
+  hasFlags?: boolean;
   /**
    * 
    */
@@ -38,7 +37,7 @@ export interface QueryDictionaryDetailOutput {
   /**
    * 字典项集合
    */
-  dictionaryItemList?: Array<QueryDictionaryItemDetailDto>;
+  dictionaryItemList?: Array<EditDictionaryItemInput>;
   /**
    * 
    */

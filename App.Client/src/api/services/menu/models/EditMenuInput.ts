@@ -1,7 +1,7 @@
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { EditMenuButtonDto } from "./EditMenuButtonDto";
+import { EditMenuButtonInput } from "./EditMenuButtonInput";
 
 /**
  * Fast.Center.Service.Menu.Dto.EditMenuInput 编辑菜单输入
@@ -106,7 +106,7 @@ export interface EditMenuInput {
   /**
    * 按钮信息
    */
-  buttonList?: Array<EditMenuButtonDto>;
+  buttonList?: Array<EditMenuButtonInput>;
   /**
    * 
    */

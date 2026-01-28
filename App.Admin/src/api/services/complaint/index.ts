@@ -2,13 +2,14 @@ import { axiosUtil } from "@fast-china/axios";
 import { QueryComplaintPagedOutput } from "./models/QueryComplaintPagedOutput";
 import { QueryComplaintPagedInput } from "./models/QueryComplaintPagedInput";
 import { AddComplaintInput } from "./models/AddComplaintInput";
+import { HandleComplaintInput } from "./models/HandleComplaintInput";
 
 /**
  * Fast.Center.Service.Complaint.ComplaintService 投诉服务Api
  */
 export const complaintApi = {
   /**
-   * 获取投诉分页列表
+   * 获取投诉工单分页列表
    */
   queryComplaintPaged(data: QueryComplaintPagedInput) {
     return axiosUtil.request<PagedResult<QueryComplaintPagedOutput>>({
@@ -19,7 +20,7 @@ export const complaintApi = {
     });
   },
   /**
-   * 获取租户投诉分页列表
+   * 获取用户投诉分页列表
    */
   queryTenantComplaintPaged(data: QueryComplaintPagedInput) {
     return axiosUtil.request<PagedResult<QueryComplaintPagedOutput>>({
@@ -51,6 +52,17 @@ export const complaintApi = {
       method: "post",
       data,
       requestType: "add",
+    });
+  },
+  /**
+   * 处理投诉
+   */
+  handleComplaint(data: HandleComplaintInput) {
+    return axiosUtil.request({
+      url: "/complaint/handleComplaint",
+      method: "post",
+      data,
+      requestType: "edit",
     });
   },
 };

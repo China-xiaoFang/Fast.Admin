@@ -59,6 +59,10 @@ export interface SqlExceptionLogModel {
    */
   pureSql?: string;
   /**
+   * 异常时间
+   */
+  createdTime?: Date;
+  /**
    * 租户Id
    */
   tenantId?: number;
@@ -106,9 +110,5 @@ export interface SqlExceptionLogModel {
    * 
    */
   createdUserName?: string;
-  /**
-   * 
-   */
-  createdTime?: Date;
 }
 

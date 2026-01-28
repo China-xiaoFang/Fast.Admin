@@ -124,6 +124,7 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加部门";
 		state.formDisabled = false;
+		state.formData = {};
 	});
 };
 

@@ -46,5 +46,9 @@ export interface QueryAccountPagedInput extends PagedInput  {
    * 是否锁定
    */
   isLock?: boolean;
+  /**
+   * 
+   */
+  readonly isOrderBy?: boolean;
 }
 

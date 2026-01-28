@@ -9,5 +9,9 @@ export interface QueryMerchantPagedInput extends PagedInput  {
    * 
    */
   merchantType?: PaymentChannelEnum;
+  /**
+   * 
+   */
+  readonly isOrderBy?: boolean;
 }
 

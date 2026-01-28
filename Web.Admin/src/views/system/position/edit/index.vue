@@ -42,9 +42,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditPositionInput & AddPositionInput>({
-		sort: 1,
-	}),
+	formData: withDefineType<EditPositionInput & AddPositionInput>({}),
 	formRules: withDefineType<FormRules>({
 		positionName: [{ required: true, message: "请输入职位名称", trigger: "blur" }],
 		sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
@@ -85,6 +83,9 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加职位";
 		state.formDisabled = false;
+		state.formData = {
+			sort: 1,
+		};
 	});
 };
 

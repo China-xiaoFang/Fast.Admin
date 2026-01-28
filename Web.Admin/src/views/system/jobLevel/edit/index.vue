@@ -83,6 +83,7 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加职级";
 		state.formDisabled = false;
+		state.formData = {};
 	});
 };
 

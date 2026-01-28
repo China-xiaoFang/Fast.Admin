@@ -332,11 +332,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditEmployeeInput & AddEmployeeInput>({
-		isPrincipal: false,
-		sex: GenderEnum.Unknown,
-		entryDate: new Date(),
-	}),
+	formData: withDefineType<EditEmployeeInput & AddEmployeeInput>({}),
 	formRules: withDefineType<FormRules>({
 		orgId: [{ required: true, message: "请选择机构", trigger: "change" }],
 		departmentId: [{ required: true, message: "请选择部门", trigger: "change" }],
@@ -416,6 +412,11 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加职员";
 		state.formDisabled = false;
+		state.formData = {
+			isPrincipal: false,
+			sex: GenderEnum.Unknown,
+			entryDate: new Date(),
+		};
 	});
 };
 

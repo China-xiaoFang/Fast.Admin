@@ -70,5 +70,9 @@ export interface QueryFilePagedOutput {
    * 创建时间
    */
   createdTime?: Date;
+  /**
+   * 租户名称
+   */
+  tenantName?: string;
 }
 

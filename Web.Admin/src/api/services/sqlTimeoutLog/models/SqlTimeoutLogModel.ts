@@ -51,6 +51,10 @@ export interface SqlTimeoutLogModel {
    */
   pureSql?: string;
   /**
+   * 超时时间
+   */
+  createdTime?: Date;
+  /**
    * 租户Id
    */
   tenantId?: number;
@@ -98,9 +102,5 @@ export interface SqlTimeoutLogModel {
    * 
    */
   createdUserName?: string;
-  /**
-   * 
-   */
-  createdTime?: Date;
 }
 

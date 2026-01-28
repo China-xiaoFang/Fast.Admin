@@ -9,6 +9,10 @@ export interface AddMerchantInput {
    */
   merchantType?: PaymentChannelEnum;
   /**
+   * 商户名称
+   */
+  merchantName?: string;
+  /**
    * 商户号
    */
   merchantNo?: string;

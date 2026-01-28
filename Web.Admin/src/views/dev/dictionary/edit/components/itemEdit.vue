@@ -75,11 +75,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditDictionaryItemInput>({
-		type: TagTypeEnum.Primary,
-		visible: true,
-		status: CommonStatusEnum.Enable,
-	}),
+	formData: withDefineType<EditDictionaryItemInput>({}),
 	formRules: withDefineType<FormRules>({
 		label: [{ required: true, message: "请输入字典项名称", trigger: "blur" }],
 		value: [{ required: true, message: "请输入字典项值", trigger: "blur" }],
@@ -118,6 +114,11 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加数据字典项";
 		state.formDisabled = false;
+		state.formData = {
+			type: TagTypeEnum.Primary,
+			visible: true,
+			status: CommonStatusEnum.Enable,
+		};
 	});
 };
 

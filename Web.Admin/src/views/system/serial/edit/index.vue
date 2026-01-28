@@ -51,11 +51,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditSerialRuleInput & AddSerialRuleInput>({
-		ruleType: SerialRuleTypeEnum.EmployeeNo,
-		dateType: SerialDateTypeEnum.Year,
-		spacer: SerialSpacerEnum.None,
-	}),
+	formData: withDefineType<EditSerialRuleInput & AddSerialRuleInput>({}),
 	formRules: withDefineType<FormRules>({
 		length: [{ required: true, message: "请输入长度", trigger: "blur" }],
 	}),
@@ -95,6 +91,11 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加序号";
 		state.formDisabled = false;
+		state.formData = {
+			ruleType: SerialRuleTypeEnum.EmployeeNo,
+			dateType: SerialDateTypeEnum.Year,
+			spacer: SerialSpacerEnum.None,
+		};
 	});
 };
 

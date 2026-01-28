@@ -3,7 +3,7 @@ import { UserTypeEnum } from "@/api/enums/UserTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
- * Fast.Center.Service.Login.Dto.LoginOutput.LoginTenantOutput 登录租户输出
+ * Fast.Center.Service.Login.Dto.LoginTenantOutput 登录租户输出
  */
 export interface LoginTenantOutput {
   /**

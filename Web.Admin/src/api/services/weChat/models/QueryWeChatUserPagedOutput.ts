@@ -98,6 +98,10 @@ export interface QueryWeChatUserPagedOutput {
    */
   mobileUpdateTime?: Date;
   /**
+   * 创建时间
+   */
+  createdTime?: Date;
+  /**
    * 
    */
   departmentName?: string;
@@ -105,10 +109,6 @@ export interface QueryWeChatUserPagedOutput {
    * 
    */
   createdUserName?: string;
-  /**
-   * 
-   */
-  createdTime?: Date;
   /**
    * 
    */

@@ -17,5 +17,9 @@ export interface QuerySqlDiffLogPagedInput extends PagedInput  {
    * 租户Id
    */
   tenantId?: number;
+  /**
+   * 
+   */
+  readonly isOrderBy?: boolean;
 }
 

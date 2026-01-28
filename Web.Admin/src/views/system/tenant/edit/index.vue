@@ -72,10 +72,7 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditTenantInput & AddTenantInput>({
-		edition: EditionEnum.Trial,
-		status: CommonStatusEnum.Enable,
-	}),
+	formData: withDefineType<EditTenantInput & AddTenantInput>({}),
 	formRules: withDefineType<FormRules>({
 		tenantName: [{ required: true, message: "请输入租户名称", trigger: "blur" }],
 		tenantCode: [{ required: true, message: "请输入租户编码", trigger: "blur" }],
@@ -123,6 +120,10 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加租户";
 		state.formDisabled = false;
+		state.formData = {
+			edition: EditionEnum.Trial,
+			status: CommonStatusEnum.Enable,
+		};
 	});
 };
 
