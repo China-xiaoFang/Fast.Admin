@@ -6,9 +6,9 @@
 </template>
 
 <script setup lang="ts">
-import { FullScreen, FullScreenExit } from "@fast-element-plus/icons-vue";
-import { useScreenFull } from "fast-element-plus";
 import { computed, onMounted } from "vue";
+import { useScreenFull } from "fast-element-plus";
+import { FullScreen, FullScreenExit } from "@fast-element-plus/icons-vue";
 
 defineOptions({
 	name: "ScreenFull",

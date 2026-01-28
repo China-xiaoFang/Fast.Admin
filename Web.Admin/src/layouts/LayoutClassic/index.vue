@@ -119,10 +119,10 @@
 </template>
 
 <script setup lang="ts">
+import { inject, ref } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { Expand, Fold, Key, Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
 import { Local, addUnit } from "@fast-china/utils";
-import { ElMessage, ElMessageBox } from "element-plus";
-import { inject, ref } from "vue";
 import { RouterView, useRouter } from "vue-router";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";

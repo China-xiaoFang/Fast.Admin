@@ -225,11 +225,11 @@
 </template>
 
 <script lang="ts" setup>
-import { Delete } from "@element-plus/icons-vue";
-import { withDefineType } from "@fast-china/utils";
-import { ElMessage, type FormRules } from "element-plus";
-import { FaDialog } from "fast-element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
+import { Delete } from "@element-plus/icons-vue";
+import { FaDialog } from "fast-element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { HttpRequestMethodEnum } from "@/api/enums/Scheduler/HttpRequestMethodEnum";
 import { MailMessageEnum } from "@/api/enums/Scheduler/MailMessageEnum";
 import { SchedulerJobTypeEnum } from "@/api/enums/Scheduler/SchedulerJobTypeEnum";

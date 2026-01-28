@@ -47,9 +47,9 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
-import { ElMessage, type FormRules } from "element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { organizationApi } from "@/api/services/Admin/organization";
 import { AddOrganizationInput } from "@/api/services/Admin/organization/models/AddOrganizationInput";
 import { EditOrganizationInput } from "@/api/services/Admin/organization/models/EditOrganizationInput";

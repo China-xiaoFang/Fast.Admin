@@ -28,9 +28,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
 import { tenantDatabaseApi } from "@/api/services/Admin/tenantDatabase";
 import { databaseApi } from "@/api/services/Center/database";
 import DatabaseEdit from "./edit/index.vue";

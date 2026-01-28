@@ -35,9 +35,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { tenantApi } from "@/api/services/Center/tenant";
 import TenantEdit from "./edit/index.vue";

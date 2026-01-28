@@ -302,10 +302,10 @@
 </template>
 
 <script lang="ts" setup>
+import { reactive, ref } from "vue";
+import { CheckboxValueType, ElMessage, type FormRules } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { dateUtil, withDefineType } from "@fast-china/utils";
-import { CheckboxValueType, ElMessage, type FormRules } from "element-plus";
-import { reactive, ref } from "vue";
 import { GenderEnum } from "@/api/enums/GenderEnum";
 import { departmentApi } from "@/api/services/Admin/department";
 import { employeeApi } from "@/api/services/Admin/employee";

@@ -15,8 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import { withDefineType } from "@fast-china/utils";
 import { defineAsyncComponent, provide, ref } from "vue";
+import { withDefineType } from "@fast-china/utils";
 import ChangePassword from "@/layouts/components/ChangePassword/index.vue";
 import LayoutConfig from "@/layouts/components/Config/index.vue";
 import { useConfig } from "@/stores";

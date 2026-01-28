@@ -17,8 +17,8 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus } from "@element-plus/icons-vue";
 import { ref } from "vue";
+import { Plus } from "@element-plus/icons-vue";
 import { sysSerialApi } from "@/api/services/Center/sysSerial";
 import SysSerialEdit from "./edit/index.vue";
 import type { QuerySysSerialRulePagedOutput } from "@/api/services/Center/sysSerial/models/QuerySysSerialRulePagedOutput";

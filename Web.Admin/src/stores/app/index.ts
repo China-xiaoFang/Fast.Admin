@@ -1,9 +1,9 @@
+import { reactive, ref, toRefs } from "vue";
+import { ElMessageBox } from "element-plus";
 import { useFastAxios } from "@fast-china/axios";
 import { consoleError, consoleLog } from "@fast-china/utils";
 import { useTitle } from "@vueuse/core";
-import { ElMessageBox } from "element-plus";
 import { defineStore } from "pinia";
-import { reactive, ref, toRefs } from "vue";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";

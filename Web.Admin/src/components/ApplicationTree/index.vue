@@ -19,8 +19,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { type ElSelectorOutput } from "fast-element-plus";
+import { useVModel } from "@vueuse/core";
 import { applicationApi } from "@/api/services/Center/application";
 
 defineOptions({

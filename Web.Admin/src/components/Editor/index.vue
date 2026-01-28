@@ -33,11 +33,11 @@
 </template>
 
 <script lang="ts" setup>
+import { inject, onBeforeUnmount, shallowRef, watch } from "vue";
+import { ElMessage, formContextKey } from "element-plus";
 import { addUnit, consoleError, definePropType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
-import { ElMessage, formContextKey } from "element-plus";
-import { inject, onBeforeUnmount, shallowRef, watch } from "vue";
 import { fileApi } from "@/api/services/File";
 import type { IDomEditor } from "@wangeditor/editor";
 import "@wangeditor/editor/dist/css/style.css";

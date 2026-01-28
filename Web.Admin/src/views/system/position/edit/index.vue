@@ -24,9 +24,9 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
-import { ElMessage, type FormRules } from "element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { positionApi } from "@/api/services/Admin/position";
 import { AddPositionInput } from "@/api/services/Admin/position/models/AddPositionInput";
 import { EditPositionInput } from "@/api/services/Admin/position/models/EditPositionInput";

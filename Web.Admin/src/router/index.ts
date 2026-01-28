@@ -1,6 +1,6 @@
+import { ElMessage, ElNotification } from "element-plus";
 import { consoleError, dateUtil, stringUtil } from "@fast-china/utils";
 import { useTitle } from "@vueuse/core";
-import { ElMessage, ElNotification } from "element-plus";
 import NProgress from "nprogress";
 import { createRouter, createWebHistory } from "vue-router";
 import { initWebSocket } from "@/signalR";

@@ -36,9 +36,9 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
-import { ElMessage, type FormRules } from "element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { ModuleViewTypeEnum } from "@/api/enums/ModuleViewTypeEnum";
 import { moduleApi } from "@/api/services/Center/module";
 import { AddModuleInput } from "@/api/services/Center/module/models/AddModuleInput";

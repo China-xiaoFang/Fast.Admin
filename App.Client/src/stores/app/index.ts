@@ -1,7 +1,7 @@
+import { reactive, ref, toRefs } from "vue";
 import { useFastAxios } from "@fast-china/axios";
 import { Local, consoleError, consoleLog, useIdentity } from "@fast-china/utils";
 import { defineStore } from "pinia";
-import { reactive, ref, toRefs } from "vue";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";

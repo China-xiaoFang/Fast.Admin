@@ -318,11 +318,11 @@
 </template>
 
 <script lang="ts" setup>
-import { StarFilled } from "@element-plus/icons-vue";
-import { withDefineType } from "@fast-china/utils";
-import { ElMessage } from "element-plus";
-import { FaDialog } from "fast-element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage } from "element-plus";
+import { StarFilled } from "@element-plus/icons-vue";
+import { FaDialog } from "fast-element-plus";
+import { withDefineType } from "@fast-china/utils";
 import DevTableConfigObjectTable from "./objectTable.vue";
 import type { FaTableColumnCtx } from "@/api/services/Center/table/models/FaTableColumnCtx";
 import type { FaDialogInstance } from "fast-element-plus";

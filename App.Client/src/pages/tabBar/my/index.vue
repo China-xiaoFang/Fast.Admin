@@ -132,9 +132,9 @@
 
 <script setup lang="ts">
 import { onPageScroll, onPullDownRefresh, onShow } from "@dcloudio/uni-app";
+import { computed, reactive, ref } from "vue";
 import { clickUtil, consoleLog } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
-import { computed, reactive, ref } from "vue";
 import { useMessage } from "wot-design-uni";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { CommonRoute } from "@/common";

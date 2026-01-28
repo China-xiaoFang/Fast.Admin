@@ -54,8 +54,8 @@
 
 <script setup lang="ts">
 import { onLoad } from "@dcloudio/uni-app";
-import { clickUtil, consoleLog, withDefineType } from "@fast-china/utils";
 import { reactive } from "vue";
+import { clickUtil, consoleLog, withDefineType } from "@fast-china/utils";
 import { weChatApi } from "@/api/services/Center/weChat";
 import { fileApi } from "@/api/services/File";
 import { RegExps } from "@/constants";

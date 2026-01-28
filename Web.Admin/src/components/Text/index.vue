@@ -7,10 +7,10 @@
 </template>
 
 <script setup lang="ts">
-import { useProps } from "@fast-china/utils";
-import { textProps } from "element-plus";
-import { isNil } from "lodash";
 import { computed } from "vue";
+import { textProps } from "element-plus";
+import { useProps } from "@fast-china/utils";
+import { isNil } from "lodash";
 import { useApp } from "@/stores";
 
 defineOptions({

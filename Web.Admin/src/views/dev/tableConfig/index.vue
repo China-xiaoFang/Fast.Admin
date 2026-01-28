@@ -47,9 +47,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
 import { tableApi } from "@/api/services/Center/table";
 import TableColumnConfig from "./config/index.vue";
 import TableConfigEdit from "./edit/index.vue";

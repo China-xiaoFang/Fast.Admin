@@ -1,6 +1,6 @@
+import { reactive, toRefs } from "vue";
 import { withDefineType } from "@fast-china/utils";
 import { defineStore } from "pinia";
-import { reactive, toRefs } from "vue";
 import router, { routerUtil } from "@/router";
 import type { RouteLocationNormalized, Router } from "vue-router";
 

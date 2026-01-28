@@ -264,11 +264,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ArrowLeftBold, Close, Lock, User } from "@element-plus/icons-vue";
-import { Local, addUnit, cryptoUtil, definePropType, withDefineType } from "@fast-china/utils";
-import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from "element-plus";
-import { type FaButtonInstance, formUtil } from "fast-element-plus";
 import { computed, inject, reactive, ref } from "vue";
+import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from "element-plus";
+import { ArrowLeftBold, Close, Lock, User } from "@element-plus/icons-vue";
+import { type FaButtonInstance, formUtil } from "fast-element-plus";
+import { Local, addUnit, cryptoUtil, definePropType, withDefineType } from "@fast-china/utils";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
 import loginIkonImage from "@/assets/images/login_ikon.png";

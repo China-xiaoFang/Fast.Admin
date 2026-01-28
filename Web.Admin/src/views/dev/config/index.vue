@@ -26,9 +26,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Delete, Plus } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { Delete, Plus } from "@element-plus/icons-vue";
 import { configApi } from "@/api/services/Center/config";
 import ConfigEdit from "./edit/index.vue";
 import type { QueryConfigPagedOutput } from "@/api/services/Center/config/models/QueryConfigPagedOutput";

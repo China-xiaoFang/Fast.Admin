@@ -59,9 +59,9 @@
 </template>
 
 <script setup lang="ts">
+import { reactive, ref } from "vue";
 import { clickUtil, withDefineType } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
-import { reactive, ref } from "vue";
 import { complaintApi } from "@/api/services/Center/complaint";
 import { fileApi } from "@/api/services/File";
 import { useLoading, useToast } from "@/hooks";

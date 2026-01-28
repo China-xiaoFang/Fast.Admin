@@ -55,11 +55,11 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
+import { ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { definePropType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
-import { ElMessageBox } from "element-plus";
-import { ref } from "vue";
 import DictionaryEditItemEdit from "./itemEdit.vue";
 import type { EditDictionaryItemInput } from "@/api/services/Center/dictionary/models/EditDictionaryItemInput";
 

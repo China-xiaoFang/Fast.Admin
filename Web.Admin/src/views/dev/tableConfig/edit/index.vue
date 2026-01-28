@@ -21,10 +21,10 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
+import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { FaDialog } from "fast-element-plus";
-import { reactive, ref } from "vue";
+import { withDefineType } from "@fast-china/utils";
 import { tableApi } from "@/api/services/Center/table";
 import type { AddTableConfigInput } from "@/api/services/Center/table/models/AddTableConfigInput";
 import type { EditTableConfigInput } from "@/api/services/Center/table/models/EditTableConfigInput";

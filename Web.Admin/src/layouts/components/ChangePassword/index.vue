@@ -22,10 +22,10 @@
 	</FaDialog>
 </template>
 <script lang="ts" setup>
-import { cryptoUtil, withDefineType } from "@fast-china/utils";
+import { reactive, ref } from "vue";
 import { ElMessage, ElMessageBox, type FormRules } from "element-plus";
 import { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { reactive, ref } from "vue";
+import { cryptoUtil, withDefineType } from "@fast-china/utils";
 import { accountApi } from "@/api/services/Center/account";
 import { ChangePasswordInput } from "@/api/services/Center/account/models/ChangePasswordInput";
 import { useUserInfo } from "@/stores";

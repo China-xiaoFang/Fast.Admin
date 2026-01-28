@@ -1,6 +1,6 @@
-import { useIdentity, useStorage } from "@fast-china/utils";
-import { ElNotification } from "element-plus";
 import { type App, type ComponentPublicInstance, nextTick } from "vue";
+import { ElNotification } from "element-plus";
+import { useIdentity, useStorage } from "@fast-china/utils";
 import { registerComponents } from "@/components";
 import { loadFastAxios } from "./axios";
 import { loadElementPlus } from "./element-plus";
