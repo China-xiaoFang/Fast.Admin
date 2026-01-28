@@ -1,9 +1,9 @@
-import { reactive } from "vue";
 import { addUnit, colorUtil, consoleLog, styleToString, withDefineType } from "@fast-china/utils";
 import { defineStore } from "pinia";
-import { useApp } from "../app";
+import { reactive } from "vue";
 import { CommonUniApp } from "@/common";
 import { useToast } from "@/hooks";
+import { useApp } from "../app";
 
 export const defaultThemeColor = "#409EFF";
 

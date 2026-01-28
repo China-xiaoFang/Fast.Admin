@@ -2,9 +2,9 @@
 import { stringUtil } from "@fast-china/utils";
 import { createRouter } from "uni-mini-router";
 import { pages, subPackages } from "virtual:uni-pages";
-import type { PageMetaDatum } from "@uni-helper/vite-plugin-uni-pages";
 import { TabBarRoute } from "@/common";
 import { useUserInfo } from "@/stores";
+import type { PageMetaDatum } from "@uni-helper/vite-plugin-uni-pages";
 
 const generateRoutes = (): PageMetaDatum[] => {
 	const routes = pages.map((page) => {

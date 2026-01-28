@@ -1,15 +1,15 @@
-import { reactive, ref, toRefs } from "vue";
 import { Local, base64Util, consoleError } from "@fast-china/utils";
 import { isNil } from "lodash-unified";
 import { defineStore } from "pinia";
-import { useApp } from "../app";
-import type { WeChatClientLoginInput } from "@/api/services/login/models/WeChatClientLoginInput";
-import type { WeChatClientLoginOutput } from "@/api/services/login/models/WeChatClientLoginOutput";
-import type { AxiosResponse } from "axios";
-import { loginApi } from "@/api/services/login";
+import { reactive, ref, toRefs } from "vue";
+import { loginApi } from "@/api/services/Auth/login";
 import { CommonRoute } from "@/common";
 import { useToast } from "@/hooks";
 import { closeWebSocket } from "@/signalR";
+import { useApp } from "../app";
+import type { WeChatClientLoginInput } from "@/api/services/Auth/login/models/WeChatClientLoginInput";
+import type { WeChatClientLoginOutput } from "@/api/services/Auth/login/models/WeChatClientLoginOutput";
+import type { AxiosResponse } from "axios";
 
 type IState = {
 	/** Token */

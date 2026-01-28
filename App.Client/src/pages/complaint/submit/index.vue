@@ -59,16 +59,16 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
 import { clickUtil, withDefineType } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
-import type { AddComplaintInput } from "@/api/services/complaint/models/AddComplaintInput";
-import type { FormInstance, FormRules } from "wot-design-uni/components/wd-form/types";
-import type { UploadFile, UploadMethod } from "wot-design-uni/components/wd-upload/types";
-import { complaintApi } from "@/api/services/complaint";
-import { fileApi } from "@/api/services/file";
+import { reactive, ref } from "vue";
+import { complaintApi } from "@/api/services/Center/complaint";
+import { fileApi } from "@/api/services/File";
 import { useLoading, useToast } from "@/hooks";
 import { useApp } from "@/stores";
+import type { AddComplaintInput } from "@/api/services/Center/complaint/models/AddComplaintInput";
+import type { FormInstance, FormRules } from "wot-design-uni/components/wd-form/types";
+import type { UploadFile, UploadMethod } from "wot-design-uni/components/wd-upload/types";
 
 definePage({
 	name: "ComplaintSubmit",
