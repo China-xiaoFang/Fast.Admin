@@ -25,7 +25,14 @@
 				</el-button>
 			</template>
 		</FastTable>
-		<el-image-viewer v-if="state.previewSrc" :urlList="[state.previewSrc]" showProgress @close="state.previewSrc = ''" />
+		<el-image-viewer
+			v-if="state.previewSrc"
+			:urlList="[state.previewSrc]"
+			hideOnClickModal
+			teleported
+			showProgress
+			@close="state.previewSrc = ''"
+		/>
 	</div>
 </template>
 
