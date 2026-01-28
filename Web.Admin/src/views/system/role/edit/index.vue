@@ -30,14 +30,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditRoleInput } from "@/api/services/Admin/role/models/EditRoleInput";
-import { AddRoleInput } from "@/api/services/Admin/role/models/AddRoleInput";
-import { roleApi } from "@/api/services/Admin/role";
+import { ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
 import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
+import { roleApi } from "@/api/services/Admin/role";
+import { AddRoleInput } from "@/api/services/Admin/role/models/AddRoleInput";
+import { EditRoleInput } from "@/api/services/Admin/role/models/EditRoleInput";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "SystemRoleEdit",

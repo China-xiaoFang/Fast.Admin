@@ -6,7 +6,7 @@
 			rowKey="mainId"
 			:requestApi="databaseApi.queryDatabasePaged"
 			hideSearchTime
-			@customCellClick="handleCustomCellClick"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
@@ -28,14 +28,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ref } from "vue";
+import { tenantDatabaseApi } from "@/api/services/Admin/tenantDatabase";
+import { databaseApi } from "@/api/services/Center/database";
 import DatabaseEdit from "./edit/index.vue";
 import type { QueryDatabasePagedOutput } from "@/api/services/Center/database/models/QueryDatabasePagedOutput";
 import type { FastTableInstance } from "@/components";
-import { databaseApi } from "@/api/services/Center/database";
-import { tenantDatabaseApi } from "@/api/services/Admin/tenantDatabase";
 
 defineOptions({
 	name: "SystemDatabase",
@@ -53,7 +53,7 @@ const handleDelete = (row: QueryDatabasePagedOutput) => {
 	const { mainId, rowVersion } = row;
 	ElMessageBox.confirm("确定要删除数据库？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await databaseApi.deleteDatabase({ mainId, rowVersion });
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();
@@ -67,7 +67,7 @@ const handleInitDatabase = (row: QueryDatabasePagedOutput) => {
 	if (isInitialized) return;
 	ElMessageBox.confirm("确定要初始化数据库？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await tenantDatabaseApi.initDatabase({ tenantId, databaseType });
 			ElMessage.success("初始化成功！");
 			fastTableRef.value?.refresh();

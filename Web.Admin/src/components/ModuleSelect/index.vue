@@ -21,8 +21,8 @@
 
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
-import type { ElSelectorOutput } from "fast-element-plus";
 import { moduleApi } from "@/api/services/Center/module";
+import type { ElSelectorOutput } from "fast-element-plus";
 
 defineOptions({
 	name: "ModuleSelect",

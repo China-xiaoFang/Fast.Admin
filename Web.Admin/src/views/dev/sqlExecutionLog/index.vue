@@ -96,13 +96,13 @@
 </template>
 
 <script lang="ts" setup>
+import { Delete } from "@element-plus/icons-vue";
+import { dateUtil } from "@fast-china/utils";
+import { ElMessage, ElMessageBox, dayjs } from "element-plus";
+import { reactive, ref } from "vue";
 import { sqlExecutionLogApi } from "@/api/services/Center/sqlExecutionLog";
 import { SqlExecutionLogModel } from "@/api/services/Center/sqlExecutionLog/models/SqlExecutionLogModel";
-import { reactive, ref } from "vue";
-import { Delete } from "@element-plus/icons-vue";
-import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 import { FastTableInstance } from "@/components";
-import { dateUtil } from "@fast-china/utils";
 import { useUserInfo } from "@/stores";
 
 defineOptions({
@@ -123,7 +123,7 @@ const state = reactive({
 const handleDeleteLog = () => {
 	ElMessageBox.confirm("确定要删除90天前的执行日志？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await sqlExecutionLogApi.deleteSqlExecutionLog();
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();

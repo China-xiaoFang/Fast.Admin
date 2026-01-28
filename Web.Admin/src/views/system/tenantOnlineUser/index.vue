@@ -57,12 +57,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import type { FastTableInstance } from "@/components";
-import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
+import { ElMessage, ElMessageBox, dayjs } from "element-plus";
+import { ref } from "vue";
 import { tenantOnlineUserApi } from "@/api/services/Center/tenantOnlineUser";
 import { TenantOnlineUserModel } from "@/api/services/Center/tenantOnlineUser/models/TenantOnlineUserModel";
+import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemTenantOnlineUser",
@@ -75,7 +75,7 @@ const handleForceOffline = (row: TenantOnlineUserModel) => {
 	const { connectionId, mobile } = row;
 	ElMessageBox.confirm(`确定踢掉账号：【${mobile}】`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await tenantOnlineUserApi.forceOffline({
 				connectionId,
 			});

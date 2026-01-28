@@ -47,14 +47,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { reactive, ref } from "vue";
+import { tableApi } from "@/api/services/Center/table";
 import TableColumnConfig from "./config/index.vue";
 import TableConfigEdit from "./edit/index.vue";
 import type { QueryTableConfigPagedOutput } from "@/api/services/Center/table/models/QueryTableConfigPagedOutput";
 import type { FaTableInstance } from "fast-element-plus";
-import { tableApi } from "@/api/services/Center/table";
 
 defineOptions({
 	name: "DevTableConfig",
@@ -85,7 +85,7 @@ const handleDelete = (row: QueryTableConfigPagedOutput) => {
 	const { tableId, rowVersion } = row;
 	ElMessageBox.confirm("确定要删除表格配置？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await tableApi.deleteTableConfig({ tableId, rowVersion });
 			ElMessage.success("删除成功！");
 			faTableRef.value?.refresh();

@@ -264,20 +264,20 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, reactive, ref } from "vue";
-import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from "element-plus";
 import { ArrowLeftBold, Close, Lock, User } from "@element-plus/icons-vue";
-import { type FaButtonInstance, formUtil } from "fast-element-plus";
 import { Local, addUnit, cryptoUtil, definePropType, withDefineType } from "@fast-china/utils";
-import type { IFormData, IFormStep, ITenantData } from "../index.vue";
-import type { LoginOutput } from "@/api/services/Auth/login/models/LoginOutput";
-import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
-import type { Ref } from "vue";
+import { ElMessage, ElMessageBox, type FormInstance, type FormRules } from "element-plus";
+import { type FaButtonInstance, formUtil } from "fast-element-plus";
+import { computed, inject, reactive, ref } from "vue";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
 import loginIkonImage from "@/assets/images/login_ikon.png";
 import logoImage from "@/assets/logo.png";
 import { useApp, useUserInfo } from "@/stores";
+import type { IFormData, IFormStep, ITenantData } from "../index.vue";
+import type { LoginOutput } from "@/api/services/Auth/login/models/LoginOutput";
+import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
+import type { Ref } from "vue";
 
 defineOptions({
 	name: "ClassicLogin",

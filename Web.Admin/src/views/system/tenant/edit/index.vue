@@ -51,16 +51,16 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
+import { ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
+import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
+import { EditionEnum } from "@/api/enums/EditionEnum";
+import { tenantApi } from "@/api/services/Center/tenant";
+import { fileApi } from "@/api/services/File";
 import type { AddTenantInput } from "@/api/services/Center/tenant/models/AddTenantInput";
 import type { EditTenantInput } from "@/api/services/Center/tenant/models/EditTenantInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditionEnum } from "@/api/enums/EditionEnum";
-import { fileApi } from "@/api/services/File";
-import { tenantApi } from "@/api/services/Center/tenant";
-import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 defineOptions({
 	name: "SystemTenantEdit",

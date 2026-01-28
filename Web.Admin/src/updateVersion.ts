@@ -1,5 +1,5 @@
-import { ElMessage, ElMessageBox } from "element-plus";
 import { consoleLog, consoleWarn } from "@fast-china/utils";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 /**
  * 是否存在版本更新实例

@@ -36,14 +36,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditModuleInput } from "@/api/services/Center/module/models/EditModuleInput";
-import { AddModuleInput } from "@/api/services/Center/module/models/AddModuleInput";
+import { ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
 import { ModuleViewTypeEnum } from "@/api/enums/ModuleViewTypeEnum";
 import { moduleApi } from "@/api/services/Center/module";
+import { AddModuleInput } from "@/api/services/Center/module/models/AddModuleInput";
+import { EditModuleInput } from "@/api/services/Center/module/models/EditModuleInput";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "DevModuleEdit",

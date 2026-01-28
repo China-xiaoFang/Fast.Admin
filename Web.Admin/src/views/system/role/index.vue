@@ -6,7 +6,7 @@
 			rowKey="roleId"
 			:requestApi="roleApi.queryRolePaged"
 			hideSearchTime
-			@customCellClick="handleCustomCellClick"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
@@ -36,15 +36,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import RoleEdit from "./edit/index.vue";
-import AuthEdit from "./edit/authEdit.vue";
-import type { FastTableInstance } from "@/components";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ref } from "vue";
+import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 import { roleApi } from "@/api/services/Admin/role";
 import { QueryRolePagedOutput } from "@/api/services/Admin/role/models/QueryRolePagedOutput";
-import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
+import AuthEdit from "./edit/authEdit.vue";
+import RoleEdit from "./edit/index.vue";
+import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemRole",
@@ -63,7 +63,7 @@ const handleDelete = (row: QueryRolePagedOutput) => {
 	const { roleId, rowVersion } = row;
 	ElMessageBox.confirm("确定要删除角色？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await roleApi.deleteRole({ roleId, rowVersion });
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();

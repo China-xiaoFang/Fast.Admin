@@ -5,10 +5,10 @@
  * 默认使用隐藏或者显示，也可以再标签上 增加 authType="xxx"
  * 接收参数：string | string[] 类型
  */
-import { ElMessage } from "element-plus";
-import type { Directive, DirectiveBinding, VNode } from "vue";
-import { useUserInfo } from "@/stores";
 import { withInstallDirective } from "@fast-china/utils";
+import { ElMessage } from "element-plus";
+import { useUserInfo } from "@/stores";
+import type { Directive, DirectiveBinding, VNode } from "vue";
 
 interface AuthElement extends HTMLElement {
 	__tag__: string[];

@@ -7,13 +7,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { textProps } from "element-plus";
 import { useProps } from "@fast-china/utils";
+import { textProps } from "element-plus";
 import { isNil } from "lodash";
+import { computed } from "vue";
 import { useApp } from "@/stores";
 
 defineOptions({
+	// eslint-disable-next-line vue/no-reserved-component-names
 	name: "Text",
 });
 

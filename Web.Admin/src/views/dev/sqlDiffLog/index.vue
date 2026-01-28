@@ -150,14 +150,14 @@
 </template>
 
 <script lang="ts" setup>
+import { Delete } from "@element-plus/icons-vue";
+import { dateUtil } from "@fast-china/utils";
+import { ElMessage, ElMessageBox, dayjs } from "element-plus";
+import { reactive, ref } from "vue";
 import { sqlDiffLogApi } from "@/api/services/Center/sqlDiffLog";
 import { SqlDiffLogModel } from "@/api/services/Center/sqlDiffLog/models/SqlDiffLogModel";
 import { FastTableInstance } from "@/components";
 import { useUserInfo } from "@/stores";
-import { Delete } from "@element-plus/icons-vue";
-import { dateUtil } from "@fast-china/utils";
-import { dayjs, ElMessage, ElMessageBox } from "element-plus";
-import { reactive, ref } from "vue";
 
 defineOptions({
 	name: "DevSqlDiffLog",
@@ -177,7 +177,7 @@ const state = reactive({
 const handleDeleteLog = () => {
 	ElMessageBox.confirm("确定要删除90天前的差异日志？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await sqlDiffLogApi.deleteSqlDiffLog();
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();

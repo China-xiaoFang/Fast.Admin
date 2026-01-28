@@ -22,13 +22,13 @@
 	</FaDialog>
 </template>
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, ElMessageBox, type FormRules } from "element-plus";
 import { cryptoUtil, withDefineType } from "@fast-china/utils";
-import { useUserInfo } from "@/stores";
-import { ChangePasswordInput } from "@/api/services/Center/account/models/ChangePasswordInput";
-import { accountApi } from "@/api/services/Center/account";
+import { ElMessage, ElMessageBox, type FormRules } from "element-plus";
 import { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import { reactive, ref } from "vue";
+import { accountApi } from "@/api/services/Center/account";
+import { ChangePasswordInput } from "@/api/services/Center/account/models/ChangePasswordInput";
+import { useUserInfo } from "@/stores";
 
 defineOptions({
 	name: "ChangePassword",
@@ -63,7 +63,7 @@ const handleConfirm = async () => {
 	faDialogRef.value.close(async () => {
 		await ElMessageBox.confirm("确认修改密码", {
 			type: "warning",
-			async beforeClose(action, instance, done) {
+			async beforeClose() {
 				await accountApi.changePassword({
 					...state.formData,
 					oldPassword: cryptoUtil.sha1.encrypt(state.formData.oldPassword),

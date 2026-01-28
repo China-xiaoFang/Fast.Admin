@@ -37,14 +37,14 @@
 </template>
 
 <script lang="ts" setup>
+import { Delete } from "@element-plus/icons-vue";
+import { dateUtil } from "@fast-china/utils";
+import { ElMessage, ElMessageBox, dayjs } from "element-plus";
+import { ref } from "vue";
 import { operateLogApi } from "@/api/services/Admin/operateLog";
 import { OperateLogModel } from "@/api/services/Admin/operateLog/models/OperateLogModel";
 import { FastTableInstance } from "@/components";
 import { useUserInfo } from "@/stores";
-import { Delete } from "@element-plus/icons-vue";
-import { dateUtil } from "@fast-china/utils";
-import { dayjs, ElMessage, ElMessageBox } from "element-plus";
-import { ref } from "vue";
 
 defineOptions({
 	name: "SystemOperateLog",
@@ -58,7 +58,7 @@ const fastTableRef = ref<FastTableInstance>();
 const handleDeleteLog = () => {
 	ElMessageBox.confirm("确定要删除90天前的操作日志？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await operateLogApi.deleteOperateLog();
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();

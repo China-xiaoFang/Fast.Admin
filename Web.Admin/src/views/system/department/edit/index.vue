@@ -16,7 +16,7 @@
 					v-model="state.formData.orgId"
 					v-model:label="state.formData.orgName"
 					placeholder="请选择机构"
-					check-strictly
+					checkStrictly
 					filterable
 					clearable
 				/>
@@ -28,7 +28,7 @@
 					v-model="state.formData.parentId"
 					v-model:label="state.formData.parentName"
 					placeholder="请选择父级部门"
-					check-strictly
+					checkStrictly
 					filterable
 					clearable
 				/>
@@ -59,14 +59,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditDepartmentInput } from "@/api/services/Admin/department/models/EditDepartmentInput";
-import { AddDepartmentInput } from "@/api/services/Admin/department/models/AddDepartmentInput";
+import { ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
 import { departmentApi } from "@/api/services/Admin/department";
+import { AddDepartmentInput } from "@/api/services/Admin/department/models/AddDepartmentInput";
+import { EditDepartmentInput } from "@/api/services/Admin/department/models/EditDepartmentInput";
 import { organizationApi } from "@/api/services/Admin/organization";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "SystemDepartmentEdit",

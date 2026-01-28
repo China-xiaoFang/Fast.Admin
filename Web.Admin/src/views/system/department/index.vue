@@ -24,7 +24,7 @@
 				hideSearchTime
 				:pagination="false"
 				defaultExpandAll
-				@customCellClick="handleCustomCellClick"
+				@custom-cell-click="handleCustomCellClick"
 			>
 				<!-- 表格按钮操作区域 -->
 				<template #header>
@@ -48,17 +48,17 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
+import { withDefineType } from "@fast-china/utils";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ElTreeOutput, FaContextMenuData, FaContextMenuInstance, FaTreeInstance } from "fast-element-plus";
+import { reactive, ref } from "vue";
+import { departmentApi } from "@/api/services/Admin/department";
+import { QueryDepartmentPagedOutput } from "@/api/services/Admin/department/models/QueryDepartmentPagedOutput";
+import { organizationApi } from "@/api/services/Admin/organization";
 import DepartmentEdit from "./edit/index.vue";
 import OrgEdit from "./edit/orgEdit.vue";
 import type { FastTableInstance } from "@/components";
-import { organizationApi } from "@/api/services/Admin/organization";
-import { ElTreeOutput, FaContextMenuData, FaContextMenuInstance, FaTreeInstance } from "fast-element-plus";
-import { withDefineType } from "@fast-china/utils";
-import { departmentApi } from "@/api/services/Admin/department";
-import { QueryDepartmentPagedOutput } from "@/api/services/Admin/department/models/QueryDepartmentPagedOutput";
 
 defineOptions({
 	name: "SystemDepartment",
@@ -76,7 +76,7 @@ const state = reactive({
 			name: "add",
 			label: "添加机构",
 			icon: "el-icon-FolderAdd",
-			click: (_, { data }: { data?: ElTreeOutput<number> }) => {
+			click: () => {
 				orgEditFormRef.value.add();
 			},
 		},
@@ -95,7 +95,7 @@ const state = reactive({
 			click: (_, { data }: { data?: ElTreeOutput<number> }) => {
 				ElMessageBox.confirm("确定要删除机构？", {
 					type: "warning",
-					async beforeClose(action, instance, done) {
+					async beforeClose() {
 						await organizationApi.deleteOrganization({ orgId: data.value, rowVersion: data.data?.rowVersion });
 						ElMessage.success("删除成功！");
 						orgTreeRef.value?.refresh();
@@ -137,7 +137,7 @@ const handleDelete = (row: QueryDepartmentPagedOutput) => {
 	const { departmentId, rowVersion } = row;
 	ElMessageBox.confirm("确定要删除部门？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await departmentApi.deleteDepartment({ departmentId, rowVersion });
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();

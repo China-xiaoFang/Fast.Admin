@@ -6,7 +6,7 @@
 			rowKey="jobLevelId"
 			:requestApi="jobLevelApi.queryJobLevelPaged"
 			hideSearchTime
-			@customCellClick="handleCustomCellClick"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
@@ -25,13 +25,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import JobLevelEdit from "./edit/index.vue";
-import type { FastTableInstance } from "@/components";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ref } from "vue";
 import { jobLevelApi } from "@/api/services/Admin/jobLevel";
 import { QueryJobLevelPagedOutput } from "@/api/services/Admin/jobLevel/models/QueryJobLevelPagedOutput";
+import JobLevelEdit from "./edit/index.vue";
+import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemJobLevel",
@@ -49,7 +49,7 @@ const handleDelete = (row: QueryJobLevelPagedOutput) => {
 	const { jobLevelId, rowVersion } = row;
 	ElMessageBox.confirm("确定要删除职级？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await jobLevelApi.deleteJobLevel({ jobLevelId, rowVersion });
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();

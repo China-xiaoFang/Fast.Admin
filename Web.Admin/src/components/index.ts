@@ -99,4 +99,3 @@ export function registerComponents(app: App): void {
 	app.component(Text.name, Text);
 	app.component(Watermark.name, Watermark);
 }
-

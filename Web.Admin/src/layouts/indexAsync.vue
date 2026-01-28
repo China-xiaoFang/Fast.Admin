@@ -15,14 +15,14 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, provide, ref } from "vue";
 import { withDefineType } from "@fast-china/utils";
+import { defineAsyncComponent, provide, ref } from "vue";
+import ChangePassword from "@/layouts/components/ChangePassword/index.vue";
+import LayoutConfig from "@/layouts/components/Config/index.vue";
+import { useConfig } from "@/stores";
 import { changePasswordKey, layoutConfigKey } from "./index";
 import type { IModeName } from "@/stores";
 import type { Component } from "vue";
-import LayoutConfig from "@/layouts/components/Config/index.vue";
-import ChangePassword from "@/layouts/components/ChangePassword/index.vue";
-import { useConfig } from "@/stores";
 
 defineOptions({
 	name: "LayoutAsync",

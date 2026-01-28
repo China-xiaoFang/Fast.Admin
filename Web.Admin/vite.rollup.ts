@@ -1,4 +1,4 @@
-export const rollupManualChunks = (id: string) => {
+export const rollupManualChunks = (id: string): string => {
 	if (/[/\\]node_modules[/\\]/.test(id)) {
 		return;
 	}

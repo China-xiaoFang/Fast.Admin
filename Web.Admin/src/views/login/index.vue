@@ -37,18 +37,18 @@
 </template>
 
 <script lang="ts" setup>
-import { defineAsyncComponent, onMounted, provide, reactive, ref, toRef } from "vue";
-import { ElMessageBox } from "element-plus";
 import { ChromeFilled, Operation, Refresh } from "@element-plus/icons-vue";
-import { Dark, Light } from "@fast-element-plus/icons-vue";
 import { Local, Session, consoleError, useIdentity, withDefineType } from "@fast-china/utils";
+import { Dark, Light } from "@fast-element-plus/icons-vue";
+import { ElMessageBox } from "element-plus";
+import { defineAsyncComponent, onMounted, provide, reactive, ref, toRef } from "vue";
+import { useApp, useConfig } from "@/stores";
 import type { LoginInput } from "@/api/services/Auth/login/models/LoginInput";
 import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
 import type { TenantLoginInput } from "@/api/services/Auth/login/models/TenantLoginInput";
 import type { ILoginComponent } from "@/stores";
 import type { DropdownInstance, FormRules } from "element-plus";
 import type { Component } from "vue";
-import { useApp, useConfig } from "@/stores";
 
 defineOptions({
 	name: "Login",
@@ -143,9 +143,9 @@ const handleDropdownClick = (command: string) => {
 				{
 					dangerouslyUseHTMLString: true,
 					type: "warning",
-					async beforeClose(action, instance, done) {
+					async beforeClose(_, instance) {
 						instance.confirmButtonText = "重置中...";
-						await new Promise((resolve, reject) => {
+						await new Promise((resolve) => {
 							setTimeout(() => {
 								// 获取设备Id
 								const uIdentity = useIdentity();

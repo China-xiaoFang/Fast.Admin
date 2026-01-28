@@ -13,12 +13,12 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
-import * as FastElementPlusIconsVue from "@fast-element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
-import { ElSelectorOutput } from "fast-element-plus";
+import * as FastElementPlusIconsVue from "@fast-element-plus/icons-vue";
+import { useVModel } from "@vueuse/core";
 import { CascaderNode } from "element-plus";
+import { ElSelectorOutput } from "fast-element-plus";
 
 defineOptions({
 	name: "IconSelect",

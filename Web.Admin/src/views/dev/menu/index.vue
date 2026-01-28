@@ -100,18 +100,18 @@
 </template>
 
 <script lang="ts" setup>
+import { Plus } from "@element-plus/icons-vue";
+import { withDefineType } from "@fast-china/utils";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ElSelectorOutput, FaContextMenuData, FaContextMenuInstance, FaTreeInstance } from "fast-element-plus";
 import { reactive, ref } from "vue";
-import type { QueryMenuPagedOutput } from "@/api/services/Center/menu/models/QueryMenuPagedOutput";
-import type { FastTableInstance } from "@/components";
+import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { menuApi } from "@/api/services/Center/menu";
 import { moduleApi } from "@/api/services/Center/module";
-import { ElSelectorOutput, FaContextMenuData, FaContextMenuInstance, FaTreeInstance } from "fast-element-plus";
-import { Plus } from "@element-plus/icons-vue";
-import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import MenuEdit from "./edit/index.vue";
 import ModuleEdit from "./edit/moduleEdit.vue";
-import { ElMessage, ElMessageBox } from "element-plus";
-import { withDefineType } from "@fast-china/utils";
+import type { QueryMenuPagedOutput } from "@/api/services/Center/menu/models/QueryMenuPagedOutput";
+import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "DevMenu",
@@ -129,7 +129,7 @@ const state = reactive({
 			name: "add",
 			label: "添加模块",
 			icon: "el-icon-FolderAdd",
-			click: (_, { data }: { data?: ElSelectorOutput<number> }) => {
+			click: () => {
 				moduleEditFormRef.value.add();
 			},
 		},
@@ -148,7 +148,7 @@ const state = reactive({
 			click: (_, { data }: { data?: ElSelectorOutput<number> }) => {
 				ElMessageBox.confirm("确定要删除模块？", {
 					type: "warning",
-					async beforeClose(action, instance, done) {
+					async beforeClose() {
 						await moduleApi.deleteModule({ moduleId: data.value, rowVersion: data.data?.rowVersion });
 						ElMessage.success("删除成功！");
 						fastTableRef.value?.refresh();
@@ -194,7 +194,7 @@ const handleDelete = (row: QueryMenuPagedOutput) => {
 	const { menuId, rowVersion } = row;
 	ElMessageBox.confirm("确定要删除菜单？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await menuApi.deleteMenu({ menuId, rowVersion });
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();
@@ -207,7 +207,7 @@ const handleChangeStatus = (row: QueryMenuPagedOutput) => {
 	const { menuId, status, rowVersion } = row;
 	ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}菜单？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await menuApi.changeStatus({
 				menuId,
 				rowVersion,

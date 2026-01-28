@@ -28,8 +28,8 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue";
 import { useGlobalSize } from "element-plus";
+import { reactive } from "vue";
 import { useApp } from "@/stores";
 
 defineOptions({

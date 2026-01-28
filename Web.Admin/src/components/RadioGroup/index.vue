@@ -1,32 +1,34 @@
 <template>
 	<ElRadioGroup v-bind="elRadioGroupProps" v-model="modelValue" @change="(value: string | number | boolean) => emit('change', value)">
-		<ElRadio
-			v-if="!props.button"
-			v-for="(item, index) in dictionaries"
-			:key="index"
-			:value="item.value"
-			:disabled="item.disabled === false ? undefined : item.disabled"
-		>
-			{{ item.label }}
-		</ElRadio>
-		<ElRadioButton
-			v-if="props.button"
-			v-for="(item, index) in dictionaries"
-			:key="index"
-			:value="item.value"
-			:disabled="item.disabled === false ? undefined : item.disabled"
-			border
-		>
-			{{ item.label }}
-		</ElRadioButton>
+		<template v-if="props.button">
+			<ElRadioButton
+				v-for="(item, index) in dictionaries"
+				:key="index"
+				:value="item.value"
+				:disabled="item.disabled === false ? undefined : item.disabled"
+				border
+			>
+				{{ item.label }}
+			</ElRadioButton>
+		</template>
+		<template v-else>
+			<ElRadio
+				v-for="(item, index) in dictionaries"
+				:key="index"
+				:value="item.value"
+				:disabled="item.disabled === false ? undefined : item.disabled"
+			>
+				{{ item.label }}
+			</ElRadio>
+		</template>
 	</ElRadioGroup>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { radioGroupEmits, radioGroupProps } from "element-plus";
 import { useProps } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
+import { radioGroupEmits, radioGroupProps } from "element-plus";
+import { computed } from "vue";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { useApp } from "@/stores";
 

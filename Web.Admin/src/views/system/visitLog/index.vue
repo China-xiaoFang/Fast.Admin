@@ -37,14 +37,14 @@
 </template>
 
 <script lang="ts" setup>
+import { Delete } from "@element-plus/icons-vue";
+import { dateUtil } from "@fast-china/utils";
+import { ElMessage, ElMessageBox, dayjs } from "element-plus";
+import { ref } from "vue";
 import { visitLogApi } from "@/api/services/Center/visitLog";
 import { VisitLogModel } from "@/api/services/Center/visitLog/models/VisitLogModel";
 import { FastTableInstance } from "@/components";
 import { useUserInfo } from "@/stores";
-import { Delete } from "@element-plus/icons-vue";
-import { dateUtil } from "@fast-china/utils";
-import { dayjs, ElMessage, ElMessageBox } from "element-plus";
-import { ref } from "vue";
 
 defineOptions({
 	name: "SystemVisitLog",
@@ -58,7 +58,7 @@ const fastTableRef = ref<FastTableInstance>();
 const handleDeleteLog = () => {
 	ElMessageBox.confirm("确定要删除90天前的访问日志？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await visitLogApi.deleteVisitLog();
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();

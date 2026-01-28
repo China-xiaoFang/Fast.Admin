@@ -24,13 +24,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditJobLevelInput } from "@/api/services/Admin/jobLevel/models/EditJobLevelInput";
-import { AddJobLevelInput } from "@/api/services/Admin/jobLevel/models/AddJobLevelInput";
+import { ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
 import { jobLevelApi } from "@/api/services/Admin/jobLevel";
+import { AddJobLevelInput } from "@/api/services/Admin/jobLevel/models/AddJobLevelInput";
+import { EditJobLevelInput } from "@/api/services/Admin/jobLevel/models/EditJobLevelInput";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "SystemJobLevelEdit",

@@ -1,13 +1,13 @@
 import { resolve } from "path";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import { buildSvgIcon, cdnImport, componentAutoImport, buildRouterPath, versionUpdatePlugin } from "fast-vite-plugins";
+import { buildRouterPath, buildSvgIcon, cdnImport, componentAutoImport, versionUpdatePlugin } from "fast-vite-plugins";
 // import { visualizer } from "rollup-plugin-visualizer";
 import { loadEnv } from "vite";
 import viteCompression from "vite-plugin-compression";
-import type { ConfigEnv, ProxyOptions, UserConfig } from "vite";
-import { rollupManualChunks } from "./vite.rollup";
 import { getCdnModules } from "./vite.cdn";
+import { rollupManualChunks } from "./vite.rollup";
+import type { ConfigEnv, ProxyOptions, UserConfig } from "vite";
 
 const pathResolve = (dir: string): any => {
 	return resolve(__dirname, ".", dir);

@@ -14,5 +14,13 @@ export default defineConfig(
 		rules: {
 			...importUseLodashRules,
 		},
+	},
+	{
+		name: "@fast-china/typescript/md/js",
+		files: ["src/components/**"],
+		rules: {
+			// 允许定义未使用的变量
+			"no-unused-vars": "off",
+		},
 	}
 );

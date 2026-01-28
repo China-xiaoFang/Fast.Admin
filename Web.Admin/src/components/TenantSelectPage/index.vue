@@ -26,9 +26,9 @@
 
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
+import { tenantApi } from "@/api/services/Center/tenant";
 import Tag from "../Tag/index.vue";
 import type { ElSelectorOutput } from "fast-element-plus";
-import { tenantApi } from "@/api/services/Center/tenant";
 
 defineOptions({
 	name: "TenantSelectPage",

@@ -18,11 +18,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
 import { addUnit } from "@fast-china/utils";
+import { computed } from "vue";
 import { useRouter } from "vue-router";
-import MenuItem from "../MenuItem/index.vue";
 import { useConfig, useNavTabs, useUserInfo } from "@/stores";
+import MenuItem from "../MenuItem/index.vue";
 
 defineOptions({
 	name: "LayoutMenu",

@@ -1,11 +1,11 @@
-import { ElLoading, ElMessage, ElMessageBox, ElNotification, dayjs } from "element-plus";
 import { useFastAxios } from "@fast-china/axios";
 import { consoleError, consoleLog, consoleWarn, objectUtil, useIdentity, withDefineType } from "@fast-china/utils";
 import { HttpTransportType, HubConnectionBuilder, HubConnectionState, LogLevel } from "@microsoft/signalr";
-import type { HubConnection } from "@microsoft/signalr";
+import { ElLoading, ElMessage, ElMessageBox, ElNotification, dayjs } from "element-plus";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { useApp, useUserInfo } from "@/stores";
-import { TenantOnlineUserModel } from "@/api/services/Center/tenantOnlineUser/models/TenantOnlineUserModel";
+import type { TenantOnlineUserModel } from "@/api/services/Center/tenantOnlineUser/models/TenantOnlineUserModel";
+import type { HubConnection } from "@microsoft/signalr";
 
 /**
  * SignalR 对象
@@ -178,7 +178,7 @@ const initWebSocket = async (): Promise<void> => {
 
 					await userInfoStore.logout({
 						type: 1,
-						message: message,
+						message,
 					});
 				}
 			);

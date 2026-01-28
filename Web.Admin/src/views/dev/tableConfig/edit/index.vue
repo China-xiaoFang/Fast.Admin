@@ -21,14 +21,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { withDefineType } from "@fast-china/utils";
 import { ElMessage, type FormRules } from "element-plus";
 import { FaDialog } from "fast-element-plus";
-import { withDefineType } from "@fast-china/utils";
+import { reactive, ref } from "vue";
+import { tableApi } from "@/api/services/Center/table";
 import type { AddTableConfigInput } from "@/api/services/Center/table/models/AddTableConfigInput";
 import type { EditTableConfigInput } from "@/api/services/Center/table/models/EditTableConfigInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { tableApi } from "@/api/services/Center/table";
 
 defineOptions({
 	name: "DevTableConfigEdit",

@@ -6,7 +6,7 @@
 			rowKey="configId"
 			:requestApi="configApi.queryConfigPaged"
 			hideSearchTime
-			@customCellClick="handleCustomCellClick"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
@@ -26,13 +26,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { Delete, Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ref } from "vue";
+import { configApi } from "@/api/services/Center/config";
 import ConfigEdit from "./edit/index.vue";
 import type { QueryConfigPagedOutput } from "@/api/services/Center/config/models/QueryConfigPagedOutput";
 import type { FastTableInstance } from "@/components";
-import { configApi } from "@/api/services/Center/config";
 
 defineOptions({
 	name: "DevConfig",
@@ -50,7 +50,7 @@ const handleDelete = (row: QueryConfigPagedOutput) => {
 	const { configCode } = row;
 	ElMessageBox.confirm("确定要删除缓存？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await configApi.deleteConfigCache({ configCode });
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();
@@ -62,7 +62,7 @@ const handleDelete = (row: QueryConfigPagedOutput) => {
 const handleDeleteAll = () => {
 	ElMessageBox.confirm("确定要删除全部缓存？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await configApi.deleteAllConfigCache();
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();

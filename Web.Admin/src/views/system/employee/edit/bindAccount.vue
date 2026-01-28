@@ -17,13 +17,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import { ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { BindLoginAccountInput } from "@/api/services/Admin/employee/models/BindLoginAccountInput";
 import { useUserInfo } from "@/stores";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "SystemEmployeeBindAccount",

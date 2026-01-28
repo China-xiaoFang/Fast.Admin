@@ -24,13 +24,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditPositionInput } from "@/api/services/Admin/position/models/EditPositionInput";
-import { AddPositionInput } from "@/api/services/Admin/position/models/AddPositionInput";
+import { ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
 import { positionApi } from "@/api/services/Admin/position";
+import { AddPositionInput } from "@/api/services/Admin/position/models/AddPositionInput";
+import { EditPositionInput } from "@/api/services/Admin/position/models/EditPositionInput";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "SystemPositionEdit",

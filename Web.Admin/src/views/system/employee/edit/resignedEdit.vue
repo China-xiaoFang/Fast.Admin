@@ -18,12 +18,12 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
 import { dateUtil, withDefineType } from "@fast-china/utils";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import { ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { EmployeeResignedInput } from "@/api/services/Admin/employee/models/EmployeeResignedInput";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "SystemEmployeeResignedEdit",

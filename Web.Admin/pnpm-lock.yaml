@@ -69,8 +69,8 @@ importers:
         version: 4.6.4(vue@3.5.27(typescript@5.9.3))
     devDependencies:
       '@fast-china/eslint-config':
-        specifier: ^1
-        version: 1.0.42(eslint@9.39.2)(prettier@3.8.1)(typescript@5.9.3)
+        specifier: ^1.0.45
+        version: 1.0.45(eslint@9.39.2)(prettier@3.8.1)(typescript@5.9.3)
       '@types/lodash':
         specifier: ^4.17
         version: 4.17.23
@@ -473,8 +473,8 @@ packages:
     peerDependencies:
       axios: ^1.9
 
-  '@fast-china/eslint-config@1.0.42':
-    resolution: {integrity: sha512-uPpos/SWmzUl+0YSrKBPIjDT6Zqo8sGuROVE0fz06SkC74HLExEM31Po1fgRuVpW3+tr1qhCA4H79B6w1oiaSA==}
+  '@fast-china/eslint-config@1.0.45':
+    resolution: {integrity: sha512-/T9hwDZfWoOFNadP2vtSPB8dQjMrvD7qovfu+e2+jvFEYVHo6vF0tfhKU35PuwhSRhXhTnxtj6ILvE4lUr6p2g==}
     engines: {node: '>=18.18.0'}
     peerDependencies:
       eslint: ^9
@@ -3349,7 +3349,7 @@ snapshots:
       lodash-unified: 1.0.3(@types/lodash-es@4.17.12)(lodash-es@4.17.23)(lodash@4.17.23)
       unplugin: 2.3.11
 
-  '@fast-china/eslint-config@1.0.42(eslint@9.39.2)(prettier@3.8.1)(typescript@5.9.3)':
+  '@fast-china/eslint-config@1.0.45(eslint@9.39.2)(prettier@3.8.1)(typescript@5.9.3)':
     dependencies:
       '@eslint/js': 9.39.2
       '@eslint/markdown': 7.5.1

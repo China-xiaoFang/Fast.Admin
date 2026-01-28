@@ -122,18 +122,16 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
 import { withDefineType } from "@fast-china/utils";
-import type { FaDialogInstance } from "fast-element-plus";
-import { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
-import { accountApi } from "@/api/services/Center/account";
 import { dayjs } from "element-plus";
+import { reactive, ref } from "vue";
+import { accountApi } from "@/api/services/Center/account";
+import { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
+import type { FaDialogInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "SystemAccountEdit",
 });
-
-const emit = defineEmits(["ok"]);
 
 const faDialogRef = ref<FaDialogInstance>();
 

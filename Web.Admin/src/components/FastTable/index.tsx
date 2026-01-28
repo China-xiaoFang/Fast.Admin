@@ -1,12 +1,12 @@
-import { Fragment, computed, defineComponent, onMounted, reactive, ref } from "vue";
+import { clickUtil, makeSlots, useEmits, useExpose, useProps, useRender, withDefineType } from "@fast-china/utils";
 import { ElDropdownItem, ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { FaTable, faTableEmits, faTableProps } from "fast-element-plus";
-import { clickUtil, makeSlots, useEmits, useExpose, useProps, useRender, withDefineType } from "@fast-china/utils";
 import { isString } from "lodash";
-import type { FaTableColumnCtx, FaTableInstance, FaTableSlots } from "fast-element-plus";
-import type { VNode } from "vue";
+import { Fragment, computed, defineComponent, onMounted, reactive, ref } from "vue";
 import { tableApi } from "@/api/services/Center/table";
 import { useApp, useConfig } from "@/stores";
+import type { FaTableColumnCtx, FaTableInstance, FaTableSlots } from "fast-element-plus";
+import type { VNode } from "vue";
 
 export default defineComponent({
 	name: "FastTable",
@@ -118,7 +118,7 @@ export default defineComponent({
 			if (showConfirm) {
 				await ElMessageBox.confirm("确认同步列缓存配置？此操作无法撤销。", {
 					type: "warning",
-					async beforeClose(action, instance, done) {
+					async beforeClose() {
 						await localRequest();
 					},
 				});
@@ -132,7 +132,7 @@ export default defineComponent({
 			if (props.columns) return;
 			ElMessageBox.confirm("确认重置列缓存配置？此操作无法撤销。", {
 				type: "warning",
-				async beforeClose(action, instance, done) {
+				async beforeClose() {
 					await faTableRef.value.doLoading(async () => {
 						try {
 							await tableApi.clearUserTableConfig({ tableKey: props.tableKey });
