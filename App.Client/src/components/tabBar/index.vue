@@ -33,9 +33,9 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, nextTick, onBeforeMount, onMounted, reactive } from "vue";
 import { addUnit, withDefineType } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
+import { getCurrentInstance, nextTick, onBeforeMount, onMounted, reactive } from "vue";
 import { useUserInfo } from "@/stores";
 
 defineOptions({
