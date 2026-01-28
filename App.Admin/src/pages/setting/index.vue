@@ -6,7 +6,7 @@
 		</view>
 
 		<wd-cell-group border>
-			<wd-cell title="系统版本" :value="appVersion" />
+			<wd-cell title="系统版本" :value="appVersion" clickable @click="checkMiniAppVersion" />
 			<!-- #ifdef APP-PLUS -->
 			<wd-cell title="热更新版本" :value="`v${appStore.appVersion}`" />
 			<!-- #endif -->
@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { onShow } from "@dcloudio/uni-app";
 import { computed, ref } from "vue";
-import { clickUtil } from "@fast-china/utils";
+import { clickUtil, consoleError, consoleLog } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { CommonRoute } from "@/common";
@@ -99,6 +99,40 @@ const limitSize = computed(() => {
 		return `${storageInfo.value.limitSize}KB`;
 	}
 });
+
+/** 检查小程序版本 */
+const checkMiniAppVersion = () => {
+	const updateManager = uni.getUpdateManager();
+	// 检查小程序是否有新版本
+	updateManager.onCheckForUpdate((res) => {
+		if (res.hasUpdate) {
+			updateManager.onUpdateReady(() => {
+				consoleLog("Launcher", "小程序存在新版本");
+				useMessageBox
+					.alert({
+						title: "更新提示",
+						msg: "新版本已经准备好，需要重启后才能正常使用应用。",
+					})
+					.then(() => {
+						updateManager.applyUpdate(); //调用 applyUpdate 应用新版本并重启
+					});
+			});
+			updateManager.onUpdateFailed(() => {
+				consoleError("Launcher", "小程序更新检测异常");
+				useMessageBox
+					.alert({
+						msg: "系统异常，无法更新新版本，是否重启应用？",
+						confirmButtonText: "重启应用",
+					})
+					.then(() => {
+						updateManager.applyUpdate(); //调用 applyUpdate 应用新版本并重启
+					});
+			});
+		} else {
+			useToast.success("小程序已是最新版本");
+		}
+	});
+};
 
 /** 清除缓存 */
 const handleClearCache = async () => {
