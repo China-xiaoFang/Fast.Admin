@@ -5,7 +5,7 @@ import { HttpTransportType, HubConnectionBuilder, HubConnectionState, LogLevel }
 import type { HubConnection } from "@microsoft/signalr";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { useApp, useUserInfo } from "@/stores";
-import { TenantOnlineUserModel } from "@/api/services/tenantOnlineUser/models/TenantOnlineUserModel";
+import { TenantOnlineUserModel } from "@/api/services/Center/tenantOnlineUser/models/TenantOnlineUserModel";
 
 /**
  * SignalR 对象

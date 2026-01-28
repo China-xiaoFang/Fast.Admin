@@ -27,7 +27,7 @@
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
 import type { ElSelectorOutput } from "fast-element-plus";
-import { accountApi } from "@/api/services/account";
+import { accountApi } from "@/api/services/Center/account";
 
 defineOptions({
 	name: "AccountSelectPage",

@@ -21,8 +21,8 @@
 
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
-import { employeeApi } from "@/api/services/employee";
-import { QueryEmployeePagedOutput } from "@/api/services/employee/models/QueryEmployeePagedOutput";
+import { employeeApi } from "@/api/services/Admin/employee";
+import { QueryEmployeePagedOutput } from "@/api/services/Admin/employee/models/QueryEmployeePagedOutput";
 
 defineOptions({
 	name: "EmployeeDialogSelect",

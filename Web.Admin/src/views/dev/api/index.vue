@@ -9,8 +9,8 @@
 </template>
 
 <script lang="ts" setup>
-import type { ApiInfoModel } from "@/api/services/api/models/ApiInfoModel";
-import { apiApi } from "@/api/services/api";
+import type { ApiInfoModel } from "@/api/services/Center/api/models/ApiInfoModel";
+import { apiApi } from "@/api/services/Center/api";
 
 defineOptions({
 	name: "DevApi",

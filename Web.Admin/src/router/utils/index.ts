@@ -3,7 +3,7 @@ import { consoleError, stringUtil } from "@fast-china/utils";
 import { cloneDeep, pick } from "lodash";
 import { NavigationFailureType, isNavigationFailure } from "vue-router";
 import { layoutRoute } from "../modules/layoutRoute";
-import type { AuthMenuInfoDto } from "@/api/services/auth/models/AuthMenuInfoDto";
+import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
 import type { NavigationFailure, RouteLocationNormalized, RouteLocationRaw, RouteRecordRaw, Router } from "vue-router";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import router from "@/router";

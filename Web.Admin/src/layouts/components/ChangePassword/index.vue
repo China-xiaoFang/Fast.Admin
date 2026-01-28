@@ -26,8 +26,8 @@ import { reactive, ref } from "vue";
 import { ElMessage, ElMessageBox, type FormRules } from "element-plus";
 import { cryptoUtil, withDefineType } from "@fast-china/utils";
 import { useUserInfo } from "@/stores";
-import { ChangePasswordInput } from "@/api/services/account/models/ChangePasswordInput";
-import { accountApi } from "@/api/services/account";
+import { ChangePasswordInput } from "@/api/services/Center/account/models/ChangePasswordInput";
+import { accountApi } from "@/api/services/Center/account";
 import { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({

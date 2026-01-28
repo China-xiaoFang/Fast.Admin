@@ -33,8 +33,8 @@ import { Plus } from "@element-plus/icons-vue";
 import ApplicationOpenIdEdit from "./edit/index.vue";
 import type { FastTableInstance } from "@/components";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { QueryApplicationOpenIdPagedOutput } from "@/api/services/applicationOpenId/models/QueryApplicationOpenIdPagedOutput";
-import { applicationOpenIdApi } from "@/api/services/applicationOpenId";
+import { QueryApplicationOpenIdPagedOutput } from "@/api/services/Center/applicationOpenId/models/QueryApplicationOpenIdPagedOutput";
+import { applicationOpenIdApi } from "@/api/services/Center/applicationOpenId";
 import { ElSelectorOutput } from "fast-element-plus";
 
 defineOptions({

@@ -109,8 +109,8 @@
 </template>
 
 <script lang="ts" setup>
-import { sqlExceptionLogApi } from "@/api/services/sqlExceptionLog";
-import { SqlExceptionLogModel } from "@/api/services/sqlExceptionLog/models/SqlExceptionLogModel";
+import { sqlExceptionLogApi } from "@/api/services/Center/sqlExceptionLog";
+import { SqlExceptionLogModel } from "@/api/services/Center/sqlExceptionLog/models/SqlExceptionLogModel";
 import { dateUtil } from "@fast-china/utils";
 import { dayjs } from "element-plus";
 import { reactive } from "vue";

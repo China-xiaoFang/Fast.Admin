@@ -24,7 +24,7 @@
 import { useVModel } from "@vueuse/core";
 import type { ElSelectorOutput } from "fast-element-plus";
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
-import { merchantApi } from "@/api/services/merchant";
+import { merchantApi } from "@/api/services/Center/merchant";
 
 defineOptions({
 	name: "MerchantSelect",

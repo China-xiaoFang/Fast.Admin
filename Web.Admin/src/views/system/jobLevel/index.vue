@@ -30,8 +30,8 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import JobLevelEdit from "./edit/index.vue";
 import type { FastTableInstance } from "@/components";
-import { jobLevelApi } from "@/api/services/jobLevel";
-import { QueryJobLevelPagedOutput } from "@/api/services/jobLevel/models/QueryJobLevelPagedOutput";
+import { jobLevelApi } from "@/api/services/Admin/jobLevel";
+import { QueryJobLevelPagedOutput } from "@/api/services/Admin/jobLevel/models/QueryJobLevelPagedOutput";
 
 defineOptions({
 	name: "SystemJobLevel",

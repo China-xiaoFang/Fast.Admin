@@ -28,9 +28,9 @@ import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditPositionInput } from "@/api/services/position/models/EditPositionInput";
-import { AddPositionInput } from "@/api/services/position/models/AddPositionInput";
-import { positionApi } from "@/api/services/position";
+import { EditPositionInput } from "@/api/services/Admin/position/models/EditPositionInput";
+import { AddPositionInput } from "@/api/services/Admin/position/models/AddPositionInput";
+import { positionApi } from "@/api/services/Admin/position";
 
 defineOptions({
 	name: "SystemPositionEdit",

@@ -30,8 +30,8 @@
 </template>
 
 <script lang="ts" setup>
-import { fileApi } from "@/api/services/file";
-import { QueryFilePagedOutput } from "@/api/services/file/models/QueryFilePagedOutput";
+import { fileApi } from "@/api/services/File";
+import { QueryFilePagedOutput } from "@/api/services/File/models/QueryFilePagedOutput";
 import { FastTableInstance } from "@/components";
 import { useUserInfo } from "@/stores";
 import { ElSelectorOutput } from "fast-element-plus";

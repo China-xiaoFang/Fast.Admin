@@ -172,13 +172,13 @@ import { inject, onMounted, reactive, ref } from "vue";
 import { dayjs, ElMessage, type FormRules } from "element-plus";
 import { dateUtil, withDefineType } from "@fast-china/utils";
 import type { FaFormInstance } from "fast-element-plus";
-import { EditEmployeeInput } from "@/api/services/employee/models/EditEmployeeInput";
-import { employeeApi } from "@/api/services/employee";
-import { fileApi } from "@/api/services/file";
+import { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
+import { employeeApi } from "@/api/services/Admin/employee";
+import { fileApi } from "@/api/services/File";
 import { useApp, useUserInfo } from "@/stores";
-import { EditAccountInput } from "@/api/services/account/models/EditAccountInput";
-import { QueryAccountDetailOutput } from "@/api/services/account/models/QueryAccountDetailOutput";
-import { accountApi } from "@/api/services/account";
+import { EditAccountInput } from "@/api/services/Center/account/models/EditAccountInput";
+import { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
+import { accountApi } from "@/api/services/Center/account";
 import { changePasswordKey } from "@/layouts";
 
 defineOptions({

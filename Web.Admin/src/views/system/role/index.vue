@@ -42,8 +42,8 @@ import { Plus } from "@element-plus/icons-vue";
 import RoleEdit from "./edit/index.vue";
 import AuthEdit from "./edit/authEdit.vue";
 import type { FastTableInstance } from "@/components";
-import { roleApi } from "@/api/services/role";
-import { QueryRolePagedOutput } from "@/api/services/role/models/QueryRolePagedOutput";
+import { roleApi } from "@/api/services/Admin/role";
+import { QueryRolePagedOutput } from "@/api/services/Admin/role/models/QueryRolePagedOutput";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 
 defineOptions({

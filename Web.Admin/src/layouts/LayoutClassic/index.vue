@@ -125,10 +125,10 @@ import { Expand, Fold, Key, Lock, Refresh, Setting, SwitchButton, User, UserFill
 import { Local, addUnit } from "@fast-china/utils";
 import { RouterView, useRouter } from "vue-router";
 import LayoutMenu from "./components/Menu/index.vue";
-import type { LoginTenantOutput } from "@/api/services/login/models/LoginTenantOutput";
+import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
 import type { FaSelectInstance } from "fast-element-plus";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
-import { loginApi } from "@/api/services/login";
+import { loginApi } from "@/api/services/Auth/login";
 import { changePasswordKey, layoutConfigKey } from "@/layouts";
 import LayoutBreadcrumb from "@/layouts/components/Breadcrumb/index.vue";
 import LayoutLogo from "@/layouts/components/Logo/index.vue";

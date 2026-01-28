@@ -22,7 +22,7 @@
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
 import type { ElSelectorOutput } from "fast-element-plus";
-import { moduleApi } from "@/api/services/module";
+import { moduleApi } from "@/api/services/Center/module";
 
 defineOptions({
 	name: "ModuleSelect",

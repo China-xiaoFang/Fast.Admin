@@ -25,10 +25,10 @@ import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { FaDialog } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { AddTableConfigInput } from "@/api/services/table/models/AddTableConfigInput";
-import type { EditTableConfigInput } from "@/api/services/table/models/EditTableConfigInput";
+import type { AddTableConfigInput } from "@/api/services/Center/table/models/AddTableConfigInput";
+import type { EditTableConfigInput } from "@/api/services/Center/table/models/EditTableConfigInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { tableApi } from "@/api/services/table";
+import { tableApi } from "@/api/services/Center/table";
 
 defineOptions({
 	name: "DevTableConfigEdit",

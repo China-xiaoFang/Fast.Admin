@@ -30,10 +30,10 @@
 import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { AddConfigInput } from "@/api/services/config/models/AddConfigInput";
-import type { EditConfigInput } from "@/api/services/config/models/EditConfigInput";
+import type { AddConfigInput } from "@/api/services/Center/config/models/AddConfigInput";
+import type { EditConfigInput } from "@/api/services/Center/config/models/EditConfigInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { configApi } from "@/api/services/config";
+import { configApi } from "@/api/services/Center/config";
 
 defineOptions({
 	name: "DevConfigEdit",

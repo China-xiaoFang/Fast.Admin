@@ -96,8 +96,8 @@
 </template>
 
 <script lang="ts" setup>
-import { sqlExecutionLogApi } from "@/api/services/sqlExecutionLog";
-import { SqlExecutionLogModel } from "@/api/services/sqlExecutionLog/models/SqlExecutionLogModel";
+import { sqlExecutionLogApi } from "@/api/services/Center/sqlExecutionLog";
+import { SqlExecutionLogModel } from "@/api/services/Center/sqlExecutionLog/models/SqlExecutionLogModel";
 import { reactive, ref } from "vue";
 import { Delete } from "@element-plus/icons-vue";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";

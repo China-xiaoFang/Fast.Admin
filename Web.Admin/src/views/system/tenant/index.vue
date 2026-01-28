@@ -39,10 +39,10 @@ import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import TenantEdit from "./edit/index.vue";
-import type { QueryTenantPagedOutput } from "@/api/services/tenant/models/QueryTenantPagedOutput";
+import type { QueryTenantPagedOutput } from "@/api/services/Center/tenant/models/QueryTenantPagedOutput";
 import type { FastTableInstance } from "@/components";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { tenantApi } from "@/api/services/tenant";
+import { tenantApi } from "@/api/services/Center/tenant";
 
 defineOptions({
 	name: "SystemTenant",

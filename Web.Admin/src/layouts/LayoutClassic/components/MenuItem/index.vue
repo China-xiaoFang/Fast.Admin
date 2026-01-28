@@ -18,7 +18,7 @@
 import { definePropType } from "@fast-china/utils";
 import { useRouter } from "vue-router";
 import MenuItem from "./index.vue";
-import type { AuthMenuInfoDto } from "@/api/services/auth/models/AuthMenuInfoDto";
+import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 
 defineOptions({

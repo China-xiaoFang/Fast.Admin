@@ -88,9 +88,9 @@
 import { ref } from "vue";
 import AccountEdit from "./edit/index.vue";
 import type { FastTableInstance } from "@/components";
-import { accountApi } from "@/api/services/account";
+import { accountApi } from "@/api/services/Center/account";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { QueryAccountPagedOutput } from "@/api/services/account/models/QueryAccountPagedOutput";
+import { QueryAccountPagedOutput } from "@/api/services/Center/account/models/QueryAccountPagedOutput";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
 

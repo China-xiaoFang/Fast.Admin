@@ -57,9 +57,9 @@ import { reactive, ref } from "vue";
 import { CheckboxValueType, ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import type { ElSelectorOutput, FaDialogInstance } from "fast-element-plus";
-import { roleApi } from "@/api/services/role";
-import { EmployeeAuthInput } from "@/api/services/employee/models/EmployeeAuthInput";
-import { employeeApi } from "@/api/services/employee";
+import { roleApi } from "@/api/services/Admin/role";
+import { EmployeeAuthInput } from "@/api/services/Admin/employee/models/EmployeeAuthInput";
+import { employeeApi } from "@/api/services/Admin/employee";
 
 defineOptions({
 	name: "SystemEmployeeAuthEdit",

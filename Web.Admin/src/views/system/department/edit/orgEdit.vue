@@ -51,9 +51,9 @@ import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { organizationApi } from "@/api/services/organization";
-import { EditOrganizationInput } from "@/api/services/organization/models/EditOrganizationInput";
-import { AddOrganizationInput } from "@/api/services/organization/models/AddOrganizationInput";
+import { organizationApi } from "@/api/services/Admin/organization";
+import { EditOrganizationInput } from "@/api/services/Admin/organization/models/EditOrganizationInput";
+import { AddOrganizationInput } from "@/api/services/Admin/organization/models/AddOrganizationInput";
 
 defineOptions({
 	name: "SystemOrgEdit",

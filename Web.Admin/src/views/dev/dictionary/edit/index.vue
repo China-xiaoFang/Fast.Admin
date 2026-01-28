@@ -47,11 +47,11 @@ import { ElMessage, type FormRules } from "element-plus";
 import { FaDialog } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
 import ItemTable from "./components/itemTable.vue";
-import type { AddDictionaryInput } from "@/api/services/dictionary/models/AddDictionaryInput";
-import type { EditDictionaryInput } from "@/api/services/dictionary/models/EditDictionaryInput";
+import type { AddDictionaryInput } from "@/api/services/Center/dictionary/models/AddDictionaryInput";
+import type { EditDictionaryInput } from "@/api/services/Center/dictionary/models/EditDictionaryInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import { DictionaryValueTypeEnum } from "@/api/enums/DictionaryValueTypeEnum";
-import { dictionaryApi } from "@/api/services/dictionary";
+import { dictionaryApi } from "@/api/services/Center/dictionary";
 
 defineOptions({
 	name: "DevDictionaryEdit",

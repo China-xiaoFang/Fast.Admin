@@ -29,9 +29,9 @@ import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import ConfigEdit from "./edit/index.vue";
-import type { QueryMerchantPagedOutput } from "@/api/services/merchant/models/QueryMerchantPagedOutput";
+import type { QueryMerchantPagedOutput } from "@/api/services/Center/merchant/models/QueryMerchantPagedOutput";
 import type { FastTableInstance } from "@/components";
-import { merchantApi } from "@/api/services/merchant";
+import { merchantApi } from "@/api/services/Center/merchant";
 
 defineOptions({
 	name: "SystemMerchant",

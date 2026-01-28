@@ -27,7 +27,7 @@
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
 import type { ElSelectorOutput } from "fast-element-plus";
-import { employeeApi } from "@/api/services/employee";
+import { employeeApi } from "@/api/services/Admin/employee";
 
 defineOptions({
 	name: "EmployeeSelectPage",

@@ -75,8 +75,8 @@
 </template>
 
 <script lang="ts" setup>
-import { payRecordApi } from "@/api/services/payRecord";
-import { PayRecordModel } from "@/api/services/payRecord/models/PayRecordModel";
+import { payRecordApi } from "@/api/services/Center/payRecord";
+import { PayRecordModel } from "@/api/services/Center/payRecord/models/PayRecordModel";
 import { dateUtil } from "@fast-china/utils";
 import { dayjs } from "element-plus";
 

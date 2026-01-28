@@ -184,15 +184,15 @@
 import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { AddDatabaseInput } from "@/api/services/database/models/AddDatabaseInput";
-import type { EditDatabaseInput } from "@/api/services/database/models/EditDatabaseInput";
+import type { AddDatabaseInput } from "@/api/services/Center/database/models/AddDatabaseInput";
+import type { EditDatabaseInput } from "@/api/services/Center/database/models/EditDatabaseInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import { DatabaseTypeEnum } from "@/api/enums/DatabaseTypeEnum";
-import { databaseApi } from "@/api/services/database";
-import { QueryDatabaseDetailOutput } from "@/api/services/database/models/QueryDatabaseDetailOutput";
+import { databaseApi } from "@/api/services/Center/database";
+import { QueryDatabaseDetailOutput } from "@/api/services/Center/database/models/QueryDatabaseDetailOutput";
 import { SugarDbType } from "@/api/enums/SugarDbType";
 import { Plus } from "@element-plus/icons-vue";
-import { EditSlaveDatabaseInput } from "@/api/services/database/models/EditSlaveDatabaseInput";
+import { EditSlaveDatabaseInput } from "@/api/services/Center/database/models/EditSlaveDatabaseInput";
 
 defineOptions({
 	name: "SystemDatabaseEdit",

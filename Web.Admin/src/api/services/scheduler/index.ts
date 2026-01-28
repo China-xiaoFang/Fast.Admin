@@ -1,8 +1,8 @@
 import { axiosUtil } from "@fast-china/axios";
+import { SchedulerJobGroupEnum } from "@/api/enums/Scheduler/SchedulerJobGroupEnum";
 import { QuerySchedulerDetailOutput } from "./models/QuerySchedulerDetailOutput";
 import { SchedulerJobKeyInput } from "./models/SchedulerJobKeyInput";
 import { QueryAllSchedulerJobOutput } from "./models/QueryAllSchedulerJobOutput";
-import { SchedulerJobGroupEnum } from "@/api/enums/SchedulerJobGroupEnum";
 import { SchedulerJobInfo } from "./models/SchedulerJobInfo";
 import { AddSchedulerJobInput } from "./models/AddSchedulerJobInput";
 import { EditSchedulerJobInput } from "./models/EditSchedulerJobInput";

@@ -53,7 +53,7 @@ import { type FormRules } from "element-plus";
 import { FaDialog } from "fast-element-plus";
 import { definePropType, withDefineType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
-import type { EditDictionaryItemInput } from "@/api/services/dictionary/models/EditDictionaryItemInput";
+import type { EditDictionaryItemInput } from "@/api/services/Center/dictionary/models/EditDictionaryItemInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { TagTypeEnum } from "@/api/enums/TagTypeEnum";

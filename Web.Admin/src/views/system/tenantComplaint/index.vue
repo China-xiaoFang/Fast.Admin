@@ -23,8 +23,8 @@
 import { ref } from "vue";
 import TenantComplaintEdit from "./edit/index.vue";
 import type { FastTableInstance } from "@/components";
-import { complaintApi } from "@/api/services/complaint";
-import { QueryComplaintPagedOutput } from "@/api/services/complaint/models/QueryComplaintPagedOutput";
+import { complaintApi } from "@/api/services/Center/complaint";
+import { QueryComplaintPagedOutput } from "@/api/services/Center/complaint/models/QueryComplaintPagedOutput";
 
 defineOptions({
 	name: "SystemTenantComplaint",

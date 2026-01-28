@@ -5,13 +5,13 @@ import { consoleError, consoleLog } from "@fast-china/utils";
 import { useTitle } from "@vueuse/core";
 import { defineStore } from "pinia";
 import { useConfig } from "@/stores/config";
-import type { LaunchOutput } from "@/api/services/app/models/LaunchOutput";
+import type { LaunchOutput } from "@/api/services/Center/app/models/LaunchOutput";
 import type { FaTableColumnCtx, FaTableEnumColumnCtx } from "fast-element-plus";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
-import { appApi } from "@/api/services/app";
-import { dictionaryApi } from "@/api/services/dictionary";
+import { appApi } from "@/api/services/Center/app";
+import { dictionaryApi } from "@/api/services/Center/dictionary";
 
 export type ILoginComponent = "ClassicLogin";
 

@@ -248,11 +248,11 @@ import { ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
 import SchedulerEdit from "./edit/index.vue";
-import type { QuerySchedulerDetailOutput } from "@/api/services/scheduler/models/QuerySchedulerDetailOutput";
-import type { SchedulerJobInfoDto } from "@/api/services/scheduler/models/SchedulerJobInfoDto";
-import { SchedulerJobGroupEnum } from "@/api/enums/SchedulerJobGroupEnum";
-import { TriggerState } from "@/api/enums/TriggerState";
-import { schedulerApi } from "@/api/services/scheduler";
+import type { QuerySchedulerDetailOutput } from "@/api/services/Scheduler/models/QuerySchedulerDetailOutput";
+import type { SchedulerJobInfoDto } from "@/api/services/Scheduler/models/SchedulerJobInfoDto";
+import { SchedulerJobGroupEnum } from "@/api/enums/Scheduler/SchedulerJobGroupEnum";
+import { TriggerState } from "@/api/enums/Scheduler/TriggerState";
+import { schedulerApi } from "@/api/services/Scheduler";
 import { useApp } from "@/stores";
 
 defineOptions({

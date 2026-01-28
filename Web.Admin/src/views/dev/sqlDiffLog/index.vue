@@ -150,8 +150,8 @@
 </template>
 
 <script lang="ts" setup>
-import { sqlDiffLogApi } from "@/api/services/sqlDiffLog";
-import { SqlDiffLogModel } from "@/api/services/sqlDiffLog/models/SqlDiffLogModel";
+import { sqlDiffLogApi } from "@/api/services/Center/sqlDiffLog";
+import { SqlDiffLogModel } from "@/api/services/Center/sqlDiffLog/models/SqlDiffLogModel";
 import { FastTableInstance } from "@/components";
 import { useUserInfo } from "@/stores";
 import { Delete } from "@element-plus/icons-vue";

@@ -61,8 +61,8 @@ import { ref } from "vue";
 import type { FastTableInstance } from "@/components";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
-import { tenantOnlineUserApi } from "@/api/services/tenantOnlineUser";
-import { TenantOnlineUserModel } from "@/api/services/tenantOnlineUser/models/TenantOnlineUserModel";
+import { tenantOnlineUserApi } from "@/api/services/Center/tenantOnlineUser";
+import { TenantOnlineUserModel } from "@/api/services/Center/tenantOnlineUser/models/TenantOnlineUserModel";
 
 defineOptions({
 	name: "SystemTenantOnlineUser",

@@ -28,9 +28,9 @@ import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditJobLevelInput } from "@/api/services/jobLevel/models/EditJobLevelInput";
-import { AddJobLevelInput } from "@/api/services/jobLevel/models/AddJobLevelInput";
-import { jobLevelApi } from "@/api/services/jobLevel";
+import { EditJobLevelInput } from "@/api/services/Admin/jobLevel/models/EditJobLevelInput";
+import { AddJobLevelInput } from "@/api/services/Admin/jobLevel/models/AddJobLevelInput";
+import { jobLevelApi } from "@/api/services/Admin/jobLevel";
 
 defineOptions({
 	name: "SystemJobLevelEdit",

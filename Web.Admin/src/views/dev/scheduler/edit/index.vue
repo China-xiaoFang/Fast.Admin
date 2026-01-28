@@ -230,15 +230,15 @@ import { ElMessage, type FormRules } from "element-plus";
 import { Delete } from "@element-plus/icons-vue";
 import { FaDialog } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { SchedulerJobGroupEnum } from "@/api/enums/SchedulerJobGroupEnum";
-import type { EditSchedulerJobInput } from "@/api/services/scheduler/models/EditSchedulerJobInput";
+import type { SchedulerJobGroupEnum } from "@/api/enums/Scheduler/SchedulerJobGroupEnum";
+import type { EditSchedulerJobInput } from "@/api/services/Scheduler/models/EditSchedulerJobInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { HttpRequestMethodEnum } from "@/api/enums/HttpRequestMethodEnum";
-import { MailMessageEnum } from "@/api/enums/MailMessageEnum";
-import { SchedulerJobTypeEnum } from "@/api/enums/SchedulerJobTypeEnum";
-import { TriggerTypeEnum } from "@/api/enums/TriggerTypeEnum";
-import { WeekEnum } from "@/api/enums/WeekEnum";
-import { schedulerApi } from "@/api/services/scheduler";
+import { HttpRequestMethodEnum } from "@/api/enums/Scheduler/HttpRequestMethodEnum";
+import { MailMessageEnum } from "@/api/enums/Scheduler/MailMessageEnum";
+import { SchedulerJobTypeEnum } from "@/api/enums/Scheduler/SchedulerJobTypeEnum";
+import { TriggerTypeEnum } from "@/api/enums/Scheduler/TriggerTypeEnum";
+import { WeekEnum } from "@/api/enums/Scheduler/WeekEnum";
+import { schedulerApi } from "@/api/services/Scheduler";
 import { useApp } from "@/stores";
 
 defineOptions({
