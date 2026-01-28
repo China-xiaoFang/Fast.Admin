@@ -82,9 +82,9 @@
 </template>
 
 <script setup lang="ts">
+import { reactive, ref } from "vue";
 import { clickUtil, consoleLog, cryptoUtil, withDefineType } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
-import { reactive, ref } from "vue";
 import { useMessage } from "wot-design-uni";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";

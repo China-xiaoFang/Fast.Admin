@@ -17,9 +17,9 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
-import { ElMessage, type FormRules } from "element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { BindLoginAccountInput } from "@/api/services/Admin/employee/models/BindLoginAccountInput";
 import { useUserInfo } from "@/stores";

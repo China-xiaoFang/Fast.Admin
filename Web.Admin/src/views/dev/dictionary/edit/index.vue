@@ -42,10 +42,10 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
+import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { FaDialog } from "fast-element-plus";
-import { reactive, ref } from "vue";
+import { withDefineType } from "@fast-china/utils";
 import { DictionaryValueTypeEnum } from "@/api/enums/DictionaryValueTypeEnum";
 import { dictionaryApi } from "@/api/services/Center/dictionary";
 import ItemTable from "./components/itemTable.vue";

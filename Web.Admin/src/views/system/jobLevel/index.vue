@@ -25,9 +25,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
 import { jobLevelApi } from "@/api/services/Admin/jobLevel";
 import { QueryJobLevelPagedOutput } from "@/api/services/Admin/jobLevel/models/QueryJobLevelPagedOutput";
 import JobLevelEdit from "./edit/index.vue";

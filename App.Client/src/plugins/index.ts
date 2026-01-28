@@ -1,5 +1,5 @@
-import { consoleLog, useIdentity, useStorage } from "@fast-china/utils";
 import { type App } from "vue";
+import { consoleLog, useIdentity, useStorage } from "@fast-china/utils";
 import { dayjs } from "wot-design-uni";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { CommonUniApp } from "@/common";

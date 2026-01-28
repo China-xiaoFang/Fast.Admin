@@ -122,9 +122,9 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
-import { dayjs } from "element-plus";
 import { reactive, ref } from "vue";
+import { dayjs } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { accountApi } from "@/api/services/Center/account";
 import { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
 import type { FaDialogInstance } from "fast-element-plus";

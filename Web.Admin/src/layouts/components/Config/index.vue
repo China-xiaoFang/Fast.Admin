@@ -198,9 +198,9 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from "vue";
 import { Grid, Hide, MagicStick, Moon, Notification, QuestionFilled, Refresh, Sunny, View } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
-import { ref } from "vue";
 import { useConfig } from "@/stores";
 import type { IAnimationName } from "@/stores";
 import type { componentSizes } from "element-plus";

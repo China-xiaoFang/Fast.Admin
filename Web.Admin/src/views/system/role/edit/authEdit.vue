@@ -51,9 +51,9 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
-import { CheckboxValueType, ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
+import { CheckboxValueType, ElMessage } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { roleApi } from "@/api/services/Admin/role";
 import { RoleAuthInput } from "@/api/services/Admin/role/models/RoleAuthInput";
 import type { ElSelectorOutput, FaDialogInstance } from "fast-element-plus";

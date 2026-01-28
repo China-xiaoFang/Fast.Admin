@@ -48,11 +48,11 @@
 </template>
 
 <script lang="ts" setup>
-import { definePropType, withDefineType } from "@fast-china/utils";
-import { useVModel } from "@vueuse/core";
+import { reactive, ref } from "vue";
 import { type FormRules } from "element-plus";
 import { FaDialog } from "fast-element-plus";
-import { reactive, ref } from "vue";
+import { definePropType, withDefineType } from "@fast-china/utils";
+import { useVModel } from "@vueuse/core";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
 import type { EditDictionaryItemInput } from "@/api/services/Center/dictionary/models/EditDictionaryItemInput";

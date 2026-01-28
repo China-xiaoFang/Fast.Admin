@@ -1,6 +1,6 @@
+import { ElLoading, ElMessage, ElMessageBox } from "element-plus";
 import { createFastAxios } from "@fast-china/axios";
 import { Local, cryptoUtil, useIdentity, withDefineType } from "@fast-china/utils";
-import { ElLoading, ElMessage, ElMessageBox } from "element-plus";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { useUserInfo } from "@/stores";
 import type { ApiResponse } from "@fast-china/axios";

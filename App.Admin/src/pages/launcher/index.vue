@@ -13,9 +13,9 @@
 
 <script setup lang="ts">
 import { onLoad } from "@dcloudio/uni-app";
+import { reactive } from "vue";
 import { consoleError, consoleLog, consoleWarn } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
-import { reactive } from "vue";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
 import { CommonRoute } from "@/common";

@@ -24,9 +24,9 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
-import { ElMessage, type FormRules } from "element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { jobLevelApi } from "@/api/services/Admin/jobLevel";
 import { AddJobLevelInput } from "@/api/services/Admin/jobLevel/models/AddJobLevelInput";
 import { EditJobLevelInput } from "@/api/services/Admin/jobLevel/models/EditJobLevelInput";

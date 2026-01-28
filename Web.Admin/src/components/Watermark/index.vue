@@ -5,9 +5,9 @@
 </template>
 
 <script setup lang="ts">
-import { withDefineType } from "@fast-china/utils";
-import { useGlobalSize } from "element-plus";
 import { computed, reactive } from "vue";
+import { useGlobalSize } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { useApp, useConfig, useUserInfo } from "@/stores";
 
 defineOptions({

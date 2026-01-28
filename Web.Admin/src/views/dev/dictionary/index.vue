@@ -88,9 +88,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
 import { dictionaryApi } from "@/api/services/Center/dictionary";
 import DictionaryEdit from "./edit/index.vue";
 import type { QueryDictionaryPagedOutput } from "@/api/services/Center/dictionary/models/QueryDictionaryPagedOutput";

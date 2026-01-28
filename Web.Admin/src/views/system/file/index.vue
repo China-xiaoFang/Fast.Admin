@@ -30,8 +30,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ElSelectorOutput } from "fast-element-plus";
 import { reactive, ref } from "vue";
+import { ElSelectorOutput } from "fast-element-plus";
 import { fileApi } from "@/api/services/File";
 import { QueryFilePagedOutput } from "@/api/services/File/models/QueryFilePagedOutput";
 import { FastTableInstance } from "@/components";

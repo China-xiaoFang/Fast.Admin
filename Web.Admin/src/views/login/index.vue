@@ -37,11 +37,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ChromeFilled, Operation, Refresh } from "@element-plus/icons-vue";
-import { Local, Session, consoleError, useIdentity, withDefineType } from "@fast-china/utils";
-import { Dark, Light } from "@fast-element-plus/icons-vue";
-import { ElMessageBox } from "element-plus";
 import { defineAsyncComponent, onMounted, provide, reactive, ref, toRef } from "vue";
+import { ElMessageBox } from "element-plus";
+import { ChromeFilled, Operation, Refresh } from "@element-plus/icons-vue";
+import { Dark, Light } from "@fast-element-plus/icons-vue";
+import { Local, Session, consoleError, useIdentity, withDefineType } from "@fast-china/utils";
 import { useApp, useConfig } from "@/stores";
 import type { LoginInput } from "@/api/services/Auth/login/models/LoginInput";
 import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";

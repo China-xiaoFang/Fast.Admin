@@ -25,9 +25,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
 import { positionApi } from "@/api/services/Admin/position";
 import { QueryPositionPagedOutput } from "@/api/services/Admin/position/models/QueryPositionPagedOutput";
 import PositionEdit from "./edit/index.vue";

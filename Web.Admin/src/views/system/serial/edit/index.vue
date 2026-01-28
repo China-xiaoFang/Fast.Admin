@@ -30,9 +30,9 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
-import { ElMessage, type FormRules } from "element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { SerialDateTypeEnum } from "@/api/enums/SerialDateTypeEnum";
 import { SerialRuleTypeEnum } from "@/api/enums/SerialRuleTypeEnum";
 import { SerialSpacerEnum } from "@/api/enums/SerialSpacerEnum";

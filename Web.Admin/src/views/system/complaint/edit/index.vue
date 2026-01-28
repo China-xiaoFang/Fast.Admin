@@ -12,9 +12,9 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
-import { ElMessage, type FormRules } from "element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { complaintApi } from "@/api/services/Center/complaint";
 import { HandleComplaintInput } from "@/api/services/Center/complaint/models/HandleComplaintInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";

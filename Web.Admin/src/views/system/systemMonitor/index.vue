@@ -128,9 +128,9 @@
 </template>
 
 <script lang="ts" setup>
+import { onActivated, onDeactivated, onMounted, onUnmounted, reactive } from "vue";
 import { axiosUtil } from "@fast-china/axios";
 import { withDefineType } from "@fast-china/utils";
-import { onActivated, onDeactivated, onMounted, onUnmounted, reactive } from "vue";
 
 defineOptions({
 	name: "SystemMonitor",

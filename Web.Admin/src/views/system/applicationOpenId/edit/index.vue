@@ -136,10 +136,10 @@
 </template>
 
 <script lang="ts" setup>
+import { reactive, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
-import { ElMessage, type FormRules } from "element-plus";
-import { reactive, ref } from "vue";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";

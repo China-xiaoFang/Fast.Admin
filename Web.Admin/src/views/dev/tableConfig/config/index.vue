@@ -107,10 +107,10 @@
 </template>
 
 <script lang="ts" setup>
+import { reactive, ref, watch } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { ArrowLeftBold, Close, Plus, Select, StarFilled } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
-import { ElMessage, ElMessageBox } from "element-plus";
-import { reactive, ref, watch } from "vue";
 import { tableApi } from "@/api/services/Center/table";
 import AdvancedConfigForm from "./components/advancedConfig.vue";
 import type { FaTableColumnCtx } from "@/api/services/Center/table/models/FaTableColumnCtx";

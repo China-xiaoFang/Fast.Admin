@@ -48,11 +48,11 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus } from "@element-plus/icons-vue";
-import { withDefineType } from "@fast-china/utils";
-import { ElMessage, ElMessageBox } from "element-plus";
-import { ElTreeOutput, FaContextMenuData, FaContextMenuInstance, FaTreeInstance } from "fast-element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
+import { ElTreeOutput, FaContextMenuData, FaContextMenuInstance, FaTreeInstance } from "fast-element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { departmentApi } from "@/api/services/Admin/department";
 import { QueryDepartmentPagedOutput } from "@/api/services/Admin/department/models/QueryDepartmentPagedOutput";
 import { organizationApi } from "@/api/services/Admin/organization";

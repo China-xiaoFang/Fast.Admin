@@ -32,9 +32,9 @@
 
 <script setup lang="ts">
 import { onLoad, onPullDownRefresh } from "@dcloudio/uni-app";
+import { ref } from "vue";
 import { clickUtil } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
-import { ref } from "vue";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
 import { CommonRoute } from "@/common";

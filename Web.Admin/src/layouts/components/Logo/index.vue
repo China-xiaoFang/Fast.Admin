@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
-import { addUnit } from "@fast-china/utils";
 import { computed } from "vue";
+import { addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
 import LogoImg from "@/assets/logo.png";
 import { useApp, useConfig } from "@/stores";

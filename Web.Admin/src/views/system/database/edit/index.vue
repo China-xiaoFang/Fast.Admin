@@ -181,10 +181,10 @@
 </template>
 
 <script lang="ts" setup>
+import { reactive, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
-import { ElMessage, type FormRules } from "element-plus";
-import { reactive, ref } from "vue";
 import { DatabaseTypeEnum } from "@/api/enums/DatabaseTypeEnum";
 import { SugarDbType } from "@/api/enums/SugarDbType";
 import { databaseApi } from "@/api/services/Center/database";

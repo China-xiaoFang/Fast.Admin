@@ -31,9 +31,9 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
 import { applicationApi } from "@/api/services/Center/application";
 import ApplicationEdit from "./edit/index.vue";
 import type { QueryApplicationPagedOutput } from "@/api/services/Center/application/models/QueryApplicationPagedOutput";

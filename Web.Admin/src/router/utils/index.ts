@@ -1,5 +1,5 @@
-import { consoleError, stringUtil } from "@fast-china/utils";
 import { ElNotification } from "element-plus";
+import { consoleError, stringUtil } from "@fast-china/utils";
 import { cloneDeep, pick } from "lodash";
 import { NavigationFailureType, isNavigationFailure } from "vue-router";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";

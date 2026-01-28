@@ -5,8 +5,8 @@
  * 默认使用隐藏或者显示，也可以再标签上 增加 authType="xxx"
  * 接收参数：string | string[] 类型
  */
-import { withInstallDirective } from "@fast-china/utils";
 import { ElMessage } from "element-plus";
+import { withInstallDirective } from "@fast-china/utils";
 import { useUserInfo } from "@/stores";
 import type { Directive, DirectiveBinding, VNode } from "vue";
 

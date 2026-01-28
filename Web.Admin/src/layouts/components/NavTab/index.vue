@@ -111,11 +111,11 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowDown, ArrowLeft, ArrowRight, Close, DArrowLeft, DArrowRight, Minus, Monitor, PriceTag, Refresh } from "@element-plus/icons-vue";
-import { addUnit, withDefineType } from "@fast-china/utils";
-import { Exit, FullScreen, FullScreenExit } from "@fast-element-plus/icons-vue";
-import { useResizeObserver } from "@vueuse/core";
 import { markRaw, nextTick, onMounted, reactive, ref } from "vue";
+import { ArrowDown, ArrowLeft, ArrowRight, Close, DArrowLeft, DArrowRight, Minus, Monitor, PriceTag, Refresh } from "@element-plus/icons-vue";
+import { Exit, FullScreen, FullScreenExit } from "@fast-element-plus/icons-vue";
+import { addUnit, withDefineType } from "@fast-china/utils";
+import { useResizeObserver } from "@vueuse/core";
 import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
 import { routerUtil } from "@/router";
 import { useConfig, useNavTabs } from "@/stores";

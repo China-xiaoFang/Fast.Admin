@@ -57,9 +57,9 @@
 
 <script setup lang="ts">
 import { onHide, onLoad, onShow } from "@dcloudio/uni-app";
+import { computed, nextTick, onBeforeMount, reactive, ref, watch } from "vue";
 import { clickUtil, consoleLog, withDefineType } from "@fast-china/utils";
 import { useRoute, useRouter } from "uni-mini-router";
-import { computed, nextTick, onBeforeMount, reactive, ref, watch } from "vue";
 import { useMessage, useNotify, useToast } from "wot-design-uni";
 import { CommonRoute } from "@/common";
 import { wdHookState } from "@/hooks";

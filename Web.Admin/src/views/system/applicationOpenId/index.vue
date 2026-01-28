@@ -28,10 +28,10 @@
 </template>
 
 <script lang="ts" setup>
-import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
-import { ElSelectorOutput } from "fast-element-plus";
 import { ref } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
+import { ElSelectorOutput } from "fast-element-plus";
 import { applicationOpenIdApi } from "@/api/services/Center/applicationOpenId";
 import { QueryApplicationOpenIdPagedOutput } from "@/api/services/Center/applicationOpenId/models/QueryApplicationOpenIdPagedOutput";
 import ApplicationOpenIdEdit from "./edit/index.vue";

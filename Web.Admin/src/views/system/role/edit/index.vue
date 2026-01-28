@@ -30,9 +30,9 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
-import { ElMessage, type FormRules } from "element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 import { roleApi } from "@/api/services/Admin/role";
 import { AddRoleInput } from "@/api/services/Admin/role/models/AddRoleInput";

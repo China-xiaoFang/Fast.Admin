@@ -18,8 +18,8 @@
 </template>
 
 <script setup lang="ts">
-import { addUnit } from "@fast-china/utils";
 import { computed } from "vue";
+import { addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
 import { useConfig, useNavTabs, useUserInfo } from "@/stores";
 import MenuItem from "../MenuItem/index.vue";

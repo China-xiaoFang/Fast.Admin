@@ -59,9 +59,9 @@
 </template>
 
 <script lang="ts" setup>
-import { withDefineType } from "@fast-china/utils";
-import { ElMessage, type FormRules } from "element-plus";
 import { reactive, ref } from "vue";
+import { ElMessage, type FormRules } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { departmentApi } from "@/api/services/Admin/department";
 import { AddDepartmentInput } from "@/api/services/Admin/department/models/AddDepartmentInput";
 import { EditDepartmentInput } from "@/api/services/Admin/department/models/EditDepartmentInput";
