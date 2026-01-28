@@ -134,7 +134,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -188,7 +188,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -203,7 +203,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -218,7 +218,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -233,7 +233,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 4,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -248,7 +248,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 5,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -335,7 +335,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -350,7 +350,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -365,7 +365,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -380,7 +380,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 4,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -395,7 +395,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 5,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -449,7 +449,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -464,7 +464,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -479,7 +479,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -494,7 +494,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 4,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -509,7 +509,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 5,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -563,7 +563,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -578,7 +578,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -593,7 +593,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -608,7 +608,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 4,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -623,7 +623,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 5,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -677,7 +677,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -692,7 +692,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -707,7 +707,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -722,7 +722,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 4,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -737,7 +737,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 5,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -826,7 +826,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -841,7 +841,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -856,7 +856,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -871,7 +871,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 4,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -960,7 +960,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -975,7 +975,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -990,7 +990,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1005,7 +1005,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 4,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1020,7 +1020,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 5,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -1074,7 +1074,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1089,7 +1089,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1104,7 +1104,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1119,7 +1119,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 4,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1134,7 +1134,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 5,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -1188,7 +1188,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1203,7 +1203,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1218,7 +1218,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1233,7 +1233,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 4,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1248,7 +1248,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 5,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -1302,7 +1302,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1317,7 +1317,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1332,7 +1332,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1347,7 +1347,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 4,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1362,7 +1362,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 5,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -1416,7 +1416,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1431,7 +1431,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1446,7 +1446,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1461,7 +1461,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 4,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1476,7 +1476,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 5,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -1530,7 +1530,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1545,7 +1545,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -1634,7 +1634,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1649,7 +1649,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1664,7 +1664,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1679,7 +1679,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 4,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1694,7 +1694,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 5,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -1746,7 +1746,7 @@ internal static partial class MenuSeedData
                 HasDesktop = true,
                 HasWeb = true,
                 HasMobile = true,
-                Sort = buttonSort,
+                Sort = 1,
                 Status = CommonStatusEnum.Enable,
                 CreatedTime = dateTime
             })
@@ -1834,7 +1834,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -1888,7 +1888,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1903,7 +1903,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1918,7 +1918,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -1972,7 +1972,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -1987,7 +1987,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 2,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 },
@@ -2002,7 +2002,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 3,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -2091,7 +2091,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -2145,7 +2145,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
@@ -2199,7 +2199,7 @@ internal static partial class MenuSeedData
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
-                    Sort = buttonSort,
+                    Sort = 1,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 }
