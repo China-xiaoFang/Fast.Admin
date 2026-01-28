@@ -85,14 +85,14 @@
 </template>
 
 <script lang="ts" setup>
+import { dateUtil } from "@fast-china/utils";
+import { ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { ref } from "vue";
+import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
+import { accountApi } from "@/api/services/Center/account";
+import { QueryAccountPagedOutput } from "@/api/services/Center/account/models/QueryAccountPagedOutput";
 import AccountEdit from "./edit/index.vue";
 import type { FastTableInstance } from "@/components";
-import { accountApi } from "@/api/services/Center/account";
-import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { QueryAccountPagedOutput } from "@/api/services/Center/account/models/QueryAccountPagedOutput";
-import { dayjs, ElMessage, ElMessageBox } from "element-plus";
-import { dateUtil } from "@fast-china/utils";
 
 defineOptions({
 	name: "SystemAccount",
@@ -106,7 +106,7 @@ const handleResetPassword = (row: QueryAccountPagedOutput) => {
 	const { accountId, rowVersion } = row;
 	ElMessageBox.confirm(`确定解锁账号？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await accountApi.resetPassword({
 				accountId,
 				rowVersion,
@@ -122,7 +122,7 @@ const handleUnlock = (row: QueryAccountPagedOutput) => {
 	const { accountId, rowVersion } = row;
 	ElMessageBox.confirm(`确定解锁账号？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await accountApi.unlock({
 				accountId,
 				rowVersion,
@@ -138,7 +138,7 @@ const handleChangeStatus = (row: QueryAccountPagedOutput) => {
 	const { accountId, status, rowVersion } = row;
 	ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}账号？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await accountApi.changeStatus({
 				accountId,
 				rowVersion,

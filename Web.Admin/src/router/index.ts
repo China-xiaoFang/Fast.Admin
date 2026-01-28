@@ -1,12 +1,12 @@
-import { ElMessage, ElNotification } from "element-plus";
 import { consoleError, dateUtil, stringUtil } from "@fast-china/utils";
 import { useTitle } from "@vueuse/core";
+import { ElMessage, ElNotification } from "element-plus";
 import NProgress from "nprogress";
 import { createRouter, createWebHistory } from "vue-router";
-import { defaultRoute } from "./modules/defaultRoute";
-import { handleDynamicRoute } from "./utils";
 import { initWebSocket } from "@/signalR";
 import { useApp, useUserInfo } from "@/stores";
+import { defaultRoute } from "./modules/defaultRoute";
+import { handleDynamicRoute } from "./utils";
 if (import.meta.env.DEV) {
 	await import("nprogress/nprogress.css");
 }

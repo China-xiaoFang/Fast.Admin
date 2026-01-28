@@ -1,9 +1,9 @@
-import { type App, type ComponentPublicInstance, nextTick } from "vue";
-import { ElNotification } from "element-plus";
 import { useIdentity, useStorage } from "@fast-china/utils";
+import { ElNotification } from "element-plus";
+import { type App, type ComponentPublicInstance, nextTick } from "vue";
+import { registerComponents } from "@/components";
 import { loadFastAxios } from "./axios";
 import { loadElementPlus } from "./element-plus";
-import { registerComponents } from "@/components";
 
 export function loadPlugins(app: App): void {
 	// 全局异常捕获

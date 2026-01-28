@@ -136,20 +136,20 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { fileApi } from "@/api/services/File";
-import { EditApplicationOpenIdInput } from "@/api/services/Center/applicationOpenId/models/EditApplicationOpenIdInput";
-import { AddApplicationOpenIdInput } from "@/api/services/Center/applicationOpenId/models/AddApplicationOpenIdInput";
-import { applicationOpenIdApi } from "@/api/services/Center/applicationOpenId";
-import { useApp } from "@/stores";
+import { ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
-import { Plus } from "@element-plus/icons-vue";
+import { applicationOpenIdApi } from "@/api/services/Center/applicationOpenId";
+import { AddApplicationOpenIdInput } from "@/api/services/Center/applicationOpenId/models/AddApplicationOpenIdInput";
+import { EditApplicationOpenIdInput } from "@/api/services/Center/applicationOpenId/models/EditApplicationOpenIdInput";
 import { EditApplicationTemplateIdInput } from "@/api/services/Center/applicationOpenId/models/EditApplicationTemplateIdInput";
+import { fileApi } from "@/api/services/File";
+import { useApp } from "@/stores";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "SystemApplicationOpenIdEdit",

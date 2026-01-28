@@ -6,7 +6,7 @@
 			rowKey="positionId"
 			:requestApi="positionApi.queryPositionPaged"
 			hideSearchTime
-			@customCellClick="handleCustomCellClick"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
@@ -25,13 +25,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import PositionEdit from "./edit/index.vue";
-import type { FastTableInstance } from "@/components";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ref } from "vue";
 import { positionApi } from "@/api/services/Admin/position";
 import { QueryPositionPagedOutput } from "@/api/services/Admin/position/models/QueryPositionPagedOutput";
+import PositionEdit from "./edit/index.vue";
+import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemPosition",
@@ -49,7 +49,7 @@ const handleDelete = (row: QueryPositionPagedOutput) => {
 	const { positionId, rowVersion } = row;
 	ElMessageBox.confirm("确定要删除职位？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await positionApi.deletePosition({ positionId, rowVersion });
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();

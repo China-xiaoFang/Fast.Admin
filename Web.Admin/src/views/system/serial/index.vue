@@ -17,12 +17,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { ref } from "vue";
+import { serialApi } from "@/api/services/Admin/serial";
 import SerialEdit from "./edit/index.vue";
 import type { QuerySerialRulePagedOutput } from "@/api/services/Admin/serial/models/QuerySerialRulePagedOutput";
 import type { FastTableInstance } from "@/components";
-import { serialApi } from "@/api/services/Admin/serial";
 
 defineOptions({
 	name: "SystemSerial",

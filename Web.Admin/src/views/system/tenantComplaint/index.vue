@@ -21,10 +21,10 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import TenantComplaintEdit from "./edit/index.vue";
-import type { FastTableInstance } from "@/components";
 import { complaintApi } from "@/api/services/Center/complaint";
 import { QueryComplaintPagedOutput } from "@/api/services/Center/complaint/models/QueryComplaintPagedOutput";
+import TenantComplaintEdit from "./edit/index.vue";
+import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemTenantComplaint",

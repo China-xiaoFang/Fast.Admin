@@ -107,15 +107,15 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { ArrowLeftBold, Close, Plus, Select, StarFilled } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { reactive, ref, watch } from "vue";
+import { tableApi } from "@/api/services/Center/table";
 import AdvancedConfigForm from "./components/advancedConfig.vue";
 import type { FaTableColumnCtx } from "@/api/services/Center/table/models/FaTableColumnCtx";
 import type { FaTableInstance } from "fast-element-plus";
 import type { WatchHandle } from "vue";
-import { tableApi } from "@/api/services/Center/table";
 
 defineOptions({
 	name: "DevTableColumnConfig",
@@ -147,7 +147,7 @@ const handleBack = () => {
 	if (state.change) {
 		ElMessageBox.confirm("确定要取消编辑？", {
 			type: "warning",
-			async beforeClose(action, instance, done) {
+			async beforeClose() {
 				emit("back");
 			},
 		});
@@ -215,7 +215,7 @@ const handleOrderChange = () => {
 const handleSave = () => {
 	ElMessageBox.confirm("确认要保存表格配置？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await tableApi.editTableColumnConfig({
 				tableId: state.tableId,
 				columns: state.tableData,

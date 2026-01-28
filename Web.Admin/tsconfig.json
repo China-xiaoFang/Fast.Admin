@@ -8,6 +8,7 @@
 		"jsx": "preserve",
 		/* 编译时包含的库类型 */
 		"lib": ["ESNext", "DOM"],
+		"moduleDetection": "force",
 		/** https://cn.vitejs.dev/guide/features.html#typescript-compiler-options */
 		"useDefineForClassFields": true,
 		"experimentalDecorators": true,
@@ -15,7 +16,6 @@
 		"baseUrl": "./",
 		"module": "ESNext",
 		"moduleResolution": "bundler",
-		"moduleDetection": "force",
 		/** 非相对模块导入的路径映射配置，根据 baseUrl 配置进行路径计算 */
 		"paths": {
 			"@": ["src"],

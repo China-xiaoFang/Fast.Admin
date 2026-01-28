@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, reactive, ref } from "vue";
 import { colorUtil, withDefineType } from "@fast-china/utils";
+import { onMounted, onUnmounted, reactive, ref } from "vue";
 
 defineOptions({
 	name: "Tendril",

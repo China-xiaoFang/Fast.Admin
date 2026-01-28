@@ -20,7 +20,7 @@
 						v-model="state.formData.orgId"
 						v-model:label="state.formData.orgName"
 						placeholder="请选择机构"
-						check-strictly
+						checkStrictly
 						filterable
 						clearable
 					/>
@@ -33,7 +33,7 @@
 						v-model="state.formData.departmentId"
 						v-model:label="state.formData.departmentName"
 						placeholder="请选择部门"
-						check-strictly
+						checkStrictly
 						filterable
 						clearable
 					/>
@@ -231,7 +231,7 @@
 										v-model="row.departmentId"
 										v-model:label="row.departmentName"
 										placeholder="请选择部门"
-										check-strictly
+										checkStrictly
 										filterable
 										clearable
 									/>
@@ -302,23 +302,23 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { CheckboxValueType, ElMessage, type FormRules } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
 import { dateUtil, withDefineType } from "@fast-china/utils";
-import type { ElSelectorOutput, FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
-import { AddEmployeeInput } from "@/api/services/Admin/employee/models/AddEmployeeInput";
+import { CheckboxValueType, ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
 import { GenderEnum } from "@/api/enums/GenderEnum";
-import { employeeApi } from "@/api/services/Admin/employee";
-import { fileApi } from "@/api/services/File";
-import { useApp } from "@/stores";
 import { departmentApi } from "@/api/services/Admin/department";
+import { employeeApi } from "@/api/services/Admin/employee";
+import { AddEmployeeInput } from "@/api/services/Admin/employee/models/AddEmployeeInput";
+import { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
+import { EmployeeOrgModel } from "@/api/services/Admin/employee/models/EmployeeOrgModel";
+import { jobLevelApi } from "@/api/services/Admin/jobLevel";
 import { organizationApi } from "@/api/services/Admin/organization";
 import { positionApi } from "@/api/services/Admin/position";
-import { jobLevelApi } from "@/api/services/Admin/jobLevel";
 import { roleApi } from "@/api/services/Admin/role";
-import { Plus } from "@element-plus/icons-vue";
-import { EmployeeOrgModel } from "@/api/services/Admin/employee/models/EmployeeOrgModel";
+import { fileApi } from "@/api/services/File";
+import { useApp } from "@/stores";
+import type { ElSelectorOutput, FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "SystemEmployeeEdit",

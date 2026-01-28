@@ -1,8 +1,8 @@
-import { reactive, toRefs } from "vue";
 import { withDefineType } from "@fast-china/utils";
 import { defineStore } from "pinia";
-import type { RouteLocationNormalized, Router } from "vue-router";
+import { reactive, toRefs } from "vue";
 import router, { routerUtil } from "@/router";
+import type { RouteLocationNormalized, Router } from "vue-router";
 
 export type INavTab = Partial<Pick<RouteLocationNormalized, "name" | "path" | "query" | "fullPath" | "meta" | "params">>;
 

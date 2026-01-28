@@ -17,9 +17,9 @@
 <script setup lang="ts">
 import { definePropType } from "@fast-china/utils";
 import { useRouter } from "vue-router";
+import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import MenuItem from "./index.vue";
 import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
-import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 
 defineOptions({
 	name: "LayoutMenuItem",

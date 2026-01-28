@@ -8,7 +8,7 @@
 				rowKey="recordId"
 				:requestApi="applicationOpenIdApi.queryApplicationOpenIdPaged"
 				hideSearchTime
-				@customCellClick="handleCustomCellClick"
+				@custom-cell-click="handleCustomCellClick"
 			>
 				<!-- 表格按钮操作区域 -->
 				<template #header>
@@ -28,14 +28,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ElSelectorOutput } from "fast-element-plus";
+import { ref } from "vue";
+import { applicationOpenIdApi } from "@/api/services/Center/applicationOpenId";
+import { QueryApplicationOpenIdPagedOutput } from "@/api/services/Center/applicationOpenId/models/QueryApplicationOpenIdPagedOutput";
 import ApplicationOpenIdEdit from "./edit/index.vue";
 import type { FastTableInstance } from "@/components";
-import { ElMessage, ElMessageBox } from "element-plus";
-import { QueryApplicationOpenIdPagedOutput } from "@/api/services/Center/applicationOpenId/models/QueryApplicationOpenIdPagedOutput";
-import { applicationOpenIdApi } from "@/api/services/Center/applicationOpenId";
-import { ElSelectorOutput } from "fast-element-plus";
 
 defineOptions({
 	name: "SystemApplication",
@@ -59,7 +59,7 @@ const handleDelete = (row: QueryApplicationOpenIdPagedOutput) => {
 	const { recordId, rowVersion } = row;
 	ElMessageBox.confirm("确定要删除应用OpenId？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await applicationOpenIdApi.deleteApplicationOpenId({ recordId, rowVersion });
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();

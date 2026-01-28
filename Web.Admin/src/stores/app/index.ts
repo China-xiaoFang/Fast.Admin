@@ -1,17 +1,17 @@
-import { reactive, ref, toRefs } from "vue";
-import { ElMessageBox } from "element-plus";
 import { useFastAxios } from "@fast-china/axios";
 import { consoleError, consoleLog } from "@fast-china/utils";
 import { useTitle } from "@vueuse/core";
+import { ElMessageBox } from "element-plus";
 import { defineStore } from "pinia";
-import { useConfig } from "@/stores/config";
-import type { LaunchOutput } from "@/api/services/Center/app/models/LaunchOutput";
-import type { FaTableColumnCtx, FaTableEnumColumnCtx } from "fast-element-plus";
+import { reactive, ref, toRefs } from "vue";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { appApi } from "@/api/services/Center/app";
 import { dictionaryApi } from "@/api/services/Center/dictionary";
+import { useConfig } from "@/stores/config";
+import type { LaunchOutput } from "@/api/services/Center/app/models/LaunchOutput";
+import type { FaTableColumnCtx, FaTableEnumColumnCtx } from "fast-element-plus";
 
 export type ILoginComponent = "ClassicLogin";
 

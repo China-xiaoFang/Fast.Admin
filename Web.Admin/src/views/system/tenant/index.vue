@@ -6,7 +6,7 @@
 			rowKey="tenantId"
 			:requestApi="tenantApi.queryTenantPaged"
 			hideSearchTime
-			@customCellClick="handleCustomCellClick"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
@@ -35,14 +35,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ref } from "vue";
+import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
+import { tenantApi } from "@/api/services/Center/tenant";
 import TenantEdit from "./edit/index.vue";
 import type { QueryTenantPagedOutput } from "@/api/services/Center/tenant/models/QueryTenantPagedOutput";
 import type { FastTableInstance } from "@/components";
-import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { tenantApi } from "@/api/services/Center/tenant";
 
 defineOptions({
 	name: "SystemTenant",
@@ -60,7 +60,7 @@ const handleChangeStatus = (row: QueryTenantPagedOutput) => {
 	const { tenantId, status, rowVersion } = row;
 	ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}租户？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await tenantApi.changeStatus({
 				tenantId,
 				rowVersion,

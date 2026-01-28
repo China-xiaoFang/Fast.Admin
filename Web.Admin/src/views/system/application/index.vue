@@ -6,7 +6,7 @@
 			rowKey="appId"
 			:requestApi="applicationApi.queryApplicationPaged"
 			hideSearchTime
-			@customCellClick="handleCustomCellClick"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
@@ -31,13 +31,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ref } from "vue";
+import { applicationApi } from "@/api/services/Center/application";
 import ApplicationEdit from "./edit/index.vue";
 import type { QueryApplicationPagedOutput } from "@/api/services/Center/application/models/QueryApplicationPagedOutput";
 import type { FastTableInstance } from "@/components";
-import { applicationApi } from "@/api/services/Center/application";
-import { ElMessage, ElMessageBox } from "element-plus";
 
 defineOptions({
 	name: "SystemApplication",
@@ -55,7 +55,7 @@ const handleDelete = (row: QueryApplicationPagedOutput) => {
 	const { appId, rowVersion } = row;
 	ElMessageBox.confirm("确定要删除应用？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await applicationApi.deleteApplication({ appId, rowVersion });
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();

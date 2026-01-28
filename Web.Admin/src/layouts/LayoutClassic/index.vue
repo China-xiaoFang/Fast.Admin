@@ -119,14 +119,11 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { Expand, Fold, Key, Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
 import { Local, addUnit } from "@fast-china/utils";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { inject, ref } from "vue";
 import { RouterView, useRouter } from "vue-router";
-import LayoutMenu from "./components/Menu/index.vue";
-import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
-import type { FaSelectInstance } from "fast-element-plus";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
 import { changePasswordKey, layoutConfigKey } from "@/layouts";
@@ -137,6 +134,9 @@ import LayoutScreenFull from "@/layouts/components/ScreenFull/index.vue";
 import LayoutScreenLock from "@/layouts/components/ScreenLock/index.vue";
 import { routerUtil } from "@/router";
 import { useConfig, useNavTabs, useUserInfo } from "@/stores";
+import LayoutMenu from "./components/Menu/index.vue";
+import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
+import type { FaSelectInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "LayoutClassic",
@@ -209,7 +209,7 @@ const handleScreenLock = () => {
 const handleLogout = async () => {
 	ElMessageBox.confirm(`确定要退出登录？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await userInfoStore.logout();
 			ElMessage.success(`退出登录成功`);
 		},

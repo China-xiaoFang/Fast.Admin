@@ -168,18 +168,18 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, onMounted, reactive, ref } from "vue";
-import { dayjs, ElMessage, type FormRules } from "element-plus";
 import { dateUtil, withDefineType } from "@fast-china/utils";
-import type { FaFormInstance } from "fast-element-plus";
-import { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
+import { ElMessage, type FormRules, dayjs } from "element-plus";
+import { inject, onMounted, reactive, ref } from "vue";
 import { employeeApi } from "@/api/services/Admin/employee";
-import { fileApi } from "@/api/services/File";
-import { useApp, useUserInfo } from "@/stores";
+import { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
+import { accountApi } from "@/api/services/Center/account";
 import { EditAccountInput } from "@/api/services/Center/account/models/EditAccountInput";
 import { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
-import { accountApi } from "@/api/services/Center/account";
+import { fileApi } from "@/api/services/File";
 import { changePasswordKey } from "@/layouts";
+import { useApp, useUserInfo } from "@/stores";
+import type { FaFormInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "SettingsAccount",

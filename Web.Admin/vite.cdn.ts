@@ -1,4 +1,4 @@
-import { CdnImportOptions } from "fast-vite-plugins";
+import type { CdnImportOptions } from "fast-vite-plugins";
 
 export const getCdnModules = (viteDev: boolean): CdnImportOptions["modules"] => [
 	{

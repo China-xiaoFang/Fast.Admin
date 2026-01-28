@@ -74,7 +74,7 @@
 				<RadioGroup button name="BooleanEnum" v-model="state.formData.disableAop" />
 			</FaFormItem>
 
-			<FaLayoutGridItem span="2" v-if="state.dialogState !== 'add'" style="min-height: 300px; max-height: 500px">
+			<FaLayoutGridItem v-if="state.dialogState !== 'add'" span="2" style="min-height: 300px; max-height: 500px">
 				<FaTable rowKey="buttonId" :data="state.formData.slaveDatabaseList" span="2">
 					<!-- 表格按钮操作区域 -->
 					<template #header>
@@ -181,18 +181,18 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { Plus } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
+import { ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
+import { DatabaseTypeEnum } from "@/api/enums/DatabaseTypeEnum";
+import { SugarDbType } from "@/api/enums/SugarDbType";
+import { databaseApi } from "@/api/services/Center/database";
+import { EditSlaveDatabaseInput } from "@/api/services/Center/database/models/EditSlaveDatabaseInput";
+import { QueryDatabaseDetailOutput } from "@/api/services/Center/database/models/QueryDatabaseDetailOutput";
 import type { AddDatabaseInput } from "@/api/services/Center/database/models/AddDatabaseInput";
 import type { EditDatabaseInput } from "@/api/services/Center/database/models/EditDatabaseInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { DatabaseTypeEnum } from "@/api/enums/DatabaseTypeEnum";
-import { databaseApi } from "@/api/services/Center/database";
-import { QueryDatabaseDetailOutput } from "@/api/services/Center/database/models/QueryDatabaseDetailOutput";
-import { SugarDbType } from "@/api/enums/SugarDbType";
-import { Plus } from "@element-plus/icons-vue";
-import { EditSlaveDatabaseInput } from "@/api/services/Center/database/models/EditSlaveDatabaseInput";
 
 defineOptions({
 	name: "SystemDatabaseEdit",

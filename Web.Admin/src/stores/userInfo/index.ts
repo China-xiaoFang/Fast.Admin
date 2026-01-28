@@ -1,14 +1,14 @@
-import { reactive, ref, toRefs } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { Local, consoleError } from "@fast-china/utils";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { defineStore } from "pinia";
-import type { GetLoginUserInfoOutput } from "@/api/services/Auth/auth/models/GetLoginUserInfoOutput";
-import type { AxiosResponse } from "axios";
+import { reactive, ref, toRefs } from "vue";
+import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 import { authApi } from "@/api/services/Auth/auth";
 import { loginApi } from "@/api/services/Auth/login";
 import router from "@/router";
 import { closeWebSocket } from "@/signalR";
-import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
+import type { GetLoginUserInfoOutput } from "@/api/services/Auth/auth/models/GetLoginUserInfoOutput";
+import type { AxiosResponse } from "axios";
 
 type IState = {
 	/** Token */

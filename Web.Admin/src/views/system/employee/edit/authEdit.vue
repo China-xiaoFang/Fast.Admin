@@ -53,13 +53,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { CheckboxValueType, ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { ElSelectorOutput, FaDialogInstance } from "fast-element-plus";
-import { roleApi } from "@/api/services/Admin/role";
-import { EmployeeAuthInput } from "@/api/services/Admin/employee/models/EmployeeAuthInput";
+import { CheckboxValueType, ElMessage } from "element-plus";
+import { reactive, ref } from "vue";
 import { employeeApi } from "@/api/services/Admin/employee";
+import { EmployeeAuthInput } from "@/api/services/Admin/employee/models/EmployeeAuthInput";
+import { roleApi } from "@/api/services/Admin/role";
+import type { ElSelectorOutput, FaDialogInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "SystemEmployeeAuthEdit",

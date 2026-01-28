@@ -198,13 +198,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
 import { Grid, Hide, MagicStick, Moon, Notification, QuestionFilled, Refresh, Sunny, View } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
+import { ref } from "vue";
+import { useConfig } from "@/stores";
 import type { IAnimationName } from "@/stores";
 import type { componentSizes } from "element-plus";
 import type { ElSelectorOutput, FaDrawerInstance, FaTableDataRange } from "fast-element-plus";
-import { useConfig } from "@/stores";
 
 defineOptions({
 	name: "LayoutConfig",

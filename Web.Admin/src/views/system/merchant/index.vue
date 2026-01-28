@@ -6,7 +6,7 @@
 			rowKey="merchantId"
 			:requestApi="merchantApi.queryMerchantPaged"
 			hideSearchTime
-			@customCellClick="handleCustomCellClick"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
@@ -25,13 +25,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ref } from "vue";
+import { merchantApi } from "@/api/services/Center/merchant";
 import ConfigEdit from "./edit/index.vue";
 import type { QueryMerchantPagedOutput } from "@/api/services/Center/merchant/models/QueryMerchantPagedOutput";
 import type { FastTableInstance } from "@/components";
-import { merchantApi } from "@/api/services/Center/merchant";
 
 defineOptions({
 	name: "SystemMerchant",
@@ -49,7 +49,7 @@ const handleDelete = (row: QueryMerchantPagedOutput) => {
 	const { merchantId, rowVersion } = row;
 	ElMessageBox.confirm("确定要删除商户号？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await merchantApi.deleteMerchant({ merchantId, rowVersion });
 			ElMessage.success("删除成功！");
 			fastTableRef.value?.refresh();

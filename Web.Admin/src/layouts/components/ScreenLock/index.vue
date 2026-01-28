@@ -57,10 +57,10 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
-import { dayjs } from "element-plus";
 import { Lock, UserFilled } from "@element-plus/icons-vue";
 import { tryOnMounted, tryOnUnmounted } from "@vueuse/core";
+import { dayjs } from "element-plus";
+import { reactive } from "vue";
 import { useConfig, useUserInfo } from "@/stores";
 
 defineOptions({

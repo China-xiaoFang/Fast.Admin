@@ -5,7 +5,7 @@
 			rowKey="dictionaryId"
 			:requestApi="dictionaryApi.queryDictionaryPaged"
 			hideSearchTime
-			@customCellClick="handleCustomCellClick"
+			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
@@ -88,13 +88,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ref } from "vue";
+import { dictionaryApi } from "@/api/services/Center/dictionary";
 import DictionaryEdit from "./edit/index.vue";
 import type { QueryDictionaryPagedOutput } from "@/api/services/Center/dictionary/models/QueryDictionaryPagedOutput";
 import type { FaTableInstance } from "fast-element-plus";
-import { dictionaryApi } from "@/api/services/Center/dictionary";
 
 defineOptions({
 	name: "DevDictionary",
@@ -112,7 +112,7 @@ const handleDelete = (row: QueryDictionaryPagedOutput) => {
 	const { dictionaryId, rowVersion } = row;
 	ElMessageBox.confirm("确定要删除数据字典？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await dictionaryApi.deleteDictionary({ dictionaryId, rowVersion });
 			ElMessage.success("删除成功！");
 			faTableRef.value?.refresh();

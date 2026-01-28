@@ -5,12 +5,12 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, watch } from "vue";
-import { type componentSizes } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { useWindowSize } from "@vueuse/core";
-import { useConfig } from "@/stores";
+import { type componentSizes } from "element-plus";
+import { onMounted, reactive, watch } from "vue";
 import { RouterView } from "vue-router";
+import { useConfig } from "@/stores";
 
 defineOptions({
 	name: "App",

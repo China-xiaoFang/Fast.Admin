@@ -55,11 +55,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { definePropType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
+import { ElMessageBox } from "element-plus";
+import { ref } from "vue";
 import DictionaryEditItemEdit from "./itemEdit.vue";
 import type { EditDictionaryItemInput } from "@/api/services/Center/dictionary/models/EditDictionaryItemInput";
 
@@ -83,7 +83,7 @@ const editFormRef = ref<InstanceType<typeof DictionaryEditItemEdit>>();
 const handleDelete = (row: EditDictionaryItemInput, index: number) => {
 	ElMessageBox.confirm("确定要删除数据字典项？", {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			modelValue.value.splice(index, 1);
 		},
 	});

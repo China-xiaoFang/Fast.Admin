@@ -30,16 +30,16 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
+import { ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
+import { SerialDateTypeEnum } from "@/api/enums/SerialDateTypeEnum";
+import { SerialSpacerEnum } from "@/api/enums/SerialSpacerEnum";
+import { SysSerialRuleTypeEnum } from "@/api/enums/SysSerialRuleTypeEnum";
+import { sysSerialApi } from "@/api/services/Center/sysSerial";
 import type { AddSysSerialRuleInput } from "@/api/services/Center/sysSerial/models/AddSysSerialRuleInput";
 import type { EditSysSerialRuleInput } from "@/api/services/Center/sysSerial/models/EditSysSerialRuleInput";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { sysSerialApi } from "@/api/services/Center/sysSerial";
-import { SysSerialRuleTypeEnum } from "@/api/enums/SysSerialRuleTypeEnum";
-import { SerialDateTypeEnum } from "@/api/enums/SerialDateTypeEnum";
-import { SerialSpacerEnum } from "@/api/enums/SerialSpacerEnum";
 
 defineOptions({
 	name: "DevSysSerialEdit",

@@ -138,19 +138,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { ArrowDown, Plus } from "@element-plus/icons-vue";
-import EmployeeEdit from "./edit/index.vue";
-import ResignedEdit from "./edit/resignedEdit.vue";
-import BindAccount from "./edit/bindAccount.vue";
-import AuthEdit from "./edit/authEdit.vue";
-import type { FastTableInstance } from "@/components";
-import { employeeApi } from "@/api/services/Admin/employee";
-import { QueryEmployeePagedOutput } from "@/api/services/Admin/employee/models/QueryEmployeePagedOutput";
 import { dateUtil } from "@fast-china/utils";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { ref } from "vue";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EmployeeStatusEnum } from "@/api/enums/EmployeeStatusEnum";
+import { employeeApi } from "@/api/services/Admin/employee";
+import { QueryEmployeePagedOutput } from "@/api/services/Admin/employee/models/QueryEmployeePagedOutput";
+import AuthEdit from "./edit/authEdit.vue";
+import BindAccount from "./edit/bindAccount.vue";
+import EmployeeEdit from "./edit/index.vue";
+import ResignedEdit from "./edit/resignedEdit.vue";
+import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemEmployee",
@@ -167,7 +167,7 @@ const handleChangeStatus = (row: QueryEmployeePagedOutput, status: EmployeeStatu
 	const { employeeId, rowVersion } = row;
 	ElMessageBox.confirm(`确定修改职员状态？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await employeeApi.changeStatus({
 				employeeId,
 				status,
@@ -184,7 +184,7 @@ const handleChangeAccountStatus = (row: QueryEmployeePagedOutput) => {
 	const { employeeId, accountStatus, rowVersion } = row;
 	ElMessageBox.confirm(`确定${accountStatus === CommonStatusEnum.Enable ? "禁用" : "启用"}登录账号？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await employeeApi.changeLoginStatus({
 				employeeId,
 				rowVersion,

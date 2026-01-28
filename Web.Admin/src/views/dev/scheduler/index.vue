@@ -243,17 +243,17 @@
 </template>
 
 <script lang="ts" setup>
-import { onActivated, onDeactivated, onMounted, onUnmounted, reactive, ref } from "vue";
-import { ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
-import SchedulerEdit from "./edit/index.vue";
-import type { QuerySchedulerDetailOutput } from "@/api/services/Scheduler/models/QuerySchedulerDetailOutput";
-import type { SchedulerJobInfoDto } from "@/api/services/Scheduler/models/SchedulerJobInfoDto";
+import { ElMessage, ElMessageBox, dayjs } from "element-plus";
+import { onActivated, onDeactivated, onMounted, onUnmounted, reactive, ref } from "vue";
 import { SchedulerJobGroupEnum } from "@/api/enums/Scheduler/SchedulerJobGroupEnum";
 import { TriggerState } from "@/api/enums/Scheduler/TriggerState";
 import { schedulerApi } from "@/api/services/Scheduler";
 import { useApp } from "@/stores";
+import SchedulerEdit from "./edit/index.vue";
+import type { QuerySchedulerDetailOutput } from "@/api/services/Scheduler/models/QuerySchedulerDetailOutput";
+import type { SchedulerJobInfoDto } from "@/api/services/Scheduler/models/SchedulerJobInfoDto";
 
 defineOptions({
 	name: "DevScheduler",
@@ -336,7 +336,7 @@ const handleJobGroupChange = (value: SchedulerJobGroupEnum) => {
 const handleStart = () => {
 	ElMessageBox.confirm(`确定要启动【${state.schedulerDetail.schedulerName}】？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await schedulerApi.startScheduler(state.tenantId);
 			ElMessage.success("启动成功！");
 			state.schedulerDetail.schedulerInStandbyMode = false;
@@ -348,7 +348,7 @@ const handleStart = () => {
 const handleStop = () => {
 	ElMessageBox.confirm(`确定要待机【${state.schedulerDetail.schedulerName}】？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await schedulerApi.stopScheduler(state.tenantId);
 			ElMessage.success("待机成功！");
 			state.schedulerDetail.schedulerInStandbyMode = true;
@@ -367,7 +367,7 @@ const handleShowException = (row: SchedulerJobInfoDto) => {
 const handleDelException = async (row: SchedulerJobInfoDto) => {
 	ElMessageBox.confirm(`确定要删除【${row.jobName}】的异常信息？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await schedulerApi.deleteSchedulerJobException(state.tenantId, {
 				jobName: row.jobName,
 				jobGroup: state.activeJobGroup,
@@ -398,7 +398,7 @@ const handleLogs = async (row: SchedulerJobInfoDto) => {
 const handleStopJob = async (row: SchedulerJobInfoDto) => {
 	ElMessageBox.confirm(`确定要暂停【${row.jobName}】？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await schedulerApi.stopSchedulerJob(state.tenantId, {
 				jobName: row.jobName,
 				jobGroup: state.activeJobGroup,
@@ -413,7 +413,7 @@ const handleStopJob = async (row: SchedulerJobInfoDto) => {
 const handleResumeJob = async (row: SchedulerJobInfoDto) => {
 	ElMessageBox.confirm(`确定要恢复【${row.jobName}】？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await schedulerApi.resumeSchedulerJob(state.tenantId, {
 				jobName: row.jobName,
 				jobGroup: state.activeJobGroup,
@@ -428,7 +428,7 @@ const handleResumeJob = async (row: SchedulerJobInfoDto) => {
 const handleTriggerJob = async (row: SchedulerJobInfoDto) => {
 	ElMessageBox.confirm(`确定要立即执行【${row.jobName}】？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await schedulerApi.triggerSchedulerJob(state.tenantId, {
 				jobName: row.jobName,
 				jobGroup: state.activeJobGroup,
@@ -443,7 +443,7 @@ const handleTriggerJob = async (row: SchedulerJobInfoDto) => {
 const handleDelJob = async (row: SchedulerJobInfoDto) => {
 	ElMessageBox.confirm(`确定要删除【${row.jobName}】？`, {
 		type: "warning",
-		async beforeClose(action, instance, done) {
+		async beforeClose() {
 			await schedulerApi.deleteSchedulerJob(state.tenantId, {
 				jobName: row.jobName,
 				jobGroup: state.activeJobGroup,

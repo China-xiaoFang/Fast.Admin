@@ -49,15 +49,15 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { EditApplicationInput } from "@/api/services/Center/application/models/EditApplicationInput";
-import { AddApplicationInput } from "@/api/services/Center/application/models/AddApplicationInput";
-import { applicationApi } from "@/api/services/Center/application";
+import { ElMessage, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
 import { EditionEnum } from "@/api/enums/EditionEnum";
+import { applicationApi } from "@/api/services/Center/application";
+import { AddApplicationInput } from "@/api/services/Center/application/models/AddApplicationInput";
+import { EditApplicationInput } from "@/api/services/Center/application/models/EditApplicationInput";
 import { fileApi } from "@/api/services/File";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "SystemApplicationEdit",

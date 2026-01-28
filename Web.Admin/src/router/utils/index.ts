@@ -1,13 +1,13 @@
-import { ElNotification } from "element-plus";
 import { consoleError, stringUtil } from "@fast-china/utils";
+import { ElNotification } from "element-plus";
 import { cloneDeep, pick } from "lodash";
 import { NavigationFailureType, isNavigationFailure } from "vue-router";
-import { layoutRoute } from "../modules/layoutRoute";
-import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
-import type { NavigationFailure, RouteLocationNormalized, RouteLocationRaw, RouteRecordRaw, Router } from "vue-router";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import router from "@/router";
 import { useUserInfo } from "@/stores";
+import { layoutRoute } from "../modules/layoutRoute";
+import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
+import type { NavigationFailure, RouteLocationNormalized, RouteLocationRaw, RouteRecordRaw, Router } from "vue-router";
 
 const modules = import.meta.glob("/src/views/**/*.vue");
 
