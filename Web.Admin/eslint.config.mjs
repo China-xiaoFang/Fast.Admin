@@ -16,7 +16,7 @@ export default defineConfig(
 		},
 	},
 	{
-		name: "@fast-china/typescript/md/js",
+		name: "@fast-china/typescript/components",
 		files: ["src/components/**"],
 		rules: {
 			// 允许定义未使用的变量
