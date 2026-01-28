@@ -30,7 +30,7 @@ namespace Fast.Admin.Service.Serial;
 /// <summary>
 /// <see cref="SerialService"/> 序号规则服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "serial")]
+[ApiDescriptionSettings(ApiGroupConst.Admin, Name = "serial")]
 public class SerialService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<SerialRuleModel> _repository;
