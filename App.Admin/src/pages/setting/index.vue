@@ -32,9 +32,9 @@
 
 <script setup lang="ts">
 import { onShow } from "@dcloudio/uni-app";
-import { computed, ref } from "vue";
 import { clickUtil } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
+import { computed, ref } from "vue";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { CommonRoute } from "@/common";
 import { useMessageBox, useToast } from "@/hooks";

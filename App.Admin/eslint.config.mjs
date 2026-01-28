@@ -1,8 +1,8 @@
-import fastChinaFlat from "@fast-china/eslint-config/flat";
+import fastChina from "@fast-china/eslint-config";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig(
-	...fastChinaFlat,
+	...fastChina,
 	{
 		name: "fast/uni-app/vue",
 		languageOptions: {
@@ -34,5 +34,21 @@ export default defineConfig(
 	{
 		name: "fast/ignores",
 		ignores: ["src/api"],
+	},
+	{
+		name: "@fast-china/typescript/components",
+		files: ["src/components/**"],
+		rules: {
+			// 允许定义未使用的变量
+			"no-unused-vars": "off",
+		},
+	},
+	{
+		name: "@fast-china/json/pages",
+		files: ["**/src/pages.json"],
+		rules: {
+			// 允许注释
+			"jsonc/no-comments": "off",
+		},
 	}
 );

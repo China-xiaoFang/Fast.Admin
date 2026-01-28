@@ -2,10 +2,10 @@ import { axiosUtil } from "@fast-china/axios";
 import { QuerySchedulerDetailOutput } from "./models/QuerySchedulerDetailOutput";
 import { SchedulerJobKeyInput } from "./models/SchedulerJobKeyInput";
 import { QueryAllSchedulerJobOutput } from "./models/QueryAllSchedulerJobOutput";
-import { SchedulerJobGroupEnum } from "@/api/enums/SchedulerJobGroupEnum";
+import { SchedulerJobGroupEnum } from "@/api/enums/Scheduler/SchedulerJobGroupEnum";
 import { SchedulerJobInfo } from "./models/SchedulerJobInfo";
 import { AddSchedulerJobInput } from "./models/AddSchedulerJobInput";
-import { UpdateSchedulerJobInput } from "./models/UpdateSchedulerJobInput";
+import { EditSchedulerJobInput } from "./models/EditSchedulerJobInput";
 
 /**
  * Fast.Scheduler.Applications.SchedulerApplication 调度作业Api
@@ -175,7 +175,7 @@ export const schedulerApi = {
   /**
    * 编辑调度作业
    */
-  editSchedulerJob(data: UpdateSchedulerJobInput) {
+  editSchedulerJob(data: EditSchedulerJobInput) {
     return axiosUtil.request({
       url: "/scheduler/editSchedulerJob",
       method: "post",

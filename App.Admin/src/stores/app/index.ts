@@ -1,15 +1,15 @@
-import { reactive, ref, toRefs } from "vue";
 import { useFastAxios } from "@fast-china/axios";
 import { Local, consoleError, consoleLog, useIdentity } from "@fast-china/utils";
 import { defineStore } from "pinia";
-import { useConfig } from "../config";
-import type { LaunchOutput } from "@/api/services/app/models/LaunchOutput";
+import { reactive, ref, toRefs } from "vue";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
-import { appApi } from "@/api/services/app";
-import { dictionaryApi } from "@/api/services/dictionary";
+import { appApi } from "@/api/services/Center/app";
+import { dictionaryApi } from "@/api/services/Center/dictionary";
 import { useToast } from "@/hooks";
+import { useConfig } from "../config";
+import type { LaunchOutput } from "@/api/services/Center/app/models/LaunchOutput";
 
 export type ILoginComponent = "ClassicLogin";
 

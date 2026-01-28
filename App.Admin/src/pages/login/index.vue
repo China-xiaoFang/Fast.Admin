@@ -82,19 +82,19 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from "vue";
 import { clickUtil, consoleLog, cryptoUtil, withDefineType } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
+import { reactive, ref } from "vue";
 import { useMessage } from "wot-design-uni";
-import type { LoginOutput } from "@/api/services/login/models/LoginOutput";
-import type { FaPopupInstance } from "@/components";
-import type { FormInstance, FormRules } from "wot-design-uni/components/wd-form/types";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
-import { loginApi } from "@/api/services/login";
+import { loginApi } from "@/api/services/Auth/login";
 import { CommonRoute } from "@/common";
 import { useMessageBox, useToast } from "@/hooks";
 import defaultLogo from "@/static/logo.png";
 import { useApp, useUserInfo } from "@/stores";
+import type { LoginOutput } from "@/api/services/Auth/login/models/LoginOutput";
+import type { FaPopupInstance } from "@/components";
+import type { FormInstance, FormRules } from "wot-design-uni/components/wd-form/types";
 
 definePage({
 	name: "Login",

@@ -1,4 +1,4 @@
-import { SchedulerJobGroupEnum } from "@/api/enums/SchedulerJobGroupEnum";
+import { SchedulerJobGroupEnum } from "@/api/enums/Scheduler/SchedulerJobGroupEnum";
 import { SchedulerJobInfoDto } from "./SchedulerJobInfoDto";
 
 /**
