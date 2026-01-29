@@ -26,13 +26,12 @@ using Microsoft.AspNetCore.Http;
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="PayRecordModel"/> 支付记录表Model类
+/// <see cref="RefundRecordModel"/> 退款记录表Model类
 /// </summary>
-[SugarTable("PayRecord", "支付记录表")]
+[SugarTable("RefundRecord", "退款记录表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(BizOrderNo)}", nameof(BizOrderId), OrderByType.Desc, nameof(BizOrderNo), OrderByType.Desc,
-    true)]
-public class PayRecordModel : IUpdateVersion
+[SugarIndex($"IX_{{table}}_{nameof(BizOrderNo)}", nameof(BizOrderId), OrderByType.Desc, nameof(BizOrderNo), OrderByType.Desc)]
+public class RefundRecordModel : IUpdateVersion
 {
     /// <summary>
     /// 记录Id
@@ -47,9 +46,9 @@ public class PayRecordModel : IUpdateVersion
     public string AppOpenId { get; set; }
 
     /// <summary>
-    /// 收款商户号
+    /// 退款商户号
     /// </summary>
-    [SugarColumn(ColumnDescription = "收款商户号", Length = 32)]
+    [SugarColumn(ColumnDescription = "退款商户号", Length = 32)]
     public string MerchantNo { get; set; }
 
     /// <summary>
@@ -105,34 +104,16 @@ public class PayRecordModel : IUpdateVersion
     public string NotifyUrl { get; set; }
 
     /// <summary>
-    /// 是否已支付
+    /// 是否已退款
     /// </summary>
-    [SugarColumn(ColumnDescription = "是否已支付")]
-    public bool IsPaid { get; set; }
+    [SugarColumn(ColumnDescription = "是否已退款")]
+    public bool IsRefunded { get; set; }
 
     /// <summary>
-    /// 支付过期时间
+    /// 退款金额
     /// </summary>
-    [SugarColumn(ColumnDescription = "支付订单过期时间")]
-    public DateTime PayExpireTime { get; set; }
-
-    /// <summary>
-    /// 是否已关闭
-    /// </summary>
-    [SugarColumn(ColumnDescription = "是否已关闭")]
-    public bool IsClosed { get; set; }
-
-    /// <summary>
-    /// 关闭时间
-    /// </summary>
-    [SugarColumn(ColumnDescription = "关闭时间")]
-    public DateTime? CloseTime { get; set; }
-
-    /// <summary>
-    /// 支付金额
-    /// </summary>
-    [SugarColumn(ColumnDescription = "支付金额", Length = 18, DecimalDigits = 2)]
-    public decimal? PaymentAmount { get; set; }
+    [SugarColumn(ColumnDescription = "退款金额", Length = 18, DecimalDigits = 2)]
+    public decimal? RefundAmount { get; set; }
 
     /// <summary>
     /// 交易流水号
@@ -141,10 +122,16 @@ public class PayRecordModel : IUpdateVersion
     public string TransactionId { get; set; }
 
     /// <summary>
-    /// 支付时间
+    /// 退款时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "支付时间")]
-    public DateTime? PaymentTime { get; set; }
+    [SugarColumn(ColumnDescription = "退款时间")]
+    public DateTime? RefundTime { get; set; }
+
+    /// <summary>
+    /// 退款状态
+    /// </summary>
+    [SugarColumn(ColumnDescription = "退款状态", Length = 10)]
+    public string RefundStatus { get; set; }
 
     /// <summary>
     /// 设备

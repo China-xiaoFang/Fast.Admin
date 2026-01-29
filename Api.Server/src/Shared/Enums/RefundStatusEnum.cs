@@ -20,36 +20,40 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Center.Entity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Fast.Center.Service.PayRecord;
+namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="PayRecordService"/> 支付记录服务
+/// <see cref="RefundStatusEnum"/> 退款状态枚举
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "payRecord")]
-public class PayRecordService : IDynamicApplication
+[Flags]
+[FastEnum("退款状态枚举")]
+public enum RefundStatusEnum : byte
 {
-    private readonly ISqlSugarRepository<PayRecordModel> _repository;
-
-    public PayRecordService(ISqlSugarRepository<PayRecordModel> repository)
-    {
-        _repository = repository;
-    }
+    /// <summary>
+    /// 待审核
+    /// </summary>
+    [TagType(TagTypeEnum.Primary)]
+    [Description("待审核")]
+    PendingReview = 1,
 
     /// <summary>
-    /// 获取支付记录分页列表
+    /// 已拒绝
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    [HttpPost]
-    [ApiInfo("获取支付记录分页列表", HttpRequestActionEnum.Paged)]
-    [Permission(PermissionConst.PayRecordPaged)]
-    public async Task<PagedResult<PayRecordModel>> QueryPayRecordPaged(PagedInput input)
-    {
-        return await _repository.Entities.OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
-            .ToPagedListAsync(input);
-    }
+    [TagType(TagTypeEnum.Warning)]
+    [Description("已拒绝")]
+    Rejected = 2,
+
+    /// <summary>
+    /// 已退款
+    /// </summary>
+    [TagType(TagTypeEnum.Success)]
+    [Description("已退款")]
+    Refunded = 4,
+
+    /// <summary>
+    /// 退款失败
+    /// </summary>
+    [TagType(TagTypeEnum.Warning)]
+    [Description("退款失败")]
+    RefundFailed = 8
 }

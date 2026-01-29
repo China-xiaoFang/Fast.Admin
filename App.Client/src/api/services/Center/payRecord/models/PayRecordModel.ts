@@ -77,14 +77,6 @@ export interface PayRecordModel {
    */
   paymentTime?: Date;
   /**
-   * 退款金额
-   */
-  refundAmount?: number;
-  /**
-   * 退款时间
-   */
-  refundTime?: Date;
-  /**
    * 设备
    */
   device?: string;
