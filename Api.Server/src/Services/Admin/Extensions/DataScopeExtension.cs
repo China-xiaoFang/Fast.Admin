@@ -103,9 +103,9 @@ public static class DataScopeExtension
         }
 
         // 职员Id
-        var employeeId = _user.UserId;
+        long? employeeId = _user.UserId;
         // 部门Id
-        var departmentId = _user.DepartmentId ?? 0;
+        long? departmentId = _user.DepartmentId ?? 0;
 
         // 仅本人数据
         if (_user.DataScopeType == (int) DataScopeTypeEnum.Self)
@@ -145,7 +145,7 @@ public static class DataScopeExtension
         if (_user.DataScopeType == (int) DataScopeTypeEnum.DeptWithChild)
         {
             var dataScopeQueryable = queryable.Context.Queryable<DepartmentModel>()
-                .Where(wh => wh.DepartmentId == departmentId || wh.ParentIds.Contains(departmentId))
+                .Where(wh => wh.DepartmentId == departmentId || wh.ParentIds.Contains((long)departmentId))
                 .Select(sl => new DepartmentModel {DepartmentId = sl.DepartmentId});
             return BuildInnerJoin(queryable, departmentIdFieldSelector, dataScopeQueryable);
         }
