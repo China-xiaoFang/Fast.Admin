@@ -44,16 +44,23 @@ public enum RefundStatusEnum : byte
     Rejected = 2,
 
     /// <summary>
+    /// 退款中
+    /// </summary>
+    [TagType(TagTypeEnum.Info)]
+    [Description("退款中")]
+    Refunding = 4,
+
+    /// <summary>
     /// 已退款
     /// </summary>
     [TagType(TagTypeEnum.Success)]
     [Description("已退款")]
-    Refunded = 4,
+    Refunded = 8,
 
     /// <summary>
     /// 退款失败
     /// </summary>
     [TagType(TagTypeEnum.Warning)]
     [Description("退款失败")]
-    RefundFailed = 8
+    RefundFailed = 16
 }
