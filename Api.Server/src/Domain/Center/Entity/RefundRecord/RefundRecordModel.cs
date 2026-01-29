@@ -111,16 +111,16 @@ public class RefundRecordModel : IUpdateVersion
     public bool IsRefunded { get; set; }
 
     /// <summary>
-    /// 退款金额
-    /// </summary>
-    [SugarColumn(ColumnDescription = "退款金额", Length = 18, DecimalDigits = 2)]
-    public decimal? RefundAmount { get; set; }
-
-    /// <summary>
     /// 交易流水号
     /// </summary>
     [SugarColumn(ColumnDescription = "交易流水号", Length = 128)]
     public string RefundId { get; set; }
+
+    /// <summary>
+    /// 退款金额
+    /// </summary>
+    [SugarColumn(ColumnDescription = "退款金额", Length = 18, DecimalDigits = 2)]
+    public decimal? RefundAmount { get; set; }
 
     /// <summary>
     /// 退款时间
