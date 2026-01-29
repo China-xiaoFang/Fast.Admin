@@ -1,3 +1,6 @@
 import type { DefineComponent } from "vue";
 
-export default [] as unknown as DefineComponent[];
+
+export default [
+
+] as unknown as DefineComponent[];

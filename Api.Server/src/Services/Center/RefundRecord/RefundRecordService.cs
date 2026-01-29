@@ -24,30 +24,30 @@ using Fast.Center.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fast.Center.Service.PayRecord;
+namespace Fast.Center.Service.RefundRecord;
 
 /// <summary>
-/// <see cref="PayRecordService"/> 支付记录服务
+/// <see cref="RefundRecordService"/> 退款记录服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "payRecord")]
-public class PayRecordService : IDynamicApplication
+[ApiDescriptionSettings(ApiGroupConst.Center, Name = "refundRecord")]
+public class RefundRecordService : IDynamicApplication
 {
-    private readonly ISqlSugarRepository<PayRecordModel> _repository;
+    private readonly ISqlSugarRepository<RefundRecordModel> _repository;
 
-    public PayRecordService(ISqlSugarRepository<PayRecordModel> repository)
+    public RefundRecordService(ISqlSugarRepository<RefundRecordModel> repository)
     {
         _repository = repository;
     }
 
     /// <summary>
-    /// 获取支付记录分页列表
+    /// 获取退款记录分页列表
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost]
-    [ApiInfo("获取支付记录分页列表", HttpRequestActionEnum.Paged)]
-    [Permission(PermissionConst.PayRecordPaged)]
-    public async Task<PagedResult<PayRecordModel>> QueryPayRecordPaged(PagedInput input)
+    [ApiInfo("获取退款记录分页列表", HttpRequestActionEnum.Paged)]
+    [Permission(PermissionConst.RefundRecordPaged)]
+    public async Task<PagedResult<RefundRecordModel>> QueryRefundRecordPaged(PagedInput input)
     {
         return await _repository.Entities.OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .ToPagedListAsync(input);

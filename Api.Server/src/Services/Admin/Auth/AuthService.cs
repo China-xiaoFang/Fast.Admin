@@ -170,6 +170,7 @@ public class AuthService : IDynamicApplication
         // 查询所有菜单
         var menuList = await menuQueryable.Clone()
             .InnerJoin(moduleQueryable.Clone(), (t1, t2) => t1.ModuleId == t2.ModuleId)
+            .OrderBy((t1, t2) => t2.Sort)
             .OrderBy(t1 => t1.Sort)
             .Select((t1, t2) => new AuthMenuInfoDto
             {

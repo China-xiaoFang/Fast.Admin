@@ -55,6 +55,7 @@ internal static partial class MenuSeedData
             _menuSort++;
             return _menuSort;
         }
+        set => _menuSort = 0;
     }
 
     /// <summary>

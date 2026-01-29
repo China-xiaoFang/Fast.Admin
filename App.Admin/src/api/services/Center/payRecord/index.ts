@@ -8,9 +8,9 @@ export const payRecordApi = {
   /**
    * 获取支付记录分页列表
    */
-  queryPasswordMapPaged(data: PagedInput) {
+  queryPayRecordPaged(data: PagedInput) {
     return axiosUtil.request<PagedResult<PayRecordModel>>({
-      url: "/payRecord/queryPasswordMapPaged",
+      url: "/payRecord/queryPayRecordPaged",
       method: "post",
       data,
       requestType: "query",

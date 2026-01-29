@@ -1,9 +1,9 @@
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 
 /**
- * Fast.Center.Entity.PayRecordModel 支付记录表Model类
+ * Fast.Center.Entity.RefundRecordModel 退款记录表Model类
  */
-export interface PayRecordModel {
+export interface RefundRecordModel {
   /**
    * 记录Id
    */
@@ -13,7 +13,7 @@ export interface PayRecordModel {
    */
   appOpenId?: string;
   /**
-   * 收款商户号
+   * 退款商户号
    */
   merchantNo?: string;
   /**
@@ -49,33 +49,25 @@ export interface PayRecordModel {
    */
   notifyUrl?: string;
   /**
-   * 是否已支付
+   * 是否已退款
    */
-  isPaid?: boolean;
+  isRefunded?: boolean;
   /**
-   * 支付过期时间
+   * 退款金额
    */
-  payExpireTime?: Date;
-  /**
-   * 是否已关闭
-   */
-  isClosed?: boolean;
-  /**
-   * 关闭时间
-   */
-  closeTime?: Date;
-  /**
-   * 支付金额
-   */
-  paymentAmount?: number;
+  refundAmount?: number;
   /**
    * 交易流水号
    */
   transactionId?: string;
   /**
-   * 支付时间
+   * 退款时间
    */
-  paymentTime?: Date;
+  refundTime?: Date;
+  /**
+   * 退款状态
+   */
+  refundStatus?: string;
   /**
    * 设备
    */

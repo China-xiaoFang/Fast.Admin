@@ -427,6 +427,9 @@ public partial class PermissionConst
     /// <summary>支付记录列表</summary>
     public const string PayRecordPaged = "PayRecord:Paged";
 
+    /// <summary>退款记录列表</summary>
+    public const string RefundRecordPaged = "RefundRecord:Paged";
+
     /// <summary><see cref="WeChat"/> 微信用户</summary>
     public class WeChat
     {

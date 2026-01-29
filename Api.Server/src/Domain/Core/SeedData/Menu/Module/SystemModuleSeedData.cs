@@ -41,6 +41,9 @@ internal static partial class MenuSeedData
     /// <returns></returns>
     private static async Task SystemModuleSeedData(ISqlSugarClient db, ApplicationModel applicationModel, DateTime dateTime)
     {
+        // 重置菜单排序
+        menuSort = 0;
+
         var systemModuleModel = new ModuleModel
         {
             ModuleId = YitIdHelper.NextId(),
@@ -1742,6 +1745,57 @@ internal static partial class MenuSeedData
                 AppId = applicationModel.AppId,
                 MenuId = payRecordMenuModel.MenuId,
                 ButtonCode = PermissionConst.PayRecordPaged,
+                ButtonName = "列表",
+                HasDesktop = true,
+                HasWeb = true,
+                HasMobile = true,
+                Sort = 1,
+                Status = CommonStatusEnum.Enable,
+                CreatedTime = dateTime
+            })
+            .ExecuteCommandAsync();
+
+        #endregion
+
+        #region 退款记录
+
+        var refundRecordMenuModel = new MenuModel
+        {
+            MenuId = YitIdHelper.NextId(),
+            Edition = EditionEnum.Professional,
+            AppId = applicationModel.AppId,
+            ModuleId = systemModuleModel.ModuleId,
+            MenuCode = PermissionConst.RefundRecordPaged,
+            MenuName = "退款记录",
+            MenuTitle = "退款记录",
+            ParentId = financeCLMenuModel.MenuId,
+            ParentIds = [0, financeCLMenuModel.MenuId],
+            MenuType = MenuTypeEnum.Menu,
+            HasDesktop = true,
+            DesktopIcon = "lock",
+            HasWeb = true,
+            WebIcon = null,
+            WebRouter = "/system/refundRecord",
+            WebComponent = "system/refundRecord/index",
+            WebTab = true,
+            WebKeepAlive = true,
+            HasMobile = true,
+            MobileIcon = "https://image.fastdotnet.com/menu/mobile/passwordMap.png",
+            MobileRouter = "pages_system/refundRecord/page/index",
+            Visible = true,
+            Sort = menuSort,
+            Status = CommonStatusEnum.Enable,
+            CreatedTime = dateTime
+        };
+        refundRecordMenuModel = await db.Insertable(refundRecordMenuModel)
+            .ExecuteReturnEntityAsync();
+        await db.Insertable(new ButtonModel
+            {
+                ButtonId = YitIdHelper.NextId(),
+                Edition = EditionEnum.Professional,
+                AppId = applicationModel.AppId,
+                MenuId = refundRecordMenuModel.MenuId,
+                ButtonCode = PermissionConst.RefundRecordPaged,
                 ButtonName = "列表",
                 HasDesktop = true,
                 HasWeb = true,

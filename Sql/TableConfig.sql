@@ -46,7 +46,7 @@ INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [Depart
 GO
 INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [DepartmentId], [DepartmentName], [CreatedUserId], [CreatedUserName], [CreatedTime], [UpdatedUserId], [UpdatedUserName], [UpdatedTime], [RowVersion]) VALUES (759870210891846, N'1D1KYCMJCP', N'系统应用_财务管理_商户号_分页列表', NULL, NULL, NULL, NULL, N'超级管理员', '2026-01-05 02:51:49.683', 764649112916037, N'超级管理员', '2026-01-27 22:25:55.947', 1);
 GO
-INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [DepartmentId], [DepartmentName], [CreatedUserId], [CreatedUserName], [CreatedTime], [UpdatedUserId], [UpdatedUserName], [UpdatedTime], [RowVersion]) VALUES (759870234234949, N'1D1K9GNFPT', N'系统应用_财务管理_支付记录_分页列表', NULL, NULL, NULL, NULL, N'超级管理员', '2026-01-05 12:49:04.210', 764649112916037, N'超级管理员', '2026-01-27 23:45:38.573', 1);
+INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [DepartmentId], [DepartmentName], [CreatedUserId], [CreatedUserName], [CreatedTime], [UpdatedUserId], [UpdatedUserName], [UpdatedTime], [RowVersion]) VALUES (759870234234949, N'1D1K9GNFPT', N'系统应用_财务管理_支付记录_分页列表', NULL, NULL, NULL, NULL, N'超级管理员', '2026-01-05 12:49:04.210', 768100812918853, N'超级管理员', '2026-01-29 20:43:59.787', 1);
 GO
 INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [DepartmentId], [DepartmentName], [CreatedUserId], [CreatedUserName], [CreatedTime], [UpdatedUserId], [UpdatedUserName], [UpdatedTime], [RowVersion]) VALUES (759870391447622, N'1D1KL4GV24', N'系统应用_平台管理_微信用户_分页列表', NULL, NULL, NULL, NULL, N'超级管理员', '2026-01-05 12:58:11.967', 764649112916037, N'超级管理员', '2026-01-27 22:47:52.183', 1);
 GO
@@ -59,4 +59,6 @@ GO
 INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [DepartmentId], [DepartmentName], [CreatedUserId], [CreatedUserName], [CreatedTime], [UpdatedUserId], [UpdatedUserName], [UpdatedTime], [RowVersion]) VALUES (759870502375494, N'1D1KHQS53T', N'系统应用_日志管理_操作日志_分页列表', NULL, NULL, NULL, NULL, N'超级管理员', '2026-01-06 00:30:43.353', 764649112916037, N'超级管理员', '2026-01-27 23:48:04.937', 1);
 GO
 INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [DepartmentId], [DepartmentName], [CreatedUserId], [CreatedUserName], [CreatedTime], [UpdatedUserId], [UpdatedUserName], [UpdatedTime], [RowVersion]) VALUES (759870522822726, N'1D1KMSURSS', N'系统应用_日志管理_请求日志_分页列表', NULL, NULL, NULL, NULL, N'超级管理员', '2026-01-06 00:37:27.727', 764649112916037, N'超级管理员', '2026-01-27 23:50:12.257', 1);
+GO
+INSERT INTO [TableConfig] ([TableId], [TableKey], [TableName], [Remark], [DepartmentId], [DepartmentName], [CreatedUserId], [CreatedUserName], [CreatedTime], [UpdatedUserId], [UpdatedUserName], [UpdatedTime], [RowVersion]) VALUES (768104096829510, N'FRMY6974MU', N'系统应用_财务管理_退款记录_分页列表', NULL, NULL, NULL, 768100812918853, N'超级管理员', '2026-01-29 20:43:36.297', 768100812918853, N'超级管理员', '2026-01-29 20:45:54.723', 1);
 GO

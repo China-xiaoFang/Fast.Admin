@@ -41,6 +41,9 @@ internal static partial class MenuSeedData
     /// <returns></returns>
     private static async Task DevModuleSeedData(ISqlSugarClient db, ApplicationModel applicationModel, DateTime dateTime)
     {
+        // 重置菜单排序
+        menuSort = 0;
+
         var devModuleModel = new ModuleModel
         {
             ModuleId = YitIdHelper.NextId(),

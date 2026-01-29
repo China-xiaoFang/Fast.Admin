@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable tableKey="1D1K9GNFPT" rowKey="recordId" :requestApi="payRecordApi.queryPasswordMapPaged" stripe>
+		<FastTable tableKey="1D1K9GNFPT" rowKey="recordId" :requestApi="payRecordApi.queryPayRecordPaged" stripe>
 			<template #mobile="{ row }: { row?: PayRecordModel }">
 				<span v-iconCopy="row.mobile">{{ row.mobile }}</span>
 				<br />
@@ -37,18 +37,6 @@
 					<span>时间：{{ dayjs(row.paymentTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 					<el-tag v-if="row.paymentTime" type="info" round effect="light" size="small" class="ml5">
 						{{ dateUtil.dateTimeFix(String(row.paymentTime)) }}
-					</el-tag>
-				</template>
-				<span v-else>--</span>
-			</template>
-
-			<template #refundTime="{ row }: { row?: PayRecordModel }">
-				<template v-if="row.refundTime">
-					<span>金额：￥{{ row.refundAmount.toFixed(2) }}</span>
-					<br />
-					<span>时间：{{ dayjs(row.refundTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
-					<el-tag v-if="row.refundTime" type="info" round effect="light" size="small" class="ml5">
-						{{ dateUtil.dateTimeFix(String(row.refundTime)) }}
 					</el-tag>
 				</template>
 				<span v-else>--</span>
