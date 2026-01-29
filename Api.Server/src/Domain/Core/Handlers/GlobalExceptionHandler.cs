@@ -68,6 +68,10 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
     /// <returns></returns>
     public async Task OnExceptionAsync(ExceptionContext context, bool isUserFriendlyException, bool isValidationException)
     {
+        // 行版本更新异常直接忽略
+        if (context.Exception is VersionExceptions)
+            return;
+
         var httpContext = context.HttpContext;
         var message = new StringBuilder();
 
