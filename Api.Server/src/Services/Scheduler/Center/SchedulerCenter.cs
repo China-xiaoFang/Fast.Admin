@@ -1219,9 +1219,10 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
         // 获取选项
         var options = _serviceProvider.GetService<IOptions<QuartzOptions>>();
 
-        // 获取数据表前缀
+        // 获取数据表前缀，这里可能不存在，不存在默认是 [QRTZ_]
         var tablePrefix =
-            options.Value[$"{StdSchedulerFactory.PropertyJobStorePrefix}.{StdSchedulerFactory.PropertyTablePrefix}"];
+            options.Value.GetValueOrDefault(
+                $"{StdSchedulerFactory.PropertyJobStorePrefix}.{StdSchedulerFactory.PropertyTablePrefix}", "QRTZ_");
 
         var querySql = $"""
                         SELECT
