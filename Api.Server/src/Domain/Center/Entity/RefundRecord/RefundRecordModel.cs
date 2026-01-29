@@ -120,7 +120,7 @@ public class RefundRecordModel : IUpdateVersion
     /// 交易流水号
     /// </summary>
     [SugarColumn(ColumnDescription = "交易流水号", Length = 128)]
-    public string TransactionId { get; set; }
+    public string RefundId { get; set; }
 
     /// <summary>
     /// 退款时间
