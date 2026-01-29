@@ -53,7 +53,7 @@ public enum RefundStatusEnum : byte
     /// <summary>
     /// 已退款
     /// </summary>
-    [TagType(TagTypeEnum.Success)]
+    [TagType(TagTypeEnum.Danger)]
     [Description("已退款")]
     Refunded = 8,
 
@@ -67,7 +67,7 @@ public enum RefundStatusEnum : byte
     /// <summary>
     /// 退款失败
     /// </summary>
-    [TagType(TagTypeEnum.Danger)]
+    [TagType(TagTypeEnum.Info)]
     [Description("退款失败")]
     RefundFailed = 32
 }
