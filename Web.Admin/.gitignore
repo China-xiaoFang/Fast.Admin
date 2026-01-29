@@ -16,3 +16,9 @@ build/
 
 # Version files
 public/version.json
+
+# Type files
+types/components.d.ts
+
+# Router files
+src/router/index.json
