@@ -92,7 +92,6 @@ public class DatabaseService : IDynamicApplication
     /// </summary>
     /// <param name="mainId"></param>
     /// <returns></returns>
-    /// <exception cref="UserFriendlyException"></exception>
     [HttpGet]
     [ApiInfo("获取数据库详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Database.Detail)]
