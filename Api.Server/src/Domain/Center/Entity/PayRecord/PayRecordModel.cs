@@ -32,6 +32,7 @@ namespace Fast.Center.Entity;
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(BizOrderNo)}", nameof(BizOrderId), OrderByType.Desc, nameof(BizOrderNo), OrderByType.Desc,
     true)]
+[SugarIndex($"IX_{{table}}_{nameof(TransactionId)}", nameof(TransactionId), OrderByType.Desc)]
 public class PayRecordModel : IUpdateVersion
 {
     /// <summary>

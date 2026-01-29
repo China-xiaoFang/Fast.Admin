@@ -31,6 +31,7 @@ namespace Fast.Center.Entity;
 [SugarTable("RefundRecord", "退款记录表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(BizOrderNo)}", nameof(BizOrderId), OrderByType.Desc, nameof(BizOrderNo), OrderByType.Desc)]
+[SugarIndex($"IX_{{table}}_{nameof(TransactionId)}", nameof(TransactionId), OrderByType.Desc)]
 public class RefundRecordModel : IUpdateVersion
 {
     /// <summary>
