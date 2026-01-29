@@ -53,13 +53,13 @@ export interface RefundRecordModel {
    */
   isRefunded?: boolean;
   /**
+   * 交易流水号
+   */
+  refundId?: string;
+  /**
    * 退款金额
    */
   refundAmount?: number;
-  /**
-   * 交易流水号
-   */
-  transactionId?: string;
   /**
    * 退款时间
    */
