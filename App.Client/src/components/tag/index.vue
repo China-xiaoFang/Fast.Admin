@@ -66,5 +66,5 @@ const dictionaries = computed(() => (props.name ? appStore.getDictionary(props.n
 /** 字典值 */
 const dictionary = computed(() => (isNil(props.value) ? null : dictionaries.value.find((f) => f.value === props.value)));
 
-const type = computed(() => (dictionary?.value.type === "info" ? "default" : dictionary?.value.type));
+const type = computed(() => (dictionary?.value?.type === "info" ? "default" : dictionary?.value?.type));
 </script>
