@@ -23,7 +23,6 @@
 using System.Text;
 using Fast.Center.Entity;
 using Fast.Center.Enum;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -1219,10 +1218,10 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
         // 获取选项
         var options = _serviceProvider.GetService<IOptions<QuartzOptions>>();
 
-        // 获取数据表前缀，这里可能不存在，不存在默认是 [QRTZ_]
-        var tablePrefix =
-            options.Value.GetValueOrDefault(
-                $"{StdSchedulerFactory.PropertyJobStorePrefix}.{StdSchedulerFactory.PropertyTablePrefix}", "QRTZ_");
+        // 获取数据表前缀
+        var tablePrefix = options.Value.GetValueOrDefault(
+            $"{StdSchedulerFactory.PropertyJobStorePrefix}.{StdSchedulerFactory.PropertyTablePrefix}",
+            AdoConstants.DefaultTablePrefix);
 
         var querySql = $"""
                         SELECT
@@ -1261,7 +1260,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                              """;
 
             // 执行更新
-            await db.Ado.ExecuteCommandAsync(updateSql, new SqlParameter("@JobData", Encoding.UTF8.GetBytes(jobData.ToString())));
+            await db.Ado.ExecuteCommandAsync(updateSql, new {JobData = Encoding.UTF8.GetBytes(jobData.ToString())});
         }
     }
 }
