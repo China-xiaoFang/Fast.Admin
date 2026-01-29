@@ -103,16 +103,17 @@ public static class DataScopeExtension
         }
 
         // 职员Id
-        long? employeeId = _user.UserId;
+        var employeeId = _user.UserId;
         // 部门Id
-        long? departmentId = _user.DepartmentId ?? 0;
+        var departmentId = _user.DepartmentId ?? 0;
 
         // 仅本人数据
         if (_user.DataScopeType == (int) DataScopeTypeEnum.Self)
         {
             var parameter = userIdFieldSelector.Parameters[0];
             var unaryOperand = userIdFieldSelector.Body is UnaryExpression unary ? unary.Operand : userIdFieldSelector.Body;
-            var equal = Expression.Equal(Expression.Convert(unaryOperand, typeof(long?)), Expression.Constant(employeeId));
+            var equal = Expression.Equal(Expression.Convert(unaryOperand, typeof(long?)),
+                Expression.Constant(employeeId, typeof(long?)));
             return queryable.Where(Expression.Lambda<Func<TEntity, bool>>(equal, parameter));
         }
 
@@ -123,7 +124,8 @@ public static class DataScopeExtension
             var unaryOperand = departmentIdFieldSelector.Body is UnaryExpression unary
                 ? unary.Operand
                 : departmentIdFieldSelector.Body;
-            var equal = Expression.Equal(Expression.Convert(unaryOperand, typeof(long?)), Expression.Constant(departmentId));
+            var equal = Expression.Equal(Expression.Convert(unaryOperand, typeof(long?)),
+                Expression.Constant(departmentId, typeof(long?)));
             return queryable.Where(Expression.Lambda<Func<TEntity, bool>>(equal, parameter));
         }
 
@@ -145,7 +147,7 @@ public static class DataScopeExtension
         if (_user.DataScopeType == (int) DataScopeTypeEnum.DeptWithChild)
         {
             var dataScopeQueryable = queryable.Context.Queryable<DepartmentModel>()
-                .Where(wh => wh.DepartmentId == departmentId || wh.ParentIds.Contains((long) departmentId))
+                .Where(wh => wh.DepartmentId == departmentId || wh.ParentIds.Contains(departmentId))
                 .Select(sl => new DepartmentModel {DepartmentId = sl.DepartmentId});
             return BuildInnerJoin(queryable, departmentIdFieldSelector, dataScopeQueryable);
         }
