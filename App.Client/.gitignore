@@ -20,3 +20,6 @@ public/version.json
 # Type files
 types/components.d.ts
 types/pages.d.ts
+
+# Pages files
+src/pages.json
