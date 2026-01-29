@@ -523,7 +523,6 @@ public class LoginService : IDynamicApplication
     /// <param name="applicationModel"></param>
     /// <param name="weChatUserModel"></param>
     /// <returns></returns>
-    /// <exception cref="UserFriendlyException"></exception>
     private async Task<LoginOutput> HandleWeChatLogin(ApplicationModel applicationModel, WeChatUserModel weChatUserModel)
     {
         var dateTime = DateTime.Now;
