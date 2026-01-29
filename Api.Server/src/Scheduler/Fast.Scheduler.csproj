@@ -10,6 +10,8 @@
 
     <ItemGroup>
         <ProjectReference Include="$(SolutionDir)src\Services\Scheduler\Fast.Scheduler.Service.csproj" />
+        <ProjectReference Include="$(SolutionDir)src\Domain\Admin\Entity\Fast.Admin.Entity.csproj" />
+        <ProjectReference Include="$(SolutionDir)src\Domain\AdminLog\Entity\Fast.AdminLog.Entity.csproj" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
