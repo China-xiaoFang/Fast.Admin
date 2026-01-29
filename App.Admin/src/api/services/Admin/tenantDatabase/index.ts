@@ -13,7 +13,7 @@ export const tenantDatabaseApi = {
       url: "/tenantDatabase/initDatabase",
       method: "post",
       data,
-      requestType: "other",
+      requestType: "submit",
     });
   },
 };
