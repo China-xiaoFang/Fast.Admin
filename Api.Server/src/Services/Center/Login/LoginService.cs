@@ -427,7 +427,7 @@ public class LoginService : IDynamicApplication
     /// <returns></returns>
     [HttpGet("/queryLoginUserByAccount")]
     [ApiInfo("获取登录用户根据账号", HttpRequestActionEnum.Query)]
-    [AllowAnonymous]
+    [AllowAnonymous, DisabledRequestLog]
     public async Task<List<LoginTenantOutput>> QueryLoginUserByAccount([Required(ErrorMessage = "账号Key不能为空")] string accountKey)
     {
         return await _repository.Queryable<AccountModel>()
