@@ -170,9 +170,6 @@ import { sqlDiffLogApi } from "@/api/services/Center/sqlDiffLog";
 import { SqlDiffLogModel } from "@/api/services/Center/sqlDiffLog/models/SqlDiffLogModel";
 import { FastTableInstance } from "@/components";
 import { useConfig, useUserInfo } from "@/stores";
-if (import.meta.env.DEV) {
-	await import("vue-json-pretty/lib/styles.css");
-}
 
 defineOptions({
 	name: "DevSqlDiffLog",

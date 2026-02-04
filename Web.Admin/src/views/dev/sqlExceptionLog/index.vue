@@ -127,9 +127,6 @@ import VueJsonPretty from "vue-json-pretty";
 import { sqlExceptionLogApi } from "@/api/services/Center/sqlExceptionLog";
 import { SqlExceptionLogModel } from "@/api/services/Center/sqlExceptionLog/models/SqlExceptionLogModel";
 import { useConfig } from "@/stores";
-if (import.meta.env.DEV) {
-	await import("vue-json-pretty/lib/styles.css");
-}
 
 const configStore = useConfig();
 

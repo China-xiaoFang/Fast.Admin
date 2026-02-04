@@ -100,9 +100,6 @@ import { requestLogApi } from "@/api/services/Center/requestLog";
 import { RequestLogModel } from "@/api/services/Center/requestLog/models/RequestLogModel";
 import { FastTableInstance } from "@/components";
 import { useConfig, useUserInfo } from "@/stores";
-if (import.meta.env.DEV) {
-	await import("vue-json-pretty/lib/styles.css");
-}
 
 defineOptions({
 	name: "SystemRequestLog",
