@@ -118,11 +118,6 @@ public interface IUser
     /// </summary>
     string TenantCode { get; set; }
 
-    /// <summary>
-    /// 租户LogoUrl
-    /// </summary>
-    string LogoUrl { get; set; }
-
     #endregion
 
     /// <summary>
