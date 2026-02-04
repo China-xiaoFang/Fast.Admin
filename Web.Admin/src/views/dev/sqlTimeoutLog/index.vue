@@ -109,9 +109,6 @@ import VueJsonPretty from "vue-json-pretty";
 import { sqlTimeoutLogApi } from "@/api/services/Center/sqlTimeoutLog";
 import { SqlTimeoutLogModel } from "@/api/services/Center/sqlTimeoutLog/models/SqlTimeoutLogModel";
 import { useConfig } from "@/stores";
-if (import.meta.env.DEV) {
-	await import("vue-json-pretty/lib/styles.css");
-}
 
 defineOptions({
 	name: "DevSqlTimeoutLog",

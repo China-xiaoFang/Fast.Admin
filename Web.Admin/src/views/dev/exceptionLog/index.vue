@@ -91,9 +91,6 @@ import VueJsonPretty from "vue-json-pretty";
 import { exceptionLogApi } from "@/api/services/Center/exceptionLog";
 import { ExceptionLogModel } from "@/api/services/Center/exceptionLog/models/ExceptionLogModel";
 import { useConfig } from "@/stores";
-if (import.meta.env.DEV) {
-	await import("vue-json-pretty/lib/styles.css");
-}
 
 defineOptions({
 	name: "DevExceptionLog",
