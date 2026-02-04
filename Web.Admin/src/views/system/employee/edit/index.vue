@@ -406,7 +406,7 @@ const detail = (employeeId: number) => {
 };
 
 const add = () => {
-	faDialogRef.value.open(() => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加职员";
 		state.formDisabled = false;
@@ -415,6 +415,7 @@ const add = () => {
 			sex: GenderEnum.Unknown,
 			entryDate: new Date(),
 		};
+		state.roleList = await roleApi.roleSelector();
 	});
 };
 
