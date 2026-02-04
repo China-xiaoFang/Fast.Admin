@@ -1,6 +1,7 @@
 import { reactive, ref, toRefs } from "vue";
 import { Local, base64Util, consoleError } from "@fast-china/utils";
 import { defineStore } from "pinia";
+import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { authApi } from "@/api/services/Auth/auth";
 import { loginApi } from "@/api/services/Auth/login";
@@ -29,22 +30,28 @@ export const useUserInfo = defineStore(
 			token: "",
 			refreshToken: "",
 			activeTabBar: CommonRoute.Workbench,
+			accountId: undefined,
 			accountKey: "",
 			mobile: "",
 			nickName: "",
 			avatar: "",
 			tenantNo: "",
 			tenantName: "",
+			shortName: "",
+			tenantCode: "",
+			logoUrl: "",
+			userId: undefined,
 			userKey: "",
 			account: "",
 			employeeNo: "",
 			employeeName: "",
-			departmentId: 0,
+			departmentId: null,
 			departmentName: "",
 			isSuperAdmin: false,
 			isAdmin: false,
 			roleNameList: [],
 			buttonCodeList: [],
+			dataScopeType: DataScopeTypeEnum.All,
 			menuList: [],
 		});
 
