@@ -296,6 +296,16 @@ public class EmployeeService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
+        var roleIds = input.RoleList.Select(sl => sl.RoleId)
+            .ToList();
+        var roleList = await _repository.Queryable<RoleModel>()
+            .Where(wh => roleIds.Contains(wh.RoleId))
+            .ToListAsync();
+        if (roleList.Count != roleIds.Count)
+        {
+            throw new UserFriendlyException("数据不存在！");
+        }
+
         var employeeModel = new EmployeeModel
         {
             EmployeeId = YitIdHelper.NextId(),
@@ -348,6 +358,16 @@ public class EmployeeService : IDynamicApplication
             IsPrincipal = input.IsPrincipal
         };
 
+        var employeeRoleList = new List<EmployeeRoleModel>();
+        foreach (var item in input.RoleList)
+        {
+            var roleModel = roleList.Single(s => s.RoleId == item.RoleId);
+            employeeRoleList.Add(new EmployeeRoleModel
+            {
+                EmployeeId = employeeModel.EmployeeId, RoleId = roleModel.RoleId, RoleName = roleModel.RoleName
+            });
+        }
+
         var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
 
         await _repository.Ado.UseTranAsync(async () =>
@@ -355,7 +375,15 @@ public class EmployeeService : IDynamicApplication
             var employeeNo = SerialContext.GenEmployeeNo(_repository, tenantModel.TenantCode);
             employeeModel.EmployeeNo = employeeNo;
             await _repository.InsertAsync(employeeModel);
+
             await _repository.Insertable(employeeOrgModel)
+                .ExecuteCommandAsync();
+
+            // 删除旧的角色数据
+            await _repository.Deleteable<EmployeeRoleModel>()
+                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
+                .ExecuteCommandAsync();
+            await _repository.Insertable(employeeRoleList)
                 .ExecuteCommandAsync();
         }, ex => throw ex);
 
