@@ -86,7 +86,7 @@ public class ProgramApplication : IDynamicApplication
             // 最大物理内存(MB)
             PeakWorkingMemoryMB = $"{peakWorking:F2} MB",
             // 物理内存使用率(%)
-            WorkingMemoryRate = Math.Round(working / peakWorking, 2, MidpointRounding.AwayFromZero),
+            WorkingMemoryRate = Math.Round(working / peakWorking * 100, 2, MidpointRounding.AwayFromZero),
             // 物理内存使用率(%)
             WorkingMemoryRatePercent = $"{working / peakWorking * 100:F2} %",
             // 分页内存(MB)
