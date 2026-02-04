@@ -116,18 +116,16 @@
 				<FaUploadImage v-model="state.formData.idPhoto" :uploadApi="fileApi.uploadIdPhoto" />
 			</FaFormItem>
 
-			<template v-if="state.dialogState !== 'add'">
-				<FaLayoutGridItem span="3">
-					<el-divider contentPosition="left">角色信息</el-divider>
-				</FaLayoutGridItem>
-				<FaFormItem prop="roleList" label="角色" span="3">
-					<el-checkbox-group v-model="state.roleIds" @change="handleRoleChange">
-						<el-checkbox v-for="(item, index) of state.roleList" :key="index" :value="item.value">
-							{{ item.label }}
-						</el-checkbox>
-					</el-checkbox-group>
-				</FaFormItem>
-			</template>
+			<FaLayoutGridItem span="3">
+				<el-divider contentPosition="left">角色信息</el-divider>
+			</FaLayoutGridItem>
+			<FaFormItem prop="roleList" label="角色" span="3">
+				<el-checkbox-group v-model="state.roleIds" @change="handleRoleChange">
+					<el-checkbox v-for="(item, index) of state.roleList" :key="index" :value="item.value">
+						{{ item.label }}
+					</el-checkbox>
+				</el-checkbox-group>
+			</FaFormItem>
 
 			<FaLayoutGridItem span="3">
 				<el-divider contentPosition="left">学籍档案</el-divider>

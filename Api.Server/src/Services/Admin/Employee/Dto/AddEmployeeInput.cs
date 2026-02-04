@@ -20,6 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.Admin.Entity;
 using Fast.Admin.Enum;
 
 namespace Fast.Admin.Service.Employee.Dto;
@@ -215,4 +216,9 @@ public class AddEmployeeInput
     /// </summary>
     [Required(ErrorMessage = "是否为负责人不能为空")]
     public bool IsPrincipal { get; set; }
+
+    /// <summary>
+    /// 角色信息
+    /// </summary>
+    public List<EmployeeRoleModel> RoleList { get; set; }
 }
