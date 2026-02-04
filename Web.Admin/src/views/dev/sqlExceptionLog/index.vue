@@ -100,20 +100,38 @@
 				<span v-else>--</span>
 			</template>
 		</FastTable>
-		<el-dialog v-model="state.visible" :title="state.title" width="700px" alignCenter draggable destroyOnClose>
+		<el-dialog v-model="state.visible" :title="state.title" width="1000px" alignCenter draggable destroyOnClose>
 			<el-scrollbar>
-				<div style="max-height: 500px; padding-bottom: 20px; padding-right: 10px" v-html="state.content" />
+				<div style="max-height: 500px; padding-bottom: 20px; padding-right: 10px">
+					<VueJsonPretty
+						:data="jsonContent"
+						:deep="3"
+						showLength
+						showLineNumber
+						showIcon
+						virtual
+						:height="500"
+						:theme="configStore.layout.isDark ? 'dark' : 'light'"
+					/>
+				</div>
 			</el-scrollbar>
 		</el-dialog>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue";
+import { computed, reactive } from "vue";
 import { dayjs } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
+import VueJsonPretty from "vue-json-pretty";
 import { sqlExceptionLogApi } from "@/api/services/Center/sqlExceptionLog";
 import { SqlExceptionLogModel } from "@/api/services/Center/sqlExceptionLog/models/SqlExceptionLogModel";
+import { useConfig } from "@/stores";
+if (import.meta.env.DEV) {
+	await import("vue-json-pretty/lib/styles.css");
+}
+
+const configStore = useConfig();
 
 defineOptions({
 	name: "DevSqlExceptionLog",
@@ -123,5 +141,13 @@ const state = reactive({
 	visible: false,
 	title: "日志",
 	content: "",
+});
+
+const jsonContent = computed(() => {
+	try {
+		return JSON.parse(state.content);
+	} catch {
+		return state.content;
+	}
 });
 </script>

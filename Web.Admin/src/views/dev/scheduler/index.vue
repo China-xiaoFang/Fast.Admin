@@ -229,10 +229,10 @@
 					<el-button v-auth="'Scheduler:Delete'" size="small" plain type="danger" @click="handleDelJob(row)">删除</el-button>
 				</template>
 			</FaTable>
-			<el-dialog v-model="state.exp.visible" :title="state.exp.title" width="700px" alignCenter draggable destroyOnClose>
+			<el-dialog v-model="state.exp.visible" :title="state.exp.title" width="1000px" alignCenter draggable destroyOnClose>
 				<div class="log_content" v-html="state.exp.content" />
 			</el-dialog>
-			<el-dialog v-model="state.log.visible" :title="state.log.title" width="700px" alignCenter draggable destroyOnClose>
+			<el-dialog v-model="state.log.visible" :title="state.log.title" width="1000px" alignCenter draggable destroyOnClose>
 				<el-scrollbar v-loading="state.log.loading" element-loading-text="加载中..." height="500px">
 					<div v-for="(item, index) in state.log.contents" :key="index" class="log_content" v-html="item" />
 				</el-scrollbar>
