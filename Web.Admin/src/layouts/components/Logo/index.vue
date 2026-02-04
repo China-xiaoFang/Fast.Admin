@@ -2,7 +2,7 @@
 	<div class="logo" :style="{ '--height': addUnit(configStore.layout.navBarHeight) }" title="首页" @click="router.push('/')">
 		<img :src="logo" alt="Logo" @error="setFallBack" />
 		<span v-if="!configStore.layout.menuCollapse" :title="appStore.appName">
-			{{ appStore.appName }}
+			{{ userInfoStore.tenantName || appStore.appName }}
 		</span>
 	</div>
 </template>
@@ -12,7 +12,7 @@ import { computed } from "vue";
 import { addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
 import LogoImg from "@/assets/logo.png";
-import { useApp, useConfig } from "@/stores";
+import { useApp, useConfig, useUserInfo } from "@/stores";
 
 defineOptions({
 	name: "Logo",
@@ -21,8 +21,9 @@ defineOptions({
 const router = useRouter();
 const appStore = useApp();
 const configStore = useConfig();
+const userInfoStore = useUserInfo();
 
-const logo = computed(() => appStore.logoUrl || LogoImg);
+const logo = computed(() => userInfoStore.logoUrl || appStore.logoUrl || LogoImg);
 
 const setFallBack = (event: Event) => {
 	const target = event.target as HTMLImageElement;

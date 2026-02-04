@@ -38,6 +38,10 @@ export interface GetLoginUserInfoOutput {
    */
   tenantCode?: string;
   /**
+   * 租户LogoUrl
+   */
+  logoUrl?: string;
+  /**
    * 用户Id/职员Id
    */
   userId?: number;

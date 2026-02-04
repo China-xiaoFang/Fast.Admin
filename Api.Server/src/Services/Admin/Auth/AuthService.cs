@@ -80,6 +80,7 @@ public class AuthService : IDynamicApplication
             TenantNo = _user.TenantNo,
             TenantName = _user.TenantName,
             TenantCode = _user.TenantCode,
+            LogoUrl = _user.LogoUrl,
             UserId = _user.UserId,
             UserKey = _user.UserKey,
             Account = _user.Account,

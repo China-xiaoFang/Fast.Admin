@@ -70,6 +70,11 @@ public class GetLoginUserInfoOutput
     public string TenantCode { get; set; }
 
     /// <summary>
+    /// 租户LogoUrl
+    /// </summary>
+    public string LogoUrl { get; set; }
+
+    /// <summary>
     /// 用户Id/职员Id
     /// </summary>
     public long UserId { get; set; }

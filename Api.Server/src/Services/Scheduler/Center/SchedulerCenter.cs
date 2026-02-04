@@ -510,7 +510,14 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 .LeftJoin<MainDatabaseModel>((t1, t2) => t1.TenantId == t2.TenantId && t2.DatabaseType == DatabaseTypeEnum.Admin)
                 .Where((t1, t2) => t2.IsInitialized)
                 .Where(t1 => t1.Status == CommonStatusEnum.Enable)
-                .Select(t1 => new {t1.TenantId, t1.TenantNo, t1.TenantCode, t1.TenantName})
+                .Select(t1 => new
+                {
+                    t1.TenantId,
+                    t1.TenantNo,
+                    t1.TenantCode,
+                    t1.TenantName,
+                    t1.LogoUrl
+                })
                 .ToListAsync();
 
             foreach (var item in tenantList)
@@ -518,9 +525,9 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 // 启动租户调度器
                 await StartScheduler(item.TenantId);
                 // 放入租户调度器缓存中
-                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, item.TenantCode, Guid
-                    .NewGuid()
-                    .ToString()));
+                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, item.TenantCode,
+                    item.LogoUrl, Guid.NewGuid()
+                        .ToString()));
 
                 // 循环租户本地作业
                 foreach (var localJobEntity in allLocalJobList.Where(wh => wh.IsAllTenant)
@@ -566,7 +573,14 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 .Where(t1 => t1.Status == CommonStatusEnum.Enable)
                 .Where(t1 => !SchedulerContext.SchedulerTenantList.Keys.ToList()
                     .Contains(t1.TenantId))
-                .Select(t1 => new {t1.TenantId, t1.TenantNo, t1.TenantCode, t1.TenantName})
+                .Select(t1 => new
+                {
+                    t1.TenantId,
+                    t1.TenantNo,
+                    t1.TenantCode,
+                    t1.TenantName,
+                    t1.LogoUrl
+                })
                 .ToListAsync();
 
             foreach (var item in tenantList)
@@ -574,9 +588,9 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 // 启动租户调度器
                 await StartScheduler(item.TenantId);
                 // 放入租户调度器缓存中
-                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, item.TenantCode, Guid
-                    .NewGuid()
-                    .ToString()));
+                SchedulerContext.SchedulerTenantList.TryAdd(item.TenantId, (item.TenantName, item.TenantNo, item.TenantCode,
+                    item.LogoUrl, Guid.NewGuid()
+                        .ToString()));
 
                 // 循环租户本地作业
                 foreach (var localJobEntity in SchedulerContext.LocalSchedulerJobList.Where(wh => wh.IsAllTenant)
