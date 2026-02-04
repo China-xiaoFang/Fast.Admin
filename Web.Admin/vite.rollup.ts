@@ -1,6 +1,20 @@
 export const rollupManualChunks = (id: string): string => {
 	if (/[/\\]node_modules[/\\]/.test(id)) {
-		return;
+		const parts = id.replace(/\\/g, "/").split("/node_modules/");
+
+		if (parts.length < 2) return null;
+
+		// 最后一个 node_modules 后面的
+		const tail = parts.at(-1);
+		const sage = tail.split("/");
+
+		// 作用域包
+		if (sage[0].startsWith("@") && sage.length > 1) {
+			return `_node_modules_${sage[0]}_${sage[1]}`;
+		}
+
+		// 普通包
+		return `_node_modules_${sage[0]}`;
 	}
 
 	for (const { path, file } of [
