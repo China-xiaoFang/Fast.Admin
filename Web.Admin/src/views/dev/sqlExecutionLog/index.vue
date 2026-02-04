@@ -87,28 +87,44 @@
 				<span v-else>--</span>
 			</template>
 		</FastTable>
-		<el-dialog v-model="state.visible" :title="state.title" width="700px" alignCenter draggable destroyOnClose>
+		<el-dialog v-model="state.visible" :title="state.title" width="1000px" alignCenter draggable destroyOnClose>
 			<el-scrollbar>
-				<div style="max-height: 500px; padding-bottom: 20px; padding-right: 10px" v-html="state.content" />
+				<div style="max-height: 500px; padding-bottom: 20px; padding-right: 10px">
+					<VueJsonPretty
+						:data="jsonContent"
+						:deep="3"
+						showLength
+						showLineNumber
+						showIcon
+						virtual
+						:height="500"
+						:theme="configStore.layout.isDark ? 'dark' : 'light'"
+					/>
+				</div>
 			</el-scrollbar>
 		</el-dialog>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { ElMessage, ElMessageBox, dayjs } from "element-plus";
 import { Delete } from "@element-plus/icons-vue";
 import { dateUtil } from "@fast-china/utils";
+import VueJsonPretty from "vue-json-pretty";
 import { sqlExecutionLogApi } from "@/api/services/Center/sqlExecutionLog";
 import { SqlExecutionLogModel } from "@/api/services/Center/sqlExecutionLog/models/SqlExecutionLogModel";
 import { FastTableInstance } from "@/components";
-import { useUserInfo } from "@/stores";
+import { useConfig, useUserInfo } from "@/stores";
+if (import.meta.env.DEV) {
+	await import("vue-json-pretty/lib/styles.css");
+}
 
 defineOptions({
 	name: "DevSqlExecutionLog",
 });
 
+const configStore = useConfig();
 const userInfoStore = useUserInfo();
 
 const fastTableRef = ref<FastTableInstance>();
@@ -117,6 +133,14 @@ const state = reactive({
 	visible: false,
 	title: "日志",
 	content: "",
+});
+
+const jsonContent = computed(() => {
+	try {
+		return JSON.parse(state.content);
+	} catch {
+		return state.content;
+	}
 });
 
 /** 处理删除日志 */

@@ -73,6 +73,12 @@ export const getCdnModules = (viteDev: boolean): CdnImportOptions["modules"] => 
 		path: "dist/browser/signalr.min.js",
 	},
 	{
+		name: "vue-json-pretty",
+		var: "VueJsonPretty",
+		path: "lib/vue-json-pretty.js",
+		css: "lib/styles.css",
+	},
+	{
 		name: "nprogress",
 		var: "NProgress",
 		path: "nprogress.js",

@@ -49,7 +49,7 @@ public class RequestLogService : IDynamicApplication
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取请求日志分页列表", HttpRequestActionEnum.Paged)]
-    [Permission(PermissionConst.RequestLogPaged)]
+    [Permission(PermissionConst.RequestLogPaged), DisabledRequestLog]
     public async Task<PagedResult<RequestLogModel>> QueryRequestLogPaged(QueryRequestLogPagedInput input)
     {
         if (input.SearchTimeList is not {Count: > 1})
@@ -66,9 +66,13 @@ public class RequestLogService : IDynamicApplication
         {
             queryable = queryable.WhereIF(input.TenantId != null, wh => wh.TenantId == input.TenantId);
         }
-        else
+        else if (_user.IsAdmin)
         {
             queryable = queryable.Where(wh => wh.TenantId == _user.TenantId);
+        }
+        else
+        {
+            queryable = queryable.Where(wh => wh.AccountId == _user.AccountId);
         }
 
         return await queryable.SplitTable()

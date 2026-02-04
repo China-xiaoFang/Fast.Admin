@@ -64,9 +64,13 @@ public class VisitLogService : IDynamicApplication
         {
             queryable = queryable.WhereIF(input.TenantId != null, wh => wh.TenantId == input.TenantId);
         }
-        else
+        else if(_user.IsAdmin)
         {
             queryable = queryable.Where(wh => wh.TenantId == _user.TenantId);
+        }
+        else
+        {
+            queryable = queryable.Where(wh => wh.AccountId == _user.AccountId);
         }
 
         return await queryable.SplitTable()
