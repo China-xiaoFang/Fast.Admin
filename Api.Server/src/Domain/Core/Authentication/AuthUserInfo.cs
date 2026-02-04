@@ -118,6 +118,11 @@ public class AuthUserInfo
     /// </summary>
     public virtual string TenantCode { get; set; }
 
+    /// <summary>
+    /// 租户LogoUrl
+    /// </summary>
+    public virtual string LogoUrl { get; set; }
+
     #endregion
 
     /// <summary>

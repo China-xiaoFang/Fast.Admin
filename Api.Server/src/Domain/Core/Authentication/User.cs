@@ -103,6 +103,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         TenantNo = authUserInfo.TenantNo;
         TenantName = authUserInfo.TenantName;
         TenantCode = authUserInfo.TenantCode;
+        LogoUrl = authUserInfo.LogoUrl;
 
         UserId = authUserInfo.UserId;
         UserKey = authUserInfo.UserKey;
