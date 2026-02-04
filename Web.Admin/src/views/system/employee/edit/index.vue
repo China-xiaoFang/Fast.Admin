@@ -413,7 +413,7 @@ const add = () => {
 		state.formData = {
 			isPrincipal: false,
 			sex: GenderEnum.Unknown,
-			entryDate: new Date(),
+			entryDate: dayjs(new Date()).format("YYYY-MM-DD 00:00:00") as unknown as Date,
 		};
 		state.roleList = await roleApi.roleSelector();
 	});
