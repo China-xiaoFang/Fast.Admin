@@ -39,11 +39,9 @@ public class SchedulerContext
     /// 已经存在调度器的 TenantId
     /// <para>租户名称</para>
     /// <para>租户编号</para>
-    /// <para>租户LogoUrl</para>
     /// <para>虚拟的设备ID</para>
     /// </summary>
-    public static
-        ConcurrentDictionary<long, (string tenantName, string tenantNo, string tenantCode, string logoUrl, string deviceId)>
+    public static ConcurrentDictionary<long, (string tenantName, string tenantNo, string tenantCode, string deviceId)>
         SchedulerTenantList { get; internal set; } = [];
 
     /// <summary>

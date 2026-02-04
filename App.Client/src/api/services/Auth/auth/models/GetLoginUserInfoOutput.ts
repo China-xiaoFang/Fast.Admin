@@ -34,6 +34,10 @@ export interface GetLoginUserInfoOutput {
    */
   tenantName?: string;
   /**
+   * 租户简称
+   */
+  shortName?: string;
+  /**
    * 租户编码
    */
   tenantCode?: string;

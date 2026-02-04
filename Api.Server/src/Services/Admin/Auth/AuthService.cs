@@ -70,6 +70,14 @@ public class AuthService : IDynamicApplication
         var hasWeb = (GlobalContext.DeviceType & AppEnvironmentEnum.Web) != 0;
         var hasMobile = GlobalContext.IsMobile;
 
+        // 查询租户信息
+        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
+
+        if (tenantModel.Status == CommonStatusEnum.Disable)
+        {
+            throw new UserFriendlyException("租户已被禁用！");
+        }
+
         var result = new GetLoginUserInfoOutput
         {
             AccountId = _user.AccountId,
@@ -79,8 +87,9 @@ public class AuthService : IDynamicApplication
             Avatar = _user.Avatar,
             TenantNo = _user.TenantNo,
             TenantName = _user.TenantName,
+            ShortName = tenantModel.ShortName,
             TenantCode = _user.TenantCode,
-            LogoUrl = _user.LogoUrl,
+            LogoUrl = tenantModel.LogoUrl,
             UserId = _user.UserId,
             UserKey = _user.UserKey,
             Account = _user.Account,
@@ -91,14 +100,6 @@ public class AuthService : IDynamicApplication
             IsSuperAdmin = _user.IsSuperAdmin,
             IsAdmin = _user.IsAdmin
         };
-
-        // 查询租户信息
-        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
-
-        if (tenantModel.Status == CommonStatusEnum.Disable)
-        {
-            throw new UserFriendlyException("租户已被禁用！");
-        }
 
         // 查询角色
         var roleList = await _empRepository.Queryable<EmployeeRoleModel>()

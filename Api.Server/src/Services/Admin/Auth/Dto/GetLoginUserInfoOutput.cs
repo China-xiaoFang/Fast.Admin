@@ -65,6 +65,11 @@ public class GetLoginUserInfoOutput
     public string TenantName { get; set; }
 
     /// <summary>
+    /// 租户简称
+    /// </summary>
+    public string ShortName { get; set; }
+
+    /// <summary>
     /// 租户编码
     /// </summary>
     public string TenantCode { get; set; }

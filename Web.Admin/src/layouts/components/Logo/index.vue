@@ -2,7 +2,7 @@
 	<div class="logo" :style="{ '--height': addUnit(configStore.layout.navBarHeight) }" title="首页" @click="router.push('/')">
 		<img :src="logo" alt="Logo" @error="setFallBack" />
 		<span v-if="!configStore.layout.menuCollapse" :title="appStore.appName">
-			{{ userInfoStore.tenantName || appStore.appName }}
+			{{ userInfoStore.shortName || appStore.appName }}
 		</span>
 	</div>
 </template>
