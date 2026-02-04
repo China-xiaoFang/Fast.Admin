@@ -6,6 +6,7 @@ import { PoliticalStatusEnum } from "@/api/enums/PoliticalStatusEnum";
 import { AcademicQualificationsEnum } from "@/api/enums/AcademicQualificationsEnum";
 import { AcademicSystemEnum } from "@/api/enums/AcademicSystemEnum";
 import { DegreeEnum } from "@/api/enums/DegreeEnum";
+import { EmployeeRoleModel } from "./EmployeeRoleModel";
 
 /**
  * Fast.Admin.Service.Employee.Dto.AddEmployeeInput 添加职员输入
@@ -151,5 +152,9 @@ export interface AddEmployeeInput {
    * 是否为负责人
    */
   isPrincipal?: boolean;
+  /**
+   * 角色信息
+   */
+  roleList?: Array<EmployeeRoleModel>;
 }
 
