@@ -63,7 +63,7 @@ internal static partial class MenuSeedData
         await db.Insertable(new MenuModel
             {
                 MenuId = YitIdHelper.NextId(),
-                Edition = EditionEnum.Enterprise,
+                Edition = EditionEnum.Custom,
                 AppId = applicationModel.AppId,
                 ModuleId = systemModuleModel.ModuleId,
                 MenuCode = PermissionConst.SystemMonitor,
