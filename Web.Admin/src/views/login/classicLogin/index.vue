@@ -75,10 +75,9 @@
 						>
 							<el-form-item v-if="tenantList.length > 0" prop="userKey">
 								<el-select
-									class="tenant__select"
+									popperClass="tenant__select__popper"
 									v-model="formData.userKey"
 									placeholder="租户"
-									:teleported="false"
 									@change="handleTenantChange"
 								>
 									<el-option
