@@ -222,12 +222,10 @@
 			}
 		}
 	}
-	:deep() {
-		.el-select-dropdown__footer {
-			padding: 5px 0;
-			.el-button {
-				width: 100%;
-			}
+	.el-select-dropdown__footer {
+		padding: 5px 0;
+		.el-button {
+			width: 100%;
 		}
 	}
 }
