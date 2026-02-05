@@ -64,7 +64,7 @@ public class VisitLogService : IDynamicApplication
         {
             queryable = queryable.WhereIF(input.TenantId != null, wh => wh.TenantId == input.TenantId);
         }
-        else if(_user.IsAdmin)
+        else if (_user.IsAdmin)
         {
             queryable = queryable.Where(wh => wh.TenantId == _user.TenantId);
         }
