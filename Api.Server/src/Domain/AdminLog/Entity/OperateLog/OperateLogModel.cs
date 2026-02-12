@@ -30,8 +30,8 @@ namespace Fast.AdminLog.Entity;
 [SugarTable("OperateLog_{year}{month}{day}", "操作日志表")]
 [SplitTable(SplitType.Month)]
 [SugarDbType(DatabaseTypeEnum.AdminLog)]
-[SugarIndex($"IX_{{table}}_{nameof(CreatedUserId)}", nameof(CreatedUserId), OrderByType.Asc)]
-[SugarIndex($"IX_{{table}}_{nameof(CreatedTime)}", nameof(CreatedTime), OrderByType.Asc)]
+[SugarIndex($"IX_{{split_table}}_{nameof(CreatedUserId)}", nameof(CreatedUserId), OrderByType.Asc)]
+[SugarIndex($"IX_{{split_table}}_{nameof(CreatedTime)}", nameof(CreatedTime), OrderByType.Asc)]
 public class OperateLogModel : BaseRecordEntity
 {
     /// <summary>

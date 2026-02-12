@@ -76,9 +76,7 @@ public class InitLogDatabaseHostedService : IHostedService
             db.DbMaintenance.CreateDatabase();
 
             // 查询核心表是否存在
-            var sql =
-                $"SELECT COUNT(*) FROM [information_schema].[TABLES] WHERE [TABLE_NAME] = '{typeof(ExceptionLogModel).GetSugarTableName()}'";
-            if (await db.Ado.GetIntAsync(sql) > 0)
+            if (db.DbMaintenance.IsAnyTable<ExceptionLogModel>())
                 return;
 
             // 加载Aop
