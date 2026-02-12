@@ -66,9 +66,7 @@ public class InitDatabaseHostedService : IHostedService
             db.DbMaintenance.CreateDatabase();
 
             // 查询核心表是否存在
-            var sql =
-                $"SELECT COUNT(*) FROM [information_schema].[TABLES] WHERE [TABLE_NAME] = '{typeof(AccountModel).GetSugarTableName()}'";
-            if (await db.Ado.GetIntAsync(sql) > 0)
+            if (db.DbMaintenance.IsAnyTable<AccountModel>())
                 return;
             // 加载Aop
             SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);

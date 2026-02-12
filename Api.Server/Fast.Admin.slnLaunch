@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "Fast.All",
+    "Projects": [
+      {
+        "Path": "src\\Api\\Fast.Api.csproj",
+        "Action": "Start",
+        "DebugTarget": "Fast.Api"
+      },
+      {
+        "Path": "src\\Scheduler\\Fast.Scheduler.csproj",
+        "Action": "Start",
+        "DebugTarget": "Fast.Scheduler"
+      }
+    ]
+  }
+]

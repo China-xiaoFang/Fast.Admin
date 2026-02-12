@@ -28,8 +28,8 @@ namespace Fast.CenterLog.Entity;
 [SugarTable("Sql_ExecutionLog_{year}{month}{day}", "Sql执行日志表")]
 [SplitTable(SplitType.Week)]
 [SugarDbType(DatabaseTypeEnum.CenterLog)]
-[SugarIndex($"IX_{{table}}_{nameof(CreatedTime)}", nameof(CreatedTime), OrderByType.Asc)]
-[SugarIndex($"IX_{{table}}_{nameof(TenantId)}", nameof(TenantId), OrderByType.Asc)]
+[SugarIndex($"IX_{{split_table}}_{nameof(CreatedTime)}", nameof(CreatedTime), OrderByType.Asc)]
+[SugarIndex($"IX_{{split_table}}_{nameof(TenantId)}", nameof(TenantId), OrderByType.Asc)]
 public class SqlExecutionLogModel : BaseRecordEntity
 {
     /// <summary>

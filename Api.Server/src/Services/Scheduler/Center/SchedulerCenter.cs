@@ -1223,22 +1223,36 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
             $"{StdSchedulerFactory.PropertyJobStorePrefix}.{StdSchedulerFactory.PropertyTablePrefix}",
             AdoConstants.DefaultTablePrefix);
 
-        var querySql = $"""
-                        SELECT
-                         [{AdoConstants.ColumnJobDataMap}] AS [Value]
-                        FROM
-                         [{tablePrefix}{AdoConstants.TableJobDetails}]
-                        WHERE
-                         [{AdoConstants.ColumnSchedulerName}] = '{scheduler.SchedulerName}'
-                         AND [{AdoConstants.ColumnJobName}] = '{jobKey.Name}'
-                         AND [{AdoConstants.ColumnJobGroup}] = '{jobKey.Group}'
-                        """;
-
         var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
         // 加载Aop
         SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
-        var jobDataBytes = await db.Ado.SqlQuerySingleAsync<byte[]>(querySql);
+        var whereConditionalModel = new List<IConditionalModel>
+        {
+            new ConditionalModel
+            {
+                FieldName = AdoConstants.ColumnSchedulerName,
+                ConditionalType = ConditionalType.Equal,
+                FieldValue = scheduler.SchedulerName
+            },
+            new ConditionalModel
+            {
+                FieldName = AdoConstants.ColumnJobName, ConditionalType = ConditionalType.Equal, FieldValue = jobKey.Name
+            },
+            new ConditionalModel
+            {
+                FieldName = AdoConstants.ColumnJobGroup,
+                ConditionalType = ConditionalType.Equal,
+                FieldValue = jobKey.Group
+            }
+        };
+        var selectModels = new List<SelectModel> {new() {FieldName = AdoConstants.ColumnJobDataMap}};
+        var jobDataBytes = await db.Queryable<byte[]>()
+            .AS($"{tablePrefix}{AdoConstants.TableJobDetails}")
+            .Where(whereConditionalModel)
+            .Select(selectModels)
+            .SingleAsync();
+
         if (jobDataBytes != null)
         {
             var jobData = JObject.Parse(Encoding.UTF8.GetString(jobDataBytes.ToArray()));
@@ -1248,19 +1262,18 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 jobData[nameof(SchedulerJobInfo.Exception)] = string.Empty;
             }
 
-            var updateSql = $"""
-                             UPDATE
-                               [{tablePrefix}{AdoConstants.TableJobDetails}]
-                             SET
-                               [{AdoConstants.ColumnJobDataMap}] = @JobData
-                             WHERE
-                              [{AdoConstants.ColumnSchedulerName}] = '{scheduler.SchedulerName}'
-                              AND [{AdoConstants.ColumnJobName}] = '{jobKey.Name}'
-                              AND [{AdoConstants.ColumnJobGroup}] = '{jobKey.Group}'
-                             """;
-
             // 执行更新
-            await db.Ado.ExecuteCommandAsync(updateSql, new {JobData = Encoding.UTF8.GetBytes(jobData.ToString())});
+            var modelDict = new Dictionary<string, object>
+            {
+                {AdoConstants.ColumnSchedulerName, scheduler.SchedulerName},
+                {AdoConstants.ColumnJobName, jobKey.Name},
+                {AdoConstants.ColumnJobGroup, jobKey.Group},
+                {AdoConstants.ColumnJobDataMap, Encoding.UTF8.GetBytes(jobData.ToString())}
+            };
+            await db.Updateable(modelDict)
+                .AS($"{tablePrefix}{AdoConstants.TableJobDetails}")
+                .WhereColumns(AdoConstants.ColumnSchedulerName, AdoConstants.ColumnJobName, AdoConstants.ColumnJobGroup)
+                .ExecuteCommandAsync();
         }
     }
 }

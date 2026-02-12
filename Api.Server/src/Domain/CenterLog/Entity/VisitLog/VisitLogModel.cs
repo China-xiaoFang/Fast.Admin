@@ -28,9 +28,9 @@ namespace Fast.CenterLog.Entity;
 [SugarTable("VisitLog_{year}{month}{day}", "访问日志表")]
 [SplitTable(SplitType.Month)]
 [SugarDbType(DatabaseTypeEnum.CenterLog)]
-[SugarIndex($"IX_{{table}}_{nameof(CreatedUserId)}", nameof(CreatedUserId), OrderByType.Asc)]
-[SugarIndex($"IX_{{table}}_{nameof(CreatedTime)}", nameof(CreatedTime), OrderByType.Asc)]
-[SugarIndex($"IX_{{table}}_{nameof(TenantId)}", nameof(TenantId), OrderByType.Asc)]
+[SugarIndex($"IX_{{split_table}}_{nameof(CreatedUserId)}", nameof(CreatedUserId), OrderByType.Asc)]
+[SugarIndex($"IX_{{split_table}}_{nameof(CreatedTime)}", nameof(CreatedTime), OrderByType.Asc)]
+[SugarIndex($"IX_{{split_table}}_{nameof(TenantId)}", nameof(TenantId), OrderByType.Asc)]
 public class VisitLogModel : BaseRecordEntity, IBaseTEntity
 {
     /// <summary>
