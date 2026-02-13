@@ -79,6 +79,16 @@ export const getCdnModules = (viteDev: boolean): CdnImportOptions["modules"] => 
 		css: "nprogress.css",
 	},
 	{
+		name: "echarts",
+		var: "echarts",
+		path: "dist/echarts.min.js",
+	},
+	{
+		name: "pinyin-pro",
+		var: "pinyinPro",
+		path: "dist/index.js",
+	},
+	{
 		name: "lodash",
 		var: "_",
 		path: "lodash.min.js",
