@@ -11,13 +11,29 @@
 				state.formData = {
 					menuIds: [],
 					buttonIds: [],
+					roleMenuIds: [],
+					roleButtonIds: [],
 				};
 				state.menuList = [];
+				state.searchKeyword = '';
+				state.expandedItems = [];
 			}
 		"
 	>
-		<el-collapse :modelValue="state.menuList.map((item) => item.value)">
-			<el-collapse-item v-for="menu in state.menuList" :key="menu.value" :name="menu.value">
+		<div class="auth-toolbar">
+			<el-input v-model="state.searchKeyword" placeholder="搜索菜单" clearable class="auth-search">
+				<template #prefix>
+					<FaIcon name="el-icon-Search" />
+				</template>
+			</el-input>
+			<div class="auth-actions">
+				<el-checkbox :modelValue="isAllMenuChecked" :indeterminate="isAllMenuIndeterminate" @change="handleAllMenuChange"> 全选 </el-checkbox>
+				<el-button size="small" @click="handleExpandAll">展开全部</el-button>
+				<el-button size="small" @click="handleCollapseAll">折叠全部</el-button>
+			</div>
+		</div>
+		<el-collapse v-model="state.expandedItems">
+			<el-collapse-item v-for="menu in filteredMenuList" :key="menu.value" :name="menu.value">
 				<template #title>
 					{{ menu.label }}
 					<el-checkbox
@@ -53,7 +69,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { CheckboxValueType, ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { employeeApi } from "@/api/services/Admin/employee";
@@ -78,6 +94,8 @@ const state = reactive({
 	}),
 	dialogTitle: "职员授权",
 	menuList: withDefineType<ElSelectorOutput<number>[]>([]),
+	searchKeyword: "",
+	expandedItems: withDefineType<number[]>([]),
 });
 
 const isMenuFromRole = (menuId: number) => {
@@ -86,6 +104,49 @@ const isMenuFromRole = (menuId: number) => {
 
 const isButtonFromRole = (buttonId: number) => {
 	return state.formData.roleButtonIds?.includes(buttonId) || false;
+};
+
+const filteredMenuList = computed(() => {
+	if (!state.searchKeyword) {
+		return state.menuList;
+	}
+	const keyword = state.searchKeyword.toLowerCase();
+	return state.menuList.filter((menu) => menu.label.toLowerCase().includes(keyword));
+});
+
+const nonRoleMenuList = computed(() => state.menuList.filter((menu) => !isMenuFromRole(menu.value)));
+
+const isAllMenuChecked = computed(() => {
+	return nonRoleMenuList.value.length > 0 && nonRoleMenuList.value.every((menu) => state.formData.menuIds?.includes(menu.value));
+});
+
+const isAllMenuIndeterminate = computed(() => {
+	const checkedCount = nonRoleMenuList.value.filter((menu) => state.formData.menuIds?.includes(menu.value)).length;
+	return checkedCount > 0 && checkedCount < nonRoleMenuList.value.length;
+});
+
+const handleAllMenuChange = (val: CheckboxValueType) => {
+	if (val) {
+		const menuIds = nonRoleMenuList.value.map((menu) => menu.value);
+		const roleInheritedMenuIds = state.formData.menuIds?.filter((id) => state.formData.roleMenuIds?.includes(id)) || [];
+		state.formData.menuIds = [...roleInheritedMenuIds, ...menuIds];
+		const allButtonIds = nonRoleMenuList.value.flatMap((menu) =>
+			menu.children.filter((btn) => !isButtonFromRole(btn.value)).map((btn) => btn.value)
+		);
+		const newButtonIds = allButtonIds.filter((id) => !state.formData.buttonIds?.includes(id));
+		state.formData.buttonIds = [...(state.formData.buttonIds || []), ...newButtonIds];
+	} else {
+		state.formData.menuIds = state.formData.menuIds?.filter((id) => state.formData.roleMenuIds?.includes(id)) || [];
+		state.formData.buttonIds = state.formData.buttonIds?.filter((id) => state.formData.roleButtonIds?.includes(id)) || [];
+	}
+};
+
+const handleExpandAll = () => {
+	state.expandedItems = state.menuList.map((item) => item.value);
+};
+
+const handleCollapseAll = () => {
+	state.expandedItems = [];
 };
 
 const isMenuChecked = (menuId: number) => {
@@ -126,6 +187,7 @@ const open = (employeeId: number) => {
 		const apiRes = await employeeApi.queryEmployeeAuthMenu({ employeeId });
 		state.formData = apiRes;
 		state.menuList = await roleApi.queryAuthMenu();
+		state.expandedItems = state.menuList.map((item) => item.value);
 		state.dialogTitle = `职员授权 - ${apiRes.employeeName}`;
 	});
 };
@@ -138,6 +200,21 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
+.auth-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 16px;
+	.auth-search {
+		flex: 1;
+	}
+	.auth-actions {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		flex-shrink: 0;
+	}
+}
 .el-collapse {
 	border: none;
 	.el-collapse-item {
