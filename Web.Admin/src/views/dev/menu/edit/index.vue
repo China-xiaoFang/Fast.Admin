@@ -136,96 +136,7 @@
 					<el-divider contentPosition="left">按钮</el-divider>
 				</FaLayoutGridItem>
 				<FaLayoutGridItem span="2" style="min-height: 300px; max-height: 500px">
-					<FaTable rowKey="buttonId" :data="state.formData.buttonList">
-						<!-- 表格按钮操作区域 -->
-						<template #header>
-							<el-button type="primary" :icon="Plus" @click="handleButtonAdd">新增</el-button>
-						</template>
-						<FaTableColumn prop="buttonName" label="按钮名称" width="200">
-							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
-								<el-form-item
-									:prop="`buttonList.${$index}.buttonName`"
-									:rules="[{ required: true, message: '请输入按钮名称', trigger: 'blur' }]"
-								>
-									<el-input v-model="row.buttonName" maxlength="20" placeholder="请输入按钮名称" />
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<FaTableColumn prop="buttonCode" label="按钮编码" width="280">
-							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
-								<el-form-item
-									:prop="`buttonList.${$index}.buttonCode`"
-									:rules="[{ required: true, message: '请输入按钮编码', trigger: 'blur' }]"
-								>
-									<el-input v-model="row.buttonCode" maxlength="50" placeholder="请输入按钮编码" />
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<FaTableColumn prop="edition" label="版本" width="120">
-							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
-								<el-form-item
-									:prop="`buttonList.${$index}.edition`"
-									:rules="[{ required: true, message: '请选择版本', trigger: 'change' }]"
-								>
-									<FaSelect :data="editionEnum" v-model="row.edition" />
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<FaTableColumn prop="hasWeb" label="Web端" width="80">
-							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
-								<el-form-item
-									:prop="`buttonList.${$index}.hasWeb`"
-									:rules="[{ required: true, message: '请选择是否Web端', trigger: 'change' }]"
-								>
-									<el-checkbox v-model="row.hasWeb" />
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<FaTableColumn prop="hasMobile" label="移动端" width="80">
-							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
-								<el-form-item
-									:prop="`buttonList.${$index}.hasMobile`"
-									:rules="[{ required: true, message: '请选择是否移动端', trigger: 'change' }]"
-								>
-									<el-checkbox v-model="row.hasMobile" />
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<FaTableColumn prop="hasDesktop" label="桌面端" width="80">
-							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
-								<el-form-item
-									:prop="`buttonList.${$index}.hasDesktop`"
-									:rules="[{ required: true, message: '请选择是否桌面端', trigger: 'change' }]"
-								>
-									<el-checkbox v-model="row.hasDesktop" />
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<FaTableColumn prop="sort" label="排序" width="100">
-							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
-								<el-form-item
-									:prop="`buttonList.${$index}.sort`"
-									:rules="[{ required: true, message: '请输入排序', trigger: 'blur' }]"
-								>
-									<el-input-number style="width: auto" v-model="row.sort" :min="1" :max="9999" placeholder="请输入排序" />
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<FaTableColumn prop="sort" label="状态" width="150">
-							<template #default="{ row, $index }: { row: EditMenuButtonInput; $index: number }">
-								<el-form-item
-									:prop="`buttonList.${$index}.status`"
-									:rules="[{ required: true, message: '请选择状态', trigger: 'change' }]"
-								>
-									<RadioGroup button name="CommonStatusEnum" v-model="row.status" />
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<!-- 表格操作 -->
-						<template #operation="{ $index }: { $index: number }">
-							<el-button size="small" plain type="danger" @click="handleButtonDelete($index)">删除</el-button>
-						</template>
-					</FaTable>
+					<ButtonTable v-model="state.formData.buttonList" :disabled="state.formDisabled" />
 				</FaLayoutGridItem>
 			</template>
 		</FaForm>
@@ -235,17 +146,15 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from "vue";
 import { CascaderValue, ElMessage, type FormRules } from "element-plus";
-import { Plus } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import { menuApi } from "@/api/services/Center/menu";
 import { AddMenuInput } from "@/api/services/Center/menu/models/AddMenuInput";
-import { EditMenuButtonInput } from "@/api/services/Center/menu/models/EditMenuButtonInput";
 import { EditMenuInput } from "@/api/services/Center/menu/models/EditMenuInput";
 import routerPath from "@/router/index.json";
-import { useApp } from "@/stores";
+import ButtonTable from "./components/buttonTable.vue";
 import type { ElSelectorOutput, FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
@@ -253,9 +162,6 @@ defineOptions({
 });
 
 const emit = defineEmits(["ok"]);
-
-const appStore = useApp();
-const editionEnum = appStore.getDictionary("EditionEnum");
 
 const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
@@ -308,21 +214,6 @@ const handleComponentChange = (value: CascaderValue) => {
 		state.formData.webRouter = "";
 		state.formData.webComponent = "";
 	}
-};
-
-const handleButtonAdd = () => {
-	state.formData.buttonList.push({
-		edition: EditionEnum.None,
-		hasWeb: true,
-		hasMobile: false,
-		hasDesktop: false,
-		sort: 1,
-		status: CommonStatusEnum.Enable,
-	});
-};
-
-const handleButtonDelete = (index: number) => {
-	state.formData.buttonList.splice(index, 1);
 };
 
 const handleConfirm = () => {
@@ -418,11 +309,3 @@ defineExpose({
 	edit,
 });
 </script>
-
-<style scoped lang="scss">
-.el-table__cell {
-	.el-form-item {
-		margin-bottom: 0;
-	}
-}
-</style>
