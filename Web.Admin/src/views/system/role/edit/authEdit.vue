@@ -16,6 +16,15 @@
 			}
 		"
 	>
+		<div class="auth-toolbar">
+			<span class="auth-toolbar__stats">
+				已选 <strong>{{ state.formData.menuIds?.length ?? 0 }}</strong> 个菜单，<strong>{{ state.formData.buttonIds?.length ?? 0 }}</strong> 个权限
+			</span>
+			<el-button-group>
+				<el-button size="small" @click="handleSelectAll">全选</el-button>
+				<el-button size="small" @click="handleDeselectAll">取消全选</el-button>
+			</el-button-group>
+		</div>
 		<el-collapse :modelValue="state.menuList.map((item) => item.value)">
 			<el-collapse-item v-for="menu in state.menuList" :key="menu.value" :name="menu.value">
 				<template #title>
@@ -145,6 +154,16 @@ const handleButtonAllChange = (menuId: number, val: CheckboxValueType) => {
 	}
 };
 
+const handleSelectAll = () => {
+	state.formData.menuIds = state.menuList.map((item) => item.value);
+	state.formData.buttonIds = state.menuList.flatMap((item) => item.children.map((child) => child.value));
+};
+
+const handleDeselectAll = () => {
+	state.formData.menuIds = [];
+	state.formData.buttonIds = [];
+};
+
 const handleConfirm = () => {
 	faDialogRef.value.close(async () => {
 		await roleApi.roleAuth(state.formData);
@@ -170,6 +189,19 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
+.auth-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 16px;
+	padding: 8px 12px;
+	background-color: var(--el-fill-color-light);
+	border-radius: 4px;
+	&__stats {
+		font-size: 13px;
+		color: var(--el-text-color-secondary);
+	}
+}
 .el-collapse {
 	border: none;
 	.el-collapse-item {
