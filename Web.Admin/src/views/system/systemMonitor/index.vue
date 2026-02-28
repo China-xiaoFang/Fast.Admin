@@ -139,6 +139,8 @@ defineOptions({
 const state = reactive({
 	/** 加载状态 */
 	loading: false,
+	/** 轮询状态 */
+	polling: false,
 	/** 定时器 */
 	interval: withDefineType<NodeJS.Timeout>(),
 	machineDetail: withDefineType<{
@@ -245,7 +247,6 @@ const state = reactive({
 			version?: string;
 		}[];
 	}>({}),
-	isRequesting: false,
 	colors: [
 		{ color: "var(--el-color-success)", percentage: 20 },
 		{ color: "var(--el-color-primary)", percentage: 40 },
@@ -255,40 +256,7 @@ const state = reactive({
 	],
 });
 
-const stopInterval = () => {
-	if (state.interval) {
-		clearInterval(state.interval);
-		state.interval = null;
-	}
-};
-
-const startInterval = () => {
-	if (!state.interval) {
-		state.interval = setInterval(async () => {
-			if (state.isRequesting) return;
-			state.isRequesting = true;
-			[state.machineDetail, state.programDetail] = await Promise.all([
-				axiosUtil.request({
-					url: "/machine",
-					method: "get",
-					requestType: "query",
-					requestCipher: true,
-				}),
-				axiosUtil.request({
-					url: "/program",
-					method: "get",
-					requestType: "query",
-					requestCipher: true,
-				}),
-			]).finally(() => {
-				state.isRequesting = false;
-			});
-		}, 5 * 1000);
-	}
-};
-
-onMounted(async () => {
-	state.loading = true;
+const fetchData = async () => {
 	[state.machineDetail, state.programDetail] = await Promise.all([
 		axiosUtil.request({
 			url: "/machine",
@@ -302,13 +270,40 @@ onMounted(async () => {
 			requestType: "query",
 			requestCipher: true,
 		}),
-	]).finally(() => {
+	]);
+};
+
+const stopInterval = () => {
+	state.polling = false;
+	if (state.interval) {
+		clearInterval(state.interval);
+		state.interval = null;
+	}
+};
+
+const startInterval = () => {
+	if (state.polling) return;
+	state.polling = true;
+	const schedule = () => {
+		if (!state.polling) return;
+		state.interval = setTimeout(async () => {
+			await fetchData().catch(() => {});
+			schedule();
+		}, 5 * 1000);
+	};
+	schedule();
+};
+
+onMounted(async () => {
+	state.loading = true;
+	await fetchData().finally(() => {
 		state.loading = false;
 	});
 	startInterval();
 });
 
-onActivated(() => {
+onActivated(async () => {
+	await fetchData().catch(() => {});
 	startInterval();
 });
 

@@ -268,8 +268,8 @@ const schedulerJobGroupEnum = appStore.getDictionary("SchedulerJobGroupEnum");
 const state = reactive({
 	/** 加载状态 */
 	loading: false,
-	/** 请求状态 */
-	isRequesting: false,
+	/** 轮询状态 */
+	polling: false,
 	/** 定时器 */
 	interval: withDefineType<NodeJS.Timeout>(),
 	/** 租户Id */
@@ -305,24 +305,28 @@ const handleTableRefresh = async () => {
 
 /** 停止定时器 */
 const stopInterval = () => {
+	state.polling = false;
 	if (state.interval) {
-		clearInterval(state.interval);
+		clearTimeout(state.interval);
 		state.interval = null;
 	}
 };
 
 /** 启动定时器 */
 const startInterval = () => {
-	if (!state.interval) {
-		state.interval = setInterval(async () => {
-			if (state.isRequesting) return;
-			state.isRequesting = true;
-			state.lastUpdateTime = new Date();
-			[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()]).finally(() => {
-				state.isRequesting = false;
-			});
+	if (state.polling) return;
+	state.polling = true;
+	const schedule = () => {
+		if (!state.polling) return;
+		state.interval = setTimeout(async () => {
+			try {
+				state.lastUpdateTime = new Date();
+				[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()]);
+			} catch {}
+			schedule();
 		}, 5000);
-	}
+	};
+	schedule();
 };
 
 /** 作业分组改变 */
@@ -456,17 +460,16 @@ const handleDelJob = async (row: SchedulerJobInfoDto) => {
 
 onMounted(async () => {
 	state.loading = true;
-	[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()])
-		.finally(() => {
-			state.isRequesting = false;
-		})
-		.finally(() => {
-			state.loading = false;
-		});
+	[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()]).finally(() => {
+		state.loading = false;
+	});
 	startInterval();
 });
 
-onActivated(() => {
+onActivated(async () => {
+	try {
+		[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()]);
+	} catch {}
 	startInterval();
 });
 
