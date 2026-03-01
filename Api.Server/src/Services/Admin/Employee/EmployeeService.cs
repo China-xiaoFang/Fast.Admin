@@ -396,6 +396,14 @@ public class EmployeeService : IDynamicApplication
             employeeModel.EmployeeNo = employeeNo;
             await _repository.InsertAsync(employeeModel);
 
+            // 如果当前职员是负责人，则清除该部门原有负责人
+            if (employeeOrgModel.IsPrincipal)
+            {
+                await _repository.Updateable<EmployeeOrgModel>()
+                    .SetColumns(_ => new EmployeeOrgModel {IsPrincipal = false})
+                    .Where(wh => wh.DepartmentId == employeeOrgModel.DepartmentId)
+                    .ExecuteCommandAsync();
+            }
             await _repository.Insertable(employeeOrgModel)
                 .ExecuteCommandAsync();
 

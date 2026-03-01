@@ -201,6 +201,7 @@ import { departmentApi } from "@/api/services/Admin/department";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { AddEmployeeInput } from "@/api/services/Admin/employee/models/AddEmployeeInput";
 import { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
+import { EmployeeOrgModel } from "@/api/services/Admin/employee/models/EmployeeOrgModel";
 import { jobLevelApi } from "@/api/services/Admin/jobLevel";
 import { organizationApi } from "@/api/services/Admin/organization";
 import { positionApi } from "@/api/services/Admin/position";
@@ -242,6 +243,36 @@ const state = reactive({
 	roleList: withDefineType<ElSelectorOutput<number>[]>([]),
 });
 
+/** 从 API 详情响应中提取主部门信息，展平到 formData */
+const flattenPrimaryOrg = (apiRes: any) => {
+	const primaryOrg = apiRes.orgList?.find((f: any) => f.isPrimary) ?? apiRes.orgList?.[0];
+	if (!primaryOrg) return;
+
+	state.formData.orgId = primaryOrg.orgId;
+	state.formData.orgName = primaryOrg.orgName;
+	state.formData.departmentId = primaryOrg.departmentId;
+	state.formData.departmentName = primaryOrg.departmentName;
+	state.formData.positionId = primaryOrg.positionId;
+	state.formData.positionName = primaryOrg.positionName;
+	state.formData.jobLevelId = primaryOrg.jobLevelId;
+	state.formData.jobLevelName = primaryOrg.jobLevelName;
+	state.formData.isPrincipal = primaryOrg.isPrincipal;
+};
+
+/** 将 UI 展平的单部门字段组装回 orgList 数组，用于提交 API */
+const buildOrgList = (): EmployeeOrgModel[] => {
+	return [
+		{
+			orgId: state.formData.orgId!,
+			departmentId: state.formData.departmentId!,
+			isPrimary: true,
+			positionId: state.formData.positionId!,
+			jobLevelId: state.formData.jobLevelId!,
+			isPrincipal: state.formData.isPrincipal ?? false,
+		},
+	];
+};
+
 const handleRoleChange = (val: CheckboxValueType[]) => {
 	state.formData.roleList = val
 		.map((m) => {
@@ -266,7 +297,10 @@ const handleConfirm = () => {
 				ElMessage.success("新增成功！");
 				break;
 			case "edit":
-				await employeeApi.editEmployee(state.formData);
+				await employeeApi.editEmployee({
+					...state.formData,
+					orgList: buildOrgList(),
+				});
 				ElMessage.success("保存成功！");
 				break;
 		}
@@ -280,16 +314,7 @@ const detail = (employeeId: number) => {
 		const apiRes = await employeeApi.queryEmployeeDetail(employeeId);
 		state.formData = apiRes;
 		state.formData.roleIds = apiRes.roleList.map((m) => m.roleId);
-		const primaryOrg = apiRes.orgList.find((f) => f.isPrimary);
-		state.formData.orgId = primaryOrg.orgId;
-		state.formData.orgName = primaryOrg.orgName;
-		state.formData.departmentId = primaryOrg.departmentId;
-		state.formData.departmentName = primaryOrg.departmentName;
-		state.formData.positionId = primaryOrg.positionId;
-		state.formData.positionName = primaryOrg.positionName;
-		state.formData.jobLevelId = primaryOrg.jobLevelId;
-		state.formData.jobLevelName = primaryOrg.jobLevelName;
-		state.formData.isPrincipal = primaryOrg.isPrincipal;
+		flattenPrimaryOrg(apiRes);
 		state.dialogTitle = `职员详情 - ${apiRes.employeeName}`;
 		state.roleList = await roleApi.roleSelector();
 	});
@@ -317,16 +342,7 @@ const edit = (employeeId: number) => {
 		const apiRes = await employeeApi.queryEmployeeDetail(employeeId);
 		state.formData = apiRes;
 		state.formData.roleIds = apiRes.roleList.map((m) => m.roleId);
-		const primaryOrg = apiRes.orgList.find((f) => f.isPrimary);
-		state.formData.orgId = primaryOrg.orgId;
-		state.formData.orgName = primaryOrg.orgName;
-		state.formData.departmentId = primaryOrg.departmentId;
-		state.formData.departmentName = primaryOrg.departmentName;
-		state.formData.positionId = primaryOrg.positionId;
-		state.formData.positionName = primaryOrg.positionName;
-		state.formData.jobLevelId = primaryOrg.jobLevelId;
-		state.formData.jobLevelName = primaryOrg.jobLevelName;
-		state.formData.isPrincipal = primaryOrg.isPrincipal;
+		flattenPrimaryOrg(apiRes);
 		state.dialogTitle = `编辑职员 - ${apiRes.employeeName}`;
 		state.roleList = await roleApi.roleSelector();
 	});
