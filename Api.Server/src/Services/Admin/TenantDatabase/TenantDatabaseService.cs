@@ -295,7 +295,7 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                 .ExecuteCommandAsync();
         }
 
-        await InitCustomDatabase(databaseType, db, newDb);
+        await InitCustomDatabase(tenantModel, databaseType, db, newDb);
 
         databaseModel.IsInitialized = true;
         await db.Updateable(databaseModel)
