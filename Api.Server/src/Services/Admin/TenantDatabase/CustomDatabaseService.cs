@@ -20,6 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.Center.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fast.Admin.Service.TenantDatabase;
@@ -32,12 +33,14 @@ public partial class TenantDatabaseService
     /// <summary>
     /// 初始化数据库（自定义）
     /// </summary>
+    /// <param name="tenantModel"><see cref="TenantModel"/> 租户</param>
     /// <param name="databaseType"><see cref="DatabaseTypeEnum"/> 数据库类型</param>
     /// <param name="db"><see cref="ISqlSugarClient"/> 数据库上下文</param>
     /// <param name="newDb"><see cref="ISqlSugarClient"/> 数据库上下文</param>
     /// <returns></returns>
     [NonAction]
-    public async Task InitCustomDatabase(DatabaseTypeEnum databaseType, ISqlSugarClient db, ISqlSugarClient newDb)
+    public async Task InitCustomDatabase(TenantModel tenantModel, DatabaseTypeEnum databaseType, ISqlSugarClient db,
+        ISqlSugarClient newDb)
     {
         switch (databaseType)
         {
