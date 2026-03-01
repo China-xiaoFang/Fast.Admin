@@ -34,8 +34,13 @@ public static class ElTreeOutputExtension
     /// <returns><see cref="List{T}"/></returns>
     public static List<ElTreeOutput<T>> Build<T>(this List<ElTreeOutput<T>> list)
     {
-        var result = list.Where(wh => wh.ParentId.Equals(0))
+        // 构建所有节点 Value 的集合
+        var valueSet = new HashSet<object>(list.Select(sl => (object) sl.Value));
+
+        // 根节点条件：ParentId == 0 或者父节点不在当前列表中（被权限过滤掉了）
+        var result = list.Where(wh => wh.ParentId.Equals(0) || !valueSet.Contains(wh.ParentId))
             .ToList();
+
         result.ForEach(e => BuildChildNodes(list, e));
         return result;
     }
