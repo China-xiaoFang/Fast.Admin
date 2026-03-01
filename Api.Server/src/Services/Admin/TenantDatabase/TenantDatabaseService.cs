@@ -204,6 +204,7 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                     RoleCode = "manager_role",
                     Sort = 1,
                     DataScopeType = DataScopeTypeEnum.All,
+                    AssignableRoleIds = [],
                     Remark = null
                 })
                 .ExecuteCommandAsync();
