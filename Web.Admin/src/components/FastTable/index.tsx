@@ -258,7 +258,6 @@ export default defineComponent({
 		const tableProps = useProps(props, faTableProps, [
 			"columns",
 			"hideImage",
-			"searchForm",
 			"collapsedSearch",
 			"advancedSearchDrawer",
 			"dataSearchRange",
@@ -291,8 +290,8 @@ export default defineComponent({
 				vLoading={state.loading}
 				element-loading-text={state.loadingText}
 				columns={state.columns}
+				searchForm={props.searchForm && configStore.tableLayout.showSearch}
 				hideImage={configStore.tableLayout.hideImage}
-				searchForm={configStore.tableLayout.showSearch}
 				collapsedSearch={configStore.tableLayout.defaultCollapsedSearch}
 				advancedSearchDrawer={configStore.tableLayout.advancedSearchDrawer}
 				dataSearchRange={configStore.tableLayout.dataSearchRange}
