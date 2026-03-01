@@ -105,9 +105,22 @@ public class AuthService : IDynamicApplication
         var roleList = await _empRepository.Queryable<EmployeeRoleModel>()
             .LeftJoin<RoleModel>((t1, t2) => t1.RoleId == t2.RoleId)
             .Where(t1 => t1.EmployeeId == _user.UserId)
-            .Select((t1, t2) => new {t1.RoleId, t1.RoleName, t2.RoleType, t2.DataScopeType})
+            .Select((t1, t2) => new
+            {
+                t1.RoleId,
+                t1.RoleName,
+                t2.RoleType,
+                t2.IsSystemMenu,
+                t2.DataScopeType
+            })
             .ToListAsync();
-        var roleIds = roleList.Select(sl => sl.RoleId)
+        // 系统菜单角色类型
+        var systemMenuRoleType = roleList.Where(wh => wh.IsSystemMenu)
+            .Select(sl => sl.RoleType)
+            .Aggregate(default(RoleTypeEnum), (acc, item) => acc | item);
+        // 自定义菜单角色
+        var customMenuRoleIds = roleList.Where(wh => !wh.IsSystemMenu)
+            .Select(sl => sl.RoleId)
             .ToList();
         result.RoleNameList = roleList.Select(sl => sl.RoleName)
             .ToList();
@@ -131,7 +144,7 @@ public class AuthService : IDynamicApplication
             moduleQueryable = moduleQueryable.Where(wh =>
                 (wh.ViewType & (ModuleViewTypeEnum.SuperAdmin | ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
         }
-        else if (_user.IsAdmin || roleList.Any(a => a.RoleType == RoleTypeEnum.Admin))
+        else if (_user.IsAdmin)
         {
             result.DataScopeType = DataScopeTypeEnum.All;
 
@@ -146,20 +159,10 @@ public class AuthService : IDynamicApplication
             moduleQueryable = moduleQueryable.Where(wh => (wh.ViewType & ModuleViewTypeEnum.All) != 0);
             // 查询当前用户角色对应的菜单Id
             var roleMenuIds = await _empRepository.Queryable<RoleMenuModel>()
-                .Where(wh => roleIds.Contains(wh.RoleId))
+                .Where(wh => customMenuRoleIds.Contains(wh.RoleId))
                 .Select(sl => sl.MenuId)
                 .ToListAsync();
-            // 查询当前用户对应的菜单Id
-            var userMenuIds = await _empRepository.Queryable<EmployeeMenuModel>()
-                .Where(wh => wh.EmployeeId == _user.UserId)
-                .Select(sl => sl.MenuId)
-                .ToListAsync();
-            var menuIds = new List<long>();
-            menuIds.AddRange(roleMenuIds);
-            menuIds.AddRange(userMenuIds);
-            menuIds = menuIds.Distinct()
-                .ToList();
-            menuQueryable = menuQueryable.Where(wh => menuIds.Contains(wh.MenuId));
+            menuQueryable = menuQueryable.Where(wh => (wh.RoleType & systemMenuRoleType) != 0 || roleMenuIds.Contains(wh.MenuId));
         }
 
         // 查询所有模块
@@ -266,24 +269,15 @@ public class AuthService : IDynamicApplication
                 .WhereIF(hasDesktop, wh => wh.HasDesktop)
                 .WhereIF(hasWeb, wh => wh.HasWeb)
                 .WhereIF(hasMobile, wh => wh.HasMobile);
-            if (!_user.IsAdmin && roleList.All(a => a.RoleType != RoleTypeEnum.Admin))
+            if (_user.IsAdmin)
             {
                 // 查询当前用户角色对应的按钮Id
                 var roleButtonIds = await _empRepository.Queryable<RoleButtonModel>()
-                    .Where(wh => roleIds.Contains(wh.RoleId))
+                    .Where(wh => customMenuRoleIds.Contains(wh.RoleId))
                     .Select(sl => sl.ButtonId)
                     .ToListAsync();
-                // 查询当前用户对应的按钮Id
-                var userButtonIds = await _empRepository.Queryable<EmployeeButtonModel>()
-                    .Where(wh => wh.EmployeeId == _user.UserId)
-                    .Select(sl => sl.ButtonId)
-                    .ToListAsync();
-                var buttonIds = new List<long>();
-                buttonIds.AddRange(roleButtonIds);
-                buttonIds.AddRange(userButtonIds);
-                buttonIds = buttonIds.Distinct()
-                    .ToList();
-                buttonQueryable = buttonQueryable.Where(wh => buttonIds.Contains(wh.ButtonId));
+                buttonQueryable = buttonQueryable.Where(wh =>
+                    (wh.RoleType & systemMenuRoleType) != 0 || roleButtonIds.Contains(wh.ButtonId));
             }
 
             result.ButtonCodeList = await buttonQueryable.OrderBy(ob => ob.Sort)
@@ -298,7 +292,8 @@ public class AuthService : IDynamicApplication
             AppNo = _user.AppNo,
             TenantNo = _user.TenantNo,
             EmployeeNo = _user.EmployeeNo,
-            RoleIdList = roleIds,
+            RoleIdList = roleList.Select(sl => sl.RoleId)
+                .ToList(),
             RoleNameList = result.RoleNameList,
             DataScopeType = (int) result.DataScopeType,
             MenuCodeList = _user.IsSuperAdmin

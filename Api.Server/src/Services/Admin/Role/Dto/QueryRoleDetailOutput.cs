@@ -40,6 +40,11 @@ public class QueryRoleDetailOutput : PagedOutput
     public RoleTypeEnum RoleType { get; set; }
 
     /// <summary>
+    /// 是否使用系统菜单
+    /// </summary>
+    public bool IsSystemMenu { get; set; }
+
+    /// <summary>
     /// 角色名称
     /// </summary>
     public string RoleName { get; set; }
@@ -58,6 +63,12 @@ public class QueryRoleDetailOutput : PagedOutput
     /// 数据范围类型
     /// </summary>
     public DataScopeTypeEnum DataScopeType { get; set; }
+
+    /// <summary>
+    /// 可分配的角色Id集合
+    /// </summary>
+    [SugarColumn(IsJson = true)]
+    public List<long> AssignableRoleIds { get; set; }
 
     /// <summary>
     /// 备注

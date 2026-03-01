@@ -14,6 +14,10 @@ export interface QueryRolePagedOutput {
    */
   roleType?: RoleTypeEnum;
   /**
+   * 是否使用系统菜单
+   */
+  isSystemMenu?: boolean;
+  /**
    * 角色名称
    */
   roleName?: string;

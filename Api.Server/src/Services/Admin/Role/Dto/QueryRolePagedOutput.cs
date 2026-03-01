@@ -40,6 +40,11 @@ public class QueryRolePagedOutput : PagedOutput
     public RoleTypeEnum RoleType { get; set; }
 
     /// <summary>
+    /// 是否使用系统菜单
+    /// </summary>
+    public bool IsSystemMenu { get; set; }
+
+    /// <summary>
     /// 角色名称
     /// </summary>
     [SugarSearchValue]

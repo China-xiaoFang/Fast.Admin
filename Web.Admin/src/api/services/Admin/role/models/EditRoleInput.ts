@@ -1,3 +1,4 @@
+import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 
 /**
@@ -8,6 +9,14 @@ export interface EditRoleInput {
    * 角色Id
    */
   roleId?: number;
+  /**
+   * 
+   */
+  roleType?: RoleTypeEnum;
+  /**
+   * 是否使用系统菜单
+   */
+  isSystemMenu?: boolean;
   /**
    * 角色名称
    */
@@ -24,6 +33,10 @@ export interface EditRoleInput {
    * 
    */
   dataScopeType?: DataScopeTypeEnum;
+  /**
+   * 可分配的角色Id集合
+   */
+  assignableRoleIds?: Array<number>;
   /**
    * 备注
    */

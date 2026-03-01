@@ -20,7 +20,6 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using System.Text.RegularExpressions;
 using Fast.Admin.Entity;
 using Fast.Admin.Enum;
 using Fast.Admin.Service.Employee.Dto;
@@ -31,6 +30,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Yitter.IdGenerator;
 
 namespace Fast.Admin.Service.Employee;
@@ -306,6 +307,25 @@ public class EmployeeService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
+        if (!_user.IsSuperAdmin && !_user.IsAdmin)
+        {
+            var _roleIds = _user.RoleIdList ?? [];
+            var _roleList = await _repository.Queryable<RoleModel>()
+                .Where(wh => _roleIds.Contains(wh.RoleId))
+                .Select(sl => new { sl.AssignableRoleIds })
+                .ToListAsync();
+            var assignableRoleIds = _roleList.Where(wh => wh.AssignableRoleIds?.Count > 0)
+                .SelectMany(sl => sl.AssignableRoleIds)
+                .Distinct()
+                .ToList();
+            if (assignableRoleIds.Count > 0
+                && roleIds.Except(assignableRoleIds)
+                    .Any())
+            {
+                throw new UserFriendlyException("无权分配超出自身权限范围的角色！");
+            }
+        }
+
         var employeeModel = new EmployeeModel
         {
             EmployeeId = YitIdHelper.NextId(),
@@ -495,6 +515,25 @@ public class EmployeeService : IDynamicApplication
         if (roleList.Count != roleIds.Count)
         {
             throw new UserFriendlyException("数据不存在！");
+        }
+
+        if (!_user.IsSuperAdmin && !_user.IsAdmin)
+        {
+            var _roleIds = _user.RoleIdList ?? [];
+            var _roleList = await _repository.Queryable<RoleModel>()
+                .Where(wh => _roleIds.Contains(wh.RoleId))
+                .Select(sl => new { sl.AssignableRoleIds })
+                .ToListAsync();
+            var assignableRoleIds = _roleList.Where(wh => wh.AssignableRoleIds?.Count > 0)
+                .SelectMany(sl => sl.AssignableRoleIds)
+                .Distinct()
+                .ToList();
+            if (assignableRoleIds.Count > 0
+                && roleIds.Except(assignableRoleIds)
+                    .Any())
+            {
+                throw new UserFriendlyException("无权分配超出自身权限范围的角色！");
+            }
         }
 
         employeeModel.EmployeeName = input.EmployeeName;
@@ -967,147 +1006,5 @@ public class EmployeeService : IDynamicApplication
             BizNo = employeeModel.EmployeeNo,
             Description = $"职员：{employeeModel.EmployeeName}，{tenantUserModel.Status.GetDescription()}登录账号"
         });
-    }
-
-    /// <summary>
-    /// 职员授权
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    [HttpPost]
-    [ApiInfo("职员授权", HttpRequestActionEnum.Edit)]
-    [Permission(PermissionConst.Employee.Edit)]
-    public async Task EmployeeAuth(EmployeeAuthInput input)
-    {
-        var employeeModel = await _repository.SingleOrDefaultAsync(input.EmployeeId);
-        if (employeeModel == null)
-        {
-            throw new UserFriendlyException("数据不存在！");
-        }
-
-        // 验证菜单是否都存在
-        var menuIds = input.MenuIds ?? [];
-        if (menuIds.Any())
-        {
-            if (await _centerRepository.Queryable<MenuModel>()
-                    .Where(wh => menuIds.Contains(wh.MenuId))
-                    .Select(sl => sl.MenuId)
-                    .CountAsync()
-                != menuIds.Count)
-            {
-                throw new UserFriendlyException("授权菜单数据不存在！");
-            }
-        }
-
-        // 验证按钮是否都存在
-        var buttonIds = input.ButtonIds ?? [];
-        if (buttonIds.Any())
-        {
-            var existButtonIds = await _centerRepository.Queryable<ButtonModel>()
-                .Where(wh => buttonIds.Contains(wh.ButtonId))
-                .Select(sl => sl.ButtonId)
-                .ToListAsync();
-
-            if (existButtonIds.Count != buttonIds.Count)
-            {
-                throw new UserFriendlyException("授权按钮数据不存在！");
-            }
-        }
-
-        await _repository.Ado.UseTranAsync(async () =>
-        {
-            // 删除旧的菜单权限
-            await _repository.Deleteable<EmployeeMenuModel>()
-                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
-                .ExecuteCommandAsync();
-
-            // 添加新的菜单权限
-            if (menuIds.Any())
-            {
-                await _repository.Insertable(menuIds
-                        .Select(menuId => new EmployeeMenuModel {EmployeeId = employeeModel.EmployeeId, MenuId = menuId})
-                        .ToList())
-                    .ExecuteCommandAsync();
-            }
-
-            // 删除旧的按钮权限
-            await _repository.Deleteable<EmployeeButtonModel>()
-                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
-                .ExecuteCommandAsync();
-
-            // 添加新的按钮权限
-            if (buttonIds.Any())
-            {
-                await _repository.Insertable(buttonIds
-                        .Select(buttonId => new EmployeeButtonModel {EmployeeId = employeeModel.EmployeeId, ButtonId = buttonId})
-                        .ToList())
-                    .ExecuteCommandAsync();
-            }
-        }, ex => throw ex);
-
-        // 操作日志
-        LogContext.OperateLog(new OperateLogDto
-        {
-            Title = "职员授权",
-            OperateType = OperateLogTypeEnum.Organization,
-            BizId = employeeModel.EmployeeId,
-            BizNo = employeeModel.EmployeeNo,
-            Description = null
-        });
-    }
-
-    /// <summary>
-    /// 获取职员授权菜单
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    [HttpPost]
-    [ApiInfo("获取职员授权菜单", HttpRequestActionEnum.Query)]
-    [Permission(PermissionConst.Employee.Edit)]
-    public async Task<EmployeeAuthInput> QueryEmployeeAuthMenu(EmployeeIdInput input)
-    {
-        if (input.EmployeeId == _user.UserId)
-        {
-            throw new UserFriendlyException("禁止操作！");
-        }
-
-        var employeeModel = await _repository.SingleOrDefaultAsync(input.EmployeeId);
-        if (employeeModel == null)
-        {
-            throw new UserFriendlyException("数据不存在！");
-        }
-
-        // 查询职员绑定角色
-        var roleIds = await _repository.Queryable<EmployeeRoleModel>()
-            .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
-            .Select(sl => sl.RoleId)
-            .ToListAsync();
-
-        var result = new EmployeeAuthInput
-        {
-            EmployeeId = employeeModel.EmployeeId,
-            EmployeeName = employeeModel.EmployeeName,
-            RowVersion = employeeModel.RowVersion,
-            RoleMenuIds = await _repository.Queryable<RoleMenuModel>()
-                .Where(wh => roleIds.Contains(wh.RoleId))
-                .Select(sl => sl.MenuId)
-                .Distinct()
-                .ToListAsync(),
-            RoleButtonIds = await _repository.Queryable<RoleButtonModel>()
-                .Where(wh => roleIds.Contains(wh.RoleId))
-                .Select(sl => sl.ButtonId)
-                .Distinct()
-                .ToListAsync(),
-            MenuIds = await _repository.Queryable<EmployeeMenuModel>()
-                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
-                .Select(sl => sl.MenuId)
-                .ToListAsync(),
-            ButtonIds = await _repository.Queryable<EmployeeButtonModel>()
-                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
-                .Select(sl => sl.ButtonId)
-                .ToListAsync()
-        };
-
-        return result;
     }
 }

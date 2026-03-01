@@ -104,7 +104,7 @@ const editFormRef = ref<InstanceType<typeof AccountEdit>>();
 /** 处理重置密码 */
 const handleResetPassword = (row: QueryAccountPagedOutput) => {
 	const { accountId, rowVersion } = row;
-	ElMessageBox.confirm(`确定解锁账号？`, {
+	ElMessageBox.confirm(`确定重置密码？`, {
 		type: "warning",
 		async beforeClose() {
 			await accountApi.resetPassword({

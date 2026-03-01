@@ -2,7 +2,7 @@ import { axiosUtil } from "@fast-china/axios";
 import { InitDatabaseInput } from "./models/InitDatabaseInput";
 
 /**
- * Fast.Admin.Service.TenantDatabase.TenantDatabaseService 租户 Database 服务Api
+ * Fast.Admin.Service.TenantDatabase.TenantDatabaseService 自定义 Database 服务Api
  */
 export const tenantDatabaseApi = {
   /**

@@ -10,56 +10,54 @@
 		@close="faFormRef.resetFields()"
 	>
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled" cols="3">
-			<template v-if="state.dialogState === 'add'">
-				<FaLayoutGridItem span="3">
-					<el-divider contentPosition="left">组织架构</el-divider>
-				</FaLayoutGridItem>
-				<FaFormItem prop="orgId" label="机构">
-					<FaTreeSelect
-						:requestApi="organizationApi.organizationSelector"
-						v-model="state.formData.orgId"
-						v-model:label="state.formData.orgName"
-						placeholder="请选择机构"
-						checkStrictly
-						filterable
-						clearable
-					/>
-				</FaFormItem>
-				<FaFormItem prop="departmentId" label="部门">
-					<FaTreeSelect
-						:requestApi="departmentApi.departmentSelector"
-						:disabled="!state.formData?.orgId"
-						:initParam="state.formData.orgId"
-						v-model="state.formData.departmentId"
-						v-model:label="state.formData.departmentName"
-						placeholder="请选择部门"
-						checkStrictly
-						filterable
-						clearable
-					/>
-				</FaFormItem>
-				<FaFormItem prop="sex" label="部门负责人">
-					<RadioGroup name="BooleanEnum" v-model="state.formData.isPrincipal" />
-				</FaFormItem>
-				<FaFormItem prop="positionId" label="职位">
-					<FaSelect
-						:requestApi="positionApi.positionSelector"
-						v-model="state.formData.positionId"
-						v-model:label="state.formData.positionName"
-						placeholder="请选择职位"
-						clearable
-					/>
-				</FaFormItem>
-				<FaFormItem prop="jobLevelId" label="职级">
-					<FaSelect
-						:requestApi="jobLevelApi.jobLevelSelector"
-						v-model="state.formData.jobLevelId"
-						v-model:label="state.formData.jobLevelName"
-						placeholder="请选择职级"
-						clearable
-					/>
-				</FaFormItem>
-			</template>
+			<FaLayoutGridItem span="3">
+				<el-divider contentPosition="left">组织架构</el-divider>
+			</FaLayoutGridItem>
+			<FaFormItem prop="orgId" label="机构">
+				<FaTreeSelect
+					:requestApi="organizationApi.organizationSelector"
+					v-model="state.formData.orgId"
+					v-model:label="state.formData.orgName"
+					placeholder="请选择机构"
+					checkStrictly
+					filterable
+					clearable
+				/>
+			</FaFormItem>
+			<FaFormItem prop="departmentId" label="部门">
+				<FaTreeSelect
+					:requestApi="departmentApi.departmentSelector"
+					:disabled="!state.formData?.orgId"
+					:initParam="state.formData.orgId"
+					v-model="state.formData.departmentId"
+					v-model:label="state.formData.departmentName"
+					placeholder="请选择部门"
+					checkStrictly
+					filterable
+					clearable
+				/>
+			</FaFormItem>
+			<FaFormItem prop="sex" label="部门负责人">
+				<RadioGroup name="BooleanEnum" v-model="state.formData.isPrincipal" />
+			</FaFormItem>
+			<FaFormItem prop="positionId" label="职位">
+				<FaSelect
+					:requestApi="positionApi.positionSelector"
+					v-model="state.formData.positionId"
+					v-model:label="state.formData.positionName"
+					placeholder="请选择职位"
+					clearable
+				/>
+			</FaFormItem>
+			<FaFormItem prop="jobLevelId" label="职级">
+				<FaSelect
+					:requestApi="jobLevelApi.jobLevelSelector"
+					v-model="state.formData.jobLevelId"
+					v-model:label="state.formData.jobLevelName"
+					placeholder="请选择职级"
+					clearable
+				/>
+			</FaFormItem>
 
 			<FaLayoutGridItem span="3">
 				<el-divider contentPosition="left">基础档案</el-divider>
@@ -120,7 +118,7 @@
 				<el-divider contentPosition="left">角色信息</el-divider>
 			</FaLayoutGridItem>
 			<FaFormItem prop="roleList" label="角色" span="3">
-				<el-checkbox-group v-model="state.roleIds" @change="handleRoleChange">
+				<el-checkbox-group v-model="state.formData.roleIds" @change="handleRoleChange">
 					<el-checkbox v-for="(item, index) of state.roleList" :key="index" :value="item.value">
 						{{ item.label }}
 					</el-checkbox>
@@ -190,111 +188,6 @@
 			<FaFormItem prop="emergencyAddress" label="紧急联系地址">
 				<el-input type="textarea" v-model="state.formData.emergencyAddress" :rows="2" maxlength="200" placeholder="请输入紧急联系地址" />
 			</FaFormItem>
-
-			<template v-if="state.dialogState !== 'add'">
-				<FaLayoutGridItem span="3">
-					<el-divider contentPosition="left">组织架构</el-divider>
-				</FaLayoutGridItem>
-				<FaLayoutGridItem span="3" style="min-height: 300px; max-height: 500px">
-					<FaTable :data="state.formData.orgList" :pagination="false">
-						<!-- 表格按钮操作区域 -->
-						<template #header>
-							<el-button type="primary" :icon="Plus" @click="handleOrgAdd">新增</el-button>
-						</template>
-						<FaTableColumn prop="orgId" label="机构" width="280">
-							<template #default="{ row, $index }: { row: EmployeeOrgModel; $index: number }">
-								<el-form-item
-									:prop="`orgList.${$index}.orgId`"
-									:rules="[{ required: true, message: '请选择机构', trigger: 'change' }]"
-								>
-									<FaSelect
-										:requestApi="organizationApi.organizationSelector"
-										v-model="row.orgId"
-										v-model:label="row.orgName"
-										placeholder="请选择机构"
-										clearable
-									/>
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<FaTableColumn prop="departmentId" label="部门" width="280">
-							<template #default="{ row, $index }: { row: EmployeeOrgModel; $index: number }">
-								<el-form-item
-									:prop="`orgList.${$index}.departmentId`"
-									:rules="[{ required: true, message: '请选择部门', trigger: 'change' }]"
-								>
-									<FaTreeSelect
-										:requestApi="departmentApi.departmentSelector"
-										:initParam="row.orgId"
-										v-model="row.departmentId"
-										v-model:label="row.departmentName"
-										placeholder="请选择部门"
-										checkStrictly
-										filterable
-										clearable
-									/>
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<FaTableColumn prop="isPrimary" label="主部门" width="80">
-							<template #default="{ row, $index }: { row: EmployeeOrgModel; $index: number }">
-								<el-form-item
-									:prop="`orgList.${$index}.isPrimary`"
-									:rules="[{ required: true, message: '请选择是否为主部门', trigger: 'change' }]"
-								>
-									<el-checkbox v-model="row.isPrimary" />
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<FaTableColumn prop="positionId" label="职位" width="280">
-							<template #default="{ row, $index }: { row: EmployeeOrgModel; $index: number }">
-								<el-form-item
-									:prop="`orgList.${$index}.positionId`"
-									:rules="[{ required: true, message: '请选择职位', trigger: 'change' }]"
-								>
-									<FaSelect
-										:requestApi="positionApi.positionSelector"
-										v-model="row.positionId"
-										v-model:label="row.positionName"
-										placeholder="请选择职位"
-										clearable
-									/>
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<FaTableColumn prop="jobLevelId" label="职级" width="280">
-							<template #default="{ row, $index }: { row: EmployeeOrgModel; $index: number }">
-								<el-form-item
-									:prop="`orgList.${$index}.jobLevelId`"
-									:rules="[{ required: true, message: '请选择职级', trigger: 'change' }]"
-								>
-									<FaSelect
-										:requestApi="jobLevelApi.jobLevelSelector"
-										v-model="row.jobLevelId"
-										v-model:label="row.jobLevelName"
-										placeholder="请选择职级"
-										clearable
-									/>
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<FaTableColumn prop="isPrincipal" label="负责人" width="80">
-							<template #default="{ row, $index }: { row: EmployeeOrgModel; $index: number }">
-								<el-form-item
-									:prop="`orgList.${$index}.isPrincipal`"
-									:rules="[{ required: true, message: '请选择是否为负责人', trigger: 'change' }]"
-								>
-									<el-checkbox v-model="row.isPrincipal" />
-								</el-form-item>
-							</template>
-						</FaTableColumn>
-						<!-- 表格操作 -->
-						<template #operation="{ $index }: { $index: number }">
-							<el-button size="small" plain type="danger" @click="handleOrgDelete($index)">删除</el-button>
-						</template>
-					</FaTable>
-				</FaLayoutGridItem>
-			</template>
 		</FaForm>
 	</FaDialog>
 </template>
@@ -302,14 +195,12 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import { CheckboxValueType, ElMessage, type FormRules, dayjs } from "element-plus";
-import { Plus } from "@element-plus/icons-vue";
 import { dateUtil, withDefineType } from "@fast-china/utils";
 import { GenderEnum } from "@/api/enums/GenderEnum";
 import { departmentApi } from "@/api/services/Admin/department";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { AddEmployeeInput } from "@/api/services/Admin/employee/models/AddEmployeeInput";
 import { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
-import { EmployeeOrgModel } from "@/api/services/Admin/employee/models/EmployeeOrgModel";
 import { jobLevelApi } from "@/api/services/Admin/jobLevel";
 import { organizationApi } from "@/api/services/Admin/organization";
 import { positionApi } from "@/api/services/Admin/position";
@@ -330,7 +221,9 @@ const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
-	formData: withDefineType<EditEmployeeInput & AddEmployeeInput>({}),
+	formData: withDefineType<EditEmployeeInput & AddEmployeeInput & { roleIds?: number[] }>({
+		roleIds: [],
+	}),
 	formRules: withDefineType<FormRules>({
 		orgId: [{ required: true, message: "请选择机构", trigger: "change" }],
 		departmentId: [{ required: true, message: "请选择部门", trigger: "change" }],
@@ -346,8 +239,6 @@ const state = reactive({
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "职员",
-	/** 角色集合 */
-	roleIds: withDefineType<number[]>([]),
 	roleList: withDefineType<ElSelectorOutput<number>[]>([]),
 });
 
@@ -364,18 +255,6 @@ const handleRoleChange = (val: CheckboxValueType[]) => {
 			};
 		})
 		.filter(Boolean);
-};
-
-const handleOrgAdd = () => {
-	state.formData.orgList.push({
-		employeeId: state.formData.employeeId,
-		isPrimary: false,
-		isPrincipal: false,
-	});
-};
-
-const handleOrgDelete = (index: number) => {
-	state.formData.orgList.splice(index, 1);
 };
 
 const handleConfirm = () => {
@@ -400,6 +279,16 @@ const detail = (employeeId: number) => {
 		state.formDisabled = true;
 		const apiRes = await employeeApi.queryEmployeeDetail(employeeId);
 		state.formData = apiRes;
+		const primaryOrg = apiRes.orgList.find((f) => f.isPrimary);
+		state.formData.orgId = primaryOrg.orgId;
+		state.formData.orgName = primaryOrg.orgName;
+		state.formData.departmentId = primaryOrg.departmentId;
+		state.formData.departmentName = primaryOrg.departmentName;
+		state.formData.positionId = primaryOrg.positionId;
+		state.formData.positionName = primaryOrg.positionName;
+		state.formData.jobLevelId = primaryOrg.jobLevelId;
+		state.formData.jobLevelName = primaryOrg.jobLevelName;
+		state.formData.isPrincipal = primaryOrg.isPrincipal;
 		state.dialogTitle = `职员详情 - ${apiRes.employeeName}`;
 		state.roleList = await roleApi.roleSelector();
 	});
@@ -426,7 +315,17 @@ const edit = (employeeId: number) => {
 		state.formDisabled = false;
 		const apiRes = await employeeApi.queryEmployeeDetail(employeeId);
 		state.formData = apiRes;
-		state.roleIds = apiRes.roleList.map((m) => m.roleId);
+		state.formData.roleIds = apiRes.roleList.map((m) => m.roleId);
+		const primaryOrg = apiRes.orgList.find((f) => f.isPrimary);
+		state.formData.orgId = primaryOrg.orgId;
+		state.formData.orgName = primaryOrg.orgName;
+		state.formData.departmentId = primaryOrg.departmentId;
+		state.formData.departmentName = primaryOrg.departmentName;
+		state.formData.positionId = primaryOrg.positionId;
+		state.formData.positionName = primaryOrg.positionName;
+		state.formData.jobLevelId = primaryOrg.jobLevelId;
+		state.formData.jobLevelName = primaryOrg.jobLevelName;
+		state.formData.isPrincipal = primaryOrg.isPrincipal;
 		state.dialogTitle = `编辑职员 - ${apiRes.employeeName}`;
 		state.roleList = await roleApi.roleSelector();
 	});

@@ -425,7 +425,7 @@ public class AccountService : IDynamicApplication
             await _repository.UpdateAsync(accountModel);
             await _repository.Insertable(new PasswordRecordModel
                 {
-                    AccountId = _user.AccountId,
+                    AccountId = accountModel.AccountId,
                     OperationType = PasswordOperationTypeEnum.Change,
                     Type = PasswordTypeEnum.SHA1,
                     Password = accountModel.Password
@@ -501,7 +501,7 @@ public class AccountService : IDynamicApplication
             await _repository.UpdateAsync(accountModel);
             await _repository.Insertable(new PasswordRecordModel
                 {
-                    AccountId = _user.AccountId,
+                    AccountId = accountModel.AccountId,
                     OperationType = PasswordOperationTypeEnum.Reset,
                     Type = PasswordTypeEnum.SHA1,
                     Password = accountModel.Password

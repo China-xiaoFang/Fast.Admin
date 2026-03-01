@@ -37,7 +37,7 @@ namespace Fast.Admin.Service.TenantDatabase;
 /// <see cref="TenantDatabaseService"/> 租户 Database 服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Admin, Name = "tenantDatabase")]
-public class TenantDatabaseService : ITenantDatabaseService, ITransientDependency, IDynamicApplication
+public partial class TenantDatabaseService : ITenantDatabaseService, ITransientDependency, IDynamicApplication
 {
     private readonly IUser _user;
 
@@ -199,6 +199,7 @@ public class TenantDatabaseService : ITenantDatabaseService, ITransientDependenc
                 {
                     RoleId = YitIdHelper.NextId(),
                     RoleType = RoleTypeEnum.Admin,
+                    IsSystemMenu = true,
                     RoleName = "管理员",
                     RoleCode = "manager_role",
                     Sort = 1,
@@ -293,6 +294,8 @@ public class TenantDatabaseService : ITenantDatabaseService, ITransientDependenc
             await db.Updateable(tenantModel)
                 .ExecuteCommandAsync();
         }
+
+        await InitCustomDatabase(databaseType, db, newDb);
 
         databaseModel.IsInitialized = true;
         await db.Updateable(databaseModel)

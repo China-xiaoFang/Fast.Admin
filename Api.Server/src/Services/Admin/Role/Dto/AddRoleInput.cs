@@ -30,6 +30,18 @@ namespace Fast.Admin.Service.Role.Dto;
 public class AddRoleInput
 {
     /// <summary>
+    /// 角色类型
+    /// </summary>
+    [EnumRequired(ErrorMessage = "角色类型不能为空")]
+    public RoleTypeEnum RoleType { get; set; }
+
+    /// <summary>
+    /// 是否使用系统菜单
+    /// </summary>
+    [Required(ErrorMessage = "是否使用系统菜单不能为空")]
+    public bool IsSystemMenu { get; set; }
+
+    /// <summary>
     /// 角色名称
     /// </summary>
     [StringRequired(ErrorMessage = "角色名称不能为空")]
@@ -52,6 +64,11 @@ public class AddRoleInput
     /// </summary>
     [EnumRequired(ErrorMessage = "数据范围类型不能为空")]
     public DataScopeTypeEnum DataScopeType { get; set; }
+
+    /// <summary>
+    /// 可分配的角色Id集合
+    /// </summary>
+    public List<long> AssignableRoleIds { get; set; }
 
     /// <summary>
     /// 备注

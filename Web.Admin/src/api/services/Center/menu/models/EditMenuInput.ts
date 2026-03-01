@@ -1,5 +1,6 @@
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
+import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditMenuButtonInput } from "./EditMenuButtonInput";
 
@@ -39,6 +40,10 @@ export interface EditMenuInput {
    * 
    */
   menuType?: MenuTypeEnum;
+  /**
+   * 
+   */
+  roleType?: RoleTypeEnum;
   /**
    * 是否桌面端
    */
