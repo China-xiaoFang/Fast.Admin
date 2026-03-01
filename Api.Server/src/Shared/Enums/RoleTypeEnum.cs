@@ -20,35 +20,47 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Service.Employee.Dto;
+namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="EmployeeAuthInput"/> 职员授权输入
+/// <see cref="RoleTypeEnum"/> 角色类型枚举
 /// </summary>
-public class EmployeeAuthInput : EmployeeIdInput
+[Flags]
+[FastEnum("角色类型枚举")]
+public enum RoleTypeEnum
 {
     /// <summary>
-    /// 职员名称
+    /// 管理员
     /// </summary>
-    public string EmployeeName { get; set; }
+    [TagType(TagTypeEnum.Danger)]
+    [Description("管理员")]
+    Admin = 1 << 0,
 
     /// <summary>
-    /// 菜单Id集合
+    /// 技术
     /// </summary>
-    public List<long> MenuIds { get; set; }
+    [TagType(TagTypeEnum.Warning)]
+    [Description("技术")]
+    IT = 1 << 1,
 
     /// <summary>
-    /// 角色菜单Id集合
+    /// 人事
     /// </summary>
-    public List<long> RoleMenuIds { get; set; }
+    [TagType(TagTypeEnum.Primary)]
+    [Description("人事")]
+    HR = 1 << 2,
 
     /// <summary>
-    /// 按钮Id集合
+    /// 财务
     /// </summary>
-    public List<long> ButtonIds { get; set; }
+    [TagType(TagTypeEnum.Primary)]
+    [Description("财务")]
+    Finance = 1 << 3,
 
     /// <summary>
-    /// 角色按钮Id集合
+    /// 运营
     /// </summary>
-    public List<long> RoleButtonIds { get; set; }
+    [TagType(TagTypeEnum.Primary)]
+    [Description("运营")]
+    Operator = 1 << 4
 }

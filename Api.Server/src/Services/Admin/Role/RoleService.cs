@@ -22,7 +22,6 @@
 
 using Dm.util;
 using Fast.Admin.Entity;
-using Fast.Admin.Enum;
 using Fast.Admin.Service.Role.Dto;
 using Fast.AdminLog.Enum;
 using Fast.Center.Entity;
@@ -57,7 +56,24 @@ public class RoleService : IDynamicApplication
     [ApiInfo("角色选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> RoleSelector()
     {
-        var data = await _repository.Entities.OrderBy(ob => ob.RoleName)
+        var queryable = _repository.Entities;
+        if (!_user.IsSuperAdmin && !_user.IsAdmin)
+        {
+            var roleIds = _user.RoleIdList ?? [];
+            var roleList = await _repository.Queryable<RoleModel>()
+                .Where(wh => roleIds.Contains(wh.RoleId))
+                .Select(sl => new {sl.AssignableRoleIds})
+                .ToListAsync();
+            var assignableRoleIds = roleList.Where(wh => wh.AssignableRoleIds?.Count > 0)
+                .SelectMany(sl => sl.AssignableRoleIds)
+                .Distinct()
+                .ToList();
+
+            // 如果没有可分配的角色，则代表可以分配全部
+            queryable = queryable.WhereIF(assignableRoleIds.Count > 0, wh => assignableRoleIds.Contains(wh.RoleId));
+        }
+
+        var data = await queryable.OrderBy(ob => ob.Sort)
             .Select(sl => new {sl.RoleId, sl.RoleName, sl.RoleCode})
             .ToListAsync();
 
@@ -82,6 +98,7 @@ public class RoleService : IDynamicApplication
             {
                 RoleId = sl.RoleId,
                 RoleType = sl.RoleType,
+                IsSystemMenu = sl.IsSystemMenu,
                 RoleName = sl.RoleName,
                 RoleCode = sl.RoleCode,
                 Sort = sl.Sort,
@@ -112,10 +129,12 @@ public class RoleService : IDynamicApplication
             {
                 RoleId = sl.RoleId,
                 RoleType = sl.RoleType,
+                IsSystemMenu = sl.IsSystemMenu,
                 RoleName = sl.RoleName,
                 RoleCode = sl.RoleCode,
                 Sort = sl.Sort,
                 DataScopeType = sl.DataScopeType,
+                AssignableRoleIds = sl.AssignableRoleIds,
                 Remark = sl.Remark,
                 DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
@@ -156,11 +175,13 @@ public class RoleService : IDynamicApplication
 
         var roleModel = new RoleModel
         {
-            RoleType = RoleTypeEnum.Normal,
+            RoleType = input.RoleType,
+            IsSystemMenu = input.IsSystemMenu,
             RoleName = input.RoleName,
             RoleCode = input.RoleCode,
             Sort = input.Sort,
             DataScopeType = input.DataScopeType,
+            AssignableRoleIds = input.AssignableRoleIds,
             Remark = input.Remark
         };
 
@@ -203,15 +224,13 @@ public class RoleService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        if (roleModel.RoleType == RoleTypeEnum.Admin)
-        {
-            throw new UserFriendlyException("禁止修改管理员角色！");
-        }
-
+        roleModel.RoleType = input.RoleType;
+        roleModel.IsSystemMenu = input.IsSystemMenu;
         roleModel.RoleName = input.RoleName;
         roleModel.RoleCode = input.RoleCode;
         roleModel.Sort = input.Sort;
         roleModel.DataScopeType = input.DataScopeType;
+        roleModel.AssignableRoleIds = input.AssignableRoleIds;
         roleModel.Remark = input.Remark;
         roleModel.RowVersion = input.RowVersion;
 
@@ -256,11 +275,6 @@ public class RoleService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        if (roleModel.RoleType == RoleTypeEnum.Admin)
-        {
-            throw new UserFriendlyException("禁止删除管理员角色！");
-        }
-
         await _repository.Ado.UseTranAsync(async () =>
         {
             // 删除角色菜单关联
@@ -302,11 +316,6 @@ public class RoleService : IDynamicApplication
         if (roleModel == null)
         {
             throw new UserFriendlyException("角色不存在！");
-        }
-
-        if (roleModel.RoleType == RoleTypeEnum.Admin)
-        {
-            throw new UserFriendlyException("禁止操作管理员角色！");
         }
 
         // 验证菜单是否都存在
@@ -396,11 +405,6 @@ public class RoleService : IDynamicApplication
             throw new UserFriendlyException("角色不存在！");
         }
 
-        if (roleModel.RoleType == RoleTypeEnum.Admin)
-        {
-            throw new UserFriendlyException("禁止操作管理员角色！");
-        }
-
         var result = new RoleAuthInput
         {
             RoleId = roleModel.RoleId,
@@ -441,11 +445,18 @@ public class RoleService : IDynamicApplication
 
         // 查询角色
         var roleIds = _user.RoleIdList ?? [];
-        var roleTypeList = await _repository.Queryable<RoleModel>()
+        var roleList = await _repository.Queryable<RoleModel>()
             .Where(wh => roleIds.Contains(wh.RoleId))
-            .Select(sl => sl.RoleType)
             .Distinct()
             .ToListAsync();
+        // 系统菜单角色类型
+        var systemMenuRoleType = roleList.Where(wh => wh.IsSystemMenu)
+            .Select(sl => sl.RoleType)
+            .Aggregate(default(RoleTypeEnum), (acc, item) => acc | item);
+        // 自定义菜单角色
+        var customMenuRoleIds = roleList.Where(wh => !wh.IsSystemMenu)
+            .Select(sl => sl.RoleId)
+            .ToList();
 
         var moduleQueryable = _centerRepository.Queryable<ModuleModel>()
             .Where(wh => wh.AppId == applicationModel.AppId)
@@ -467,7 +478,7 @@ public class RoleService : IDynamicApplication
             moduleQueryable = moduleQueryable.Where(wh =>
                 (wh.ViewType & (ModuleViewTypeEnum.SuperAdmin | ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
         }
-        else if (_user.IsAdmin || roleTypeList.Any(a => a == RoleTypeEnum.Admin))
+        else if (_user.IsAdmin)
         {
             moduleQueryable =
                 moduleQueryable.Where(wh => (wh.ViewType & (ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
@@ -477,37 +488,18 @@ public class RoleService : IDynamicApplication
             moduleQueryable = moduleQueryable.Where(wh => (wh.ViewType & ModuleViewTypeEnum.All) != 0);
             // 查询当前用户角色对应的菜单Id
             var roleMenuIds = await _repository.Queryable<RoleMenuModel>()
-                .Where(wh => roleIds.Contains(wh.RoleId))
+                .Where(wh => customMenuRoleIds.Contains(wh.RoleId))
                 .Select(sl => sl.MenuId)
                 .ToListAsync();
-            // 查询当前用户对应的菜单Id
-            var userMenuIds = await _repository.Queryable<EmployeeMenuModel>()
-                .Where(wh => wh.EmployeeId == _user.UserId)
-                .Select(sl => sl.MenuId)
-                .ToListAsync();
-            var menuIds = new List<long>();
-            menuIds.AddRange(roleMenuIds);
-            menuIds.AddRange(userMenuIds);
-            menuIds = menuIds.Distinct()
-                .ToList();
-            menuQueryable = menuQueryable.Where(wh => menuIds.Contains(wh.MenuId));
+            menuQueryable = menuQueryable.Where(wh => (wh.RoleType & systemMenuRoleType) != 0 || roleMenuIds.Contains(wh.MenuId));
 
             // 查询当前用户角色对应的按钮Id
             var roleButtonIds = await _repository.Queryable<RoleButtonModel>()
-                .Where(wh => roleIds.Contains(wh.RoleId))
+                .Where(wh => customMenuRoleIds.Contains(wh.RoleId))
                 .Select(sl => sl.ButtonId)
                 .ToListAsync();
-            // 查询当前用户对应的按钮Id
-            var userButtonIds = await _repository.Queryable<EmployeeButtonModel>()
-                .Where(wh => wh.EmployeeId == _user.UserId)
-                .Select(sl => sl.ButtonId)
-                .ToListAsync();
-            var buttonIds = new List<long>();
-            buttonIds.AddRange(roleButtonIds);
-            buttonIds.AddRange(userButtonIds);
-            buttonIds = buttonIds.Distinct()
-                .ToList();
-            buttonQueryable = buttonQueryable.Where(wh => buttonIds.Contains(wh.ButtonId));
+            buttonQueryable =
+                buttonQueryable.Where(wh => (wh.RoleType & systemMenuRoleType) != 0 || roleButtonIds.Contains(wh.ButtonId));
         }
 
         // 查询所有菜单

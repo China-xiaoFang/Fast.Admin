@@ -107,7 +107,6 @@
 						</template>
 					</el-dropdown>
 				</div>
-				<el-button v-auth="'Employee:Edit'" size="small" plain type="success" @click="authEditRef.open(row.employeeId)">授权</el-button>
 				<template v-if="row.account">
 					<el-button
 						v-if="row.accountStatus == CommonStatusEnum.Enable"
@@ -133,7 +132,6 @@
 		<EmployeeEdit ref="editFormRef" @ok="fastTableRef.refresh()" />
 		<ResignedEdit ref="resignedEditFormRef" @ok="fastTableRef.refresh()" />
 		<BindAccount ref="bindAccountFormRef" @ok="fastTableRef.refresh()" />
-		<AuthEdit ref="authEditRef" @ok="fastTableRef.refresh()" />
 	</div>
 </template>
 
@@ -146,7 +144,6 @@ import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EmployeeStatusEnum } from "@/api/enums/EmployeeStatusEnum";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { QueryEmployeePagedOutput } from "@/api/services/Admin/employee/models/QueryEmployeePagedOutput";
-import AuthEdit from "./edit/authEdit.vue";
 import BindAccount from "./edit/bindAccount.vue";
 import EmployeeEdit from "./edit/index.vue";
 import ResignedEdit from "./edit/resignedEdit.vue";
@@ -160,7 +157,6 @@ const fastTableRef = ref<FastTableInstance>();
 const editFormRef = ref<InstanceType<typeof EmployeeEdit>>();
 const resignedEditFormRef = ref<InstanceType<typeof ResignedEdit>>();
 const bindAccountFormRef = ref<InstanceType<typeof BindAccount>>();
-const authEditRef = ref<InstanceType<typeof AuthEdit>>();
 
 /** 处理状态变更 */
 const handleChangeStatus = (row: QueryEmployeePagedOutput, status: EmployeeStatusEnum) => {

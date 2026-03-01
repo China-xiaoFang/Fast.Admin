@@ -1,5 +1,7 @@
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
+import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
+import { EditMenuButtonInput } from "./EditMenuButtonInput";
 
 /**
  * Fast.Center.Service.Menu.Dto.AddMenuInput 添加菜单输入
@@ -33,6 +35,10 @@ export interface AddMenuInput {
    * 
    */
   menuType?: MenuTypeEnum;
+  /**
+   * 
+   */
+  roleType?: RoleTypeEnum;
   /**
    * 是否桌面端
    */
@@ -93,5 +99,9 @@ export interface AddMenuInput {
    * 排序
    */
   sort?: number;
+  /**
+   * 按钮信息
+   */
+  buttonList?: Array<EditMenuButtonInput>;
 }
 

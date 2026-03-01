@@ -44,6 +44,12 @@ public class RoleModel : BaseEntity, IUpdateVersion
     public RoleTypeEnum RoleType { get; set; }
 
     /// <summary>
+    /// 是否使用系统菜单
+    /// </summary>
+    [SugarColumn(ColumnDescription = "是否使用系统菜单")]
+    public bool IsSystemMenu { get; set; }
+
+    /// <summary>
     /// 角色名称
     /// </summary>
     [Required]
@@ -69,6 +75,16 @@ public class RoleModel : BaseEntity, IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "数据范围类型")]
     public DataScopeTypeEnum DataScopeType { get; set; }
+
+    /// <summary>
+    /// 可分配的角色Id集合
+    /// </summary>
+    /// <remarks>
+    /// <para>为 null 或空集合时，表示不限制（可分配所有角色）</para>
+    /// <para>有值时，只允许分配集合内的角色给其他人</para>
+    /// </remarks>
+    [SugarColumn(ColumnDescription = "可分配的角色Id集合", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
+    public List<long> AssignableRoleIds { get; set; }
 
     /// <summary>
     /// 备注

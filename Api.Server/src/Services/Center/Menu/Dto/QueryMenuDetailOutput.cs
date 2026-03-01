@@ -85,6 +85,11 @@ public class QueryMenuDetailOutput : PagedOutput
     public MenuTypeEnum MenuType { get; set; }
 
     /// <summary>
+    /// 角色类型
+    /// </summary>
+    public RoleTypeEnum RoleType { get; set; }
+
+    /// <summary>
     /// 是否桌面端
     /// </summary>
     public bool HasDesktop { get; set; }

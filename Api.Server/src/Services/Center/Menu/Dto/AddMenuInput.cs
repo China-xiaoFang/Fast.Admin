@@ -71,6 +71,12 @@ public class AddMenuInput
     public MenuTypeEnum MenuType { get; set; }
 
     /// <summary>
+    /// 角色类型
+    /// </summary>
+    [EnumRequired(ErrorMessage = "角色类型不能为空", FlagEnum = true, AllowZero = true)]
+    public RoleTypeEnum RoleType { get; set; }
+
+    /// <summary>
     /// 是否桌面端
     /// </summary>
     [Required(ErrorMessage = "是否桌面端不能为空")]
@@ -151,4 +157,9 @@ public class AddMenuInput
     /// </summary>
     [IntRequired(ErrorMessage = "排序不能为空")]
     public int Sort { get; set; }
+
+    /// <summary>
+    /// 按钮信息
+    /// </summary>
+    public List<EditMenuButtonInput> ButtonList { get; set; }
 }

@@ -20,27 +20,51 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Admin.Enum;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Fast.Admin.Service.TenantDatabase;
 
 /// <summary>
-/// <see cref="RoleTypeEnum"/> 角色类型枚举
+/// <see cref="TenantDatabaseService"/> 自定义 Database 服务
 /// </summary>
-[Flags]
-[FastEnum("角色类型枚举")]
-public enum RoleTypeEnum : byte
+public partial class TenantDatabaseService
 {
     /// <summary>
-    /// 普通
+    /// 初始化数据库（自定义）
     /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("普通")]
-    Normal = 0,
-
-    /// <summary>
-    /// 管理员
-    /// </summary>
-    /// <remarks>默认查看所有数据</remarks>
-    [TagType(TagTypeEnum.Primary)]
-    [Description("管理员")]
-    Admin = 1
+    /// <param name="databaseType"><see cref="DatabaseTypeEnum"/> 数据库类型</param>
+    /// <param name="db"><see cref="ISqlSugarClient"/> 数据库上下文</param>
+    /// <param name="newDb"><see cref="ISqlSugarClient"/> 数据库上下文</param>
+    /// <returns></returns>
+    [NonAction]
+    public async Task InitCustomDatabase(DatabaseTypeEnum databaseType, ISqlSugarClient db, ISqlSugarClient newDb)
+    {
+        switch (databaseType)
+        {
+            case DatabaseTypeEnum.Center:
+            {
+            }
+                break;
+            case DatabaseTypeEnum.CenterLog:
+            {
+            }
+                break;
+            case DatabaseTypeEnum.Admin:
+            {
+            }
+                break;
+            case DatabaseTypeEnum.AdminLog:
+            {
+            }
+                break;
+            case DatabaseTypeEnum.Gateway:
+            {
+            }
+                break;
+            case DatabaseTypeEnum.Deploy:
+            {
+            }
+                break;
+        }
+    }
 }

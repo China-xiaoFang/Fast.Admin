@@ -24,6 +24,7 @@ using Fast.Center.Entity;
 using Fast.Center.Service.Menu.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yitter.IdGenerator;
 
 namespace Fast.Center.Service.Menu;
 
@@ -98,6 +99,7 @@ public class MenuService : IDynamicApplication
                 MenuTitle = t1.MenuTitle,
                 ParentId = t1.ParentId,
                 MenuType = t1.MenuType,
+                RoleType = t1.RoleType,
                 HasDesktop = t1.HasDesktop,
                 DesktopIcon = t1.DesktopIcon,
                 DesktopRouter = t1.DesktopRouter,
@@ -153,6 +155,7 @@ public class MenuService : IDynamicApplication
                 MenuTitle = t1.MenuTitle,
                 ParentId = t1.ParentId,
                 MenuType = t1.MenuType,
+                RoleType = t1.RoleType,
                 HasDesktop = t1.HasDesktop,
                 DesktopIcon = t1.DesktopIcon,
                 DesktopRouter = t1.DesktopRouter,
@@ -192,6 +195,7 @@ public class MenuService : IDynamicApplication
                 Edition = sl.Edition,
                 ButtonCode = sl.ButtonCode,
                 ButtonName = sl.ButtonName,
+                RoleType = sl.RoleType,
                 HasDesktop = sl.HasDesktop,
                 HasWeb = sl.HasWeb,
                 HasMobile = sl.HasMobile,
@@ -228,6 +232,7 @@ public class MenuService : IDynamicApplication
 
         var menuModel = new MenuModel
         {
+            MenuId = YitIdHelper.NextId(),
             Edition = input.Edition,
             AppId = moduleModel.AppId,
             ModuleId = moduleModel.ModuleId,
@@ -235,6 +240,7 @@ public class MenuService : IDynamicApplication
             MenuName = input.MenuName,
             MenuTitle = input.MenuTitle,
             MenuType = input.MenuType,
+            RoleType = input.RoleType,
             HasDesktop = input.HasDesktop,
             DesktopIcon = input.DesktopIcon,
             DesktopRouter = input.DesktopRouter,
@@ -270,7 +276,29 @@ public class MenuService : IDynamicApplication
             menuModel.ParentIds = [0];
         }
 
-        await _repository.InsertAsync(menuModel);
+        var addButtonList = input.ButtonList.Select(item => new ButtonModel
+            {
+                Edition = item.Edition,
+                AppId = menuModel.AppId,
+                ModuleId = menuModel.ModuleId,
+                MenuId = menuModel.MenuId,
+                ButtonCode = item.ButtonCode,
+                ButtonName = item.ButtonName,
+                RoleType = item.RoleType,
+                HasDesktop = item.HasDesktop,
+                HasWeb = item.HasWeb,
+                HasMobile = item.HasMobile,
+                Sort = item.Sort,
+                Status = item.Status
+            })
+            .ToList();
+
+        await _repository.Ado.UseTranAsync(async () =>
+        {
+            await _repository.InsertAsync(menuModel);
+            await _repository.Insertable(addButtonList)
+                .ExecuteCommandAsync();
+        }, ex => throw ex);
     }
 
     /// <summary>
@@ -341,6 +369,7 @@ public class MenuService : IDynamicApplication
         menuModel.MenuName = input.MenuName;
         menuModel.MenuTitle = input.MenuTitle;
         menuModel.MenuType = input.MenuType;
+        menuModel.RoleType = input.RoleType;
         menuModel.HasDesktop = input.HasDesktop;
         menuModel.DesktopIcon = input.DesktopIcon;
         menuModel.DesktopRouter = input.DesktopRouter;
@@ -375,6 +404,7 @@ public class MenuService : IDynamicApplication
                     MenuId = menuModel.MenuId,
                     ButtonCode = item.ButtonCode,
                     ButtonName = item.ButtonName,
+                    RoleType = item.RoleType,
                     HasDesktop = item.HasDesktop,
                     HasWeb = item.HasWeb,
                     HasMobile = item.HasMobile,
@@ -398,6 +428,7 @@ public class MenuService : IDynamicApplication
                 buttonModel.MenuId = menuModel.MenuId;
                 buttonModel.ButtonCode = item.ButtonCode;
                 buttonModel.ButtonName = item.ButtonName;
+                buttonModel.RoleType = item.RoleType;
                 buttonModel.HasDesktop = item.HasDesktop;
                 buttonModel.HasWeb = item.HasWeb;
                 buttonModel.HasMobile = item.HasMobile;

@@ -17,16 +17,7 @@
 			<template #operation="{ row }: { row: QueryRolePagedOutput }">
 				<el-button v-auth="'Role:Detail'" size="small" plain @click="editFormRef.detail(row.roleId)">详情</el-button>
 				<el-button v-auth="'Role:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.roleId)">编辑</el-button>
-				<el-button
-					v-if="row.roleType === RoleTypeEnum.Normal"
-					v-auth="'Role:Edit'"
-					size="small"
-					plain
-					type="success"
-					@click="authEditRef.open(row.roleId)"
-				>
-					授权
-				</el-button>
+				<el-button v-auth="'Role:Edit'" size="small" plain type="success" @click="authEditRef.open(row.roleId)"> 授权 </el-button>
 				<el-button v-auth="'Role:Delete'" size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
 			</template>
 		</FastTable>
@@ -39,7 +30,6 @@
 import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 import { roleApi } from "@/api/services/Admin/role";
 import { QueryRolePagedOutput } from "@/api/services/Admin/role/models/QueryRolePagedOutput";
 import AuthEdit from "./edit/authEdit.vue";

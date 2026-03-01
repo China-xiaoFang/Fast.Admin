@@ -96,6 +96,12 @@ public class MenuModel : BaseEntity, IUpdateVersion
     public MenuTypeEnum MenuType { get; set; }
 
     /// <summary>
+    /// 角色类型
+    /// </summary>
+    [SugarColumn(ColumnDescription = "角色类型")]
+    public RoleTypeEnum RoleType { get; set; }
+
+    /// <summary>
     /// 是否桌面端
     /// </summary>
     [SugarColumn(ColumnDescription = "是否桌面端")]
