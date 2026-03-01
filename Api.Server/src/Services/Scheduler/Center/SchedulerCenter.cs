@@ -1246,16 +1246,19 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 FieldValue = jobKey.Group
             }
         };
-        var selectModels = new List<SelectModel> {new() {FieldName = AdoConstants.ColumnJobDataMap}};
-        var jobDataBytes = await db.Queryable<byte[]>()
+        var selectModels = new List<SelectModel>
+        {
+            new() {FieldName = AdoConstants.ColumnJobDataMap, AsName = nameof(QueryableJobDataResult.JobData)}
+        };
+        var queryResult = await db.Queryable<QueryableJobDataResult>()
             .AS($"{tablePrefix}{AdoConstants.TableJobDetails}")
             .Where(whereConditionalModel)
             .Select(selectModels)
             .SingleAsync();
 
-        if (jobDataBytes != null)
+        if (queryResult.JobData != null)
         {
-            var jobData = JObject.Parse(Encoding.UTF8.GetString(jobDataBytes.ToArray()));
+            var jobData = JObject.Parse(Encoding.UTF8.GetString(queryResult.JobData.ToArray()));
             // 移除异常日志
             if (jobData.ContainsKey(nameof(SchedulerJobInfo.Exception)))
             {
@@ -1275,5 +1278,10 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
                 .WhereColumns(AdoConstants.ColumnSchedulerName, AdoConstants.ColumnJobName, AdoConstants.ColumnJobGroup)
                 .ExecuteCommandAsync();
         }
+    }
+
+    private protected class QueryableJobDataResult
+    {
+        public byte[] JobData { get; set; }
     }
 }
