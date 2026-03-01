@@ -55,12 +55,5 @@ public enum RoleTypeEnum
     /// </summary>
     [TagType(TagTypeEnum.Primary)]
     [Description("财务")]
-    Finance = 1 << 3,
-
-    /// <summary>
-    /// 运营
-    /// </summary>
-    [TagType(TagTypeEnum.Primary)]
-    [Description("运营")]
-    Operator = 1 << 4
+    Finance = 1 << 3
 }
