@@ -27,7 +27,7 @@
 			<FaFormItem prop="departmentId" label="部门">
 				<FaTreeSelect
 					:requestApi="departmentApi.departmentSelector"
-					:disabled="!state.formData?.orgId"
+					:disabled="state.formDisabled || !state.formData?.orgId"
 					:initParam="state.formData.orgId"
 					v-model="state.formData.departmentId"
 					v-model:label="state.formData.departmentName"

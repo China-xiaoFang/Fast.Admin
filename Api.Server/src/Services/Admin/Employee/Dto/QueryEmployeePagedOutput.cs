@@ -21,6 +21,8 @@
 // ------------------------------------------------------------------------
 
 using Fast.Admin.Enum;
+using Fast.Serialization;
+using Newtonsoft.Json;
 
 namespace Fast.Admin.Service.Employee.Dto;
 
@@ -44,12 +46,14 @@ public class QueryEmployeePagedOutput
     /// 姓名
     /// </summary>
     [SugarSearchValue]
+    [JsonConverter(typeof(DataMaskingConverter), DataMaskingTypeEnum.NameKeepLast)]
     public string EmployeeName { get; set; }
 
     /// <summary>
     /// 手机
     /// </summary>
     [SugarSearchValue]
+    [JsonConverter(typeof(DataMaskingConverter), DataMaskingTypeEnum.Mobile)]
     public string Mobile { get; set; }
 
     /// <summary>
@@ -61,6 +65,7 @@ public class QueryEmployeePagedOutput
     /// 邮箱
     /// </summary>
     [SugarSearchValue]
+    [JsonConverter(typeof(DataMaskingConverter), DataMaskingTypeEnum.Email)]
     public string Email { get; set; }
 
     /// <summary>
@@ -218,6 +223,7 @@ public class QueryEmployeePagedOutput
     /// <summary>
     /// 账户
     /// </summary>
+    [JsonConverter(typeof(DataMaskingConverter), DataMaskingTypeEnum.Account)]
     public string Account { get; set; }
 
     /// <summary>
@@ -228,16 +234,19 @@ public class QueryEmployeePagedOutput
     /// <summary>
     /// 账号手机
     /// </summary>
+    [JsonConverter(typeof(DataMaskingConverter), DataMaskingTypeEnum.Mobile)]
     public string AccountMobile { get; set; }
 
     /// <summary>
     /// 账号邮箱
     /// </summary>
+    [JsonConverter(typeof(DataMaskingConverter), DataMaskingTypeEnum.Email)]
     public string AccountEmail { get; set; }
 
     /// <summary>
     /// 账号昵称
     /// </summary>
+    [JsonConverter(typeof(DataMaskingConverter), DataMaskingTypeEnum.NameKeepLast)]
     public string AccountNickName { get; set; }
 
     /// <summary>
