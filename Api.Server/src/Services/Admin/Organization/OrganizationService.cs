@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 using Fast.Admin.Entity;
+using Fast.Admin.Enum;
 using Fast.Admin.Service.Organization.Dto;
 using Fast.AdminLog.Enum;
 using Microsoft.AspNetCore.Authorization;
@@ -34,10 +35,12 @@ namespace Fast.Admin.Service.Organization;
 [ApiDescriptionSettings(ApiGroupConst.Admin, Name = "organization")]
 public class OrganizationService : IDynamicApplication
 {
+    private readonly IUser _user;
     private readonly ISqlSugarRepository<OrganizationModel> _repository;
 
-    public OrganizationService(ISqlSugarRepository<OrganizationModel> repository)
+    public OrganizationService(IUser user, ISqlSugarRepository<OrganizationModel> repository)
     {
+        _user = user;
         _repository = repository;
     }
 
@@ -49,7 +52,27 @@ public class OrganizationService : IDynamicApplication
     [ApiInfo("机构选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> OrganizationSelector()
     {
-        var data = await _repository.Entities.OrderBy(ob => ob.Sort)
+        var queryable = _repository.Entities;
+
+        // 管理员，全部权限
+        if (_user.IsSuperAdmin || _user.IsAdmin || _user.DataScopeType == (int) DataScopeTypeEnum.All)
+        {
+        }
+        // 本机构及以下数据
+        // 本部门及以下数据
+        // 本部门数据
+        // 仅本人数据
+        else
+        {
+            queryable = queryable.Where(wh => wh.OrgId
+                                              == SqlFunc.Subqueryable<EmployeeOrgModel>()
+                                                  // 主部门
+                                                  .Where(e => e.EmployeeId == _user.UserId && e.IsPrimary)
+                                                  .Where(e => e.OrgId == wh.OrgId)
+                                                  .Select(e => e.OrgId));
+        }
+
+        var data = await queryable.OrderBy(ob => ob.Sort)
             .Select(sl => new
             {
                 sl.OrgId,
