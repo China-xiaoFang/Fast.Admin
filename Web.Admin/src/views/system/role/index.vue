@@ -17,7 +17,9 @@
 			<template #operation="{ row }: { row: QueryRolePagedOutput }">
 				<el-button v-auth="'Role:Detail'" size="small" plain @click="editFormRef.detail(row.roleId)">详情</el-button>
 				<el-button v-auth="'Role:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.roleId)">编辑</el-button>
-				<el-button v-auth="'Role:Edit'" size="small" plain type="success" @click="authEditRef.open(row.roleId)"> 授权 </el-button>
+				<el-button v-if="!row.isSystemMenu" v-auth="'Role:Edit'" size="small" plain type="success" @click="authEditRef.open(row.roleId)">
+					授权
+				</el-button>
 				<el-button v-auth="'Role:Delete'" size="small" plain type="danger" @click="handleDelete(row)">删除</el-button>
 			</template>
 		</FastTable>
