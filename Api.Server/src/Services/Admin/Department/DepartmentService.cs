@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 using Fast.Admin.Entity;
+using Fast.Admin.Enum;
 using Fast.Admin.Service.Department.Dto;
 using Fast.AdminLog.Enum;
 using Fast.Center.Entity;
@@ -35,12 +36,14 @@ namespace Fast.Admin.Service.Department;
 [ApiDescriptionSettings(ApiGroupConst.Admin, Name = "department")]
 public class DepartmentService : IDynamicApplication
 {
+    private readonly IUser _user;
     private readonly ISqlSugarRepository<DepartmentModel> _repository;
     private readonly ISqlSugarRepository<TenantUserModel> _tenantUserRepository;
 
-    public DepartmentService(ISqlSugarRepository<DepartmentModel> repository,
+    public DepartmentService(IUser user, ISqlSugarRepository<DepartmentModel> repository,
         ISqlSugarRepository<TenantUserModel> tenantUserRepository)
     {
+        _user = user;
         _repository = repository;
         _tenantUserRepository = tenantUserRepository;
     }
@@ -54,8 +57,35 @@ public class DepartmentService : IDynamicApplication
     [ApiInfo("部门选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> DepartmentSelector(long? orgId)
     {
-        var data = await _repository.Entities.WhereIF(orgId != null, wh => wh.OrgId == orgId)
-            .OrderBy(ob => ob.Sort)
+        var queryable = _repository.Entities.WhereIF(orgId != null, wh => wh.OrgId == orgId);
+
+        // 管理员，全部权限
+        if (_user.IsSuperAdmin || _user.IsAdmin || _user.DataScopeType == (int) DataScopeTypeEnum.All)
+        {
+        }
+        // 本机构及以下数据
+        else if (_user.DataScopeType == (int) DataScopeTypeEnum.OrgWithChild)
+        {
+            queryable = queryable.Where(wh => wh.OrgId
+                                              == SqlFunc.Subqueryable<EmployeeOrgModel>()
+                                                  // 主部门
+                                                  .Where(e => e.EmployeeId == _user.UserId && e.IsPrimary)
+                                                  .Where(e => e.OrgId == wh.OrgId)
+                                                  .Select(e => e.OrgId));
+        }
+        // 本部门及以下数据
+        else if (_user.DataScopeType == (int) DataScopeTypeEnum.DeptWithChild)
+        {
+            queryable = queryable.Where(wh =>
+                wh.DepartmentId == _user.DepartmentId || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
+        }
+        // 本部门数据或仅本人数据
+        else
+        {
+            queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId);
+        }
+
+        var data = await queryable.OrderBy(ob => ob.Sort)
             .Select(sl => new
             {
                 sl.DepartmentId,
@@ -103,10 +133,37 @@ public class DepartmentService : IDynamicApplication
     [Permission(PermissionConst.Department.Paged)]
     public async Task<List<QueryDepartmentPagedOutput>> QueryDepartmentPaged(QueryDepartmentPagedInput input)
     {
-        var data = await _repository.Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
+        var queryable = _repository.Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
                 wh => wh.DepartmentName.Contains(input.SearchValue) || wh.DepartmentCode.Contains(input.SearchValue))
-            .WhereIF(input.OrgId != null, wh => wh.OrgId == input.OrgId)
-            .OrderByIF(input.IsOrderBy, ob => ob.Sort)
+            .WhereIF(input.OrgId != null, wh => wh.OrgId == input.OrgId);
+
+        // 管理员，全部权限
+        if (_user.IsSuperAdmin || _user.IsAdmin || _user.DataScopeType == (int) DataScopeTypeEnum.All)
+        {
+        }
+        // 本机构及以下数据
+        else if (_user.DataScopeType == (int) DataScopeTypeEnum.OrgWithChild)
+        {
+            queryable = queryable.Where(wh => wh.OrgId
+                                              == SqlFunc.Subqueryable<EmployeeOrgModel>()
+                                                  // 主部门
+                                                  .Where(e => e.EmployeeId == _user.UserId && e.IsPrimary)
+                                                  .Where(e => e.OrgId == wh.OrgId)
+                                                  .Select(e => e.OrgId));
+        }
+        // 本部门及以下数据
+        else if (_user.DataScopeType == (int) DataScopeTypeEnum.DeptWithChild)
+        {
+            queryable = queryable.Where(wh =>
+                wh.DepartmentId == _user.DepartmentId || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
+        }
+        // 本部门数据或仅本人数据
+        else
+        {
+            queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId);
+        }
+
+        var data = await queryable.OrderByIF(input.IsOrderBy, ob => ob.Sort)
             .Select(sl => new QueryDepartmentPagedOutput
             {
                 DepartmentId = sl.DepartmentId,
