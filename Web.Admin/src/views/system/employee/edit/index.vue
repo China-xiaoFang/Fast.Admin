@@ -279,6 +279,7 @@ const detail = (employeeId: number) => {
 		state.formDisabled = true;
 		const apiRes = await employeeApi.queryEmployeeDetail(employeeId);
 		state.formData = apiRes;
+		state.formData.roleIds = apiRes.roleList.map((m) => m.roleId);
 		const primaryOrg = apiRes.orgList.find((f) => f.isPrimary);
 		state.formData.orgId = primaryOrg.orgId;
 		state.formData.orgName = primaryOrg.orgName;
