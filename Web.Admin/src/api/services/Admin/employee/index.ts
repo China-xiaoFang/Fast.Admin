@@ -61,6 +61,17 @@ export const employeeApi = {
     });
   },
   /**
+   * 编辑本职员
+   */
+  editSelfEmployee(data: EditEmployeeInput) {
+    return axiosUtil.request({
+      url: "/employee/editSelfEmployee",
+      method: "post",
+      data,
+      requestType: "edit",
+    });
+  },
+  /**
    * 编辑职员
    */
   editEmployee(data: EditEmployeeInput) {
