@@ -136,16 +136,8 @@
 					</FaFormItem>
 
 					<FaLayoutGridItem span="3">
-						<el-divider contentPosition="left">其他信息</el-divider>
+						<el-divider contentPosition="left">机构信息</el-divider>
 					</FaLayoutGridItem>
-
-					<FaFormItem prop="roleList" label="角色" span="3" disabled>
-						<el-checkbox-group :modelValue="state.employeeFormData.roleList?.map((m) => m.roleId)">
-							<el-checkbox v-for="(item, index) of state.employeeFormData.roleList" :key="index" :value="item.roleId">
-								{{ item.roleName }}
-							</el-checkbox>
-						</el-checkbox-group>
-					</FaFormItem>
 
 					<FaLayoutGridItem span="3" style="min-height: 300px; max-height: 500px">
 						<FaTable :data="state.employeeFormData.orgList" :pagination="false" :headerCard="false">
@@ -217,7 +209,7 @@ const handleConfirm = async (event: MouseEvent, done: () => void) => {
 		await accountApi.editAccount(state.accountFormData);
 		if (!userInfoStore.isSuperAdmin && !userInfoStore.isAdmin) {
 			await employeeFaFormRef.value.validateScrollToField();
-			await employeeApi.editEmployee(state.employeeFormData);
+			await employeeApi.editSelfEmployee(state.employeeFormData);
 		}
 		ElMessage.success("保存成功！");
 		window.location.reload();
