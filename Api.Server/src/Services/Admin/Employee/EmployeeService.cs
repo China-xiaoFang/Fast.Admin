@@ -20,6 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using System.Text.RegularExpressions;
 using Fast.Admin.Entity;
 using Fast.Admin.Enum;
 using Fast.Admin.Service.Employee.Dto;
@@ -30,8 +31,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Yitter.IdGenerator;
 
 namespace Fast.Admin.Service.Employee;
@@ -312,7 +311,7 @@ public class EmployeeService : IDynamicApplication
             var _roleIds = _user.RoleIdList ?? [];
             var _roleList = await _repository.Queryable<RoleModel>()
                 .Where(wh => _roleIds.Contains(wh.RoleId))
-                .Select(sl => new { sl.AssignableRoleIds })
+                .Select(sl => new {sl.AssignableRoleIds})
                 .ToListAsync();
             var assignableRoleIds = _roleList.Where(wh => wh.AssignableRoleIds?.Count > 0)
                 .SelectMany(sl => sl.AssignableRoleIds)
@@ -404,6 +403,7 @@ public class EmployeeService : IDynamicApplication
                     .Where(wh => wh.DepartmentId == employeeOrgModel.DepartmentId)
                     .ExecuteCommandAsync();
             }
+
             await _repository.Insertable(employeeOrgModel)
                 .ExecuteCommandAsync();
 
@@ -424,6 +424,85 @@ public class EmployeeService : IDynamicApplication
             BizNo = employeeModel.EmployeeNo,
             Description =
                 $"职员名称：{employeeModel.EmployeeName}，职员手机：{employeeModel.Mobile}，职员邮箱：{employeeModel.Email}，职员部门：{employeeOrgModel.DepartmentName}"
+        });
+    }
+
+    /// <summary>
+    /// 编辑本职员
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    [ApiInfo("编辑本职员", HttpRequestActionEnum.Edit)]
+    public async Task EditSelfEmployee(EditEmployeeInput input)
+    {
+        if (await _repository.AnyAsync(a => a.Mobile == input.Mobile && a.EmployeeId != input.EmployeeId))
+        {
+            throw new UserFriendlyException("手机号重复！");
+        }
+
+        var employeeModel = await _repository.SingleOrDefaultAsync(_user.UserId);
+        if (employeeModel == null)
+        {
+            throw new UserFriendlyException("数据不存在！");
+        }
+
+        employeeModel.EmployeeName = input.EmployeeName;
+        employeeModel.Mobile = input.Mobile;
+        employeeModel.Email = input.Email;
+        employeeModel.Sex = input.Sex;
+        employeeModel.IdPhoto = input.IdPhoto;
+        employeeModel.Nation = input.Nation;
+        employeeModel.NativePlace = input.NativePlace;
+        employeeModel.FamilyAddress = input.FamilyAddress;
+        employeeModel.MailingAddress = input.MailingAddress;
+        employeeModel.Birthday = input.Birthday;
+        employeeModel.IdType = input.IdType;
+        employeeModel.IdNumber = input.IdNumber;
+        employeeModel.FamilyPhone = input.FamilyPhone;
+        employeeModel.OfficePhone = input.OfficePhone;
+        employeeModel.EmergencyContact = input.EmergencyContact;
+        employeeModel.EmergencyPhone = input.EmergencyPhone;
+        employeeModel.EmergencyAddress = input.EmergencyAddress;
+
+        // 开启事务
+        await _repository.Ado.BeginTranAsync();
+        await _centerRepository.Ado.BeginTranAsync();
+        try
+        {
+            var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
+                .Where(wh => wh.UserId == employeeModel.EmployeeId)
+                .SingleAsync();
+            if (tenantUserModel != null)
+            {
+                tenantUserModel.EmployeeName = employeeModel.EmployeeName;
+                tenantUserModel.IdPhoto = employeeModel.IdPhoto;
+                await _centerRepository.Updateable(tenantUserModel)
+                    .ExecuteCommandAsync();
+            }
+
+            await _repository.UpdateAsync(employeeModel);
+
+            // 提交事务
+            await _repository.Ado.CommitTranAsync();
+            await _centerRepository.Ado.CommitTranAsync();
+        }
+        catch
+        {
+            // 回滚事务
+            await _repository.Ado.RollbackTranAsync();
+            await _centerRepository.Ado.RollbackTranAsync();
+            throw;
+        }
+
+        // 操作日志
+        LogContext.OperateLog(new OperateLogDto
+        {
+            Title = "编辑本职员",
+            OperateType = OperateLogTypeEnum.Organization,
+            BizId = employeeModel.EmployeeId,
+            BizNo = employeeModel.EmployeeNo,
+            Description = $"编辑本职员：{employeeModel.EmployeeName}"
         });
     }
 
@@ -530,7 +609,7 @@ public class EmployeeService : IDynamicApplication
             var _roleIds = _user.RoleIdList ?? [];
             var _roleList = await _repository.Queryable<RoleModel>()
                 .Where(wh => _roleIds.Contains(wh.RoleId))
-                .Select(sl => new { sl.AssignableRoleIds })
+                .Select(sl => new {sl.AssignableRoleIds})
                 .ToListAsync();
             var assignableRoleIds = _roleList.Where(wh => wh.AssignableRoleIds?.Count > 0)
                 .SelectMany(sl => sl.AssignableRoleIds)
