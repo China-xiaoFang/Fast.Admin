@@ -170,7 +170,7 @@ public class TableService : IDynamicApplication
 
         await _tableRepository.Updateable(tableConfigModel)
             // 避免表格同步循环问题，这里不更新时间
-            .IgnoreColumns(it => new {it.UpdatedTime})
+            .IgnoreColumns(it => new { it.UpdatedTime })
             .ExecuteCommandWithOptLockAsync(true);
     }
 
@@ -459,11 +459,11 @@ public class TableService : IDynamicApplication
     {
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableKey, _user.TenantNo, _user.EmployeeNo);
         return await _centerCache.GetAndSetAsync(cacheKey, async () =>
-               {
-                   return await _columnCacheRepository.Entities.Where(wh => wh.UserId == _user.UserId && wh.TableId == tableId)
-                       .OrderBy(ob => ob.Order)
-                       .ToListAsync();
-               })
+        {
+            return await _columnCacheRepository.Entities.Where(wh => wh.UserId == _user.UserId && wh.TableId == tableId)
+                .OrderBy(ob => ob.Order)
+                .ToListAsync();
+        })
                ?? [];
     }
 
@@ -564,7 +564,7 @@ public class TableService : IDynamicApplication
                     }
                 }
 
-                column.TryAdd("otherAdvancedConfig", item.OtherConfig.Select(sl => new {sl.Prop, sl.Type}));
+                column.TryAdd("otherAdvancedConfig", item.OtherConfig.Select(sl => new { sl.Prop, sl.Type }));
             }
 
             // 搜素项
@@ -611,7 +611,7 @@ public class TableService : IDynamicApplication
                         }
                     }
 
-                    column.TryAdd("searchAdvancedConfig", item.SearchConfig.Select(sl => new {sl.Prop, sl.Type}));
+                    column.TryAdd("searchAdvancedConfig", item.SearchConfig.Select(sl => new { sl.Prop, sl.Type }));
                 }
 
                 if (searchPropsConfig.Count > 0)
@@ -703,6 +703,7 @@ public class TableService : IDynamicApplication
 
         var columnIds = tableColumnCacheList.Select(sl => sl.ColumnId)
             .ToList();
+        var sourceColumnIds = tableConfigModel.TableColumnConfigList.Select(sl => sl.ColumnId).ToList();
 
         var dateTime = DateTime.Now;
 
@@ -730,13 +731,39 @@ public class TableService : IDynamicApplication
             .ToList();
 
         // 删除的
-        var deleteTableColumnCacheList = tableColumnCacheList.Where(wh => !columnIds.Contains(wh.ColumnId))
+        var deleteTableColumnCacheList = tableColumnCacheList.Where(wh => !sourceColumnIds.Contains(wh.ColumnId))
             .ToList();
+
+        // 更新的
+        var sourceDict = tableConfigModel.TableColumnConfigList.ToDictionary(k => k.ColumnId);
+        var updateTableColumnCacheList = tableColumnCacheList
+            .Where(wh => sourceColumnIds.Contains(wh.ColumnId))
+            .ToList();
+
+        foreach (var item in updateTableColumnCacheList)
+        {
+            if (!sourceDict.TryGetValue(item.ColumnId, out var sourceItem))
+                continue;
+
+            item.Label = sourceItem.Label;
+            item.Fixed = sourceItem.Fixed;
+            item.AutoWidth = sourceItem.AutoWidth;
+            item.Width = sourceItem.Width;
+            item.SmallWidth = sourceItem.SmallWidth;
+            item.Order = sourceItem.Order;
+            item.Show = sourceItem.Show;
+            item.Copy = sourceItem.Copy;
+            item.Sortable = sourceItem.Sortable;
+            item.SearchLabel = sourceItem.SearchLabel;
+            item.SearchOrder = sourceItem.SearchOrder;
+            item.CreatedTime = dateTime;
+        }
 
         await _columnCacheRepository.Ado.UseTranAsync(async () =>
         {
             await _columnCacheRepository.DeleteAsync(deleteTableColumnCacheList);
             await _columnCacheRepository.InsertAsync(addTableColumnCacheList);
+            await _columnCacheRepository.UpdateAsync(updateTableColumnCacheList);
         }, ex => throw ex);
 
         // 删除缓存
