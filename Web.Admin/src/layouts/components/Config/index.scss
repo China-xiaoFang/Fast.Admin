@@ -71,8 +71,12 @@
 						margin-bottom: 5px;
 					}
 				}
-				.layout-mode__Vertical {
-					cursor: not-allowed;
+				.layout-mode__Horizontal {
+					.el-header {
+						margin-bottom: 5px;
+					}
+				}
+				.layout-mode__Mixed {
 					.el-header {
 						margin-bottom: 5px;
 					}

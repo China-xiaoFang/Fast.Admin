@@ -16,8 +16,14 @@
 							</el-container>
 						</el-container>
 					</el-tooltip>
-					<el-tooltip effect="dark" placement="top" :showAfter="200" content="纵向（敬请期待）">
-						<el-container class="layout-mode__Vertical">
+					<el-tooltip effect="dark" placement="top" :showAfter="200" content="横向" @click="configStore.setLayoutMode('Horizontal')">
+						<el-container class="layout-mode__Horizontal" :class="{ active: configStore.layout.layoutMode === 'Horizontal' }">
+							<el-header />
+							<el-main />
+						</el-container>
+					</el-tooltip>
+					<el-tooltip effect="dark" placement="top" :showAfter="200" content="混合" @click="configStore.setLayoutMode('Mixed')">
+						<el-container class="layout-mode__Mixed" :class="{ active: configStore.layout.layoutMode === 'Mixed' }">
 							<el-header />
 							<el-container>
 								<el-aside />
