@@ -5,7 +5,7 @@ import { defineStore } from "pinia";
 import type { componentSizes } from "element-plus";
 import type { FaTableDataRange } from "fast-element-plus";
 
-export type IModeName = "Classic";
+export type IModeName = "Classic" | "Horizontal" | "Mixed";
 
 export type IAnimationName =
 	| "slide-right"

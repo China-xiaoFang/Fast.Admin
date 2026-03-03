@@ -271,7 +271,6 @@ html.dark {
 
 @media (max-width: 800px) {
 	.el-container {
-		min-width: 500px;
 		.el-main {
 			.login-card {
 				max-width: 450px;
@@ -291,6 +290,38 @@ html.dark {
 					padding-top: 20px;
 				}
 			}
+		}
+	}
+}
+
+@media (max-width: 480px) {
+	.el-container {
+		.el-main {
+			padding: 16px;
+			.login-card {
+				max-width: 100%;
+				width: 100%;
+				height: auto;
+				min-height: 440px;
+				padding: 24px 20px;
+				border-radius: 20px;
+				.login-card__left {
+					.left__title {
+						justify-content: center;
+					}
+				}
+				.login-card__right {
+					.right__title {
+						font-size: 22px;
+					}
+				}
+			}
+		}
+		.el-footer {
+			font-size: var(--el-font-size-extra-small);
+			flex-direction: column;
+			justify-content: space-evenly;
+			height: calc(var(--el-footer-height) * 1.7);
 		}
 	}
 }
