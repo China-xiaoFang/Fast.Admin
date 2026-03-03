@@ -5,13 +5,27 @@
 			<div class="bg-orb bg-orb--1" />
 			<div class="bg-orb bg-orb--2" />
 			<div class="bg-orb bg-orb--3" />
+			<div class="bg-grid" />
+			<div class="bg-glow bg-glow--top" />
+			<div class="bg-glow bg-glow--bottom" />
 		</div>
 		<el-main>
 			<div class="login-glass">
+				<div class="login-glass__decor">
+					<div class="decor-line decor-line--1" />
+					<div class="decor-line decor-line--2" />
+					<div class="decor-dot decor-dot--1" />
+					<div class="decor-dot decor-dot--2" />
+					<div class="decor-dot decor-dot--3" />
+				</div>
 				<div class="login-glass__header">
-					<img :src="logoImage" class="logo" />
+					<div class="logo-wrapper">
+						<div class="logo-ring" />
+						<img :src="logoImage" class="logo" />
+					</div>
 					<h2>{{ appStore.appName }}</h2>
-					<p>欢迎登录管理系统</p>
+					<p class="subtitle">欢迎登录管理系统</p>
+					<div class="header-line" />
 				</div>
 				<transition mode="out-in" name="slide-left">
 					<!-- 账号 -->
@@ -257,6 +271,9 @@
 						</ul>
 					</div>
 				</transition>
+				<div class="login-glass__footer-text">
+					Powered by Fast Dotnet
+				</div>
 			</div>
 		</el-main>
 		<el-footer :style="{ '--el-footer-height': addUnit(props.footerHeight) }">

@@ -75,6 +75,7 @@ export type IFormStep = "Account" | "TenantAccount" | "SelectTenant" | "NewAccou
 const loginComponents = withDefineType<Record<ILoginComponent, Component>>({
 	ClassicLogin: defineAsyncComponent(() => import("./classicLogin/index.vue")),
 	ModernLogin: defineAsyncComponent(() => import("./modernLogin/index.vue")),
+	SplitLogin: defineAsyncComponent(() => import("./splitLogin/index.vue")),
 });
 
 const appStore = useApp();
