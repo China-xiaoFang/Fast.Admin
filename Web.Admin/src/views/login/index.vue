@@ -1,6 +1,6 @@
 <template>
 	<component
-		:is="loginComponents['SplitLogin']"
+		:is="loginComponents[appStore.loginComponent]"
 		:background="getThemeGradient(appStore.themeColor, configStore.layout.isDark ? 'dark' : 'light')"
 		:footerHeight="configStore.layout.footerHeight"
 		:formRules="state.formRules"
