@@ -37,6 +37,15 @@ router.beforeEach(async (to, from, next) => {
 	// 开启进度条
 	NProgress.start();
 
+	// 移动端访问检测
+	if (import.meta.env.VITE_ENABLE_MOBILE !== "true" && to.path !== "/mobile-blocked") {
+		const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+		if (isMobile) {
+			next({ path: "/mobile-blocked" });
+			return;
+		}
+	}
+
 	const appStore = useApp();
 	const userInfoStore = useUserInfo();
 

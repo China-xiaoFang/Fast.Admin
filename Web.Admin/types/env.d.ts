@@ -50,4 +50,8 @@ declare interface ImportMetaEnv {
 	 * 接口请求代理地址
 	 */
 	readonly VITE_AXIOS_PROXY_URL: string;
+	/**
+	 * 启用移动端访问
+	 */
+	readonly VITE_ENABLE_MOBILE: "true" | "false";
 }
