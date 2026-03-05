@@ -24,26 +24,21 @@
 								<span>首页</span>
 							</template>
 						</el-menu-item>
-						<template v-if="userInfoStore.menuList.length === 1">
-							<template v-for="(item, idx) in (userInfoStore.menuList[0].children ?? []).filter((f) => f.visible)" :key="idx">
+						<template v-if="moduleMenus.length === 1">
+							<template v-for="(item, idx) in moduleMenus[0].visibleChildren" :key="idx">
 								<MenuItem :menu="item" />
 							</template>
 						</template>
 						<template v-else>
-							<template v-for="(mod, mIdx) in userInfoStore.menuList" :key="mIdx">
-								<el-sub-menu
-									v-if="(mod.children ?? []).filter((f) => f.visible).length > 0"
-									:index="'module-' + mod.moduleId"
-								>
-									<template #title>
-										<FaIcon :name="mod.icon || 'el-icon-Menu'" />
-										<span>{{ mod.moduleName }}</span>
-									</template>
-									<template v-for="(item, idx) in (mod.children ?? []).filter((f) => f.visible)" :key="idx">
-										<MenuItem :menu="item" />
-									</template>
-								</el-sub-menu>
-							</template>
+							<el-sub-menu v-for="(mod, mIdx) in moduleMenus" :key="mIdx" :index="'module-' + mod.moduleId">
+								<template #title>
+									<FaIcon :name="mod.icon || 'el-icon-Menu'" />
+									<span>{{ mod.moduleName }}</span>
+								</template>
+								<template v-for="(item, idx) in mod.visibleChildren" :key="idx">
+									<MenuItem :menu="item" />
+								</template>
+							</el-sub-menu>
 						</template>
 					</el-menu>
 				</div>
@@ -157,6 +152,16 @@ const changePasswordRef = inject(changePasswordKey);
 const faTenantSelectRef = ref<FaSelectInstance>();
 
 const activeMenu = computed(() => router.currentRoute.value.path);
+
+/** 按模块分组的菜单列表（过滤不可见菜单） */
+const moduleMenus = computed(() =>
+	userInfoStore.menuList
+		.map((mod) => ({
+			...mod,
+			visibleChildren: (mod.children ?? []).filter((f) => f.visible),
+		}))
+		.filter((mod) => mod.visibleChildren.length > 0)
+);
 
 const handleRefreshSystem = () => {
 	ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {
