@@ -109,8 +109,13 @@ const loadDepartmentList = async () => {
 watch(
 	() => state.formData.dataScopeType,
 	(val) => {
-		if (val === DataScopeTypeEnum.Custom && state.departmentList.length === 0) {
-			loadDepartmentList();
+		if (val === DataScopeTypeEnum.Custom) {
+			if (state.departmentList.length === 0) {
+				loadDepartmentList();
+			}
+		} else {
+			// 非自定义部门数据范围时，清空自定义部门Id集合
+			state.formData.dataScopeDepartmentIds = [];
 		}
 	}
 );

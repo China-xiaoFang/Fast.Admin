@@ -133,6 +133,16 @@ public static class DataScopeExtension
         if (_user.DataScopeType == (int) DataScopeTypeEnum.Custom)
         {
             var dataScopeDepartmentIds = _user.DataScopeDepartmentIds ?? new List<long>();
+            if (dataScopeDepartmentIds.Count == 0)
+            {
+                // 自定义部门未配置，仅允许访问本人数据
+                var parameter2 = userIdFieldSelector.Parameters[0];
+                var unaryOperand2 = userIdFieldSelector.Body is UnaryExpression unary2 ? unary2.Operand : userIdFieldSelector.Body;
+                var equal2 = Expression.Equal(Expression.Convert(unaryOperand2, typeof(long?)),
+                    Expression.Constant(employeeId, typeof(long?)));
+                return queryable.Where(Expression.Lambda<Func<TEntity, bool>>(equal2, parameter2));
+            }
+
             var dataScopeQueryable = queryable.Context.Queryable<DepartmentModel>()
                 .Where(wh => dataScopeDepartmentIds.Contains(wh.DepartmentId))
                 .Select(sl => new DepartmentModel {DepartmentId = sl.DepartmentId});
