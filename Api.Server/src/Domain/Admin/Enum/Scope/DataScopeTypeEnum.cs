@@ -53,6 +53,12 @@ public enum DataScopeTypeEnum : byte
     Dept = 8,
 
     /// <summary>
+    /// 自定义部门数据
+    /// </summary>
+    [Description("自定义部门数据")]
+    Custom = 12,
+
+    /// <summary>
     /// 仅本人数据
     /// </summary>
     [Description("仅本人数据")]

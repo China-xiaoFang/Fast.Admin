@@ -129,6 +129,16 @@ public static class DataScopeExtension
             return queryable.Where(Expression.Lambda<Func<TEntity, bool>>(equal, parameter));
         }
 
+        // 自定义部门数据
+        if (_user.DataScopeType == (int) DataScopeTypeEnum.Custom)
+        {
+            var dataScopeDepartmentIds = _user.DataScopeDepartmentIds ?? new List<long>();
+            var dataScopeQueryable = queryable.Context.Queryable<DepartmentModel>()
+                .Where(wh => dataScopeDepartmentIds.Contains(wh.DepartmentId))
+                .Select(sl => new DepartmentModel {DepartmentId = sl.DepartmentId});
+            return BuildInnerJoin(queryable, departmentIdFieldSelector, dataScopeQueryable);
+        }
+
         // 本机构及以下数据
         if (_user.DataScopeType == (int) DataScopeTypeEnum.OrgWithChild)
         {

@@ -65,6 +65,12 @@ public class QueryRoleDetailOutput : PagedOutput
     public DataScopeTypeEnum DataScopeType { get; set; }
 
     /// <summary>
+    /// 数据范围自定义部门Id集合
+    /// </summary>
+    [SugarColumn(IsJson = true)]
+    public List<long> DataScopeDepartmentIds { get; set; }
+
+    /// <summary>
     /// 可分配的角色Id集合
     /// </summary>
     [SugarColumn(IsJson = true)]

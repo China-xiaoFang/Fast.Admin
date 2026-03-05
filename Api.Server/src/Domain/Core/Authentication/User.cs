@@ -123,6 +123,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         RoleIdList = authUserInfo.RoleIdList;
         RoleNameList = authUserInfo.RoleNameList;
         DataScopeType = authUserInfo.DataScopeType;
+        DataScopeDepartmentIds = authUserInfo.DataScopeDepartmentIds;
         MenuCodeList = authUserInfo.MenuCodeList;
         ButtonCodeList = authUserInfo.ButtonCodeList;
         _hasUserInfo = true;
@@ -362,6 +363,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         RoleIdList = input.RoleIdList;
         RoleNameList = input.RoleNameList;
         DataScopeType = input.DataScopeType;
+        DataScopeDepartmentIds = input.DataScopeDepartmentIds;
         MenuCodeList = input.MenuCodeList;
         ButtonCodeList = input.ButtonCodeList;
 
@@ -477,6 +479,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         RoleIdList = input.RoleIdList;
         RoleNameList = input.RoleNameList;
         DataScopeType = input.DataScopeType;
+        DataScopeDepartmentIds = input.DataScopeDepartmentIds;
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),

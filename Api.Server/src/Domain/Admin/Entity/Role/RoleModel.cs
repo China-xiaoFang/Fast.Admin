@@ -77,6 +77,15 @@ public class RoleModel : BaseEntity, IUpdateVersion
     public DataScopeTypeEnum DataScopeType { get; set; }
 
     /// <summary>
+    /// 数据范围自定义部门Id集合
+    /// </summary>
+    /// <remarks>
+    /// <para>仅当 <see cref="DataScopeType"/> 为 <see cref="DataScopeTypeEnum.Custom"/> 时有效</para>
+    /// </remarks>
+    [SugarColumn(ColumnDescription = "数据范围自定义部门Id集合", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
+    public List<long> DataScopeDepartmentIds { get; set; }
+
+    /// <summary>
     /// 可分配的角色Id集合
     /// </summary>
     /// <remarks>

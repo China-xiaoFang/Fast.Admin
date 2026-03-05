@@ -216,6 +216,11 @@ public class AuthUserInfo
     public int DataScopeType { get; set; }
 
     /// <summary>
+    /// 数据范围自定义部门Id集合
+    /// </summary>
+    public virtual List<long> DataScopeDepartmentIds { get; set; } = new();
+
+    /// <summary>
     /// 菜单编码集合
     /// </summary>
     public virtual List<string> MenuCodeList { get; set; } = new();

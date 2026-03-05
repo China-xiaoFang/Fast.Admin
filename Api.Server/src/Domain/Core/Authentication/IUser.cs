@@ -216,6 +216,11 @@ public interface IUser
     int DataScopeType { get; set; }
 
     /// <summary>
+    /// 数据范围自定义部门Id集合
+    /// </summary>
+    List<long> DataScopeDepartmentIds { get; set; }
+
+    /// <summary>
     /// 菜单编码集合
     /// </summary>
     List<string> MenuCodeList { get; set; }

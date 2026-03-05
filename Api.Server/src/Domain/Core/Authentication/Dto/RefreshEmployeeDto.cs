@@ -76,4 +76,9 @@ public class RefreshEmployeeDto
     /// 数据范围类型
     /// </summary>
     public int DataScopeType { get; set; }
+
+    /// <summary>
+    /// 数据范围自定义部门Id集合
+    /// </summary>
+    public virtual List<long> DataScopeDepartmentIds { get; set; } = new();
 }

@@ -22,6 +22,7 @@
 
 using Dm.util;
 using Fast.Admin.Entity;
+using Fast.Admin.Enum;
 using Fast.Admin.Service.Role.Dto;
 using Fast.AdminLog.Enum;
 using Fast.Center.Entity;
@@ -134,6 +135,7 @@ public class RoleService : IDynamicApplication
                 RoleCode = sl.RoleCode,
                 Sort = sl.Sort,
                 DataScopeType = sl.DataScopeType,
+                DataScopeDepartmentIds = sl.DataScopeDepartmentIds,
                 AssignableRoleIds = sl.AssignableRoleIds,
                 Remark = sl.Remark,
                 DepartmentName = sl.DepartmentName,
@@ -181,6 +183,7 @@ public class RoleService : IDynamicApplication
             RoleCode = input.RoleCode,
             Sort = input.Sort,
             DataScopeType = input.DataScopeType,
+            DataScopeDepartmentIds = input.DataScopeType == DataScopeTypeEnum.Custom ? input.DataScopeDepartmentIds : null,
             AssignableRoleIds = input.AssignableRoleIds,
             Remark = input.Remark
         };
@@ -230,6 +233,7 @@ public class RoleService : IDynamicApplication
         roleModel.RoleCode = input.RoleCode;
         roleModel.Sort = input.Sort;
         roleModel.DataScopeType = input.DataScopeType;
+        roleModel.DataScopeDepartmentIds = input.DataScopeType == DataScopeTypeEnum.Custom ? input.DataScopeDepartmentIds : null;
         roleModel.AssignableRoleIds = input.AssignableRoleIds;
         roleModel.Remark = input.Remark;
         roleModel.RowVersion = input.RowVersion;

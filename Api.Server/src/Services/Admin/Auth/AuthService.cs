@@ -111,7 +111,8 @@ public class AuthService : IDynamicApplication
                 t1.RoleName,
                 t2.RoleType,
                 t2.IsSystemMenu,
-                t2.DataScopeType
+                t2.DataScopeType,
+                t2.DataScopeDepartmentIds
             })
             .ToListAsync();
         // 系统菜单角色类型
@@ -155,6 +156,16 @@ public class AuthService : IDynamicApplication
         {
             result.DataScopeType = roleList.Any(a => a.RoleType == RoleTypeEnum.Admin) ? DataScopeTypeEnum.All :
                 roleList.Any() ? roleList.Min(m => m.DataScopeType) : DataScopeTypeEnum.Self;
+
+            // 自定义部门数据范围：合并所有自定义角色的部门Id
+            if (result.DataScopeType == DataScopeTypeEnum.Custom)
+            {
+                result.DataScopeDepartmentIds = roleList
+                    .Where(r => r.DataScopeType == DataScopeTypeEnum.Custom && r.DataScopeDepartmentIds?.Count > 0)
+                    .SelectMany(r => r.DataScopeDepartmentIds)
+                    .Distinct()
+                    .ToList();
+            }
 
             moduleQueryable = moduleQueryable.Where(wh => (wh.ViewType & ModuleViewTypeEnum.All) != 0);
             // 查询当前用户角色对应的菜单Id
@@ -296,6 +307,7 @@ public class AuthService : IDynamicApplication
                 .ToList(),
             RoleNameList = result.RoleNameList,
             DataScopeType = (int) result.DataScopeType,
+            DataScopeDepartmentIds = result.DataScopeDepartmentIds,
             MenuCodeList = _user.IsSuperAdmin
                 ? []
                 : menuList.Select(sl => sl.MenuCode)

@@ -79,6 +79,12 @@ public class DepartmentService : IDynamicApplication
             queryable = queryable.Where(wh =>
                 wh.DepartmentId == _user.DepartmentId || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
         }
+        // 自定义部门数据
+        else if (_user.DataScopeType == (int) DataScopeTypeEnum.Custom)
+        {
+            var dataScopeDepartmentIds = _user.DataScopeDepartmentIds ?? new List<long>();
+            queryable = queryable.Where(wh => dataScopeDepartmentIds.Contains(wh.DepartmentId));
+        }
         // 本部门数据或仅本人数据
         else
         {
@@ -156,6 +162,12 @@ public class DepartmentService : IDynamicApplication
         {
             queryable = queryable.Where(wh =>
                 wh.DepartmentId == _user.DepartmentId || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
+        }
+        // 自定义部门数据
+        else if (_user.DataScopeType == (int) DataScopeTypeEnum.Custom)
+        {
+            var dataScopeDepartmentIds = _user.DataScopeDepartmentIds ?? new List<long>();
+            queryable = queryable.Where(wh => dataScopeDepartmentIds.Contains(wh.DepartmentId));
         }
         // 本部门数据或仅本人数据
         else
