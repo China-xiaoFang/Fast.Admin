@@ -19,7 +19,7 @@ export type IAnimationName =
 	| "el-zoom-in-bottom";
 
 const defaultSize: (typeof componentSizes)[number] = "default";
-const defaultMode: IModeName = "Horizontal";
+const defaultMode: IModeName = "Classic";
 const defaultAnimation: IAnimationName = "slide-right";
 export const defaultThemeColor = "#409EFF";
 
