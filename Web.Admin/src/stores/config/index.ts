@@ -5,7 +5,7 @@ import { defineStore } from "pinia";
 import type { componentSizes } from "element-plus";
 import type { FaTableDataRange } from "fast-element-plus";
 
-export type IModeName = "Classic";
+export type IModeName = "Classic" | "Horizontal" | "Mixed";
 
 export type IAnimationName =
 	| "slide-right"
@@ -19,7 +19,7 @@ export type IAnimationName =
 	| "el-zoom-in-bottom";
 
 const defaultSize: (typeof componentSizes)[number] = "default";
-const defaultMode: IModeName = "Classic";
+const defaultMode: IModeName = "Horizontal";
 const defaultAnimation: IAnimationName = "slide-right";
 export const defaultThemeColor = "#409EFF";
 
