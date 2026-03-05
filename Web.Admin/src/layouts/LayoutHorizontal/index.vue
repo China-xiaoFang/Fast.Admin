@@ -24,9 +24,25 @@
 								<span>首页</span>
 							</template>
 						</el-menu-item>
-						<template v-for="(mod, mIdx) in userInfoStore.menuList" :key="mIdx">
-							<template v-for="(item, idx) in (mod.children ?? []).filter((f) => f.visible)" :key="idx">
+						<template v-if="userInfoStore.menuList.length === 1">
+							<template v-for="(item, idx) in (userInfoStore.menuList[0].children ?? []).filter((f) => f.visible)" :key="idx">
 								<MenuItem :menu="item" />
+							</template>
+						</template>
+						<template v-else>
+							<template v-for="(mod, mIdx) in userInfoStore.menuList" :key="mIdx">
+								<el-sub-menu
+									v-if="(mod.children ?? []).filter((f) => f.visible).length > 0"
+									:index="'module-' + mod.moduleId"
+								>
+									<template #title>
+										<FaIcon :name="mod.icon || 'el-icon-Menu'" />
+										<span>{{ mod.moduleName }}</span>
+									</template>
+									<template v-for="(item, idx) in (mod.children ?? []).filter((f) => f.visible)" :key="idx">
+										<MenuItem :menu="item" />
+									</template>
+								</el-sub-menu>
 							</template>
 						</template>
 					</el-menu>
