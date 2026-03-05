@@ -28,6 +28,29 @@
 			<FaFormItem prop="dataScopeType" label="数据范围">
 				<RadioGroup name="DataScopeTypeEnum" v-model="state.formData.dataScopeType" />
 			</FaFormItem>
+			<FaFormItem
+				v-if="state.formData.dataScopeType === DataScopeTypeEnum.Custom"
+				prop="dataScopeDepartmentIds"
+				label="自定义部门"
+				tips="选择该角色可访问数据的部门"
+			>
+				<el-tree-select
+					v-model="state.formData.dataScopeDepartmentIds"
+					:data="state.departmentList"
+					multiple
+					:render-after-expand="false"
+					show-checkbox
+					check-strictly
+					filterable
+					clearable
+					collapse-tags
+					collapse-tags-tooltip
+					node-key="value"
+					:props="{ label: 'label', children: 'children' }"
+					placeholder="请选择部门"
+					style="width: 100%"
+				/>
+			</FaFormItem>
 			<FaFormItem prop="assignableRoleIds" label="可分配角色" tips="为空则代表可分配所有角色，有值则只能分配勾选的角色">
 				<el-checkbox-group v-model="state.formData.assignableRoleIds">
 					<el-checkbox v-for="(item, index) of state.roleList" :key="index" :value="item.value">
@@ -43,11 +66,12 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, watch } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
+import { departmentApi } from "@/api/services/Admin/department";
 import { roleApi } from "@/api/services/Admin/role";
 import { AddRoleInput } from "@/api/services/Admin/role/models/AddRoleInput";
 import { EditRoleInput } from "@/api/services/Admin/role/models/EditRoleInput";
@@ -73,7 +97,23 @@ const state = reactive({
 	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "角色",
 	roleList: withDefineType<ElSelectorOutput<number>[]>([]),
+	departmentList: withDefineType<ElSelectorOutput<number>[]>([]),
 });
+
+/** 加载部门列表 */
+const loadDepartmentList = async () => {
+	const data = await departmentApi.departmentSelector(undefined);
+	state.departmentList = data;
+};
+
+watch(
+	() => state.formData.dataScopeType,
+	(val) => {
+		if (val === DataScopeTypeEnum.Custom && state.departmentList.length === 0) {
+			loadDepartmentList();
+		}
+	}
+);
 
 const handleConfirm = () => {
 	faDialogRef.value.close(async () => {
@@ -99,6 +139,9 @@ const detail = (roleId: number) => {
 		state.formData = apiRes;
 		state.dialogTitle = `角色详情 - ${apiRes.roleName}`;
 		state.roleList = await roleApi.roleSelector();
+		if (apiRes.dataScopeType === DataScopeTypeEnum.Custom) {
+			await loadDepartmentList();
+		}
 	});
 };
 
@@ -111,6 +154,7 @@ const add = () => {
 			roleType: RoleTypeEnum.Admin,
 			isSystemMenu: true,
 			dataScopeType: DataScopeTypeEnum.All,
+			dataScopeDepartmentIds: [],
 			assignableRoleIds: [],
 			sort: 1,
 		};
@@ -126,6 +170,9 @@ const edit = (roleId: number) => {
 		state.formData = apiRes;
 		state.dialogTitle = `编辑角色 - ${apiRes.roleName}`;
 		state.roleList = await roleApi.roleSelector();
+		if (apiRes.dataScopeType === DataScopeTypeEnum.Custom) {
+			await loadDepartmentList();
+		}
 	});
 };
 

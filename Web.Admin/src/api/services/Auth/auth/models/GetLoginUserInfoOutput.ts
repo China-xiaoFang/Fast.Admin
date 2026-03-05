@@ -90,6 +90,10 @@ export interface GetLoginUserInfoOutput {
    */
   dataScopeType?: DataScopeTypeEnum;
   /**
+   * 数据范围自定义部门Id集合
+   */
+  dataScopeDepartmentIds?: Array<number>;
+  /**
    * 按钮编码集合
    */
   buttonCodeList?: Array<string>;

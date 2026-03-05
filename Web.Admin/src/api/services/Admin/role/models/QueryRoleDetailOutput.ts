@@ -34,6 +34,10 @@ export interface QueryRoleDetailOutput {
    */
   dataScopeType?: DataScopeTypeEnum;
   /**
+   * 数据范围自定义部门Id集合
+   */
+  dataScopeDepartmentIds?: Array<number>;
+  /**
    * 可分配的角色Id集合
    */
   assignableRoleIds?: Array<number>;

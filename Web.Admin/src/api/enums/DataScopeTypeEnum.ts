@@ -19,6 +19,10 @@ export enum DataScopeTypeEnum {
    */
   Dept = 8,
   /**
+   * 自定义部门数据
+   */
+  Custom = 12,
+  /**
    * 仅本人数据
    */
   Self = 16,
