@@ -80,7 +80,7 @@
 		box-shadow 0.3s ease,
 		transform 0.3s ease;
 
-	.split-login__brand {
+	.modern-login__brand {
 		position: relative;
 		display: flex;
 		align-items: center;
@@ -172,30 +172,16 @@
 				font-weight: 700;
 				margin: 0 0 8px;
 				letter-spacing: 2px;
+				color: #fff;
 				text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-				.brand-title--1 {
-					color: #fff;
-				}
-				.brand-title--2 {
-					color: rgba(255, 255, 255, 0.85);
-					font-weight: 400;
-					margin-left: 4px;
-				}
 			}
 
 			.brand-subtitle {
 				font-size: 15px;
-				font-weight: 700;
+				font-weight: 400;
 				margin: 0 0 24px;
 				letter-spacing: 1px;
-				.brand-subtitle--1 {
-					color: #fff;
-				}
-				.brand-subtitle--2 {
-					color: rgba(255, 255, 255, 0.8);
-					font-weight: 400;
-					margin-left: 4px;
-				}
+				color: rgba(255, 255, 255, 0.8);
 			}
 
 			.brand-divider {
@@ -233,7 +219,7 @@
 		}
 	}
 
-	.split-login__form {
+	.modern-login__form {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -385,7 +371,7 @@
 			}
 		}
 
-		.glass-text {
+		.form-footer-text {
 			text-align: center;
 			margin-top: 20px;
 			font-size: 12px;
@@ -492,7 +478,7 @@ html.dark {
 				box-shadow:
 					0 20px 60px rgba(0, 0, 0, 0.45),
 					0 4px 16px rgba(0, 0, 0, 0.3);
-				.split-login__brand {
+				.modern-login__brand {
 					.brand-bg {
 						.brand-particle {
 							opacity: 0.08;
@@ -524,10 +510,10 @@ html.dark {
 				max-width: 500px;
 				max-height: 560px;
 				grid-template-columns: 1fr;
-				.split-login__brand {
+				.modern-login__brand {
 					display: none;
 				}
-				.split-login__form {
+				.modern-login__form {
 					padding: 20px 20px;
 				}
 			}
@@ -541,7 +527,7 @@ html.dark {
 			padding: 12px;
 			.modern-login {
 				max-width: 100%;
-				.split-login__form {
+				.modern-login__form {
 					padding: 24px 16px;
 					.form-panel {
 						.form-header {

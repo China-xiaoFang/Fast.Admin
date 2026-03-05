@@ -1,8 +1,8 @@
 <template>
-	<div class="modern-login" :style="{ '--login-bg': props.background }">
+	<div class="split-login" :style="{ '--login-bg': props.background }">
 		<slot name="help" />
 		<!-- 左侧装饰面板 -->
-		<div class="modern-login__panel">
+		<div class="split-login__panel">
 			<div class="panel__decoration">
 				<div class="deco-circle deco-circle--1"></div>
 				<div class="deco-circle deco-circle--2"></div>
@@ -38,7 +38,7 @@
 			</div>
 		</div>
 		<!-- 右侧登录表单 -->
-		<div class="modern-login__form-wrap">
+		<div class="split-login__form-wrap">
 			<transition mode="out-in" name="fade-up">
 				<!-- 账号登录 -->
 				<div v-if="formStep === 'Account'" key="Account" class="form-container">
