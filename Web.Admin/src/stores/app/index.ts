@@ -13,7 +13,7 @@ import { useConfig } from "@/stores/config";
 import type { LaunchOutput } from "@/api/services/Center/app/models/LaunchOutput";
 import type { FaTableColumnCtx, FaTableEnumColumnCtx } from "fast-element-plus";
 
-export type ILoginComponent = "ClassicLogin";
+export type ILoginComponent = "ClassicLogin" | "ModernLogin" | "SimpleLogin" | "SplitLogin";
 
 type IState = {
 	/** 是否存在 Launch 数据 */

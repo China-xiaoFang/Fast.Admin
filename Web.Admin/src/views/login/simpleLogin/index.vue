@@ -1,0 +1,325 @@
+<template>
+	<el-container :style="{ background: props.background }">
+		<slot name="help" />
+		<div class="animated-bg">
+			<div class="bg-orb bg-orb--1" />
+			<div class="bg-orb bg-orb--2" />
+			<div class="bg-orb bg-orb--3" />
+			<div class="bg-grid" />
+			<div class="bg-glow bg-glow--top" />
+			<div class="bg-glow bg-glow--bottom" />
+		</div>
+		<el-main>
+			<div class="login-glass">
+				<div class="login-glass__decor">
+					<div class="decor-line decor-line--1" />
+					<div class="decor-line decor-line--2" />
+					<div class="decor-dot decor-dot--1" />
+					<div class="decor-dot decor-dot--2" />
+					<div class="decor-dot decor-dot--3" />
+				</div>
+				<div class="login-glass__header">
+					<div class="logo-wrapper">
+						<div class="logo-ring" />
+						<img :src="logoImage" class="logo" />
+					</div>
+					<h2>{{ appStore.appName }}</h2>
+					<p class="subtitle">欢迎登录管理系统</p>
+					<div class="header-line" />
+				</div>
+				<transition mode="out-in" name="slide-left">
+					<!-- 账号 -->
+					<div v-if="formStep === 'Account'" key="account" class="login-glass__body">
+						<el-form
+							ref="elFormRef"
+							labelPosition="top"
+							:model="formData"
+							:rules="props.formRules"
+							size="large"
+							labelSuffix=""
+							@keyup.enter="handleKeyupEnter"
+						>
+							<el-form-item prop="account">
+								<el-input
+									v-model.trim="formData.account"
+									placeholder="请输入账号"
+									type="text"
+									tabindex="1"
+									:prefixIcon="User"
+									@change="handleAccountChange"
+								/>
+							</el-form-item>
+							<el-form-item prop="password">
+								<el-input
+									v-model.trim="formData.password"
+									placeholder="请输入密码"
+									type="password"
+									tabindex="2"
+									:showPassword="!formData.encryptPassword"
+									:prefixIcon="Lock"
+									@input="handlePasswordInput"
+								/>
+							</el-form-item>
+							<el-form-item prop="rememberMe">
+								<el-checkbox v-model.checked="formData.rememberMe" size="default">记住密码</el-checkbox>
+							</el-form-item>
+							<FaButton ref="faButtonRef" class="w100 login-btn" type="primary" size="large" @click="handleFormLogin"> 登 录 </FaButton>
+						</el-form>
+					</div>
+					<!-- 租户账号 -->
+					<div v-else-if="formStep === 'TenantAccount'" key="tenant" class="login-glass__body">
+						<div class="tenant-info">
+							<span class="tenant-welcome">欢迎回来</span>
+							<span>
+								{{ currentTenant?.tenantName }} -
+								<span class="bold">{{ currentTenant?.employeeName }}</span>
+							</span>
+						</div>
+						<el-form
+							ref="elFormRef"
+							labelPosition="top"
+							:model="formData"
+							:rules="props.formRules"
+							size="large"
+							labelSuffix=""
+							@keyup.enter="handleKeyupEnter"
+						>
+							<el-form-item v-if="tenantList.length > 0" prop="userKey">
+								<el-select
+									popperClass="tenant__select__popper"
+									v-model="formData.userKey"
+									placeholder="租户"
+									@change="handleTenantChange"
+								>
+									<el-option
+										v-for="(item, idx) in tenantList"
+										:key="idx"
+										:label="item.tenant.tenantName"
+										:value="item.tenant.userKey"
+									>
+										<div class="tenant__warp">
+											<div class="tenant__top">
+												<div class="top__name">
+													<img :src="item.tenant.logoUrl" />
+													<span>{{ item.tenant.tenantName }}</span>
+												</div>
+												<Tag size="small" name="EditionEnum" :value="item.tenant.edition" />
+											</div>
+											<div class="tenant__center">
+												<span>{{ item.tenant.departmentName || "无部门..." }}</span>
+												<span>{{ item.tenant.employeeNo || "无工号..." }}</span>
+											</div>
+											<div class="tenant__bottom">
+												<Tag size="small" name="UserTypeEnum" :value="item.tenant.userType" />
+												<div class="bottom__name">
+													<span>{{ item.tenant.employeeName }}</span>
+													<img :src="item.tenant.idPhoto" />
+												</div>
+											</div>
+										</div>
+										<el-icon @click="handleTenantRemove(idx, item)"><Close /></el-icon>
+									</el-option>
+									<template #footer>
+										<el-button text type="info" @click="handleNewAccount">绑定新租户账号</el-button>
+									</template>
+								</el-select>
+							</el-form-item>
+							<el-form-item prop="account">
+								<template #label>
+									<FaFormItemTip label="账号" tips="授权租户不能修改账号，如需登录新的租户账号，请重新绑定" />
+								</template>
+								<el-input
+									disabled
+									v-model.trim="formData.account"
+									placeholder="账号"
+									type="text"
+									tabindex="1"
+									:prefixIcon="User"
+									@change="handleAccountChange"
+								/>
+							</el-form-item>
+							<el-form-item prop="password">
+								<el-input
+									v-model.trim="formData.password"
+									placeholder="密码"
+									type="password"
+									tabindex="2"
+									:showPassword="!formData.encryptPassword"
+									:prefixIcon="Lock"
+									@input="handlePasswordInput"
+								/>
+							</el-form-item>
+							<el-form-item prop="rememberMe">
+								<el-checkbox v-model.checked="formData.rememberMe" size="default">记住密码</el-checkbox>
+							</el-form-item>
+							<FaButton ref="faButtonRef" class="w100 login-btn" type="primary" size="large" @click="handleFormLogin"> 登 录 </FaButton>
+						</el-form>
+					</div>
+					<!-- 新账号 -->
+					<div v-else-if="formStep === 'NewAccount'" key="new" class="login-glass__body">
+						<div class="tenant-info">
+							<span class="tenant-welcome">请输入</span>
+							<span>新的租户账号进行登录</span>
+						</div>
+						<div class="right__button-back">
+							<el-button type="primary" size="default" link :icon="ArrowLeftBold" @click="handleNewAccountBack">返回</el-button>
+						</div>
+						<el-form
+							ref="elFormRef"
+							labelPosition="top"
+							:model="formData"
+							:rules="props.formRules"
+							size="large"
+							labelSuffix=""
+							@keyup.enter="handleKeyupEnter"
+						>
+							<el-form-item prop="account">
+								<el-input
+									v-model.trim="formData.account"
+									placeholder="账号"
+									type="text"
+									tabindex="1"
+									:prefixIcon="User"
+									@change="handleAccountChange"
+								/>
+							</el-form-item>
+							<el-form-item prop="password">
+								<el-input
+									v-model.trim="formData.password"
+									placeholder="密码"
+									type="password"
+									tabindex="2"
+									:showPassword="!formData.encryptPassword"
+									:prefixIcon="Lock"
+									@input="handlePasswordInput"
+								/>
+							</el-form-item>
+							<el-form-item prop="rememberMe">
+								<el-checkbox v-model.checked="formData.rememberMe" size="default">记住密码</el-checkbox>
+							</el-form-item>
+							<FaButton ref="faButtonRef" class="w100 login-btn" type="primary" size="large" @click="handleFormLogin"> 登 录 </FaButton>
+						</el-form>
+					</div>
+					<!-- 租户选择 -->
+					<div v-else-if="formStep === 'SelectTenant'" key="select" class="login-glass__body">
+						<div class="tenant-info">
+							<span class="tenant-welcome">请选择</span>
+							<span>租户账号进行登录</span>
+						</div>
+						<div class="right__button-back">
+							<el-button
+								type="primary"
+								size="default"
+								link
+								:icon="ArrowLeftBold"
+								@click="
+									() => {
+										if (tenantList.length > 0) {
+											formStep = 'NewAccount';
+										} else {
+											formStep = 'Account';
+										}
+									}
+								"
+							>
+								返回
+							</el-button>
+						</div>
+						<ul class="tenant__list">
+							<el-scrollbar>
+								<li v-for="(item, idx) in tenantSelector" :key="idx">
+									<div class="tenant__warp">
+										<div class="tenant__top">
+											<div class="top__name">
+												<img :src="item.logoUrl" />
+												<span>{{ item.tenantName }}</span>
+											</div>
+											<Tag size="small" name="EditionEnum" :value="item.edition" />
+										</div>
+										<div class="tenant__center">
+											<span>{{ item.departmentName || "无部门..." }}</span>
+											<span>{{ item.employeeNo || "无工号..." }}</span>
+										</div>
+										<div class="tenant__bottom">
+											<Tag size="small" name="UserTypeEnum" :value="item.userType" />
+											<div class="bottom__name">
+												<span>{{ item.employeeName }}</span>
+												<img :src="item.idPhoto" />
+											</div>
+										</div>
+									</div>
+									<FaButton
+										type="primary"
+										size="default"
+										@click="
+											(event, done) => {
+												formData.userKey = item.userKey;
+												handleLogin(event, done);
+											}
+										"
+									>
+										登录
+									</FaButton>
+								</li>
+							</el-scrollbar>
+						</ul>
+					</div>
+				</transition>
+				<div class="login-glass__footer-text">Powered by Fast Dotnet</div>
+			</div>
+		</el-main>
+		<el-footer :style="{ '--el-footer-height': addUnit(props.footerHeight) }">
+			<Footer />
+		</el-footer>
+	</el-container>
+</template>
+
+<script lang="ts" setup>
+import { ref } from "vue";
+import { FormInstance, type FormRules } from "element-plus";
+import { ArrowLeftBold, Close, Lock, User } from "@element-plus/icons-vue";
+import { FaButtonInstance } from "fast-element-plus";
+import { addUnit, definePropType } from "@fast-china/utils";
+import logoImage from "@/assets/logo.png";
+import { useApp } from "@/stores";
+import { useLogin } from "../useLogin";
+
+defineOptions({
+	name: "SimpleLogin",
+});
+
+const props = defineProps({
+	/** 背景 */
+	background: String,
+	/** 页脚高度 */
+	footerHeight: Number,
+	/** 表单规则 */
+	formRules: definePropType<FormRules>(Object),
+});
+
+const appStore = useApp();
+
+const elFormRef = ref<FormInstance>();
+const faButtonRef = ref<FaButtonInstance>();
+
+const {
+	formData,
+	tenantList,
+	formStep,
+	tenantSelector,
+	currentTenant,
+	handleTenantChange,
+	handleTenantRemove,
+	handleNewAccount,
+	handleNewAccountBack,
+	handleAccountChange,
+	handlePasswordInput,
+	handleLogin,
+	handleFormLogin,
+	handleKeyupEnter,
+} = useLogin(elFormRef, faButtonRef);
+</script>
+
+<style scoped lang="scss">
+@use "./index.scss";
+</style>

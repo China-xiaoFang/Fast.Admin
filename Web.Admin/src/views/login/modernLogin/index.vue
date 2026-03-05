@@ -2,7 +2,7 @@
 	<el-container :style="{ background: props.background }">
 		<slot name="help" />
 		<el-main>
-			<div class="split-login">
+			<div class="modern-login">
 				<!-- 左侧品牌展示区 -->
 				<div class="split-login__brand">
 					<div class="brand-bg">

@@ -1,12 +1,12 @@
 <template>
 	<component
-		:is="loginComponents[appStore.loginComponent]"
+		:is="loginComponents['SplitLogin']"
 		:background="getThemeGradient(appStore.themeColor, configStore.layout.isDark ? 'dark' : 'light')"
 		:footerHeight="configStore.layout.footerHeight"
 		:formRules="state.formRules"
 	>
 		<template #help>
-			<el-dropdown ref="helpDropdownRef" size="default" trigger="click" @command="handleDropdownClick">
+			<el-dropdown ref="helpDropdownRef" class="help_dropdown" size="default" trigger="click" @command="handleDropdownClick">
 				<div>
 					<el-icon :size="20" title="主题">
 						<ChromeFilled />
@@ -74,6 +74,9 @@ export type IFormStep = "Account" | "TenantAccount" | "SelectTenant" | "NewAccou
 /** 登录组件 */
 const loginComponents = withDefineType<Record<ILoginComponent, Component>>({
 	ClassicLogin: defineAsyncComponent(() => import("./classicLogin/index.vue")),
+	ModernLogin: defineAsyncComponent(() => import("./modernLogin/index.vue")),
+	SimpleLogin: defineAsyncComponent(() => import("./simpleLogin/index.vue")),
+	SplitLogin: defineAsyncComponent(() => import("./splitLogin/index.vue")),
 });
 
 const appStore = useApp();
@@ -110,7 +113,7 @@ onMounted(() => {
 		const tenantList = Local.get<ITenantData[]>(state.cFormKey);
 		if (tenantList && tenantList.length > 0) {
 			state.tenantList = tenantList;
-			const { formData, tenant } = tenantList[tenantList.length - 1];
+			const { formData, tenant } = tenantList[0];
 			state.formData = { ...formData, userKey: tenant.userKey };
 			state.formData.encryptPassword = formData.rememberMe;
 			state.formStep = "TenantAccount";
@@ -261,40 +264,11 @@ const getThemeGradient = (baseColor: string, mode: "light" | "dark" = "light", a
 </script>
 
 <style scoped lang="scss">
-.el-dropdown {
+.help_dropdown {
 	position: fixed;
 	top: 5%;
 	right: 5%;
 	cursor: pointer;
 	color: var(--el-color-white);
-}
-:deep() {
-	.el-footer {
-		--el-footer-padding: 0;
-		font-size: var(--el-font-size-base);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		transition: height var(--el-transition-duration);
-		overflow: hidden;
-	}
-}
-
-@media (max-width: 1366px) {
-	:deep() {
-		.el-footer {
-			flex-direction: column;
-			justify-content: space-evenly;
-			height: calc(var(--el-footer-height) * 1.7);
-		}
-	}
-}
-
-@media (max-width: 500px) {
-	:deep() {
-		.el-footer {
-			font-size: var(--el-font-size-extra-small);
-		}
-	}
 }
 </style>

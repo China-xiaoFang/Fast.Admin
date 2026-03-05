@@ -1,0 +1,428 @@
+.modern-login {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	overflow: hidden;
+	position: relative;
+	// ─── 左侧装饰面板 ──────────────────────────────────────
+	&__panel {
+		position: relative;
+		width: 42%;
+		flex-shrink: 0;
+		background: var(--login-bg, linear-gradient(165deg, #0e6db5, #0487d0, #1a8fce, #5b8dd9));
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.panel__decoration {
+			position: absolute;
+			inset: 0;
+			pointer-events: none;
+			.deco-circle {
+				position: absolute;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.06);
+			}
+			.deco-circle--1 {
+				width: 420px;
+				height: 420px;
+				top: -140px;
+				right: -140px;
+			}
+			.deco-circle--2 {
+				width: 280px;
+				height: 280px;
+				bottom: -60px;
+				left: -80px;
+			}
+			.deco-circle--3 {
+				width: 160px;
+				height: 160px;
+				top: 50%;
+				left: 30%;
+				transform: translate(-50%, -50%);
+				background: rgba(255, 255, 255, 0.04);
+			}
+		}
+		.panel__content {
+			position: relative;
+			z-index: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 28px;
+			padding: 40px;
+			color: #fff;
+			.panel__logo {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				.logo-img {
+					width: 36px;
+					height: 36px;
+					border-radius: 8px;
+					background: rgba(255, 255, 255, 0.2);
+					padding: 4px;
+				}
+				.logo-text {
+					font-size: 20px;
+					font-weight: 700;
+					letter-spacing: 1px;
+				}
+			}
+			.panel__icon {
+				svg {
+					width: 180px;
+					height: 180px;
+					filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.2));
+				}
+			}
+			.panel__tagline {
+				text-align: center;
+				h2 {
+					font-size: 22px;
+					font-weight: 700;
+					margin: 0 0 10px;
+					letter-spacing: 1px;
+				}
+				p {
+					font-size: 13px;
+					opacity: 0.75;
+					margin: 0;
+					line-height: 1.6;
+					max-width: 240px;
+				}
+			}
+		}
+	}
+	// ─── 右侧表单区域 ──────────────────────────────────────
+	&__form-wrap {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		background: var(--el-bg-color);
+		overflow: hidden;
+		position: relative;
+		.form-container {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			padding: 48px 60px;
+			overflow: hidden;
+			.form-header {
+				margin-bottom: 32px;
+				.back-btn {
+					margin-bottom: 12px;
+					:deep(.el-button span) {
+						margin-left: 0;
+					}
+				}
+				.form-title {
+					font-size: 32px;
+					font-weight: 800;
+					margin: 0 0 8px;
+					color: var(--el-text-color-primary);
+					letter-spacing: 0.5px;
+				}
+				.form-subtitle {
+					font-size: 14px;
+					color: var(--el-text-color-secondary);
+					margin: 0;
+					line-height: 1.5;
+				}
+			}
+			:deep() {
+				.el-form-item__label {
+					font-size: 13px;
+					font-weight: 500;
+					color: var(--el-text-color-regular);
+					padding-bottom: 6px;
+				}
+				.el-input__wrapper {
+					border-radius: 12px;
+					padding: 0 16px;
+					box-shadow: 0 0 0 1px var(--el-border-color) inset;
+					background: var(--el-fill-color-blank);
+					transition:
+						box-shadow 0.25s ease,
+						background 0.25s ease;
+					&:hover {
+						box-shadow: 0 0 0 1px var(--el-color-primary-light-5) inset;
+					}
+				}
+				.el-input__wrapper.is-focus {
+					box-shadow:
+						0 0 0 1.5px var(--el-color-primary) inset,
+						0 2px 8px rgba(var(--el-color-primary-rgb), 0.15);
+				}
+				.el-input__inner {
+					height: 44px;
+					font-size: 14px;
+				}
+				.el-form-item {
+					margin-bottom: 20px;
+				}
+			}
+			.form-options {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-bottom: 24px;
+				margin-top: -4px;
+			}
+			.login-btn {
+				width: 100%;
+				height: 48px;
+				border-radius: 12px;
+				font-size: 16px;
+				font-weight: 600;
+				letter-spacing: 4px;
+				transition:
+					transform 0.2s ease,
+					box-shadow 0.2s ease;
+				box-shadow: 0 4px 16px rgba(var(--el-color-primary-rgb), 0.35);
+				&:hover {
+					transform: translateY(-1px);
+					box-shadow: 0 6px 20px rgba(var(--el-color-primary-rgb), 0.45);
+				}
+				&:active {
+					transform: translateY(0);
+				}
+			}
+			.tenant__list {
+				flex: 1;
+				max-height: 280px;
+				overflow: hidden;
+				.el-scrollbar {
+					padding: 0 4px;
+					li {
+						padding: 10px 0;
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						justify-content: space-between;
+						gap: 16px;
+						&:not(:last-child) {
+							border-bottom: var(--el-border);
+						}
+						.tenant__warp {
+							flex: 1;
+							display: flex;
+							flex-direction: column;
+							line-height: 20px;
+							.tenant__top {
+								display: flex;
+								align-items: center;
+								justify-content: space-between;
+								.top__name {
+									display: flex;
+									align-items: center;
+									color: var(--el-text-color-regular);
+									font-weight: var(--el-font-weight-primary);
+								}
+								img {
+									width: 22px;
+									height: 22px;
+									margin-right: 6px;
+									border-radius: 50%;
+								}
+							}
+							.tenant__center {
+								margin-left: 28px;
+								color: var(--el-text-color-disabled);
+								display: flex;
+								justify-content: space-between;
+								font-size: var(--el-font-size-small);
+							}
+							.tenant__bottom {
+								margin-left: 14px;
+								color: var(--el-text-color-disabled);
+								display: flex;
+								justify-content: space-between;
+								align-items: center;
+								font-size: var(--el-font-size-small);
+								.bottom__name {
+									display: flex;
+									align-items: center;
+									font-weight: var(--el-font-weight-primary);
+								}
+								.el-tag {
+									margin-right: 4px;
+								}
+								img {
+									width: 18px;
+									height: 18px;
+									margin-left: 5px;
+									border-radius: 50%;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		.form-footer {
+			padding: 12px 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: var(--el-font-size-extra-small);
+			color: var(--el-text-color-placeholder);
+			border-top: 1px solid var(--el-border-color-lighter);
+		}
+	}
+}
+// ─── 租户下拉弹窗 ──────────────────────────────────────────
+.tenant__select__popper {
+	.el-select-dropdown__wrap {
+		max-height: 200px;
+		.el-select-dropdown__list {
+			li {
+				height: 100%;
+				padding: 0 15px 0 10px;
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				gap: 10px;
+				&:not(:last-child) {
+					border-bottom: var(--el-border);
+				}
+				.tenant__warp {
+					flex: 1;
+					display: flex;
+					flex-direction: column;
+					.tenant__top {
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						.top__name {
+							display: flex;
+							align-items: center;
+							color: var(--el-text-color-regular);
+							font-weight: var(--el-font-weight-primary);
+						}
+						img {
+							width: 25px;
+							height: 25px;
+							margin-right: 5px;
+							border-radius: 50%;
+						}
+					}
+					.tenant__center {
+						margin-left: 30px;
+						margin-top: -15px;
+						color: var(--el-text-color-disabled);
+						display: flex;
+						justify-content: space-between;
+						font-size: var(--el-font-size-small);
+					}
+					.tenant__bottom {
+						margin-left: 15px;
+						margin-top: -15px;
+						color: var(--el-text-color-disabled);
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						font-size: var(--el-font-size-small);
+						.bottom__name {
+							display: flex;
+							align-items: center;
+							font-weight: var(--el-font-weight-primary);
+						}
+						.el-tag {
+							margin-right: 5px;
+						}
+						img {
+							width: 20px;
+							height: 20px;
+							margin-left: 5px;
+							border-radius: 50%;
+						}
+					}
+				}
+				.el-icon {
+					transition:
+						background-color var(--el-transition-duration) ease,
+						color var(--el-transition-duration) ease,
+						transform var(--el-transition-duration) ease;
+					&:hover {
+						border-radius: 50%;
+						background-color: var(--el-color-primary);
+						color: var(--el-color-white);
+					}
+				}
+			}
+		}
+	}
+	.el-select-dropdown__footer {
+		padding: 5px 0;
+		.el-button {
+			width: 100%;
+		}
+	}
+}
+// ─── 深色模式 ──────────────────────────────────────────────
+html.dark {
+	.modern-login {
+		&__panel {
+			background: linear-gradient(165deg, #0a3f6e, #023d5e, #0c4f80, #2a5090);
+		}
+		&__form-wrap {
+			background: var(--el-bg-color);
+			.form-footer {
+				border-top-color: var(--el-border-color-darker);
+			}
+		}
+	}
+}
+// ─── 过渡动画 ──────────────────────────────────────────────
+.fade-up-enter-active,
+.fade-up-leave-active {
+	transition:
+		opacity 0.28s ease,
+		transform 0.28s ease;
+}
+.fade-up-enter-from {
+	opacity: 0;
+	transform: translateY(16px);
+}
+.fade-up-leave-to {
+	opacity: 0;
+	transform: translateY(-12px);
+}
+// ─── 响应式 ────────────────────────────────────────────────
+@media (max-width: 900px) {
+	.modern-login {
+		flex-direction: column;
+		min-width: 360px;
+		&__panel {
+			width: 100%;
+			height: 200px;
+			flex-shrink: 0;
+			.panel__content {
+				flex-direction: row;
+				gap: 20px;
+				padding: 20px 32px;
+				.panel__icon {
+					display: none;
+				}
+				.panel__tagline {
+					text-align: left;
+					h2 {
+						font-size: 18px;
+					}
+					p {
+						font-size: 12px;
+					}
+				}
+			}
+		}
+		&__form-wrap {
+			.form-container {
+				padding: 32px 28px;
+			}
+		}
+	}
+}
