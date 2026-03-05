@@ -289,7 +289,7 @@ import { ref } from "vue";
 import { FormInstance, type FormRules } from "element-plus";
 import { ArrowLeftBold, Close, Lock, User } from "@element-plus/icons-vue";
 import { FaButtonInstance } from "fast-element-plus";
-import { addUnit, definePropType } from "@fast-china/utils";
+import { definePropType } from "@fast-china/utils";
 import logoImage from "@/assets/logo.png";
 import { useApp } from "@/stores";
 import { useLogin } from "../useLogin";
