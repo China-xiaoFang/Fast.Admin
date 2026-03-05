@@ -65,7 +65,7 @@
 	}
 }
 
-.split-login {
+.modern-login {
 	width: 960px;
 	height: 560px;
 	display: grid;
@@ -488,7 +488,7 @@
 html.dark {
 	.el-container {
 		.el-main {
-			.split-login {
+			.modern-login {
 				box-shadow:
 					0 20px 60px rgba(0, 0, 0, 0.45),
 					0 4px 16px rgba(0, 0, 0, 0.3);
@@ -518,7 +518,7 @@ html.dark {
 @media (max-width: 900px) {
 	.el-container {
 		.el-main {
-			.split-login {
+			.modern-login {
 				width: 100%;
 				height: 100%;
 				max-width: 500px;
@@ -539,7 +539,7 @@ html.dark {
 	.el-container {
 		.el-main {
 			padding: 12px;
-			.split-login {
+			.modern-login {
 				max-width: 100%;
 				.split-login__form {
 					padding: 24px 16px;
