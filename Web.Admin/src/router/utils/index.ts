@@ -24,7 +24,7 @@ const loadComponent = (component: string): any => {
 };
 
 /** 加载组件名称 */
-const loadComponentName = (name: string): string => {
+export const loadComponentName = (name: string): string => {
 	if (name) {
 		if (name.includes("/")) {
 			const cArr = name.replace(/(^|\/)index(?=\/|$)/gi, "").split("/");
@@ -40,6 +40,16 @@ const loadComponentName = (name: string): string => {
 	}
 };
 
+/** 解析路由地址，分离路径和查询参数 */
+export const parseRouterUrl = (routerUrl: string): { path: string; query?: Record<string, string> } => {
+	if (!routerUrl) return { path: routerUrl };
+	const qIdx = routerUrl.indexOf("?");
+	if (qIdx === -1) return { path: routerUrl };
+	const queryString = routerUrl.substring(qIdx + 1);
+	const query = queryString ? Object.fromEntries(new URLSearchParams(queryString)) : undefined;
+	return { path: routerUrl.substring(0, qIdx), query };
+};
+
 /**
  * 组装路由
  */
@@ -50,10 +60,13 @@ const packageMenu = (menuList: AuthMenuInfoDto[]): RouteRecordRaw[] => {
 		if ((item.menuType & (MenuTypeEnum.Catalog | MenuTypeEnum.Menu)) == 0) {
 			continue;
 		}
+		// 解析路由地址，分离路径和查询参数，避免 Vue Router 将查询参数作为路径的一部分导致 404
+		const { path: routerBasePath } = parseRouterUrl(item.router ?? "");
 		const routeInfo = {
-			path: item.menuType === MenuTypeEnum.Catalog ? stringUtil.generateRandomString(8) : item.router,
-			// 这里由于 keep-alive 必须设置 name 的问题，所以根据组件的地址，生成固定的 name，需要在每个页面增加 name，不然 keep-alive 会失效
-			name: loadComponentName(item.component || item.menuCode),
+			path: item.menuType === MenuTypeEnum.Catalog ? stringUtil.generateRandomString(8) : routerBasePath,
+			// 使用 menuCode 作为路由 name，确保每个菜单项拥有唯一 name（即使多个菜单共用同一组件）
+			// 这样导航时 to.name / to.meta 能正确反映当前菜单项信息
+			name: loadComponentName(item.menuCode || item.component),
 			component: loadComponent(item.component),
 			redirect: undefined,
 			meta: {
@@ -63,6 +76,8 @@ const packageMenu = (menuList: AuthMenuInfoDto[]): RouteRecordRaw[] => {
 				tab: item.tab,
 				hide: item.visible,
 				keepAlive: item.keepAlive,
+				// 保存组件名称用于 keep-alive（keep-alive 的 include 需要匹配组件的 name 选项，而非路由 name）
+				componentName: loadComponentName(item.component || item.menuCode),
 			},
 			children: [],
 		};

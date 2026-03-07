@@ -18,6 +18,7 @@
 import { definePropType } from "@fast-china/utils";
 import { useRouter } from "vue-router";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
+import { loadComponentName, parseRouterUrl } from "@/router";
 import MenuItem from "./index.vue";
 import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
 
@@ -35,8 +36,19 @@ const props = defineProps({
 const handleMenuClick = () => {
 	switch (props.menu.menuType) {
 		case MenuTypeEnum.Catalog:
-		case MenuTypeEnum.Menu:
 			break;
+		case MenuTypeEnum.Menu: {
+			// 通过路由 name 导航，确保 to.name / to.meta 正确反映当前菜单项
+			// 同时将 router 地址中的查询参数单独提取，避免同一路径不同查询参数的菜单共用同一路由记录
+			const { query } = parseRouterUrl(props.menu.router || "");
+			const routeName = loadComponentName(props.menu.menuCode || props.menu.component);
+			if (routeName) {
+				router.push({ name: routeName, query });
+			} else {
+				router.push(props.menu.router || "");
+			}
+			break;
+		}
 		case MenuTypeEnum.Internal:
 			router.push({
 				path: "/iframe",

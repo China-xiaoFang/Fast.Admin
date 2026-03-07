@@ -1,12 +1,11 @@
 <template>
 	<el-scrollbar>
 		<el-menu
-			router
 			:defaultActive="activeMenu"
 			:collapse="configStore.layout.menuCollapse"
 			:style="{ '--el-menu-item-height': addUnit(configStore.layout.menuHeight) }"
 		>
-			<el-menu-item index="/dashboard">
+			<el-menu-item index="/dashboard" @click="router.push('/dashboard')">
 				<FaIcon name="fa-icon-Dashboard" />
 				<template #title>
 					<span>首页</span>
@@ -33,7 +32,7 @@ const configStore = useConfig();
 const navTabStore = useNavTabs();
 const userInfoStore = useUserInfo();
 
-const activeMenu = computed(() => router.currentRoute.value.path);
+const activeMenu = computed(() => router.currentRoute.value.fullPath);
 
 const menuList = computed(() => {
 	const activeModuleId = navTabStore.activeModuleId || userInfoStore.menuList[0].moduleId;

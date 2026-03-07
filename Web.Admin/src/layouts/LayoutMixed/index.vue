@@ -105,7 +105,7 @@
 						<RouterView v-slot="{ Component, route }">
 							<transition mode="out-in" :name="configStore.layout.mainAnimation">
 								<KeepAlive :include="navTabsStore.keepAliveComponentNameList">
-									<component :is="Component" :key="route.path" class="layout-main" />
+									<component :is="Component" :key="route.fullPath" class="layout-main" />
 								</KeepAlive>
 							</transition>
 						</RouterView>

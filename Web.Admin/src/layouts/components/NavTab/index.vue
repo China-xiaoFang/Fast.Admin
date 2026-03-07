@@ -7,9 +7,9 @@
 			<transition-group name="el-fade-in" tag="div" class="nav-tab__warp">
 				<div
 					v-for="(tag, idx) in navTabsStore.navTabs"
-					:key="tag.path"
+					:key="tag.fullPath || tag.path"
 					ref="tagRefs"
-					:class="['nav-tab__item', { 'is-active': route.path === tag.path }]"
+					:class="['nav-tab__item', { 'is-active': route.fullPath === tag.fullPath }]"
 					:title="tag.meta?.title"
 					@click.prevent="(event) => handleTabClick(event, tag)"
 					@mousedown.middle="(event) => handleCloseClick(event, tag)"
@@ -17,7 +17,7 @@
 				>
 					{{ tag.meta?.title }}
 					<el-icon
-						v-if="!tag.meta?.affix && route.path === tag.path"
+						v-if="!tag.meta?.affix && route.fullPath === tag.fullPath"
 						class="icon-close"
 						title="关闭"
 						@click.prevent.stop="(event) => handleCloseClick(event, tag)"
@@ -310,14 +310,14 @@ const handleMoveTo = (to?: RouteLocationNormalized) => {
 };
 
 const handleTabClick = (event: MouseEvent, tag: INavTab): void => {
-	if (tag.path === route.path) return;
+	if (tag.fullPath === route.fullPath) return;
 	// 左键
 	routerUtil.routePushSafe(router, { path: tag.path, query: tag.query });
 };
 
 const handleContextMenuList = (tag: INavTab, index: number) => {
 	// 禁用重新加载
-	contextMenuList[0].disabled = tag.path !== route.path;
+	contextMenuList[0].disabled = tag.fullPath !== route.fullPath;
 	// 禁用关闭
 	contextMenuList[1].disabled = tag?.meta?.affix === true;
 	// 禁用关闭左侧

@@ -12,13 +12,12 @@
 				<div class="left">
 					<LayoutLogo />
 					<el-menu
-						router
 						:defaultActive="activeMenu"
 						mode="horizontal"
 						:ellipsis="true"
 						:style="{ '--el-menu-item-height': addUnit(configStore.layout.menuHeight) }"
 					>
-						<el-menu-item index="/dashboard">
+						<el-menu-item index="/dashboard" @click="router.push('/dashboard')">
 							<FaIcon name="fa-icon-Dashboard" />
 							<template #title>
 								<span>首页</span>
@@ -91,7 +90,7 @@
 				<RouterView v-slot="{ Component, route }">
 					<transition mode="out-in" :name="configStore.layout.mainAnimation">
 						<KeepAlive :include="navTabsStore.keepAliveComponentNameList">
-							<component :is="Component" :key="route.path" class="layout-main" />
+							<component :is="Component" :key="route.fullPath" class="layout-main" />
 						</KeepAlive>
 					</transition>
 				</RouterView>
@@ -140,7 +139,7 @@ const layoutConfigRef = inject(layoutConfigKey);
 const changePasswordRef = inject(changePasswordKey);
 const faTenantSelectRef = ref<FaSelectInstance>();
 
-const activeMenu = computed(() => router.currentRoute.value.path);
+const activeMenu = computed(() => router.currentRoute.value.fullPath);
 
 const handleRefreshSystem = () => {
 	ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {
