@@ -39,6 +39,10 @@ declare interface ImportMetaEnv {
 	 */
 	readonly VITE_STORAGE_CRYPTO: "true" | "false";
 	/**
+	 * 启用移动端访问
+	 */
+	readonly VITE_ENABLE_MOBILE: "true" | "false";
+	/**
 	 * APP 版本号
 	 */
 	readonly VITE_APP_VERSION: string;

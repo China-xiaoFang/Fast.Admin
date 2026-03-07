@@ -1,5 +1,5 @@
 import { ElMessage, ElNotification } from "element-plus";
-import { consoleError, dateUtil, stringUtil } from "@fast-china/utils";
+import { consoleError, dateUtil, envUtil, stringUtil } from "@fast-china/utils";
 import { useTitle } from "@vueuse/core";
 import NProgress from "nprogress";
 import { createRouter, createWebHistory } from "vue-router";
@@ -36,6 +36,11 @@ NProgress.configure({
 router.beforeEach(async (to, from, next) => {
 	// 开启进度条
 	NProgress.start();
+
+	if (import.meta.env.VITE_ENABLE_MOBILE !== "true" && to.path != "/mobileBlocked" && envUtil.isMobile()) {
+		next({ path: "/mobileBlocked" });
+		return;
+	}
 
 	const appStore = useApp();
 	const userInfoStore = useUserInfo();

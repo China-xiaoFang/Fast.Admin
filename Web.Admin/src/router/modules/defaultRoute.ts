@@ -45,6 +45,15 @@ export const defaultRoute: RouteRecordRaw[] = [
 		},
 	},
 	{
+		path: "/mobileBlocked",
+		name: "MobileBlocked",
+		component: () => import("@/views/common/mobileBlocked/index.vue"),
+		meta: {
+			title: "请使用电脑访问",
+			noLogin: true,
+		},
+	},
+	{
 		path: "/:path(.*)*",
 		redirect: "/404",
 	},
