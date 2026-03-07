@@ -66,7 +66,8 @@ public class DepartmentService : IDynamicApplication
         // 本机构及以下数据
         else if (_user.DataScopeType == (int) DataScopeTypeEnum.OrgWithChild)
         {
-            queryable = queryable.Where(wh => wh.OrgId
+            queryable = queryable.Where(wh => wh.DataPublic
+                                              || wh.OrgId
                                               == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                                   // 主部门
                                                   .Where(e => e.EmployeeId == _user.UserId && e.IsPrimary)
@@ -77,7 +78,7 @@ public class DepartmentService : IDynamicApplication
         else if (_user.DataScopeType == (int) DataScopeTypeEnum.DeptWithChild)
         {
             queryable = queryable.Where(wh =>
-                wh.DepartmentId == _user.DepartmentId || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
+                wh.DataPublic || wh.DepartmentId == _user.DepartmentId || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
         }
         // 本部门数据或仅本人数据
         else
@@ -144,7 +145,8 @@ public class DepartmentService : IDynamicApplication
         // 本机构及以下数据
         else if (_user.DataScopeType == (int) DataScopeTypeEnum.OrgWithChild)
         {
-            queryable = queryable.Where(wh => wh.OrgId
+            queryable = queryable.Where(wh => wh.DataPublic
+                                              || wh.OrgId
                                               == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                                   // 主部门
                                                   .Where(e => e.EmployeeId == _user.UserId && e.IsPrimary)
@@ -155,7 +157,7 @@ public class DepartmentService : IDynamicApplication
         else if (_user.DataScopeType == (int) DataScopeTypeEnum.DeptWithChild)
         {
             queryable = queryable.Where(wh =>
-                wh.DepartmentId == _user.DepartmentId || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
+                wh.DataPublic || wh.DepartmentId == _user.DepartmentId || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
         }
         // 本部门数据或仅本人数据
         else
@@ -179,6 +181,7 @@ public class DepartmentService : IDynamicApplication
                 Phone = sl.Phone,
                 Email = sl.Email,
                 Sort = sl.Sort,
+                DataPublic = sl.DataPublic,
                 Remark = sl.Remark,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
@@ -218,6 +221,7 @@ public class DepartmentService : IDynamicApplication
                 Phone = sl.Phone,
                 Email = sl.Email,
                 Sort = sl.Sort,
+                DataPublic = sl.DataPublic,
                 Remark = sl.Remark,
                 CreatedUserName = sl.CreatedUserName,
                 CreatedTime = sl.CreatedTime,
@@ -273,6 +277,7 @@ public class DepartmentService : IDynamicApplication
             Phone = input.Phone,
             Email = input.Email,
             Sort = input.Sort,
+            DataPublic = input.DataPublic,
             Remark = input.Remark
         };
 
@@ -359,6 +364,7 @@ public class DepartmentService : IDynamicApplication
         departmentModel.Phone = input.Phone;
         departmentModel.Email = input.Email;
         departmentModel.Sort = input.Sort;
+        departmentModel.DataPublic = input.DataPublic;
         departmentModel.Remark = input.Remark;
         departmentModel.RowVersion = input.RowVersion;
 

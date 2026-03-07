@@ -18,8 +18,4 @@ export enum RoleTypeEnum {
    * 财务
    */
   Finance = 8,
-  /**
-   * 运营
-   */
-  Operator = 16,
 }

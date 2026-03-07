@@ -130,6 +130,7 @@ public class OrganizationService : IDynamicApplication
                 Phone = sl.Phone,
                 Email = sl.Email,
                 Sort = sl.Sort,
+                DataPublic = sl.DataPublic,
                 Remark = sl.Remark,
                 DepartmentName = sl.DepartmentName,
                 CreatedUserName = sl.CreatedUserName,
@@ -176,6 +177,7 @@ public class OrganizationService : IDynamicApplication
             Phone = input.Phone,
             Email = input.Email,
             Sort = input.Sort,
+            DataPublic = input.DataPublic,
             Remark = input.Remark
         };
 
@@ -252,6 +254,7 @@ public class OrganizationService : IDynamicApplication
         organizationModel.Phone = input.Phone;
         organizationModel.Email = input.Email;
         organizationModel.Sort = input.Sort;
+        organizationModel.DataPublic = input.DataPublic;
         organizationModel.Remark = input.Remark;
         organizationModel.RowVersion = input.RowVersion;
 

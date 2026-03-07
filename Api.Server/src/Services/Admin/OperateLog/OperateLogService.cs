@@ -80,7 +80,8 @@ public class OperateLogService : IDynamicApplication
         else if (_user.DataScopeType == (int) DataScopeTypeEnum.OrgWithChild)
         {
             var departmentIds = await _adminRepository.Queryable<DepartmentModel>()
-                .Where(wh => wh.OrgId
+                .Where(wh => wh.DataPublic
+                             || wh.OrgId
                              == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                  // 主部门
                                  .Where(e => e.EmployeeId == _user.UserId && e.IsPrimary)
@@ -93,7 +94,9 @@ public class OperateLogService : IDynamicApplication
         else if (_user.DataScopeType == (int) DataScopeTypeEnum.DeptWithChild)
         {
             var departmentIds = await _adminRepository.Queryable<DepartmentModel>()
-                .Where(wh => wh.DepartmentId == _user.DepartmentId || wh.ParentIds.Contains(_user.DepartmentId ?? 0))
+                .Where(wh => wh.DataPublic
+                             || wh.DepartmentId == _user.DepartmentId
+                             || wh.ParentIds.Contains(_user.DepartmentId ?? 0))
                 .Select(sl => sl.DepartmentId)
                 .ToListAsync();
             queryable = queryable.Where(wh => departmentIds.Contains(wh.DepartmentId ?? 0));

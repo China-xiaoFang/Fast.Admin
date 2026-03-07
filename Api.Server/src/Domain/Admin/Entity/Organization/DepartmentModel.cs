@@ -113,6 +113,12 @@ public class DepartmentModel : IUpdateVersion
     public int Sort { get; set; }
 
     /// <summary>
+    /// 数据公开
+    /// </summary>
+    /// <remarks><see cref="DataScopeTypeEnum.DeptWithChild"/> 时生效</remarks>
+    public bool DataPublic { get; set; }
+
+    /// <summary>
     /// 备注
     /// </summary>
     [SugarColumn(ColumnDescription = "备注", Length = 200)]

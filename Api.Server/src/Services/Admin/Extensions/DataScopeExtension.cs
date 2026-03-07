@@ -133,7 +133,8 @@ public static class DataScopeExtension
         if (_user.DataScopeType == (int) DataScopeTypeEnum.OrgWithChild)
         {
             var dataScopeQueryable = queryable.Context.Queryable<DepartmentModel>()
-                .Where(wh => wh.OrgId
+                .Where(wh => wh.DataPublic
+                             || wh.OrgId
                              == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                  // 主部门
                                  .Where(e => e.EmployeeId == employeeId && e.IsPrimary)
@@ -147,7 +148,7 @@ public static class DataScopeExtension
         if (_user.DataScopeType == (int) DataScopeTypeEnum.DeptWithChild)
         {
             var dataScopeQueryable = queryable.Context.Queryable<DepartmentModel>()
-                .Where(wh => wh.DepartmentId == departmentId || wh.ParentIds.Contains(departmentId))
+                .Where(wh => wh.DataPublic || wh.DepartmentId == departmentId || wh.ParentIds.Contains(departmentId))
                 .Select(sl => new DepartmentModel {DepartmentId = sl.DepartmentId});
             return BuildInnerJoin(queryable, departmentIdFieldSelector, dataScopeQueryable);
         }
