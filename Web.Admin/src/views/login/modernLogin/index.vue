@@ -4,7 +4,7 @@
 		<el-main>
 			<div class="modern-login">
 				<!-- 左侧品牌展示区 -->
-				<div class="split-login__brand">
+				<div class="modern-login__brand">
 					<div class="brand-bg">
 						<div class="brand-particle brand-particle--1" />
 						<div class="brand-particle brand-particle--2" />
@@ -17,14 +17,8 @@
 						<div class="brand-logo">
 							<img :src="logoImage" alt="Logo" />
 						</div>
-						<h1 class="brand-title">
-							<span class="brand-title--1">Fast</span>
-							<span class="brand-title--2">DotNet</span>
-						</h1>
-						<p class="brand-subtitle">
-							<span class="brand-subtitle--1">{{ appStore.appName }}</span>
-							<span class="brand-subtitle--2">管理平台</span>
-						</p>
+						<h1 class="brand-title">{{ appStore.appName }}</h1>
+						<p class="brand-subtitle">管理平台</p>
 						<div class="brand-divider" />
 						<ul class="brand-features">
 							<li>
@@ -47,7 +41,7 @@
 					</div>
 				</div>
 				<!-- 右侧登录表单 -->
-				<div class="split-login__form">
+				<div class="modern-login__form">
 					<transition mode="out-in" name="slide-left">
 						<!-- 账号 -->
 						<div v-if="formStep === 'Account'" class="form-panel">
@@ -297,7 +291,7 @@
 							</ul>
 						</div>
 					</transition>
-					<div class="glass-text">Powered by FastDotNet</div>
+					<div class="form-footer-text">Powered by FastDotNet</div>
 				</div>
 			</div>
 		</el-main>

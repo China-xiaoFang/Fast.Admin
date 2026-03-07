@@ -265,7 +265,7 @@
 						</ul>
 					</div>
 				</transition>
-				<div class="login-glass__footer-text">Powered by Fast Dotnet</div>
+				<div class="login-glass__footer-text">Powered by FastDotNet</div>
 			</div>
 		</el-main>
 		<el-footer :style="{ '--el-footer-height': addUnit(props.footerHeight) }">

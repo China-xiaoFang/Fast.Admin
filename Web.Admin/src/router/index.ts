@@ -32,10 +32,19 @@ NProgress.configure({
 	minimum: 0.3,
 });
 
+/** 移动端检测（缓存结果，UA 在会话中不变） */
+const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
 /** 路由加载前 */
 router.beforeEach(async (to, from, next) => {
 	// 开启进度条
 	NProgress.start();
+
+	// 移动端访问检测
+	if (import.meta.env.VITE_ENABLE_MOBILE !== "true" && to.path !== "/mobile-blocked" && isMobileDevice) {
+		next({ path: "/mobile-blocked" });
+		return;
+	}
 
 	const appStore = useApp();
 	const userInfoStore = useUserInfo();
