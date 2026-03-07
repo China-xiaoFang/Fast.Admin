@@ -42,6 +42,9 @@
 			<FaFormItem prop="sort" label="排序" tips="从小到大">
 				<el-input-number v-model="state.formData.sort" :min="1" :max="9999" placeholder="请输入排序" />
 			</FaFormItem>
+			<FaFormItem prop="dataPublic" label="数据公开" tips="只有“本部门及以下数据”才生效">
+				<RadioGroup name="BooleanEnum" v-model="state.formData.dataPublic" />
+			</FaFormItem>
 			<FaFormItem prop="contacts" label="联系人">
 				<el-input v-model="state.formData.contacts" maxlength="20" placeholder="请输入联系人" />
 			</FaFormItem>
@@ -84,6 +87,7 @@ const state = reactive({
 		departmentName: [{ required: true, message: "请输入部门名称", trigger: "blur" }],
 		departmentCode: [{ required: true, message: "请输入部门编码", trigger: "blur" }],
 		sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
+		dataPublic: [{ required: true, message: "请选择数据公开", trigger: "change" }],
 	}),
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),
@@ -124,7 +128,9 @@ const add = () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加部门";
 		state.formDisabled = false;
-		state.formData = {};
+		state.formData = {
+			dataPublic: false,
+		};
 	});
 };
 

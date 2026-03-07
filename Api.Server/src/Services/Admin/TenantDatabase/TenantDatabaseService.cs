@@ -190,6 +190,7 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                     Phone = tenantModel.AdminMobile,
                     Email = tenantModel.AdminEmail,
                     Sort = 1,
+                    DataPublic = false,
                     Remark = null
                 })
                 .ExecuteCommandAsync();

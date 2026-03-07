@@ -66,6 +66,12 @@ public class AddOrganizationInput
     public int Sort { get; set; }
 
     /// <summary>
+    /// 数据公开
+    /// </summary>
+    [Required(ErrorMessage = "数据公开为空")]
+    public bool DataPublic { get; set; }
+
+    /// <summary>
     /// 备注
     /// </summary>
     public string Remark { get; set; }
