@@ -268,7 +268,22 @@ const getThemeGradient = (baseColor: string, mode: "light" | "dark" = "light", a
 	position: fixed;
 	top: 5%;
 	right: 5%;
+	z-index: 10;
 	cursor: pointer;
-	color: var(--el-color-white);
+	width: 36px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	color: var(--el-text-color-primary);
+	background: var(--el-bg-color-overlay);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	transition:
+		background 0.3s,
+		box-shadow 0.3s;
+	&:hover {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	}
 }
 </style>
