@@ -1,21 +1,15 @@
-.split-login {
+.modern-login {
 	width: 100%;
 	height: 100%;
 	display: flex;
-	flex-direction: column;
 	overflow: hidden;
 	position: relative;
-	// ─── 主体区域（左右分割）─────────────────────────────────
-	&__body {
-		flex: 1;
-		display: flex;
-		overflow: hidden;
-	}
+	background: var(--login-bg, linear-gradient(165deg, #0e6db5, #0487d0, #1a8fce, #5b8dd9));
 	// ─── 左侧装饰面板 ──────────────────────────────────────
 	&__panel {
 		position: relative;
-		flex: 1;
-		background: var(--login-bg, linear-gradient(165deg, #0e6db5, #0487d0, #1a8fce, #5b8dd9));
+		width: 42%;
+		flex-shrink: 0;
 		overflow: hidden;
 		display: flex;
 		align-items: center;
@@ -90,6 +84,14 @@
 					font-weight: 700;
 					margin: 0 0 10px;
 					letter-spacing: 1px;
+					.tagline-title--1 {
+						color: #fff;
+					}
+					.tagline-title--2 {
+						color: rgba(255, 255, 255, 0.8);
+						font-weight: 400;
+						margin-left: 4px;
+					}
 				}
 				p {
 					font-size: 13px;
@@ -102,12 +104,13 @@
 		}
 	}
 	// ─── 右侧表单区域 ──────────────────────────────────────
-	&__form {
-		width: 480px;
-		flex-shrink: 0;
+	&__form-wrap {
+		flex: 1;
 		display: flex;
 		flex-direction: column;
-		background: var(--el-bg-color);
+		background: rgba(255, 255, 255, 0.92);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
 		overflow: hidden;
 		position: relative;
 		.form-container {
@@ -269,18 +272,16 @@
 				}
 			}
 		}
-	}
-	// ─── 底部页脚 ──────────────────────────────────────────
-	&__footer {
-		width: 100%;
-		padding: 12px 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: var(--el-font-size-extra-small);
-		color: var(--el-text-color-placeholder);
-		border-top: 1px solid var(--el-border-color-lighter);
-		background: var(--el-bg-color);
+		.form-footer {
+			padding: 12px 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: var(--el-font-size-extra-small);
+			color: var(--el-text-color-placeholder);
+			background: transparent;
+			border-top: none;
+		}
 	}
 }
 // ─── 租户下拉弹窗 ──────────────────────────────────────────
@@ -375,12 +376,15 @@
 }
 // ─── 深色模式 ──────────────────────────────────────────────
 html.dark {
-	.split-login {
-		&__panel {
-			background: linear-gradient(165deg, #0a3f6e, #023d5e, #0c4f80, #2a5090);
-		}
-		&__footer {
-			border-top-color: var(--el-border-color-darker);
+	.modern-login {
+		background: linear-gradient(165deg, #0a3f6e, #023d5e, #0c4f80, #2a5090);
+		&__form-wrap {
+			background: rgba(30, 30, 40, 0.88);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			.form-footer {
+				color: rgba(255, 255, 255, 0.35);
+			}
 		}
 	}
 }
@@ -401,13 +405,13 @@ html.dark {
 }
 // ─── 响应式 ────────────────────────────────────────────────
 @media (max-width: 900px) {
-	.split-login {
-		&__body {
-			flex-direction: column;
-		}
+	.modern-login {
+		flex-direction: column;
+		min-width: 360px;
 		&__panel {
+			width: 100%;
 			height: 200px;
-			flex: none;
+			flex-shrink: 0;
 			.panel__content {
 				flex-direction: row;
 				gap: 20px;
@@ -426,9 +430,7 @@ html.dark {
 				}
 			}
 		}
-		&__form {
-			width: 100%;
-			flex: 1;
+		&__form-wrap {
 			.form-container {
 				padding: 32px 28px;
 			}
