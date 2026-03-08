@@ -9,7 +9,6 @@ import { EditionEnum } from "@/api/enums/EditionEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { appApi } from "@/api/services/Center/app";
 import { dictionaryApi } from "@/api/services/Center/dictionary";
-import { useConfig } from "@/stores/config";
 import type { LaunchOutput } from "@/api/services/Center/app/models/LaunchOutput";
 import type { FaTableColumnCtx, FaTableEnumColumnCtx } from "fast-element-plus";
 
@@ -23,7 +22,7 @@ type IState = {
 export const useApp = defineStore(
 	"app",
 	() => {
-		const state = reactive<IState & LaunchOutput>({
+		const state = reactive<IState & Required<LaunchOutput>>({
 			edition: EditionEnum.None,
 			appNo: "",
 			appName: "Fast.Admin",
@@ -103,8 +102,8 @@ export const useApp = defineStore(
 					consoleError("App", "字典加载失败");
 				}
 
-				const configStore = useConfig();
-				configStore.setTheme(state.themeColor);
+				// const configStore = useConfig();
+				// configStore.setTheme(state.themeColor);
 			}
 		};
 

@@ -20,7 +20,7 @@ type IState = {
 export const useUserInfo = defineStore(
 	"userInfo",
 	() => {
-		const state = reactive<IState & GetLoginUserInfoOutput>({
+		const state = reactive<IState & Required<GetLoginUserInfoOutput>>({
 			token: "",
 			refreshToken: "",
 			accountId: undefined,
