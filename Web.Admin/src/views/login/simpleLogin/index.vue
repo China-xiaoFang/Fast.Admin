@@ -64,7 +64,13 @@
 								<el-form-item prop="rememberMe">
 									<el-checkbox v-model.checked="formData.rememberMe" size="default">记住密码</el-checkbox>
 								</el-form-item>
-								<FaButton ref="faButtonRef" class="w100 login-btn" type="primary" size="large" @click="handleFormLogin">
+								<el-form-item v-if="loginVerify === 'slider'">
+									<SliderVerify ref="sliderVerifyRef" @success="state.verifyPassed = true" />
+								</el-form-item>
+								<el-form-item v-if="loginVerify === 'captcha'" prop="captchaCode">
+									<CaptchaVerify ref="captchaVerifyRef" v-model="state.captchaCode" @refresh="handleCaptchaRefresh" />
+								</el-form-item>
+								<FaButton ref="faButtonRef" class="w100 login-btn" type="primary" size="large" @click="handleVerifyLogin">
 									登 录
 								</FaButton>
 							</el-form>
@@ -272,14 +278,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { FormInstance, type FormRules } from "element-plus";
+import { reactive, ref } from "vue";
+import { ElMessage, FormInstance, type FormRules } from "element-plus";
 import { ArrowLeftBold, Close, Lock, User } from "@element-plus/icons-vue";
 import { FaButtonInstance } from "fast-element-plus";
 import { addUnit, definePropType } from "@fast-china/utils";
 import logoImage from "@/assets/logo.png";
 import { useApp } from "@/stores";
 import { useLogin } from "../useLogin";
+import SliderVerify from "../components/SliderVerify.vue";
+import CaptchaVerify from "../components/CaptchaVerify.vue";
 
 defineOptions({
 	name: "SimpleLogin",
@@ -298,6 +306,17 @@ const appStore = useApp();
 
 const elFormRef = ref<FormInstance>();
 const faButtonRef = ref<FaButtonInstance>();
+const sliderVerifyRef = ref<InstanceType<typeof SliderVerify>>();
+const captchaVerifyRef = ref<InstanceType<typeof CaptchaVerify>>();
+
+/** 登录验证方式 */
+const loginVerify = import.meta.env.VITE_LOGIN_VERIFY || "none";
+
+const state = reactive({
+	verifyPassed: false,
+	captchaCode: "",
+	captchaKey: "",
+});
 
 const {
 	formData,
@@ -315,6 +334,45 @@ const {
 	handleFormLogin,
 	handleKeyupEnter,
 } = useLogin(elFormRef, faButtonRef);
+
+const handleCaptchaRefresh = (captchaKey: string) => {
+	state.captchaKey = captchaKey;
+};
+
+/** 带验证的登录 */
+const handleVerifyLogin = (event: MouseEvent, done?: () => void) => {
+	if (loginVerify === "slider" && !state.verifyPassed) {
+		ElMessage.warning("请先完成滑块验证");
+		done && done();
+		return;
+	}
+	if (loginVerify === "captcha") {
+		if (!state.captchaCode || state.captchaCode.trim().length !== 4) {
+			ElMessage.warning("请输入4位验证码");
+			done && done();
+			return;
+		}
+		if (state.captchaCode !== state.captchaKey) {
+			ElMessage.error("验证码错误");
+			state.captchaCode = "";
+			captchaVerifyRef.value?.refresh();
+			done && done();
+			return;
+		}
+	}
+	handleFormLogin(event, () => {
+		// 登录失败时重置验证
+		if (loginVerify === "slider") {
+			state.verifyPassed = false;
+			sliderVerifyRef.value?.reset();
+		}
+		if (loginVerify === "captcha") {
+			state.captchaCode = "";
+			captchaVerifyRef.value?.refresh();
+		}
+		done && done();
+	});
+};
 </script>
 
 <style scoped lang="scss">
