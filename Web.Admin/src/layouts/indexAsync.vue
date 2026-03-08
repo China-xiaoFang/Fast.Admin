@@ -37,8 +37,8 @@ provide(changePasswordKey, changePasswordRef);
 
 const layoutComponents = withDefineType<Record<IModeName, Component>>({
 	Classic: defineAsyncComponent(() => import("@/layouts/LayoutClassic/index.vue")),
-	Horizontal: defineAsyncComponent(() => import("@/layouts/LayoutHorizontal/index.vue")),
-	Mixed: defineAsyncComponent(() => import("@/layouts/LayoutMixed/index.vue")),
+	Horizontal: defineAsyncComponent(() => import("@/layouts/LayoutClassic/index.vue")),
+	Mixed: defineAsyncComponent(() => import("@/layouts/LayoutClassic/index.vue")),
 });
 </script>
 

@@ -44,15 +44,13 @@ public class MenuService : IDynamicApplication
     /// <summary>
     /// 菜单选择器
     /// </summary>
-    /// <param name="moduleId"></param>
     /// <returns></returns>
     [HttpGet]
     [ApiInfo("菜单选择器", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Menu.Paged)]
-    public async Task<List<ElSelectorOutput<long>>> MenuSelector(long? moduleId)
+    public async Task<List<ElSelectorOutput<long>>> MenuSelector()
     {
-        var data = await _repository.Entities.WhereIF(moduleId != null, wh => wh.ModuleId == moduleId)
-            .OrderBy(ob => ob.Sort)
+        var data = await _repository.Entities.OrderBy(ob => ob.Sort)
             .Select(sl => new {sl.MenuId, sl.MenuName, sl.MenuCode, sl.ParentId})
             .ToListAsync();
 
@@ -74,11 +72,9 @@ public class MenuService : IDynamicApplication
     [Permission(PermissionConst.Menu.Paged)]
     public async Task<List<QueryMenuPagedOutput>> QueryMenuPaged(QueryMenuPagedInput input)
     {
-        var data = await _repository.Entities.LeftJoin<ModuleModel>((t1, t2) => t1.ModuleId == t2.ModuleId)
-            .LeftJoin<ApplicationModel>((t1, t2, t3) => t1.AppId == t3.AppId)
+        var data = await _repository.Entities.LeftJoin<ApplicationModel>((t1, t2) => t1.AppId == t2.AppId)
             .WhereIF(input.Edition != null, t1 => t1.Edition == input.Edition)
             .WhereIF(input.AppId != null, t1 => t1.AppId == input.AppId)
-            .WhereIF(input.ModuleId != null, t1 => t1.ModuleId == input.ModuleId)
             .WhereIF(input.MenuType != null, t1 => t1.MenuType == input.MenuType)
             .WhereIF(input.HasDesktop != null, t1 => t1.HasDesktop == input.HasDesktop)
             .WhereIF(input.HasWeb != null, t1 => t1.HasWeb == input.HasWeb)
@@ -86,14 +82,12 @@ public class MenuService : IDynamicApplication
             .WhereIF(input.HasMobile != null, t1 => t1.HasMobile == input.HasMobile)
             .WhereIF(input.Status != null, t1 => t1.Status == input.Status)
             .OrderByIF(input.IsOrderBy, t1 => t1.Sort)
-            .Select((t1, t2, t3) => new QueryMenuPagedOutput
+            .Select((t1, t2) => new QueryMenuPagedOutput
             {
                 MenuId = t1.MenuId,
                 Edition = t1.Edition,
                 AppId = t1.AppId,
-                AppName = t3.AppName,
-                ModuleId = t1.ModuleId,
-                ModuleName = t2.ModuleName,
+                AppName = t2.AppName,
                 MenuCode = t1.MenuCode,
                 MenuName = t1.MenuName,
                 MenuTitle = t1.MenuTitle,
@@ -139,17 +133,14 @@ public class MenuService : IDynamicApplication
     [Permission(PermissionConst.Menu.Detail)]
     public async Task<QueryMenuDetailOutput> QueryMenuDetail([Required(ErrorMessage = "菜单Id不能为为空")] long? menuId)
     {
-        var result = await _repository.Entities.LeftJoin<ModuleModel>((t1, t2) => t1.ModuleId == t2.ModuleId)
-            .LeftJoin<ApplicationModel>((t1, t2, t3) => t1.AppId == t3.AppId)
+        var result = await _repository.Entities.LeftJoin<ApplicationModel>((t1, t2) => t1.AppId == t2.AppId)
             .Where(t1 => t1.MenuId == menuId)
-            .Select((t1, t2, t3) => new QueryMenuDetailOutput
+            .Select((t1, t2) => new QueryMenuDetailOutput
             {
                 MenuId = t1.MenuId,
                 Edition = t1.Edition,
                 AppId = t1.AppId,
-                AppName = t3.AppName,
-                ModuleId = t1.ModuleId,
-                ModuleName = t2.ModuleName,
+                AppName = t2.AppName,
                 MenuCode = t1.MenuCode,
                 MenuName = t1.MenuName,
                 MenuTitle = t1.MenuTitle,
@@ -217,15 +208,14 @@ public class MenuService : IDynamicApplication
     [Permission(PermissionConst.Menu.Add)]
     public async Task AddMenu(AddMenuInput input)
     {
-        var moduleModel = await _repository.Queryable<ModuleModel>()
-            .SingleAsync(s => s.ModuleId == input.ModuleId);
-        if (moduleModel == null)
+        var applicationModel = await _repository.Queryable<ApplicationModel>()
+            .SingleAsync(s => s.AppId == input.AppId);
+        if (applicationModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
         }
 
-        if (await _repository.AnyAsync(a =>
-                a.AppId == moduleModel.AppId && a.ModuleId == moduleModel.ModuleId && a.MenuName == input.MenuName))
+        if (await _repository.AnyAsync(a => a.AppId == applicationModel.AppId && a.MenuName == input.MenuName))
         {
             throw new UserFriendlyException("菜单名称重复！");
         }
@@ -234,8 +224,7 @@ public class MenuService : IDynamicApplication
         {
             MenuId = YitIdHelper.NextId(),
             Edition = input.Edition,
-            AppId = moduleModel.AppId,
-            ModuleId = moduleModel.ModuleId,
+            AppId = applicationModel.AppId,
             MenuCode = input.MenuCode,
             MenuName = input.MenuName,
             MenuTitle = input.MenuTitle,
@@ -279,8 +268,7 @@ public class MenuService : IDynamicApplication
         var addButtonList = input.ButtonList.Select(item => new ButtonModel
             {
                 Edition = item.Edition,
-                AppId = menuModel.AppId,
-                ModuleId = menuModel.ModuleId,
+                AppId = applicationModel.AppId,
                 MenuId = menuModel.MenuId,
                 ButtonCode = item.ButtonCode,
                 ButtonName = item.ButtonName,
@@ -319,18 +307,15 @@ public class MenuService : IDynamicApplication
             throw new UserFriendlyException("按钮重复！");
         }
 
-        var moduleModel = await _repository.Queryable<ModuleModel>()
-            .SingleAsync(s => s.ModuleId == input.ModuleId);
-        if (moduleModel == null)
+        var applicationModel = await _repository.Queryable<ApplicationModel>()
+            .SingleAsync(s => s.AppId == input.AppId);
+        if (applicationModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
         }
 
         if (await _repository.AnyAsync(a =>
-                a.AppId == moduleModel.AppId
-                && a.ModuleId == moduleModel.ModuleId
-                && a.MenuName == input.MenuName
-                && a.MenuId != input.MenuId))
+                a.AppId == applicationModel.AppId && a.MenuName == input.MenuName && a.MenuId != input.MenuId))
         {
             throw new UserFriendlyException("菜单名称重复！");
         }
@@ -363,8 +348,7 @@ public class MenuService : IDynamicApplication
         }
 
         menuModel.Edition = input.Edition;
-        menuModel.AppId = moduleModel.AppId;
-        menuModel.ModuleId = moduleModel.ModuleId;
+        menuModel.AppId = applicationModel.AppId;
         menuModel.MenuCode = input.MenuCode;
         menuModel.MenuName = input.MenuName;
         menuModel.MenuTitle = input.MenuTitle;
@@ -399,8 +383,7 @@ public class MenuService : IDynamicApplication
                 buttonModel = new ButtonModel
                 {
                     Edition = item.Edition,
-                    AppId = menuModel.AppId,
-                    ModuleId = menuModel.ModuleId,
+                    AppId = applicationModel.AppId,
                     MenuId = menuModel.MenuId,
                     ButtonCode = item.ButtonCode,
                     ButtonName = item.ButtonName,
@@ -423,8 +406,7 @@ public class MenuService : IDynamicApplication
                 }
 
                 buttonModel.Edition = item.Edition;
-                buttonModel.AppId = menuModel.AppId;
-                buttonModel.ModuleId = menuModel.ModuleId;
+                buttonModel.AppId = applicationModel.AppId;
                 buttonModel.MenuId = menuModel.MenuId;
                 buttonModel.ButtonCode = item.ButtonCode;
                 buttonModel.ButtonName = item.ButtonName;

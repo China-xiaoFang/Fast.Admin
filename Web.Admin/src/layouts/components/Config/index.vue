@@ -20,7 +20,7 @@
 							</el-container>
 						</el-container>
 					</el-tooltip>
-					<el-tooltip effect="dark" placement="top" :showAfter="200" content="横向">
+					<el-tooltip effect="dark" placement="top" :showAfter="200" content="水平">
 						<el-container
 							class="layout-mode__Horizontal"
 							:class="{ active: configStore.layout.layoutMode === 'Horizontal' }"

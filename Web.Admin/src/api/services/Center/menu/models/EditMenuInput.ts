@@ -17,9 +17,9 @@ export interface EditMenuInput {
    */
   edition?: EditionEnum;
   /**
-   * 模块Id
+   * 应用Id
    */
-  moduleId?: number;
+  appId?: number;
   /**
    * 菜单编码
    */

@@ -57,7 +57,6 @@ const packageMenu = (menuList: AuthMenuInfoDto[]): RouteRecordRaw[] => {
 			component: loadComponent(item.component),
 			redirect: undefined,
 			meta: {
-				moduleId: item.moduleId,
 				title: item.menuTitle || item.menuName,
 				icon: item.icon,
 				tab: item.tab,
@@ -91,7 +90,7 @@ export const handleDynamicRoute = (): void => {
 	const deepLayoutRoute = cloneDeep(layoutRoute);
 
 	// 组装路由，循环添加到 layout 中
-	const layoutRoutes = packageMenu(userInfoStore.menuList.flatMap((m) => m.children));
+	const layoutRoutes = packageMenu(userInfoStore.menuList);
 	layoutRoutes.forEach((rItem) => {
 		deepLayoutRoute.children.push(rItem);
 	});

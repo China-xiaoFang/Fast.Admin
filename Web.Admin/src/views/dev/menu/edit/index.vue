@@ -18,18 +18,8 @@
 			<FaFormItem prop="appId" label="应用">
 				<ApplicationSelect v-model="state.formData.appId" v-model:appName="state.formData.appName" />
 			</FaFormItem>
-			<FaFormItem prop="moduleId" label="模块">
-				<ModuleSelect
-					:disabled="!state.formData?.appId"
-					:appId="state.formData.appId"
-					v-model="state.formData.moduleId"
-					v-model:moduleName="state.formData.moduleName"
-					@change="handleModuleChange"
-				/>
-			</FaFormItem>
 			<FaFormItem prop="parentId" label="父级">
 				<el-cascader
-					:disabled="!state.formData?.moduleId"
 					v-model="state.formData.parentId"
 					:options="state.menuList"
 					placeholder="请选择父级菜单"
@@ -179,13 +169,11 @@ const state = reactive({
 			AddMenuInput & {
 				appId?: number;
 				appName?: string;
-				moduleName?: string;
 				roleTypes?: RoleTypeEnum[];
 			}
 	>({}),
 	formRules: withDefineType<FormRules>({
 		appId: [{ required: true, message: "请选择应用", trigger: "change" }],
-		moduleId: [{ required: true, message: "请选择模块", trigger: "change" }],
 		menuType: [{ required: true, message: "请选择菜单类型", trigger: "change" }],
 		menuCode: [{ required: true, message: "请输入菜单编码", trigger: "blur" }],
 		menuName: [{ required: true, message: "请输入菜单名称", trigger: "blur" }],
@@ -207,10 +195,6 @@ const state = reactive({
 	componentValue: [],
 	menuList: withDefineType<ElSelectorOutput<number>[]>([]),
 });
-
-const handleModuleChange = async (value: ElSelectorOutput) => {
-	state.menuList = await menuApi.menuSelector(value?.value);
-};
 
 const handleComponentChange = (value: CascaderValue) => {
 	if (!Array.isArray(value) || value.length === 0) {
@@ -275,7 +259,7 @@ const handleFlagsEnum = () => {
 };
 
 const add = () => {
-	faDialogRef.value.open(() => {
+	faDialogRef.value.open(async () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加菜单";
 		state.formDisabled = false;
@@ -292,6 +276,7 @@ const add = () => {
 			status: CommonStatusEnum.Enable,
 			buttonList: [],
 		};
+		state.menuList = await menuApi.menuSelector();
 	});
 };
 
@@ -301,9 +286,7 @@ const edit = (menuId: number) => {
 		state.formDisabled = false;
 		const apiRes = await menuApi.queryMenuDetail(menuId);
 		state.formData = apiRes;
-		if (apiRes.moduleId) {
-			state.menuList = await menuApi.menuSelector(apiRes.moduleId);
-		}
+		state.menuList = await menuApi.menuSelector();
 		state.componentValue = apiRes.webComponent
 			? apiRes.webComponent.split("/").map((part, index, arr) => (index === arr.length - 1 ? `${part}.vue` : part))
 			: [];
@@ -312,7 +295,7 @@ const edit = (menuId: number) => {
 	});
 };
 
-onMounted(() => {
+onMounted(async () => {
 	state.componentList = [];
 
 	for (const path in routerPath) {

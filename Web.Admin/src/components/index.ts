@@ -46,9 +46,6 @@ export type LoadingInstance = InstanceType<typeof Loading>;
 import MerchantSelect from "./MerchantSelect/index.vue";
 export { MerchantSelect };
 export type MerchantSelectInstance = InstanceType<typeof MerchantSelect>;
-import ModuleSelect from "./ModuleSelect/index.vue";
-export { ModuleSelect };
-export type ModuleSelectInstance = InstanceType<typeof ModuleSelect>;
 import ProvinceSelect from "./ProvinceSelect/index.vue";
 export { ProvinceSelect };
 export type ProvinceSelectInstance = InstanceType<typeof ProvinceSelect>;
@@ -89,7 +86,6 @@ export function registerComponents(app: App): void {
 	app.component(IconSelect.name, IconSelect);
 	app.component(Loading.name, Loading);
 	app.component(MerchantSelect.name, MerchantSelect);
-	app.component(ModuleSelect.name, ModuleSelect);
 	app.component(ProvinceSelect.name, ProvinceSelect);
 	app.component(RadioGroup.name, RadioGroup);
 	app.component(RegionSelect.name, RegionSelect);

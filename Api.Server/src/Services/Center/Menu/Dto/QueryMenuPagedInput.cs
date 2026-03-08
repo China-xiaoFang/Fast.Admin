@@ -40,11 +40,6 @@ public class QueryMenuPagedInput : PagedInput
     public long? AppId { get; set; }
 
     /// <summary>
-    /// 模块Id
-    /// </summary>
-    public long? ModuleId { get; set; }
-
-    /// <summary>
     /// 菜单类型
     /// </summary>
     public MenuTypeEnum? MenuType { get; set; }

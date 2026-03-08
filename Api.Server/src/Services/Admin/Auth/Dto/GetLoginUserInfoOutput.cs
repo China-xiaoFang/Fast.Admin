@@ -142,6 +142,5 @@ public class GetLoginUserInfoOutput
     /// <summary>
     /// 菜单集合
     /// </summary>
-    /// <remarks>第一层是模块</remarks>
-    public List<AuthModuleInfoDto> MenuList { get; set; } = [];
+    public List<AuthMenuInfoDto> MenuList { get; set; } = [];
 }

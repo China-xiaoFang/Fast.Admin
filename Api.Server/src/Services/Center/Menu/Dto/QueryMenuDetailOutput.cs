@@ -50,16 +50,6 @@ public class QueryMenuDetailOutput : PagedOutput
     public string AppName { get; set; }
 
     /// <summary>
-    /// 模块Id
-    /// </summary>
-    public long ModuleId { get; set; }
-
-    /// <summary>
-    /// 模块名称
-    /// </summary>
-    public string ModuleName { get; set; }
-
-    /// <summary>
     /// 菜单编码
     /// </summary>
     public string MenuCode { get; set; }

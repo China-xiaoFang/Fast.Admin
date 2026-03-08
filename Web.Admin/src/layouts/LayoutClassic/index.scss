@@ -9,9 +9,6 @@ html.small {
 						}
 					}
 					.right {
-						.el-menu--horizontal {
-							--el-menu-item-font-size: var(--el-font-size-small);
-						}
 						.screen-full {
 							width: 30px;
 						}
@@ -81,10 +78,6 @@ html.small {
 					flex-direction: row;
 					align-items: center;
 					gap: 5px;
-					.el-menu--horizontal {
-						--el-menu-horizontal-height: 100%;
-						border: none;
-					}
 					.fa-select {
 						.el-select-dropdown__wrap {
 							max-height: 200px;
@@ -266,18 +259,3 @@ html.small {
 		}
 	}
 }
-
-// .el-container {
-// 	.el-header {
-// 		overflow: hidden;
-// 		.nav-bar {
-// 			flex-direction: row;
-// 			overflow: hidden;
-// 			.right {
-// 				.el-select {
-// 					margin-right: 10px;
-// 				}
-// 			}
-// 		}
-// 	}
-// }

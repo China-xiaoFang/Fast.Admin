@@ -28,8 +28,7 @@ namespace Fast.Center.Entity;
 [SugarTable("Menu", "菜单表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(MenuCode)}", nameof(MenuCode), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(MenuName)}", nameof(AppId), OrderByType.Asc, nameof(ModuleId), OrderByType.Asc,
-    nameof(MenuName), OrderByType.Asc, true)]
+[SugarIndex($"IX_{{table}}_{nameof(MenuName)}", nameof(AppId), OrderByType.Asc, nameof(MenuName), OrderByType.Asc, true)]
 public class MenuModel : BaseEntity, IUpdateVersion
 {
     /// <summary>
@@ -49,12 +48,6 @@ public class MenuModel : BaseEntity, IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "应用Id")]
     public long AppId { get; set; }
-
-    /// <summary>
-    /// 模块Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "模块Id")]
-    public long ModuleId { get; set; }
 
     /// <summary>
     /// 菜单编码

@@ -26,23 +26,10 @@
 						<LayoutBreadcrumb />
 					</div>
 					<div class="right">
-						<el-menu
-							:defaultActive="navTabsStore.activeModuleId?.toString()"
-							mode="horizontal"
-							:ellipsis="false"
-							@select="handleModuleSelect"
-						>
-							<el-menu-item v-for="(item, idx) in userInfoStore.menuList" :key="idx" :index="item.moduleId.toString()">
-								<FaIcon :name="item.icon || 'el-icon-Menu'" />
-								<template #title>
-									{{ item.moduleName }}
-								</template>
-							</el-menu-item>
-						</el-menu>
 						<FaSelect
 							ref="faTenantSelectRef"
-							width="150px"
-							size="small"
+							width="180px"
+							size="default"
 							valueKey="userKey"
 							:props="{ label: 'tenantName' }"
 							:lazy="false"
@@ -160,13 +147,6 @@ const handleRefreshSystem = () => {
 		// 刷新App
 		window.location.reload();
 	});
-};
-
-const handleModuleSelect = (moduleId: string) => {
-	const fInfo = userInfoStore.menuList.find((f) => f.moduleId.toString() === moduleId);
-	if (fInfo) {
-		navTabsStore.activeModuleId = moduleId;
-	}
 };
 
 const handleTenantChange = async (value: LoginTenantOutput) => {

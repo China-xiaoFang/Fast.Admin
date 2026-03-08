@@ -36,11 +36,6 @@ public class AuthMenuInfoDto : ITreeNode<long>
     public long MenuId { get; set; }
 
     /// <summary>
-    /// 模块Id
-    /// </summary>
-    public long ModuleId { get; set; }
-
-    /// <summary>
     /// 菜单编码
     /// </summary>
     public string MenuCode { get; set; }

@@ -24,14 +24,6 @@ export interface QueryMenuPagedOutput {
    */
   appName?: string;
   /**
-   * 模块Id
-   */
-  moduleId?: number;
-  /**
-   * 模块名称
-   */
-  moduleName?: string;
-  /**
    * 菜单编码
    */
   menuCode?: string;
