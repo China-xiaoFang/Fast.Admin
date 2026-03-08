@@ -1,15 +1,36 @@
+.el-container {
+	width: 100%;
+	height: 100%;
+	background: var(--login-bg, linear-gradient(165deg, #0e6db5, #0487d0, #1a8fce, #5b8dd9));
+	.el-main {
+		padding: 0;
+		color: var(--el-text-color-primary);
+		font-size: var(--el-font-size-base);
+		display: flex;
+	}
+	.el-footer {
+		--el-footer-padding: 0;
+		font-size: var(--el-font-size-base);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: rgba(255, 255, 255, 0.6);
+		transition: height var(--el-transition-duration);
+		overflow: hidden;
+	}
+}
+
 .modern-login {
 	width: 100%;
 	height: 100%;
 	display: flex;
 	overflow: hidden;
 	position: relative;
-	background: var(--login-bg, linear-gradient(165deg, #0e6db5, #0487d0, #1a8fce, #5b8dd9));
 	// ─── 左侧装饰面板 ──────────────────────────────────────
 	&__panel {
 		position: relative;
-		width: 42%;
-		flex-shrink: 0;
+		flex: 1;
+		min-width: 0;
 		overflow: hidden;
 		display: flex;
 		align-items: center;
@@ -105,7 +126,8 @@
 	}
 	// ─── 右侧表单区域 ──────────────────────────────────────
 	&__form-wrap {
-		flex: 1;
+		width: 480px;
+		flex-shrink: 0;
 		display: flex;
 		flex-direction: column;
 		background: rgba(255, 255, 255, 0.92);
@@ -272,16 +294,6 @@
 				}
 			}
 		}
-		.form-footer {
-			padding: 12px 0;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: var(--el-font-size-extra-small);
-			color: var(--el-text-color-placeholder);
-			background: transparent;
-			border-top: none;
-		}
 	}
 }
 // ─── 租户下拉弹窗 ──────────────────────────────────────────
@@ -376,15 +388,14 @@
 }
 // ─── 深色模式 ──────────────────────────────────────────────
 html.dark {
-	.modern-login {
+	.el-container {
 		background: linear-gradient(165deg, #0a3f6e, #023d5e, #0c4f80, #2a5090);
+	}
+	.modern-login {
 		&__form-wrap {
 			background: rgba(30, 30, 40, 0.88);
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
-			.form-footer {
-				color: rgba(255, 255, 255, 0.35);
-			}
 		}
 	}
 }
@@ -404,14 +415,22 @@ html.dark {
 	transform: translateY(-12px);
 }
 // ─── 响应式 ────────────────────────────────────────────────
+@media (max-width: 1366px) {
+	.el-footer {
+		flex-direction: column;
+		justify-content: space-evenly;
+		height: calc(var(--el-footer-height) * 1.7);
+	}
+}
+
 @media (max-width: 900px) {
 	.modern-login {
 		flex-direction: column;
 		min-width: 360px;
 		&__panel {
+			flex: none;
 			width: 100%;
 			height: 200px;
-			flex-shrink: 0;
 			.panel__content {
 				flex-direction: row;
 				gap: 20px;
@@ -431,8 +450,38 @@ html.dark {
 			}
 		}
 		&__form-wrap {
+			width: 100%;
+			flex: 1;
 			.form-container {
 				padding: 32px 28px;
+			}
+		}
+	}
+}
+
+@media (max-width: 480px) {
+	.el-container {
+		.el-footer {
+			font-size: var(--el-font-size-extra-small);
+		}
+	}
+
+	.modern-login {
+		&__panel {
+			height: 150px;
+		}
+		&__form-wrap {
+			.form-container {
+				padding: 24px 16px;
+				.form-header {
+					.form-title {
+						font-size: 22px;
+					}
+				}
+				.login-btn {
+					height: 42px;
+					font-size: 15px;
+				}
 			}
 		}
 	}

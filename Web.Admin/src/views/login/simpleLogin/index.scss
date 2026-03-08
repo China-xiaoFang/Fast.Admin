@@ -118,8 +118,8 @@
 		position: absolute;
 		inset: 0;
 		background-image:
-			linear-gradient(rgba(var(--el-color-primary-rgb), 0.12) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(var(--el-color-primary-rgb), 0.12) 1px, transparent 1px);
+			linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 		background-size: 60px 60px;
 		animation: gridPulse 8s ease-in-out infinite;
 	}
@@ -574,11 +574,6 @@ html.dark {
 		}
 		.bg-orb--3 {
 			background: rgba(59, 130, 246, 0.28);
-		}
-		.bg-grid {
-			background-image:
-				linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-				linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 		}
 		.bg-glow--top {
 			background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.6), transparent);
