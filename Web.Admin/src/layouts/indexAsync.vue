@@ -48,4 +48,10 @@ const layoutComponents = withDefineType<Record<IModeName, Component>>({
 	height: 100%;
 	min-width: 1024px;
 }
+
+@media (max-width: 768px) {
+	.layout {
+		min-width: 100%;
+	}
+}
 </style>

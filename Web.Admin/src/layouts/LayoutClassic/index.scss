@@ -259,3 +259,33 @@ html.small {
 		}
 	}
 }
+
+// 移动端适配
+.layout.is-mobile {
+	.el-container {
+		.el-header {
+			.nav-bar {
+				.left {
+					.el-breadcrumb {
+						display: none;
+					}
+				}
+				.right {
+					.fa-select {
+						display: none;
+					}
+					.nick-name {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+}
+
+.mobile-menu {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}

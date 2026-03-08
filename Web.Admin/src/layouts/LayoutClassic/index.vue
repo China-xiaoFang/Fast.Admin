@@ -4,21 +4,37 @@
 			{
 				contentFull: navTabsStore.contentFull,
 				contentLarge: navTabsStore.contentLarge,
+				'is-mobile': isMobile,
 			},
 		]"
 	>
-		<el-aside :style="{ '--el-aside-width': addUnit(configStore.layout.menuCollapse ? 'auto' : configStore.layout.menuWidth) }">
+		<!-- 桌面端侧边栏 -->
+		<el-aside v-if="!isMobile" :style="{ '--el-aside-width': addUnit(configStore.layout.menuCollapse ? 'auto' : configStore.layout.menuWidth) }">
 			<LayoutLogo />
 			<LayoutMenu />
 		</el-aside>
+		<!-- 移动端抽屉菜单 -->
+		<el-drawer
+			v-if="isMobile"
+			v-model="mobileMenuVisible"
+			direction="ltr"
+			:showClose="false"
+			:size="configStore.layout.menuWidth"
+			:withHeader="false"
+		>
+			<div class="mobile-menu">
+				<LayoutLogo />
+				<LayoutMenu />
+			</div>
+		</el-drawer>
 		<el-container>
 			<el-header>
 				<div class="nav-bar" :style="{ '--height': addUnit(configStore.layout.navBarHeight) }">
 					<div class="left">
 						<el-icon
 							class="menu-collapse fa__hover__twinkle"
-							:title="configStore.layout.menuCollapse ? '展开' : '折叠'"
-							@click="configStore.layout.menuCollapse = !configStore.layout.menuCollapse"
+							:title="isMobile ? '菜单' : configStore.layout.menuCollapse ? '展开' : '折叠'"
+							@click="handleMenuToggle"
 						>
 							<Expand v-if="configStore.layout.menuCollapse" />
 							<Fold v-else />
@@ -112,10 +128,10 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Expand, Fold, Key, Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
-import { Local, addUnit } from "@fast-china/utils";
+import { Local, addUnit, envUtil } from "@fast-china/utils";
 import { RouterView, useRouter } from "vue-router";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
@@ -144,6 +160,20 @@ const userInfoStore = useUserInfo();
 const layoutConfigRef = inject(layoutConfigKey);
 const changePasswordRef = inject(changePasswordKey);
 const faTenantSelectRef = ref<FaSelectInstance>();
+
+/** 是否移动端 */
+const isMobile = computed(() => import.meta.env.VITE_ENABLE_MOBILE === "true" && envUtil.isMobile());
+/** 移动端菜单可见性 */
+const mobileMenuVisible = ref(false);
+
+/** 菜单切换 */
+const handleMenuToggle = () => {
+	if (isMobile.value) {
+		mobileMenuVisible.value = !mobileMenuVisible.value;
+	} else {
+		configStore.layout.menuCollapse = !configStore.layout.menuCollapse;
+	}
+};
 
 const handleRefreshSystem = () => {
 	ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {
