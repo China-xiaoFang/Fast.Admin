@@ -118,8 +118,8 @@
 		position: absolute;
 		inset: 0;
 		background-image:
-			linear-gradient(rgba(var(--el-color-primary-rgb), 0.08) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(var(--el-color-primary-rgb), 0.08) 1px, transparent 1px);
+			linear-gradient(rgba(var(--el-color-primary-rgb), 0.12) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(var(--el-color-primary-rgb), 0.12) 1px, transparent 1px);
 		background-size: 60px 60px;
 		animation: gridPulse 8s ease-in-out infinite;
 	}
@@ -297,6 +297,8 @@
 	}
 
 	.simple-login__form {
+		flex: 1;
+		min-height: 0;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -307,6 +309,7 @@
 			width: 100%;
 			display: flex;
 			flex-direction: column;
+			min-height: 0;
 			overflow: hidden;
 
 			.form-header {
@@ -387,6 +390,7 @@
 
 			.tenant__list {
 				flex: 1;
+				min-height: 0;
 				overflow: hidden;
 				.el-scrollbar {
 					padding: 0 10px 0 5px;
