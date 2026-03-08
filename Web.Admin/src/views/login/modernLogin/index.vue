@@ -229,7 +229,7 @@
 								<el-form-item prop="rememberMe">
 									<el-checkbox v-model.checked="formData.rememberMe" size="default">记住密码</el-checkbox>
 								</el-form-item>
-								<FaButton ref="faButtonRef" class="w100" type="primary" size="large" @click="handleFormLogin">登录</FaButton>
+								<FaButton ref="faButtonRef" class="w100" type="primary" size="large" @click="handleFormLogin">登 录</FaButton>
 							</el-form>
 						</div>
 						<!-- 租户选择 -->
