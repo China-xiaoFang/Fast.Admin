@@ -7,8 +7,12 @@
 			</el-divider>
 			<div class="main__box">
 				<div class="layout-mode">
-					<el-tooltip effect="dark" placement="top" :showAfter="200" content="经典" @click="configStore.setLayoutMode('Classic')">
-						<el-container class="layout-mode__Classic" :class="{ active: configStore.layout.layoutMode === 'Classic' }">
+					<el-tooltip effect="dark" placement="top" :showAfter="200" content="经典">
+						<el-container
+							class="layout-mode__Classic"
+							:class="{ active: configStore.layout.layoutMode === 'Classic' }"
+							@click="configStore.setLayoutMode('Classic')"
+						>
 							<el-aside />
 							<el-container>
 								<el-header />
@@ -16,14 +20,22 @@
 							</el-container>
 						</el-container>
 					</el-tooltip>
-					<el-tooltip effect="dark" placement="top" :showAfter="200" content="横向" @click="configStore.setLayoutMode('Horizontal')">
-						<el-container class="layout-mode__Horizontal" :class="{ active: configStore.layout.layoutMode === 'Horizontal' }">
+					<el-tooltip effect="dark" placement="top" :showAfter="200" content="横向">
+						<el-container
+							class="layout-mode__Horizontal"
+							:class="{ active: configStore.layout.layoutMode === 'Horizontal' }"
+							@click="configStore.setLayoutMode('Horizontal')"
+						>
 							<el-header />
 							<el-main />
 						</el-container>
 					</el-tooltip>
-					<el-tooltip effect="dark" placement="top" :showAfter="200" content="混合" @click="configStore.setLayoutMode('Mixed')">
-						<el-container class="layout-mode__Mixed" :class="{ active: configStore.layout.layoutMode === 'Mixed' }">
+					<el-tooltip effect="dark" placement="top" :showAfter="200" content="混合">
+						<el-container
+							class="layout-mode__Mixed"
+							:class="{ active: configStore.layout.layoutMode === 'Mixed' }"
+							@click="configStore.setLayoutMode('Mixed')"
+						>
 							<el-header />
 							<el-container>
 								<el-aside />
