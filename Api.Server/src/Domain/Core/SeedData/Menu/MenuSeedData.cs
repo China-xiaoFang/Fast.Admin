@@ -30,20 +30,7 @@ namespace Fast.Core;
 /// </summary>
 internal static partial class MenuSeedData
 {
-    private static int _moduleSort = 1;
     private static int _menuSort = 1;
-
-    /// <summary>
-    /// 模块顺序
-    /// </summary>
-    private static int moduleSort
-    {
-        get
-        {
-            _moduleSort++;
-            return _moduleSort;
-        }
-    }
 
     /// <summary>
     /// 菜单顺序

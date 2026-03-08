@@ -1,5 +1,5 @@
 import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
-import { AuthModuleInfoDto } from "./AuthModuleInfoDto";
+import { AuthMenuInfoDto } from "./AuthMenuInfoDto";
 
 /**
  * Fast.Admin.Service.Auth.Dto.GetLoginUserInfoOutput 获取登录用户信息输出
@@ -96,6 +96,6 @@ export interface GetLoginUserInfoOutput {
   /**
    * 菜单集合
    */
-  menuList?: Array<AuthModuleInfoDto>;
+  menuList?: Array<AuthMenuInfoDto>;
 }
 

@@ -51,16 +51,6 @@ public class QueryMenuPagedOutput : PagedOutput, ITreeNode<long>
     public string AppName { get; set; }
 
     /// <summary>
-    /// 模块Id
-    /// </summary>
-    public long ModuleId { get; set; }
-
-    /// <summary>
-    /// 模块名称
-    /// </summary>
-    public string ModuleName { get; set; }
-
-    /// <summary>
     /// 菜单编码
     /// </summary>
     [SugarSearchValue]

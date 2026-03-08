@@ -16,10 +16,6 @@ export interface QueryMenuPagedInput extends PagedInput  {
    */
   appId?: number;
   /**
-   * 模块Id
-   */
-  moduleId?: number;
-  /**
    * 
    */
   menuType?: MenuTypeEnum;

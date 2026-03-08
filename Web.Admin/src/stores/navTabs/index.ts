@@ -10,8 +10,6 @@ export const useNavTabs = defineStore(
 	"navTabs",
 	() => {
 		const state = reactive({
-			/** 激活模块Id */
-			activeModuleId: withDefineType<string | number>(),
 			/** 激活tab的index */
 			activeIndex: -1,
 			/** 最后一个激活tab的index */
@@ -32,7 +30,6 @@ export const useNavTabs = defineStore(
 		const $reset = (): void => {
 			state.activeIndex = -1;
 			state.lastActiveIndex = -1;
-			state.activeModuleId = router.currentRoute.value.meta?.moduleId;
 			state.activeTab = null;
 			state.navTabs = [];
 			state.keepAliveComponentNameList = [];
@@ -146,7 +143,6 @@ export const useNavTabs = defineStore(
 		const setActiveRoute = (route: INavTab): void => {
 			const fIdx = state.navTabs.findIndex((f) => f.path == route.path);
 			if (fIdx === -1) return;
-			state.activeModuleId = route.meta?.moduleId;
 			state.activeTab = routerUtil.pickByRoute(route);
 			state.lastActiveIndex = state.activeIndex;
 			state.activeIndex = fIdx;
@@ -188,8 +184,6 @@ export const useNavTabs = defineStore(
 			});
 
 			state.navTabs = [...affixNavTabs, ...oldNavTabs];
-
-			state.activeModuleId = router.currentRoute.value.meta?.moduleId;
 		};
 
 		return {

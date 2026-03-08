@@ -21,7 +21,7 @@
 import { computed } from "vue";
 import { addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
-import { useConfig, useNavTabs, useUserInfo } from "@/stores";
+import { useConfig, useUserInfo } from "@/stores";
 import MenuItem from "../MenuItem/index.vue";
 
 defineOptions({
@@ -30,16 +30,12 @@ defineOptions({
 
 const router = useRouter();
 const configStore = useConfig();
-const navTabStore = useNavTabs();
 const userInfoStore = useUserInfo();
 
 const activeMenu = computed(() => router.currentRoute.value.path);
 
-const menuList = computed(() => {
-	const activeModuleId = navTabStore.activeModuleId || userInfoStore.menuList[0].moduleId;
-	const _menuList = userInfoStore.menuList.find((f) => f.moduleId === activeModuleId) ?? userInfoStore.menuList[0];
-	return (_menuList?.children ?? []).filter((f) => f.visible);
-});
+const menuList = computed(() => userInfoStore.menuList.filter((f) => f.visible));
+console.log(menuList.value);
 </script>
 
 <style scoped lang="scss">

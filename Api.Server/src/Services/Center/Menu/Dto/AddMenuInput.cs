@@ -36,10 +36,10 @@ public class AddMenuInput
     public EditionEnum Edition { get; set; }
 
     /// <summary>
-    /// 模块Id
+    /// 应用Id
     /// </summary>
-    [LongRequired(ErrorMessage = "模块Id不能为空")]
-    public long ModuleId { get; set; }
+    [LongRequired(ErrorMessage = "应用Id不能为空")]
+    public long AppId { get; set; }
 
     /// <summary>
     /// 菜单编码

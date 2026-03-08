@@ -458,10 +458,6 @@ public class RoleService : IDynamicApplication
             .Select(sl => sl.RoleId)
             .ToList();
 
-        var moduleQueryable = _centerRepository.Queryable<ModuleModel>()
-            .Where(wh => wh.AppId == applicationModel.AppId)
-            .Where(wh => wh.Status == CommonStatusEnum.Enable);
-
         var menuQueryable = _centerRepository.Queryable<MenuModel>()
             .Where(wh => wh.AppId == applicationModel.AppId)
             .Where(wh => wh.Status == CommonStatusEnum.Enable)
@@ -473,19 +469,8 @@ public class RoleService : IDynamicApplication
             .Where(wh => wh.Status == CommonStatusEnum.Enable)
             .Where(wh => tenantModel.Edition >= wh.Edition);
 
-        if (_user.IsSuperAdmin)
+        if (!_user.IsSuperAdmin && !_user.IsAdmin)
         {
-            moduleQueryable = moduleQueryable.Where(wh =>
-                (wh.ViewType & (ModuleViewTypeEnum.SuperAdmin | ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
-        }
-        else if (_user.IsAdmin)
-        {
-            moduleQueryable =
-                moduleQueryable.Where(wh => (wh.ViewType & (ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
-        }
-        else
-        {
-            moduleQueryable = moduleQueryable.Where(wh => (wh.ViewType & ModuleViewTypeEnum.All) != 0);
             // 查询当前用户角色对应的菜单Id
             var roleMenuIds = await _repository.Queryable<RoleMenuModel>()
                 .Where(wh => customMenuRoleIds.Contains(wh.RoleId))
@@ -504,17 +489,14 @@ public class RoleService : IDynamicApplication
 
         // 查询所有菜单
         var menuList = await menuQueryable.Clone()
-            .InnerJoin(moduleQueryable.Clone(), (t1, t2) => t1.ModuleId == t2.ModuleId)
-            .OrderBy((t1, t2) => t2.Sort)
-            .OrderBy(t1 => t1.Sort)
-            .Select((t1, t2) => new
+            .OrderBy(ob => ob.Sort)
+            .Select(sl => new
             {
-                t1.MenuId,
-                t1.ModuleId,
-                t1.MenuName,
-                t1.HasMobile,
-                t1.HasWeb,
-                t1.HasDesktop
+                sl.MenuId,
+                sl.MenuName,
+                sl.HasMobile,
+                sl.HasWeb,
+                sl.HasDesktop
             })
             .ToListAsync();
 

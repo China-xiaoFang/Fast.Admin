@@ -50,12 +50,6 @@ public class ButtonModel : BaseEntity
     public long AppId { get; set; }
 
     /// <summary>
-    /// 模块Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "模块Id")]
-    public long ModuleId { get; set; }
-
-    /// <summary>
     /// 菜单Id
     /// </summary>
     [SugarColumn(ColumnDescription = "菜单Id")]

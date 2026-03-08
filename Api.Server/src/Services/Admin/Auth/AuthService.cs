@@ -125,9 +125,6 @@ public class AuthService : IDynamicApplication
         result.RoleNameList = roleList.Select(sl => sl.RoleName)
             .ToList();
 
-        var moduleQueryable = _repository.Queryable<ModuleModel>()
-            .Where(wh => wh.AppId == applicationModel.AppId)
-            .Where(wh => wh.Status == CommonStatusEnum.Enable);
         var menuQueryable = _repository.Queryable<MenuModel>()
             .Where(wh => wh.AppId == applicationModel.AppId)
             .Where(wh => wh.Status == CommonStatusEnum.Enable)
@@ -137,26 +134,15 @@ public class AuthService : IDynamicApplication
             .WhereIF(hasWeb, wh => wh.HasWeb)
             .WhereIF(hasMobile, wh => wh.HasMobile);
 
-        if (_user.IsSuperAdmin)
+        if (_user.IsSuperAdmin || _user.IsAdmin)
         {
             result.DataScopeType = DataScopeTypeEnum.All;
-
-            moduleQueryable = moduleQueryable.Where(wh =>
-                (wh.ViewType & (ModuleViewTypeEnum.SuperAdmin | ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
-        }
-        else if (_user.IsAdmin)
-        {
-            result.DataScopeType = DataScopeTypeEnum.All;
-
-            moduleQueryable =
-                moduleQueryable.Where(wh => (wh.ViewType & (ModuleViewTypeEnum.Admin | ModuleViewTypeEnum.All)) != 0);
         }
         else
         {
             result.DataScopeType = roleList.Any(a => a.RoleType == RoleTypeEnum.Admin) ? DataScopeTypeEnum.All :
                 roleList.Any() ? roleList.Min(m => m.DataScopeType) : DataScopeTypeEnum.Self;
 
-            moduleQueryable = moduleQueryable.Where(wh => (wh.ViewType & ModuleViewTypeEnum.All) != 0);
             // 查询当前用户角色对应的菜单Id
             var roleMenuIds = await _empRepository.Queryable<RoleMenuModel>()
                 .Where(wh => customMenuRoleIds.Contains(wh.RoleId))
@@ -165,41 +151,31 @@ public class AuthService : IDynamicApplication
             menuQueryable = menuQueryable.Where(wh => (wh.RoleType & systemMenuRoleType) != 0 || roleMenuIds.Contains(wh.MenuId));
         }
 
-        // 查询所有模块
-        var moduleList = await moduleQueryable.Clone()
-            .OrderBy(ob => ob.Sort)
-            .Select(sl =>
-                new AuthModuleInfoDto {ModuleId = sl.ModuleId, ModuleName = sl.ModuleName, Icon = sl.Icon, Color = sl.Color})
-            .ToListAsync();
-
         // 查询所有菜单
         var menuList = await menuQueryable.Clone()
-            .InnerJoin(moduleQueryable.Clone(), (t1, t2) => t1.ModuleId == t2.ModuleId)
-            .OrderBy((t1, t2) => t2.Sort)
-            .OrderBy(t1 => t1.Sort)
-            .Select((t1, t2) => new AuthMenuInfoDto
+            .OrderBy(ob => ob.Sort)
+            .Select(sl => new AuthMenuInfoDto
             {
-                MenuId = t1.MenuId,
-                ModuleId = t1.ModuleId,
-                MenuCode = t1.MenuCode,
-                MenuName = t1.MenuName,
-                MenuTitle = t1.MenuTitle,
-                ParentId = t1.ParentId,
-                MenuType = t1.MenuType,
-                Icon = hasDesktop ? t1.DesktopIcon :
-                    hasWeb ? t1.WebIcon :
-                    hasMobile ? t1.MobileIcon : null,
-                Router = hasDesktop ? t1.DesktopRouter :
-                    hasWeb ? t1.WebRouter :
-                    hasMobile ? t1.MobileRouter : null,
-                Component = hasWeb ? t1.WebComponent : null,
+                MenuId = sl.MenuId,
+                MenuCode = sl.MenuCode,
+                MenuName = sl.MenuName,
+                MenuTitle = sl.MenuTitle,
+                ParentId = sl.ParentId,
+                MenuType = sl.MenuType,
+                Icon = hasDesktop ? sl.DesktopIcon :
+                    hasWeb ? sl.WebIcon :
+                    hasMobile ? sl.MobileIcon : null,
+                Router = hasDesktop ? sl.DesktopRouter :
+                    hasWeb ? sl.WebRouter :
+                    hasMobile ? sl.MobileRouter : null,
+                Component = hasWeb ? sl.WebComponent : null,
                 // ReSharper disable once SimplifyConditionalTernaryExpression
-                Tab = hasWeb ? t1.WebTab : false,
+                Tab = hasWeb ? sl.WebTab : false,
                 // ReSharper disable once SimplifyConditionalTernaryExpression
-                KeepAlive = hasWeb ? t1.WebKeepAlive : false,
-                Link = t1.Link,
-                Visible = t1.Visible,
-                Sort = t1.Sort
+                KeepAlive = hasWeb ? sl.WebKeepAlive : false,
+                Link = sl.Link,
+                Visible = sl.Visible,
+                Sort = sl.Sort
             })
             .ToListAsync();
 
@@ -219,7 +195,6 @@ public class AuthService : IDynamicApplication
             .Select(t1 => new AuthMenuInfoDto
             {
                 MenuId = t1.MenuId,
-                ModuleId = t1.ModuleId,
                 MenuCode = t1.MenuCode,
                 MenuName = t1.MenuName,
                 MenuTitle = t1.MenuTitle,
@@ -245,20 +220,8 @@ public class AuthService : IDynamicApplication
         menuList.AddRange(parentMenuList);
 
         // 组建菜单树形
-        var menuTreeList = new TreeBuildUtil<AuthMenuInfoDto, long>().Build(menuList.Distinct()
+        result.MenuList = new TreeBuildUtil<AuthMenuInfoDto, long>().Build(menuList.Distinct()
             .ToList());
-
-        // 组装菜单
-        foreach (var item in moduleList)
-        {
-            var curMenuTreeList = menuTreeList.Where(wh => wh.ModuleId == item.ModuleId)
-                .ToList();
-            if (curMenuTreeList.Count > 0)
-            {
-                item.Children.AddRange(curMenuTreeList);
-                result.MenuList.Add(item);
-            }
-        }
 
         if (!_user.IsSuperAdmin)
         {
