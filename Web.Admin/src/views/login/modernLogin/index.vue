@@ -4,7 +4,7 @@
 		<el-main>
 			<div class="modern-login">
 				<!-- 左侧品牌展示区 -->
-				<div class="split-login__brand">
+				<div class="modern-login__brand">
 					<div class="brand-bg">
 						<div class="brand-particle brand-particle--1" />
 						<div class="brand-particle brand-particle--2" />
@@ -47,7 +47,7 @@
 					</div>
 				</div>
 				<!-- 右侧登录表单 -->
-				<div class="split-login__form">
+				<div class="modern-login__form">
 					<transition mode="out-in" name="slide-left">
 						<!-- 账号 -->
 						<div v-if="formStep === 'Account'" class="form-panel">

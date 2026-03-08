@@ -80,7 +80,7 @@
 		box-shadow 0.3s ease,
 		transform 0.3s ease;
 
-	.split-login__brand {
+	.modern-login__brand {
 		position: relative;
 		display: flex;
 		align-items: center;
@@ -233,7 +233,7 @@
 		}
 	}
 
-	.split-login__form {
+	.modern-login__form {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -490,7 +490,7 @@ html.dark {
 		box-shadow:
 			0 20px 60px rgba(0, 0, 0, 0.45),
 			0 4px 16px rgba(0, 0, 0, 0.3);
-		.split-login__brand {
+		.modern-login__brand {
 			.brand-bg {
 				.brand-particle {
 					opacity: 0.08;
@@ -518,10 +518,10 @@ html.dark {
 		max-width: 500px;
 		max-height: 560px;
 		grid-template-columns: 1fr;
-		.split-login__brand {
+		.modern-login__brand {
 			display: none;
 		}
-		.split-login__form {
+		.modern-login__form {
 			padding: 20px 20px;
 		}
 	}
@@ -539,7 +539,7 @@ html.dark {
 
 	.modern-login {
 		max-width: 100%;
-		.split-login__form {
+		.modern-login__form {
 			padding: 18px 16px;
 			.form-panel {
 				.form-header {

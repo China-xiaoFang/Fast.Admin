@@ -1,45 +1,50 @@
 <template>
-	<div class="modern-login" :style="{ '--login-bg': props.background }">
+	<div class="split-login" :style="{ '--login-bg': props.background }">
 		<slot name="help" />
-		<!-- 左侧装饰面板 -->
-		<div class="modern-login__panel">
-			<div class="panel__decoration">
-				<div class="deco-circle deco-circle--1"></div>
-				<div class="deco-circle deco-circle--2"></div>
-				<div class="deco-circle deco-circle--3"></div>
+		<div class="split-login__body">
+			<!-- 左侧装饰面板 -->
+			<div class="split-login__panel">
+				<div class="panel__decoration">
+					<div class="deco-circle deco-circle--1"></div>
+					<div class="deco-circle deco-circle--2"></div>
+					<div class="deco-circle deco-circle--3"></div>
+				</div>
+				<div class="panel__content">
+					<div class="panel__logo">
+						<img :src="logoImage" class="logo-img" />
+						<span class="logo-text">{{ appStore.appName }}</span>
+					</div>
+					<div class="panel__icon">
+						<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<circle cx="100" cy="100" r="80" fill="rgba(255,255,255,0.08)" />
+							<circle cx="100" cy="100" r="60" fill="rgba(255,255,255,0.06)" />
+							<!-- 盾牌 -->
+							<path
+								d="M100 40 L140 65 L140 110 Q140 145 100 170 Q60 145 60 110 L60 65 Z"
+								fill="rgba(255,255,255,0.12)"
+								stroke="rgba(255,255,255,0.8)"
+								stroke-width="2.5"
+							/>
+							<!-- 对勾 -->
+							<polyline
+								points="82,108 95,122 118,92"
+								stroke="rgba(255,255,255,0.9)"
+								stroke-width="4"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								fill="none"
+							/>
+						</svg>
+					</div>
+					<div class="panel__tagline">
+						<h2>{{ appStore.appName }}</h2>
+						<p>高效、安全、便捷的一体化管理解决方案</p>
+					</div>
+				</div>
 			</div>
-			<div class="panel__content">
-				<div class="panel__logo">
-					<img :src="logoImage" class="logo-img" />
-					<span class="logo-text">{{ appStore.appName }}</span>
-				</div>
-				<div class="panel__icon">
-					<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<circle cx="100" cy="100" r="80" fill="rgba(255,255,255,0.08)" />
-						<circle cx="100" cy="100" r="60" fill="rgba(255,255,255,0.06)" />
-						<!-- 医疗十字 -->
-						<rect x="82" y="52" width="36" height="96" rx="8" fill="rgba(255,255,255,0.9)" />
-						<rect x="52" y="82" width="96" height="36" rx="8" fill="rgba(255,255,255,0.9)" />
-						<!-- 心跳线 -->
-						<polyline
-							points="30,140 55,140 65,120 78,160 90,110 103,155 115,135 130,140 170,140"
-							stroke="rgba(255,255,255,0.6)"
-							stroke-width="3"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							fill="none"
-						/>
-					</svg>
-				</div>
-				<div class="panel__tagline">
-					<h2>智慧医院管理平台</h2>
-					<p>高效、安全、便捷的一体化医院管理解决方案</p>
-				</div>
-			</div>
-		</div>
-		<!-- 右侧登录表单 -->
-		<div class="modern-login__form-wrap">
-			<transition mode="out-in" name="fade-up">
+			<!-- 右侧登录表单 -->
+			<div class="split-login__form">
+				<transition mode="out-in" name="fade-up">
 				<!-- 账号登录 -->
 				<div v-if="formStep === 'Account'" key="Account" class="form-container">
 					<div class="form-header">
@@ -277,9 +282,10 @@
 					</ul>
 				</div>
 			</transition>
-			<div class="form-footer">
-				<Footer />
 			</div>
+		</div>
+		<div class="split-login__footer">
+			<Footer />
 		</div>
 	</div>
 </template>
