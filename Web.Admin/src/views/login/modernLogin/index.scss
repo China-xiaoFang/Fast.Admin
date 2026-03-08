@@ -486,21 +486,17 @@
 }
 
 html.dark {
-	.el-container {
-		.el-main {
-			.modern-login {
-				box-shadow:
-					0 20px 60px rgba(0, 0, 0, 0.45),
-					0 4px 16px rgba(0, 0, 0, 0.3);
-				.split-login__brand {
-					.brand-bg {
-						.brand-particle {
-							opacity: 0.08;
-						}
-						.brand-ring {
-							border-color: rgba(255, 255, 255, 0.06);
-						}
-					}
+	.modern-login {
+		box-shadow:
+			0 20px 60px rgba(0, 0, 0, 0.45),
+			0 4px 16px rgba(0, 0, 0, 0.3);
+		.split-login__brand {
+			.brand-bg {
+				.brand-particle {
+					opacity: 0.08;
+				}
+				.brand-ring {
+					border-color: rgba(255, 255, 255, 0.06);
 				}
 			}
 		}
@@ -516,21 +512,17 @@ html.dark {
 }
 
 @media (max-width: 900px) {
-	.el-container {
-		.el-main {
-			.modern-login {
-				width: 100%;
-				height: 100%;
-				max-width: 500px;
-				max-height: 560px;
-				grid-template-columns: 1fr;
-				.split-login__brand {
-					display: none;
-				}
-				.split-login__form {
-					padding: 20px 20px;
-				}
-			}
+	.modern-login {
+		width: 100%;
+		height: 100%;
+		max-width: 500px;
+		max-height: 560px;
+		grid-template-columns: 1fr;
+		.split-login__brand {
+			display: none;
+		}
+		.split-login__form {
+			padding: 20px 20px;
 		}
 	}
 }
@@ -539,26 +531,27 @@ html.dark {
 	.el-container {
 		.el-main {
 			padding: 12px;
-			.modern-login {
-				max-width: 100%;
-				.split-login__form {
-					padding: 24px 16px;
-					.form-panel {
-						.form-header {
-							h2 {
-								font-size: 22px;
-							}
-						}
-						.login-btn {
-							height: 42px;
-							font-size: 15px;
-						}
-					}
-				}
-			}
 		}
 		.el-footer {
 			font-size: var(--el-font-size-extra-small);
+		}
+	}
+
+	.modern-login {
+		max-width: 100%;
+		.split-login__form {
+			padding: 18px 16px;
+			.form-panel {
+				.form-header {
+					h2 {
+						font-size: 22px;
+					}
+				}
+				.login-btn {
+					height: 42px;
+					font-size: 15px;
+				}
+			}
 		}
 	}
 }
