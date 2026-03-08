@@ -27,9 +27,11 @@
 				<RadioGroup name="EnvironmentTypeEnum" v-model="state.formData.environmentType" />
 			</FaFormItem>
 			<FaFormItem prop="loginComponent" label="登录组件">
-				<el-select v-model="state.formData.loginComponent" placeholder="请选择登录组件" clearable>
-					<el-option value="ClassicLogin" label="ClassicLogin" />
-				</el-select>
+				<el-radio-group v-model="state.formData.loginComponent">
+					<el-radio label="ClassicLogin">经典</el-radio>
+					<el-radio label="ModernLogin">现代</el-radio>
+					<el-radio label="SimpleLogin">简约</el-radio>
+				</el-radio-group>
 			</FaFormItem>
 			<FaFormItem prop="webSocketUrl" label="WebSocket地址">
 				<el-input v-model="state.formData.webSocketUrl" maxlength="50" placeholder="请输入WebSocket地址" />

@@ -85,7 +85,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background: linear-gradient(160deg, var(--el-color-primary), var(--el-color-primary-dark-2));
+		background: linear-gradient(160deg, var(--el-color-primary), var(--el-color-primary-dark-2), var(--el-color-primary-light-3));
+		background-size: 200% 200%;
 		overflow: hidden;
 
 		.brand-bg {
