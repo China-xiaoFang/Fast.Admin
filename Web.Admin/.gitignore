@@ -21,4 +21,5 @@ public/version.json
 types/components.d.ts
 
 # Router files
-src/router/index.jsonpackage-lock.json
+src/router/index.json
+package-lock.json
