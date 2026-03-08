@@ -50,6 +50,12 @@
 						<el-option v-for="(item, index) in animationList" :key="index" :label="item.label" :value="item.value" />
 					</el-select>
 				</div>
+				<div class="box-item">
+					<span>页签样式</span>
+					<el-select v-model="configStore.layout.navTabStyle" style="width: 120px">
+						<el-option v-for="(item, index) in navTabStyleList" :key="index" :label="item.label" :value="item.value" />
+					</el-select>
+				</div>
 			</div>
 			<el-divider contentPosition="center">
 				<el-icon><MagicStick /></el-icon>
@@ -124,6 +130,17 @@
 						</el-tooltip>
 					</span>
 					<el-switch v-model="configStore.layout.watermark" :activeActionIcon="View" :inactiveActionIcon="Hide" />
+				</div>
+				<div class="box-item">
+					<span>
+						页面宽度
+						<el-tooltip effect="dark" content="设置主内容区域的最大宽度，0为自适应" placement="top">
+							<el-icon><QuestionFilled /></el-icon>
+						</el-tooltip>
+					</span>
+					<el-select v-model="configStore.layout.contentWidth" style="width: 80px">
+						<el-option v-for="(item, index) in contentWidthList" :key="index" :label="item.label" :value="item.value" />
+					</el-select>
 				</div>
 				<div class="box-item">
 					<span>菜单宽度</span>
@@ -220,7 +237,7 @@ import { ref } from "vue";
 import { Grid, Hide, MagicStick, Moon, Notification, QuestionFilled, Refresh, Sunny, View } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
 import { useConfig } from "@/stores";
-import type { IAnimationName } from "@/stores";
+import type { IAnimationName, INavTabStyle } from "@/stores";
 import type { componentSizes } from "element-plus";
 import type { ElSelectorOutput, FaDrawerInstance, FaTableDataRange } from "fast-element-plus";
 
@@ -268,6 +285,44 @@ const animationList: Readonly<ElSelectorOutput<IAnimationName>> = [
 	{
 		label: "底部放大",
 		value: "el-zoom-in-bottom",
+	},
+];
+
+const navTabStyleList: Readonly<ElSelectorOutput<INavTabStyle>> = [
+	{
+		label: "卡片",
+		value: "Card",
+	},
+	{
+		label: "灵动",
+		value: "Smart",
+	},
+	{
+		label: "谷歌",
+		value: "Chrome",
+	},
+];
+
+const contentWidthList: Readonly<ElSelectorOutput<number>[]> = [
+	{
+		label: "自适应",
+		value: 0,
+	},
+	{
+		label: "1200px",
+		value: 1200,
+	},
+	{
+		label: "1400px",
+		value: 1400,
+	},
+	{
+		label: "1600px",
+		value: 1600,
+	},
+	{
+		label: "1920px",
+		value: 1920,
 	},
 ];
 

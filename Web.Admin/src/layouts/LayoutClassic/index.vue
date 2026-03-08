@@ -53,6 +53,7 @@
 								</div>
 							</template>
 						</FaSelect>
+						<LayoutMenuSearch />
 						<LayoutScreenFull />
 						<el-dropdown
 							class="avatar"
@@ -87,7 +88,12 @@
 					<RouterView v-slot="{ Component, route }">
 						<transition mode="out-in" :name="configStore.layout.mainAnimation">
 							<KeepAlive :include="navTabsStore.keepAliveComponentNameList">
-								<component :is="Component" :key="route.path" class="layout-main" />
+								<component
+									:is="Component"
+									:key="route.path"
+									class="layout-main"
+									:style="configStore.layout.contentWidth > 0 ? { maxWidth: addUnit(configStore.layout.contentWidth), margin: '0 auto' } : undefined"
+								/>
 							</KeepAlive>
 						</transition>
 					</RouterView>
@@ -116,6 +122,7 @@ import { loginApi } from "@/api/services/Auth/login";
 import { changePasswordKey, layoutConfigKey } from "@/layouts";
 import LayoutBreadcrumb from "@/layouts/components/Breadcrumb/index.vue";
 import LayoutLogo from "@/layouts/components/Logo/index.vue";
+import LayoutMenuSearch from "@/layouts/components/MenuSearch/index.vue";
 import LayoutNavTab from "@/layouts/components/NavTab/index.vue";
 import LayoutScreenFull from "@/layouts/components/ScreenFull/index.vue";
 import LayoutScreenLock from "@/layouts/components/ScreenLock/index.vue";

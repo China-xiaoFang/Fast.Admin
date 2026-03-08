@@ -7,6 +7,8 @@ import type { FaTableDataRange } from "fast-element-plus";
 
 export type IModeName = "Classic" | "Horizontal" | "Mixed";
 
+export type INavTabStyle = "Card" | "Smart" | "Chrome";
+
 export type IAnimationName =
 	| "slide-right"
 	| "slide-left"
@@ -66,6 +68,8 @@ export const useConfig = defineStore(
 			footerHeight: 30,
 			/** 布局方式 */
 			layoutMode: withDefineType<IModeName>(defaultMode),
+			/** 页签样式 */
+			navTabStyle: withDefineType<INavTabStyle>("Card"),
 			/** 切换动画 */
 			mainAnimation: withDefineType<IAnimationName>(defaultAnimation),
 			/** 主题颜色 */
@@ -84,6 +88,8 @@ export const useConfig = defineStore(
 			footer: true,
 			/** 是否显示水印 */
 			watermark: true,
+			/** 页面宽度（0 表示自适应） */
+			contentWidth: 0,
 		});
 
 		/** 表格配置 */
@@ -209,6 +215,7 @@ export const useConfig = defineStore(
 			layout.layoutSize = defaultSize;
 			layout.menuCollapse = false;
 			layout.layoutMode = defaultMode;
+			layout.navTabStyle = "Card";
 			layout.mainAnimation = defaultAnimation;
 			layout.themeColor = defaultThemeColor;
 			layout.autoThemMode = true;
@@ -218,6 +225,7 @@ export const useConfig = defineStore(
 			layout.navTab = true;
 			layout.footer = true;
 			layout.watermark = true;
+			layout.contentWidth = 0;
 			setDefaultLayoutSize();
 			initTheme();
 			tableLayout.showSearch = true;

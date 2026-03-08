@@ -23,6 +23,15 @@ export const layoutRoute: RouteRecordRaw = {
 			},
 		},
 		{
+			path: "/about",
+			name: "About",
+			component: () => import("@/views/about/index.vue"),
+			meta: {
+				title: "关于",
+				hide: true,
+			},
+		},
+		{
 			path: "/iframe",
 			name: "Iframe",
 			component: () => import("@/views/common/iframe/index.vue"),
