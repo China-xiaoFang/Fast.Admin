@@ -118,8 +118,8 @@
 		position: absolute;
 		inset: 0;
 		background-image:
-			linear-gradient(rgba(var(--el-color-primary-rgb), 0.04) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(var(--el-color-primary-rgb), 0.04) 1px, transparent 1px);
+			linear-gradient(rgba(var(--el-color-primary-rgb), 0.08) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(var(--el-color-primary-rgb), 0.08) 1px, transparent 1px);
 		background-size: 60px 60px;
 		animation: gridPulse 8s ease-in-out infinite;
 	}
