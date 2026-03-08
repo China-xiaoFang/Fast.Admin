@@ -270,5 +270,6 @@ const getThemeGradient = (baseColor: string, mode: "light" | "dark" = "light", a
 	right: 5%;
 	cursor: pointer;
 	color: var(--el-color-white);
+	z-index: 2001;
 }
 </style>

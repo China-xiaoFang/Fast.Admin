@@ -1,14 +1,20 @@
-.modern-login {
+.split-login {
 	width: 100%;
 	height: 100%;
 	display: flex;
+	flex-direction: column;
 	overflow: hidden;
 	position: relative;
+	// ─── 主体区域（左右分割）─────────────────────────────────
+	&__body {
+		flex: 1;
+		display: flex;
+		overflow: hidden;
+	}
 	// ─── 左侧装饰面板 ──────────────────────────────────────
 	&__panel {
 		position: relative;
-		width: 42%;
-		flex-shrink: 0;
+		flex: 1;
 		background: var(--login-bg, linear-gradient(165deg, #0e6db5, #0487d0, #1a8fce, #5b8dd9));
 		overflow: hidden;
 		display: flex;
@@ -96,8 +102,9 @@
 		}
 	}
 	// ─── 右侧表单区域 ──────────────────────────────────────
-	&__form-wrap {
-		flex: 1;
+	&__form {
+		width: 480px;
+		flex-shrink: 0;
 		display: flex;
 		flex-direction: column;
 		background: var(--el-bg-color);
@@ -262,15 +269,18 @@
 				}
 			}
 		}
-		.form-footer {
-			padding: 12px 0;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: var(--el-font-size-extra-small);
-			color: var(--el-text-color-placeholder);
-			border-top: 1px solid var(--el-border-color-lighter);
-		}
+	}
+	// ─── 底部页脚 ──────────────────────────────────────────
+	&__footer {
+		width: 100%;
+		padding: 12px 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: var(--el-font-size-extra-small);
+		color: var(--el-text-color-placeholder);
+		border-top: 1px solid var(--el-border-color-lighter);
+		background: var(--el-bg-color);
 	}
 }
 // ─── 租户下拉弹窗 ──────────────────────────────────────────
@@ -365,15 +375,12 @@
 }
 // ─── 深色模式 ──────────────────────────────────────────────
 html.dark {
-	.modern-login {
+	.split-login {
 		&__panel {
 			background: linear-gradient(165deg, #0a3f6e, #023d5e, #0c4f80, #2a5090);
 		}
-		&__form-wrap {
-			background: var(--el-bg-color);
-			.form-footer {
-				border-top-color: var(--el-border-color-darker);
-			}
+		&__footer {
+			border-top-color: var(--el-border-color-darker);
 		}
 	}
 }
@@ -394,13 +401,13 @@ html.dark {
 }
 // ─── 响应式 ────────────────────────────────────────────────
 @media (max-width: 900px) {
-	.modern-login {
-		flex-direction: column;
-		min-width: 360px;
+	.split-login {
+		&__body {
+			flex-direction: column;
+		}
 		&__panel {
-			width: 100%;
 			height: 200px;
-			flex-shrink: 0;
+			flex: none;
 			.panel__content {
 				flex-direction: row;
 				gap: 20px;
@@ -419,7 +426,9 @@ html.dark {
 				}
 			}
 		}
-		&__form-wrap {
+		&__form {
+			width: 100%;
+			flex: 1;
 			.form-container {
 				padding: 32px 28px;
 			}
