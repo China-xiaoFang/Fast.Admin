@@ -118,7 +118,8 @@
 		position: absolute;
 		inset: 0;
 		background-image:
-			linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+			linear-gradient(rgba(var(--el-color-primary-rgb), 0.04) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(var(--el-color-primary-rgb), 0.04) 1px, transparent 1px);
 		background-size: 60px 60px;
 		animation: gridPulse 8s ease-in-out infinite;
 	}
@@ -127,7 +128,7 @@
 		position: absolute;
 		border-radius: 50%;
 		filter: blur(80px);
-		opacity: 0.45;
+		opacity: 0.35;
 		animation: float 12s ease-in-out infinite;
 	}
 	.bg-orb--1 {
@@ -135,7 +136,7 @@
 		height: 420px;
 		top: -12%;
 		left: -8%;
-		background: rgba(99, 102, 241, 0.4);
+		background: rgba(var(--el-color-primary-rgb), 0.25);
 		animation-delay: 0s;
 	}
 	.bg-orb--2 {
@@ -143,7 +144,7 @@
 		height: 360px;
 		bottom: -12%;
 		right: -8%;
-		background: rgba(168, 85, 247, 0.35);
+		background: rgba(var(--el-color-primary-rgb), 0.2);
 		animation-delay: -4s;
 	}
 	.bg-orb--3 {
@@ -151,7 +152,7 @@
 		height: 280px;
 		top: 40%;
 		left: 50%;
-		background: rgba(59, 130, 246, 0.28);
+		background: rgba(var(--el-color-primary-rgb), 0.15);
 		animation-delay: -8s;
 	}
 
@@ -166,13 +167,13 @@
 	.bg-glow--top {
 		top: 18%;
 		left: -10%;
-		background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.6), transparent);
+		background: linear-gradient(90deg, transparent, rgba(var(--el-color-primary-rgb), 0.4), transparent);
 		animation: glowSlide 10s ease-in-out infinite;
 	}
 	.bg-glow--bottom {
 		bottom: 22%;
 		right: -10%;
-		background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.5), transparent);
+		background: linear-gradient(90deg, transparent, rgba(var(--el-color-primary-rgb), 0.3), transparent);
 		animation: glowSlide 12s ease-in-out infinite reverse;
 	}
 }
@@ -185,13 +186,13 @@
 	border-radius: 24px;
 	overflow: hidden;
 	padding: 30px 40px 20px;
-	background: rgba(255, 255, 255, 0.12);
+	background: rgba(255, 255, 255, 0.78);
 	backdrop-filter: blur(24px);
 	-webkit-backdrop-filter: blur(24px);
-	border: 1px solid rgba(255, 255, 255, 0.22);
+	border: 1px solid rgba(var(--el-color-primary-rgb), 0.12);
 	box-shadow:
-		0 12px 40px rgba(0, 0, 0, 0.15),
-		inset 0 1px 0 rgba(255, 255, 255, 0.25);
+		0 12px 40px rgba(0, 0, 0, 0.08),
+		inset 0 1px 0 rgba(255, 255, 255, 0.6);
 	animation: cardFadeIn 0.6s ease-out;
 	transition:
 		box-shadow 0.3s ease,
@@ -206,7 +207,7 @@
 
 		.decor-line {
 			position: absolute;
-			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+			background: linear-gradient(90deg, transparent, rgba(var(--el-color-primary-rgb), 0.1), transparent);
 		}
 		.decor-line--1 {
 			width: 100%;
@@ -220,14 +221,14 @@
 			height: 100%;
 			top: 0;
 			left: 72%;
-			background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+			background: linear-gradient(180deg, transparent, rgba(var(--el-color-primary-rgb), 0.08), transparent);
 			animation: decorLineShift 18s ease-in-out infinite reverse;
 		}
 
 		.decor-dot {
 			position: absolute;
 			border-radius: 50%;
-			background: rgba(255, 255, 255, 0.2);
+			background: rgba(var(--el-color-primary-rgb), 0.2);
 		}
 		.decor-dot--1 {
 			width: 6px;
@@ -259,14 +260,14 @@
 				position: absolute;
 				inset: -8px;
 				border-radius: 50%;
-				border: 2px solid rgba(255, 255, 255, 0.15);
+				border: 2px solid rgba(var(--el-color-primary-rgb), 0.2);
 				animation: ringPulse 3s ease-in-out infinite;
 			}
 			img {
 				position: relative;
 				width: 72px;
 				height: 72px;
-				filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+				filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.12));
 			}
 		}
 
@@ -274,15 +275,15 @@
 			margin-bottom: 6px;
 			font-size: 24px;
 			font-weight: 700;
-			color: #fff;
-			text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+			color: var(--el-text-color-primary);
+			text-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 			letter-spacing: 1px;
 		}
 
 		p {
 			margin-bottom: 16px;
 			font-size: 14px;
-			color: rgba(255, 255, 255, 0.7);
+			color: var(--el-text-color-secondary);
 			letter-spacing: 0.5px;
 		}
 
@@ -290,7 +291,7 @@
 			width: 40px;
 			height: 3px;
 			margin: 0 auto;
-			background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+			background: linear-gradient(90deg, transparent, rgba(var(--el-color-primary-rgb), 0.4), transparent);
 			border-radius: 2px;
 		}
 	}
@@ -328,12 +329,12 @@
 
 			:deep(.el-form) {
 				.el-form-item__label {
-					color: rgba(255, 255, 255, 0.85);
+					color: var(--el-text-color-regular);
 				}
 				.el-select__wrapper,
 				.el-input__wrapper {
-					background: rgba(255, 255, 255, 0.1);
-					border: 1px solid rgba(255, 255, 255, 0.18);
+					background: rgba(255, 255, 255, 0.6);
+					border: 1px solid var(--el-border-color);
 					border-radius: 10px;
 					box-shadow: none;
 					transition:
@@ -341,27 +342,27 @@
 						border-color 0.25s ease,
 						box-shadow 0.25s ease;
 					&:hover {
-						background: rgba(255, 255, 255, 0.16);
-						border-color: rgba(255, 255, 255, 0.3);
+						background: rgba(255, 255, 255, 0.8);
+						border-color: var(--el-color-primary-light-5);
 					}
 				}
 				.el-select__wrapper.is-focused,
 				.el-input__wrapper.is-focus {
-					background: rgba(255, 255, 255, 0.2);
-					border-color: rgba(255, 255, 255, 0.45);
-					box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+					background: rgba(255, 255, 255, 0.9);
+					border-color: var(--el-color-primary);
+					box-shadow: 0 0 0 3px rgba(var(--el-color-primary-rgb), 0.1);
 				}
 				.el-input__inner {
-					color: #fff;
+					color: var(--el-text-color-primary);
 					&::placeholder {
-						color: rgba(255, 255, 255, 0.45);
+						color: var(--el-text-color-placeholder);
 					}
 				}
 				.el-input__prefix {
-					color: rgba(255, 255, 255, 0.55);
+					color: var(--el-text-color-secondary);
 				}
 				.el-checkbox__label {
-					color: rgba(255, 255, 255, 0.8);
+					color: var(--el-text-color-regular);
 				}
 			}
 
@@ -460,7 +461,7 @@
 			text-align: center;
 			margin-top: 20px;
 			font-size: 12px;
-			color: rgba(255, 255, 255, 0.35);
+			color: var(--el-text-color-placeholder);
 			letter-spacing: 0.5px;
 		}
 	}
@@ -557,6 +558,31 @@
 }
 
 html.dark {
+	.animated-bg {
+		.bg-orb {
+			opacity: 0.45;
+		}
+		.bg-orb--1 {
+			background: rgba(99, 102, 241, 0.4);
+		}
+		.bg-orb--2 {
+			background: rgba(168, 85, 247, 0.35);
+		}
+		.bg-orb--3 {
+			background: rgba(59, 130, 246, 0.28);
+		}
+		.bg-grid {
+			background-image:
+				linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+				linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+		}
+		.bg-glow--top {
+			background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.6), transparent);
+		}
+		.bg-glow--bottom {
+			background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.5), transparent);
+		}
+	}
 	.simple-login {
 		background: rgba(20, 20, 30, 0.45);
 		border-color: rgba(255, 255, 255, 0.08);
@@ -574,8 +600,58 @@ html.dark {
 			.decor-dot {
 				background: rgba(255, 255, 255, 0.12);
 			}
+			.decor__logo .decor__ring {
+				border-color: rgba(255, 255, 255, 0.15);
+			}
+			h2 {
+				color: #fff;
+				text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+			}
+			p {
+				color: rgba(255, 255, 255, 0.7);
+			}
 			.decor__line {
 				background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+			}
+		}
+
+		.simple-login__form {
+			.form-panel {
+				:deep(.el-form) {
+					.el-form-item__label {
+						color: rgba(255, 255, 255, 0.85);
+					}
+					.el-select__wrapper,
+					.el-input__wrapper {
+						background: rgba(255, 255, 255, 0.1);
+						border-color: rgba(255, 255, 255, 0.18);
+						&:hover {
+							background: rgba(255, 255, 255, 0.16);
+							border-color: rgba(255, 255, 255, 0.3);
+						}
+					}
+					.el-select__wrapper.is-focused,
+					.el-input__wrapper.is-focus {
+						background: rgba(255, 255, 255, 0.2);
+						border-color: rgba(255, 255, 255, 0.45);
+						box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+					}
+					.el-input__inner {
+						color: #fff;
+						&::placeholder {
+							color: rgba(255, 255, 255, 0.45);
+						}
+					}
+					.el-input__prefix {
+						color: rgba(255, 255, 255, 0.55);
+					}
+					.el-checkbox__label {
+						color: rgba(255, 255, 255, 0.8);
+					}
+				}
+			}
+			.glass-text {
+				color: rgba(255, 255, 255, 0.35);
 			}
 		}
 	}

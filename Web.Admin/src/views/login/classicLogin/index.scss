@@ -30,6 +30,25 @@
 	}
 }
 
+@keyframes shimmer {
+	0% {
+		background-position: -200% center;
+	}
+	100% {
+		background-position: 200% center;
+	}
+}
+
+@keyframes subtleFloat {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-6px);
+	}
+}
+
 .classic-login {
 	width: 960px;
 	height: 560px;
@@ -43,6 +62,12 @@
 	transition:
 		box-shadow 0.3s ease,
 		transform 0.3s ease;
+	&:hover {
+		transform: translateY(-2px);
+		box-shadow:
+			0 24px 70px rgba(0, 0, 0, 0.22),
+			0 6px 20px rgba(0, 0, 0, 0.12);
+	}
 	background-size: cover;
 	background-position: center;
 	background-image: url("@/assets/images/login_card.png");
@@ -60,6 +85,17 @@
 			font-weight: var(--el-font-weight-primary);
 			font-size: var(--el-font-size-medium);
 			letter-spacing: 2.5px;
+			background: linear-gradient(
+				90deg,
+				var(--el-text-color-primary) 0%,
+				var(--el-color-primary) 50%,
+				var(--el-text-color-primary) 100%
+			);
+			background-size: 200% auto;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-clip: text;
+			animation: shimmer 6s ease-in-out infinite;
 			img {
 				width: 32px;
 				height: 32px;
@@ -76,6 +112,7 @@
 				width: 290px;
 				height: 200px;
 				filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+				animation: subtleFloat 4s ease-in-out infinite;
 			}
 		}
 	}
@@ -150,12 +187,14 @@
 				transition:
 					transform 0.2s,
 					box-shadow 0.3s;
+				box-shadow: 0 4px 12px rgba(var(--el-color-primary-rgb, 64, 158, 255), 0.25);
 				&:hover {
-					transform: translateY(-1px);
-					box-shadow: 0 4px 12px rgba(var(--el-color-primary-rgb, 64, 158, 255), 0.35);
+					transform: translateY(-2px);
+					box-shadow: 0 6px 20px rgba(var(--el-color-primary-rgb, 64, 158, 255), 0.45);
 				}
 				&:active {
 					transform: translateY(0);
+					box-shadow: 0 2px 8px rgba(var(--el-color-primary-rgb, 64, 158, 255), 0.3);
 				}
 			}
 

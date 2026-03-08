@@ -4,12 +4,12 @@
 	display: flex;
 	overflow: hidden;
 	position: relative;
+	background: var(--login-bg, linear-gradient(165deg, #0e6db5, #0487d0, #1a8fce, #5b8dd9));
 	// ─── 左侧装饰面板 ──────────────────────────────────────
 	&__panel {
 		position: relative;
 		width: 42%;
 		flex-shrink: 0;
-		background: var(--login-bg, linear-gradient(165deg, #0e6db5, #0487d0, #1a8fce, #5b8dd9));
 		overflow: hidden;
 		display: flex;
 		align-items: center;
@@ -84,6 +84,14 @@
 					font-weight: 700;
 					margin: 0 0 10px;
 					letter-spacing: 1px;
+					.tagline-title--1 {
+						color: #fff;
+					}
+					.tagline-title--2 {
+						color: rgba(255, 255, 255, 0.8);
+						font-weight: 400;
+						margin-left: 4px;
+					}
 				}
 				p {
 					font-size: 13px;
@@ -100,7 +108,9 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		background: var(--el-bg-color);
+		background: rgba(255, 255, 255, 0.92);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
 		overflow: hidden;
 		position: relative;
 		.form-container {
@@ -269,7 +279,8 @@
 			justify-content: center;
 			font-size: var(--el-font-size-extra-small);
 			color: var(--el-text-color-placeholder);
-			border-top: 1px solid var(--el-border-color-lighter);
+			background: transparent;
+			border-top: none;
 		}
 	}
 }
@@ -366,13 +377,13 @@
 // ─── 深色模式 ──────────────────────────────────────────────
 html.dark {
 	.modern-login {
-		&__panel {
-			background: linear-gradient(165deg, #0a3f6e, #023d5e, #0c4f80, #2a5090);
-		}
+		background: linear-gradient(165deg, #0a3f6e, #023d5e, #0c4f80, #2a5090);
 		&__form-wrap {
-			background: var(--el-bg-color);
+			background: rgba(30, 30, 40, 0.88);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
 			.form-footer {
-				border-top-color: var(--el-border-color-darker);
+				color: rgba(255, 255, 255, 0.35);
 			}
 		}
 	}

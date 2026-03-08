@@ -17,14 +17,19 @@
 					<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<circle cx="100" cy="100" r="80" fill="rgba(255,255,255,0.08)" />
 						<circle cx="100" cy="100" r="60" fill="rgba(255,255,255,0.06)" />
-						<!-- 医疗十字 -->
-						<rect x="82" y="52" width="36" height="96" rx="8" fill="rgba(255,255,255,0.9)" />
-						<rect x="52" y="82" width="96" height="36" rx="8" fill="rgba(255,255,255,0.9)" />
-						<!-- 心跳线 -->
-						<polyline
-							points="30,140 55,140 65,120 78,160 90,110 103,155 115,135 130,140 170,140"
+						<!-- 盾牌外框 -->
+						<path
+							d="M100 35 L145 55 V110 C145 140 120 162 100 170 C80 162 55 140 55 110 V55 Z"
+							fill="rgba(255,255,255,0.15)"
 							stroke="rgba(255,255,255,0.6)"
-							stroke-width="3"
+							stroke-width="2.5"
+							stroke-linejoin="round"
+						/>
+						<!-- 对勾 -->
+						<polyline
+							points="78,105 93,120 122,85"
+							stroke="rgba(255,255,255,0.9)"
+							stroke-width="4"
 							stroke-linecap="round"
 							stroke-linejoin="round"
 							fill="none"
@@ -32,8 +37,11 @@
 					</svg>
 				</div>
 				<div class="panel__tagline">
-					<h2>智慧医院管理平台</h2>
-					<p>高效、安全、便捷的一体化医院管理解决方案</p>
+					<h2>
+						<span class="tagline-title--1">{{ appStore.appName }}</span>
+						<span class="tagline-title--2">管理平台</span>
+					</h2>
+					<p>高效、安全、便捷的一体化企业管理解决方案</p>
 				</div>
 			</div>
 		</div>
