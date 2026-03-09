@@ -21,6 +21,7 @@
 // ------------------------------------------------------------------------
 
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Fast.Core;
 
@@ -40,6 +41,17 @@ internal class ExcelPropertyInfo
     public ExcelColumnAttribute ColumnAttribute { get; set; }
 
     /// <summary>
+    /// Excel列名称
+    /// </summary>
+    /// <remarks>优先使用 <see cref="ExcelColumnAttribute.Name"/>，其次使用属性名</remarks>
+    public string ColumnName { get; set; }
+
+    /// <summary>
+    /// 排序
+    /// </summary>
+    public int Order { get; set; }
+
+    /// <summary>
     /// 必填验证特性
     /// </summary>
     public ExcelRequiredAttribute RequiredAttribute { get; set; }
@@ -50,28 +62,65 @@ internal class ExcelPropertyInfo
     public List<ExcelRegexAttribute> RegexAttributes { get; set; } = [];
 
     /// <summary>
-    /// 列名称
+    /// 预编译的正则表达式列表
     /// </summary>
-    public string ColumnName { get; set; }
+    /// <remarks>在构建属性信息时一次编译，避免每行数据都重新编译正则引擎</remarks>
+    public List<(Regex CompiledRegex, string ErrorMessage)> CompiledRegexPatterns { get; set; } = [];
 
     /// <summary>
-    /// 排序
+    /// 属性的原始类型（如 int?、List&lt;string&gt;）
     /// </summary>
-    public int Order { get; set; }
+    public Type PropertyType { get; set; }
 
     /// <summary>
-    /// 是否为枚举
+    /// 属性的底层类型
+    /// <remarks>对于 Nullable&lt;T&gt; 返回 T，其他类型返回自身</remarks>
+    /// </summary>
+    public Type UnderlyingType { get; set; }
+
+    /// <summary>
+    /// 是否为可空类型（Nullable&lt;T&gt;）
+    /// </summary>
+    public bool IsNullable { get; set; }
+
+    /// <summary>
+    /// 是否为布尔类型
+    /// </summary>
+    public bool IsBool { get; set; }
+
+    /// <summary>
+    /// 是否为枚举类型
     /// </summary>
     public bool IsEnum { get; set; }
 
     /// <summary>
-    /// 枚举选项
+    /// 是否为 DateTime 类型
     /// </summary>
-    /// <remarks>如果是枚举类型才会存在</remarks>
-    public List<EnumItem<long>> EnumItems { get; set; }
+    public bool IsDateTime { get; set; }
 
     /// <summary>
-    /// 是否为集合
+    /// 是否为 DateTimeOffset 类型
     /// </summary>
-    public bool IsList { get; set; }
+    public bool IsDateTimeOffset { get; set; }
+
+    /// <summary>
+    /// 是否为 Guid 类型
+    /// </summary>
+    public bool IsGuid { get; set; }
+
+    /// <summary>
+    /// 是否为值类型集合（如 List&lt;int&gt;、List&lt;string&gt;）
+    /// </summary>
+    public bool IsValueTypeCollection { get; set; }
+
+    /// <summary>
+    /// 是否为复杂对象集合（非值类型的 IEnumerable）
+    /// </summary>
+    public bool IsComplexCollection { get; set; }
+
+    /// <summary>
+    /// 值类型集合的元素类型
+    /// <remarks>仅当 IsValueTypeCollection 为 true 时有值，避免每次调用 GetGenericArguments</remarks>
+    /// </summary>
+    public Type CollectionElementType { get; set; }
 }
