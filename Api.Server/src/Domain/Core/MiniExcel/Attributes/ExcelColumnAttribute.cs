@@ -62,7 +62,8 @@ public class ExcelColumnAttribute : Attribute
     /// <summary>
     /// 列宽度
     /// </summary>
-    public int Width { get; set; }
+    /// <remarks>默认宽度10</remarks>
+    public int Width { get; set; } = 10;
 
     /// <summary>
     /// 格式化字符串
