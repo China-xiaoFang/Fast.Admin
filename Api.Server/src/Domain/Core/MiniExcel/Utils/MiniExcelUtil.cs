@@ -95,7 +95,7 @@ public static class MiniExcelUtil
     /// <param name="sheetName"><see cref="string"/> Sheet名称</param>
     /// <param name="excelType"><see cref="ExcelType"/> Excel类型</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/> 取消令牌</param>
-    /// <returns><see cref="Task{TResult}"/></returns>
+    /// <returns><see cref="Task{MemoryStream}"/></returns>
     public static async Task<MemoryStream> ExportExcelAsync<T>(IEnumerable<T> data, string sheetName = "Sheet1",
         ExcelType excelType = ExcelType.XLSX, CancellationToken cancellationToken = default) where T : class, new()
     {
@@ -148,7 +148,7 @@ public static class MiniExcelUtil
     /// <param name="sheetName"><see cref="string"/> Sheet名称</param>
     /// <param name="excelType"><see cref="ExcelType"/> Excel类型</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/> 取消令牌</param>
-    /// <returns><see cref="Task{TResult}"/></returns>
+    /// <returns><see cref="Task{FileStreamResult}"/></returns>
     public static async Task<FileStreamResult> ExportExcelAsync<T>(IEnumerable<T> data, string fileName,
         string sheetName = "Sheet1", ExcelType excelType = ExcelType.XLSX, CancellationToken cancellationToken = default)
         where T : class, new()
@@ -1009,20 +1009,20 @@ public static class MiniExcelUtil
         // 数组类型：直接创建对应类型的数组
         if (collectionType.IsArray)
         {
-            var items = new List<object>();
+            var convertedParts = new List<object>(parts.Length);
             foreach (var part in parts)
             {
                 var trimmed = part.Trim();
                 if (!string.IsNullOrEmpty(trimmed))
                 {
-                    items.Add(Convert.ChangeType(trimmed, elementType));
+                    convertedParts.Add(Convert.ChangeType(trimmed, elementType));
                 }
             }
 
-            var array = Array.CreateInstance(elementType, items.Count);
-            for (var i = 0; i < items.Count; i++)
+            var array = Array.CreateInstance(elementType, convertedParts.Count);
+            for (var i = 0; i < convertedParts.Count; i++)
             {
-                array.SetValue(items[i], i);
+                array.SetValue(convertedParts[i], i);
             }
 
             return array;
