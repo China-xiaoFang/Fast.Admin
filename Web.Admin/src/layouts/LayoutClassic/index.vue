@@ -7,21 +7,44 @@
 			},
 		]"
 	>
-		<el-aside :style="{ '--el-aside-width': addUnit(configStore.layout.menuCollapse ? 'auto' : configStore.layout.menuWidth) }">
+		<!-- 桌面端侧边栏 -->
+		<el-aside v-if="!isMobile" :style="{ '--el-aside-width': addUnit(configStore.layout.menuCollapse ? 'auto' : configStore.layout.menuWidth) }">
 			<LayoutLogo />
 			<LayoutMenu />
 		</el-aside>
+		<!-- 移动端抽屉菜单 -->
+		<el-drawer
+			v-else
+			bodyClass="mobile-menu__body"
+			v-model="mobileMenuVisible"
+			direction="ltr"
+			:showClose="false"
+			:withHeader="false"
+			:size="configStore.layout.menuWidth"
+		>
+			<LayoutLogo />
+			<LayoutMenu />
+		</el-drawer>
 		<el-container>
 			<el-header>
 				<div class="nav-bar" :style="{ '--height': addUnit(configStore.layout.navBarHeight) }">
 					<div class="left">
 						<el-icon
+							v-if="!isMobile"
 							class="menu-collapse fa__hover__twinkle"
 							:title="configStore.layout.menuCollapse ? '展开' : '折叠'"
-							@click="configStore.layout.menuCollapse = !configStore.layout.menuCollapse"
+							@click="handleMenuToggle"
 						>
 							<Expand v-if="configStore.layout.menuCollapse" />
 							<Fold v-else />
+						</el-icon>
+						<el-icon
+							v-else
+							class="menu-collapse fa__hover__twinkle"
+							:title="configStore.layout.menuCollapse ? '展开' : '折叠'"
+							@click="handleMenuToggle"
+						>
+							<Expand />
 						</el-icon>
 						<LayoutBreadcrumb />
 					</div>
@@ -53,6 +76,7 @@
 								</div>
 							</template>
 						</FaSelect>
+						<LayoutMenuSearch />
 						<LayoutScreenFull />
 						<el-dropdown
 							class="avatar"
@@ -106,22 +130,24 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Expand, Fold, Key, Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
 import { Local, addUnit } from "@fast-china/utils";
+import { useWindowSize } from "@vueuse/core";
 import { RouterView, useRouter } from "vue-router";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
 import { changePasswordKey, layoutConfigKey } from "@/layouts";
 import LayoutBreadcrumb from "@/layouts/components/Breadcrumb/index.vue";
 import LayoutLogo from "@/layouts/components/Logo/index.vue";
+import LayoutMenuSearch from "@/layouts/components/MenuSearch/index.vue";
 import LayoutNavTab from "@/layouts/components/NavTab/index.vue";
 import LayoutScreenFull from "@/layouts/components/ScreenFull/index.vue";
 import LayoutScreenLock from "@/layouts/components/ScreenLock/index.vue";
 import { routerUtil } from "@/router";
 import { useConfig, useNavTabs, useUserInfo } from "@/stores";
-import LayoutMenu from "./components/Menu/index.vue";
+import LayoutMenu from "./components/menu.vue";
 import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
 import type { FaSelectInstance } from "fast-element-plus";
 
@@ -133,10 +159,25 @@ const router = useRouter();
 const configStore = useConfig();
 const navTabsStore = useNavTabs();
 const userInfoStore = useUserInfo();
+const windowSize = useWindowSize();
 
 const layoutConfigRef = inject(layoutConfigKey);
 const changePasswordRef = inject(changePasswordKey);
 const faTenantSelectRef = ref<FaSelectInstance>();
+
+/** 是否移动端（窗口宽度 <= 768） */
+const isMobile = computed(() => windowSize.width.value <= 768);
+/** 移动端菜单可见性 */
+const mobileMenuVisible = ref(false);
+
+/** 菜单切换 */
+const handleMenuToggle = () => {
+	if (isMobile.value) {
+		mobileMenuVisible.value = !mobileMenuVisible.value;
+	} else {
+		configStore.layout.menuCollapse = !configStore.layout.menuCollapse;
+	}
+};
 
 const handleRefreshSystem = () => {
 	ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {

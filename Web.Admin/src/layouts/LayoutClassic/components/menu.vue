@@ -22,10 +22,10 @@ import { computed } from "vue";
 import { addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
 import { useConfig, useUserInfo } from "@/stores";
-import MenuItem from "../MenuItem/index.vue";
+import MenuItem from "./menuItem.vue";
 
 defineOptions({
-	name: "LayoutMenu",
+	name: "LayoutClassicMenu",
 });
 
 const router = useRouter();
@@ -35,7 +35,6 @@ const userInfoStore = useUserInfo();
 const activeMenu = computed(() => router.currentRoute.value.path);
 
 const menuList = computed(() => userInfoStore.menuList.filter((f) => f.visible));
-console.log(menuList.value);
 </script>
 
 <style scoped lang="scss">
