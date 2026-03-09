@@ -76,7 +76,9 @@
 								</div>
 							</template>
 						</FaSelect>
-						<LayoutMenuSearch />
+						<el-icon class="menu-search fa__hover__twinkle" title="搜索菜单" @click="menuSearchRef.open()">
+							<Search />
+						</el-icon>
 						<LayoutScreenFull />
 						<el-dropdown
 							class="avatar"
@@ -132,16 +134,15 @@
 <script setup lang="ts">
 import { computed, inject, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { Expand, Fold, Key, Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
+import { Expand, Fold, Key, Lock, Refresh, Search, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
 import { Local, addUnit } from "@fast-china/utils";
 import { useWindowSize } from "@vueuse/core";
 import { RouterView, useRouter } from "vue-router";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
-import { changePasswordKey, layoutConfigKey } from "@/layouts";
+import { changePasswordKey, layoutConfigKey, menuSearchKey } from "@/layouts";
 import LayoutBreadcrumb from "@/layouts/components/Breadcrumb/index.vue";
 import LayoutLogo from "@/layouts/components/Logo/index.vue";
-import LayoutMenuSearch from "@/layouts/components/MenuSearch/index.vue";
 import LayoutNavTab from "@/layouts/components/NavTab/index.vue";
 import LayoutScreenFull from "@/layouts/components/ScreenFull/index.vue";
 import LayoutScreenLock from "@/layouts/components/ScreenLock/index.vue";
@@ -162,6 +163,7 @@ const userInfoStore = useUserInfo();
 const windowSize = useWindowSize();
 
 const layoutConfigRef = inject(layoutConfigKey);
+const menuSearchRef = inject(menuSearchKey);
 const changePasswordRef = inject(changePasswordKey);
 const faTenantSelectRef = ref<FaSelectInstance>();
 

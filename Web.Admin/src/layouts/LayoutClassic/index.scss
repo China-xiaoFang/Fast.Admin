@@ -12,6 +12,7 @@ html.small {
 						.screen-full {
 							width: 30px;
 						}
+						.menu-search,
 						.setting {
 							width: 30px;
 						}
@@ -178,6 +179,7 @@ html.small {
 							background-color: var(--el-text-color-disabled);
 						}
 					}
+					.menu-search,
 					.setting {
 						height: 100%;
 						width: 35px;
