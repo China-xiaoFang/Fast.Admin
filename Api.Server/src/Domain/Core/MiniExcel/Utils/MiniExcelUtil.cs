@@ -332,8 +332,12 @@ public static class MiniExcelUtil
             {
                 var columnAttr = prop.GetCustomAttribute<ExcelColumnAttribute>();
 
+                // 跳过没有标记 [ExcelColumn] 特性的属性（未标记的属性默认忽略，不参与导入导出）
+                if (columnAttr == null)
+                    continue;
+
                 // 跳过标记了 Ignore = true 的属性
-                if (columnAttr?.Ignore == true)
+                if (columnAttr.Ignore)
                     continue;
 
                 // 解析属性类型信息
