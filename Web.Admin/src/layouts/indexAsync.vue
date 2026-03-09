@@ -68,6 +68,6 @@ const layoutComponents = withDefineType<Record<IModeName, Component>>({
 }
 
 .layout.is-mobile {
-	min-width: 100%;
+	min-width: 0;
 }
 </style>

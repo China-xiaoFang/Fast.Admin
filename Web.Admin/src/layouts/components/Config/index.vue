@@ -54,7 +54,7 @@
 								<el-main />
 							</el-container>
 						</el-container>
-						<div style="flex: 2; display: flex; align-items: center; justify-content: center; color: var(--el-text-color-secondary); font-size: var(--el-font-size-small);">
+						<div class="layout-mode__notice">
 							移动端仅支持经典布局
 						</div>
 					</template>

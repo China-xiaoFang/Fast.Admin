@@ -34,6 +34,14 @@
 				> .active {
 					box-shadow: 0 0 0 2px var(--el-color-primary) !important;
 				}
+				.layout-mode__notice {
+					flex: 2;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					color: var(--el-text-color-secondary);
+					font-size: var(--el-font-size-small);
+				}
 				> .el-container {
 					flex: 1;
 					height: 56px;
