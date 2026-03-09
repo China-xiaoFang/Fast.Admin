@@ -41,9 +41,15 @@ const menuList = computed(() => userInfoStore.menuList.filter((f) => f.visible))
 .el-scrollbar {
 	flex: 1;
 	overflow: hidden;
+	:deep() {
+		.el-scrollbar__wrap {
+			overflow-y: hidden !important;
+		}
+	}
 }
 .el-menu {
 	border: none;
+	white-space: nowrap;
 	:deep() {
 		.el-sub-menu {
 			&.is-active {

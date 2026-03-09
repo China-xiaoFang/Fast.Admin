@@ -7,7 +7,7 @@
 			</el-divider>
 			<div class="main__box">
 				<div class="layout-mode">
-					<el-tooltip effect="dark" placement="top" :showAfter="200" content="经典">
+					<el-tooltip v-if="!isMobile" effect="dark" placement="top" :showAfter="200" content="经典">
 						<el-container
 							class="layout-mode__Classic"
 							:class="{ active: configStore.layout.layoutMode === 'Classic' }"
@@ -20,7 +20,7 @@
 							</el-container>
 						</el-container>
 					</el-tooltip>
-					<el-tooltip effect="dark" placement="top" :showAfter="200" content="水平">
+					<el-tooltip v-if="!isMobile" effect="dark" placement="top" :showAfter="200" content="水平">
 						<el-container
 							class="layout-mode__Horizontal"
 							:class="{ active: configStore.layout.layoutMode === 'Horizontal' }"
@@ -30,7 +30,7 @@
 							<el-main />
 						</el-container>
 					</el-tooltip>
-					<el-tooltip effect="dark" placement="top" :showAfter="200" content="混合">
+					<el-tooltip v-if="!isMobile" effect="dark" placement="top" :showAfter="200" content="混合">
 						<el-container
 							class="layout-mode__Mixed"
 							:class="{ active: configStore.layout.layoutMode === 'Mixed' }"
@@ -43,6 +43,21 @@
 							</el-container>
 						</el-container>
 					</el-tooltip>
+					<template v-if="isMobile">
+						<el-container
+							class="layout-mode__Classic"
+							:class="{ active: true }"
+						>
+							<el-aside />
+							<el-container>
+								<el-header />
+								<el-main />
+							</el-container>
+						</el-container>
+						<div style="flex: 2; display: flex; align-items: center; justify-content: center; color: var(--el-text-color-secondary); font-size: var(--el-font-size-small);">
+							移动端仅支持经典布局
+						</div>
+					</template>
 				</div>
 				<div class="box-item">
 					<span>切换动画</span>
@@ -52,9 +67,11 @@
 				</div>
 				<div class="box-item">
 					<span>页签样式</span>
-					<el-select v-model="configStore.layout.navTabStyle" style="width: 120px">
-						<el-option v-for="(item, index) in navTabStyleList" :key="index" :label="item.label" :value="item.value" />
-					</el-select>
+					<el-radio-group v-model="configStore.layout.navTabStyle" size="small">
+						<el-radio-button v-for="(item, index) in navTabStyleList" :key="index" :value="item.value">
+							{{ item.label }}
+						</el-radio-button>
+					</el-radio-group>
 				</div>
 			</div>
 			<el-divider contentPosition="center">
@@ -110,9 +127,11 @@
 				</div>
 				<div class="box-item">
 					<span>布局大小</span>
-					<el-select v-model="configStore.layout.layoutSize" style="width: 80px" :disabled="configStore.layout.autoSize">
-						<el-option v-for="(item, index) in layoutSizeList" :key="index" :label="item.label" :value="item.value" />
-					</el-select>
+					<el-radio-group v-model="configStore.layout.layoutSize" size="small" :disabled="configStore.layout.autoSize">
+						<el-radio-button v-for="(item, index) in layoutSizeList" :key="index" :value="item.value">
+							{{ item.label }}
+						</el-radio-button>
+					</el-radio-group>
 				</div>
 				<div class="box-item">
 					<span>页签</span>
@@ -131,16 +150,49 @@
 					</span>
 					<el-switch v-model="configStore.layout.watermark" :activeActionIcon="View" :inactiveActionIcon="Hide" />
 				</div>
-				<div class="box-item">
+				<div class="box-item" style="flex-direction: column; align-items: flex-start; gap: 8px">
 					<span>
 						页面宽度
-						<el-tooltip effect="dark" content="设置主内容区域的最大宽度，0为自适应" placement="top">
+						<el-tooltip effect="dark" content="设置主内容区域的最大宽度，流式为自适应" placement="top">
 							<el-icon><QuestionFilled /></el-icon>
 						</el-tooltip>
 					</span>
-					<el-select v-model="configStore.layout.contentWidth" style="width: 80px">
-						<el-option v-for="(item, index) in contentWidthList" :key="index" :label="item.label" :value="item.value" />
-					</el-select>
+					<div class="content-width">
+						<div
+							class="content-width__item"
+							:class="{ active: configStore.layout.contentWidth === 0 }"
+							@click="configStore.layout.contentWidth = 0"
+						>
+							<el-tooltip effect="dark" placement="bottom" :showAfter="200" content="流式">
+								<div class="content-width__inner">
+									<div class="cw-header" />
+									<div class="cw-body" />
+								</div>
+							</el-tooltip>
+						</div>
+						<div
+							class="content-width__item"
+							:class="{ active: configStore.layout.contentWidth > 0 }"
+							@click="configStore.layout.contentWidth = 1400"
+						>
+							<el-tooltip effect="dark" placement="bottom" :showAfter="200" content="定宽">
+								<div class="content-width__inner">
+									<div class="cw-header" />
+									<div class="cw-body-fixed">
+										<div class="cw-body-inner" />
+									</div>
+								</div>
+							</el-tooltip>
+						</div>
+					</div>
+				</div>
+				<div v-if="configStore.layout.contentWidth > 0" class="box-item">
+					<span>页面宽度值</span>
+					<el-input-number v-model="configStore.layout.contentWidth" :max="1920" :min="900" :step="100" style="width: 120px">
+						<template #suffix>
+							<span>px</span>
+						</template>
+					</el-input-number>
 				</div>
 				<div class="box-item">
 					<span>菜单宽度</span>
@@ -233,9 +285,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Grid, Hide, MagicStick, Moon, Notification, QuestionFilled, Refresh, Sunny, View } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
+import { useWindowSize } from "@vueuse/core";
 import { useConfig } from "@/stores";
 import type { IAnimationName, INavTabStyle } from "@/stores";
 import type { componentSizes } from "element-plus";
@@ -248,6 +301,10 @@ defineOptions({
 const faDrawerRef = ref<FaDrawerInstance>();
 
 const configStore = useConfig();
+const windowSize = useWindowSize();
+
+/** 是否移动端（窗口宽度 <= 768） */
+const isMobile = computed(() => windowSize.width.value <= 768);
 
 const animationList: Readonly<ElSelectorOutput<IAnimationName>> = [
 	{
@@ -300,29 +357,6 @@ const navTabStyleList: Readonly<ElSelectorOutput<INavTabStyle>> = [
 	{
 		label: "谷歌",
 		value: "Chrome",
-	},
-];
-
-const contentWidthList: Readonly<ElSelectorOutput<number>[]> = [
-	{
-		label: "自适应",
-		value: 0,
-	},
-	{
-		label: "1200px",
-		value: 1200,
-	},
-	{
-		label: "1400px",
-		value: 1400,
-	},
-	{
-		label: "1600px",
-		value: 1600,
-	},
-	{
-		label: "1920px",
-		value: 1920,
 	},
 ];
 

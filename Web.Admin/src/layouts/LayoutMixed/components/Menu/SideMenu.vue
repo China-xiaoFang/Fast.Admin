@@ -34,8 +34,13 @@ const props = defineProps({
 const activeMenu = computed(() => router.currentRoute.value.path);
 
 const sideMenuList = computed(() => {
-	if (!props.activeModuleMenu?.children) return [];
-	return props.activeModuleMenu.children.filter((f) => f.visible);
+	if (!props.activeModuleMenu) return [];
+	// 如果模块有子菜单，显示子菜单；否则显示模块自身（避免左侧空白）
+	if (props.activeModuleMenu.children && props.activeModuleMenu.children.length > 0) {
+		return props.activeModuleMenu.children.filter((f) => f.visible);
+	}
+	// 根目录菜单没有子菜单时，显示自身
+	return props.activeModuleMenu.visible ? [props.activeModuleMenu] : [];
 });
 </script>
 

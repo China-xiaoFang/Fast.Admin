@@ -28,17 +28,16 @@
 			}
 			.layout-mode {
 				display: flex;
-				flex-wrap: wrap;
+				flex-wrap: nowrap;
 				justify-content: space-between;
+				gap: 8px;
 				> .active {
 					box-shadow: 0 0 0 2px var(--el-color-primary) !important;
 				}
 				> .el-container {
-					width: 100px;
-					height: 70px;
-					padding: 6px;
-					margin: 10px 5px;
-					flex-grow: 0;
+					flex: 1;
+					height: 56px;
+					padding: 5px;
 					cursor: pointer;
 					border-radius: 6px;
 					box-shadow: 0 0 5px 1px var(--el-border-color-dark);
@@ -47,12 +46,12 @@
 						box-shadow: 0 0 5px 1px var(--el-text-color-secondary);
 					}
 					.el-aside {
-						width: 20px;
+						width: 16px;
 						border-radius: 3px;
 						background-color: var(--el-color-primary);
 					}
 					.el-header {
-						height: 12px;
+						height: 10px;
 						border-radius: 3px;
 						background-color: var(--el-color-primary-light-5);
 					}
@@ -65,23 +64,80 @@
 				}
 				.layout-mode__Classic {
 					.el-aside {
-						margin-right: 5px;
+						margin-right: 4px;
 					}
 					.el-header {
-						margin-bottom: 5px;
+						margin-bottom: 4px;
 					}
 				}
 				.layout-mode__Horizontal {
 					.el-header {
-						margin-bottom: 5px;
+						margin-bottom: 4px;
 					}
 				}
 				.layout-mode__Mixed {
 					.el-header {
-						margin-bottom: 5px;
+						margin-bottom: 4px;
 					}
 					.el-aside {
-						margin-right: 5px;
+						margin-right: 4px;
+					}
+				}
+			}
+			// 页宽配置
+			.content-width {
+				display: flex;
+				flex-wrap: nowrap;
+				justify-content: space-between;
+				gap: 8px;
+				> .content-width__item {
+					flex: 1;
+					height: 50px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+					border-radius: 6px;
+					box-shadow: 0 0 5px 1px var(--el-border-color-dark);
+					transition: all 0.2s;
+					position: relative;
+					overflow: hidden;
+					&:hover {
+						box-shadow: 0 0 5px 1px var(--el-text-color-secondary);
+					}
+					&.active {
+						box-shadow: 0 0 0 2px var(--el-color-primary) !important;
+					}
+					.content-width__inner {
+						width: 100%;
+						height: 100%;
+						display: flex;
+						flex-direction: column;
+						padding: 5px;
+						box-sizing: border-box;
+						.cw-header {
+							height: 8px;
+							border-radius: 2px;
+							background-color: var(--el-color-primary-light-5);
+							margin-bottom: 4px;
+						}
+						.cw-body {
+							flex: 1;
+							border-radius: 2px;
+							border: 1px dashed var(--el-color-primary);
+							background-color: var(--el-color-primary-light-8);
+						}
+						.cw-body-fixed {
+							flex: 1;
+							display: flex;
+							justify-content: center;
+							.cw-body-inner {
+								width: 60%;
+								border-radius: 2px;
+								border: 1px dashed var(--el-color-primary);
+								background-color: var(--el-color-primary-light-8);
+							}
+						}
 					}
 				}
 			}

@@ -122,15 +122,15 @@ html.small {
 				cursor: pointer;
 				&:hover {
 					font-weight: var(--el-font-weight-primary);
-					transform: translateY(-1px) scale(1.02);
-					box-shadow: 0 14px 24px var(--el-text-color-secondary);
-					border-radius: 4px;
+					color: var(--el-color-primary);
+					border-color: var(--el-color-primary-light-5);
+					background-color: var(--el-color-primary-light-9);
 				}
 				&.is-active {
 					font-weight: var(--el-font-weight-primary);
-					background-color: var(--el-menu-active-color);
+					background-color: var(--el-color-primary);
 					color: var(--el-color-white);
-					border-color: var(--el-menu-active-color);
+					border-color: var(--el-color-primary);
 					&::before {
 						content: "";
 						background-color: var(--el-color-white);
@@ -139,13 +139,6 @@ html.small {
 						height: 8px;
 						border-radius: 50%;
 						margin-right: 2px;
-					}
-				}
-				&:not(.is-active) {
-					&:hover {
-						transform: translateY(-2px) scale(1.02);
-						box-shadow: 0 14px 24px var(--el-text-color-secondary);
-						border-radius: 6px;
 					}
 				}
 				.icon-close {
@@ -157,7 +150,7 @@ html.small {
 						color var(--el-transition-duration) ease,
 						transform var(--el-transition-duration) ease;
 					&:hover {
-						color: var(--el-menu-active-color);
+						color: var(--el-color-primary);
 						background-color: var(--el-color-white);
 						transform: scale(1.1);
 					}
@@ -233,6 +226,8 @@ html.small {
 // 谷歌样式 (Chrome)
 // ============================
 .nav-tab--chrome {
+	border-bottom: none;
+	background-color: var(--el-bg-color);
 	.el-scrollbar {
 		.nav-tab__warp {
 			gap: 0;
@@ -250,13 +245,23 @@ html.small {
 				color: var(--el-text-color-primary);
 				margin-top: auto;
 				&:hover {
-					background-color: var(--el-fill-color-light);
+					background-color: var(--el-color-primary-light-9);
+					color: var(--el-color-primary);
 				}
 				&.is-active {
 					font-weight: var(--el-font-weight-primary);
 					background-color: var(--el-bg-color-page);
 					color: var(--el-color-primary);
-					box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.05), 2px -2px 4px rgba(0, 0, 0, 0.05);
+					box-shadow: -4px -2px 6px rgba(0, 0, 0, 0.06), 4px -2px 6px rgba(0, 0, 0, 0.06);
+					&::after {
+						content: "";
+						position: absolute;
+						bottom: 0;
+						left: 0;
+						right: 0;
+						height: 2px;
+						background-color: var(--el-color-primary);
+					}
 				}
 				.icon-close {
 					margin-left: 4px;
@@ -268,7 +273,7 @@ html.small {
 						transform var(--el-transition-duration) ease;
 					&:hover {
 						color: var(--el-color-white);
-						background-color: var(--el-text-color-secondary);
+						background-color: var(--el-color-primary);
 						transform: scale(1.1);
 					}
 				}

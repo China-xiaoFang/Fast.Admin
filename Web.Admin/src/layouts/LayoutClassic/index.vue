@@ -131,7 +131,8 @@
 import { computed, inject, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Expand, Fold, Key, Lock, Refresh, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
-import { Local, addUnit, envUtil } from "@fast-china/utils";
+import { Local, addUnit } from "@fast-china/utils";
+import { useWindowSize } from "@vueuse/core";
 import { RouterView, useRouter } from "vue-router";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
@@ -156,13 +157,14 @@ const router = useRouter();
 const configStore = useConfig();
 const navTabsStore = useNavTabs();
 const userInfoStore = useUserInfo();
+const windowSize = useWindowSize();
 
 const layoutConfigRef = inject(layoutConfigKey);
 const changePasswordRef = inject(changePasswordKey);
 const faTenantSelectRef = ref<FaSelectInstance>();
 
-/** 是否移动端 */
-const isMobile = computed(() => import.meta.env.VITE_ENABLE_MOBILE === "true" && envUtil.isMobile());
+/** 是否移动端（窗口宽度 <= 768） */
+const isMobile = computed(() => windowSize.width.value <= 768);
 /** 移动端菜单可见性 */
 const mobileMenuVisible = ref(false);
 
