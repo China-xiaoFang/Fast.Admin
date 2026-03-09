@@ -49,7 +49,7 @@
 				<el-input v-model="state.formData.menuTitle" maxlength="20" placeholder="请输入菜单标题" />
 			</FaFormItem>
 			<FaFormItem prop="sort" label="排序" tips="从小到大">
-				<el-input-number v-model="state.formData.sort" :min="1" :max="9999" placeholder="请输入排序" />
+				<el-input-number v-model="state.formData.sort" :min="1" :max="99999" placeholder="请输入排序" />
 			</FaFormItem>
 			<FaFormItem prop="visible" label="显示">
 				<RadioGroup button name="BooleanEnum" v-model="state.formData.visible" />

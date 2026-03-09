@@ -34,7 +34,7 @@
 				<el-checkbox v-model="state.formData.hasDesktop">桌面端</el-checkbox>
 			</FaFormItem>
 			<FaFormItem prop="sort" label="排序" tips="从小到大">
-				<el-input-number v-model="state.formData.sort" :min="1" :max="9999" placeholder="请输入排序" />
+				<el-input-number v-model="state.formData.sort" :min="1" :max="99999" placeholder="请输入排序" />
 			</FaFormItem>
 			<FaFormItem prop="status" label="状态">
 				<RadioGroup button name="CommonStatusEnum" v-model="state.formData.status" />
