@@ -377,6 +377,7 @@ public static class ExcelUtil
             var row = rows[rowIndex];
             var item = new T();
             var rowErrors = new List<ExcelImportError>();
+            var rowNumber = rowIndex + 1;
 
             foreach (var info in propertyInfos)
             {
@@ -402,7 +403,7 @@ public static class ExcelUtil
                     {
                         rowErrors.Add(new ExcelImportError
                         {
-                            RowIndex = rowIndex + 1,
+                            RowIndex = rowNumber,
                             ColumnName = info.ColumnName,
                             PropertyName = info.Property.Name,
                             CellValue = cellValue,
@@ -428,7 +429,7 @@ public static class ExcelUtil
                         {
                             rowErrors.Add(new ExcelImportError
                             {
-                                RowIndex = rowIndex + 1,
+                                RowIndex = rowNumber,
                                 ColumnName = info.ColumnName,
                                 PropertyName = info.Property.Name,
                                 CellValue = cellValue,
@@ -441,7 +442,7 @@ public static class ExcelUtil
                 }
 
                 // 如果有正则错误，跳过赋值
-                if (rowErrors.Any(e => e.RowIndex == rowIndex + 1 && e.PropertyName == info.Property.Name))
+                if (rowErrors.Any(e => e.RowIndex == rowNumber && e.PropertyName == info.Property.Name))
                     continue;
 
                 // 类型转换并赋值
@@ -457,7 +458,7 @@ public static class ExcelUtil
                 {
                     rowErrors.Add(new ExcelImportError
                     {
-                        RowIndex = rowIndex + 1,
+                        RowIndex = rowNumber,
                         ColumnName = info.ColumnName,
                         PropertyName = info.Property.Name,
                         CellValue = cellValue,
@@ -643,7 +644,10 @@ public static class ExcelUtil
 
         if (long.TryParse(text, out var longValue))
         {
-            return System.Enum.ToObject(enumType, longValue);
+            if (System.Enum.IsDefined(enumType, longValue))
+            {
+                return System.Enum.ToObject(enumType, longValue);
+            }
         }
 
         throw new InvalidCastException($"无法将 \"{text}\" 转换为枚举类型 {enumType.Name}");
