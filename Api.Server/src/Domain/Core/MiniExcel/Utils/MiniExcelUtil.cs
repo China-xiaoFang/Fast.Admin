@@ -470,10 +470,13 @@ public static class MiniExcelUtil
             // 创建动态列：设置列名和索引
             var column = new DynamicExcelColumn(info.ColumnName) {Index = i, Width = info.ColumnAttribute?.Width ?? 0};
 
-            // 如果指定了格式化字符串，则应用；否则根据属性类型设置默认格式
-            column.Format = !string.IsNullOrEmpty(info.ColumnAttribute?.Format)
-                ? info.ColumnAttribute.Format
-                : GetDefaultFormat(info);
+            // 仅当标记了 ExcelColumn 特性时才处理格式：优先使用显式指定的格式，否则按属性类型设置默认格式
+            if (info.ColumnAttribute != null)
+            {
+                column.Format = !string.IsNullOrEmpty(info.ColumnAttribute.Format)
+                    ? info.ColumnAttribute.Format
+                    : GetDefaultFormat(info);
+            }
 
             columns.Add(column);
         }
