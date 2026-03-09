@@ -470,16 +470,37 @@ public static class MiniExcelUtil
             // 创建动态列：设置列名和索引
             var column = new DynamicExcelColumn(info.ColumnName) {Index = i, Width = info.ColumnAttribute?.Width ?? 0};
 
-            // 如果指定了格式化字符串，则应用（如日期格式、数字格式等）
-            if (!string.IsNullOrEmpty(info.ColumnAttribute?.Format))
-            {
-                column.Format = info.ColumnAttribute.Format;
-            }
+            // 如果指定了格式化字符串，则应用；否则根据属性类型设置默认格式
+            column.Format = !string.IsNullOrEmpty(info.ColumnAttribute?.Format)
+                ? info.ColumnAttribute.Format
+                : GetDefaultFormat(info);
 
             columns.Add(column);
         }
 
         return columns;
+    }
+
+    /// <summary>
+    /// 根据属性类型获取默认的 Excel 格式化字符串
+    /// </summary>
+    /// <remarks>
+    /// 当 <see cref="ExcelColumnAttribute.Format"/> 未指定时，根据属性类型返回默认格式：
+    /// <para>- DateTime / DateTimeOffset → yyyy-MM-dd HH:mm:ss</para>
+    /// <para>- decimal / double / float → 0.00</para>
+    /// </remarks>
+    /// <param name="info"><see cref="ExcelPropertyInfo"/> 属性元信息</param>
+    /// <returns>默认格式化字符串，无需默认格式时返回 null</returns>
+    private static string GetDefaultFormat(ExcelPropertyInfo info)
+    {
+        if (info.IsDateTime || info.IsDateTimeOffset)
+            return "yyyy-MM-dd HH:mm:ss";
+
+        var type = info.UnderlyingType;
+        if (type == typeof(decimal) || type == typeof(double) || type == typeof(float))
+            return "0.00";
+
+        return null;
     }
 
     /// <summary>
