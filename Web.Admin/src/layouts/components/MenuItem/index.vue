@@ -18,11 +18,11 @@
 import { definePropType } from "@fast-china/utils";
 import { useRouter } from "vue-router";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
-import MenuItem from "./menuItem.vue";
+import MenuItem from "./index.vue";
 import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
 
 defineOptions({
-	name: "LayoutHorizontalMenuItem",
+	name: "LayoutMenuItem",
 });
 
 const router = useRouter();
@@ -35,7 +35,9 @@ const props = defineProps({
 const handleMenuClick = () => {
 	switch (props.menu.menuType) {
 		case MenuTypeEnum.Catalog:
+			break;
 		case MenuTypeEnum.Menu:
+			router.push(props.menu.router);
 			break;
 		case MenuTypeEnum.Internal:
 			router.push({
