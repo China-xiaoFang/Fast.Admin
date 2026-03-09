@@ -60,7 +60,7 @@ public static class MiniExcelUtil
     /// <param name="data"><see cref="IEnumerable{T}"/> 数据集合</param>
     /// <param name="sheetName"><see cref="string"/> Sheet名称</param>
     /// <param name="excelType"><see cref="ExcelType"/> Excel类型</param>
-    /// <returns></returns>
+    /// <returns><see cref="MemoryStream"/></returns>
     public static MemoryStream ExportExcel<T>(IEnumerable<T> data, string sheetName = "Sheet1",
         ExcelType excelType = ExcelType.XLSX) where T : class, new()
     {
@@ -95,7 +95,7 @@ public static class MiniExcelUtil
     /// <param name="sheetName"><see cref="string"/> Sheet名称</param>
     /// <param name="excelType"><see cref="ExcelType"/> Excel类型</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/> 取消令牌</param>
-    /// <returns></returns>
+    /// <returns><see cref="Task{MemoryStream}"/></returns>
     public static async Task<MemoryStream> ExportExcelAsync<T>(IEnumerable<T> data, string sheetName = "Sheet1",
         ExcelType excelType = ExcelType.XLSX, CancellationToken cancellationToken = default) where T : class, new()
     {
@@ -131,7 +131,7 @@ public static class MiniExcelUtil
     /// <param name="fileName"><see cref="string"/> 文件名称</param>
     /// <param name="sheetName"><see cref="string"/> Sheet名称</param>
     /// <param name="excelType"><see cref="ExcelType"/> Excel类型</param>
-    /// <returns></returns>
+    /// <returns><see cref="FileStreamResult"/></returns>
     public static FileStreamResult ExportExcel<T>(IEnumerable<T> data, string fileName, string sheetName = "Sheet1",
         ExcelType excelType = ExcelType.XLSX) where T : class, new()
     {
@@ -148,7 +148,7 @@ public static class MiniExcelUtil
     /// <param name="sheetName"><see cref="string"/> Sheet名称</param>
     /// <param name="excelType"><see cref="ExcelType"/> Excel类型</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/> 取消令牌</param>
-    /// <returns></returns>
+    /// <returns><see cref="Task{FileStreamResult}"/></returns>
     public static async Task<FileStreamResult> ExportExcelAsync<T>(IEnumerable<T> data, string fileName,
         string sheetName = "Sheet1", ExcelType excelType = ExcelType.XLSX, CancellationToken cancellationToken = default)
         where T : class, new()
@@ -174,7 +174,7 @@ public static class MiniExcelUtil
         // 转换数据为 MiniExcel 可写入的字典格式
         var exportData = ConvertExportData(data, propertyInfos);
 
-        // 根据属性元信息将 DTO 数据转换为 Dictionary 列表（适配 MiniExcel 的动态列导出）
+        // 构建 MiniExcel 的动态列配置（列名、宽度、格式等）
         var config = new OpenXmlConfiguration();
         var dynamicColumns = BuildDynamicColumns(propertyInfos);
         if (dynamicColumns.Count > 0)
@@ -183,7 +183,7 @@ public static class MiniExcelUtil
         }
 
         // 使用 MiniExcel 写入文件
-        MiniExcel.SaveAs(filePath, exportData, sheetName: sheetName, excelType: ExcelType.XLSX, configuration: config);
+        MiniExcel.SaveAs(filePath, exportData, sheetName: sheetName, excelType: excelType, configuration: config);
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ public static class MiniExcelUtil
         // 转换数据为 MiniExcel 可写入的字典格式
         var exportData = ConvertExportData(data, propertyInfos);
 
-        // 根据属性元信息将 DTO 数据转换为 Dictionary 列表（适配 MiniExcel 的动态列导出）
+        // 构建 MiniExcel 的动态列配置（列名、宽度、格式等）
         var config = new OpenXmlConfiguration();
         var dynamicColumns = BuildDynamicColumns(propertyInfos);
         if (dynamicColumns.Count > 0)
@@ -213,7 +213,7 @@ public static class MiniExcelUtil
         }
 
         // 使用 MiniExcel 写入文件
-        await MiniExcel.SaveAsAsync(filePath, exportData, sheetName: sheetName, excelType: ExcelType.XLSX, configuration: config,
+        await MiniExcel.SaveAsAsync(filePath, exportData, sheetName: sheetName, excelType: excelType, configuration: config,
             cancellationToken: cancellationToken);
     }
 
@@ -367,10 +367,17 @@ public static class MiniExcelUtil
                     IsComplexCollection = CheckIsComplexCollection(propertyType)
                 };
 
-                // 如果是值类型集合，缓存元素类型（避免每次 GetGenericArguments）
-                if (info.IsValueTypeCollection && propertyType.IsGenericType)
+                // 如果是值类型集合，缓存元素类型（避免每次 GetGenericArguments / GetElementType）
+                if (info.IsValueTypeCollection)
                 {
-                    info.CollectionElementType = propertyType.GetGenericArguments()[0];
+                    if (propertyType.IsArray)
+                    {
+                        info.CollectionElementType = propertyType.GetElementType();
+                    }
+                    else if (propertyType.IsGenericType)
+                    {
+                        info.CollectionElementType = propertyType.GetGenericArguments()[0];
+                    }
                 }
 
                 // 如果是枚举类型，预先构建枚举映射缓存
@@ -612,20 +619,6 @@ public static class MiniExcelUtil
 
         // 从缓存获取属性元信息
         var propertyInfos = GetPropertyInfos<T>();
-
-        // 构建列名到属性的映射（支持 ExcelColumn.Name 和属性名两种匹配方式）
-        var columnMap = new Dictionary<string, ExcelPropertyInfo>(StringComparer.OrdinalIgnoreCase);
-        foreach (var info in propertyInfos)
-        {
-            // 使用 ExcelColumn 特性指定的列名匹配
-            columnMap[info.ColumnName] = info;
-
-            // 同时支持按属性名匹配（当列名与属性名不同时）
-            if (info.ColumnName != info.Property.Name)
-            {
-                columnMap[info.Property.Name] = info;
-            }
-        }
 
         // 逐行解析数据
         for (var rowIndex = 0; rowIndex < rows.Count; rowIndex++)
@@ -884,11 +877,23 @@ public static class MiniExcelUtil
     /// <summary>
     /// 判断类型是否为值类型集合
     /// </summary>
-    /// <remarks>如 List&lt;int&gt;、List&lt;string&gt;、List&lt;long&gt;、List&lt;decimal&gt; 等</remarks>
+    /// <remarks>如 List&lt;int&gt;、List&lt;string&gt;、int[]、string[] 等</remarks>
     /// <param name="type"><see cref="Type"/> 待检查的类型</param>
     /// <returns></returns>
     private static bool CheckIsValueTypeCollection(Type type)
     {
+        // 数组类型：检查元素类型是否为值类型或常用简单类型
+        if (type.IsArray)
+        {
+            var arrayElementType = type.GetElementType();
+            return arrayElementType != null
+                   && (arrayElementType.IsPrimitive
+                       || arrayElementType == typeof(string)
+                       || arrayElementType == typeof(decimal)
+                       || arrayElementType == typeof(Guid)
+                       || arrayElementType == typeof(DateTime));
+        }
+
         if (!type.IsGenericType)
             return false;
 
@@ -917,15 +922,19 @@ public static class MiniExcelUtil
     /// <returns></returns>
     private static bool CheckIsComplexCollection(Type type)
     {
-        // 数组类型直接视为复杂集合
+        // 值类型集合已在 CheckIsValueTypeCollection 中处理，此处排除
+        if (CheckIsValueTypeCollection(type))
+            return false;
+
+        // 数组类型且非值类型数组视为复杂集合
         if (type.IsArray)
             return true;
 
         if (!type.IsGenericType)
             return false;
 
-        // 实现了 IEnumerable 且不是值类型集合也不是字符串
-        if (typeof(IEnumerable).IsAssignableFrom(type) && !CheckIsValueTypeCollection(type) && type != typeof(string))
+        // 实现了 IEnumerable 且不是字符串
+        if (typeof(IEnumerable).IsAssignableFrom(type) && type != typeof(string))
         {
             return true;
         }
@@ -961,7 +970,7 @@ public static class MiniExcelUtil
     /// <summary>
     /// 将分隔符字符串解析为值类型集合
     /// </summary>
-    /// <remarks>用于导入时将 "1,2,3" 格式的字符串转为 List&lt;int&gt; 等值类型集合</remarks>
+    /// <remarks>用于导入时将 "1,2,3" 格式的字符串转为 List&lt;int&gt;、int[] 等值类型集合</remarks>
     /// <param name="text">分隔符连接的字符串</param>
     /// <param name="collectionType">目标集合类型</param>
     /// <param name="elementType">集合元素类型（从缓存获取，避免重复 GetGenericArguments）</param>
@@ -973,12 +982,34 @@ public static class MiniExcelUtil
          * 防御性编程：正常情况下 elementType 在 ExcelPropertyInfo 初始化时已缓存，
          * 此处兜底处理仅用于方法被独立调用时的安全保障
          */
-        elementType ??= collectionType.GetGenericArguments()[0];
+        elementType ??= collectionType.IsArray ? collectionType.GetElementType() : collectionType.GetGenericArguments()[0];
 
         // 按分隔符拆分并去除空项
         var parts = text.Split([separator], StringSplitOptions.RemoveEmptyEntries);
 
-        // 创建对应类型的 List<T> 实例
+        // 数组类型：直接创建对应类型的数组
+        if (collectionType.IsArray)
+        {
+            var convertedParts = new List<object>(parts.Length);
+            foreach (var part in parts)
+            {
+                var trimmed = part.Trim();
+                if (!string.IsNullOrEmpty(trimmed))
+                {
+                    convertedParts.Add(Convert.ChangeType(trimmed, elementType));
+                }
+            }
+
+            var array = Array.CreateInstance(elementType, convertedParts.Count);
+            for (var i = 0; i < convertedParts.Count; i++)
+            {
+                array.SetValue(convertedParts[i], i);
+            }
+
+            return array;
+        }
+
+        // 泛型集合类型：创建对应类型的 List<T> 实例
         var listType = typeof(List<>).MakeGenericType(elementType);
         var list = (IList) Activator.CreateInstance(listType);
 
