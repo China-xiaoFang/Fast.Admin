@@ -475,6 +475,8 @@ public static class ExcelUtil
                 mapping.ValueToDescription[value] = description;
 
                 // 导入映射：描述文本 → 枚举值（忽略大小写）
+                // 注意：当多个枚举值共享相同 Description 时，TryAdd 只保留第一个映射，
+                // 这是预期行为（导入时同名描述只能映射到一个值）
                 mapping.TextToValue.TryAdd(description, value);
 
                 // 导入映射：枚举名称 → 枚举值
@@ -731,6 +733,8 @@ public static class ExcelUtil
                 var cellString = cellValue.ToString()?.Trim();
 
                 // --- 第三步：正则验证（使用预编译的 Regex 对象） ---
+                // 注意：仅对非空值执行正则验证。空值的存在性应由 ExcelRequired 特性控制，
+                // 正则验证仅校验"有值时格式是否正确"，不负责判断"是否必须有值"
                 if (!string.IsNullOrEmpty(cellString))
                 {
                     var hasRegexError = false;
@@ -1014,7 +1018,8 @@ public static class ExcelUtil
     private static object ParseValueTypeCollection(string text, Type collectionType, Type elementType,
         string separator)
     {
-        // 如果缓存的元素类型为空，从泛型参数中获取（兜底处理）
+        // 防御性编程：正常情况下 elementType 在 ExcelPropertyInfo 初始化时已缓存，
+        // 此处兜底处理仅用于方法被独立调用时的安全保障
         elementType ??= collectionType.GetGenericArguments()[0];
 
         // 按分隔符拆分并去除空项
