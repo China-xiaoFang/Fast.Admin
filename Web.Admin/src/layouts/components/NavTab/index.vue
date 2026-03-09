@@ -1,5 +1,8 @@
 <template>
-	<div class="nav-tab" :style="{ '--height': configStore.layout.navTab ? addUnit(configStore.layout.navTabHeight) : 0 }">
+	<div
+		:class="['nav-tab', 'nav-tab--' + configStore.layout.navTabStyle.toLowerCase()]"
+		:style="{ '--height': configStore.layout.navTab ? addUnit(configStore.layout.navTabHeight) : 0 }"
+	>
 		<el-icon v-show="state.isShowArrow" class="icon-arrow left fa__hover__twinkle" title="向左滚动" @click="handleScrollTo('left')">
 			<ArrowLeft />
 		</el-icon>
