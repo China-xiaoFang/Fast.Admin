@@ -74,8 +74,4 @@
         </None>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Excel\Attributes\" />
-    </ItemGroup>
-
 </Project>
