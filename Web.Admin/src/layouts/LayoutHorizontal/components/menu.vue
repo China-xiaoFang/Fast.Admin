@@ -1,11 +1,11 @@
 <template>
 	<el-menu
-		router
+		uniqueOpened
 		mode="horizontal"
 		:defaultActive="activeMenu"
 		:style="{ '--el-menu-horizontal-height': addUnit(configStore.layout.navBarHeight) }"
 	>
-		<el-menu-item index="/dashboard">
+		<el-menu-item index="/dashboard" @click="router.push('/dashboard')">
 			<FaIcon name="fa-icon-Dashboard" />
 			<template #title>
 				<span>首页</span>
@@ -19,8 +19,8 @@
 import { computed } from "vue";
 import { addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
+import MenuItem from "@/layouts/components/MenuItem/index.vue";
 import { useConfig, useUserInfo } from "@/stores";
-import MenuItem from "./menuItem.vue";
 
 defineOptions({
 	name: "LayoutHorizontalMenu",
@@ -37,7 +37,7 @@ const menuList = computed(() => userInfoStore.menuList.filter((f) => f.visible))
 
 <style scoped lang="scss">
 .el-menu {
-	width: 100% !important;
+	width: 100%;
 	border: none;
 	white-space: nowrap;
 	overflow: hidden;

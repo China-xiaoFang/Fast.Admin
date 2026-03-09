@@ -6,35 +6,42 @@
 			:collapse="configStore.layout.menuCollapse"
 			:style="{ '--el-menu-item-height': addUnit(configStore.layout.menuHeight) }"
 		>
-			<el-menu-item index="/dashboard" @click="router.push('/dashboard')">
-				<FaIcon name="fa-icon-Dashboard" />
-				<template #title>
-					<span>首页</span>
-				</template>
-			</el-menu-item>
-			<MenuItem v-for="(item, idx) in menuList" :key="idx" :menu="item" />
+			<MenuItem v-for="(item, idx) in sideMenuList" :key="idx" :menu="item" />
 		</el-menu>
 	</el-scrollbar>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { addUnit } from "@fast-china/utils";
+import { addUnit, definePropType } from "@fast-china/utils";
 import { useRouter } from "vue-router";
 import MenuItem from "@/layouts/components/MenuItem/index.vue";
-import { useConfig, useUserInfo } from "@/stores";
+import { useConfig } from "@/stores";
+import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
 
 defineOptions({
-	name: "LayoutClassicMenu",
+	name: "LayoutMixedSideMenu",
 });
 
 const router = useRouter();
 const configStore = useConfig();
-const userInfoStore = useUserInfo();
+
+const props = defineProps({
+	/** 当前激活的顶部菜单 */
+	activeTopMenu: definePropType<AuthMenuInfoDto>(Object),
+});
 
 const activeMenu = computed(() => router.currentRoute.value.path);
 
-const menuList = computed(() => userInfoStore.menuList.filter((f) => f.visible));
+const sideMenuList = computed(() => {
+	if (!props.activeTopMenu) return [];
+	// 如果顶部菜单有子菜单，显示子菜单；否则显示顶部菜单自身（避免左侧空白）
+	if (props.activeTopMenu.children?.length > 0) {
+		return props.activeTopMenu.children.filter((f) => f.visible);
+	}
+	// 顶部菜单没有子菜单时，显示自身
+	return props.activeTopMenu.visible ? [props.activeTopMenu] : [];
+});
 </script>
 
 <style scoped lang="scss">
