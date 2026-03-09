@@ -505,10 +505,12 @@ html.dark {
 }
 
 @media (max-width: 1366px) {
-	.el-footer {
-		flex-direction: column;
-		justify-content: space-evenly;
-		height: calc(var(--el-footer-height) * 1.7);
+	.el-container {
+		.el-footer {
+			flex-direction: column;
+			justify-content: space-evenly;
+			height: calc(var(--el-footer-height) * 1.7);
+		}
 	}
 }
 
