@@ -41,6 +41,7 @@ html.small {
 }
 
 .logo {
+	width: var(--width);
 	height: var(--height);
 	display: flex;
 	align-items: center;
