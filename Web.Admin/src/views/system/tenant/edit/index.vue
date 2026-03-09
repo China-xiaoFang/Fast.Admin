@@ -11,7 +11,7 @@
 	>
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled" cols="2">
 			<FaFormItem prop="tenantName" label="租户名称" span="2">
-				<el-input v-model="state.formData.tenantName" maxlength="30" placeholder="请输入租户名称" />
+				<el-input v-model="state.formData.tenantName" maxlength="30" placeholder="请输入租户名称" @input="handleSpellName" />
 			</FaFormItem>
 			<FaFormItem prop="tenantCode" label="租户编码" tips="单号生成前缀">
 				<el-input v-model="state.formData.tenantCode" maxlength="5" placeholder="请输入租户编码" />
@@ -54,6 +54,7 @@
 import { reactive, ref } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
+import { pinyin } from "pinyin-pro";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { tenantApi } from "@/api/services/Center/tenant";
@@ -88,6 +89,12 @@ const state = reactive({
 	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "租户",
 });
+
+const handleSpellName = (value: string) => {
+	state.formData.spellName = pinyin(value, { toneType: "none", type: "array" })
+		.map((item) => item.charAt(0).toUpperCase() + item.slice(1))
+		.join("");
+};
 
 const handleConfirm = () => {
 	faDialogRef.value.close(async () => {
