@@ -51,9 +51,10 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, watch } from "vue";
 import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
+import { pinyin } from "pinyin-pro";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { tenantApi } from "@/api/services/Center/tenant";
@@ -88,6 +89,17 @@ const state = reactive({
 	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "租户",
 });
+
+watch(
+	() => state.formData.tenantName,
+	(val) => {
+		if (val && !state.formDisabled) {
+			state.formData.spellName = pinyin(val, { toneType: "none", type: "array" })
+				.map((item) => item.charAt(0).toUpperCase() + item.slice(1).toLowerCase())
+				.join("");
+		}
+	}
+);
 
 const handleConfirm = () => {
 	faDialogRef.value.close(async () => {
