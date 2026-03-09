@@ -620,20 +620,6 @@ public static class MiniExcelUtil
         // 从缓存获取属性元信息
         var propertyInfos = GetPropertyInfos<T>();
 
-        // 构建列名到属性的映射（支持 ExcelColumn.Name 和属性名两种匹配方式）
-        var columnMap = new Dictionary<string, ExcelPropertyInfo>(StringComparer.OrdinalIgnoreCase);
-        foreach (var info in propertyInfos)
-        {
-            // 使用 ExcelColumn 特性指定的列名匹配
-            columnMap[info.ColumnName] = info;
-
-            // 同时支持按属性名匹配（当列名与属性名不同时）
-            if (info.ColumnName != info.Property.Name)
-            {
-                columnMap[info.Property.Name] = info;
-            }
-        }
-
         // 逐行解析数据
         for (var rowIndex = 0; rowIndex < rows.Count; rowIndex++)
         {
