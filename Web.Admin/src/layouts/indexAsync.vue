@@ -11,6 +11,7 @@
 		</template>
 	</suspense>
 	<LayoutConfig ref="layoutConfigRef" />
+	<MenuSearch ref="menuSearchRef" />
 	<ChangePassword ref="changePasswordRef" />
 </template>
 
@@ -20,8 +21,9 @@ import { withDefineType } from "@fast-china/utils";
 import { useWindowSize } from "@vueuse/core";
 import ChangePassword from "@/layouts/components/ChangePassword/index.vue";
 import LayoutConfig from "@/layouts/components/Config/index.vue";
+import MenuSearch from "@/layouts/components/MenuSearch/index.vue";
 import { useConfig } from "@/stores";
-import { changePasswordKey, layoutConfigKey } from "./index";
+import { changePasswordKey, layoutConfigKey, menuSearchKey } from "./index";
 import type { IModeName } from "@/stores";
 import type { Component } from "vue";
 
@@ -33,8 +35,10 @@ const configStore = useConfig();
 const windowSize = useWindowSize();
 
 const layoutConfigRef = ref<InstanceType<typeof LayoutConfig>>();
+const menuSearchRef = ref<InstanceType<typeof MenuSearch>>();
 const changePasswordRef = ref<InstanceType<typeof ChangePassword>>();
 provide(layoutConfigKey, layoutConfigRef);
+provide(menuSearchKey, menuSearchRef);
 provide(changePasswordKey, changePasswordRef);
 
 /** 是否移动端（窗口宽度 <= 768） */
