@@ -23,6 +23,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Data;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
@@ -78,9 +79,12 @@ public static class MiniExcelUtil
             config.DynamicColumns = dynamicColumns.ToArray();
         }
 
+        // 当数据为空时，使用 DataTable 确保仍然导出表头（MiniExcel 对空字典列表不会生成表头）
+        var dataToExport = GetExportDataObject(exportData, propertyInfos);
+
         // 使用 MiniExcel 写入 Excel 到流
         var memoryStream = new MemoryStream();
-        memoryStream.SaveAs(exportData, sheetName: sheetName, excelType: excelType, configuration: config);
+        memoryStream.SaveAs(dataToExport, sheetName: sheetName, excelType: excelType, configuration: config);
 
         // 重置流位置到开头，以便调用方可以直接读取
         memoryStream.Seek(0, SeekOrigin.Begin);
@@ -113,9 +117,12 @@ public static class MiniExcelUtil
             config.DynamicColumns = dynamicColumns.ToArray();
         }
 
+        // 当数据为空时，使用 DataTable 确保仍然导出表头（MiniExcel 对空字典列表不会生成表头）
+        var dataToExport = GetExportDataObject(exportData, propertyInfos);
+
         // 使用 MiniExcel 写入 Excel 到流
         var memoryStream = new MemoryStream();
-        await memoryStream.SaveAsAsync(exportData, sheetName: sheetName, excelType: excelType, configuration: config,
+        await memoryStream.SaveAsAsync(dataToExport, sheetName: sheetName, excelType: excelType, configuration: config,
             cancellationToken: cancellationToken);
 
         // 重置流位置到开头，以便调用方可以直接读取
@@ -182,8 +189,11 @@ public static class MiniExcelUtil
             config.DynamicColumns = dynamicColumns.ToArray();
         }
 
+        // 当数据为空时，使用 DataTable 确保仍然导出表头（MiniExcel 对空字典列表不会生成表头）
+        var dataToExport = GetExportDataObject(exportData, propertyInfos);
+
         // 使用 MiniExcel 写入文件
-        MiniExcel.SaveAs(filePath, exportData, sheetName: sheetName, excelType: excelType, configuration: config);
+        MiniExcel.SaveAs(filePath, dataToExport, sheetName: sheetName, excelType: excelType, configuration: config);
     }
 
     /// <summary>
@@ -212,8 +222,11 @@ public static class MiniExcelUtil
             config.DynamicColumns = dynamicColumns.ToArray();
         }
 
+        // 当数据为空时，使用 DataTable 确保仍然导出表头（MiniExcel 对空字典列表不会生成表头）
+        var dataToExport = GetExportDataObject(exportData, propertyInfos);
+
         // 使用 MiniExcel 写入文件
-        await MiniExcel.SaveAsAsync(filePath, exportData, sheetName: sheetName, excelType: excelType, configuration: config,
+        await MiniExcel.SaveAsAsync(filePath, dataToExport, sheetName: sheetName, excelType: excelType, configuration: config,
             cancellationToken: cancellationToken);
     }
 
@@ -228,12 +241,13 @@ public static class MiniExcelUtil
     /// <param name="stream"><see cref="Stream"/> Excel文件流</param>
     /// <param name="sheetName"><see cref="string"/> Sheet名称，为空时读取第一个Sheet</param>
     /// <param name="excelType"><see cref="ExcelType"/> Excel类型</param>
+    /// <param name="startCell"><see cref="string"/> 起始单元格，如 "A1"、"B2"，默认从 A1 开始读取</param>
     /// <returns><see cref="ExcelImportResult{T}"/></returns>
     public static ExcelImportResult<T> ImportExcel<T>(Stream stream, string sheetName = null,
-        ExcelType excelType = ExcelType.XLSX) where T : class, new()
+        ExcelType excelType = ExcelType.XLSX, string startCell = "A1") where T : class, new()
     {
         // 使用 MiniExcel 读取 Excel 数据（启用 useHeaderRow 以列头名称作为 Key）
-        var rows = stream.Query(sheetName: sheetName, useHeaderRow: true, excelType: excelType)
+        var rows = stream.Query(sheetName: sheetName, useHeaderRow: true, excelType: excelType, startCell: startCell)
             .Cast<IDictionary<string, object>>()
             .ToList();
 
@@ -248,13 +262,16 @@ public static class MiniExcelUtil
     /// <param name="stream"><see cref="Stream"/> Excel文件流</param>
     /// <param name="sheetName"><see cref="string"/> Sheet名称，为空时读取第一个Sheet</param>
     /// <param name="excelType"><see cref="ExcelType"/> Excel类型</param>
+    /// <param name="startCell"><see cref="string"/> 起始单元格，如 "A1"、"B2"，默认从 A1 开始读取</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/> 取消令牌</param>
     /// <returns><see cref="ExcelImportResult{T}"/></returns>
     public static async Task<ExcelImportResult<T>> ImportExcelAsync<T>(Stream stream, string sheetName = null,
-        ExcelType excelType = ExcelType.XLSX, CancellationToken cancellationToken = default) where T : class, new()
+        ExcelType excelType = ExcelType.XLSX, string startCell = "A1", CancellationToken cancellationToken = default)
+        where T : class, new()
     {
         // 使用 MiniExcel 读取 Excel 数据（启用 useHeaderRow 以列头名称作为 Key）
-        var rows = await stream.QueryAsync(true, sheetName, excelType, cancellationToken: cancellationToken);
+        var rows = await stream.QueryAsync(true, sheetName, excelType, startCell: startCell,
+            cancellationToken: cancellationToken);
 
         // 将动态行数据转换为字典列表
         var rowList = rows.Cast<IDictionary<string, object>>()
@@ -271,12 +288,14 @@ public static class MiniExcelUtil
     /// <param name="filePath"><see cref="string"/> 文件路径</param>
     /// <param name="sheetName"><see cref="string"/> Sheet名称，为空时读取第一个Sheet</param>
     /// <param name="excelType"><see cref="ExcelType"/> Excel类型</param>
+    /// <param name="startCell"><see cref="string"/> 起始单元格，如 "A1"、"B2"，默认从 A1 开始读取</param>
     /// <returns><see cref="ExcelImportResult{T}"/></returns>
     public static ExcelImportResult<T> ImportExcel<T>(string filePath, string sheetName = null,
-        ExcelType excelType = ExcelType.XLSX) where T : class, new()
+        ExcelType excelType = ExcelType.XLSX, string startCell = "A1") where T : class, new()
     {
         // 使用 MiniExcel 从文件读取数据
-        var rows = MiniExcel.Query(filePath, sheetName: sheetName, useHeaderRow: true, excelType: excelType)
+        var rows = MiniExcel.Query(filePath, sheetName: sheetName, useHeaderRow: true, excelType: excelType,
+                startCell: startCell)
             .Cast<IDictionary<string, object>>()
             .ToList();
 
@@ -291,13 +310,16 @@ public static class MiniExcelUtil
     /// <param name="filePath"><see cref="string"/> 文件路径</param>
     /// <param name="sheetName"><see cref="string"/> Sheet名称，为空时读取第一个Sheet</param>
     /// <param name="excelType"><see cref="ExcelType"/> Excel类型</param>
+    /// <param name="startCell"><see cref="string"/> 起始单元格，如 "A1"、"B2"，默认从 A1 开始读取</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/> 取消令牌</param>
     /// <returns><see cref="ExcelImportResult{T}"/></returns>
     public static async Task<ExcelImportResult<T>> ImportExcelAsync<T>(string filePath, string sheetName = null,
-        ExcelType excelType = ExcelType.XLSX, CancellationToken cancellationToken = default) where T : class, new()
+        ExcelType excelType = ExcelType.XLSX, string startCell = "A1", CancellationToken cancellationToken = default)
+        where T : class, new()
     {
         // 使用 MiniExcel 异步从文件读取数据
-        var rows = await MiniExcel.QueryAsync(filePath, true, sheetName, excelType, cancellationToken: cancellationToken);
+        var rows = await MiniExcel.QueryAsync(filePath, true, sheetName, excelType, startCell: startCell,
+            cancellationToken: cancellationToken);
 
         // 将动态行数据转换为字典列表
         var rowList = rows.Cast<IDictionary<string, object>>()
@@ -486,6 +508,32 @@ public static class MiniExcelUtil
         }
 
         return columns;
+    }
+
+    /// <summary>
+    /// 获取导出数据对象
+    /// </summary>
+    /// <remarks>
+    /// 当导出数据不为空时直接返回字典列表；
+    /// 当导出数据为空时，使用 <see cref="DataTable"/> 构建仅含列定义的空表，确保 MiniExcel 仍然输出表头行。
+    /// </remarks>
+    /// <param name="exportData">转换后的导出数据</param>
+    /// <param name="propertyInfos"><see cref="List{T}"/> 属性元信息列表</param>
+    /// <returns>可传递给 MiniExcel SaveAs 的数据对象</returns>
+    private static object GetExportDataObject(List<Dictionary<string, object>> exportData,
+        List<ExcelPropertyInfo> propertyInfos)
+    {
+        if (exportData.Count > 0)
+            return exportData;
+
+        // 当数据为空时，构建仅含列定义的 DataTable，确保导出文件包含表头
+        var table = new DataTable();
+        foreach (var info in propertyInfos)
+        {
+            table.Columns.Add(info.ColumnName);
+        }
+
+        return table;
     }
 
     /// <summary>
