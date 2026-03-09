@@ -54,7 +54,7 @@ public static class MiniExcelUtil
     #region 导出
 
     /// <summary>
-    /// 导出Excel
+    /// 导出 Excel 数据到内存流
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="data"><see cref="IEnumerable{T}"/> 数据集合</param>
@@ -88,7 +88,7 @@ public static class MiniExcelUtil
     }
 
     /// <summary>
-    /// 导出Excel
+    /// 导出 Excel 数据到内存流
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="data"><see cref="IEnumerable{T}"/> 数据集合</param>
@@ -124,7 +124,7 @@ public static class MiniExcelUtil
     }
 
     /// <summary>
-    /// 导出Excel
+    /// 导出 Excel 文件并返回下载流
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="data"><see cref="IEnumerable{T}"/> 数据集合</param>
@@ -132,7 +132,7 @@ public static class MiniExcelUtil
     /// <param name="sheetName"><see cref="string"/> Sheet名称</param>
     /// <param name="excelType"><see cref="ExcelType"/> Excel类型</param>
     /// <returns><see cref="FileStreamResult"/></returns>
-    public static FileStreamResult ExportExcel<T>(IEnumerable<T> data, string fileName, string sheetName = "Sheet1",
+    public static FileStreamResult ExportExcelResult<T>(IEnumerable<T> data, string fileName, string sheetName = "Sheet1",
         ExcelType excelType = ExcelType.XLSX) where T : class, new()
     {
         var memoryStream = ExportExcel(data, sheetName, excelType);
@@ -140,7 +140,7 @@ public static class MiniExcelUtil
     }
 
     /// <summary>
-    /// 导出Excel
+    /// 导出 Excel 文件并返回下载流
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="data"><see cref="IEnumerable{T}"/> 数据集合</param>
@@ -149,7 +149,7 @@ public static class MiniExcelUtil
     /// <param name="excelType"><see cref="ExcelType"/> Excel类型</param>
     /// <param name="cancellationToken"><see cref="CancellationToken"/> 取消令牌</param>
     /// <returns><see cref="Task{FileStreamResult}"/></returns>
-    public static async Task<FileStreamResult> ExportExcelAsync<T>(IEnumerable<T> data, string fileName,
+    public static async Task<FileStreamResult> ExportExcelResultAsync<T>(IEnumerable<T> data, string fileName,
         string sheetName = "Sheet1", ExcelType excelType = ExcelType.XLSX, CancellationToken cancellationToken = default)
         where T : class, new()
     {
@@ -158,7 +158,7 @@ public static class MiniExcelUtil
     }
 
     /// <summary>
-    /// 导出到文件
+    /// 导出 Excel 数据到文件
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="filePath"><see cref="string"/> 文件路径</param>
@@ -187,7 +187,7 @@ public static class MiniExcelUtil
     }
 
     /// <summary>
-    /// 导出到文件
+    /// 导出 Excel 数据到文件
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="filePath"><see cref="string"/> 文件路径</param>
@@ -222,7 +222,7 @@ public static class MiniExcelUtil
     #region 导入
 
     /// <summary>
-    /// 导入Excel
+    /// 从流导入 Excel 数据
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="stream"><see cref="Stream"/> Excel文件流</param>
@@ -242,7 +242,7 @@ public static class MiniExcelUtil
     }
 
     /// <summary>
-    /// 导入Excel
+    /// 从流导入 Excel 数据
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="stream"><see cref="Stream"/> Excel文件流</param>
@@ -265,7 +265,7 @@ public static class MiniExcelUtil
     }
 
     /// <summary>
-    /// 从文件导入Excel
+    /// 从文件导入 Excel 数据
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="filePath"><see cref="string"/> 文件路径</param>
@@ -285,7 +285,7 @@ public static class MiniExcelUtil
     }
 
     /// <summary>
-    /// 从文件导入Excel
+    /// 从文件导入 Excel 数据
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="filePath"><see cref="string"/> 文件路径</param>
