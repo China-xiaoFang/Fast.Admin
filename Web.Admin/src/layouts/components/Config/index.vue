@@ -20,7 +20,7 @@
 							</el-container>
 						</el-container>
 					</el-tooltip>
-					<el-tooltip effect="dark" placement="top" :showAfter="200" content="水平">
+					<el-tooltip v-if="!isMobile" effect="dark" placement="top" :showAfter="200" content="水平">
 						<el-container
 							class="layout-mode__Horizontal"
 							:class="{ active: configStore.layout.layoutMode === 'Horizontal' }"
@@ -30,7 +30,7 @@
 							<el-main />
 						</el-container>
 					</el-tooltip>
-					<el-tooltip effect="dark" placement="top" :showAfter="200" content="混合">
+					<el-tooltip v-if="!isMobile" effect="dark" placement="top" :showAfter="200" content="混合">
 						<el-container
 							class="layout-mode__Mixed"
 							:class="{ active: configStore.layout.layoutMode === 'Mixed' }"
@@ -50,7 +50,33 @@
 						<el-option v-for="(item, index) in animationList" :key="index" :label="item.label" :value="item.value" />
 					</el-select>
 				</div>
+				<div class="box-item">
+					<span>
+						跟随分辨率设置
+						<el-tooltip effect="dark" content="跟随屏幕分辨率自动切换大小" placement="top">
+							<el-icon><QuestionFilled /></el-icon>
+						</el-tooltip>
+					</span>
+					<el-switch v-model="configStore.layout.autoSize" />
+				</div>
+				<div class="box-item box-item__row">
+					<span>布局大小</span>
+					<el-radio-group v-model="configStore.layout.layoutSize" :disabled="configStore.layout.autoSize">
+						<el-radio-button v-for="(item, index) in layoutSizeList" :key="index" :value="item.value">
+							{{ item.label }}
+						</el-radio-button>
+					</el-radio-group>
+				</div>
+				<div class="box-item box-item__row">
+					<span>页签样式</span>
+					<el-radio-group v-model="configStore.layout.navTabStyle">
+						<el-radio-button v-for="(item, index) in navTabStyleList" :key="index" :value="item.value">
+							{{ item.label }}
+						</el-radio-button>
+					</el-radio-group>
+				</div>
 			</div>
+
 			<el-divider contentPosition="center">
 				<el-icon><MagicStick /></el-icon>
 				主题样式
@@ -93,21 +119,6 @@
 				界面配置
 			</el-divider>
 			<div class="main__box">
-				<div class="box-item">
-					<span>
-						跟随分辨率设置
-						<el-tooltip effect="dark" content="跟随屏幕分辨率自动切换大小" placement="top">
-							<el-icon><QuestionFilled /></el-icon>
-						</el-tooltip>
-					</span>
-					<el-switch v-model="configStore.layout.autoSize" />
-				</div>
-				<div class="box-item">
-					<span>布局大小</span>
-					<el-select v-model="configStore.layout.layoutSize" style="width: 80px" :disabled="configStore.layout.autoSize">
-						<el-option v-for="(item, index) in layoutSizeList" :key="index" :label="item.label" :value="item.value" />
-					</el-select>
-				</div>
 				<div class="box-item">
 					<span>页签</span>
 					<el-switch v-model="configStore.layout.navTab" :activeActionIcon="View" :inactiveActionIcon="Hide" />
@@ -216,11 +227,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Grid, Hide, MagicStick, Moon, Notification, QuestionFilled, Refresh, Sunny, View } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
+import { useWindowSize } from "@vueuse/core";
 import { useConfig } from "@/stores";
-import type { IAnimationName } from "@/stores";
+import type { IAnimationName, INavTabStyle } from "@/stores";
 import type { componentSizes } from "element-plus";
 import type { ElSelectorOutput, FaDrawerInstance, FaTableDataRange } from "fast-element-plus";
 
@@ -231,6 +243,10 @@ defineOptions({
 const faDrawerRef = ref<FaDrawerInstance>();
 
 const configStore = useConfig();
+const windowSize = useWindowSize();
+
+/** 是否移动端（窗口宽度 <= 768） */
+const isMobile = computed(() => windowSize.width.value <= 768);
 
 const animationList: Readonly<ElSelectorOutput<IAnimationName>> = [
 	{
@@ -283,6 +299,21 @@ const layoutSizeList: Readonly<ElSelectorOutput<(typeof componentSizes)[number]>
 	{
 		label: "小",
 		value: "small",
+	},
+];
+
+const navTabStyleList: Readonly<ElSelectorOutput<INavTabStyle>> = [
+	{
+		label: "灵动",
+		value: "Smart",
+	},
+	{
+		label: "卡片",
+		value: "Card",
+	},
+	{
+		label: "谷歌",
+		value: "Chrome",
 	},
 ];
 

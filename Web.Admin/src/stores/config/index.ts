@@ -7,6 +7,8 @@ import type { FaTableDataRange } from "fast-element-plus";
 
 export type IModeName = "Classic" | "Horizontal" | "Mixed";
 
+export type INavTabStyle = "Smart" | "Card" | "Chrome";
+
 export type IAnimationName =
 	| "slide-right"
 	| "slide-left"
@@ -20,13 +22,14 @@ export type IAnimationName =
 
 const defaultSize: (typeof componentSizes)[number] = "default";
 const defaultMode: IModeName = "Classic";
+const defaultNavTab: INavTabStyle = "Smart";
 const defaultAnimation: IAnimationName = "slide-right";
 export const defaultThemeColor = "#409EFF";
 
 const defaultLayoutSize = {
 	navBarHeight: 45,
 	navTabHeight: 35,
-	menuWidth: 210,
+	menuWidth: 180,
 	menuHeight: 50,
 	mainPadding: 5,
 	footerHeight: 30,
@@ -35,7 +38,7 @@ const defaultLayoutSize = {
 const smallLayoutSize = {
 	navBarHeight: 40,
 	navTabHeight: 30,
-	menuWidth: 180,
+	menuWidth: 160,
 	menuHeight: 45,
 	mainPadding: 3,
 	footerHeight: 25,
@@ -50,6 +53,14 @@ export const useConfig = defineStore(
 			autoSize: true,
 			/** 布局大小 */
 			layoutSize: withDefineType<(typeof componentSizes)[number]>(defaultSize),
+			/** 布局方式 */
+			layoutMode: withDefineType<IModeName>(defaultMode),
+			/** 页签样式 */
+			navTabStyle: withDefineType<INavTabStyle>(defaultNavTab),
+			/** 切换动画 */
+			mainAnimation: withDefineType<IAnimationName>(defaultAnimation),
+			/** 主题颜色 */
+			themeColor: withDefineType<string>(defaultThemeColor),
 			/** 导航栏高度 */
 			navBarHeight: 45,
 			/** 页签高度 */
@@ -57,19 +68,13 @@ export const useConfig = defineStore(
 			/** 菜单折叠 */
 			menuCollapse: false,
 			/** 菜单宽度 */
-			menuWidth: 210,
+			menuWidth: 180,
 			/** 菜单高度 */
 			menuHeight: 50,
 			/** 主页面内容 padding */
 			mainPadding: 5,
 			/** 页脚高度 */
 			footerHeight: 30,
-			/** 布局方式 */
-			layoutMode: withDefineType<IModeName>(defaultMode),
-			/** 切换动画 */
-			mainAnimation: withDefineType<IAnimationName>(defaultAnimation),
-			/** 主题颜色 */
-			themeColor: withDefineType<string>(defaultThemeColor),
 			/** 跟随系统设置，自动切换浅色/深色模式 */
 			autoThemMode: true,
 			/** 是否深色模式 */
@@ -209,6 +214,7 @@ export const useConfig = defineStore(
 			layout.layoutSize = defaultSize;
 			layout.menuCollapse = false;
 			layout.layoutMode = defaultMode;
+			layout.navTabStyle = defaultNavTab;
 			layout.mainAnimation = defaultAnimation;
 			layout.themeColor = defaultThemeColor;
 			layout.autoThemMode = true;
