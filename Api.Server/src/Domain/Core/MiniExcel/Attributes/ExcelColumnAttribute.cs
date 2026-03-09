@@ -40,9 +40,11 @@ public class ExcelColumnAttribute : Attribute
     /// <see cref="ExcelColumnAttribute"/> Excel列特性
     /// </summary>
     /// <param name="name"><see cref="string"/> 列名称</param>
-    public ExcelColumnAttribute(string name)
+    /// <param name="order"><see cref="int"/> 列排序</param>
+    public ExcelColumnAttribute(string name, int order)
     {
         Name = name;
+        Order = order;
     }
 
     /// <summary>
