@@ -84,8 +84,8 @@ export default defineComponent({
 					localColumns[i]?.searchAdvancedConfig
 						.filter((f) => f.type === 8)
 						.forEach((advKey: { prop: string; type: number }) => {
-							const { args, body } = handleFunctionArgs(localColumns[i].search[advKey.prop]);
-							localColumns[i].search[advKey.prop] = new Function(...args, body);
+							const { args, body } = handleFunctionArgs(localColumns[i].search.props[advKey.prop]);
+							localColumns[i].search.props[advKey.prop] = new Function(...args, body);
 						});
 					delete localColumns[i].searchAdvancedConfig;
 				}
