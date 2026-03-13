@@ -211,6 +211,11 @@ public interface IUser
     List<string> RoleNameList { get; set; }
 
     /// <summary>
+    /// 角色类型
+    /// </summary>
+    RoleTypeEnum RoleType { get; set; }
+
+    /// <summary>
     /// 数据范围类型
     /// </summary>
     int DataScopeType { get; set; }

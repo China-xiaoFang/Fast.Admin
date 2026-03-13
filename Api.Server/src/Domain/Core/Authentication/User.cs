@@ -478,6 +478,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         DepartmentName = input.DepartmentName;
         RoleIdList = input.RoleIdList;
         RoleNameList = input.RoleNameList;
+        RoleType = input.RoleType;
         DataScopeType = input.DataScopeType;
 
         // 获取缓存Key
