@@ -124,9 +124,6 @@ public class AuthService : IDynamicApplication
             .ToList();
         result.RoleNameList = roleList.Select(sl => sl.RoleName)
             .ToList();
-        result.RoleType = roleList.Select(sl => sl.RoleType)
-            .DefaultIfEmpty()
-            .Aggregate((a, b) => a | b);
 
         var menuQueryable = _repository.Queryable<MenuModel>()
             .Where(wh => wh.AppId == applicationModel.AppId)
@@ -139,10 +136,14 @@ public class AuthService : IDynamicApplication
 
         if (_user.IsSuperAdmin || _user.IsAdmin)
         {
+            result.RoleType = RoleTypeEnum.Admin;
             result.DataScopeType = DataScopeTypeEnum.All;
         }
         else
         {
+            result.RoleType = roleList.Select(sl => sl.RoleType)
+                .DefaultIfEmpty()
+                .Aggregate((a, b) => a | b);
             result.DataScopeType = roleList.Any(a => a.RoleType == RoleTypeEnum.Admin) ? DataScopeTypeEnum.All :
                 roleList.Any() ? roleList.Min(m => m.DataScopeType) : DataScopeTypeEnum.Self;
 
