@@ -122,6 +122,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         LastLoginTime = authUserInfo.LastLoginTime;
         RoleIdList = authUserInfo.RoleIdList;
         RoleNameList = authUserInfo.RoleNameList;
+        RoleType = authUserInfo.RoleType;
         DataScopeType = authUserInfo.DataScopeType;
         MenuCodeList = authUserInfo.MenuCodeList;
         ButtonCodeList = authUserInfo.ButtonCodeList;
@@ -361,6 +362,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         // 设置授权用户信息
         RoleIdList = input.RoleIdList;
         RoleNameList = input.RoleNameList;
+        RoleType = input.RoleType;
         DataScopeType = input.DataScopeType;
         MenuCodeList = input.MenuCodeList;
         ButtonCodeList = input.ButtonCodeList;

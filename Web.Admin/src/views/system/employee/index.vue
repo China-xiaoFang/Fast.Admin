@@ -50,6 +50,8 @@
 				职位：<span>{{ row.positionName }}</span>
 				<br />
 				职级：<span>{{ row.jobLevelName }}</span>
+				<br />
+				角色：<span>{{ row.roleNames }}</span>
 			</template>
 
 			<!-- 表格操作 -->
