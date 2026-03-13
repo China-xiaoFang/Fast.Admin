@@ -130,6 +130,11 @@ public class GetLoginUserInfoOutput
     public List<string> RoleNameList { get; set; } = [];
 
     /// <summary>
+    /// 角色类型
+    /// </summary>
+    public RoleTypeEnum RoleType { get; set; }
+
+    /// <summary>
     /// 数据范围类型
     /// </summary>
     public DataScopeTypeEnum DataScopeType { get; set; }

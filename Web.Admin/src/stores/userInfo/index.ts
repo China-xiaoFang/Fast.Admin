@@ -44,6 +44,7 @@ export const useUserInfo = defineStore(
 			isAdmin: false,
 			roleNameList: [],
 			buttonCodeList: [],
+			roleType: null,
 			dataScopeType: DataScopeTypeEnum.All,
 			menuList: [],
 		});

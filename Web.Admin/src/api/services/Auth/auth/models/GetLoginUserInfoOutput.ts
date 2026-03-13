@@ -1,3 +1,4 @@
+import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 import { AuthMenuInfoDto } from "./AuthMenuInfoDto";
 
@@ -85,6 +86,10 @@ export interface GetLoginUserInfoOutput {
    * 角色名称集合
    */
   roleNameList?: Array<string>;
+  /**
+   * 
+   */
+  roleType?: RoleTypeEnum;
   /**
    * 
    */

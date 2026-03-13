@@ -157,6 +157,10 @@ export interface QueryEmployeePagedOutput {
    */
   isPrincipal?: boolean;
   /**
+   * 角色名称
+   */
+  roleNames?: string;
+  /**
    * 账户
    */
   account?: string;

@@ -58,6 +58,11 @@ public class RefreshAuthDto
     public List<string> RoleNameList { get; set; } = new();
 
     /// <summary>
+    /// 角色类型
+    /// </summary>
+    public RoleTypeEnum RoleType { get; set; }
+
+    /// <summary>
     /// 数据范围类型
     /// </summary>
     public int DataScopeType { get; set; }

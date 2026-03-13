@@ -216,6 +216,11 @@ public class QueryEmployeePagedOutput
     public bool? IsPrincipal { get; set; }
 
     /// <summary>
+    /// 角色名称
+    /// </summary>
+    public string RoleNames { get; set; }
+
+    /// <summary>
     /// 账户
     /// </summary>
     public string Account { get; set; }

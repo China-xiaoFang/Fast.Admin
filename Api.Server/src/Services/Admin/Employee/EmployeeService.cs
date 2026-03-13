@@ -172,6 +172,10 @@ public class EmployeeService : IDynamicApplication
             })
             .ToListAsync();
 
+        var roleList = await _repository.Queryable<EmployeeRoleModel>()
+            .Where(wh => userIds.Contains(wh.EmployeeId))
+            .ToListAsync();
+
         foreach (var item in result.Rows)
         {
             var userInfo = userList.SingleOrDefault(s => s.UserId == item.EmployeeId);
@@ -184,6 +188,11 @@ public class EmployeeService : IDynamicApplication
                 item.AccountNickName = userInfo.NickName;
                 item.LastLoginTime = userInfo.LastLoginTime;
             }
+
+            item.RoleNames = string.Join(",", roleList.Where(wh => wh.EmployeeId == item.EmployeeId)
+                .OrderBy(ob => ob.RoleName)
+                .Select(sl => sl.RoleName)
+                .ToList());
         }
 
         return result;
