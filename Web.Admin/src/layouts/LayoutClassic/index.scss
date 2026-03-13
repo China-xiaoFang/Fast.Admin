@@ -236,28 +236,6 @@
 		flex-direction: column;
 		overflow: hidden;
 	}
-	.el-container {
-		.el-header {
-			.nav-bar {
-				.left {
-					.el-breadcrumb {
-						display: none;
-					}
-				}
-				.right {
-					.fa-select {
-						display: none;
-					}
-					.nick-name {
-						display: none;
-					}
-				}
-			}
-		}
-		.el-main {
-			overflow-x: auto;
-		}
-	}
 }
 
 html.small {
