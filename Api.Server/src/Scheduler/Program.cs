@@ -61,9 +61,6 @@ builder.Services.AddDependencyInjection();
 // 邮件配置验证
 builder.Services.AddConfigurableOptions<MailSettingsOptions>();
 
-// 上传文件配置验证
-builder.Services.AddConfigurableOptions<UploadFileSettingsOptions>();
-
 // 添加缓存服务
 builder.Services.AddCache();
 
@@ -140,9 +137,6 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 
 //// 强制使用 Https
 //app.UseHttpsRedirection();
-
-// 启用静态文件
-app.UseStaticFiles();
 
 // 启用 Body 重复读功能
 app.EnableBuffering();

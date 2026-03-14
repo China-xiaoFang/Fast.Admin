@@ -170,7 +170,7 @@ public class TableService : IDynamicApplication
 
         await _tableRepository.Updateable(tableConfigModel)
             // 避免表格同步循环问题，这里不更新时间
-            .IgnoreColumns(it => new { it.UpdatedTime })
+            .IgnoreColumns(it => new {it.UpdatedTime})
             .ExecuteCommandWithOptLockAsync(true);
     }
 
@@ -459,11 +459,11 @@ public class TableService : IDynamicApplication
     {
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableKey, _user.TenantNo, _user.EmployeeNo);
         return await _centerCache.GetAndSetAsync(cacheKey, async () =>
-        {
-            return await _columnCacheRepository.Entities.Where(wh => wh.UserId == _user.UserId && wh.TableId == tableId)
-                .OrderBy(ob => ob.Order)
-                .ToListAsync();
-        })
+               {
+                   return await _columnCacheRepository.Entities.Where(wh => wh.UserId == _user.UserId && wh.TableId == tableId)
+                       .OrderBy(ob => ob.Order)
+                       .ToListAsync();
+               })
                ?? [];
     }
 
@@ -564,7 +564,7 @@ public class TableService : IDynamicApplication
                     }
                 }
 
-                column.TryAdd("otherAdvancedConfig", item.OtherConfig.Select(sl => new { sl.Prop, sl.Type }));
+                column.TryAdd("otherAdvancedConfig", item.OtherConfig.Select(sl => new {sl.Prop, sl.Type}));
             }
 
             // 搜素项
@@ -611,7 +611,7 @@ public class TableService : IDynamicApplication
                         }
                     }
 
-                    column.TryAdd("searchAdvancedConfig", item.SearchConfig.Select(sl => new { sl.Prop, sl.Type }));
+                    column.TryAdd("searchAdvancedConfig", item.SearchConfig.Select(sl => new {sl.Prop, sl.Type}));
                 }
 
                 if (searchPropsConfig.Count > 0)
@@ -703,7 +703,8 @@ public class TableService : IDynamicApplication
 
         var columnIds = tableColumnCacheList.Select(sl => sl.ColumnId)
             .ToList();
-        var sourceColumnIds = tableConfigModel.TableColumnConfigList.Select(sl => sl.ColumnId).ToList();
+        var sourceColumnIds = tableConfigModel.TableColumnConfigList.Select(sl => sl.ColumnId)
+            .ToList();
 
         var dateTime = DateTime.Now;
 
@@ -736,8 +737,7 @@ public class TableService : IDynamicApplication
 
         // 更新的
         var sourceDict = tableConfigModel.TableColumnConfigList.ToDictionary(k => k.ColumnId);
-        var updateTableColumnCacheList = tableColumnCacheList
-            .Where(wh => sourceColumnIds.Contains(wh.ColumnId))
+        var updateTableColumnCacheList = tableColumnCacheList.Where(wh => sourceColumnIds.Contains(wh.ColumnId))
             .ToList();
 
         foreach (var item in updateTableColumnCacheList)

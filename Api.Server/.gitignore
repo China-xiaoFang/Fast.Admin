@@ -366,4 +366,4 @@ FodyWeavers.xsd
 *.xml
 
 # 添加上传文件忽略
-src/Api/Upload/
+src/File/Upload/

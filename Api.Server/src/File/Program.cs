@@ -30,7 +30,6 @@ using Fast.NET.Core;
 using Fast.OpenApi;
 using Fast.Runtime;
 using Fast.Serialization;
-using Fast.Shared;
 using Fast.SqlSugar;
 using Fast.Swagger;
 using Fast.UnifyResult;
@@ -60,6 +59,9 @@ builder.Services.AddDependencyInjection();
 // 邮件配置验证
 builder.Services.AddConfigurableOptions<MailSettingsOptions>();
 
+// 上传文件配置验证
+builder.Services.AddConfigurableOptions<UploadFileSettingsOptions>();
+
 // 添加缓存服务
 builder.Services.AddCache();
 
@@ -87,10 +89,6 @@ builder.Services.AddHttpClient();
 // 添加 JwtBearer 授权
 builder.Services.AddJwtBearer(builder.Configuration);
 
-// 添加即时通讯
-builder.Services.AddSignalR()
-    .AddNewtonsoftJsonProtocol(options => options.PayloadSerializerSettings = JsonContext.SerializerOptions);
-
 // Add Controllers.
 builder.Services.AddControllers()
     // 请求日志拦截
@@ -112,8 +110,14 @@ builder.Services.AddOpenApi(builder.Configuration);
 // 添加 Swagger Newtonsoft.Json 库支持
 builder.Services.AddSwaggerGenNewtonsoftSupport();
 
-// 添加托管服务
-builder.Services.AddHostedService();
+// 添加删除日志托管服务
+builder.Services.AddHostedService<DeleteLogHostedService>();
+
+// 添加同步 Api 托管服务
+builder.Services.AddHostedService<SyncApiHostedService>();
+
+// 添加生成Api文件托管服务
+builder.Services.AddHostedService<GenerateApiFileHostedService>();
 
 var app = builder.Build();
 
@@ -123,8 +127,11 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-//// 强制使用 Https
-//app.UseHttpsRedirection();
+// 强制使用 Https
+app.UseHttpsRedirection();
+
+// 启用静态文件
+app.UseStaticFiles();
 
 // 启用 Body 重复读功能
 app.EnableBuffering();
@@ -136,12 +143,6 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-// 启用 WebSocket
-app.UseWebSockets();
-
-// 启用集线器
-app.UseMapHub();
 
 // 启用 Swagger 文档
 app.UseSwaggerDocuments();

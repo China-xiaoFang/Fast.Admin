@@ -20,7 +20,9 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Service.File.Dto;
+using System.ComponentModel.DataAnnotations;
+
+namespace Fast.File.Applications.Dto;
 
 /// <summary>
 /// <see cref="DownloadFileInput"/> 下载文件输入
