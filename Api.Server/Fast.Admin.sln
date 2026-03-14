@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32616.157
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11605.240 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{38721009-FDB2-46DC-AD33-24C1CD5B847F}"
 	ProjectSection(SolutionItems) = preProject
@@ -66,6 +66,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fast.Admin.Service", "src\Services\Admin\Fast.Admin.Service.csproj", "{FEAD480D-9999-252F-8CE6-E372906A767A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fast.Api", "src\Api\Fast.Api.csproj", "{0E48BC51-AF22-4AC5-8E1D-BF33689EB935}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "File", "File", "{BE4F72A5-2BB3-43DB-ACA6-6552AF3D3F01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fast.File", "src\File\Fast.File.csproj", "{742BE35A-09D7-4EE2-8A0C-BD26B7B32669}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scheduler", "Scheduler", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -155,6 +159,10 @@ Global
 		{D4D95070-962C-49CB-BAAB-A26943429A78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4D95070-962C-49CB-BAAB-A26943429A78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4D95070-962C-49CB-BAAB-A26943429A78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{742BE35A-09D7-4EE2-8A0C-BD26B7B32669}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{742BE35A-09D7-4EE2-8A0C-BD26B7B32669}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{742BE35A-09D7-4EE2-8A0C-BD26B7B32669}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{742BE35A-09D7-4EE2-8A0C-BD26B7B32669}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -191,6 +199,8 @@ Global
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {DC257ACE-1569-4E43-87DC-3CA0D9E5590A}
 		{51282103-9CBE-716C-64D1-368491F72DAC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{D4D95070-962C-49CB-BAAB-A26943429A78} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{BE4F72A5-2BB3-43DB-ACA6-6552AF3D3F01} = {DC257ACE-1569-4E43-87DC-3CA0D9E5590A}
+		{742BE35A-09D7-4EE2-8A0C-BD26B7B32669} = {BE4F72A5-2BB3-43DB-ACA6-6552AF3D3F01}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2E4261BB-E228-45EE-8B97-B915C19C8A4F}

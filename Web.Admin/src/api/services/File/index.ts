@@ -24,7 +24,7 @@ export const fileApi = {
    */
   download(data: DownloadFileInput) {
     return axiosUtil.request({
-      url: "/file/download",
+      url: "/fileStorage/download",
       method: "post",
       data,
       responseType: "blob",
@@ -37,7 +37,7 @@ export const fileApi = {
    */
   uploadLogo(data: FormData) {
     return axiosUtil.request<string>({
-      url: "/file/uploadLogo",
+      url: "/fileStorage/uploadLogo",
       method: "post",
       data,
       cancelDuplicateRequest: false,
@@ -49,7 +49,7 @@ export const fileApi = {
    */
   uploadAvatar(data: FormData) {
     return axiosUtil.request<string>({
-      url: "/file/uploadAvatar",
+      url: "/fileStorage/uploadAvatar",
       method: "post",
       data,
       cancelDuplicateRequest: false,
@@ -61,7 +61,7 @@ export const fileApi = {
    */
   uploadIdPhoto(data: FormData) {
     return axiosUtil.request<string>({
-      url: "/file/uploadIdPhoto",
+      url: "/fileStorage/uploadIdPhoto",
       method: "post",
       data,
       cancelDuplicateRequest: false,
@@ -73,7 +73,7 @@ export const fileApi = {
    */
   uploadEditor(data: FormData) {
     return axiosUtil.request<string>({
-      url: "/file/uploadEditor",
+      url: "/fileStorage/uploadEditor",
       method: "post",
       data,
       cancelDuplicateRequest: false,
@@ -85,7 +85,7 @@ export const fileApi = {
    */
   uploadFile(data: FormData) {
     return axiosUtil.request<string>({
-      url: "/file/uploadFile",
+      url: "/fileStorage/uploadFile",
       method: "post",
       data,
       cancelDuplicateRequest: false,

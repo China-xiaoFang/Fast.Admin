@@ -112,7 +112,7 @@ public static class WeekEnumExtension
     /// <returns></returns>
     public static DayOfWeek ToDayOfWeek(this WeekEnum week)
     {
-        return ToDayOfWeeks(week)
+        return week.ToDayOfWeeks()
             .FirstOrDefault();
     }
 

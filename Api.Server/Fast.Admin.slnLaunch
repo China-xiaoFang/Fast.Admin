@@ -8,6 +8,11 @@
         "DebugTarget": "Fast.Api"
       },
       {
+        "Path": "src\\File\\Fast.File.csproj",
+        "Action": "Start",
+        "DebugTarget": "Fast.File"
+      },
+      {
         "Path": "src\\Scheduler\\Fast.Scheduler.csproj",
         "Action": "Start",
         "DebugTarget": "Fast.Scheduler"
