@@ -264,6 +264,10 @@ public class FileApplication : IDynamicApplication
     public async Task<IActionResult> RangeDownload(
         [FromRoute, Required(ErrorMessage = "文件名称不能为空")] string fileName)
     {
+        // 防止路径遍历攻击
+        if (fileName.Contains("..") || fileName.Contains('/') || fileName.Contains('\\'))
+            throw new UserFriendlyException("文件名称包含非法字符！");
+
         var fileSuffix = Path.GetExtension(fileName);
         if (string.IsNullOrWhiteSpace(fileSuffix))
             throw new UserFriendlyException("文件不存在！");
@@ -547,6 +551,11 @@ public class FileApplication : IDynamicApplication
     {
         var fileInfoSettings = _uploadFileSettingsOptions.Default;
 
+        // 分片数量上限校验
+        const int maxChunksAllowed = 10000;
+        if (input.TotalChunks > maxChunksAllowed)
+            throw new UserFriendlyException($"分片数量超出限制，最大允许{maxChunksAllowed}个分片！");
+
         // 文件大小校验
         var fileSizeKb = input.FileSize / 1024L;
         if (fileInfoSettings.MaxSize > 0 && fileSizeKb > fileInfoSettings.MaxSize)
@@ -628,6 +637,11 @@ public class FileApplication : IDynamicApplication
 
         if (chunkIndex < 0 || chunkIndex >= metadata.TotalChunks)
             throw new UserFriendlyException($"分片索引无效，有效范围：0-{metadata.TotalChunks - 1}");
+
+        // 分片大小校验（允许最后一个分片略小，其余分片不超过声明大小的110%）
+        var maxAllowedChunkSize = (long)(metadata.ChunkSize * 1.1);
+        if (file.Length > maxAllowedChunkSize)
+            throw new UserFriendlyException($"分片文件大小超出限制！");
 
         var chunkFilePath = Path.Combine(metadata.ChunkTempPath, $"chunk_{chunkIndex}");
         await using (var fileStream = System.IO.File.Create(chunkFilePath))
@@ -741,14 +755,25 @@ public class FileApplication : IDynamicApplication
         var localFullPath = Path.Combine(localFilePath, fileObjectName);
 
         // 合并分片文件
-        await using (var mergedStream = System.IO.File.Create(localFullPath))
+        try
         {
-            for (var i = 0; i < metadata.TotalChunks; i++)
+            await using (var mergedStream = System.IO.File.Create(localFullPath))
             {
-                var chunkFilePath = Path.Combine(metadata.ChunkTempPath, $"chunk_{i}");
-                await using var chunkStream = System.IO.File.OpenRead(chunkFilePath);
-                await chunkStream.CopyToAsync(mergedStream);
+                for (var i = 0; i < metadata.TotalChunks; i++)
+                {
+                    var chunkFilePath = Path.Combine(metadata.ChunkTempPath, $"chunk_{i}");
+                    await using var chunkStream = System.IO.File.OpenRead(chunkFilePath);
+                    await chunkStream.CopyToAsync(mergedStream);
+                }
             }
+        }
+        catch (FileNotFoundException)
+        {
+            // 清理不完整的合并文件
+            if (System.IO.File.Exists(localFullPath))
+                System.IO.File.Delete(localFullPath);
+            CleanupChunkTempFiles(metadata);
+            throw new UserFriendlyException("分片文件异常，请重新上传！");
         }
 
         // 计算合并后文件的哈希
@@ -827,6 +852,10 @@ public class FileApplication : IDynamicApplication
     {
         if (string.IsNullOrWhiteSpace(uploadId))
             throw new UserFriendlyException("上传标识不能为空！");
+
+        // 验证uploadId格式，防止路径遍历攻击
+        if (!Guid.TryParseExact(uploadId, "N", out _))
+            throw new UserFriendlyException("上传标识格式无效！");
 
         if (ChunkUploads.TryGetValue(uploadId, out var metadata))
             return metadata;
