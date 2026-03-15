@@ -1,75 +1,200 @@
 [中](https://gitee.com/FastDotnet/Fast.Admin) | **En**
 
-# Fast.Admin
+<p align="center">
+  <img src="Fast.png" alt="Fast.Admin Logo" width="120" />
+</p>
 
-- A rapid construction project that combines the strengths of hundreds of experts, focuses on `Web Api` applications, provides out-of-the-box functionality, and keeps up with the latest cutting-edge technology of the `.NET` framework.
-- Use [Fast.NET](https://gitee.com/FastDotnet/Fast.NET) as the bottom layer of the framework.
-- Developed using `C#10` and `.NET6`.
-- Supports seamless upgrade to `.NET7` `.NET8`.
+<h1 align="center">Fast.Admin</h1>
 
-#### Project Features:
+<p align="center">
+  A rapid development framework for <strong>.NET Web API</strong> applications — combining best practices, out-of-the-box features, and cutting-edge technology.
+</p>
 
-- **Integrating the strengths of hundreds of schools**: Integrating hundreds of useful functions into one.
-- **Out-of-the-box**: Provides many black technologies, no additional configuration or development work is required, and projects can be built quickly.
-- **Stay up-to-date with cutting-edge technology**: Adopt the latest technologies and frameworks to always stay abreast of the latest trends and developments in the industry.
+<p align="center">
+  <a href="https://gitee.com/FastDotnet/Fast.Admin/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License" />
+  </a>
+  <a href="https://dotnet.microsoft.com/">
+    <img src="https://img.shields.io/badge/.NET-6.0%2B-purple.svg" alt=".NET" />
+  </a>
+  <a href="https://vuejs.org/">
+    <img src="https://img.shields.io/badge/Vue-3.x-green.svg" alt="Vue" />
+  </a>
+</p>
 
-## Branch description
+---
 
-| Branch  | Details            | Version           | Environment             | Suggestions                                                                                                                                         |
-| ------- | ------------------ | ----------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| master  | master branch      | stable version    | production environment  | If you need to Fork or make modifications on this version, please pull the code of the master branch                                                |
-| develop | development branch | iterative version | development environment | develop is a fast iteration version. The functions of this version are untested code, so it is not recommended to use develop for fork and learning |
+## ✨ Features
 
-## Update log
+- **🚀 Out-of-the-Box** — Fully functional admin framework, no additional configuration needed.
+- **📦 Unified File Service** — Upload, download, online preview, chunked upload/download with resume support, instant upload (hash dedup).
+- **🎨 Multiple Frontends** — Vue 3 admin panel (Web.Admin), React admin (App.Admin), React client (App.Client).
+- **🏢 Multi-Tenant** — Complete tenant isolation with per-tenant storage and data filtering.
+- **🔐 RBAC** — Role-based access control with JWT authentication.
+- **📊 Multi-Database** — Separate databases for Center, Admin, Logs, Gateway, Deploy (SqlSugar ORM).
+- **🔌 Modular** — Clean DDD-based layered architecture, each domain independently managed.
+- **📄 Rich Document Support** — Image, PDF, Word, Excel, PowerPoint, audio, video, archive file handling.
+- **🖼️ Image Processing** — Automatic thumbnail generation (thumb/small/normal) via SixLabors.ImageSharp.
+- **📡 Real-Time** — SignalR-based real-time communication.
+- **📝 API Documentation** — Swagger + Knife4j UI for interactive API exploration.
 
-Update log [Click to view](https://gitee.com/FastDotnet/Fast.Admin/commits/master)
-
-## protocol
-
-[Fast.Admin](https://gitee.com/FastDotnet/Fast.Admin) Follow [Apache-2.0](https://gitee.com/FastDotnet/Fast.Admin/blob/master/LICENSE) Open source license, everyone is welcome to submit `PR` or `Issue`.
+## 🏗️ Architecture
 
 ```
-Apache Open Source License
+Fast.Admin/
+├── Api.Server/              # .NET Backend
+│   └── src/
+│       ├── Api/             # Main API entry point
+│       ├── File/            # Standalone file service
+│       ├── Domain/          # Domain layer (entities, enums, core)
+│       ├── Services/        # Business logic layer
+│       ├── Shared/          # Shared DTOs and utilities
+│       └── Scheduler/       # Background job scheduler
+├── Web.Admin/               # Vue 3 Admin Panel
+├── App.Admin/               # React Admin App
+├── App.Client/              # React Client App
+├── docs/                    # Documentation
+└── Sql/                     # Database scripts
+```
+
+## 📂 File Service
+
+The unified file service module supports:
+
+| Feature | Description |
+|---------|-------------|
+| Standard Upload | Single file upload for Logo, Avatar, ID Photo, Editor, and general files |
+| **Chunked Upload** | Large file upload with chunk splitting, parallel upload, and resume capability |
+| **Instant Upload** | MD5 hash-based deduplication — skip upload if file already exists |
+| Standard Download | Full file download with original filename |
+| **Range Download** | HTTP Range-based partial download for large files |
+| Online Preview | Direct file preview in browser (images, PDF, audio, video) |
+| Image Thumbnails | Auto-generated thumb (100px), small (300px), normal (600px) variants |
+
+### Supported Formats
+
+| Type | Formats |
+|------|---------|
+| Images | JPG, JPEG, PNG, GIF, BMP |
+| Videos | MP4, MPEG, AVI, WMV, WebM, OGG |
+| Audio | MP3, WAV, OGG, M4A, FLAC |
+| Documents | PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX |
+| Text | TXT, CSV, HTML, Markdown |
+| Archives | ZIP, RAR, 7Z, GZIP |
+
+> See [File Service Documentation](docs/guide/file-service.md) for complete API usage guide.
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- [.NET SDK 6.0+](https://dotnet.microsoft.com/download) (8.0 recommended)
+- [Node.js 18+](https://nodejs.org/) & [pnpm 8+](https://pnpm.io/)
+- MySQL 5.7+ / SQL Server 2017+ / PostgreSQL 12+
+
+### Backend
+
+```bash
+cd Api.Server
+dotnet restore
+dotnet build
+cd src/Api
+dotnet run
+```
+
+Access API docs at: `http://localhost:5000/knife4j`
+
+### Frontend
+
+```bash
+cd Web.Admin
+pnpm install
+pnpm dev
+```
+
+Access the admin panel at: `http://localhost:5173`
+
+> See [Getting Started Guide](docs/guide/getting-started.md) for detailed setup instructions.
+
+## 📖 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Getting Started](docs/guide/getting-started.md) | Environment setup and first run |
+| [Architecture](docs/guide/architecture.md) | Project structure and design |
+| [File Service](docs/guide/file-service.md) | File upload/download/preview guide |
+| [API Reference](docs/api/README.md) | Backend API documentation |
+| [Web.Admin Guide](docs/web/README.md) | Frontend development guide |
+| [Deployment](docs/guide/deployment.md) | Production deployment |
+
+## 🌿 Branch Strategy
+
+| Branch | Description | Environment |
+|--------|-------------|-------------|
+| `master` | Stable release | Production |
+| `develop` | Active development (unstable) | Development |
+
+> For Fork or modifications, use the `master` branch.
+
+## 🛠️ Tech Stack
+
+### Backend
+- **Framework**: [Fast.NET](https://gitee.com/FastDotnet/Fast.NET) + .NET 6/7/8
+- **ORM**: SqlSugar (multi-database support)
+- **Authentication**: JWT Bearer
+- **API Docs**: Swagger + Knife4j UI
+- **Image Processing**: SixLabors.ImageSharp
+- **Excel**: MiniExcel
+- **Real-Time**: SignalR
+- **Caching**: Redis (optional)
+
+### Frontend
+- **Web.Admin**: Vue 3 + TypeScript + Vite + Element Plus + Pinia
+- **App.Admin / App.Client**: React + TypeScript + Vite
+
+## 📝 Changelog
+
+[View Changelog](https://gitee.com/FastDotnet/Fast.Admin/commits/master)
+
+## 📄 License
+
+[Fast.Admin](https://gitee.com/FastDotnet/Fast.Admin) is licensed under [Apache-2.0](LICENSE).
+
+```
+Apache License 2.0
 
 Copyright © 2018-Now xiaoFang
 
-License:
-This Agreement grants any individual or organization that obtains a copy of this software and its related documentation (hereinafter referred to as the "Software").
-Subject to the terms of this Agreement, you have the right to use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the Software:
-1.All copies or major parts of the Software must retain this Copyright Notice and this License Agreement.
-2.The use, copying, modification, or distribution of the Software shall not violate applicable laws or infringe upon the legitimate rights and interests of others.
-3.Modified or derivative works must clearly indicate the original author and the source of the original Software.
+Licensed under the Apache License, Version 2.0.
+You may use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, subject to the following conditions:
 
-Special Statement:
-- This Software is provided "as is" without any express or implied warranty of any kind, including but not limited to the warranty of merchantability, fitness for purpose, and non-infringement.
-- In no event shall the author or copyright holder be liable for any direct or indirect loss caused by the use or inability to use this Software.
-- Including but not limited to data loss, business interruption, etc.
+1. All copies must retain this copyright notice and license.
+2. Usage must comply with applicable laws and not infringe others' rights.
+3. Modified works must clearly indicate the original author and source.
 
-Disclaimer:
-It is prohibited to use this software to engage in illegal activities such as endangering national security, disrupting social order, or infringing on the legitimate rights and interests of others.
-The author does not assume any responsibility for any legal disputes and liabilities caused by the secondary development of this software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 ```
 
-## team member
+## 👥 Team
 
-| Members | Technology | Nickname | Motto                                                                                                                                                                                                                                            |
-| ------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 小方    | Full Stack | 1.8K 仔  | Accepting your own mediocrity and ordinaryness is a required course for growth<br> The life you envy is the hardship you have not survived<br> When your ability cannot support you When you are ambitious, you need to calm down and study hard |
+| Member | Role | Nickname | Motto |
+|--------|------|----------|-------|
+| 小方 | Full Stack | 1.8K 仔 | Accepting your own mediocrity and ordinariness is a required course for growth |
 
-## Coding environment
+## 💻 Development Environment
 
-| Name               | Remarks                                                                                                                                       |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| Visual Studio 2022 |                                                                                                                                               |
-| Visual Studio Code |                                                                                                                                               |
-| Resharper          | The comments starting with `// ReSharper` that you see in the code are generated by this application to avoid unnecessary warnings or prompts |
+| Tool | Notes |
+|------|-------|
+| Visual Studio 2022 | Recommended IDE |
+| Visual Studio Code | Lightweight alternative |
+| ReSharper | Code analysis (comments with `// ReSharper` are auto-generated) |
 
-## Disclaimer
+## ⚠️ Disclaimer
 
-     Please do not use it for projects that violate the laws of our country.
+Please do not use this software for projects that violate any national laws or regulations. The author assumes no liability for any legal disputes arising from secondary development.
 
-     This framework can be said to continue to reinvent the wheel based on the predecessors, but it is simpler and more convenient than some frameworks on the market. It's better to use. I don't know if we can talk about it.
+## ⭐ Support
 
-## Supplementary instructions
+If this project helps you, please click **Star** in the upper right corner to stay updated. Thank you!
 
-     If it is helpful to you, you can click "Star" in the upper right corner to collect it and get the latest updates. Thank you!
