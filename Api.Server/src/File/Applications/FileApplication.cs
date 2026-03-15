@@ -265,7 +265,10 @@ public class FileApplication : IDynamicApplication
         [FromRoute, Required(ErrorMessage = "文件名称不能为空")] string fileName)
     {
         var fileSuffix = Path.GetExtension(fileName);
-        var fileIdStr = fileName[..^fileSuffix.Length];
+        if (string.IsNullOrWhiteSpace(fileSuffix))
+            throw new UserFriendlyException("文件不存在！");
+
+        var fileIdStr = Path.GetFileNameWithoutExtension(fileName);
         if (!long.TryParse(fileIdStr, out var fileId))
             throw new UserFriendlyException("文件不存在！");
 
@@ -828,7 +831,7 @@ public class FileApplication : IDynamicApplication
         if (ChunkUploads.TryGetValue(uploadId, out var metadata))
             return metadata;
 
-        // 从文件恢复元数据
+        // 从文件恢复元数据（应用重启后自动恢复）
         var chunkTempPath = Path.Combine(Environment.CurrentDirectory, "Upload", "Chunks", uploadId);
         var metadataPath = Path.Combine(chunkTempPath, "metadata.json");
         if (!System.IO.File.Exists(metadataPath))
@@ -836,6 +839,9 @@ public class FileApplication : IDynamicApplication
 
         var metadataJson = await System.IO.File.ReadAllTextAsync(metadataPath);
         metadata = JsonSerializer.Deserialize<ChunkUploadMetadata>(metadataJson);
+        if (metadata == null)
+            throw new UserFriendlyException("上传任务元数据损坏！");
+
         ChunkUploads[uploadId] = metadata;
         return metadata;
     }

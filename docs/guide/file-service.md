@@ -312,6 +312,14 @@ const fileLocation = await fileApi.uploadFile(formData);
 ```typescript
 import { fileApi } from "@/api/services/File";
 
+// MD5 计算辅助函数（使用 Web Crypto API）
+async function calculateMD5(file: File): Promise<string> {
+  const buffer = await file.arrayBuffer();
+  const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
 // 1. 初始化分片上传
 const initResult = await fileApi.initChunkUpload({
   fileName: file.name,
