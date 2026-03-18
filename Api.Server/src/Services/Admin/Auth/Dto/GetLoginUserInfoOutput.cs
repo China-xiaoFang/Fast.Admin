@@ -20,8 +20,6 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.Admin.Enum;
-
 namespace Fast.Admin.Service.Auth.Dto;
 
 /// <summary>
@@ -80,19 +78,14 @@ public class GetLoginUserInfoOutput
     public string LogoUrl { get; set; }
 
     /// <summary>
-    /// 用户Id/职员Id
-    /// </summary>
-    public long UserId { get; set; }
-
-    /// <summary>
     /// 用户Key
     /// </summary>
     public string UserKey { get; set; }
 
     /// <summary>
-    /// 账户
+    /// 职员Id
     /// </summary>
-    public string Account { get; set; }
+    public long EmployeeId { get; set; }
 
     /// <summary>
     /// 工号

@@ -50,7 +50,7 @@ public class RefreshAccountDto
     /// <summary>
     /// 头像
     /// </summary>
-    public string Avatar { get; set; }
+    public virtual string Avatar { get; set; }
 
     /// <summary>
     /// 租户编号

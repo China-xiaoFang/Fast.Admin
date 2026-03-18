@@ -460,7 +460,8 @@ public class TableService : IDynamicApplication
         var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.UserTableConfigCache, tableKey, _user.TenantNo, _user.EmployeeNo);
         return await _centerCache.GetAndSetAsync(cacheKey, async () =>
                {
-                   return await _columnCacheRepository.Entities.Where(wh => wh.UserId == _user.UserId && wh.TableId == tableId)
+                   return await _columnCacheRepository.Entities
+                       .Where(wh => wh.UserId == _user.EmployeeId && wh.TableId == tableId)
                        .OrderBy(ob => ob.Order)
                        .ToListAsync();
                })
@@ -712,7 +713,7 @@ public class TableService : IDynamicApplication
         var addTableColumnCacheList = tableConfigModel.TableColumnConfigList.Where(wh => !columnIds.Contains(wh.ColumnId))
             .Select(sl => new TableColumnConfigCacheModel
             {
-                UserId = _user.UserId,
+                UserId = _user.EmployeeId,
                 TableId = sl.TableId,
                 ColumnId = sl.ColumnId,
                 Label = sl.Label,
@@ -806,7 +807,7 @@ public class TableService : IDynamicApplication
             {
                 tableColumnCacheModel = new TableColumnConfigCacheModel
                 {
-                    UserId = _user.UserId,
+                    UserId = _user.EmployeeId,
                     TableId = tableColumnModel.TableId,
                     ColumnId = tableColumnModel.ColumnId,
                     Label = string.IsNullOrWhiteSpace(item.Label) ? tableColumnModel.Label : item.Label,

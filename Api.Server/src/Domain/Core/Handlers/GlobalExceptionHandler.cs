@@ -183,7 +183,6 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
             {
                 RecordId = YitIdHelper.NextId(),
                 AccountId = _user?.AccountId,
-                Account = _user?.Account,
                 Mobile = _user?.Mobile,
                 NickName = _user?.NickName,
                 ClassName = context.Exception.TargetSite?.DeclaringType?.FullName,
@@ -200,7 +199,7 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
                     .ToJsonString(),
                 DepartmentId = _user?.DepartmentId,
                 DepartmentName = _user?.DepartmentName,
-                CreatedUserId = _user?.UserId,
+                CreatedUserId = _user?.EmployeeId,
                 CreatedUserName = _user?.EmployeeName,
                 CreatedTime = DateTime.Now,
                 TenantId = _user?.TenantId,

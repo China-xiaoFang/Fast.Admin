@@ -231,9 +231,8 @@ public class LoginService : IDynamicApplication
             TenantNo = tenantModel.TenantNo,
             TenantName = tenantModel.TenantName,
             TenantCode = tenantModel.TenantCode,
-            UserId = tenantUserModel.UserId,
             UserKey = tenantUserModel.UserKey,
-            Account = tenantUserModel.Account,
+            EmployeeId = tenantUserModel.EmployeeId,
             EmployeeNo = tenantUserModel.EmployeeNo,
             EmployeeName = tenantUserModel.EmployeeName,
             DepartmentId = tenantUserModel.DepartmentId,
@@ -254,13 +253,12 @@ public class LoginService : IDynamicApplication
         {
             RecordId = YitIdHelper.NextId(),
             AccountId = _user.AccountId,
-            Account = _user.Account,
             Mobile = _user.Mobile,
             NickName = _user.NickName,
             VisitType = VisitTypeEnum.Login,
             DepartmentId = _user.DepartmentId,
             DepartmentName = _user.DepartmentName,
-            CreatedUserId = _user.UserId,
+            CreatedUserId = _user.EmployeeId,
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
             TenantId = _user.TenantId,
@@ -340,8 +338,7 @@ public class LoginService : IDynamicApplication
             // 根据账号或登录工号查询租户用户信息
             var tenantUserModel = await _repository.Queryable<TenantUserModel>()
                 .ClearFilter<IBaseTEntity>()
-                .Where(wh => (!string.IsNullOrWhiteSpace(wh.Account) && wh.Account == input.Account)
-                             || wh.EmployeeNo == input.Account)
+                .Where(wh => wh.EmployeeNo == input.Account)
                 .SingleAsync();
             if (tenantUserModel != null)
             {
@@ -421,20 +418,19 @@ public class LoginService : IDynamicApplication
     }
 
     /// <summary>
-    /// 获取登录用户根据账号
+    /// 获取登录用户
     /// </summary>
-    /// <param name="accountKey"></param>
     /// <returns></returns>
-    [HttpGet("/queryLoginUserByAccount")]
-    [ApiInfo("获取登录用户根据账号", HttpRequestActionEnum.Query)]
-    [AllowAnonymous, DisabledRequestLog]
-    public async Task<List<LoginTenantOutput>> QueryLoginUserByAccount([Required(ErrorMessage = "账号Key不能为空")] string accountKey)
+    [HttpGet("/queryLoginUser")]
+    [ApiInfo("获取登录用户", HttpRequestActionEnum.Query)]
+    [DisabledRequestLog]
+    public async Task<List<LoginTenantOutput>> QueryLoginUser()
     {
         return await _repository.Queryable<AccountModel>()
             .InnerJoin<TenantUserModel>((t1, t2) => t1.AccountId == t2.AccountId)
             .InnerJoin<TenantModel>((t1, t2, t3) => t2.TenantId == t3.TenantId)
             .ClearFilter<IBaseTEntity>()
-            .Where(t1 => t1.AccountKey == accountKey)
+            .Where(t1 => t1.AccountId == _user.AccountId)
             .Select((t1, t2, t3) => new LoginTenantOutput
             {
                 UserKey = t2.UserKey,
@@ -1056,7 +1052,7 @@ public class LoginService : IDynamicApplication
             TenantNo = tenantMode?.TenantNo ?? applicationModel.Application.AppNo,
             TenantName = applicationModel.Application.TenantName,
             TenantCode = tenantMode?.TenantCode ?? "",
-            UserId = weChatUserModel.WeChatId,
+            EmployeeId = weChatUserModel.WeChatId,
             EmployeeName = weChatUserModel.NickName,
             WeChatId = weChatUserModel.WeChatId,
             WeChatOpenId = weChatUserModel.OpenId,

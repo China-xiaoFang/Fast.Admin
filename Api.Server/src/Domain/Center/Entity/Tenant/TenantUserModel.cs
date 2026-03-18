@@ -27,15 +27,14 @@ namespace Fast.Center.Entity;
 /// </summary>
 [SugarTable("TenantUser", "租户用户表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(Account)}", nameof(Account), OrderByType.Asc, true)]
 public class TenantUserModel : IBaseTEntity, IUpdateVersion
 {
     /// <summary>
-    /// 用户Id
+    /// 职员Id
     /// </summary>
     /// <remarks>绑定 Admin 库 Employee 表主键Id</remarks>
     [SugarColumn(ColumnDescription = "用户Id", IsPrimaryKey = true)]
-    public long UserId { get; set; }
+    public long EmployeeId { get; set; }
 
     /// <summary>
     /// 用户Key
@@ -49,14 +48,6 @@ public class TenantUserModel : IBaseTEntity, IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "账号Id")]
     public long AccountId { get; set; }
-
-    /// <summary>
-    /// 账户
-    /// </summary>
-    /// <remarks>6-20位字母或数字，必须以字母开头，不能全为数字</remarks>
-    [Required]
-    [SugarColumn(ColumnDescription = "账户", Length = 20)]
-    public string Account { get; set; }
 
     /// <summary>
     /// 工号

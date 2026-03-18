@@ -34,13 +34,6 @@ public class BindLoginAccountInput : UpdateVersionInput
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 账号
-    /// </summary>
-    [StringRequired(ErrorMessage = "账号不能为空")]
-    [RegularExpression(RegexConst.Account, ErrorMessage = "账号格式不正确")]
-    public string Account { get; set; }
-
-    /// <summary>
     /// 手机
     /// </summary>
     [StringRequired(ErrorMessage = "手机不能为空")]

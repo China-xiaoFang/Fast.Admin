@@ -58,7 +58,7 @@ public class TenantOnlineUserService : IDynamicApplication
     {
         return await _repository.Entities.WhereIF(input.DeviceType != null, wh => wh.DeviceType == input.DeviceType)
             .WhereIF(input.AccountId != null, wh => wh.AccountId == input.AccountId)
-            .WhereIF(input.EmployeeId != null, wh => wh.UserId == input.EmployeeId)
+            .WhereIF(input.EmployeeId != null, wh => wh.EmployeeId == input.EmployeeId)
             .OrderByIF(input.IsOrderBy, ob => ob.IsOnline, OrderByType.Desc)
             .OrderByIF(input.IsOrderBy, ob => ob.LastLoginTime, OrderByType.Desc)
             .ToPagedListAsync(input);

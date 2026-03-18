@@ -247,13 +247,10 @@ public class ChatHub : Hub<IChatClient>
                 AppNo = authUserInfo.AppNo,
                 AppName = authUserInfo.AppName,
                 AccountId = authUserInfo.AccountId,
-                AccountKey = authUserInfo.AccountKey,
                 Mobile = authUserInfo.Mobile,
                 NickName = authUserInfo.NickName,
                 Avatar = authUserInfo.Avatar,
-                UserId = authUserInfo.UserId,
-                UserKey = authUserInfo.UserKey,
-                Account = authUserInfo.Account,
+                EmployeeId = authUserInfo.EmployeeId,
                 EmployeeNo = authUserInfo.EmployeeNo,
                 EmployeeName = authUserInfo.EmployeeName,
                 DepartmentId = authUserInfo.DepartmentId,
@@ -298,7 +295,7 @@ public class ChatHub : Hub<IChatClient>
             var connectionIdList = await _repository.Queryable<TenantOnlineUserModel>()
                 .ClearFilter<IBaseTEntity>()
                 .Where(wh => wh.AppNo == authUserInfo.AppNo)
-                .Where(wh => wh.UserId == authUserInfo.UserId)
+                .Where(wh => wh.EmployeeId == authUserInfo.EmployeeId)
                 .Where(wh => wh.TenantId == authUserInfo.TenantId)
                 .Where(wh => wh.ConnectionId != Context.ConnectionId)
                 .Select(sl => sl.ConnectionId)

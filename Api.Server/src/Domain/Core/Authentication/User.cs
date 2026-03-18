@@ -104,9 +104,8 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         TenantName = authUserInfo.TenantName;
         TenantCode = authUserInfo.TenantCode;
 
-        UserId = authUserInfo.UserId;
         UserKey = authUserInfo.UserKey;
-        Account = authUserInfo.Account;
+        EmployeeId = authUserInfo.EmployeeId;
         EmployeeNo = authUserInfo.EmployeeNo;
         EmployeeName = authUserInfo.EmployeeName;
         DepartmentId = authUserInfo.DepartmentId;
@@ -534,13 +533,12 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                         {
                             RecordId = YitIdHelper.NextId(),
                             AccountId = authUserInfo.AccountId,
-                            Account = authUserInfo.Account,
                             Mobile = authUserInfo.Mobile,
                             NickName = authUserInfo.NickName,
                             VisitType = VisitTypeEnum.Logout,
                             DepartmentId = authUserInfo.DepartmentId,
                             DepartmentName = authUserInfo.DepartmentName,
-                            CreatedUserId = authUserInfo.UserId,
+                            CreatedUserId = authUserInfo.EmployeeId,
                             CreatedUserName = authUserInfo.EmployeeName,
                             CreatedTime = DateTime.Now,
                             TenantId = authUserInfo.TenantId,

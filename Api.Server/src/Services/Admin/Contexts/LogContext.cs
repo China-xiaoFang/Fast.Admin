@@ -55,9 +55,7 @@ public class LogContext
             var operateLogModel = new OperateLogModel
             {
                 RecordId = YitIdHelper.NextId(),
-                EmployeeId = _user.UserId,
                 EmployeeNo = _user.EmployeeNo,
-                EmployeeName = _user.EmployeeName,
                 Mobile = _user.Mobile,
                 Title = logDto.Title?.GetNVarcharMaxLen(50, true),
                 OperateType = logDto.OperateType,
@@ -66,7 +64,7 @@ public class LogContext
                 Description = logDto.Description?.GetNVarcharMaxLen(500, true),
                 DepartmentId = _user.DepartmentId,
                 DepartmentName = _user.DepartmentName,
-                CreatedUserId = _user.UserId,
+                CreatedUserId = _user.EmployeeId,
                 CreatedUserName = _user.EmployeeName,
                 CreatedTime = DateTime.Now
             };

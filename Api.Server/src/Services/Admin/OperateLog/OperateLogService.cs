@@ -21,7 +21,6 @@
 // ------------------------------------------------------------------------
 
 using Fast.Admin.Entity;
-using Fast.Admin.Enum;
 using Fast.Admin.Service.OperateLog.Dto;
 using Fast.AdminLog.Entity;
 using Microsoft.AspNetCore.Authorization;
@@ -63,35 +62,35 @@ public class OperateLogService : IDynamicApplication
         }
 
         var queryable = _repository.Entities.WhereIF(input.OperateType != null, wh => wh.OperateType == input.OperateType)
-            .WhereIF(input.EmployeeId != null, wh => wh.EmployeeId == input.EmployeeId)
+            .WhereIF(input.EmployeeId != null, wh => wh.CreatedUserId == input.EmployeeId)
             .WhereIF(input.BizId != null, wh => wh.BizId == input.BizId);
 
         // 仅本人数据
-        if (_user.DataScopeType == (int) DataScopeTypeEnum.Self)
+        if (_user.DataScopeType == DataScopeTypeEnum.Self)
         {
-            queryable = queryable.Where(wh => wh.EmployeeId == _user.UserId);
+            queryable = queryable.Where(wh => wh.CreatedUserId == _user.EmployeeId);
         }
         // 本部门数据
-        else if (_user.DataScopeType == (int) DataScopeTypeEnum.Dept)
+        else if (_user.DataScopeType == DataScopeTypeEnum.Dept)
         {
             queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId);
         }
         // 本机构及以下数据
-        else if (_user.DataScopeType == (int) DataScopeTypeEnum.OrgWithChild)
+        else if (_user.DataScopeType == DataScopeTypeEnum.OrgWithChild)
         {
             var departmentIds = await _adminRepository.Queryable<DepartmentModel>()
                 .Where(wh => wh.DataPublic
                              || wh.OrgId
                              == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                  // 主部门
-                                 .Where(e => e.EmployeeId == _user.UserId && e.IsPrimary)
+                                 .Where(e => e.EmployeeId == _user.EmployeeId && e.IsPrimary)
                                  .Where(e => e.OrgId == wh.OrgId)
                                  .Select(e => e.OrgId))
                 .Select(sl => sl.DepartmentId)
                 .ToListAsync();
             queryable = queryable.Where(wh => departmentIds.Contains(wh.DepartmentId ?? 0));
         } // 本部门及以下数据
-        else if (_user.DataScopeType == (int) DataScopeTypeEnum.DeptWithChild)
+        else if (_user.DataScopeType == DataScopeTypeEnum.DeptWithChild)
         {
             var departmentIds = await _adminRepository.Queryable<DepartmentModel>()
                 .Where(wh => wh.DataPublic

@@ -41,24 +41,11 @@ public class OperateLogModel : BaseRecordEntity
     public long RecordId { get; set; }
 
     /// <summary>
-    /// 职员Id
-    /// </summary>
-    [SugarColumn(ColumnDescription = "职员Id")]
-    public long EmployeeId { get; set; }
-
-    /// <summary>
     /// 工号
     /// </summary>
     [Required]
     [SugarColumn(ColumnDescription = "工号", Length = 20)]
     public string EmployeeNo { get; set; }
-
-    /// <summary>
-    /// 姓名
-    /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "姓名", Length = 20)]
-    public string EmployeeName { get; set; }
 
     /// <summary>
     /// 手机

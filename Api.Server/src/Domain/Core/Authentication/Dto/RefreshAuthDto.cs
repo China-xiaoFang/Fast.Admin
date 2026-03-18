@@ -55,17 +55,17 @@ public class RefreshAuthDto
     /// <summary>
     /// 角色名称集合
     /// </summary>
-    public List<string> RoleNameList { get; set; } = new();
+    public virtual List<string> RoleNameList { get; set; } = new();
 
     /// <summary>
     /// 角色类型
     /// </summary>
-    public RoleTypeEnum RoleType { get; set; }
+    public virtual RoleTypeEnum RoleType { get; set; }
 
     /// <summary>
     /// 数据范围类型
     /// </summary>
-    public int DataScopeType { get; set; }
+    public virtual DataScopeTypeEnum DataScopeType { get; set; }
 
     /// <summary>
     /// 菜单编码集合

@@ -70,12 +70,6 @@ public class TenantOnlineUserModel : IBaseTEntity
     public long AccountId { get; set; }
 
     /// <summary>
-    /// 账号Key
-    /// </summary>
-    [SugarColumn(ColumnDescription = "账号Key", Length = 12)]
-    public string AccountKey { get; set; }
-
-    /// <summary>
     /// 手机
     /// </summary>
     [Required]
@@ -97,23 +91,10 @@ public class TenantOnlineUserModel : IBaseTEntity
     public string Avatar { get; set; }
 
     /// <summary>
-    /// 用户Id/职员Id
+    /// 职员Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "用户Id/职员Id")]
-    public long UserId { get; set; }
-
-    /// <summary>
-    /// 用户Key
-    /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "用户Key", Length = 12)]
-    public string UserKey { get; set; }
-
-    /// <summary>
-    /// 账户
-    /// </summary>
-    [SugarColumn(ColumnDescription = "账户", Length = 20)]
-    public string Account { get; set; }
+    [SugarColumn(ColumnDescription = "职员Id")]
+    public long EmployeeId { get; set; }
 
     /// <summary>
     /// 工号

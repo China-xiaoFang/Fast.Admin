@@ -155,10 +155,9 @@ public class InitDatabaseHostedService : IHostedService
                 {
                     new()
                     {
-                        UserId = superAdminUserId,
+                        EmployeeId = superAdminUserId,
                         UserKey = NumberUtil.IdToCodeByLong(superAdminUserId),
                         AccountId = superAdminAccountModel.AccountId,
-                        Account = "SuperAdmin",
                         EmployeeNo = "SuperAdmin",
                         EmployeeName = "超级管理员",
                         IdPhoto = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
@@ -171,10 +170,9 @@ public class InitDatabaseHostedService : IHostedService
                     },
                     new()
                     {
-                        UserId = robotUserId,
+                        EmployeeId = robotUserId,
                         UserKey = NumberUtil.IdToCodeByLong(robotUserId),
                         AccountId = -99,
-                        Account = $"{systemTenantModel.TenantCode}_Robot",
                         EmployeeNo = $"{systemTenantModel.TenantCode}_Robot",
                         EmployeeName = systemTenantModel.RobotName,
                         UserType = UserTypeEnum.Robot,

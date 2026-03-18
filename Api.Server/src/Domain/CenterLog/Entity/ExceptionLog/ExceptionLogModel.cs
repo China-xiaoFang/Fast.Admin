@@ -44,13 +44,6 @@ public class ExceptionLogModel : BaseRecordEntity
     public long? AccountId { get; set; }
 
     /// <summary>
-    /// 账号
-    /// </summary>
-    [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "账号", Length = 20)]
-    public string Account { get; set; }
-
-    /// <summary>
     /// 手机
     /// </summary>
     [SugarSearchValue]

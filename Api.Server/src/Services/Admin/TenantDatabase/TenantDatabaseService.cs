@@ -258,16 +258,15 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                 tenantModel.AdminAccountId = accountModel.AccountId;
 
                 // 初始化租户管理员用户
-                var userId = YitIdHelper.NextId();
-                var robotUserId = YitIdHelper.NextId();
+                var employeeId = YitIdHelper.NextId();
+                var robotEmployeeId = YitIdHelper.NextId();
                 await db.Insertable(new List<TenantUserModel>
                     {
                         new()
                         {
-                            UserId = userId,
-                            UserKey = NumberUtil.IdToCodeByLong(userId),
+                            EmployeeId = employeeId,
+                            UserKey = NumberUtil.IdToCodeByLong(employeeId),
                             AccountId = accountModel.AccountId,
-                            Account = $"{tenantModel.TenantCode}_Admin",
                             EmployeeNo = $"{tenantModel.TenantCode}_Admin",
                             EmployeeName = tenantModel.AdminName,
                             IdPhoto = tenantModel.LogoUrl,
@@ -279,10 +278,9 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                         },
                         new()
                         {
-                            UserId = robotUserId,
-                            UserKey = NumberUtil.IdToCodeByLong(robotUserId),
+                            EmployeeId = robotEmployeeId,
+                            UserKey = NumberUtil.IdToCodeByLong(robotEmployeeId),
                             AccountId = -99,
-                            Account = $"{tenantModel.TenantCode}_Robot",
                             EmployeeNo = $"{tenantModel.TenantCode}_Robot",
                             EmployeeName = tenantModel.RobotName,
                             UserType = UserTypeEnum.Robot,

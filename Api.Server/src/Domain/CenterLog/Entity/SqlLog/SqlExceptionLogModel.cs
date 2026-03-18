@@ -44,13 +44,6 @@ public class SqlExceptionLogModel : BaseRecordEntity
     public long? AccountId { get; set; }
 
     /// <summary>
-    /// 账号
-    /// </summary>
-    [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "账号", Length = 20)]
-    public string Account { get; set; }
-
-    /// <summary>
     /// 手机
     /// </summary>
     [SugarSearchValue]
@@ -99,18 +92,6 @@ public class SqlExceptionLogModel : BaseRecordEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "异常堆栈信息", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string StackTrace { get; set; }
-
-    /// <summary>
-    /// 原始Sql
-    /// </summary>
-    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string RawSql { get; set; }
-
-    /// <summary>
-    /// Sql参数
-    /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string Parameters { get; set; }
 
     /// <summary>
     /// 纯Sql，参数化之后的Sql

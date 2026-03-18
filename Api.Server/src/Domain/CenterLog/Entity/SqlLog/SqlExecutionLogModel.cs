@@ -26,7 +26,7 @@ namespace Fast.CenterLog.Entity;
 /// <see cref="SqlExecutionLogModel"/> Sql执行日志Model类
 /// </summary>
 [SugarTable("Sql_ExecutionLog_{year}{month}{day}", "Sql执行日志表")]
-[SplitTable(SplitType.Week)]
+[SplitTable(SplitType.Day)]
 [SugarDbType(DatabaseTypeEnum.CenterLog)]
 [SugarIndex($"IX_{{split_table}}_{nameof(CreatedTime)}", nameof(CreatedTime), OrderByType.Asc)]
 [SugarIndex($"IX_{{split_table}}_{nameof(TenantId)}", nameof(TenantId), OrderByType.Asc)]
@@ -43,13 +43,6 @@ public class SqlExecutionLogModel : BaseRecordEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "账号Id")]
     public long? AccountId { get; set; }
-
-    /// <summary>
-    /// 账号
-    /// </summary>
-    [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "账号", Length = 20)]
-    public string Account { get; set; }
 
     /// <summary>
     /// 手机
@@ -69,19 +62,6 @@ public class SqlExecutionLogModel : BaseRecordEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "执行秒数")]
     public double? ExecuteSeconds { get; set; }
-
-    /// <summary>
-    /// 原始Sql
-    /// </summary>
-    [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string RawSql { get; set; }
-
-    /// <summary>
-    /// Sql参数
-    /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string Parameters { get; set; }
 
     /// <summary>
     /// 纯Sql，参数化之后的Sql
