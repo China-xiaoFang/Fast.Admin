@@ -13,10 +13,6 @@ export interface SqlDiffLogModel {
    */
   accountId?: number;
   /**
-   * 账号
-   */
-  account?: string;
-  /**
    * 手机
    */
   mobile?: string;
@@ -37,10 +33,6 @@ export interface SqlDiffLogModel {
    */
   tableDescription?: string;
   /**
-   * 业务数据
-   */
-  businessData?: any;
-  /**
    * 旧的列信息
    */
   beforeColumnList?: Array<any>;
@@ -52,14 +44,6 @@ export interface SqlDiffLogModel {
    * 执行秒数
    */
   executeSeconds?: number;
-  /**
-   * 原始Sql
-   */
-  rawSql?: string;
-  /**
-   * Sql参数
-   */
-  parameters?: string;
   /**
    * 纯Sql，参数化之后的Sql
    */

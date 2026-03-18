@@ -1,5 +1,6 @@
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
+import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
@@ -23,14 +24,6 @@ export interface QueryMenuPagedOutput {
    */
   appName?: string;
   /**
-   * 模块Id
-   */
-  moduleId?: number;
-  /**
-   * 模块名称
-   */
-  moduleName?: string;
-  /**
    * 菜单编码
    */
   menuCode?: string;
@@ -50,6 +43,10 @@ export interface QueryMenuPagedOutput {
    * 
    */
   menuType?: MenuTypeEnum;
+  /**
+   * 
+   */
+  roleType?: RoleTypeEnum;
   /**
    * 是否桌面端
    */

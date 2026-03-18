@@ -1,5 +1,6 @@
+import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
-import { AuthModuleInfoDto } from "./AuthModuleInfoDto";
+import { AuthMenuInfoDto } from "./AuthMenuInfoDto";
 
 /**
  * Fast.Admin.Service.Auth.Dto.GetLoginUserInfoOutput 获取登录用户信息输出
@@ -46,17 +47,13 @@ export interface GetLoginUserInfoOutput {
    */
   logoUrl?: string;
   /**
-   * 用户Id/职员Id
-   */
-  userId?: number;
-  /**
    * 用户Key
    */
   userKey?: string;
   /**
-   * 账户
+   * 职员Id
    */
-  account?: string;
+  employeeId?: number;
   /**
    * 工号
    */
@@ -88,6 +85,10 @@ export interface GetLoginUserInfoOutput {
   /**
    * 
    */
+  roleType?: RoleTypeEnum;
+  /**
+   * 
+   */
   dataScopeType?: DataScopeTypeEnum;
   /**
    * 按钮编码集合
@@ -96,6 +97,6 @@ export interface GetLoginUserInfoOutput {
   /**
    * 菜单集合
    */
-  menuList?: Array<AuthModuleInfoDto>;
+  menuList?: Array<AuthMenuInfoDto>;
 }
 
