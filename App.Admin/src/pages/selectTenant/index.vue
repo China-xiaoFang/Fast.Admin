@@ -91,7 +91,7 @@ const queryTenant = async () => {
 			});
 	} else {
 		useLoading.show("获取租户信息中...");
-		tenantList.value = await loginApi.queryLoginUserByAccount(accountKey).finally(() => useLoading.hide());
+		tenantList.value = await loginApi.queryLoginUser().finally(() => useLoading.hide());
 		if (tenantList.value.length === 0) {
 			useMessageBox
 				.alert({

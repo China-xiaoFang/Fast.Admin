@@ -11,10 +11,6 @@ export interface ExceptionLogModel {
    */
   accountId?: number;
   /**
-   * 账号
-   */
-  account?: string;
-  /**
    * 手机
    */
   mobile?: string;

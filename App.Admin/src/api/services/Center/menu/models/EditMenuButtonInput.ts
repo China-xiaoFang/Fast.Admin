@@ -1,4 +1,5 @@
 import { EditionEnum } from "@/api/enums/EditionEnum";
+import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 
 /**
@@ -21,6 +22,10 @@ export interface EditMenuButtonInput {
    * 按钮名称
    */
   buttonName?: string;
+  /**
+   * 
+   */
+  roleType?: RoleTypeEnum;
   /**
    * 是否桌面端
    */

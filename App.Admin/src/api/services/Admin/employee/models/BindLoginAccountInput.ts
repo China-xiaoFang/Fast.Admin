@@ -7,10 +7,6 @@ export interface BindLoginAccountInput {
    */
   employeeId?: number;
   /**
-   * 账号
-   */
-  account?: string;
-  /**
    * 手机
    */
   mobile?: string;

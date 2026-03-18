@@ -27,15 +27,12 @@ export const loginApi = {
     });
   },
   /**
-   * 获取登录用户根据账号
+   * 获取登录用户
    */
-  queryLoginUserByAccount(accountKey: string) {
+  queryLoginUser() {
     return axiosUtil.request<LoginTenantOutput[]>({
-      url: "/queryLoginUserByAccount",
+      url: "/queryLoginUser",
       method: "get",
-      params: {
-        accountKey,
-      },
       requestType: "query",
     });
   },
