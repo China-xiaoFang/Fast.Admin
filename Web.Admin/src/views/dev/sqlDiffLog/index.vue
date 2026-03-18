@@ -10,8 +10,6 @@
 				{{ row.nickName }}
 				<br />
 				手机：<span v-iconCopy="row.mobile">{{ row.mobile }}</span>
-				<br />
-				账号：<span v-iconCopy="row.account">{{ row.account }}</span>
 			</template>
 
 			<template #os="{ row }: { row?: SqlDiffLogModel }">
@@ -69,42 +67,6 @@
 				<span v-else>--</span>
 			</template>
 
-			<template #rawSql="{ row }: { row?: SqlDiffLogModel }">
-				<el-tag
-					v-if="row.rawSql"
-					type="info"
-					style="cursor: pointer"
-					@click="
-						() => {
-							state.title = '原始Sql';
-							state.content = row.rawSql || '';
-							state.visible = true;
-						}
-					"
-				>
-					查看
-				</el-tag>
-				<span v-else>--</span>
-			</template>
-
-			<template #parameters="{ row }: { row?: SqlDiffLogModel }">
-				<el-tag
-					v-if="row.parameters"
-					type="info"
-					style="cursor: pointer"
-					@click="
-						() => {
-							state.title = 'Sql参数';
-							state.content = row.parameters || '';
-							state.visible = true;
-						}
-					"
-				>
-					查看
-				</el-tag>
-				<span v-else>--</span>
-			</template>
-
 			<template #pureSql="{ row }: { row?: SqlDiffLogModel }">
 				<el-tag
 					v-if="row.pureSql"
@@ -114,24 +76,6 @@
 						() => {
 							state.title = '纯Sql';
 							state.content = row.pureSql || '';
-							state.visible = true;
-						}
-					"
-				>
-					查看
-				</el-tag>
-				<span v-else>--</span>
-			</template>
-
-			<template #businessData="{ row }: { row?: SqlDiffLogModel }">
-				<el-tag
-					v-if="row.businessData"
-					type="info"
-					style="cursor: pointer"
-					@click="
-						() => {
-							state.title = '业务数据';
-							state.content = JSON.stringify(row.businessData) || '';
 							state.visible = true;
 						}
 					"

@@ -224,7 +224,7 @@ onMounted(async () => {
 	try {
 		state.accountFormData = await accountApi.queryEditAccountDetail();
 		if (!userInfoStore.isSuperAdmin && !userInfoStore.isAdmin) {
-			state.employeeFormData = await employeeApi.queryEmployeeDetail(userInfoStore.userId);
+			state.employeeFormData = await employeeApi.queryEmployeeDetail(userInfoStore.employeeId);
 		}
 	} finally {
 		state.loading = false;

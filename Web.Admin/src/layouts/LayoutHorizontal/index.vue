@@ -22,7 +22,7 @@
 						:props="{ label: 'tenantName' }"
 						:lazy="false"
 						moreDetail
-						:requestApi="() => loginApi.queryLoginUserByAccount(userInfoStore.accountKey)"
+						:requestApi="loginApi.queryLoginUser"
 						@change="handleTenantChange"
 						@data-change-call-back="() => faTenantSelectRef.setSelection(userInfoStore.userKey)"
 					>

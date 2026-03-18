@@ -10,8 +10,6 @@
 				{{ row.nickName }}
 				<br />
 				手机：<span v-iconCopy="row.mobile">{{ row.mobile }}</span>
-				<br />
-				账号：<span v-iconCopy="row.account">{{ row.account }}</span>
 			</template>
 
 			<template #os="{ row }: { row?: VisitLogModel }">

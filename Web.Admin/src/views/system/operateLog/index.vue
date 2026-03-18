@@ -7,7 +7,7 @@
 			</template>
 
 			<template #employeeNo="{ row }: { row?: OperateLogModel }">
-				{{ row.employeeName }}
+				{{ row.createdUserName }}
 				<br />
 				工号：<span v-iconCopy="row.employeeNo">{{ row.employeeNo }}</span>
 				<br />
