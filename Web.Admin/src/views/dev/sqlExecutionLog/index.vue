@@ -10,8 +10,6 @@
 				{{ row.nickName }}
 				<br />
 				手机：<span v-iconCopy="row.mobile">{{ row.mobile }}</span>
-				<br />
-				账号：<span v-iconCopy="row.account">{{ row.account }}</span>
 			</template>
 
 			<template #os="{ row }: { row?: SqlExecutionLogModel }">
@@ -31,42 +29,6 @@
 				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small" class="ml5">
 					{{ dateUtil.dateTimeFix(String(row.createdTime)) }}
 				</el-tag>
-			</template>
-
-			<template #rawSql="{ row }: { row?: SqlExecutionLogModel }">
-				<el-tag
-					v-if="row.rawSql"
-					type="info"
-					style="cursor: pointer"
-					@click="
-						() => {
-							state.title = '原始Sql';
-							state.content = row.rawSql || '';
-							state.visible = true;
-						}
-					"
-				>
-					查看
-				</el-tag>
-				<span v-else>--</span>
-			</template>
-
-			<template #parameters="{ row }: { row?: SqlExecutionLogModel }">
-				<el-tag
-					v-if="row.parameters"
-					type="info"
-					style="cursor: pointer"
-					@click="
-						() => {
-							state.title = 'Sql参数';
-							state.content = row.parameters || '';
-							state.visible = true;
-						}
-					"
-				>
-					查看
-				</el-tag>
-				<span v-else>--</span>
 			</template>
 
 			<template #pureSql="{ row }: { row?: SqlExecutionLogModel }">

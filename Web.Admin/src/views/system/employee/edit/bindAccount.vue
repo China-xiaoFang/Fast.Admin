@@ -1,11 +1,6 @@
 <template>
 	<FaDialog ref="faDialogRef" width="500" :title="state.dialogTitle" @confirm-click="handleConfirm" @close="faFormRef.resetFields()">
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules">
-			<FaFormItem prop="account" label="账号">
-				<el-input v-model="state.formData.account" maxlength="20" placeholder="请输入账号">
-					<template #prepend>{{ userInfoStore.tenantCode }}_</template>
-				</el-input>
-			</FaFormItem>
 			<FaFormItem prop="mobile" label="手机">
 				<el-input v-model="state.formData.mobile" maxlength="11" placeholder="请输入手机" />
 			</FaFormItem>
@@ -22,7 +17,6 @@ import { ElMessage, type FormRules } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { BindLoginAccountInput } from "@/api/services/Admin/employee/models/BindLoginAccountInput";
-import { useUserInfo } from "@/stores";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
@@ -31,15 +25,12 @@ defineOptions({
 
 const emit = defineEmits(["ok"]);
 
-const userInfoStore = useUserInfo();
-
 const faDialogRef = ref<FaDialogInstance>();
 const faFormRef = ref<FaFormInstance>();
 
 const state = reactive({
 	formData: withDefineType<BindLoginAccountInput>({}),
 	formRules: withDefineType<FormRules>({
-		account: [{ required: true, message: "请输入账号", trigger: "blur" }],
 		mobile: [{ required: true, message: "请输入手机", trigger: "blur" }],
 		email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
 	}),

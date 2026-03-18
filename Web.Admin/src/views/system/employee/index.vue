@@ -17,10 +17,10 @@
 			</template>
 
 			<template #account="{ row }: { row?: QueryEmployeePagedOutput }">
-				<template v-if="row.account">
+				<template v-if="row.accountMobile">
 					<span>昵称：{{ row.accountNickName }}</span>
 					<br />
-					账号：<span v-iconCopy="row.account">{{ row.account }}</span>
+					手机：<span v-iconCopy="row.accountMobile">{{ row.accountMobile }}</span>
 					<br />
 					邮箱：<span v-iconCopy="row.accountEmail">{{ row.accountEmail }}</span>
 					<br />
@@ -109,7 +109,7 @@
 						</template>
 					</el-dropdown>
 				</div>
-				<template v-if="row.account">
+				<template v-if="row.accountMobile">
 					<el-button
 						v-if="row.accountStatus == CommonStatusEnum.Enable"
 						v-auth="'Employee:Status'"

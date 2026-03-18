@@ -47,17 +47,13 @@ export interface GetLoginUserInfoOutput {
    */
   logoUrl?: string;
   /**
-   * 用户Id/职员Id
-   */
-  userId?: number;
-  /**
    * 用户Key
    */
   userKey?: string;
   /**
-   * 账户
+   * 职员Id
    */
-  account?: string;
+  employeeId?: number;
   /**
    * 工号
    */
