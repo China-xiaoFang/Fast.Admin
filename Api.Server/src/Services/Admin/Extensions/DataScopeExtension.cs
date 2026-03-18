@@ -24,7 +24,6 @@ using System.Linq.Expressions;
 using System.Net;
 using System.Reflection;
 using Fast.Admin.Entity;
-using Fast.Admin.Enum;
 
 namespace Fast.Admin.Service;
 
@@ -66,7 +65,7 @@ public static class DataScopeExtension
             return queryable;
         }
 
-        if (_user.DataScopeType == (int) DataScopeTypeEnum.All)
+        if (_user.DataScopeType == DataScopeTypeEnum.All)
         {
             return queryable;
         }
@@ -103,12 +102,12 @@ public static class DataScopeExtension
         }
 
         // 职员Id
-        var employeeId = _user.UserId;
+        var employeeId = _user.EmployeeId;
         // 部门Id
         var departmentId = _user.DepartmentId ?? 0;
 
         // 仅本人数据
-        if (_user.DataScopeType == (int) DataScopeTypeEnum.Self)
+        if (_user.DataScopeType == DataScopeTypeEnum.Self)
         {
             var parameter = userIdFieldSelector.Parameters[0];
             var unaryOperand = userIdFieldSelector.Body is UnaryExpression unary ? unary.Operand : userIdFieldSelector.Body;
@@ -118,7 +117,7 @@ public static class DataScopeExtension
         }
 
         // 本部门数据
-        if (_user.DataScopeType == (int) DataScopeTypeEnum.Dept)
+        if (_user.DataScopeType == DataScopeTypeEnum.Dept)
         {
             var parameter = departmentIdFieldSelector.Parameters[0];
             var unaryOperand = departmentIdFieldSelector.Body is UnaryExpression unary
@@ -130,7 +129,7 @@ public static class DataScopeExtension
         }
 
         // 本机构及以下数据
-        if (_user.DataScopeType == (int) DataScopeTypeEnum.OrgWithChild)
+        if (_user.DataScopeType == DataScopeTypeEnum.OrgWithChild)
         {
             var dataScopeQueryable = queryable.Context.Queryable<DepartmentModel>()
                 .Where(wh => wh.DataPublic
@@ -145,7 +144,7 @@ public static class DataScopeExtension
         }
 
         // 本部门及以下数据
-        if (_user.DataScopeType == (int) DataScopeTypeEnum.DeptWithChild)
+        if (_user.DataScopeType == DataScopeTypeEnum.DeptWithChild)
         {
             var dataScopeQueryable = queryable.Context.Queryable<DepartmentModel>()
                 .Where(wh => wh.DataPublic || wh.DepartmentId == departmentId || wh.ParentIds.Contains(departmentId))

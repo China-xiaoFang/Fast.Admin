@@ -154,16 +154,15 @@ public class EmployeeService : IDynamicApplication
             .DataScope(e => e.DepartmentId, e => e.EmployeeId)
             .ToPagedListAsync(input);
 
-        var userIds = result.Rows.Select(sl => sl.EmployeeId)
+        var employeeIds = result.Rows.Select(sl => sl.EmployeeId)
             .ToList();
 
         var userList = await _centerRepository.Queryable<TenantUserModel>()
             .LeftJoin<AccountModel>((t1, t2) => t1.AccountId == t2.AccountId)
-            .Where(t1 => userIds.Contains(t1.UserId))
+            .Where(t1 => employeeIds.Contains(t1.EmployeeId))
             .Select((t1, t2) => new
             {
-                t1.UserId,
-                t1.Account,
+                t1.EmployeeId,
                 t1.Status,
                 t2.Mobile,
                 t2.Email,
@@ -173,15 +172,14 @@ public class EmployeeService : IDynamicApplication
             .ToListAsync();
 
         var roleList = await _repository.Queryable<EmployeeRoleModel>()
-            .Where(wh => userIds.Contains(wh.EmployeeId))
+            .Where(wh => employeeIds.Contains(wh.EmployeeId))
             .ToListAsync();
 
         foreach (var item in result.Rows)
         {
-            var userInfo = userList.SingleOrDefault(s => s.UserId == item.EmployeeId);
+            var userInfo = userList.SingleOrDefault(s => s.EmployeeId == item.EmployeeId);
             if (userInfo != null)
             {
-                item.Account = userInfo.Account;
                 item.AccountStatus = userInfo.Status;
                 item.AccountMobile = userInfo.Mobile;
                 item.AccountEmail = userInfo.Email;
@@ -454,7 +452,7 @@ public class EmployeeService : IDynamicApplication
             throw new UserFriendlyException("手机号重复！");
         }
 
-        var employeeModel = await _repository.SingleOrDefaultAsync(_user.UserId);
+        var employeeModel = await _repository.SingleOrDefaultAsync(_user.EmployeeId);
         if (employeeModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
@@ -484,7 +482,7 @@ public class EmployeeService : IDynamicApplication
         try
         {
             var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
-                .Where(wh => wh.UserId == employeeModel.EmployeeId)
+                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
                 .SingleAsync();
             if (tenantUserModel != null)
             {
@@ -656,7 +654,7 @@ public class EmployeeService : IDynamicApplication
 
         var employeeOrgList = new List<EmployeeOrgModel>();
         var employeeRoleList = new List<EmployeeRoleModel>();
-        if (employeeModel.EmployeeId != _user.UserId)
+        if (employeeModel.EmployeeId != _user.EmployeeId)
         {
             employeeModel.FirstWorkDate = input.FirstWorkDate;
             employeeModel.EntryDate = input.EntryDate;
@@ -709,7 +707,7 @@ public class EmployeeService : IDynamicApplication
         try
         {
             var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
-                .Where(wh => wh.UserId == employeeModel.EmployeeId)
+                .Where(wh => wh.EmployeeId == employeeModel.EmployeeId)
                 .SingleAsync();
             if (tenantUserModel != null)
             {
@@ -717,7 +715,7 @@ public class EmployeeService : IDynamicApplication
                 tenantUserModel.IdPhoto = employeeModel.IdPhoto;
             }
 
-            if (employeeModel.EmployeeId != _user.UserId)
+            if (employeeModel.EmployeeId != _user.EmployeeId)
             {
                 // 删除旧的部门数据
                 await _repository.Deleteable<EmployeeOrgModel>()
@@ -910,20 +908,9 @@ public class EmployeeService : IDynamicApplication
         }
 
         if (await _centerRepository.Queryable<TenantUserModel>()
-                .AnyAsync(a => a.UserId == employeeModel.EmployeeId))
+                .AnyAsync(a => a.EmployeeId == employeeModel.EmployeeId))
         {
             throw new UserFriendlyException("已存在登录账号！");
-        }
-
-        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
-
-        var account = $"{tenantModel.TenantCode}_{input.Account}";
-
-        // 判断账号是否存在
-        if (await _centerRepository.Queryable<TenantUserModel>()
-                .AnyAsync(a => a.Account == account))
-        {
-            throw new UserFriendlyException("账号重复！");
         }
 
         var employeeOrgModel = await _repository.Queryable<EmployeeOrgModel>()
@@ -989,10 +976,9 @@ public class EmployeeService : IDynamicApplication
 
             var tenantUserModel = new TenantUserModel
             {
-                UserId = employeeModel.EmployeeId,
+                EmployeeId = employeeModel.EmployeeId,
                 UserKey = NumberUtil.IdToCodeByLong(employeeModel.EmployeeId),
                 AccountId = accountModel.AccountId,
-                Account = account,
                 EmployeeNo = employeeModel.EmployeeNo,
                 EmployeeName = employeeModel.EmployeeName,
                 IdPhoto = employeeModel.IdPhoto,
@@ -1025,7 +1011,7 @@ public class EmployeeService : IDynamicApplication
             OperateType = OperateLogTypeEnum.Organization,
             BizId = employeeModel.EmployeeId,
             BizNo = employeeModel.EmployeeNo,
-            Description = $"职员：{employeeModel.EmployeeName}，绑定登录账号：{account}，手机：{input.Mobile}，邮箱：{input.Email}"
+            Description = $"职员：{employeeModel.EmployeeName}，手机：{input.Mobile}，邮箱：{input.Email}"
         });
     }
 
@@ -1079,7 +1065,7 @@ public class EmployeeService : IDynamicApplication
 
             var connectionId = await _centerRepository.Queryable<TenantOnlineUserModel>()
                 .Where(wh => wh.IsOnline)
-                .Where(wh => wh.UserId == tenantUserModel.UserId)
+                .Where(wh => wh.EmployeeId == tenantUserModel.EmployeeId)
                 .Select(sl => sl.ConnectionId)
                 .SingleAsync();
 

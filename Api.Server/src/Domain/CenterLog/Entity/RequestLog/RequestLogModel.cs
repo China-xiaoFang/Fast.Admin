@@ -26,7 +26,7 @@ namespace Fast.CenterLog.Entity;
 /// <see cref="RequestLogModel"/> 请求日志Model类
 /// </summary>
 [SugarTable("RequestLog_{year}{month}{day}", "请求日志表")]
-[SplitTable(SplitType.Month)]
+[SplitTable(SplitType.Week)]
 [SugarDbType(DatabaseTypeEnum.CenterLog)]
 [SugarIndex($"IX_{{split_table}}_{nameof(CreatedUserId)}", nameof(CreatedUserId), OrderByType.Asc)]
 [SugarIndex($"IX_{{split_table}}_{nameof(CreatedTime)}", nameof(CreatedTime), OrderByType.Asc)]
@@ -44,13 +44,6 @@ public class RequestLogModel : BaseRecordEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "账号Id")]
     public long? AccountId { get; set; }
-
-    /// <summary>
-    /// 账号
-    /// </summary>
-    [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "账号", Length = 20)]
-    public string Account { get; set; }
 
     /// <summary>
     /// 手机

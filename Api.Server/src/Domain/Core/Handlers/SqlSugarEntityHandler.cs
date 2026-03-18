@@ -124,26 +124,13 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         {
             RecordId = YitIdHelper.NextId(),
             AccountId = _user.AccountId,
-            Account = _user.Account,
             Mobile = _user.Mobile,
             NickName = _user.NickName,
             ExecuteSeconds = executeTime.TotalSeconds,
-            RawSql = rawSql,
-            Parameters = parameters.Select(sl => new
-                {
-                    sl.ParameterName,
-                    sl.Value,
-                    DbType = sl.DbType.ToString(),
-                    sl.IsNullable,
-                    sl.IsJson,
-                    sl.IsArray
-                })
-                .ToList()
-                .ToJsonString(),
             PureSql = handlerSql,
             DepartmentId = _user.DepartmentId,
             DepartmentName = _user.DepartmentName,
-            CreatedUserId = _user.UserId,
+            CreatedUserId = _user.EmployeeId,
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
             TenantId = _user.TenantId,
@@ -198,29 +185,16 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         {
             RecordId = YitIdHelper.NextId(),
             AccountId = _user.AccountId,
-            Account = _user.Account,
             Mobile = _user.Mobile,
             NickName = _user.NickName,
             FileName = fileName,
             FileLine = fileLine,
             MethodName = methodName,
             TimeoutSeconds = executeTime.TotalSeconds,
-            RawSql = rawSql,
-            Parameters = parameters.Select(sl => new
-                {
-                    sl.ParameterName,
-                    sl.Value,
-                    DbType = sl.DbType.ToString(),
-                    sl.IsNullable,
-                    sl.IsJson,
-                    sl.IsArray
-                })
-                .ToList()
-                .ToJsonString(),
             PureSql = handlerSql,
             DepartmentId = _user.DepartmentId,
             DepartmentName = _user.DepartmentName,
-            CreatedUserId = _user.UserId,
+            CreatedUserId = _user.EmployeeId,
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
             TenantId = _user.TenantId,
@@ -285,32 +259,18 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         {
             RecordId = YitIdHelper.NextId(),
             AccountId = _user.AccountId,
-            Account = _user.Account,
             Mobile = _user.Mobile,
             NickName = _user.NickName,
             DiffType = diffLogType,
             TableName = tableName,
             TableDescription = tableDescription,
-            BusinessData = businessData,
             BeforeColumnList = beforeColumnList,
             AfterColumnList = afterColumnList,
             ExecuteSeconds = executeTime?.TotalSeconds,
-            RawSql = rawSql,
-            Parameters = parameters.Select(sl => new
-                {
-                    sl.ParameterName,
-                    sl.Value,
-                    DbType = sl.DbType.ToString(),
-                    sl.IsNullable,
-                    sl.IsJson,
-                    sl.IsArray
-                })
-                .ToList()
-                .ToJsonString(),
             PureSql = handlerSql,
             DepartmentId = _user.DepartmentId,
             DepartmentName = _user.DepartmentName,
-            CreatedUserId = _user.UserId,
+            CreatedUserId = _user.EmployeeId,
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
             TenantId = _user.TenantId,
@@ -364,7 +324,6 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         {
             RecordId = YitIdHelper.NextId(),
             AccountId = _user.AccountId,
-            Account = _user.Account,
             Mobile = _user.Mobile,
             NickName = _user.NickName,
             FileName = fileName,
@@ -373,22 +332,10 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             Message = exception.Message,
             Source = exception.Source,
             StackTrace = exception.StackTrace,
-            RawSql = rawSql,
-            Parameters = parameters.Select(sl => new
-                {
-                    sl.ParameterName,
-                    sl.Value,
-                    DbType = sl.DbType.ToString(),
-                    sl.IsNullable,
-                    sl.IsJson,
-                    sl.IsArray
-                })
-                .ToList()
-                .ToJsonString(),
             PureSql = handlerSql,
             DepartmentId = _user.DepartmentId,
             DepartmentName = _user.DepartmentName,
-            CreatedUserId = _user.UserId,
+            CreatedUserId = _user.EmployeeId,
             CreatedUserName = _user.EmployeeName,
             CreatedTime = DateTime.Now,
             TenantId = _user.TenantId,
@@ -455,7 +402,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     /// <returns></returns>
     public long? AssignUserId()
     {
-        return _user.UserId;
+        return _user.EmployeeId;
     }
 
     /// <summary>指派用户名称</summary>

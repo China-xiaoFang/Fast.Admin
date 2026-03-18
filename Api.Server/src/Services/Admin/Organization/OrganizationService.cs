@@ -21,7 +21,6 @@
 // ------------------------------------------------------------------------
 
 using Fast.Admin.Entity;
-using Fast.Admin.Enum;
 using Fast.Admin.Service.Organization.Dto;
 using Fast.AdminLog.Enum;
 using Microsoft.AspNetCore.Authorization;
@@ -55,7 +54,7 @@ public class OrganizationService : IDynamicApplication
         var queryable = _repository.Entities;
 
         // 管理员，全部权限
-        if (_user.IsSuperAdmin || _user.IsAdmin || _user.DataScopeType == (int) DataScopeTypeEnum.All)
+        if (_user.IsSuperAdmin || _user.IsAdmin || _user.DataScopeType == DataScopeTypeEnum.All)
         {
         }
         // 本机构及以下数据
@@ -67,7 +66,7 @@ public class OrganizationService : IDynamicApplication
             queryable = queryable.Where(wh => wh.OrgId
                                               == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                                   // 主部门
-                                                  .Where(e => e.EmployeeId == _user.UserId && e.IsPrimary)
+                                                  .Where(e => e.EmployeeId == _user.EmployeeId && e.IsPrimary)
                                                   .Where(e => e.OrgId == wh.OrgId)
                                                   .Select(e => e.OrgId));
         }

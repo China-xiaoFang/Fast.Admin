@@ -121,19 +121,14 @@ public interface IUser
     #endregion
 
     /// <summary>
-    /// 用户Id/职员Id
-    /// </summary>
-    long UserId { get; set; }
-
-    /// <summary>
     /// 用户Key
     /// </summary>
     string UserKey { get; set; }
 
     /// <summary>
-    /// 账户
+    /// 职员Id
     /// </summary>
-    string Account { get; set; }
+    long EmployeeId { get; set; }
 
     /// <summary>
     /// 工号
@@ -218,7 +213,7 @@ public interface IUser
     /// <summary>
     /// 数据范围类型
     /// </summary>
-    int DataScopeType { get; set; }
+    DataScopeTypeEnum DataScopeType { get; set; }
 
     /// <summary>
     /// 菜单编码集合

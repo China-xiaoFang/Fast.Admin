@@ -21,7 +21,6 @@
 // ------------------------------------------------------------------------
 
 using Fast.Admin.Entity;
-using Fast.Admin.Enum;
 using Fast.Admin.Service.Auth.Dto;
 using Fast.Center.Entity;
 using Fast.Center.Enum;
@@ -90,9 +89,8 @@ public class AuthService : IDynamicApplication
             ShortName = tenantModel.ShortName,
             TenantCode = _user.TenantCode,
             LogoUrl = tenantModel.LogoUrl,
-            UserId = _user.UserId,
             UserKey = _user.UserKey,
-            Account = _user.Account,
+            EmployeeId = _user.EmployeeId,
             EmployeeNo = _user.EmployeeNo,
             EmployeeName = _user.EmployeeName,
             DepartmentId = _user.DepartmentId,
@@ -104,7 +102,7 @@ public class AuthService : IDynamicApplication
         // 查询角色
         var roleList = await _empRepository.Queryable<EmployeeRoleModel>()
             .LeftJoin<RoleModel>((t1, t2) => t1.RoleId == t2.RoleId)
-            .Where(t1 => t1.EmployeeId == _user.UserId)
+            .Where(t1 => t1.EmployeeId == _user.EmployeeId)
             .Select((t1, t2) => new
             {
                 t1.RoleId,
@@ -263,7 +261,7 @@ public class AuthService : IDynamicApplication
                 .ToList(),
             RoleNameList = result.RoleNameList,
             RoleType = result.RoleType,
-            DataScopeType = (int) result.DataScopeType,
+            DataScopeType = result.DataScopeType,
             MenuCodeList = _user.IsSuperAdmin
                 ? []
                 : menuList.Select(sl => sl.MenuCode)

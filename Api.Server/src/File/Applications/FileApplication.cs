@@ -413,7 +413,7 @@ public class FileApplication : IDynamicApplication
         fileInfoModel.UploadProvince = wanNetIpInfo.Province;
         fileInfoModel.UploadCity = wanNetIpInfo.City;
         fileInfoModel.UploadIp = ip;
-        fileInfoModel.CreatedUserId = _user?.UserId;
+        fileInfoModel.CreatedUserId = _user?.EmployeeId;
         fileInfoModel.CreatedUserName = _user?.NickName;
         fileInfoModel.CreatedTime = dateTime;
         await _repository.InsertAsync(fileInfoModel);

@@ -45,13 +45,6 @@ public class SqlDiffLogModel : BaseRecordEntity
     public long? AccountId { get; set; }
 
     /// <summary>
-    /// 账号
-    /// </summary>
-    [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "账号", Length = 20)]
-    public string Account { get; set; }
-
-    /// <summary>
     /// 手机
     /// </summary>
     [SugarSearchValue]
@@ -84,12 +77,6 @@ public class SqlDiffLogModel : BaseRecordEntity
     public string TableDescription { get; set; }
 
     /// <summary>
-    /// 业务数据
-    /// </summary>
-    [SugarColumn(ColumnDescription = "差异描述", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
-    public object BusinessData { get; set; }
-
-    /// <summary>
     /// 旧的列信息
     /// </summary>
     [SugarColumn(ColumnDescription = "旧的列信息", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
@@ -106,18 +93,6 @@ public class SqlDiffLogModel : BaseRecordEntity
     /// </summary>
     [SugarColumn(ColumnDescription = "执行秒数")]
     public double? ExecuteSeconds { get; set; }
-
-    /// <summary>
-    /// 原始Sql
-    /// </summary>
-    [SugarColumn(ColumnDescription = "原始Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string RawSql { get; set; }
-
-    /// <summary>
-    /// Sql参数
-    /// </summary>
-    [SugarColumn(ColumnDescription = "Sql参数", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string Parameters { get; set; }
 
     /// <summary>
     /// 纯Sql，参数化之后的Sql

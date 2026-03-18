@@ -78,7 +78,7 @@ public class AuthUserInfo
     /// <summary>
     /// 头像
     /// </summary>
-    public string Avatar { get; set; }
+    public virtual string Avatar { get; set; }
 
     #endregion
 
@@ -121,19 +121,14 @@ public class AuthUserInfo
     #endregion
 
     /// <summary>
-    /// 用户Id/职员Id
-    /// </summary>
-    public virtual long UserId { get; set; }
-
-    /// <summary>
     /// 用户Key
     /// </summary>
     public virtual string UserKey { get; set; }
 
     /// <summary>
-    /// 账户
+    /// 职员Id
     /// </summary>
-    public virtual string Account { get; set; }
+    public virtual long EmployeeId { get; set; }
 
     /// <summary>
     /// 工号
@@ -208,17 +203,17 @@ public class AuthUserInfo
     /// <summary>
     /// 角色名称集合
     /// </summary>
-    public List<string> RoleNameList { get; set; } = new();
+    public virtual List<string> RoleNameList { get; set; } = new();
 
     /// <summary>
     /// 角色类型
     /// </summary>
-    public RoleTypeEnum RoleType { get; set; }
+    public virtual RoleTypeEnum RoleType { get; set; }
 
     /// <summary>
     /// 数据范围类型
     /// </summary>
-    public int DataScopeType { get; set; }
+    public virtual DataScopeTypeEnum DataScopeType { get; set; }
 
     /// <summary>
     /// 菜单编码集合

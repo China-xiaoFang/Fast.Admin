@@ -30,7 +30,7 @@ public class LoginInput
     /// <summary>
     /// 账号
     /// </summary>
-    /// <remarks>手机号/账号/工号</remarks>
+    /// <remarks>手机号/工号</remarks>
     [StringRequired(ErrorMessage = "账号不能为空")]
     public string Account { get; set; }
 

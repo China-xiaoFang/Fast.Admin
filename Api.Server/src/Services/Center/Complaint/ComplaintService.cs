@@ -173,7 +173,7 @@ public class ComplaintService : IDynamicApplication
             AppId = applicationModel.AppId,
             AppName = applicationModel.Application.AppName,
             OpenId = applicationModel.OpenId,
-            UserId = _user.UserId,
+            UserId = _user.EmployeeId,
             NickName = _user.NickName,
             ComplaintType = input.ComplaintType,
             Mobile = _user.Mobile,

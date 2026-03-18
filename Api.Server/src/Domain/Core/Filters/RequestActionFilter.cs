@@ -102,7 +102,6 @@ public class RequestActionFilter : IAsyncActionFilter
         {
             RecordId = YitIdHelper.NextId(),
             AccountId = _user?.AccountId,
-            Account = _user?.Account,
             Mobile = _user?.Mobile,
             NickName = _user?.NickName,
             IsSuccess = actionContext.Exception == null,
@@ -119,7 +118,7 @@ public class RequestActionFilter : IAsyncActionFilter
             ElapsedTime = stopwatch.ElapsedMilliseconds,
             DepartmentId = _user?.DepartmentId,
             DepartmentName = _user?.DepartmentName,
-            CreatedUserId = _user?.UserId,
+            CreatedUserId = _user?.EmployeeId,
             CreatedUserName = _user?.EmployeeName,
             CreatedTime = dateTime,
             TenantId = _user?.TenantId,

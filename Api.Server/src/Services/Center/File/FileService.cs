@@ -64,7 +64,7 @@ public class FileService : IDynamicApplication
         }
         else if (!_user.IsAdmin)
         {
-            queryable = queryable.Where(t1 => t1.CreatedUserId == _user.UserId);
+            queryable = queryable.Where(t1 => t1.CreatedUserId == _user.EmployeeId);
         }
 
         return await queryable.SelectMergeTable((t1, t2) => new QueryFilePagedOutput

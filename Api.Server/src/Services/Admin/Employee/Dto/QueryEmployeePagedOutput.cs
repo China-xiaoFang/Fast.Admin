@@ -221,11 +221,6 @@ public class QueryEmployeePagedOutput
     public string RoleNames { get; set; }
 
     /// <summary>
-    /// 账户
-    /// </summary>
-    public string Account { get; set; }
-
-    /// <summary>
     /// 账号状态
     /// </summary>
     public CommonStatusEnum AccountStatus { get; set; }
