@@ -25,7 +25,7 @@ type IState = {
 export const useUserInfo = defineStore(
 	"userInfo",
 	() => {
-		const state = reactive<IState & WeChatClientLoginOutput>({
+		const state = reactive<IState & Required<Omit<WeChatClientLoginOutput, "status" | "message">>>({
 			token: "",
 			refreshToken: "",
 			activeTabBar: CommonRoute.Home,

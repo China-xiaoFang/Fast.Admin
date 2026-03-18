@@ -9,10 +9,6 @@ export interface AuthMenuInfoDto {
    */
   menuId?: number;
   /**
-   * 模块Id
-   */
-  moduleId?: number;
-  /**
    * 菜单编码
    */
   menuCode?: string;

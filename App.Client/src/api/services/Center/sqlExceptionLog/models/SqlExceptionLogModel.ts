@@ -11,10 +11,6 @@ export interface SqlExceptionLogModel {
    */
   accountId?: number;
   /**
-   * 账号
-   */
-  account?: string;
-  /**
    * 手机
    */
   mobile?: string;
@@ -46,14 +42,6 @@ export interface SqlExceptionLogModel {
    * 异常堆栈信息
    */
   stackTrace?: string;
-  /**
-   * 原始Sql
-   */
-  rawSql?: string;
-  /**
-   * Sql参数
-   */
-  parameters?: string;
   /**
    * 纯Sql，参数化之后的Sql
    */

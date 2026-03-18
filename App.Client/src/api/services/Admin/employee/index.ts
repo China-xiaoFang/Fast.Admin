@@ -8,7 +8,6 @@ import { ChangeStatusInput } from "./models/ChangeStatusInput";
 import { EmployeeResignedInput } from "./models/EmployeeResignedInput";
 import { BindLoginAccountInput } from "./models/BindLoginAccountInput";
 import { EmployeeIdInput } from "./models/EmployeeIdInput";
-import { EmployeeAuthInput } from "./models/EmployeeAuthInput";
 
 /**
  * Fast.Admin.Service.Employee.EmployeeService 职员服务Api
@@ -58,6 +57,17 @@ export const employeeApi = {
       method: "post",
       data,
       requestType: "add",
+    });
+  },
+  /**
+   * 编辑本职员
+   */
+  editSelfEmployee(data: EditEmployeeInput) {
+    return axiosUtil.request({
+      url: "/employee/editSelfEmployee",
+      method: "post",
+      data,
+      requestType: "edit",
     });
   },
   /**
@@ -113,28 +123,6 @@ export const employeeApi = {
       method: "post",
       data,
       requestType: "edit",
-    });
-  },
-  /**
-   * 职员授权
-   */
-  employeeAuth(data: EmployeeAuthInput) {
-    return axiosUtil.request({
-      url: "/employee/employeeAuth",
-      method: "post",
-      data,
-      requestType: "edit",
-    });
-  },
-  /**
-   * 获取职员授权菜单
-   */
-  queryEmployeeAuthMenu(data: EmployeeIdInput) {
-    return axiosUtil.request<EmployeeAuthInput>({
-      url: "/employee/queryEmployeeAuthMenu",
-      method: "post",
-      data,
-      requestType: "query",
     });
   },
 };

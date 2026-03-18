@@ -11,10 +11,6 @@ export interface SqlTimeoutLogModel {
    */
   accountId?: number;
   /**
-   * 账号
-   */
-  account?: string;
-  /**
    * 手机
    */
   mobile?: string;
@@ -38,14 +34,6 @@ export interface SqlTimeoutLogModel {
    * 超时秒数
    */
   timeoutSeconds?: number;
-  /**
-   * 原始Sql
-   */
-  rawSql?: string;
-  /**
-   * Sql参数
-   */
-  parameters?: string;
   /**
    * 纯Sql，参数化之后的Sql
    */

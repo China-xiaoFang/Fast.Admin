@@ -14,6 +14,10 @@ export interface QueryRoleDetailOutput {
    */
   roleType?: RoleTypeEnum;
   /**
+   * 是否使用系统菜单
+   */
+  isSystemMenu?: boolean;
+  /**
    * 角色名称
    */
   roleName?: string;
@@ -29,6 +33,10 @@ export interface QueryRoleDetailOutput {
    * 
    */
   dataScopeType?: DataScopeTypeEnum;
+  /**
+   * 可分配的角色Id集合
+   */
+  assignableRoleIds?: Array<number>;
   /**
    * 备注
    */
