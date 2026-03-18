@@ -29,10 +29,6 @@ export interface TenantOnlineUserModel {
    */
   accountId?: number;
   /**
-   * 账号Key
-   */
-  accountKey?: string;
-  /**
    * 手机
    */
   mobile?: string;
@@ -45,17 +41,9 @@ export interface TenantOnlineUserModel {
    */
   avatar?: string;
   /**
-   * 用户Id/职员Id
+   * 职员Id
    */
-  userId?: number;
-  /**
-   * 用户Key
-   */
-  userKey?: string;
-  /**
-   * 账户
-   */
-  account?: string;
+  employeeId?: number;
   /**
    * 工号
    */

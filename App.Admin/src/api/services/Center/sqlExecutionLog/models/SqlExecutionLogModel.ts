@@ -11,10 +11,6 @@ export interface SqlExecutionLogModel {
    */
   accountId?: number;
   /**
-   * 账号
-   */
-  account?: string;
-  /**
    * 手机
    */
   mobile?: string;
@@ -26,14 +22,6 @@ export interface SqlExecutionLogModel {
    * 执行秒数
    */
   executeSeconds?: number;
-  /**
-   * 原始Sql
-   */
-  rawSql?: string;
-  /**
-   * Sql参数
-   */
-  parameters?: string;
   /**
    * 纯Sql，参数化之后的Sql
    */

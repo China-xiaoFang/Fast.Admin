@@ -39,6 +39,10 @@ export interface EditDepartmentInput {
    */
   sort?: number;
   /**
+   * 数据公开
+   */
+  dataPublic?: boolean;
+  /**
    * 备注
    */
   remark?: string;
