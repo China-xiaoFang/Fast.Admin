@@ -26,7 +26,7 @@ namespace Fast.CenterLog.Entity;
 /// <see cref="SqlDiffLogModel"/> Sql差异日志Model类
 /// </summary>
 [SugarTable("Sql_DiffLog_{year}{month}{day}", "Sql差异日志表")]
-[SplitTable(SplitType.Week)]
+[SplitTable(SplitType.Month)]
 [SugarDbType(DatabaseTypeEnum.CenterLog)]
 [SugarIndex($"IX_{{split_table}}_{nameof(CreatedTime)}", nameof(CreatedTime), OrderByType.Asc)]
 [SugarIndex($"IX_{{split_table}}_{nameof(TenantId)}", nameof(TenantId), OrderByType.Asc)]
