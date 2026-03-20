@@ -1,0 +1,132 @@
+﻿// ------------------------------------------------------------------------
+// Apache开源许可证
+// 
+// 版权所有 © 2018-Now 小方
+// 
+// 许可授权：
+// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
+// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
+// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
+// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
+// 3.修改或衍生作品须明确标注原作者及原软件出处。
+// 
+// 特别声明：
+// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
+// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
+// - 包括但不限于数据丢失、业务中断等情况。
+// 
+// 免责条款：
+// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
+// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
+// ------------------------------------------------------------------------
+
+using System.Text;
+using Fast.Center.Enum;
+using Fast.CenterLog.Entity;
+using Fast.Core;
+using Fast.NET.Core;
+using Fast.Shared;
+using Fast.SqlSugar;
+using SqlSugar;
+
+namespace Fast.Scheduler.LocalJob;
+
+/// <summary>
+/// <see cref="DeleteRequestLogLocalJob"/> 删除请求日志本地作业
+/// </summary>
+public class DeleteRequestLogLocalJob : ISchedulerJob
+{
+    /// <summary>
+    /// 获取本地作业
+    /// </summary>
+    /// <returns></returns>
+    public SchedulerLocalJobInfo GetLocalJob()
+    {
+        return new SchedulerLocalJobInfo
+        {
+            JobName = "删除请求日志本地作业",
+            JobGroup = SchedulerJobGroupEnum.System,
+            BeginTime = new DateTime(1970, 01, 01),
+            EndTime = null,
+            TriggerType = TriggerTypeEnum.Cron,
+            Cron = "0 40 0 * * ?",
+            Week = null,
+            DailyStartTime = null,
+            DailyEndTime = null,
+            IntervalSecond = null,
+            RunTimes = null,
+            WarnTime = null,
+            RetryTimes = null,
+            RetryMillisecond = null,
+            MailMessage = MailMessageEnum.Error,
+            Description = "删除请求日志本地作业，每天00:40执行。"
+        };
+    }
+
+    /// <summary>
+    /// 执行作业
+    /// </summary>
+    /// <param name="serviceProvider"><see cref="IServiceProvider"/> 服务提供者（请求作用域类似于，如果存在 TenantId 则自动注入 IUser 服务）</param>
+    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
+    /// <param name="logInfo"><see cref="SchedulerJobLocalLogInfo"/> 日志信息</param>
+    /// <returns></returns>
+    public async Task<string> Execute(IServiceProvider serviceProvider, ISqlSugarClient db, SchedulerJobLocalLogInfo logInfo)
+    {
+        // 进入方法的一瞬间记录时间
+        var dateTime = DateTime.Now;
+
+        // 解析服务
+        var _sqlSugarEntityService = serviceProvider.GetService<ISqlSugarEntityService>();
+        // 获取 CenterLog 库的连接字符串配置
+        var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
+            CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
+        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+
+        // 这里不能使用Aop
+        var logDb = new SqlSugarClient(connectionConfig);
+        logDb.Aop.OnLogExecuted = (rawSql, pars) =>
+        {
+            if (FastContext.HostEnvironment.IsDevelopment())
+            {
+                var handleSql = UtilMethods.GetSqlString(logDb.CurrentConnectionConfig.DbType, rawSql, pars);
+
+                var useColor = !Console.IsOutputRedirected;
+                var logSb = new StringBuilder();
+                if (useColor)
+                    logSb.Append("\u001b[40m\u001b[90m");
+                logSb.Append("fsql");
+                if (useColor)
+                    logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                logSb.Append(": ");
+                logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+                logSb.Append(Environment.NewLine);
+                if (useColor)
+                    logSb.Append("\u001b[40m\u001b[90m");
+                logSb.Append("      ");
+                logSb.Append($"Time: {logDb.Ado.SqlExecutionTime}");
+                logSb.Append(Environment.NewLine);
+                logSb.Append("      ");
+                logSb.Append(handleSql);
+                if (useColor)
+                    logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                Console.WriteLine(logSb.ToString());
+            }
+        };
+
+        var expireDate = dateTime.Date.AddDays(-90);
+
+        // 查询总共多少条
+        var deleteCount = await logDb.Queryable<RequestLogModel>()
+            .Where(wh => wh.CreatedTime < expireDate)
+            .SplitTable(t => t.Where(wh => wh.Date.Date < expireDate))
+            .CountAsync();
+
+        // 删除90天前的请求日志
+        await logDb.Deleteable<RequestLogModel>()
+            .Where(wh => wh.CreatedTime < expireDate)
+            .SplitTable(t => t.Where(wh => wh.Date.Date < expireDate))
+            .ExecuteCommandAsync();
+
+        return $"删除请求日志，共计：{deleteCount}条。";
+    }
+}

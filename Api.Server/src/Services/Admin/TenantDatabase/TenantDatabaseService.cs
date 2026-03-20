@@ -158,7 +158,6 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
         {
             // 查询所有系统规则序号
             var serialRuleList = await newDb.Queryable<SerialRuleModel>()
-                .Where(wh => wh.SerialType == SerialTypeEnum.AutoSerial)
                 .ToListAsync();
 
             // 初始化工号序号
@@ -168,7 +167,6 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                     {
                         SerialRuleId = YitIdHelper.NextId(),
                         RuleType = SerialRuleTypeEnum.EmployeeNo,
-                        SerialType = SerialTypeEnum.AutoSerial,
                         Prefix = null,
                         DateType = SerialDateTypeEnum.Day,
                         Spacer = SerialSpacerEnum.None,

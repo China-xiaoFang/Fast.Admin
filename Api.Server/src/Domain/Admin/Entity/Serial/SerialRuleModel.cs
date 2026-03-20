@@ -43,12 +43,6 @@ public class SerialRuleModel : BaseEntity, IUpdateVersion
     public SerialRuleTypeEnum RuleType { get; set; }
 
     /// <summary>
-    /// 序号类型
-    /// </summary>
-    [SugarColumn(ColumnDescription = "序号类型")]
-    public SerialTypeEnum SerialType { get; set; }
-
-    /// <summary>
     /// 前缀
     /// </summary>
     [SugarColumn(ColumnDescription = "前缀", ColumnDataType = "varchar(5)")]
