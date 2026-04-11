@@ -87,17 +87,29 @@ public class DeleteRequestLogLocalJob : ISchedulerJob
 
         var expireDate = dateTime.Date.AddDays(-90);
 
-        // 查询总共多少条
-        var deleteCount = await logDb.Queryable<RequestLogModel>()
-            .Where(wh => wh.CreatedTime < expireDate)
-            .SplitTable(t => t.Where(wh => wh.Date.Date < expireDate))
-            .CountAsync();
+        var deleteCount = 0;
+
+        var tableInfos = logDb.SplitHelper<RequestLogModel>()
+            .GetTables()
+            .OrderBy(ob => ob.Date).ToList();
 
         // 删除90天前的请求日志
-        await logDb.Deleteable<RequestLogModel>()
-            .Where(wh => wh.CreatedTime < expireDate)
-            .SplitTable(t => t.Where(wh => wh.Date.Date < expireDate))
-            .ExecuteCommandAsync();
+        foreach (var tableInfo in tableInfos)
+        {
+            // 删除数据
+            deleteCount += await logDb.Deleteable<RequestLogModel>()
+                .AS(tableInfo.TableName)
+                .Where(wh => wh.CreatedTime < expireDate)
+                .ExecuteCommandAsync();
+
+            // 查询是否不存在数据
+            if (!await logDb.Queryable<RequestLogModel>()
+                    .AS(tableInfo.TableName)
+                    .AnyAsync())
+            {
+                logDb.DbMaintenance.DropTable(tableInfo.TableName);
+            }
+        }
 
         return $"删除请求日志，共计：{deleteCount}条。";
     }
