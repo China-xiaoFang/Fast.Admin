@@ -89,7 +89,9 @@ public class SqlExecutionLogService : IDynamicApplication
         var dateTime = DateTime.Now.AddDays(-90);
 
         var tableNames = _repository.SplitHelper<SqlExecutionLogModel>()
-            .GetTables();
+            .GetTables()
+            .OrderBy(ob => ob.Date)
+            .ToList();
 
         // 删除空数据的表
         foreach (var tableInfo in tableNames)
@@ -99,7 +101,8 @@ public class SqlExecutionLogService : IDynamicApplication
                 .Where(wh => wh.CreatedTime < dateTime)
                 .ExecuteCommandAsync();
 
-            if (!await _repository.Entities.AS(tableInfo.TableName)
+            if (!await _repository.Queryable<SqlExecutionLogModel>()
+                    .AS(tableInfo.TableName)
                     .AnyAsync())
             {
                 _repository.DbMaintenance.DropTable(tableInfo.TableName);

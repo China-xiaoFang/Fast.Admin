@@ -96,7 +96,9 @@ public class RequestLogService : IDynamicApplication
         var dateTime = DateTime.Now.AddDays(-90);
 
         var tableNames = _repository.SplitHelper<RequestLogModel>()
-            .GetTables();
+            .GetTables()
+            .OrderBy(ob => ob.Date)
+            .ToList();
 
         // 删除空数据的表
         foreach (var tableInfo in tableNames)
@@ -106,7 +108,8 @@ public class RequestLogService : IDynamicApplication
                 .Where(wh => wh.CreatedTime < dateTime)
                 .ExecuteCommandAsync();
 
-            if (!await _repository.Entities.AS(tableInfo.TableName)
+            if (!await _repository.Queryable<RequestLogModel>()
+                    .AS(tableInfo.TableName)
                     .AnyAsync())
             {
                 _repository.DbMaintenance.DropTable(tableInfo.TableName);
