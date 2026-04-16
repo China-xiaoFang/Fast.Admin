@@ -105,41 +105,4 @@ public class OperateLogService : IDynamicApplication
             .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .ToPagedListAsync(input);
     }
-
-    /// <summary>
-    /// 删除90天前的操作日志
-    /// </summary>
-    /// <returns></returns>
-    [HttpPost]
-    [ApiInfo("删除90天前的操作日志", HttpRequestActionEnum.Delete)]
-    public async Task DeleteOperateLog()
-    {
-        if (!_user.IsSuperAdmin && !_user.IsAdmin)
-        {
-            throw new UserFriendlyException("非管理员，禁止操作！");
-        }
-
-        var dateTime = DateTime.Now.AddDays(-90);
-
-        var tableInfos = _repository.SplitHelper<OperateLogModel>()
-            .GetTables()
-            .OrderBy(ob => ob.Date)
-            .ToList();
-
-        // 删除空数据的表
-        foreach (var tableInfo in tableInfos)
-        {
-            await _repository.Deleteable<OperateLogModel>()
-                .AS(tableInfo.TableName)
-                .Where(wh => wh.CreatedTime < dateTime)
-                .ExecuteCommandAsync();
-
-            if (!await _repository.Queryable<OperateLogModel>()
-                    .AS(tableInfo.TableName)
-                    .AnyAsync())
-            {
-                _repository.DbMaintenance.DropTable(tableInfo.TableName);
-            }
-        }
-    }
 }

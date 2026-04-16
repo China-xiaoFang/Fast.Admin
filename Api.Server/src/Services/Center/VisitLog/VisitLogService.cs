@@ -77,41 +77,4 @@ public class VisitLogService : IDynamicApplication
             .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .ToPagedListAsync(input);
     }
-
-    /// <summary>
-    /// 删除90天前的访问日志
-    /// </summary>
-    /// <returns></returns>
-    [HttpPost]
-    [ApiInfo("删除90天前的访问日志", HttpRequestActionEnum.Delete)]
-    public async Task DeleteVisitLog()
-    {
-        if (!_user.IsSuperAdmin)
-        {
-            throw new UserFriendlyException("非超级管理员，禁止操作！");
-        }
-
-        var dateTime = DateTime.Now.AddDays(-90);
-
-        var tableNames = _repository.SplitHelper<VisitLogModel>()
-            .GetTables()
-            .OrderBy(ob => ob.Date)
-            .ToList();
-
-        // 删除空数据的表
-        foreach (var tableInfo in tableNames)
-        {
-            await _repository.Deleteable<VisitLogModel>()
-                .AS(tableInfo.TableName)
-                .Where(wh => wh.CreatedTime < dateTime)
-                .ExecuteCommandAsync();
-
-            if (!await _repository.Queryable<VisitLogModel>()
-                    .AS(tableInfo.TableName)
-                    .AnyAsync())
-            {
-                _repository.DbMaintenance.DropTable(tableInfo.TableName);
-            }
-        }
-    }
 }

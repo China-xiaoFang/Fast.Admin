@@ -1,11 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1D1K2Z66L4" rowKey="recordId" :requestApi="visitLogApi.queryVisitLogPaged" stripe>
-			<!-- 表格按钮操作区域 -->
-			<template #header>
-				<el-button v-if="userInfoStore.isSuperAdmin" plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
-			</template>
-
+		<FastTable tableKey="1D1K2Z66L4" rowKey="recordId" :requestApi="visitLogApi.queryVisitLogPaged" stripe>
 			<template #mobile="{ row }: { row?: VisitLogModel }">
 				{{ row.nickName }}
 				<br />
@@ -35,32 +30,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox, dayjs } from "element-plus";
-import { Delete } from "@element-plus/icons-vue";
+import { dayjs } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
 import { visitLogApi } from "@/api/services/Center/visitLog";
 import { VisitLogModel } from "@/api/services/Center/visitLog/models/VisitLogModel";
-import { FastTableInstance } from "@/components";
-import { useUserInfo } from "@/stores";
 
 defineOptions({
 	name: "SystemVisitLog",
 });
-
-const userInfoStore = useUserInfo();
-
-const fastTableRef = ref<FastTableInstance>();
-
-/** 处理删除日志 */
-const handleDeleteLog = () => {
-	ElMessageBox.confirm("确定要删除90天前的访问日志？", {
-		type: "warning",
-		async beforeClose() {
-			await visitLogApi.deleteVisitLog();
-			ElMessage.success("删除成功！");
-			fastTableRef.value?.refresh();
-		},
-	});
-};
 </script>

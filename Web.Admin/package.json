@@ -27,7 +27,7 @@
 		"@fast-china/axios": "^1",
 		"@fast-china/utils": "^1",
 		"@fast-element-plus/icons-vue": "^1",
-		"@microsoft/signalr": "^8",
+		"@microsoft/signalr": "^10",
 		"@vueuse/core": "^14",
 		"@wangeditor/editor": "^5.1",
 		"@wangeditor/editor-for-vue": "^5.1",
@@ -42,7 +42,7 @@
 		"pinyin-pro": "^3.28",
 		"vue": "^3.5",
 		"vue-json-pretty": "^2",
-		"vue-router": "^4.5"
+		"vue-router": "^5.0"
 	},
 	"devDependencies": {
 		"@fast-china/eslint-config": "^1",
@@ -51,14 +51,14 @@
 		"@types/nprogress": "^0.2",
 		"@vitejs/plugin-vue": "^6",
 		"@vitejs/plugin-vue-jsx": "^5",
-		"@vue/tsconfig": "^0.8",
-		"eslint": "^9",
+		"@vue/tsconfig": "^0.9",
+		"eslint": "^10",
 		"fast-vite-plugins": "^1",
 		"prettier": "^3",
 		"sass": "^1.93",
 		"terser": "^5",
 		"typescript": "^5",
-		"vite": "^7",
+		"vite": "^8",
 		"vite-plugin-compression": "^0.5",
 		"vue-demi": "^0.14",
 		"vue-tsc": "^3"
