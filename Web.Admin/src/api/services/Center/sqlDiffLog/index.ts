@@ -18,14 +18,4 @@ export const sqlDiffLogApi = {
       requestType: "query",
     });
   },
-  /**
-   * 删除90天前的Sql差异日志
-   */
-  deleteSqlDiffLog() {
-    return axiosUtil.request({
-      url: "/sqlDiffLog/deleteSqlDiffLog",
-      method: "post",
-      requestType: "delete",
-    });
-  },
 };

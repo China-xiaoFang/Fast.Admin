@@ -1,11 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1D1KHQS53T" rowKey="recordId" :requestApi="operateLogApi.queryOperateLogPaged" stripe>
-			<!-- 表格按钮操作区域 -->
-			<template #header>
-				<el-button v-if="userInfoStore.isAdmin" plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
-			</template>
-
+		<FastTable tableKey="1D1KHQS53T" rowKey="recordId" :requestApi="operateLogApi.queryOperateLogPaged" stripe>
 			<template #employeeNo="{ row }: { row?: OperateLogModel }">
 				{{ row.createdUserName }}
 				<br />
@@ -37,32 +32,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox, dayjs } from "element-plus";
-import { Delete } from "@element-plus/icons-vue";
+import { dayjs } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
 import { operateLogApi } from "@/api/services/Admin/operateLog";
 import { OperateLogModel } from "@/api/services/Admin/operateLog/models/OperateLogModel";
-import { FastTableInstance } from "@/components";
-import { useUserInfo } from "@/stores";
 
 defineOptions({
 	name: "SystemOperateLog",
 });
-
-const userInfoStore = useUserInfo();
-
-const fastTableRef = ref<FastTableInstance>();
-
-/** 处理删除日志 */
-const handleDeleteLog = () => {
-	ElMessageBox.confirm("确定要删除90天前的操作日志？", {
-		type: "warning",
-		async beforeClose() {
-			await operateLogApi.deleteOperateLog();
-			ElMessage.success("删除成功！");
-			fastTableRef.value?.refresh();
-		},
-	});
-};
 </script>

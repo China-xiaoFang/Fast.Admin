@@ -126,6 +126,7 @@ export const useApp = defineStore(
 				}
 				return;
 			}
+			// @ts-ignore ts(2589)
 			return tableColumns.value.get(tableKey);
 		};
 

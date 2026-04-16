@@ -18,14 +18,4 @@ export const visitLogApi = {
       requestType: "query",
     });
   },
-  /**
-   * 删除90天前的访问日志
-   */
-  deleteVisitLog() {
-    return axiosUtil.request({
-      url: "/visitLog/deleteVisitLog",
-      method: "post",
-      requestType: "delete",
-    });
-  },
 };

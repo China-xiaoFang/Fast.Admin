@@ -85,7 +85,7 @@ public class DeleteRequestLogLocalJob : ISchedulerJob
         // 加载Aop
         SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), logDb);
 
-        var expireDate = dateTime.Date.AddDays(-90);
+        var expireDate = dateTime.Date.AddDays(-30);
 
         var deleteCount = 0;
 
@@ -93,7 +93,7 @@ public class DeleteRequestLogLocalJob : ISchedulerJob
             .GetTables()
             .OrderBy(ob => ob.Date).ToList();
 
-        // 删除90天前的请求日志
+        // 删除30天前的请求日志
         foreach (var tableInfo in tableInfos)
         {
             // 删除数据

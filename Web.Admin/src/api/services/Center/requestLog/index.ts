@@ -18,14 +18,4 @@ export const requestLogApi = {
       requestType: "query",
     });
   },
-  /**
-   * 删除90天前的请求日志
-   */
-  deleteRequestLog() {
-    return axiosUtil.request({
-      url: "/requestLog/deleteRequestLog",
-      method: "post",
-      requestType: "delete",
-    });
-  },
 };

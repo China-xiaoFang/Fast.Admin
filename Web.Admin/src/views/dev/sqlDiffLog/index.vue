@@ -1,11 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1D11BD21TV" rowKey="recordId" :requestApi="sqlDiffLogApi.querySqlDiffLogPaged" stripe>
-			<!-- 表格按钮操作区域 -->
-			<template #header>
-				<el-button v-if="userInfoStore.isSuperAdmin" plain type="danger" :icon="Delete" @click="handleDeleteLog">删除日志</el-button>
-			</template>
-
+		<FastTable tableKey="1D11BD21TV" rowKey="recordId" :requestApi="sqlDiffLogApi.querySqlDiffLogPaged" stripe>
 			<template #mobile="{ row }: { row?: SqlDiffLogModel }">
 				{{ row.nickName }}
 				<br />
@@ -105,24 +100,19 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, ref } from "vue";
-import { ElMessage, ElMessageBox, dayjs } from "element-plus";
-import { Delete } from "@element-plus/icons-vue";
+import { computed, reactive } from "vue";
+import { dayjs } from "element-plus";
 import { dateUtil } from "@fast-china/utils";
 import VueJsonPretty from "vue-json-pretty";
 import { sqlDiffLogApi } from "@/api/services/Center/sqlDiffLog";
 import { SqlDiffLogModel } from "@/api/services/Center/sqlDiffLog/models/SqlDiffLogModel";
-import { FastTableInstance } from "@/components";
-import { useConfig, useUserInfo } from "@/stores";
+import { useConfig } from "@/stores";
 
 defineOptions({
 	name: "DevSqlDiffLog",
 });
 
 const configStore = useConfig();
-const userInfoStore = useUserInfo();
-
-const fastTableRef = ref<FastTableInstance>();
 
 const state = reactive({
 	visible: false,
@@ -137,16 +127,4 @@ const jsonContent = computed(() => {
 		return state.content;
 	}
 });
-
-/** 处理删除日志 */
-const handleDeleteLog = () => {
-	ElMessageBox.confirm("确定要删除90天前的差异日志？", {
-		type: "warning",
-		async beforeClose() {
-			await sqlDiffLogApi.deleteSqlDiffLog();
-			ElMessage.success("删除成功！");
-			fastTableRef.value?.refresh();
-		},
-	});
-};
 </script>

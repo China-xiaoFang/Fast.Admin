@@ -18,14 +18,4 @@ export const operateLogApi = {
       requestType: "query",
     });
   },
-  /**
-   * 删除90天前的操作日志
-   */
-  deleteOperateLog() {
-    return axiosUtil.request({
-      url: "/operateLog/deleteOperateLog",
-      method: "post",
-      requestType: "delete",
-    });
-  },
 };

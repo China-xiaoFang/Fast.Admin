@@ -18,14 +18,4 @@ export const sqlExecutionLogApi = {
       requestType: "query",
     });
   },
-  /**
-   * 删除90天前的Sql执行日志
-   */
-  deleteSqlExecutionLog() {
-    return axiosUtil.request({
-      url: "/sqlExecutionLog/deleteSqlExecutionLog",
-      method: "post",
-      requestType: "delete",
-    });
-  },
 };
