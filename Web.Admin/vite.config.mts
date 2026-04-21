@@ -103,7 +103,7 @@ const ViteConfig = ({ mode }: ConfigEnv): UserConfig => {
 					chunkFileNames: "js/[name]-[hash].js",
 					entryFileNames: "js/[name]-[hash].js",
 					assetFileNames(chunkInfo) {
-						if (chunkInfo.name.endsWith(".css")) {
+						if (chunkInfo.names[0]?.endsWith(".css")) {
 							return "[ext]/[name]-[hash].[ext]";
 						} else {
 							return "[ext]/[name].[ext]";
