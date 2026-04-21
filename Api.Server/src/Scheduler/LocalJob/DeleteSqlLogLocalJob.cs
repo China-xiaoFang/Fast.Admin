@@ -84,6 +84,8 @@ public class DeleteSqlLogLocalJob : ISchedulerJob
         var logDb = new SqlSugarClient(connectionConfig);
         // 加载Aop
         SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), logDb);
+        // 设置超时时间5分钟
+        logDb.Ado.CommandTimeOut = 300;
 
         var expireDate = dateTime.Date.AddDays(-90);
 
@@ -91,7 +93,8 @@ public class DeleteSqlLogLocalJob : ISchedulerJob
 
         var tableInfos = logDb.SplitHelper<SqlExecutionLogModel>()
             .GetTables()
-            .OrderBy(ob => ob.Date).ToList();
+            .OrderBy(ob => ob.Date)
+            .ToList();
 
         // 删除90天前的Sql执行日志
         foreach (var tableInfo in tableInfos)
@@ -100,6 +103,7 @@ public class DeleteSqlLogLocalJob : ISchedulerJob
             deleteCount += await logDb.Deleteable<SqlExecutionLogModel>()
                 .AS(tableInfo.TableName)
                 .Where(wh => wh.CreatedTime < expireDate)
+                .PageSize(5000)
                 .ExecuteCommandAsync();
 
             // 查询是否不存在数据
