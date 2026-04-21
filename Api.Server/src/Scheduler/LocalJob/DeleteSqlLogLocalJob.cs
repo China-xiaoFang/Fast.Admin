@@ -84,8 +84,8 @@ public class DeleteSqlLogLocalJob : ISchedulerJob
         var logDb = new SqlSugarClient(connectionConfig);
         // 加载Aop
         SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), logDb);
-        // 设置超时时间5分钟
-        logDb.Ado.CommandTimeOut = 300;
+        // 设置超时时间30分钟
+        logDb.Ado.CommandTimeOut = 60 * 30;
 
         var expireDate = dateTime.Date.AddDays(-90);
 
