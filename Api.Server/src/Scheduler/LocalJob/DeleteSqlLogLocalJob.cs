@@ -87,7 +87,7 @@ public class DeleteSqlLogLocalJob : ISchedulerJob
         // 设置超时时间30分钟
         logDb.Ado.CommandTimeOut = 60 * 30;
 
-        var expireDate = dateTime.Date.AddDays(-90);
+        var expireDate = dateTime.Date.AddDays(-30);
 
         var deleteCount = 0;
 
