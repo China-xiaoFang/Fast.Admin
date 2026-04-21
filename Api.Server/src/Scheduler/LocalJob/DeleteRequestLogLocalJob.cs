@@ -103,7 +103,6 @@ public class DeleteRequestLogLocalJob : ISchedulerJob
             deleteCount += await logDb.Deleteable<RequestLogModel>()
                 .AS(tableInfo.TableName)
                 .Where(wh => wh.CreatedTime < expireDate)
-                .PageSize(5000)
                 .ExecuteCommandAsync();
 
             // 查询是否不存在数据
