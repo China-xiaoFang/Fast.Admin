@@ -24,7 +24,6 @@ using System.Diagnostics;
 using System.Reflection;
 using Fast.CenterLog.Entity;
 using Fast.SqlSugar;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
@@ -112,9 +111,10 @@ public class RequestActionFilter : IAsyncActionFilter
             Location = httpRequest.Path,
             RequestMethod = requestMethod,
             Param = context.ActionArguments.Count < 1 ? "" : context.ActionArguments.ToJsonString(),
-            Result =
-                (actionContext.Result?.GetType() == typeof(JsonResult) ? actionContext.Result.ToJsonString() : null)
-                ?? actionContext.Exception?.ToJsonString(),
+            //Result = actionContext.Exception != null ? actionContext.Exception.ToString() :
+            //    actionContext.Result?.GetType() == typeof(JsonResult) ? actionContext.Result.ToJsonString() : null,
+            // 这里只记录异常日志
+            Result = actionContext.Exception?.ToString(),
             ElapsedTime = stopwatch.ElapsedMilliseconds,
             DepartmentId = _user?.DepartmentId,
             DepartmentName = _user?.DepartmentName,
