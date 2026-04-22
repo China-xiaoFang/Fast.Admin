@@ -1,0 +1,10 @@
+<Project>
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <LangVersion>12.0</LangVersion>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Authors>小方</Authors>
+        <Copyright>版权所有 © 2018-Now 小方</Copyright>
+    </PropertyGroup>
+</Project>

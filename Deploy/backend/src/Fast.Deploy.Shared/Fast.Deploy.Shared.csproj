@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Description>Fast.Deploy 共享类库，包含枚举、模型、DTO。</Description>
+    </PropertyGroup>
+
+</Project>
