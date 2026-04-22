@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Fast.Deploy.Agent/Fast.Deploy.Agent.csproj" />
+    <Project Path="src/Fast.Deploy.Server/Fast.Deploy.Server.csproj" />
+    <Project Path="src/Fast.Deploy.Shared/Fast.Deploy.Shared.csproj" />
+  </Folder>
+</Solution>

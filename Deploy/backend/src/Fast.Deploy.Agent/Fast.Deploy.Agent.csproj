@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <Description>Fast.Deploy Agent 服务，运行在每个部署节点上，接受并执行部署指令。</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../Fast.Deploy.Shared/Fast.Deploy.Shared.csproj" />
+    </ItemGroup>
+
+</Project>
