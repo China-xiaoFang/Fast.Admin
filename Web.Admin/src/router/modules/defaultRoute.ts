@@ -20,6 +20,7 @@ export const defaultRoute: RouteRecordRaw[] = [
 		component: () => import("@/views/common/403/index.vue"),
 		meta: {
 			title: "无权限操作",
+			noLogin: true,
 		},
 	},
 	{
@@ -27,6 +28,7 @@ export const defaultRoute: RouteRecordRaw[] = [
 		component: () => import("@/views/common/404/index.vue"),
 		meta: {
 			title: "页面找不到了",
+			noLogin: true,
 		},
 	},
 	{

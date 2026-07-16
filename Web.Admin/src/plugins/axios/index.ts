@@ -21,7 +21,11 @@ let loginCallBack = false;
 const handleReloadLogin = (response: AxiosResponse): boolean => {
 	// 尝试获取 Restful 风格返回Code，或者获取响应状态码
 	const code = response?.data?.code || response?.status;
-	if (code && [401].includes(code)) {
+	if (code === 403) {
+		ElMessage.warning("无权限，请联系管理员！");
+		return true;
+	}
+	if (code === 401) {
 		if (!loginCallBack) {
 			loginCallBack = true;
 			ElMessageBox.alert("登录已失效，请重新登录！", {

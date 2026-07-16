@@ -231,8 +231,7 @@ public class FileApplication : IDynamicApplication
     [ApiInfo("下载文件", HttpRequestActionEnum.Download)]
     public async Task<IActionResult> Download(DownloadFileInput input)
     {
-        var fileInfoModel = await _repository.Entities.ClearFilter<IBaseTEntity>()
-            .InSingleAsync(input.FileId);
+        var fileInfoModel = await _repository.Entities.InSingleAsync(input.FileId);
         if (fileInfoModel == null)
             throw new UserFriendlyException("文件不存在！");
 

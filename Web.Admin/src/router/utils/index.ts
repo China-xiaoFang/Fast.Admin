@@ -17,7 +17,7 @@ const loadComponent = (component: string): any => {
 		if (component.includes("/")) {
 			return modules[`/src/views/${component}.vue`];
 		}
-		return [`/src/views/${component}/index.vue`];
+		return modules[`/src/views/${component}/index.vue`];
 	} else {
 		return () => import("@/views/common/empty/index.vue");
 	}
@@ -60,7 +60,7 @@ const packageMenu = (menuList: AuthMenuInfoDto[]): RouteRecordRaw[] => {
 				title: item.menuTitle || item.menuName,
 				icon: item.icon,
 				tab: item.tab,
-				hide: item.visible,
+				hide: !item.visible,
 				keepAlive: item.keepAlive,
 			},
 			children: [],

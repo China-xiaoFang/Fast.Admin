@@ -22,9 +22,11 @@
 
 using Fast.JwtBearer;
 using Fast.UnifyResult;
+using Fast.Center.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using SqlSugar;
 
 namespace Fast.Core;
 
@@ -61,6 +63,18 @@ public class JwtBearerHandle : IJwtBearerHandle
                 await _user.GetAuthUserInfo(Enum.Parse<AppEnvironmentEnum>(deviceType, true), appNo, tenantNo, employeeNo);
 
             if (authUserInfo == null)
+                return false;
+
+            var repository = httpContext.RequestServices.GetService<ISqlSugarClient>();
+            var accountEnabled = await repository.Queryable<AccountModel>()
+                .Where(wh => wh.AccountId == authUserInfo.AccountId)
+                .Where(wh => wh.Status == CommonStatusEnum.Enable)
+                .AnyAsync();
+            if (!accountEnabled)
+                return false;
+
+            var tenantModel = await TenantContext.GetTenant(tenantNo, false);
+            if (tenantModel?.Status != CommonStatusEnum.Enable)
                 return false;
 
             // 判断设备信息是否和缓存中的一致

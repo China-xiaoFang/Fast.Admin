@@ -782,7 +782,7 @@ public class LoginService : IDynamicApplication
     /// <returns></returns>
     [HttpPost("/tryLogin")]
     [ApiInfo("尝试登录", HttpRequestActionEnum.Auth)]
-    [AllowAnonymous]
+    [Authorize]
     public async Task<LoginOutput> TryLogin(TryLoginInput input)
     {
         // 查询应用信息
@@ -801,6 +801,11 @@ public class LoginService : IDynamicApplication
         if (tenantUserModel == null)
         {
             return new LoginOutput {Status = LoginStatusEnum.NotAccount, Message = "未找到用户信息，请先授权登录！"};
+        }
+
+        if (tenantUserModel.AccountId != _user.AccountId)
+        {
+            throw new UnauthorizedAccessException("无权切换到指定用户！");
         }
 
         var accountModel = await _repository.Queryable<AccountModel>()
