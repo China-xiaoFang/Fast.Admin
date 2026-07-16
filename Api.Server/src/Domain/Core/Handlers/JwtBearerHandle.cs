@@ -65,10 +65,9 @@ public class JwtBearerHandle : IJwtBearerHandle
             if (authUserInfo == null)
                 return false;
 
-            var repository = httpContext.RequestServices.GetService<ISqlSugarClient>();
+            var repository = httpContext.RequestServices.GetRequiredService<ISqlSugarClient>();
             var accountEnabled = await repository.Queryable<AccountModel>()
-                .Where(wh => wh.AccountId == authUserInfo.AccountId)
-                .Where(wh => wh.Status == CommonStatusEnum.Enable)
+                .Where(wh => wh.AccountId == authUserInfo.AccountId && wh.Status == CommonStatusEnum.Enable)
                 .AnyAsync();
             if (!accountEnabled)
                 return false;
