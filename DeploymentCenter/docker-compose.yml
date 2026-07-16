@@ -1,0 +1,14 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Server/Dockerfile
+    ports: ["5000:8080"]
+    volumes: ["packages:/app/data/packages"]
+  web:
+    build:
+      context: ./Web
+      dockerfile: Dockerfile
+    ports: ["8080:80"]
+volumes:
+  packages:

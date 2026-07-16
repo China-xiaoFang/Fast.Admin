@@ -1,0 +1,6 @@
+@DeploymentCenter.Server_HostAddress = http://localhost:5011
+
+GET {{DeploymentCenter.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

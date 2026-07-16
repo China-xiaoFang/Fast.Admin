@@ -1,0 +1,7 @@
+{
+  "name": "orders-api",
+  "version": "1.0.0",
+  "runtime": "dotnet",
+  "entryPoint": "Orders.Api.dll",
+  "healthCheck": { "type": "http", "url": "http://127.0.0.1:8080/health" }
+}
