@@ -297,10 +297,21 @@ const state = reactive({
 	},
 });
 
+/** 页面当前是否处于活动状态 */
+let isActive = false;
+
+/** 活动会话编号，用于阻止失活后的异步回调重启轮询 */
+let activeSession = 0;
+
 /** 表格刷新 */
 const handleTableRefresh = async () => {
 	const apiRes = await schedulerApi.queryAllSchedulerJob(state.activeJobGroup, state.tenantId);
 	state.schedulerJobList = apiRes[0]?.jobInfoList ?? [];
+};
+
+/** 刷新调度器数据 */
+const fetchData = async () => {
+	[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()]);
 };
 
 /** 停止定时器 */
@@ -321,7 +332,7 @@ const startInterval = () => {
 		state.interval = setTimeout(async () => {
 			try {
 				state.lastUpdateTime = new Date();
-				[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()]);
+				await fetchData();
 			} catch {}
 			schedule();
 		}, 5000);
@@ -458,28 +469,35 @@ const handleDelJob = async (row: SchedulerJobInfoDto) => {
 	});
 };
 
-onMounted(async () => {
-	state.loading = true;
-	[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()]).finally(() => {
-		state.loading = false;
-	});
-	startInterval();
-});
+/** 激活页面并在首次请求完成后启动轮询 */
+const activate = (showLoading = false) => {
+	if (isActive) return;
+	isActive = true;
+	const session = ++activeSession;
+	if (showLoading) state.loading = true;
+	fetchData()
+		.catch(() => {})
+		.finally(() => {
+			if (!isActive || session !== activeSession) return;
+			state.loading = false;
+			startInterval();
+		});
+};
 
-onActivated(async () => {
-	try {
-		[state.schedulerDetail] = await Promise.all([schedulerApi.querySchedulerDetail(state.tenantId), handleTableRefresh()]);
-	} catch {}
-	startInterval();
-});
-
-onDeactivated(() => {
+/** 停用页面并使尚未完成的激活流程失效 */
+const deactivate = () => {
+	if (!isActive) return;
+	isActive = false;
+	activeSession++;
+	state.loading = false;
 	stopInterval();
-});
+};
 
-onUnmounted(() => {
-	stopInterval();
-});
+onMounted(() => activate(true));
+onActivated(() => activate());
+onDeactivated(deactivate);
+
+onUnmounted(deactivate);
 </script>
 
 <style lang="scss" scoped>

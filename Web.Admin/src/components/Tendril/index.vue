@@ -40,6 +40,7 @@ const props = defineProps({
 
 const canvasRef = ref<HTMLCanvasElement>();
 let ctx: CanvasRenderingContext2D = null;
+let animationFrameId: number | null = null;
 
 const state = reactive({
 	/** 鼠标当前位置作为丝带目标点 */
@@ -190,6 +191,7 @@ const reset = () => {
 
 /** 动画循环 */
 const loop = () => {
+	animationFrameId = null;
 	if (!state.running || !ctx) return;
 
 	// 背景填充
@@ -229,7 +231,7 @@ const loop = () => {
 		}
 	}
 
-	requestAnimationFrame(loop);
+	animationFrameId = requestAnimationFrame(loop);
 };
 
 /** 鼠标或触摸移动时更新目标点 */
@@ -269,18 +271,21 @@ const init = (event: MouseEvent | TouchEvent) => {
 
 	mousemove(event);
 	reset();
-	loop();
+	if (state.running && animationFrameId === null) loop();
 };
 
 const start = () => {
-	if (!state.running) {
-		state.running = true;
-		loop();
-	}
+	if (state.running && animationFrameId !== null) return;
+	state.running = true;
+	loop();
 };
 
 const stop = () => {
 	state.running = false;
+	if (animationFrameId !== null) {
+		cancelAnimationFrame(animationFrameId);
+		animationFrameId = null;
+	}
 };
 
 const handleClick = (event: PointerEvent) => {
@@ -324,14 +329,17 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+	stop();
 	document.removeEventListener("mousemove", init);
 	document.removeEventListener("touchstart", init);
 	document.removeEventListener("mousemove", mousemove);
 	document.removeEventListener("touchmove", mousemove);
 	document.removeEventListener("touchstart", touchstart);
+	document.body.removeEventListener("orientationchange", resize);
 	window.removeEventListener("resize", resize);
 	window.removeEventListener("focus", start);
 	window.removeEventListener("blur", stop);
+	ctx = null;
 });
 
 // 暴露给父组件使用
