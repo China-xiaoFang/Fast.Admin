@@ -14,7 +14,7 @@ interface AuthElement extends HTMLElement {
 	__tag__: string[];
 	__authType: "hide" | "disabled" | "disablePointer" | "none";
 	__auth_isAuth__: boolean;
-	__auth_timer__: NodeJS.Timeout;
+	__auth_timer__?: ReturnType<typeof setTimeout>;
 	__tag_originClick__: (...args) => any;
 }
 
@@ -111,7 +111,7 @@ const AuthDirective: Directive = {
 				// 原来的事件
 				vNode.props.onClick = function (): void {
 					if (el.__auth_timer__) {
-						clearInterval(el.__auth_timer__);
+						clearTimeout(el.__auth_timer__);
 					}
 					// 防抖处理
 					el.__auth_timer__ = setTimeout(() => {
@@ -129,6 +129,12 @@ const AuthDirective: Directive = {
 		// 判断权限是否通过
 		if (!el.__auth_isAuth__) {
 			notAuthAction(el, vNode);
+		}
+	},
+	beforeUnmount(el: AuthElement) {
+		if (el.__auth_timer__) {
+			clearTimeout(el.__auth_timer__);
+			delete el.__auth_timer__;
 		}
 	},
 };

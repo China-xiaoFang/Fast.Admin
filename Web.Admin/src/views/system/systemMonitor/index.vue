@@ -256,6 +256,12 @@ const state = reactive({
 	],
 });
 
+/** 页面当前是否处于活动状态 */
+let isActive = false;
+
+/** 活动会话编号，用于阻止失活后的异步回调重启轮询 */
+let activeSession = 0;
+
 const fetchData = async () => {
 	[state.machineDetail, state.programDetail] = await Promise.all([
 		axiosUtil.request({
@@ -276,7 +282,7 @@ const fetchData = async () => {
 const stopInterval = () => {
 	state.polling = false;
 	if (state.interval) {
-		clearInterval(state.interval);
+		clearTimeout(state.interval);
 		state.interval = null;
 	}
 };
@@ -294,26 +300,35 @@ const startInterval = () => {
 	schedule();
 };
 
-onMounted(async () => {
-	state.loading = true;
-	await fetchData().finally(() => {
-		state.loading = false;
-	});
-	startInterval();
-});
+/** 激活页面并在首次请求完成后启动轮询 */
+const activate = (showLoading = false) => {
+	if (isActive) return;
+	isActive = true;
+	const session = ++activeSession;
+	if (showLoading) state.loading = true;
+	fetchData()
+		.catch(() => {})
+		.finally(() => {
+			if (!isActive || session !== activeSession) return;
+			state.loading = false;
+			startInterval();
+		});
+};
 
-onActivated(async () => {
-	await fetchData().catch(() => {});
-	startInterval();
-});
-
-onDeactivated(() => {
+/** 停用页面并使尚未完成的激活流程失效 */
+const deactivate = () => {
+	if (!isActive) return;
+	isActive = false;
+	activeSession++;
+	state.loading = false;
 	stopInterval();
-});
+};
 
-onUnmounted(() => {
-	stopInterval();
-});
+onMounted(() => activate(true));
+onActivated(() => activate());
+onDeactivated(deactivate);
+
+onUnmounted(deactivate);
 </script>
 
 <style lang="scss" scoped>
