@@ -11,8 +11,9 @@ public sealed class DeploymentController(IDeploymentOrchestrator orchestrator) :
     [HttpPost]
     public async Task<ActionResult<DeploymentPlan>> Create(DeploymentRequest request, CancellationToken cancellationToken)
     {
-        if (request.Id == Guid.Empty || request.NodeIds.Count == 0)
-            return BadRequest("A deployment id and at least one node are required.");
+        if (request.Id == Guid.Empty || request.NodeIds.Count == 0 || request.PackageSha256.Length != 64 ||
+            !request.PackageSha256.All(Uri.IsHexDigit))
+            return BadRequest("A deployment id, at least one node, and a SHA-256 checksum are required.");
         return Ok(await orchestrator.StartAsync(request, cancellationToken));
     }
 

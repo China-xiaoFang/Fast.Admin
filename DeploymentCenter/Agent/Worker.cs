@@ -34,8 +34,13 @@ public sealed class Worker(ILogger<Worker> logger, IConfiguration configuration,
             executor.ExecuteAsync(new AgentTask(deploymentId, nodeId, string.Empty, string.Empty, "rollback", new Dictionary<string, string>()), stoppingToken));
         await connection.StartAsync(stoppingToken);
         await connection.InvokeAsync("Register", nodeId, stoppingToken);
-        while (!stoppingToken.IsCancellationRequested)
-            await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
-        await connection.DisposeAsync();
+        try
+        {
+            await Task.Delay(Timeout.InfiniteTimeSpan, stoppingToken);
+        }
+        finally
+        {
+            await connection.DisposeAsync();
+        }
     }
 }

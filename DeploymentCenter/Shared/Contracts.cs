@@ -16,6 +16,7 @@ public sealed record DeploymentRequest(
     Guid ApplicationId,
     Guid EnvironmentId,
     Guid ReleaseId,
+    string PackageSha256,
     DeploymentStrategyType Strategy,
     IReadOnlyList<Guid> NodeIds,
     IReadOnlyList<int>? RollingPercentages,
@@ -23,7 +24,7 @@ public sealed record DeploymentRequest(
 public sealed record DeploymentPlan(IReadOnlyList<IReadOnlyList<Guid>> Batches, bool RequiresTrafficSwitch);
 public sealed record DeploymentEvent(Guid DeploymentId, DateTimeOffset Timestamp, DeploymentStatus Status, string Message, Guid? NodeId = null);
 public sealed record AgentRegistration(string AgentName, AgentPlatform Platform, string AccessKey, string SecretProof, IReadOnlySet<string> Tags);
-public sealed record AgentHeartbeat(Guid NodeId, double CpuPercent, long MemoryBytes, long DiskFreeBytes, DateTimeOffset Timestamp);
+public sealed record AgentHeartbeat(Guid NodeId, double CpuUtilizationPercent, long MemoryBytes, long DiskFreeBytes, DateTimeOffset Timestamp);
 public sealed record AgentTask(Guid DeploymentId, Guid NodeId, string PackageUrl, string Sha256, string Operation, IReadOnlyDictionary<string, string> Parameters);
 
 public interface IDeploymentStrategy

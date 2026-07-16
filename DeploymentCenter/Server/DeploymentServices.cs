@@ -31,7 +31,7 @@ public sealed class DeploymentOrchestrator(
             foreach (var batch in plan.Batches)
             {
                 foreach (var nodeId in batch)
-                    await agents.DispatchAsync(new(request.Id, nodeId, $"/api/packages/{request.ReleaseId}", request.ReleaseId.ToString(), "deploy", new Dictionary<string, string>()), cancellationToken);
+                    await agents.DispatchAsync(new(request.Id, nodeId, $"/api/packages/{request.ReleaseId}", request.PackageSha256, "deploy", new Dictionary<string, string>()), cancellationToken);
                 await events.PublishAsync(new(request.Id, DateTimeOffset.UtcNow, DeploymentStatus.Running, $"Batch of {batch.Count} node(s) dispatched."), cancellationToken);
             }
             return plan;
@@ -52,8 +52,18 @@ public sealed class DeploymentOrchestrator(
     }
 }
 
-public sealed class LocalStorageProvider(string root) : IStorageProvider
+public sealed class LocalStorageProvider : IStorageProvider
 {
+    private readonly string _root;
+    private readonly string _rootPrefix;
+
+    public LocalStorageProvider(string root)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(root);
+        _root = Path.GetFullPath(root);
+        _rootPrefix = _root.EndsWith(Path.DirectorySeparatorChar) ? _root : _root + Path.DirectorySeparatorChar;
+    }
+
     public async Task<string> SaveAsync(string key, Stream content, CancellationToken cancellationToken)
     {
         var path = GetPath(key);
@@ -66,9 +76,11 @@ public sealed class LocalStorageProvider(string root) : IStorageProvider
     public Task DeleteAsync(string key, CancellationToken cancellationToken) { File.Delete(GetPath(key)); return Task.CompletedTask; }
     private string GetPath(string key)
     {
-        var basePath = Path.GetFullPath(root) + Path.DirectorySeparatorChar;
-        var path = Path.GetFullPath(Path.Combine(root, key.Replace('/', Path.DirectorySeparatorChar)));
-        return path.StartsWith(basePath, StringComparison.Ordinal) ? path : throw new ArgumentException("Invalid storage key.", nameof(key));
+        var normalizedKey = Uri.UnescapeDataString(key).Replace('/', Path.DirectorySeparatorChar);
+        if (Path.IsPathRooted(normalizedKey) || normalizedKey.Split(Path.DirectorySeparatorChar).Any(segment => segment is "." or ".."))
+            throw new ArgumentException("Invalid storage key.", nameof(key));
+        var path = Path.GetFullPath(Path.Combine(_root, normalizedKey));
+        return path.StartsWith(_rootPrefix, StringComparison.Ordinal) ? path : throw new ArgumentException("Invalid storage key.", nameof(key));
     }
 }
 
