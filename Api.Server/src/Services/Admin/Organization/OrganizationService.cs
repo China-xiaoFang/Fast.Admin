@@ -291,7 +291,7 @@ public class OrganizationService : IDynamicApplication
         await _repository.UpdateAsync(organizationModel);
 
         // 更新所有子级
-        var childrenList = await _repository.Entities.Where(wh => wh.ParentIds.Contains(organizationModel.OrgId))
+        var childrenList = await _repository.Entities.Where(wh => SqlFunc.JsonArrayAny(wh.ParentIds, organizationModel.OrgId))
             .ToListAsync();
 
         void updateChildrenName(long parentId)

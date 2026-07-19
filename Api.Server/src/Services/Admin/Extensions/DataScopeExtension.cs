@@ -147,7 +147,7 @@ public static class DataScopeExtension
         if (_user.DataScopeType == DataScopeTypeEnum.DeptWithChild)
         {
             var dataScopeQueryable = queryable.Context.Queryable<DepartmentModel>()
-                .Where(wh => wh.DataPublic || wh.DepartmentId == departmentId || wh.ParentIds.Contains(departmentId))
+                .Where(wh => wh.DataPublic || wh.DepartmentId == departmentId || SqlFunc.JsonArrayAny(wh.ParentIds, departmentId))
                 .Select(sl => new DepartmentModel {DepartmentId = sl.DepartmentId});
             return BuildInnerJoin(queryable, departmentIdFieldSelector, dataScopeQueryable);
         }
