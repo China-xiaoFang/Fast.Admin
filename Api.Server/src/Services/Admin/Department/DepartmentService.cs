@@ -76,10 +76,8 @@ public class DepartmentService : IDynamicApplication
         // 本部门及以下数据
         else if (_user.DataScopeType == DataScopeTypeEnum.DeptWithChild)
         {
-            queryable = queryable.Where(wh =>
-                wh.DataPublic
-                || wh.DepartmentId == _user.DepartmentId
-                || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0));
+            queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId
+                                              || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0));
         }
         // 本部门数据或仅本人数据
         else
@@ -157,10 +155,8 @@ public class DepartmentService : IDynamicApplication
         // 本部门及以下数据
         else if (_user.DataScopeType == DataScopeTypeEnum.DeptWithChild)
         {
-            queryable = queryable.Where(wh =>
-                wh.DataPublic
-                || wh.DepartmentId == _user.DepartmentId
-                || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0));
+            queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId
+                                              || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0));
         }
         // 本部门数据或仅本人数据
         else
