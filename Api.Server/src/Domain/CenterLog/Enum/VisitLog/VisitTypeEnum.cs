@@ -23,7 +23,7 @@
 namespace Fast.CenterLog.Enum;
 
 /// <summary>
-/// <see cref="VisitTypeEnum"/> 访问类型枚举
+/// 访问类型枚举
 /// </summary>
 [Flags]
 [FastEnum("访问类型枚举")]

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.ExceptionLog.Dto;
 
 /// <summary>
-/// <see cref="QueryExceptionLogPagedInput"/> 获取异常日志分页列表输入
+/// 获取异常日志分页列表输入
 /// </summary>
 public class QueryExceptionLogPagedInput : PagedInput
 {

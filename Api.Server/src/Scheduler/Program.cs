@@ -30,13 +30,14 @@ using Fast.NET.Core;
 using Fast.OpenApi;
 using Fast.Runtime;
 using Fast.Scheduler;
-using Fast.Scheduler.HostedService;
+using Fast.Scheduler.BackgroundServices;
 using Fast.Serialization;
 using Fast.SqlSugar;
 using Fast.Swagger;
 using Fast.UnifyResult;
 using IGeekFan.AspNetCore.Knife4jUI;
 using Microsoft.AspNetCore.HttpOverrides;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,11 +56,11 @@ builder.Services.AddCorsAccessor(builder.Configuration);
 // 添加 Gzip 压缩服务
 builder.Services.AddGzipCompression();
 
+// 添加邮件服务
+builder.Services.AddMailService();
+
 // 添加依赖注入服务
 builder.Services.AddDependencyInjection();
-
-// 邮件配置验证
-builder.Services.AddConfigurableOptions<MailSettingsOptions>();
 
 // 添加缓存服务
 builder.Services.AddCache();
@@ -71,8 +72,13 @@ if (redisOptions != null)
     // 添加分布式缓存
     builder.Services.AddStackExchangeRedisCache(options =>
     {
-        options.Configuration =
-            $"{redisOptions.ServiceIp}:{redisOptions.Port ?? 6379},password={redisOptions.DbPwd},defaultDatabase={redisOptions.DbName ?? 2},abortConnect=false";
+        options.ConfigurationOptions = new ConfigurationOptions
+        {
+            Password = redisOptions.DbPwd,
+            DefaultDatabase = redisOptions.DbName ?? 2,
+            AbortOnConnectFail = false,
+            EndPoints = {{redisOptions.ServiceIp, redisOptions.Port ?? 6379}}
+        };
         options.InstanceName = $"{nameof(Fast)}:";
     });
 }
@@ -85,11 +91,16 @@ builder.Services.AddSqlSugar(builder.Configuration, builder.Environment);
 
 builder.Services.AddHttpClient();
 
+// 添加 API 限流
+builder.Services.AddApiRateLimit();
+
 // 添加 JwtBearer 授权
 builder.Services.AddJwtBearer(builder.Configuration);
 
-// Add Controllers.
+// Add Controllers
 builder.Services.AddControllers()
+    // 平台控制面租户边界
+    .AddMvcFilter<PlatformAccessFilter>()
     // 请求日志拦截
     .AddMvcFilter<RequestActionFilter>()
     .AddSerialization();
@@ -113,13 +124,16 @@ builder.Services.AddSwaggerGenNewtonsoftSupport();
 builder.Services.AddQuartzService(builder.Configuration);
 
 // 添加删除日志托管服务
-builder.Services.AddHostedService<DeleteLogHostedService>();
+builder.Services.AddHostedService<DeleteLogBackgroundService>();
+
+// 添加 SqlSugar 日志后台服务
+builder.Services.AddHostedService<SqlSugarLogBackgroundService>();
 
 // 添加同步 Api 托管服务
 builder.Services.AddHostedService<SyncApiHostedService>();
 
 // 添加生成Api文件托管服务
-builder.Services.AddHostedService<GenerateApiFileHostedService>();
+builder.Services.AddHostedService<GenerateApiFileBackgroundService>();
 
 // 添加 Quartz 托管服务
 builder.Services.AddQuartzHostedService();
@@ -135,8 +149,11 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-//// 强制使用 Https
-//app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+    app.UseHttpsRedirection();
+}
 
 // 启用 Body 重复读功能
 app.EnableBuffering();
@@ -145,6 +162,8 @@ app.EnableBuffering();
 app.UseMiddleware<RequestMiddleware>();
 
 app.UseRouting();
+
+app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -162,6 +181,7 @@ app.UseKnife4UI(options =>
     }
 });
 
-app.MapControllers();
+app.MapControllers()
+    .RequireRateLimiting(CommonConst.GlobalApiRateLimit);
 
 app.Run();

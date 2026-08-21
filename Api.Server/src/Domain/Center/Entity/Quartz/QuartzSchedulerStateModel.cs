@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="QuartzSchedulerStateModel"/> Quartz 调度器状态表Model类
+/// Quartz 调度器状态表Model类
 /// </summary>
 [SugarTable("QRTZ_SCHEDULER_STATE", "Quartz 调度器状态表")]
 [SugarDbType(DatabaseTypeEnum.Center)]

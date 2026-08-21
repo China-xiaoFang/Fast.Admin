@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="WeChatUserTypeEnum"/> 微信用户类型枚举
+/// 微信用户类型枚举
 /// </summary>
 [Flags]
 [FastEnum("微信用户类型枚举")]

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,9 +28,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.SysSerial;
 
 /// <summary>
-/// <see cref="SysSerialService"/> 系统序号规则服务
+/// 系统序号规则服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "sysSerial")]
+[PlatformOnly]
 public class SysSerialService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<SysSerialRuleModel> _repository;
@@ -43,8 +44,6 @@ public class SysSerialService : IDynamicApplication
     /// <summary>
     /// 获取系统序号规则分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取系统序号规则分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.SysSerial.Paged)]
@@ -76,8 +75,6 @@ public class SysSerialService : IDynamicApplication
     /// <summary>
     /// 获取系统序号规则详情
     /// </summary>
-    /// <param name="serialRuleId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取系统序号规则详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.SysSerial.Detail)]
@@ -113,8 +110,6 @@ public class SysSerialService : IDynamicApplication
     /// <summary>
     /// 添加系统序号规则
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加系统序号规则", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.SysSerial.Add)]
@@ -140,8 +135,6 @@ public class SysSerialService : IDynamicApplication
     /// <summary>
     /// 编辑系统序号规则
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑系统序号规则", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.SysSerial.Edit)]

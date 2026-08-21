@@ -23,7 +23,7 @@
 namespace Fast.Admin.Entity;
 
 /// <summary>
-/// <see cref="DepartmentModel"/> 部门表Model类
+/// 部门表Model类
 /// </summary>
 [SugarTable("Department", "部门表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
@@ -116,6 +116,7 @@ public class DepartmentModel : IUpdateVersion
     /// 数据公开
     /// </summary>
     /// <remarks><see cref="DataScopeTypeEnum.DeptWithChild"/> 时生效</remarks>
+    [SugarColumn(ColumnDescription = "数据公开")]
     public bool DataPublic { get; set; }
 
     /// <summary>

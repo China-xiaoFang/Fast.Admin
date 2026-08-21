@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Table.Dto;
 
 /// <summary>
-/// <see cref="QueryTableConfigDetailOutput"/> 获取表格配置详情输出
+/// 获取表格配置详情输出
 /// </summary>
 public class QueryTableConfigDetailOutput : PagedOutput
 {

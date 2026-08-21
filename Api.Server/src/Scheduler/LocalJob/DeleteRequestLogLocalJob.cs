@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -31,14 +31,11 @@ using SqlSugar;
 namespace Fast.Scheduler.LocalJob;
 
 /// <summary>
-/// <see cref="DeleteRequestLogLocalJob"/> 删除请求日志本地作业
+/// 删除请求日志本地作业
 /// </summary>
 public class DeleteRequestLogLocalJob : ISchedulerJob
 {
-    /// <summary>
-    /// 获取本地作业
-    /// </summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public SchedulerLocalJobInfo GetLocalJob()
     {
         return new SchedulerLocalJobInfo
@@ -62,13 +59,7 @@ public class DeleteRequestLogLocalJob : ISchedulerJob
         };
     }
 
-    /// <summary>
-    /// 执行作业
-    /// </summary>
-    /// <param name="serviceProvider"><see cref="IServiceProvider"/> 服务提供者（请求作用域类似于，如果存在 TenantId 则自动注入 IUser 服务）</param>
-    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
-    /// <param name="logInfo"><see cref="SchedulerJobLocalLogInfo"/> 日志信息</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<string> Execute(IServiceProvider serviceProvider, ISqlSugarClient db, SchedulerJobLocalLogInfo logInfo)
     {
         // 进入方法的一瞬间记录时间
@@ -81,7 +72,7 @@ public class DeleteRequestLogLocalJob : ISchedulerJob
             CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
-        var logDb = new SqlSugarClient(connectionConfig);
+        using var logDb = new SqlSugarClient(connectionConfig);
         // 加载Aop
         SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), logDb);
         // 设置超时时间30分钟

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,9 +28,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.PasswordRecord;
 
 /// <summary>
-/// <see cref="PasswordRecordService"/> 密码记录服务
+/// 密码记录服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "passwordRecord")]
+[PlatformOnly]
 public class PasswordRecordService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<PasswordRecordModel> _repository;
@@ -43,8 +44,6 @@ public class PasswordRecordService : IDynamicApplication
     /// <summary>
     /// 获取密码记录分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取密码记录分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.PasswordRecordPaged)]
@@ -59,7 +58,6 @@ public class PasswordRecordService : IDynamicApplication
                 AccountId = t1.AccountId,
                 OperationType = t1.OperationType,
                 Type = t1.Type,
-                Password = t1.Password,
                 CreatedTime = t1.CreatedTime,
                 AccountKey = t2.AccountKey,
                 Mobile = t2.Mobile,

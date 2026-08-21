@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Position.Dto;
 
 /// <summary>
-/// <see cref="QueryPositionDetailOutput"/> 获取职位详情输出
+/// 获取职位详情输出
 /// </summary>
 public class QueryPositionDetailOutput : PagedOutput
 {

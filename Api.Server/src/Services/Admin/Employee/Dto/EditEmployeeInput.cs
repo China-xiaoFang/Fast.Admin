@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -21,12 +21,11 @@
 // ------------------------------------------------------------------------
 
 using Fast.Admin.Entity;
-using Fast.Admin.Enum;
 
 namespace Fast.Admin.Service.Employee.Dto;
 
 /// <summary>
-/// <see cref="EditEmployeeInput"/> 编辑职员输入
+/// 编辑职员输入
 /// </summary>
 public class EditEmployeeInput : UpdateVersionInput
 {
@@ -68,106 +67,10 @@ public class EditEmployeeInput : UpdateVersionInput
     public string IdPhoto { get; set; }
 
     /// <summary>
-    /// 初次工作日期
-    /// </summary>
-    [DateTimeRequired(ErrorMessage = "初次工作日期不能为空")]
-    public DateTime FirstWorkDate { get; set; }
-
-    /// <summary>
     /// 入职日期
     /// </summary>
     [DateTimeRequired(ErrorMessage = "入职日期不能为空")]
     public DateTime EntryDate { get; set; }
-
-    /// <summary>
-    /// 民族
-    /// </summary>
-    public NationEnum? Nation { get; set; }
-
-    /// <summary>
-    /// 籍贯
-    /// </summary>
-    public string NativePlace { get; set; }
-
-    /// <summary>
-    /// 家庭地址
-    /// </summary>
-    public string FamilyAddress { get; set; }
-
-    /// <summary>
-    /// 通信地址
-    /// </summary>
-    public string MailingAddress { get; set; }
-
-    /// <summary>
-    /// 生日
-    /// </summary>
-    public DateTime? Birthday { get; set; }
-
-    /// <summary>
-    /// 证件类型
-    /// </summary>
-    public IdTypeEnum? IdType { get; set; }
-
-    /// <summary>
-    /// 证件号码
-    /// </summary>
-    public string IdNumber { get; set; }
-
-    /// <summary>
-    /// 文件程度
-    /// </summary>
-    public EducationLevelEnum? EducationLevel { get; set; }
-
-    /// <summary>
-    /// 政治面貌
-    /// </summary>
-    public PoliticalStatusEnum? PoliticalStatus { get; set; }
-
-    /// <summary>
-    /// 毕业学院
-    /// </summary>
-    public string GraduationCollege { get; set; }
-
-    /// <summary>
-    /// 学历
-    /// </summary>
-    public AcademicQualificationsEnum? AcademicQualifications { get; set; }
-
-    /// <summary>
-    /// 学制
-    /// </summary>
-    public AcademicSystemEnum? AcademicSystem { get; set; }
-
-    /// <summary>
-    /// 学位
-    /// </summary>
-    public DegreeEnum? Degree { get; set; }
-
-    /// <summary>
-    /// 家庭电话
-    /// </summary>
-    public string FamilyPhone { get; set; }
-
-    /// <summary>
-    /// 办公电话
-    /// </summary>
-    public string OfficePhone { get; set; }
-
-    /// <summary>
-    /// 紧急联系人
-    /// </summary>
-    public string EmergencyContact { get; set; }
-
-    /// <summary>
-    /// 紧急联系电话
-    /// </summary>
-    public string EmergencyPhone { get; set; }
-
-    /// <summary>
-    /// 紧急联系地址
-    /// </summary>
-    public string EmergencyAddress { get; set; }
 
     /// <summary>
     /// 备注

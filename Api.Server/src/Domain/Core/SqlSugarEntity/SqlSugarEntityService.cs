@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,7 +29,7 @@ using SqlSugar;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="SqlSugarEntityService"/> SqlSugar实体服务
+/// <see cref="ISqlSugarEntityService"/> 默认实现
 /// </summary>
 public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependency
 {
@@ -49,11 +49,8 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
     private readonly ILogger _logger;
 
     /// <summary>
-    /// <see cref="SqlSugarEntityService"/> SqlSugar实体服务
+    /// SqlSugar 实体服务
     /// </summary>
-    /// <param name="centerCache"><see cref="ICache"/> 缓存</param>
-    /// <param name="hostEnvironment"><see cref="IHostEnvironment"/> 运行环境</param>
-    /// <param name="logger"><see cref="ILogger"/> 日志</param>
     public SqlSugarEntityService(ICache<CenterCCL> centerCache, IHostEnvironment hostEnvironment,
         ILogger<ISqlSugarEntityService> logger)
     {
@@ -62,13 +59,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
         _logger = logger;
     }
 
-    /// <summary>
-    /// 根据类型获取连接字符串
-    /// </summary>
-    /// <param name="tenantId"><see cref="long"/> 租户Id</param>
-    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
-    /// <param name="databaseType"><see cref="DatabaseTypeEnum"/> 数据库类型</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<ConnectionSettingsOptions> GetConnectionSetting(long tenantId, string tenantNo,
         DatabaseTypeEnum databaseType)
     {
@@ -89,7 +80,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
 
         var result = await _centerCache.GetAndSetAsync(cacheKey, async () =>
         {
-            var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+            using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
             var data = await db.Queryable<MainDatabaseModel>()
                 .Includes(e => e.SlaveDatabaseList)
@@ -150,12 +141,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
         return result;
     }
 
-    /// <summary>
-    /// 删除缓存
-    /// </summary>
-    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
-    /// <param name="databaseType"><see cref="DatabaseTypeEnum"/> 数据库类型</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task DeleteCache(string tenantNo, DatabaseTypeEnum databaseType)
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
@@ -180,11 +166,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
         await _centerCache.DelAsync(cacheKey);
     }
 
-    /// <summary>
-    /// 删除所有缓存
-    /// </summary>
-    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task DeleteAllCache(string tenantNo)
     {
         if (string.IsNullOrWhiteSpace(tenantNo))

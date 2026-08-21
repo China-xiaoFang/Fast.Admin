@@ -23,26 +23,23 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ExcelRegexAttribute"/> Excel正则验证特性
+/// Excel正则验证特性
 /// </summary>
 [SuppressSniffer]
 [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-public class ExcelRegexAttribute : Attribute
+public sealed class ExcelRegexAttribute : Attribute
 {
     /// <summary>
-    /// <see cref="ExcelRegexAttribute"/> Excel正则验证特性
+    /// Excel正则验证特性
     /// </summary>
-    /// <param name="pattern"><see cref="string"/> 正则表达式</param>
     public ExcelRegexAttribute(string pattern)
     {
         Pattern = pattern;
     }
 
     /// <summary>
-    /// <see cref="ExcelRegexAttribute"/> Excel正则验证特性
+    /// Excel正则验证特性
     /// </summary>
-    /// <param name="pattern"><see cref="string"/> 正则表达式</param>
-    /// <param name="errorMessage"><see cref="string"/> 错误消息</param>
     public ExcelRegexAttribute(string pattern, string errorMessage)
     {
         Pattern = pattern;

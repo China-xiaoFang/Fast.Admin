@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Login.Dto;
 
 /// <summary>
-/// <see cref="LoginInput"/> 登录输入
+/// 登录输入
 /// </summary>
 public class LoginInput
 {
@@ -35,8 +35,9 @@ public class LoginInput
     public string Account { get; set; }
 
     /// <summary>
-    /// 密码
+    /// 原始密码；生产环境必须通过 HTTPS 传输
     /// </summary>
-    [StringRequired(ErrorMessage = "密码不能为空"), MinLength(6, ErrorMessage = "密码不能少于6位字符")]
+    [StringRequired(ErrorMessage = "密码不能为空"), MinLength(6, ErrorMessage = "密码不能少于6位字符"),
+     MaxLength(20, ErrorMessage = "密码不能超过20位字符")]
     public string Password { get; set; }
 }

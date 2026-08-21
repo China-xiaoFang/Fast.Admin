@@ -23,7 +23,7 @@
 namespace Fast.Admin.Enum;
 
 /// <summary>
-/// <see cref="EducationLevelEnum"/> 文化程度枚举
+/// 文化程度枚举
 /// </summary>
 [Flags]
 [FastEnum("文化程度枚举")]

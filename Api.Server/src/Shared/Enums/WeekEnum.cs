@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="WeekEnum"/> 星期枚举
+/// 星期枚举
 /// </summary>
 [Flags]
 [FastEnum("星期枚举")]
@@ -79,7 +79,7 @@ public enum WeekEnum
 }
 
 /// <summary>
-/// <see cref="WeekEnum"/> 拓展类
+/// <see cref="WeekEnum"/> 扩展方法
 /// </summary>
 public static class WeekEnumExtension
 {
@@ -96,8 +96,7 @@ public static class WeekEnumExtension
     /// <summary>
     /// 转换为 <see cref="DayOfWeek"/> 集合
     /// </summary>
-    /// <param name="week"></param>
-    /// <returns></returns>
+    /// <returns>转换后的星期集合</returns>
     public static List<DayOfWeek> ToDayOfWeeks(this WeekEnum week)
     {
         return WeekMap.Where(wh => (week & wh.weekEnum) != 0)
@@ -108,8 +107,7 @@ public static class WeekEnumExtension
     /// <summary>
     /// 转换为 <see cref="DayOfWeek"/>
     /// </summary>
-    /// <param name="week"></param>
-    /// <returns></returns>
+    /// <returns>转换后的星期</returns>
     public static DayOfWeek ToDayOfWeek(this WeekEnum week)
     {
         return week.ToDayOfWeeks()
@@ -119,8 +117,7 @@ public static class WeekEnumExtension
     /// <summary>
     /// 转换为 <see cref="WeekEnum"/>
     /// </summary>
-    /// <param name="daysOfWeek"></param>
-    /// <returns></returns>
+    /// <returns>匹配的星期枚举值；没有匹配项时为 <see langword="null"/></returns>
     public static WeekEnum? ToWeekEnum(this DayOfWeek daysOfWeek)
     {
         foreach (var item in WeekMap)
@@ -135,8 +132,7 @@ public static class WeekEnumExtension
     /// <summary>
     /// 转换为 <see cref="WeekEnum"/>
     /// </summary>
-    /// <param name="daysOfWeek"></param>
-    /// <returns></returns>
+    /// <returns>组合后的星期枚举值；集合为空时为 <see langword="null"/></returns>
     public static WeekEnum? ToWeekEnum(this List<DayOfWeek> daysOfWeek)
     {
         var week = WeekEnum.None;

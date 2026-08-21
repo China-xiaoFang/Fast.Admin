@@ -25,7 +25,7 @@ using System.ComponentModel;
 namespace Fast.Center.Service.Login.Dto;
 
 /// <summary>
-/// <see cref="LoginStatusEnum"/> 登录状态枚举
+/// 登录状态枚举
 /// </summary>
 [FastEnum("登录状态枚举")]
 public enum LoginStatusEnum

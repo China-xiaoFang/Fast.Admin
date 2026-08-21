@@ -23,10 +23,10 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ConfigConst"/> 配置常量
+/// 配置常量
 /// </summary>
 [SuppressSniffer]
-public class ConfigConst
+public static class ConfigConst
 {
     /// <summary>
     /// 单租户自动登录

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -30,7 +30,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Admin.Service.Department;
 
 /// <summary>
-/// <see cref="DepartmentService"/> 部门服务
+/// 部门服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Admin, Name = "department")]
 public class DepartmentService : IDynamicApplication
@@ -50,13 +50,12 @@ public class DepartmentService : IDynamicApplication
     /// <summary>
     /// 部门选择器
     /// </summary>
-    /// <param name="orgId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("部门选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> DepartmentSelector(long? orgId)
     {
         var queryable = _repository.Entities.WhereIF(orgId != null, wh => wh.OrgId == orgId);
+        var customDepartmentIds = _user.DataScopeDepartmentIdList ?? [];
 
         // 管理员，全部权限
         if (_user.IsSuperAdmin || _user.IsAdmin || _user.DataScopeType == DataScopeTypeEnum.All)
@@ -66,6 +65,7 @@ public class DepartmentService : IDynamicApplication
         else if (_user.DataScopeType == DataScopeTypeEnum.OrgWithChild)
         {
             queryable = queryable.Where(wh => wh.DataPublic
+                                              || customDepartmentIds.Contains(wh.DepartmentId)
                                               || wh.OrgId
                                               == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                                   // 主部门
@@ -77,12 +77,21 @@ public class DepartmentService : IDynamicApplication
         else if (_user.DataScopeType == DataScopeTypeEnum.DeptWithChild)
         {
             queryable = queryable.Where(wh =>
-                wh.DataPublic || wh.DepartmentId == _user.DepartmentId || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
+                wh.DataPublic
+                || customDepartmentIds.Contains(wh.DepartmentId)
+                || wh.DepartmentId == _user.DepartmentId
+                || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
+        }
+        // 自定义部门数据
+        else if (_user.DataScopeType == DataScopeTypeEnum.CustomDept)
+        {
+            queryable = queryable.Where(wh => customDepartmentIds.Contains(wh.DepartmentId));
         }
         // 本部门数据或仅本人数据
         else
         {
-            queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId);
+            queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId
+                                              || customDepartmentIds.Contains(wh.DepartmentId));
         }
 
         var data = await queryable.OrderBy(ob => ob.Sort)
@@ -126,8 +135,6 @@ public class DepartmentService : IDynamicApplication
     /// <summary>
     /// 获取部门列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取部门列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Department.Paged)]
@@ -136,6 +143,7 @@ public class DepartmentService : IDynamicApplication
         var queryable = _repository.Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
                 wh => wh.DepartmentName.Contains(input.SearchValue) || wh.DepartmentCode.Contains(input.SearchValue))
             .WhereIF(input.OrgId != null, wh => wh.OrgId == input.OrgId);
+        var customDepartmentIds = _user.DataScopeDepartmentIdList ?? [];
 
         // 管理员，全部权限
         if (_user.IsSuperAdmin || _user.IsAdmin || _user.DataScopeType == DataScopeTypeEnum.All)
@@ -145,6 +153,7 @@ public class DepartmentService : IDynamicApplication
         else if (_user.DataScopeType == DataScopeTypeEnum.OrgWithChild)
         {
             queryable = queryable.Where(wh => wh.DataPublic
+                                              || customDepartmentIds.Contains(wh.DepartmentId)
                                               || wh.OrgId
                                               == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                                   // 主部门
@@ -156,12 +165,21 @@ public class DepartmentService : IDynamicApplication
         else if (_user.DataScopeType == DataScopeTypeEnum.DeptWithChild)
         {
             queryable = queryable.Where(wh =>
-                wh.DataPublic || wh.DepartmentId == _user.DepartmentId || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
+                wh.DataPublic
+                || customDepartmentIds.Contains(wh.DepartmentId)
+                || wh.DepartmentId == _user.DepartmentId
+                || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
+        }
+        // 自定义部门数据
+        else if (_user.DataScopeType == DataScopeTypeEnum.CustomDept)
+        {
+            queryable = queryable.Where(wh => customDepartmentIds.Contains(wh.DepartmentId));
         }
         // 本部门数据或仅本人数据
         else
         {
-            queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId);
+            queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId
+                                              || customDepartmentIds.Contains(wh.DepartmentId));
         }
 
         var data = await queryable.OrderByIF(input.IsOrderBy, ob => ob.Sort)
@@ -197,8 +215,6 @@ public class DepartmentService : IDynamicApplication
     /// <summary>
     /// 获取部门详情
     /// </summary>
-    /// <param name="departmentId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取部门详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Department.Detail)]
@@ -241,8 +257,6 @@ public class DepartmentService : IDynamicApplication
     /// <summary>
     /// 添加部门
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加部门", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.Department.Add)]
@@ -304,7 +318,7 @@ public class DepartmentService : IDynamicApplication
         await _repository.InsertAsync(departmentModel);
 
         // 操作日志
-        LogContext.OperateLog(new OperateLogDto
+        await LogContext.OperateLog(new OperateLogDto
         {
             Title = "添加部门",
             OperateType = OperateLogTypeEnum.Organization,
@@ -317,8 +331,6 @@ public class DepartmentService : IDynamicApplication
     /// <summary>
     /// 编辑部门
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑部门", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Department.Edit)]
@@ -444,7 +456,7 @@ public class DepartmentService : IDynamicApplication
             .ExecuteCommandAsync();
 
         // 操作日志
-        LogContext.OperateLog(new OperateLogDto
+        await LogContext.OperateLog(new OperateLogDto
         {
             Title = "编辑部门",
             OperateType = OperateLogTypeEnum.Organization,
@@ -457,8 +469,6 @@ public class DepartmentService : IDynamicApplication
     /// <summary>
     /// 删除部门
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除部门", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Department.Delete)]
@@ -485,7 +495,7 @@ public class DepartmentService : IDynamicApplication
         await _repository.DeleteAsync(departmentModel);
 
         // 操作日志
-        LogContext.OperateLog(new OperateLogDto
+        await LogContext.OperateLog(new OperateLogDto
         {
             Title = "删除部门",
             OperateType = OperateLogTypeEnum.Organization,

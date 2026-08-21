@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -38,9 +38,9 @@ using Quartz;
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="JobBase{T}"/> 作业基础实现
+/// 作业基础实现
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">调度作业日志类型</typeparam>
 [DisallowConcurrentExecution]
 [PersistJobDataAfterExecution]
 internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
@@ -66,22 +66,22 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
     private readonly Stopwatch _stopwatch = new();
 
     /// <summary>
-    /// <see cref="IServiceProvider"/> 服务提供者
+    /// 服务提供者
     /// </summary>
     private readonly IServiceProvider _serviceProvider;
 
     /// <summary>
-    /// <see cref="IMailService"/> 邮件服务
+    /// 邮件服务
     /// </summary>
     protected readonly IMailService _mailService;
 
     /// <summary>
-    /// <see cref="JsonSerializerSettings"/> JSON 序列化配置
+    /// JSON 序列化配置
     /// </summary>
     protected readonly JsonSerializerSettings _jsonSerializerSettings;
 
     /// <summary>
-    /// <see cref="ILogger"/> 日志
+    /// 日志
     /// </summary>
     protected readonly ILogger _logger;
 
@@ -91,7 +91,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
     protected readonly T _logInfo;
 
     /// <summary>
-    /// <see cref="MailMessageEnum"/> 邮件消息
+    /// 邮件消息
     /// </summary>
     protected MailMessageEnum MailMessage { get; private set; }
 
@@ -110,18 +110,11 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
     /// <summary>
     /// 执行调度作业
     /// </summary>
-    /// <param name="serviceProvider"><see cref="IServiceProvider"/> 服务提供者</param>
-    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
-    /// <param name="context"></param>
-    /// <returns></returns>
     protected abstract Task JobExecute(IServiceProvider serviceProvider, ISqlSugarClient db, IJobExecutionContext context);
 
     /// <summary>
     /// 信息日志
     /// </summary>
-    /// <param name="title"></param>
-    /// <param name="msg"></param>
-    /// <returns></returns>
     protected async Task InfoLog(string title, string msg)
     {
         _logger.LogInformation(msg);
@@ -138,9 +131,6 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
     /// <summary>
     /// 警告日志
     /// </summary>
-    /// <param name="title"></param>
-    /// <param name="msg"></param>
-    /// <returns></returns>
     protected async Task WarnLog(string title, string msg)
     {
         _logger.LogWarning(msg);
@@ -157,10 +147,9 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
     /// <summary>
     /// 错误日志
     /// </summary>
-    /// <param name="title"></param>
-    /// <param name="exception"></param>
-    /// <param name="msg"></param>
-    /// <returns></returns>
+    /// <param name="title">标题</param>
+    /// <param name="exception">待处理的异常</param>
+    /// <param name="msg">消息正文</param>
     protected async Task ErrorLog(string title, Exception exception, string msg)
     {
         if (exception == null)
@@ -199,19 +188,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
         }
     }
 
-    /// <summary>
-    /// Called by the <see cref="T:Quartz.IScheduler" /> when a <see cref="T:Quartz.ITrigger" />
-    /// fires that is associated with the <see cref="T:Quartz.IJob" />.
-    /// </summary>
-    /// <remarks>
-    /// The implementation may wish to set a  result object on the
-    /// JobExecutionContext before this method exits.  The result itself
-    /// is meaningless to Quartz, but may be informative to
-    /// <see cref="T:Quartz.IJobListener" />s or
-    /// <see cref="T:Quartz.ITriggerListener" />s that are watching the job's
-    /// execution.
-    /// </remarks>
-    /// <param name="context">The execution context.</param>
+    /// <inheritdoc />
     public async Task Execute(IJobExecutionContext context)
     {
         // 结束时间
@@ -227,7 +204,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
         // 创建请求作用域
         using var scope = _serviceProvider.CreateScope();
 
-        var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+        using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
         // 加载Aop
         SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
@@ -278,6 +255,8 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
             {
                 DeviceType = AppEnvironmentEnum.Api,
                 DeviceId = deviceId,
+                SessionId = Guid.NewGuid()
+                    .ToString("N"),
                 AppNo = "Scheduler",
                 AppName = "调度程序",
                 NickName = robotInfo.EmployeeName,
@@ -286,6 +265,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
                 TenantNo = tenantNo,
                 TenantName = tenantName,
                 TenantCode = tenantCode,
+                IsSystemTenant = false,
                 EmployeeId = robotInfo.EmployeeId,
                 EmployeeNo = robotInfo.EmployeeNo,
                 EmployeeName = robotInfo.EmployeeName,

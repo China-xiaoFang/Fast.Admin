@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="FaTableColumnAdvancedCtx"/> FastElementPlus FaTable 列高级选项上下文
+/// FastElementPlus FaTable 列高级选项上下文
 /// </summary>
 public class FaTableColumnAdvancedCtx
 {

@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="PaymentStatusEnum"/> 支付状态枚举
+/// 支付状态枚举
 /// </summary>
 [Flags]
 [FastEnum("支付状态枚举")]

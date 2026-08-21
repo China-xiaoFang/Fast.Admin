@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,10 +23,10 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="RegexConst"/> 正则表达式常量
+/// 正则表达式常量
 /// </summary>
 [SuppressSniffer]
-public class RegexConst
+public static class RegexConst
 {
     /// <summary>
     /// 账号
@@ -40,7 +40,7 @@ public class RegexConst
     public const string Chinese = "^[\u4e00-\u9fa5]{0,}$";
 
     /// <summary>
-    /// Http地址判断
+    /// HTTP 地址判断
     /// </summary>
     public const string HttpUrl = "^(http):\\/\\/([\\w.]+\\/?)\\S*$";
 
@@ -50,7 +50,7 @@ public class RegexConst
     public const string HttpsUrl = "^(https):\\/\\/([\\w.]+\\/?)\\S*$";
 
     /// <summary>
-    /// Http或者Https地址判断
+    /// HTTP 或者Https地址判断
     /// </summary>
     public const string HttpOrHttpsUrl = "^(http|https):\\/\\/([\\w.]+\\/?)\\S*$";
 

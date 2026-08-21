@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Application.Dto;
 
 /// <summary>
-/// <see cref="AppIdInput"/> 应用Id输入
+/// 应用Id输入
 /// </summary>
 public class AppIdInput : UpdateVersionInput
 {

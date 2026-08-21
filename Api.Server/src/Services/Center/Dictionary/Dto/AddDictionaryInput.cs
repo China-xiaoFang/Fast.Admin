@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.Dictionary.Dto;
 
 /// <summary>
-/// <see cref="AddDictionaryInput"/> 添加字典输入
+/// 添加字典输入
 /// </summary>
 public class AddDictionaryInput
 {
@@ -58,7 +58,7 @@ public class AddDictionaryInput
     public List<AddDictionaryItemInput> DictionaryItemList { get; set; } = [];
 
     /// <summary>
-    /// <see cref="AddDictionaryItemInput"/> 添加字典项输入
+    /// 添加字典项输入
     /// </summary>
     public class AddDictionaryItemInput
     {

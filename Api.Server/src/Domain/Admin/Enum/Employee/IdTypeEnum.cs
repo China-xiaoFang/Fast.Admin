@@ -23,7 +23,7 @@
 namespace Fast.Admin.Enum;
 
 /// <summary>
-/// <see cref="IdTypeEnum"/> 证件类型枚举
+/// 证件类型枚举
 /// </summary>
 [Flags]
 [FastEnum("证件类型枚举")]

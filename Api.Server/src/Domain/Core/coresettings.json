@@ -25,6 +25,19 @@
     // 客户端可获取的响应标头
     "WithExposedHeaders": [ "Fast-Response-Encipher" ]
   },
+  // API 限流配置
+  "ApiRateLimitSettingsOptions": {
+    // 登录限流，单个Ip与设备Id组合在统计窗口内允许的请求数
+    "LoginPermitLimit": 10,
+    // 登录限流，单个Ip在统计窗口内允许的请求数
+    "LoginIpPermitLimit": 30,
+    // 单个Ip与设备Id组合在统计窗口内允许的请求数
+    "PermitLimit": 120,
+    // 单个Ip在统计窗口内允许的请求数
+    "IpPermitLimit": 60,
+    // 统计窗口秒数
+    "WindowSeconds": 60
+  },
   // 邮件配置
   "MailSettingsOptions": {
     "Smtp": "smtp.qq.com",

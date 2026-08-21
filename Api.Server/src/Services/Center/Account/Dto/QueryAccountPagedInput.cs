@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Account.Dto;
 
 /// <summary>
-/// <see cref="QueryAccountPagedInput"/> 获取账号分页列表输入
+/// 获取账号分页列表输入
 /// </summary>
 public class QueryAccountPagedInput : PagedInput
 {
@@ -41,16 +41,6 @@ public class QueryAccountPagedInput : PagedInput
     /// 状态
     /// </summary>
     public CommonStatusEnum? Status { get; set; }
-
-    /// <summary>
-    /// 电话
-    /// </summary>
-    public string Phone { get; set; }
-
-    /// <summary>
-    /// 性别
-    /// </summary>
-    public GenderEnum? Sex { get; set; }
 
     /// <summary>
     /// 初次登录城市

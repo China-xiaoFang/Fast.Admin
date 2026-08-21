@@ -23,18 +23,18 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="WeChatUserModel"/> 微信用户表Model类
+/// 客户端用户表Model类
 /// </summary>
-[SugarTable("WeChatUser", "微信用户表")]
+[SugarTable("User", "客户端用户表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(AppId), OrderByType.Asc, nameof(OpenId), OrderByType.Asc, true)]
-public class WeChatUserModel : IUpdateVersion
+public class UserModel : IUpdateVersion
 {
     /// <summary>
-    /// 微信用户Id
+    /// 客户端用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "微信Id", IsPrimaryKey = true)]
-    public long WeChatId { get; set; }
+    [SugarColumn(ColumnDescription = "客户端用户Id", IsPrimaryKey = true)]
+    public long UserId { get; set; }
 
     /// <summary>
     /// 应用Id
@@ -62,22 +62,16 @@ public class WeChatUserModel : IUpdateVersion
     public string UnionId { get; set; }
 
     /// <summary>
-    /// 用户纯手机号码
+    /// 手机
     /// </summary>
-    [SugarColumn(ColumnDescription = "用户纯手机号码", ColumnDataType = "varchar(11)")]
-    public string PurePhoneNumber { get; set; }
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
+    public string Mobile { get; set; }
 
     /// <summary>
-    /// 用户手机号码
+    /// 密码
     /// </summary>
-    [SugarColumn(ColumnDescription = "用户手机号码", Length = 20)]
-    public string PhoneNumber { get; set; }
-
-    /// <summary>
-    /// 用户手机号码区号
-    /// </summary>
-    [SugarColumn(ColumnDescription = "用户手机号码区号", Length = 5)]
-    public string CountryCode { get; set; }
+    [SugarColumn(ColumnDescription = "密码", Length = 200)]
+    public string Password { get; set; }
 
     /// <summary>
     /// 小程序登录凭证
@@ -102,33 +96,6 @@ public class WeChatUserModel : IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "性别")]
     public GenderEnum Sex { get; set; }
-
-    /// <summary>
-    /// 国家
-    /// </summary>
-    [SugarColumn(ColumnDescription = "国家", Length = 20)]
-
-    public string Country { get; set; }
-
-    /// <summary>
-    /// 省份
-    /// </summary>
-    [SugarColumn(ColumnDescription = "省份", Length = 20)]
-
-    public string Province { get; set; }
-
-    /// <summary>
-    /// 城市
-    /// </summary>
-    [SugarColumn(ColumnDescription = "城市", Length = 20)]
-
-    public string City { get; set; }
-
-    /// <summary>
-    /// 语言
-    /// </summary>
-    [SugarColumn(ColumnDescription = "语言", Length = 10)]
-    public string Language { get; set; }
 
     /// <summary>
     /// 最后登录设备

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -27,7 +27,7 @@ using SqlSugar;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="TenantContext"/> 租户上下文
+/// 租户上下文
 /// </summary>
 [SuppressSniffer]
 public class TenantContext
@@ -45,9 +45,7 @@ public class TenantContext
     /// <summary>
     /// 获取租户
     /// </summary>
-    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
-    /// <param name="throwError"><see cref="bool"/> 抛出错误</param>
-    /// <returns></returns>
+    /// <returns>租户信息；未找到且不要求抛出异常时为 <see langword="null"/></returns>
     public static TenantModel GetTenantSync(string tenantNo, bool throwError = true)
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
@@ -95,9 +93,7 @@ public class TenantContext
     /// <summary>
     /// 获取租户
     /// </summary>
-    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
-    /// <param name="throwError"><see cref="bool"/> 抛出错误</param>
-    /// <returns></returns>
+    /// <returns>租户信息；未找到且不要求抛出异常时为 <see langword="null"/></returns>
     public static async Task<TenantModel> GetTenant(string tenantNo, bool throwError = true)
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
@@ -145,8 +141,6 @@ public class TenantContext
     /// <summary>
     /// 删除租户
     /// </summary>
-    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
-    /// <returns></returns>
     public static async Task DeleteTenant(string tenantNo)
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
@@ -171,7 +165,6 @@ public class TenantContext
     /// <summary>
     /// 删除所有租户
     /// </summary>
-    /// <returns></returns>
     public static async Task DeleteAllTenant()
     {
         if (FastContext.HttpContext != null)
@@ -186,7 +179,7 @@ public class TenantContext
             }
         }
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, "*");
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Tenant, "*");
         await centerCache.DelByPatternAsync(cacheKey);
     }
 }

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Serial.Dto;
 
 /// <summary>
-/// <see cref="EditSerialRuleInput"/> 编辑序号规则输入
+/// 编辑序号规则输入
 /// </summary>
 public class EditSerialRuleInput : UpdateVersionInput
 {

@@ -23,7 +23,7 @@
 namespace Fast.Admin.Enum;
 
 /// <summary>
-/// <see cref="DegreeEnum"/> 学位枚举
+/// 学位枚举
 /// </summary>
 [Flags]
 [FastEnum("学位枚举")]

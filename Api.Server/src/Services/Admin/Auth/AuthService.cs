@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -30,7 +30,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Admin.Service.Auth;
 
 /// <summary>
-/// <see cref="AuthService"/> 鉴权服务
+/// 鉴权服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Auth, Name = "auth", Order = 998)]
 public class AuthService : IDynamicApplication
@@ -49,7 +49,6 @@ public class AuthService : IDynamicApplication
     /// <summary>
     /// 获取登录用户信息
     /// </summary>
-    /// <returns></returns>
     [HttpGet("/getLoginUserInfo")]
     [ApiInfo("获取登录用户信息", HttpRequestActionEnum.Auth)]
     [AllowForbidden, DisabledRequestLog]
@@ -108,17 +107,11 @@ public class AuthService : IDynamicApplication
                 t1.RoleId,
                 t1.RoleName,
                 t2.RoleType,
-                t2.IsSystemMenu,
-                t2.DataScopeType
+                t2.DataScopeType,
+                t2.DataScopeDepartmentIds
             })
             .ToListAsync();
-        // 系统菜单角色类型
-        var systemMenuRoleType = roleList.Where(wh => wh.IsSystemMenu)
-            .Select(sl => sl.RoleType)
-            .Aggregate(default(RoleTypeEnum), (acc, item) => acc | item);
-        // 自定义菜单角色
-        var customMenuRoleIds = roleList.Where(wh => !wh.IsSystemMenu)
-            .Select(sl => sl.RoleId)
+        var roleIds = roleList.Select(sl => sl.RoleId)
             .ToList();
         result.RoleNameList = roleList.Select(sl => sl.RoleName)
             .ToList();
@@ -142,15 +135,19 @@ public class AuthService : IDynamicApplication
             result.RoleType = roleList.Select(sl => sl.RoleType)
                 .DefaultIfEmpty()
                 .Aggregate((a, b) => a | b);
-            result.DataScopeType = roleList.Any(a => a.RoleType == RoleTypeEnum.Admin) ? DataScopeTypeEnum.All :
-                roleList.Any() ? roleList.Min(m => m.DataScopeType) : DataScopeTypeEnum.Self;
+            result.DataScopeType = roleList.Any()
+                ? roleList.Where(wh => wh.DataScopeType != DataScopeTypeEnum.CustomDept)
+                    .Select(sl => sl.DataScopeType)
+                    .DefaultIfEmpty(DataScopeTypeEnum.CustomDept)
+                    .Min()
+                : DataScopeTypeEnum.Self;
 
             // 查询当前用户角色对应的菜单Id
             var roleMenuIds = await _empRepository.Queryable<RoleMenuModel>()
-                .Where(wh => customMenuRoleIds.Contains(wh.RoleId))
+                .Where(wh => roleIds.Contains(wh.RoleId))
                 .Select(sl => sl.MenuId)
                 .ToListAsync();
-            menuQueryable = menuQueryable.Where(wh => (wh.RoleType & systemMenuRoleType) != 0 || roleMenuIds.Contains(wh.MenuId));
+            menuQueryable = menuQueryable.Where(wh => roleMenuIds.Contains(wh.MenuId));
         }
 
         // 查询所有菜单
@@ -238,11 +235,10 @@ public class AuthService : IDynamicApplication
             {
                 // 查询当前用户角色对应的按钮Id
                 var roleButtonIds = await _empRepository.Queryable<RoleButtonModel>()
-                    .Where(wh => customMenuRoleIds.Contains(wh.RoleId))
+                    .Where(wh => roleIds.Contains(wh.RoleId))
                     .Select(sl => sl.ButtonId)
                     .ToListAsync();
-                buttonQueryable = buttonQueryable.Where(wh =>
-                    (wh.RoleType & systemMenuRoleType) != 0 || roleButtonIds.Contains(wh.ButtonId));
+                buttonQueryable = buttonQueryable.Where(wh => roleButtonIds.Contains(wh.ButtonId));
             }
 
             result.ButtonCodeList = await buttonQueryable.OrderBy(ob => ob.Sort)
@@ -262,6 +258,11 @@ public class AuthService : IDynamicApplication
             RoleNameList = result.RoleNameList,
             RoleType = result.RoleType,
             DataScopeType = result.DataScopeType,
+            DataScopeDepartmentIdList = roleList.Where(wh => wh.DataScopeType == DataScopeTypeEnum.CustomDept)
+                .Where(wh => wh.DataScopeDepartmentIds != null)
+                .SelectMany(sl => sl.DataScopeDepartmentIds)
+                .Distinct()
+                .ToList(),
             MenuCodeList = _user.IsSuperAdmin
                 ? []
                 : menuList.Select(sl => sl.MenuCode)

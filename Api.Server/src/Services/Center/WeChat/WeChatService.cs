@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -26,6 +26,7 @@ using Fast.Center.Service.WeChat.Dto;
 using Fast.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using SKIT.FlurlHttpClient.Wechat.Api;
 using SKIT.FlurlHttpClient.Wechat.Api.Models;
 using SKIT.FlurlHttpClient.Wechat.Api.Utilities;
@@ -33,15 +34,15 @@ using SKIT.FlurlHttpClient.Wechat.Api.Utilities;
 namespace Fast.Center.Service.WeChat;
 
 /// <summary>
-/// <see cref="WeChatService"/> 微信服务
+/// 微信服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "weChat")]
 public class WeChatService : IDynamicApplication
 {
     private readonly IUser _user;
-    private readonly ISqlSugarRepository<WeChatUserModel> _repository;
+    private readonly ISqlSugarRepository<UserModel> _repository;
 
-    public WeChatService(IUser user, ISqlSugarRepository<WeChatUserModel> repository)
+    public WeChatService(IUser user, ISqlSugarRepository<UserModel> repository)
     {
         _user = user;
         _repository = repository;
@@ -50,8 +51,6 @@ public class WeChatService : IDynamicApplication
     /// <summary>
     /// 获取微信用户分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取微信用户分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.WeChat.Paged)]
@@ -63,21 +62,16 @@ public class WeChatService : IDynamicApplication
             .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .Select(sl => new QueryWeChatUserPagedOutput
             {
-                WeChatId = sl.WeChatId,
+                WeChatId = sl.UserId,
                 AppId = sl.AppId,
                 UserType = sl.UserType,
                 OpenId = sl.OpenId,
                 UnionId = sl.UnionId,
-                PurePhoneNumber = sl.PurePhoneNumber,
-                PhoneNumber = sl.PhoneNumber,
-                CountryCode = sl.CountryCode,
+                PurePhoneNumber = sl.Mobile,
+                PhoneNumber = sl.Mobile,
                 NickName = sl.NickName,
                 Avatar = sl.Avatar,
                 Sex = sl.Sex,
-                Country = sl.Country,
-                Province = sl.Province,
-                City = sl.City,
-                Language = sl.Language,
                 LastLoginDevice = sl.LastLoginDevice,
                 LastLoginOS = sl.LastLoginOS,
                 LastLoginBrowser = sl.LastLoginBrowser,
@@ -96,7 +90,6 @@ public class WeChatService : IDynamicApplication
     /// <summary>
     /// 获取微信用户详情
     /// </summary>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取微信用户详情", HttpRequestActionEnum.Query)]
     public async Task<QueryWeChatUserDetailOutput> QueryWeChatUserDetail()
@@ -110,25 +103,19 @@ public class WeChatService : IDynamicApplication
         }
 
         // 根据 OpenId 获取微信用户信息
-        var result = await _repository.Queryable<WeChatUserModel>()
-            .Where(wh => wh.AppId == applicationModel.AppId)
-            .Where(wh => wh.WeChatId == _user.WeChatId)
+        var result = await _repository.Entities.Where(wh => wh.AppId == applicationModel.AppId)
+            .Where(wh => wh.UserId == _user.WeChatId)
             .Select(sl => new QueryWeChatUserDetailOutput
             {
-                WeChatId = sl.WeChatId,
+                WeChatId = sl.UserId,
                 UserType = sl.UserType,
                 OpenId = sl.OpenId,
                 UnionId = sl.UnionId,
-                PurePhoneNumber = sl.PurePhoneNumber,
-                PhoneNumber = sl.PhoneNumber,
-                CountryCode = sl.CountryCode,
+                PurePhoneNumber = sl.Mobile,
+                PhoneNumber = sl.Mobile,
                 NickName = sl.NickName,
                 Avatar = sl.Avatar,
                 Sex = sl.Sex,
-                Country = sl.Country,
-                Province = sl.Province,
-                City = sl.City,
-                Language = sl.Language,
                 LastLoginDevice = sl.LastLoginDevice,
                 LastLoginOS = sl.LastLoginOS,
                 LastLoginBrowser = sl.LastLoginBrowser,
@@ -154,8 +141,6 @@ public class WeChatService : IDynamicApplication
     /// <summary>
     /// 编辑微信用户
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑微信用户", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.ClientService)]
@@ -169,55 +154,48 @@ public class WeChatService : IDynamicApplication
             throw new UserFriendlyException("应用类型不匹配！");
         }
 
-        var weChatUserModel = await _repository.Queryable<WeChatUserModel>()
-            .Where(wh => wh.AppId == applicationModel.AppId)
-            .Where(wh => wh.WeChatId == _user.WeChatId)
+        var userModel = await _repository.Entities.Where(wh => wh.AppId == applicationModel.AppId)
+            .Where(wh => wh.UserId == _user.WeChatId)
             .SingleAsync();
 
-        if (weChatUserModel == null)
+        if (userModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
         }
 
-        if (!string.IsNullOrWhiteSpace(input.PurePhoneNumber))
+        if (!string.IsNullOrWhiteSpace(input.PurePhoneNumber) && userModel.Mobile != input.PurePhoneNumber)
         {
-            weChatUserModel.PurePhoneNumber = input.PurePhoneNumber;
-            weChatUserModel.PhoneNumber = input.PhoneNumber;
-            weChatUserModel.CountryCode = input.CountryCode;
-            weChatUserModel.MobileUpdateTime = DateTime.Now;
+            userModel.Mobile = input.PurePhoneNumber;
+            userModel.MobileUpdateTime = DateTime.Now;
         }
 
-        weChatUserModel.NickName = input.NickName;
-        weChatUserModel.Avatar = input.Avatar;
-        weChatUserModel.Sex = input.Sex;
-        weChatUserModel.Country = input.Country;
-        weChatUserModel.Province = input.Province;
-        weChatUserModel.City = input.City;
-        weChatUserModel.RowVersion = input.RowVersion;
+        userModel.NickName = input.NickName;
+        userModel.Avatar = input.Avatar;
+        userModel.Sex = input.Sex;
+        userModel.RowVersion = input.RowVersion;
 
-        await _repository.UpdateAsync(weChatUserModel);
+        await _repository.UpdateAsync(userModel);
 
         // 刷新缓存
         await _user.RefreshWeChatUser(new RefreshWeChatUserDto
         {
             DeviceType = _user.DeviceType,
             AppNo = _user.AppNo,
-            Mobile = weChatUserModel.PurePhoneNumber,
-            NickName = weChatUserModel.NickName,
-            Avatar = weChatUserModel.Avatar,
+            Mobile = userModel.Mobile,
+            NickName = userModel.NickName,
+            Avatar = userModel.Avatar,
             TenantNo = _user.TenantNo,
-            WeChatOpenId = weChatUserModel.OpenId
+            WeChatOpenId = userModel.OpenId
         });
     }
 
     /// <summary>
     /// 换取微信用户身份信息
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("换取微信用户身份信息", HttpRequestActionEnum.Auth)]
     [AllowAnonymous]
+    [EnableRateLimiting(CommonConst.LoginApiRateLimit)]
     public async Task<WeChatCode2SessionOutput> WeChatCode2Session(WeChatCode2SessionInput input)
     {
         // 查询应用信息
@@ -253,12 +231,15 @@ public class WeChatService : IDynamicApplication
 
 
         // 这里的 IV 和 EncryptedData 在没有授权的情况下是为空的
-        if (!string.IsNullOrWhiteSpace(input.IV) || !string.IsNullOrWhiteSpace(input.EncryptedData))
+        if (string.IsNullOrWhiteSpace(input.IV) != string.IsNullOrWhiteSpace(input.EncryptedData))
+            throw new UserFriendlyException("IV 和加密用户数据必须同时提供！");
+
+        if (!string.IsNullOrWhiteSpace(input.IV) && !string.IsNullOrWhiteSpace(input.EncryptedData))
         {
             // 尝试解析加密数据
             var decryptBytes = AESUtility.DecryptWithCBC(Convert.FromBase64String(response.SessionKey),
                 Convert.FromBase64String(input.IV), Convert.FromBase64String(input.EncryptedData));
-            var decryptStr = Encoding.Default.GetString(decryptBytes);
+            var decryptStr = Encoding.UTF8.GetString(decryptBytes);
             var decryptData = decryptStr.ToObject<DecryptWeChatUserInfo>();
             if (decryptData == null)
             {
@@ -279,11 +260,10 @@ public class WeChatService : IDynamicApplication
     /// <summary>
     /// 换取微信用户手机号
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("换取微信用户手机号", HttpRequestActionEnum.Auth)]
     [AllowAnonymous]
+    [EnableRateLimiting(CommonConst.LoginApiRateLimit)]
     public async Task<WeChatCode2PhoneNumberOutput> WeChatCode2PhoneNumber(WeChatCode2PhoneNumberInput input)
     {
         // 查询应用信息

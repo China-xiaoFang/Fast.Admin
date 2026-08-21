@@ -23,19 +23,19 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="ResponseEncipherAttribute"/> 响应加密特性
+/// 响应加密特性
 /// </summary>
 [SuppressSniffer]
 [AttributeUsage(AttributeTargets.Method)]
-public class ResponseEncipherAttribute : Attribute
+public sealed class ResponseEncipherAttribute : Attribute
 {
     /// <summary>
-    /// <see cref="bool"/> 启用
+    /// 启用
     /// </summary>
     public bool Enable { get; set; }
 
     /// <summary>
-    /// <see cref="ResponseEncipherAttribute"/> 响应加密特性
+    /// 响应加密特性
     /// </summary>
     public ResponseEncipherAttribute()
     {
@@ -43,9 +43,8 @@ public class ResponseEncipherAttribute : Attribute
     }
 
     /// <summary>
-    /// <see cref="ResponseEncipherAttribute"/> 响应加密特性
+    /// 响应加密特性
     /// </summary>
-    /// <param name="enable"><see cref="bool"/> 启用</param>
     public ResponseEncipherAttribute(bool enable)
     {
         Enable = enable;

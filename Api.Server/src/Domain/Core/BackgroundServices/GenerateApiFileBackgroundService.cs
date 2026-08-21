@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -32,10 +32,10 @@ using Microsoft.Extensions.Options;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="GenerateApiFileHostedService"/> 生成Api文件托管服务
+/// 生成 API 文件后台服务
 /// </summary>
 [Order(999)]
-public class GenerateApiFileHostedService : IHostedService
+public class GenerateApiFileBackgroundService : BackgroundService
 {
     /// <summary>
     /// 托管应用程序生命周期
@@ -63,16 +63,11 @@ public class GenerateApiFileHostedService : IHostedService
     private readonly ILogger _logger;
 
     /// <summary>
-    /// <see cref="GenerateApiFileHostedService"/> 生成Api文件托管服务
+    /// 生成 API 文件托管服务
     /// </summary>
-    /// <param name="hostApplicationLifetime"><see cref="IHostApplicationLifetime"/> 托管应用程序生命周期</param>
-    /// <param name="server"><see cref="IServer"/> 服务器</param>
-    /// <param name="apiDescriptionGroupCollectionProvider"><see cref="IApiDescriptionGroupCollectionProvider"/> 接口描述提供程序</param>
-    /// <param name="options"><see cref="IOptions{TOptions}"/> Swagger 配置</param>
-    /// <param name="logger"><see cref="ILogger"/> 日志</param>
-    public GenerateApiFileHostedService(IHostApplicationLifetime hostApplicationLifetime, IServer server,
+    public GenerateApiFileBackgroundService(IHostApplicationLifetime hostApplicationLifetime, IServer server,
         IApiDescriptionGroupCollectionProvider apiDescriptionGroupCollectionProvider, IOptions<SwaggerSettingsOptions> options,
-        ILogger<DeleteLogHostedService> logger)
+        ILogger<GenerateApiFileBackgroundService> logger)
     {
         _hostApplicationLifetime = hostApplicationLifetime;
         _server = server;
@@ -81,12 +76,8 @@ public class GenerateApiFileHostedService : IHostedService
         _logger = logger;
     }
 
-    /// <summary>
-    /// Triggered when the application host is ready to start the service.
-    /// </summary>
-    /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
-    /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous Start operation.</returns>
-    public async Task StartAsync(CancellationToken cancellationToken)
+    /// <inheritdoc />
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         // 只有开发环境才会生成
         if (!FastContext.HostEnvironment.IsDevelopment())
@@ -96,44 +87,38 @@ public class GenerateApiFileHostedService : IHostedService
         if (_swaggerSettings.Enable != true)
             return;
 
-        // 订阅 ApplicationStarted 事件
-        _hostApplicationLifetime?.ApplicationStarted.Register(() =>
+        try
         {
-            _ = Task.Run(async () =>
+            // OpenAPI 生成需要访问已经监听的本机地址，因此等待应用启动完成后再继续
+            if (!_hostApplicationLifetime.ApplicationStarted.IsCancellationRequested)
             {
-                try
-                {
-                    var feature = _server.Features.Get<IServerAddressesFeature>();
-                    // 默认获取第一个地址，并且处理 [::]
-                    var address = feature?.Addresses.FirstOrDefault()
-                        ?.Replace("[::]", "127.0.0.1");
-                    if (string.IsNullOrWhiteSpace(address))
-                        return;
+                var applicationStarted = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+                await using var registration =
+                    _hostApplicationLifetime.ApplicationStarted.Register(() => applicationStarted.TrySetResult());
+                await applicationStarted.Task.WaitAsync(stoppingToken);
+            }
 
-                    // 获取 Swagger 分组
-                    var groupList = _swaggerSettings.GroupOpenApiInfos?.Select(sl => sl.Group)
-                        .ToList();
+            var feature = _server.Features.Get<IServerAddressesFeature>();
+            // 默认获取第一个地址，并且处理 [::]
+            var address = feature?.Addresses.FirstOrDefault()
+                ?.Replace("[::]", "127.0.0.1");
+            if (string.IsNullOrWhiteSpace(address))
+                return;
 
-                    // 生成Api
-                    await OpenApiUtil.GenerateOpenApi(address, _apiDescriptionGroupCollectionProvider, groupList);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Generate api file error...");
-                }
-            }, cancellationToken);
-        });
+            // 获取 Swagger 分组
+            var groupList = _swaggerSettings.GroupOpenApiInfos?.Select(sl => sl.Group)
+                .ToList();
 
-        await Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// Triggered when the application host is performing a graceful shutdown.
-    /// </summary>
-    /// <param name="cancellationToken">Indicates that the shutdown process should no longer be graceful.</param>
-    /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous Stop operation.</returns>
-    public async Task StopAsync(CancellationToken cancellationToken)
-    {
-        await Task.CompletedTask;
+            // 直接等待 OpenAPI 文件生成完成，由托管服务统一观察异常和停止信号
+            await OpenApiUtil.GenerateOpenApi(address, _apiDescriptionGroupCollectionProvider, groupList);
+        }
+        catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+        {
+            // 宿主停止时取消启动等待或文件生成属于正常停机流程
+        }
+        catch (Exception ex) when (!stoppingToken.IsCancellationRequested)
+        {
+            _logger.LogError(ex, "Generate api file error...");
+        }
     }
 }

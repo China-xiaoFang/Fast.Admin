@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="SchedulerJobTypeEnum"/> 调度作业类型枚举
+/// 调度作业类型枚举
 /// </summary>
 [Flags]
 [FastEnum("调度作业类型枚举")]
@@ -42,14 +42,14 @@ public enum SchedulerJobTypeEnum : byte
     Local = 1,
 
     /// <summary>
-    /// 内网Url
+    /// 内网 URL
     /// </summary>
     /// <remarks>自动处理 AccessToken</remarks>
     [Description("内网Url")]
     IntranetUrl = 2,
 
     /// <summary>
-    /// 外网Url
+    /// 外网 URL
     /// </summary>
     [Description("外网Url")]
     OuterNetUrl = 4

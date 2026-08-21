@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,11 +23,11 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="PermissionConst"/> 权限常量
+/// 权限常量
 /// </summary>
 /// <remarks>所有权限都在这里</remarks>
 [SuppressSniffer]
-public partial class PermissionConst
+public static partial class PermissionConst
 {
     /// <summary>客户端服务</summary>
     public const string ClientService = "ClientService";
@@ -41,8 +41,8 @@ public partial class PermissionConst
     /// <summary>Knife4j</summary>
     public const string ApiKnife4j = "Api:Knife4j";
 
-    /// <summary><see cref="Config"/> 配置</summary>
-    public class Config
+    /// <summary>配置</summary>
+    public static class Config
     {
         /// <summary>配置列表</summary>
         public const string Paged = "Config:Paged";
@@ -54,8 +54,8 @@ public partial class PermissionConst
         public const string Edit = "Config:Edit";
     }
 
-    /// <summary><see cref="Menu"/> 菜单</summary>
-    public class Menu
+    /// <summary>菜单</summary>
+    public static class Menu
     {
         /// <summary>菜单列表</summary>
         public const string Paged = "Menu:Paged";
@@ -76,8 +76,8 @@ public partial class PermissionConst
         public const string Status = "Menu:Status";
     }
 
-    /// <summary><see cref="SysSerial"/> 系统序号</summary>
-    public class SysSerial
+    /// <summary>系统序号</summary>
+    public static class SysSerial
     {
         /// <summary>系统序号列表</summary>
         public const string Paged = "SysSerial:Paged";
@@ -92,8 +92,8 @@ public partial class PermissionConst
         public const string Edit = "SysSerial:Edit";
     }
 
-    /// <summary><see cref="Dictionary"/> 字典</summary>
-    public class Dictionary
+    /// <summary>字典</summary>
+    public static class Dictionary
     {
         /// <summary>字典列表</summary>
         public const string Paged = "Dictionary:Paged";
@@ -111,8 +111,8 @@ public partial class PermissionConst
         public const string Delete = "Dictionary:Delete";
     }
 
-    /// <summary><see cref="Table"/> 表格</summary>
-    public class Table
+    /// <summary>表格</summary>
+    public static class Table
     {
         /// <summary>表格列表</summary>
         public const string Paged = "Table:Paged";
@@ -130,8 +130,8 @@ public partial class PermissionConst
         public const string Delete = "Table:Delete";
     }
 
-    /// <summary><see cref="Scheduler"/> 调度程序</summary>
-    public class Scheduler
+    /// <summary>调度程序</summary>
+    public static class Scheduler
     {
         /// <summary>调度程序列表</summary>
         public const string Paged = "Scheduler:Paged";
@@ -170,16 +170,16 @@ public partial class PermissionConst
     /// <summary>异常日志列表</summary>
     public const string ExceptionLogPaged = "ExceptionLog:Paged";
 
-    /// <summary>Sql异常日志列表</summary>
+    /// <summary>SQL 异常日志列表</summary>
     public const string SqlExceptionLogPaged = "SqlExceptionLog:Paged";
 
-    /// <summary>Sql超时日志列表</summary>
+    /// <summary>SQL 超时日志列表</summary>
     public const string SqlTimeoutLogPaged = "SqlTimeoutLog:Paged";
 
-    /// <summary>Sql执行日志列表</summary>
+    /// <summary>SQL 执行日志列表</summary>
     public const string SqlExecutionLogPaged = "SqlExecutionLog:Paged";
 
-    /// <summary>Sql差异日志列表</summary>
+    /// <summary>SQL 差异日志列表</summary>
     public const string SqlDiffLogPaged = "SqlDiffLog:Paged";
 
 
@@ -189,8 +189,8 @@ public partial class PermissionConst
     /// <summary>文件列表</summary>
     public const string FilePaged = "File:Paged";
 
-    /// <summary><see cref="Tenant"/> 租户</summary>
-    public class Tenant
+    /// <summary>租户</summary>
+    public static class Tenant
     {
         /// <summary>租户列表</summary>
         public const string Paged = "Tenant:Paged";
@@ -208,8 +208,8 @@ public partial class PermissionConst
         public const string Status = "Tenant:Status";
     }
 
-    /// <summary><see cref="Database"/> 数据库</summary>
-    public class Database
+    /// <summary>数据库</summary>
+    public static class Database
     {
         /// <summary>数据库列表</summary>
         public const string Paged = "Database:Paged";
@@ -227,8 +227,8 @@ public partial class PermissionConst
         public const string Delete = "Database:Delete";
     }
 
-    /// <summary><see cref="App"/> 应用</summary>
-    public class App
+    /// <summary>应用</summary>
+    public static class App
     {
         /// <summary>应用列表</summary>
         public const string Paged = "App:Paged";
@@ -246,8 +246,8 @@ public partial class PermissionConst
         public const string Delete = "App:Delete";
     }
 
-    /// <summary><see cref="AppOpenId"/> 应用标识</summary>
-    public class AppOpenId
+    /// <summary>应用标识</summary>
+    public static class AppOpenId
     {
         /// <summary>应用标识列表</summary>
         public const string Paged = "AppOpenId:Paged";
@@ -265,8 +265,8 @@ public partial class PermissionConst
         public const string Delete = "AppOpenId:Delete";
     }
 
-    /// <summary><see cref="Account"/> 账号</summary>
-    public class Account
+    /// <summary>账号</summary>
+    public static class Account
     {
         /// <summary>账号列表</summary>
         public const string Paged = "Account:Paged";
@@ -284,8 +284,8 @@ public partial class PermissionConst
         public const string Status = "Account:Status";
     }
 
-    /// <summary><see cref="Serial"/> 序号</summary>
-    public class Serial
+    /// <summary>序号</summary>
+    public static class Serial
     {
         /// <summary>序号列表</summary>
         public const string Paged = "Serial:Paged";
@@ -300,8 +300,8 @@ public partial class PermissionConst
         public const string Edit = "Serial:Edit";
     }
 
-    /// <summary><see cref="Position"/> 职位</summary>
-    public class Position
+    /// <summary>职位</summary>
+    public static class Position
     {
         /// <summary>职位列表</summary>
         public const string Paged = "Position:Paged";
@@ -319,8 +319,8 @@ public partial class PermissionConst
         public const string Delete = "Position:Delete";
     }
 
-    /// <summary><see cref="JobLevel"/> 职级</summary>
-    public class JobLevel
+    /// <summary>职级</summary>
+    public static class JobLevel
     {
         /// <summary>职级列表</summary>
         public const string Paged = "JobLevel:Paged";
@@ -338,8 +338,8 @@ public partial class PermissionConst
         public const string Delete = "JobLevel:Delete";
     }
 
-    /// <summary><see cref="Role"/> 角色</summary>
-    public class Role
+    /// <summary>角色</summary>
+    public static class Role
     {
         /// <summary>角色列表</summary>
         public const string Paged = "Role:Paged";
@@ -357,8 +357,8 @@ public partial class PermissionConst
         public const string Delete = "Role:Delete";
     }
 
-    /// <summary><see cref="Department"/> 部门</summary>
-    public class Department
+    /// <summary>部门</summary>
+    public static class Department
     {
         /// <summary>部门列表</summary>
         public const string Paged = "Department:Paged";
@@ -376,8 +376,8 @@ public partial class PermissionConst
         public const string Delete = "Department:Delete";
     }
 
-    /// <summary><see cref="Employee"/> 职员</summary>
-    public class Employee
+    /// <summary>职员</summary>
+    public static class Employee
     {
         /// <summary>职员列表</summary>
         public const string Paged = "Employee:Paged";
@@ -395,8 +395,8 @@ public partial class PermissionConst
         public const string Status = "Employee:Status";
     }
 
-    /// <summary><see cref="TenantOnlineUser"/> 在线用户</summary>
-    public class TenantOnlineUser
+    /// <summary>在线用户</summary>
+    public static class TenantOnlineUser
     {
         /// <summary>在线用户列表</summary>
         public const string Paged = "TenantOnlineUser:Paged";
@@ -405,8 +405,8 @@ public partial class PermissionConst
         public const string ForceOffline = "TenantOnlineUser:ForceOffline";
     }
 
-    /// <summary><see cref="Merchant"/> 商户号</summary>
-    public class Merchant
+    /// <summary>商户号</summary>
+    public static class Merchant
     {
         /// <summary>商户号列表</summary>
         public const string Paged = "Merchant:Paged";
@@ -430,15 +430,15 @@ public partial class PermissionConst
     /// <summary>退款记录列表</summary>
     public const string RefundRecordPaged = "RefundRecord:Paged";
 
-    /// <summary><see cref="WeChat"/> 微信用户</summary>
-    public class WeChat
+    /// <summary>微信用户</summary>
+    public static class WeChat
     {
         /// <summary>微信用户列表</summary>
         public const string Paged = "WeChat:Paged";
     }
 
-    /// <summary><see cref="Complaint"/> 投诉</summary>
-    public class Complaint
+    /// <summary>投诉</summary>
+    public static class Complaint
     {
         /// <summary>投诉工单列表</summary>
         public const string Paged = "Complaint:Paged";

@@ -25,7 +25,7 @@ using Fast.Admin.Enum;
 namespace Fast.Admin.Service.Serial.Dto;
 
 /// <summary>
-/// <see cref="AddSerialRuleInput"/> 添加序号规则输入
+/// 添加序号规则输入
 /// </summary>
 public class AddSerialRuleInput
 {

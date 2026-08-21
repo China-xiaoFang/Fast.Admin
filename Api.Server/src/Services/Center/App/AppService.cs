@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,7 +28,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.App;
 
 /// <summary>
-/// <see cref="AppService"/> App
+/// App
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "app", Order = 996)]
 public class AppService : IDynamicApplication
@@ -43,7 +43,6 @@ public class AppService : IDynamicApplication
     /// <summary>
     /// Launch
     /// </summary>
-    /// <returns></returns>
     [HttpPost("/launch")]
     [ApiInfo("Launch", HttpRequestActionEnum.Auth)]
     [AllowAnonymous, DisabledRequestLog]
@@ -56,14 +55,6 @@ public class AppService : IDynamicApplication
             throw new UserFriendlyException("非法访问！");
         }
 
-        double? latitude = null, longitude = null;
-
-        if (applicationOpenIdModel.Latitude != null && applicationOpenIdModel.Longitude != null)
-        {
-            (latitude, longitude) = CoordinateUtil.WGS84ToGCJ02((double) applicationOpenIdModel.Latitude,
-                (double) applicationOpenIdModel.Longitude);
-        }
-
         return new LaunchOutput
         {
             Edition = applicationOpenIdModel.Application.Edition,
@@ -71,23 +62,12 @@ public class AppService : IDynamicApplication
             AppName = applicationOpenIdModel.Application.AppName,
             LogoUrl = applicationOpenIdModel.Application.LogoUrl,
             ThemeColor = applicationOpenIdModel.Application.ThemeColor,
-            ICPSecurityCode = applicationOpenIdModel.Application.ICPSecurityCode,
-            PublicSecurityCode = applicationOpenIdModel.Application.PublicSecurityCode,
-            UserAgreement = applicationOpenIdModel.Application.UserAgreement,
-            PrivacyAgreement = applicationOpenIdModel.Application.PrivacyAgreement,
-            ServiceAgreement = applicationOpenIdModel.Application.ServiceAgreement,
             AppType = applicationOpenIdModel.AppType,
             EnvironmentType = applicationOpenIdModel.EnvironmentType,
             LoginComponent = applicationOpenIdModel.LoginComponent,
             WebSocketUrl = applicationOpenIdModel.WebSocketUrl,
             RequestTimeout = applicationOpenIdModel.RequestTimeout,
             RequestEncipher = applicationOpenIdModel.RequestEncipher,
-            StatusBarImageUrl = applicationOpenIdModel.StatusBarImageUrl,
-            ContactPhone = applicationOpenIdModel.ContactPhone,
-            Latitude = (decimal?) latitude,
-            Longitude = (decimal?) longitude,
-            Address = applicationOpenIdModel.Address,
-            BannerImages = applicationOpenIdModel.BannerImages ?? [],
             TenantName = applicationOpenIdModel.Application.TenantName
         };
     }

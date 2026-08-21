@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,7 +29,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Admin.Service.Organization;
 
 /// <summary>
-/// <see cref="OrganizationService"/> 机构服务
+/// 机构服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Admin, Name = "organization")]
 public class OrganizationService : IDynamicApplication
@@ -46,16 +46,28 @@ public class OrganizationService : IDynamicApplication
     /// <summary>
     /// 机构选择器
     /// </summary>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("机构选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> OrganizationSelector()
     {
         var queryable = _repository.Entities;
+        var customDepartmentIds = _user.DataScopeDepartmentIdList ?? [];
+        var customOrgIds = customDepartmentIds.Count == 0
+            ? []
+            : await _repository.Queryable<DepartmentModel>()
+                .Where(wh => customDepartmentIds.Contains(wh.DepartmentId))
+                .Select(sl => sl.OrgId)
+                .Distinct()
+                .ToListAsync();
 
         // 管理员，全部权限
         if (_user.IsSuperAdmin || _user.IsAdmin || _user.DataScopeType == DataScopeTypeEnum.All)
         {
+        }
+        // 自定义部门数据
+        else if (_user.DataScopeType == DataScopeTypeEnum.CustomDept)
+        {
+            queryable = queryable.Where(wh => customOrgIds.Contains(wh.OrgId));
         }
         // 本机构及以下数据
         // 本部门及以下数据
@@ -63,7 +75,8 @@ public class OrganizationService : IDynamicApplication
         // 仅本人数据
         else
         {
-            queryable = queryable.Where(wh => wh.OrgId
+            queryable = queryable.Where(wh => customOrgIds.Contains(wh.OrgId)
+                                              || wh.OrgId
                                               == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                                   // 主部门
                                                   .Where(e => e.EmployeeId == _user.EmployeeId && e.IsPrimary)
@@ -108,8 +121,6 @@ public class OrganizationService : IDynamicApplication
     /// <summary>
     /// 获取机构详情
     /// </summary>
-    /// <param name="orgId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取机构详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Department.Detail)]
@@ -151,8 +162,6 @@ public class OrganizationService : IDynamicApplication
     /// <summary>
     /// 添加机构
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加机构", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.Department.Add)]
@@ -204,7 +213,7 @@ public class OrganizationService : IDynamicApplication
         await _repository.InsertAsync(organizationModel);
 
         // 操作日志
-        LogContext.OperateLog(new OperateLogDto
+        await LogContext.OperateLog(new OperateLogDto
         {
             Title = "添加机构",
             OperateType = OperateLogTypeEnum.Organization,
@@ -217,8 +226,6 @@ public class OrganizationService : IDynamicApplication
     /// <summary>
     /// 编辑机构
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑机构", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Department.Edit)]
@@ -334,7 +341,7 @@ public class OrganizationService : IDynamicApplication
             .ExecuteCommandAsync();
 
         // 操作日志
-        LogContext.OperateLog(new OperateLogDto
+        await LogContext.OperateLog(new OperateLogDto
         {
             Title = "编辑机构",
             OperateType = OperateLogTypeEnum.Organization,
@@ -347,8 +354,6 @@ public class OrganizationService : IDynamicApplication
     /// <summary>
     /// 删除机构
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除机构", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Department.Delete)]
@@ -382,7 +387,7 @@ public class OrganizationService : IDynamicApplication
         await _repository.DeleteAsync(organizationModel);
 
         // 操作日志
-        LogContext.OperateLog(new OperateLogDto
+        await LogContext.OperateLog(new OperateLogDto
         {
             Title = "删除机构",
             OperateType = OperateLogTypeEnum.Organization,

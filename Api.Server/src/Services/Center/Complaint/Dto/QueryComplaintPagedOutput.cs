@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.Complaint.Dto;
 
 /// <summary>
-/// <see cref="QueryComplaintPagedOutput"/> 获取投诉分页列表输出
+/// 获取投诉分页列表输出
 /// </summary>
 public class QueryComplaintPagedOutput
 {

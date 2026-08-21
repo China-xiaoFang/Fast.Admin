@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Role.Dto;
 
 /// <summary>
-/// <see cref="AddRoleInput"/> 添加角色输入
+/// 添加角色输入
 /// </summary>
 public class AddRoleInput
 {
@@ -62,6 +62,11 @@ public class AddRoleInput
     /// </summary>
     [EnumRequired(ErrorMessage = "数据范围类型不能为空")]
     public DataScopeTypeEnum DataScopeType { get; set; }
+
+    /// <summary>
+    /// 自定义数据范围部门Id集合
+    /// </summary>
+    public List<long> DataScopeDepartmentIds { get; set; }
 
     /// <summary>
     /// 可分配的角色Id集合

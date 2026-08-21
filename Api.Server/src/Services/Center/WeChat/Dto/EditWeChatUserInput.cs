@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.WeChat.Dto;
 
 /// <summary>
-/// <see cref="EditWeChatUserInput"/> 编辑微信用户输入
+/// 编辑微信用户输入
 /// </summary>
 public class EditWeChatUserInput : UpdateVersionInput
 {

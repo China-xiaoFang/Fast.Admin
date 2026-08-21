@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.WeChat.Dto;
 
 /// <summary>
-/// <see cref="QueryWeChatUserPagedInput"/> 获取微信用户分页列表输入
+/// 获取微信用户分页列表输入
 /// </summary>
 public class QueryWeChatUserPagedInput : PagedInput
 {

@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="SlaveDatabaseModel"/> 从数据库表Model类
+/// 从数据库表Model类
 /// </summary>
 [SugarTable("DatabaseSlave", "从数据库表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -73,20 +73,20 @@ public class SlaveDatabaseModel : BaseTEntity
     /// 数据库用户
     /// </summary>
     /// <remarks>为空则使用主库的</remarks>
-    [SugarColumn(ColumnDescription = "数据库用户", Length = 10)]
+    [SugarColumn(ColumnDescription = "数据库用户", Length = 128)]
     public string DbUser { get; set; }
 
     /// <summary>
     /// 数据库密码
     /// </summary>
     /// <remarks>为空则使用主库的</remarks>
-    [SugarColumn(ColumnDescription = "数据库密码", Length = 20)]
+    [SugarColumn(ColumnDescription = "数据库密码", Length = 512)]
     public string DbPwd { get; set; }
 
     /// <summary>
     /// 自定义连接字符串
     /// </summary>
-    [SugarColumn(ColumnDescription = "自定义连接字符串", Length = 100)]
+    [SugarColumn(ColumnDescription = "自定义连接字符串", Length = 2000)]
     public string CustomConnectionStr { get; set; }
 
     /// <summary>

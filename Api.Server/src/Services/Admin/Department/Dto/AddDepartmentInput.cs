@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Department.Dto;
 
 /// <summary>
-/// <see cref="AddDepartmentInput"/> 添加部门输入
+/// 添加部门输入
 /// </summary>
 public class AddDepartmentInput
 {

@@ -23,7 +23,7 @@
 namespace Fast.Admin.Enum;
 
 /// <summary>
-/// <see cref="NationEnum"/> 民族枚举
+/// 民族枚举
 /// </summary>
 [FastEnum("民族枚举")]
 public enum NationEnum : byte

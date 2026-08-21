@@ -24,7 +24,7 @@
 
 namespace Quartz;
 
-internal class CalendarConfiguration
+internal sealed class CalendarConfiguration
 {
     public CalendarConfiguration(string name, ICalendar calendar, bool replace, bool updateTriggers)
     {

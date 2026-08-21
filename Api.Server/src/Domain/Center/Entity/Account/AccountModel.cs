@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="AccountModel"/> 账号信息表Model类
+/// 账号信息表Model类
 /// </summary>
 [SugarTable("Account", "账号信息表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -68,7 +68,7 @@ public class AccountModel : IUpdateVersion
     /// 密码
     /// </summary>
     [Required]
-    [SugarColumn(ColumnDescription = "密码", Length = 50)]
+    [SugarColumn(ColumnDescription = "密码", Length = 200)]
     public string Password { get; set; }
 
     /// <summary>
@@ -89,24 +89,6 @@ public class AccountModel : IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "头像", Length = 200)]
     public string Avatar { get; set; }
-
-    /// <summary>
-    /// 电话
-    /// </summary>
-    [SugarColumn(ColumnDescription = "电话", Length = 20)]
-    public string Phone { get; set; }
-
-    /// <summary>
-    /// 性别
-    /// </summary>
-    [SugarColumn(ColumnDescription = "性别")]
-    public GenderEnum Sex { get; set; }
-
-    /// <summary>
-    /// 生日
-    /// </summary>
-    [SugarColumn(ColumnDescription = "生日")]
-    public DateTime? Birthday { get; set; }
 
     /// <summary>
     /// 初次登录租户

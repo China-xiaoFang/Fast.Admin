@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,36 +29,49 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="JwtBearerHandle"/> Jwt验证提供器
+/// JWT 验证提供器
 /// </summary>
 public class JwtBearerHandle : IJwtBearerHandle
 {
-    /// <summary>授权处理</summary>
-    /// <remarks>这里已经判断了 Token 是否有效，并且已经处理了自动刷新 Token。只需要处理其余的逻辑即可。如果返回 false或抛出异常，搭配 AuthorizeFailHandle 则抛出 HttpStatusCode = 401 状态码，否则走默认处理 AuthorizationHandlerContext.Fail() 会返回 HttpStatusCode = 403 状态码</remarks>
-    /// <param name="context"><see cref="T:Microsoft.AspNetCore.Authorization.AuthorizationHandlerContext" /></param>
-    /// <param name="httpContext"><see cref="T:Microsoft.AspNetCore.Http.HttpContext" /></param>
-    /// <returns><see cref="T:System.Boolean" /></returns>
+    /// <inheritdoc />
     public async Task<bool> AuthorizeHandle(AuthorizationHandlerContext context, HttpContext httpContext)
     {
-        if (httpContext.User.Identity?.IsAuthenticated == false)
+        if (httpContext.User.Identity?.IsAuthenticated != true)
             return false;
 
         // 获取 IUser，当前请求生命周期，只会解析一次
         var _user = httpContext.RequestServices.GetService<IUser>();
 
         // 从 AccessToken 中读取 Data
-        var data = httpContext.User.Claims.FirstOrDefault(f => f.Type == "Data")!.Value;
-        var payload = data.Base64ToString()
-            .ToObject<Dictionary<string, string>>();
-        // 从 payload 中读取 DeviceType,AppNo,TenantNo,EmployeeNo
-        if (payload.TryGetValue(nameof(AuthUserInfo.DeviceType), out var deviceType)
+        var data = httpContext.User.FindFirst("Data")
+            ?.Value;
+        if (string.IsNullOrWhiteSpace(data) || _user == null)
+            return false;
+
+        Dictionary<string, string> payload;
+        try
+        {
+            payload = data.Base64ToString()
+                .ToObject<Dictionary<string, string>>();
+        }
+        catch
+        {
+            return false;
+        }
+
+        if (payload == null)
+            return false;
+
+        // 从 payload 中读取 DeviceType,SessionId,AppNo,TenantNo,EmployeeNo
+        if (payload.TryGetValue(nameof(AuthUserInfo.DeviceType), out var deviceTypeValue)
+            && Enum.TryParse<AppEnvironmentEnum>(deviceTypeValue, true, out var deviceType)
+            && payload.TryGetValue(nameof(AuthUserInfo.SessionId), out var sessionId)
             && payload.TryGetValue(nameof(AuthUserInfo.AppNo), out var appNo)
             && payload.TryGetValue(nameof(AuthUserInfo.TenantNo), out var tenantNo)
             && payload.TryGetValue(nameof(AuthUserInfo.EmployeeNo), out var employeeNo))
         {
             // 获取授权用户信息
-            var authUserInfo =
-                await _user.GetAuthUserInfo(Enum.Parse<AppEnvironmentEnum>(deviceType, true), appNo, tenantNo, employeeNo);
+            var authUserInfo = await _user.GetAuthUserInfo(deviceType, appNo, tenantNo, employeeNo, sessionId);
 
             if (authUserInfo == null)
                 return false;
@@ -76,25 +89,15 @@ public class JwtBearerHandle : IJwtBearerHandle
         return false;
     }
 
-    /// <summary>授权失败处理</summary>
-    /// <remarks>如果返回 null，则走默认处理 AuthorizationHandlerContext.Fail()</remarks>
-    /// <param name="context"><see cref="T:Microsoft.AspNetCore.Authorization.AuthorizationHandlerContext" /></param>
-    /// <param name="httpContext"><see cref="T:Microsoft.AspNetCore.Http.HttpContext" /></param>
-    /// <param name="exception"><see cref="T:System.Exception" /></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<object> AuthorizeFailHandle(AuthorizationHandlerContext context, HttpContext httpContext,
         Exception exception)
     {
-        return await Task.FromResult(UnifyContext.GetRestfulResult(StatusCodes.Status401Unauthorized, false, null,
-            exception?.Message ?? "401 未经授权", httpContext));
+        return await Task.FromResult(UnifyContext.GetRestfulResult(StatusCodes.Status401Unauthorized, false, null, "401 未经授权",
+            httpContext));
     }
 
-    /// <summary>权限判断处理</summary>
-    /// <remarks>这里只需要判断你的权限逻辑即可，如果返回 false或抛出异常 则抛出 HttpStatusCode = 403 状态码</remarks>
-    /// <param name="context"><see cref="T:Microsoft.AspNetCore.Authorization.AuthorizationHandlerContext" /></param>
-    /// <param name="requirement"><see cref="T:Microsoft.AspNetCore.Authorization.IAuthorizationRequirement" /></param>
-    /// <param name="httpContext"><see cref="T:Microsoft.AspNetCore.Http.HttpContext" /></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<bool> PermissionHandle(AuthorizationHandlerContext context, IAuthorizationRequirement requirement,
         HttpContext httpContext)
     {
@@ -126,13 +129,7 @@ public class JwtBearerHandle : IJwtBearerHandle
         return await Task.FromResult(false);
     }
 
-    /// <summary>权限判断失败处理</summary>
-    /// <remarks>如果返回 null，则走默认处理 AuthorizationHandlerContext.Fail()</remarks>
-    /// <param name="context"><see cref="T:Microsoft.AspNetCore.Authorization.AuthorizationHandlerContext" /></param>
-    /// <param name="requirement"><see cref="T:Microsoft.AspNetCore.Authorization.IAuthorizationRequirement" /></param>
-    /// <param name="httpContext"><see cref="T:Microsoft.AspNetCore.Http.HttpContext" /></param>
-    /// <param name="exception"><see cref="T:System.Exception" /></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<object> PermissionFailHandle(AuthorizationHandlerContext context, IAuthorizationRequirement requirement,
         HttpContext httpContext, Exception exception)
     {

@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Database.Dto;
 
 /// <summary>
-/// <see cref="EditDatabaseInput"/> 编辑数据库输入
+/// 编辑数据库输入
 /// </summary>
 public class EditDatabaseInput : UpdateVersionInput
 {
@@ -87,7 +87,7 @@ public class EditDatabaseInput : UpdateVersionInput
     public int CommandTimeOut { get; set; }
 
     /// <summary>
-    /// SqlSugar Sql执行最大秒数，如果超过记录警告日志
+    /// SqlSugar SQL 执行最大秒数，如果超过记录警告日志
     /// </summary>
     [IntRequired(ErrorMessage = "SqlSugar Sql执行最大秒数不能为空")]
     public int SugarSqlExecMaxSeconds { get; set; }
@@ -99,7 +99,7 @@ public class EditDatabaseInput : UpdateVersionInput
     public bool DiffLog { get; set; }
 
     /// <summary>
-    /// 禁用 SqlSugar 的 Aop
+    /// 禁用 SqlSugar 的 AOP
     /// </summary>
     [Required(ErrorMessage = "禁用 SqlSugar 的 Aop不能为空")]
     public bool DisableAop { get; set; }

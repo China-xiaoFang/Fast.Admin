@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -27,16 +27,13 @@ using Yitter.IdGenerator;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ConfigSeedData"/> 配置种子数据
+/// 配置种子数据
 /// </summary>
 internal static class ConfigSeedData
 {
     /// <summary>
     /// 配置种子数据
     /// </summary>
-    /// <param name="db"></param>
-    /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
-    /// <returns></returns>
     public static async Task SystemConfigSeedData(ISqlSugarClient db, DateTime dateTime)
     {
         await db.Insertable(new List<ConfigModel>

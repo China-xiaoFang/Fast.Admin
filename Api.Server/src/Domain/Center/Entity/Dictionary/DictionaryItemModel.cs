@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="DictionaryItemModel"/> 字典项表Model类
+/// 字典项表Model类
 /// </summary>
 [SugarTable("DictionaryItem", "字典项表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -87,18 +87,14 @@ public class DictionaryItemModel : BaseEntity
     [SugarColumn(ColumnDescription = "状态")]
     public CommonStatusEnum Status { get; set; }
 
-    /// <summary>Serves as the default hash function.</summary>
-    /// <returns>A hash code for the current object.</returns>
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         // ReSharper disable once NonReadonlyMemberInGetHashCode
         return DictionaryItemId.GetHashCode();
     }
 
-    /// <summary>Determines whether the specified object is equal to the current object.</summary>
-    /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns>
-    /// <see langword="true" /> if the specified object  is equal to the current object; otherwise, <see langword="false" />.</returns>
+    /// <inheritdoc />
     public override bool Equals(object obj)
     {
         if (obj is not DictionaryItemModel oldDictionaryItemModel)

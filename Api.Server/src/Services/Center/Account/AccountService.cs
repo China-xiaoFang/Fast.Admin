@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -35,24 +35,25 @@ using Yitter.IdGenerator;
 namespace Fast.Center.Service.Account;
 
 /// <summary>
-/// <see cref="AccountService"/> 账号服务
+/// 账号服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "account")]
 public class AccountService : IDynamicApplication
 {
     private readonly IUser _user;
     private readonly ISqlSugarRepository<AccountModel> _repository;
+    private readonly IHubContext<ChatHub, IChatClient> _hubContext;
 
-    public AccountService(IUser user, ISqlSugarRepository<AccountModel> repository)
+    public AccountService(IUser user, ISqlSugarRepository<AccountModel> repository, IHubContext<ChatHub, IChatClient> hubContext)
     {
         _user = user;
         _repository = repository;
+        _hubContext = hubContext;
     }
 
     /// <summary>
     /// 账号选择器
     /// </summary>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("账号选择器", HttpRequestActionEnum.Query)]
     public async Task<PagedResult<ElSelectorOutput<long>>> AccountSelector(PagedInput input)
@@ -72,24 +73,14 @@ public class AccountService : IDynamicApplication
                     Email = sl.Email,
                     AccountKey = sl.AccountKey,
                     NickName = sl.NickName,
-                    Avatar = sl.Avatar,
-                    Sex = sl.Sex
+                    Avatar = sl.Avatar
                 })
                 .OrderBy(ob => ob.NickName)
                 .ToPagedListAsync(input);
 
             return data.ToPagedData(sl => new ElSelectorOutput<long>
             {
-                Value = sl.AccountId,
-                Label = sl.Mobile,
-                Data = new
-                {
-                    sl.Email,
-                    sl.AccountKey,
-                    sl.NickName,
-                    sl.Avatar,
-                    sl.Sex
-                }
+                Value = sl.AccountId, Label = sl.Mobile, Data = new {sl.Email, sl.AccountKey, sl.NickName, sl.Avatar}
             });
         }
         else
@@ -108,24 +99,14 @@ public class AccountService : IDynamicApplication
                     Email = t2.Email,
                     AccountKey = t2.AccountKey,
                     NickName = t2.NickName,
-                    Avatar = t2.Avatar,
-                    Sex = t2.Sex
+                    Avatar = t2.Avatar
                 })
                 .Distinct()
                 .ToPagedListAsync(input);
 
             return data.ToPagedData(sl => new ElSelectorOutput<long>
             {
-                Value = sl.AccountId,
-                Label = sl.Mobile,
-                Data = new
-                {
-                    sl.Email,
-                    sl.AccountKey,
-                    sl.NickName,
-                    sl.Avatar,
-                    sl.Sex
-                }
+                Value = sl.AccountId, Label = sl.Mobile, Data = new {sl.Email, sl.AccountKey, sl.NickName, sl.Avatar}
             });
         }
     }
@@ -133,11 +114,10 @@ public class AccountService : IDynamicApplication
     /// <summary>
     /// 获取账号分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取账号分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Account.Paged)]
+    [PlatformOnly]
     public async Task<PagedResult<QueryAccountPagedOutput>> QueryAccountPaged(QueryAccountPagedInput input)
     {
         var dateTime = DateTime.Now;
@@ -148,8 +128,6 @@ public class AccountService : IDynamicApplication
             .WhereIF(!string.IsNullOrWhiteSpace(input.Mobile), t1 => t1.Mobile.Contains(input.Mobile))
             .WhereIF(!string.IsNullOrWhiteSpace(input.Email), t1 => t1.Email.Contains(input.Email))
             .WhereIF(input.Status != null, t1 => t1.Status == input.Status)
-            .WhereIF(!string.IsNullOrWhiteSpace(input.Phone), t1 => t1.Phone.Contains(input.Phone))
-            .WhereIF(input.Sex != null, t1 => t1.Sex == input.Sex)
             .WhereIF(!string.IsNullOrWhiteSpace(input.FirstLoginCity), t1 => t1.FirstLoginCity.Contains(input.FirstLoginCity))
             .WhereIF(!string.IsNullOrWhiteSpace(input.FirstLoginIp), t1 => t1.FirstLoginIp.Contains(input.FirstLoginIp))
             .WhereIF(!string.IsNullOrWhiteSpace(input.LastLoginCity), t1 => t1.LastLoginCity.Contains(input.LastLoginCity))
@@ -165,8 +143,6 @@ public class AccountService : IDynamicApplication
                 Status = t1.Status,
                 NickName = t1.NickName,
                 Avatar = t1.Avatar,
-                Sex = t1.Sex,
-                Birthday = t1.Birthday,
                 FirstLoginTenantName = t2.TenantName,
                 FirstLoginDevice = t1.FirstLoginDevice,
                 FirstLoginOS = t1.FirstLoginOS,
@@ -200,11 +176,10 @@ public class AccountService : IDynamicApplication
     /// <summary>
     /// 获取账号详情
     /// </summary>
-    /// <param name="accountId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取账号详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Account.Detail)]
+    [PlatformOnly]
     public async Task<QueryAccountDetailOutput> QueryAccountDetail([Required(ErrorMessage = "账号Id不能为空")] long? accountId)
     {
         var result = await _repository.Queryable<AccountModel>()
@@ -220,9 +195,6 @@ public class AccountService : IDynamicApplication
                 Status = t1.Status,
                 NickName = t1.NickName,
                 Avatar = t1.Avatar,
-                Phone = t1.Phone,
-                Sex = t1.Sex,
-                Birthday = t1.Birthday,
                 FirstLoginTenantName = t2.TenantName,
                 FirstLoginDevice = t1.FirstLoginDevice,
                 FirstLoginOS = t1.FirstLoginOS,
@@ -259,7 +231,6 @@ public class AccountService : IDynamicApplication
     /// <summary>
     /// 获取编辑账号详情
     /// </summary>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取编辑账号详情", HttpRequestActionEnum.Query)]
     public async Task<EditAccountInput> QueryEditAccountDetail()
@@ -272,9 +243,6 @@ public class AccountService : IDynamicApplication
                 Email = sl.Email,
                 NickName = sl.NickName,
                 Avatar = sl.Avatar,
-                Phone = sl.Phone,
-                Sex = sl.Sex,
-                Birthday = sl.Birthday,
                 RowVersion = sl.RowVersion
             })
             .SingleAsync();
@@ -290,8 +258,6 @@ public class AccountService : IDynamicApplication
     /// <summary>
     /// 编辑账号
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑账号", HttpRequestActionEnum.Edit)]
     public async Task EditAccount(EditAccountInput input)
@@ -321,36 +287,32 @@ public class AccountService : IDynamicApplication
         accountModel.Email = input.Email;
         accountModel.NickName = input.NickName;
         accountModel.Avatar = input.Avatar;
-        accountModel.Phone = input.Phone;
-        accountModel.Sex = input.Sex;
-        accountModel.Birthday = input.Birthday;
         accountModel.RowVersion = input.RowVersion;
 
         // 同步微信用户信息
-        WeChatUserModel weChatUserModel = null;
+        UserModel userModel = null;
         if (accountModel.WeChatId != null)
         {
-            weChatUserModel = await _repository.Queryable<WeChatUserModel>()
+            userModel = await _repository.Queryable<UserModel>()
                 .InSingleAsync(accountModel.WeChatId);
 
-            if (weChatUserModel == null)
+            if (userModel == null)
             {
                 // 自动解绑
                 accountModel.WeChatId = null;
             }
             else
             {
-                weChatUserModel.NickName = input.NickName;
-                weChatUserModel.Avatar = input.Avatar;
-                weChatUserModel.Sex = input.Sex;
+                userModel.NickName = input.NickName;
+                userModel.Avatar = input.Avatar;
             }
         }
 
         await _repository.Ado.UseTranAsync(async () =>
         {
-            if (weChatUserModel != null)
+            if (userModel != null)
             {
-                await _repository.Updateable(weChatUserModel)
+                await _repository.Updateable(userModel)
                     .ExecuteCommandAsync();
             }
 
@@ -373,15 +335,22 @@ public class AccountService : IDynamicApplication
     /// <summary>
     /// 账号修改密码
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("账号修改密码", HttpRequestActionEnum.Edit)]
     public async Task ChangePassword(ChangePasswordInput input)
     {
-        if (!string.Equals(input.NewPassword, input.ConfirmPassword, StringComparison.OrdinalIgnoreCase))
+        if (!string.Equals(input.NewPassword, input.ConfirmPassword, StringComparison.Ordinal))
         {
             throw new UserFriendlyException("新密码和确认密码不一致！");
+        }
+
+        // 客户端提交原始密码后，服务端可以直接校验真实复杂度
+        if (input.NewPassword.Length < 8
+            || !input.NewPassword.Any(char.IsUpper)
+            || !input.NewPassword.Any(char.IsLower)
+            || !input.NewPassword.Any(char.IsDigit))
+        {
+            throw new UserFriendlyException("新密码至少8位，且必须包含大小写字母、数字！");
         }
 
         var accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
@@ -390,13 +359,24 @@ public class AccountService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        if (!string.Equals(accountModel.Password, input.OldPassword, StringComparison.OrdinalIgnoreCase))
+
+        if (!CryptoUtil.VerifyPasswordPBKDF2SHA256(input.OldPassword, accountModel.Password))
         {
             throw new UserFriendlyException("旧密码不正确！");
         }
 
+        // 查询最近5次密码修改记录
+        var passwordRecordList = await _repository.Queryable<PasswordRecordModel>()
+            .Where(wh => wh.AccountId == accountModel.AccountId)
+            .OrderByDescending(ob => ob.CreatedTime)
+            .Take(3)
+            .Select(sl => sl.Password)
+            .ToListAsync();
+        if (passwordRecordList.Any(history => CryptoUtil.VerifyPasswordPBKDF2SHA256(input.NewPassword, history)))
+            throw new UserFriendlyException("新密码不能与最近3次使用的密码相同！");
+
         // 更新密码
-        accountModel.Password = input.NewPassword.ToUpper();
+        accountModel.Password = CryptoUtil.HashPasswordPBKDF2SHA256(input.NewPassword);
         accountModel.RowVersion = input.RowVersion;
 
         var _visitLogRepository = FastContext.HttpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>();
@@ -426,7 +406,7 @@ public class AccountService : IDynamicApplication
                 {
                     AccountId = accountModel.AccountId,
                     OperationType = PasswordOperationTypeEnum.Change,
-                    Type = PasswordTypeEnum.SHA1,
+                    Type = PasswordTypeEnum.PBKDF2_SHA256,
                     Password = accountModel.Password
                 })
                 .ExecuteCommandAsync();
@@ -435,16 +415,17 @@ public class AccountService : IDynamicApplication
 
         // 退出登录
         await _user.Logout();
+        await _user.RevokeAccount(accountModel.AccountId);
+        await AccountForceOffline(accountModel.AccountId, "密码已修改，请重新登录");
     }
 
     /// <summary>
     /// 账号解除锁定
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("账号解除锁定", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Account.Unlock)]
+    [PlatformOnly]
     public async Task Unlock(AccountIdInput input)
     {
         var accountModel = await _repository.SingleOrDefaultAsync(input.AccountId);
@@ -472,11 +453,10 @@ public class AccountService : IDynamicApplication
     /// <summary>
     /// 账号重置密码
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("账号重置密码", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Account.ResetPassword)]
+    [PlatformOnly]
     public async Task ResetPassword(AccountIdInput input)
     {
         if (_user.AccountId == input.AccountId)
@@ -491,8 +471,7 @@ public class AccountService : IDynamicApplication
         }
 
         // 更新密码
-        accountModel.Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
-            .ToUpper();
+        accountModel.Password = CryptoUtil.HashPasswordPBKDF2SHA256(CommonConst.Default.Password);
         accountModel.RowVersion = input.RowVersion;
 
         await _repository.Ado.UseTranAsync(async () =>
@@ -502,21 +481,23 @@ public class AccountService : IDynamicApplication
                 {
                     AccountId = accountModel.AccountId,
                     OperationType = PasswordOperationTypeEnum.Reset,
-                    Type = PasswordTypeEnum.SHA1,
+                    Type = PasswordTypeEnum.PBKDF2_SHA256,
                     Password = accountModel.Password
                 })
                 .ExecuteCommandAsync();
         }, ex => throw ex);
+
+        await _user.RevokeAccount(accountModel.AccountId);
+        await AccountForceOffline(accountModel.AccountId, "密码已重置，请重新登录");
     }
 
     /// <summary>
     /// 账号更改状态
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("账号更改状态", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Account.Status)]
+    [PlatformOnly]
     public async Task ChangeStatus(AccountIdInput input)
     {
         if (_user.AccountId == input.AccountId)
@@ -543,24 +524,34 @@ public class AccountService : IDynamicApplication
 
         if (accountModel.Status == CommonStatusEnum.Disable)
         {
-            // 强制下线当前账号所有在线用户
-            var _hubContext = FastContext.HttpContext.RequestServices.GetService<IHubContext<ChatHub, IChatClient>>();
-
-            var connectionIds = await _repository.Queryable<TenantOnlineUserModel>()
-                .Where(wh => wh.IsOnline)
-                .Where(wh => wh.AccountId == accountModel.AccountId)
-                .Select(sl => sl.ConnectionId)
-                .ToListAsync();
-
-            await _hubContext.Clients.Clients(connectionIds)
-                .ForceOffline(new ForceOfflineOutput
-                {
-                    IsAdmin = _user.IsSuperAdmin || _user.IsAdmin,
-                    NickName = _user.NickName,
-                    EmployeeNo = _user.EmployeeNo,
-                    OfflineTime = DateTime.Now,
-                    Message = "账号已被禁用"
-                });
+            await _user.RevokeAccount(accountModel.AccountId);
+            await AccountForceOffline(accountModel.AccountId, "账号已被禁用");
         }
+    }
+
+    /// <summary>
+    /// 强制下线账号
+    /// </summary>
+    private async Task AccountForceOffline(long accountId, string message)
+    {
+        var connectionIds = await _repository.Queryable<TenantOnlineUserModel>()
+            .ClearFilter<IBaseTEntity>()
+            .Where(wh => wh.IsOnline)
+            .Where(wh => wh.AccountId == accountId)
+            .Select(sl => sl.ConnectionId)
+            .ToListAsync();
+        if (connectionIds.Count == 0)
+            return;
+
+        // 强制下线当前账号所有在线用户
+        await _hubContext.Clients.Clients(connectionIds)
+            .ForceOffline(new ForceOfflineOutput
+            {
+                IsAdmin = _user.IsSuperAdmin || _user.IsAdmin,
+                NickName = _user.NickName,
+                EmployeeNo = _user.EmployeeNo,
+                OfflineTime = DateTime.Now,
+                Message = message
+            });
     }
 }

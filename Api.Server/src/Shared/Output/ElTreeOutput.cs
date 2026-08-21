@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="ElTreeOutput{T}"/> ElementPlus ElTree 通用输出
+/// ElementPlus ElTree 通用输出
 /// </summary>
 [SuppressSniffer]
 public class ElTreeOutput<T>

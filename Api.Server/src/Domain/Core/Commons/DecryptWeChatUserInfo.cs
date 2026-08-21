@@ -26,7 +26,7 @@ using Newtonsoft.Json;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="DecryptWeChatUserInfo"/> 解密微信用户信息
+/// 解密微信用户信息
 /// </summary>
 /// <remarks>解密数据返回</remarks>
 public class DecryptWeChatUserInfo

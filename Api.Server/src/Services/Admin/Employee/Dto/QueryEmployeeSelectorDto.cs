@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Employee.Dto;
 
 /// <summary>
-/// <see cref="QueryEmployeeSelectorDto"/> 获取职员选择器Dto
+/// 获取职员选择器Dto
 /// </summary>
 public class QueryEmployeeSelectorDto
 {

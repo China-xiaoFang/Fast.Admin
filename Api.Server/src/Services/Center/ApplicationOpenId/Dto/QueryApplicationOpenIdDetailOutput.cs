@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.ApplicationOpenId.Dto;
 
 /// <summary>
-/// <see cref="QueryApplicationOpenIdDetailOutput"/> 获取应用标识详情输出
+/// 获取应用标识详情输出
 /// </summary>
 public class QueryApplicationOpenIdDetailOutput : PagedOutput
 {
@@ -83,37 +83,6 @@ public class QueryApplicationOpenIdDetailOutput : PagedOutput
     public bool RequestEncipher { get; set; }
 
     /// <summary>
-    /// 状态栏图片地址
-    /// </summary>
-    public string StatusBarImageUrl { get; set; }
-
-    /// <summary>
-    /// 联系电话
-    /// </summary>
-    public string ContactPhone { get; set; }
-
-    /// <summary>
-    /// 纬度
-    /// </summary>
-    public decimal? Latitude { get; set; }
-
-    /// <summary>
-    /// 经度
-    /// </summary>
-    public decimal? Longitude { get; set; }
-
-    /// <summary>
-    /// 地址
-    /// </summary>
-    public string Address { get; set; }
-
-    /// <summary>
-    /// Banner图
-    /// </summary>
-    [SugarColumn(IsJson = true)]
-    public List<string> BannerImages { get; set; }
-
-    /// <summary>
     /// 微信商户号Id
     /// </summary>
     public long? WeChatMerchantId { get; set; }
@@ -139,7 +108,7 @@ public class QueryApplicationOpenIdDetailOutput : PagedOutput
     public DateTime? WeChatAccessTokenRefreshTime { get; set; }
 
     /// <summary>
-    /// 微信 JsApi Ticket 刷新时间
+    /// 微信 JSAPI Ticket 刷新时间
     /// </summary>
     public DateTime? WeChatJsApiTicketRefreshTime { get; set; }
 

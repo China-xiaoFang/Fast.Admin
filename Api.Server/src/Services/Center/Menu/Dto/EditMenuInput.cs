@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.Menu.Dto;
 
 /// <summary>
-/// <see cref="EditMenuInput"/> 编辑菜单输入
+/// 编辑菜单输入
 /// </summary>
 public class EditMenuInput : UpdateVersionInput
 {

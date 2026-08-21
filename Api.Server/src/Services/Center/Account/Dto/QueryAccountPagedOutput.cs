@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Account.Dto;
 
 /// <summary>
-/// <see cref="QueryAccountPagedOutput"/> 获取账号分页列表输出
+/// 获取账号分页列表输出
 /// </summary>
 public class QueryAccountPagedOutput
 {
@@ -59,16 +59,6 @@ public class QueryAccountPagedOutput
     /// 头像
     /// </summary>
     public string Avatar { get; set; }
-
-    /// <summary>
-    /// 性别
-    /// </summary>
-    public GenderEnum Sex { get; set; }
-
-    /// <summary>
-    /// 生日
-    /// </summary>
-    public DateTime? Birthday { get; set; }
 
     /// <summary>
     /// 初次登录租户

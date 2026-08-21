@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,72 +25,50 @@ using MimeKit;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="IMailService"/> 邮件服务
+/// 邮件服务
 /// </summary>
 public interface IMailService
 {
     /// <summary>
     /// 获取公用邮件模板
     /// </summary>
-    /// <param name="title"></param>
-    /// <param name="msg"></param>
+    /// <param name="title">标题</param>
+    /// <param name="msg">消息正文</param>
     /// <param name="type">
     /// <para>info</para>
     /// <para>warn</para>
     /// <para>error</para>
     /// </param>
-    /// <returns></returns>
+    /// <returns>公用邮件模板</returns>
     string GetEmailTemplate(string title, string msg, string type = null);
 
     /// <summary>
     /// 发送邮件
     /// </summary>
-    /// <param name="title"><see cref="string"/> 标题</param>
-    /// <param name="content"><see cref="string"/> 正文内容</param>
-    /// <param name="receiveEmails"><see cref="string"/> 收件人邮箱</param>
-    /// <returns></returns>
     Task SendEmail(string title, string content, string receiveEmails);
 
     /// <summary>
     /// 发送邮件 - 默认收件人
     /// </summary>
-    /// <param name="title"><see cref="string"/> 标题</param>
-    /// <param name="content"><see cref="string"/> 正文内容</param>
-    /// <returns></returns>
     Task SendEmail(string title, string content);
 
     /// <summary>
     /// 发送邮件
     /// </summary>
-    /// <param name="title"><see cref="string"/> 标题</param>
-    /// <param name="content"><see cref="BodyBuilder"/> 正文内容</param>
-    /// <param name="receiveEmails"><see cref="string"/> 收件人邮箱</param>
-    /// <returns></returns>
     Task SendEmail(string title, BodyBuilder content, string receiveEmails);
 
     /// <summary>
     /// 发送邮件 - 默认收件人
     /// </summary>
-    /// <param name="title"><see cref="string"/> 标题</param>
-    /// <param name="content"><see cref="BodyBuilder"/> 正文内容</param>
-    /// <returns></returns>
     Task SendEmail(string title, BodyBuilder content);
 
     /// <summary>
     /// 发送邮件
     /// </summary>
-    /// <param name="title"><see cref="string"/> 标题</param>
-    /// <param name="content"><see cref="string"/> 正文内容</param>
-    /// <param name="receiveEmails"><see cref="List{T}"/> 收件人邮箱</param>
-    /// <returns></returns>
     Task SendEmail(string title, string content, List<string> receiveEmails);
 
     /// <summary>
     /// 发送邮件
     /// </summary>
-    /// <param name="title"><see cref="string"/> 标题</param>
-    /// <param name="content"><see cref="BodyBuilder"/> 正文内容</param>
-    /// <param name="receiveEmails"><see cref="List{T}"/> 收件人邮箱</param>
-    /// <returns></returns>
     Task SendEmail(string title, BodyBuilder content, List<string> receiveEmails);
 }

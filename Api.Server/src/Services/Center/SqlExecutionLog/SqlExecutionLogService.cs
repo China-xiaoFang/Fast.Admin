@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,7 +28,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.SqlExecutionLog;
 
 /// <summary>
-/// <see cref="SqlExecutionLogService"/> Sql执行日志服务
+/// SQL 执行日志服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "sqlExecutionLog")]
 public class SqlExecutionLogService : IDynamicApplication
@@ -43,10 +43,8 @@ public class SqlExecutionLogService : IDynamicApplication
     }
 
     /// <summary>
-    /// 获取Sql执行日志分页列表
+    /// 获取 SQL 执行日志分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取Sql执行日志分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.SqlExecutionLogPaged)]

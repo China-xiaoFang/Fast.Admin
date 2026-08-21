@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Table.Dto;
 
 /// <summary>
-/// <see cref="SyncUserTableConfigInput"/> 同步用户表格配置输入
+/// 同步用户表格配置输入
 /// </summary>
 public class SyncUserTableConfigInput
 {

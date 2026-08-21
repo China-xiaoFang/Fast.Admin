@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,18 +25,16 @@ using Quartz;
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="JobDataMap"/> 拓展类
+/// <see cref="JobDataMap"/> 扩展方法
 /// </summary>
 [SuppressSniffer]
 public static class JobDataMapExtension
 {
     /// <summary>
-    /// 获取可空类型的枚举值，只支持 Int 类型的枚举
+    /// 获取以 <see langword="int"/> 为基础类型的枚举值
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="jobData"></param>
-    /// <param name="key"></param>
-    /// <returns></returns>、
+    /// <typeparam name="T">枚举类型</typeparam>
+    /// <returns>枚举值</returns>
     public static T GetEnum<T>(this JobDataMap jobData, string key) where T : Enum
     {
         // 获取值
@@ -65,12 +63,10 @@ public static class JobDataMapExtension
     }
 
     /// <summary>
-    /// 获取可空类型的枚举值，只支持 Int 类型的枚举
+    /// 获取以 <see langword="int"/> 为基础类型的可空枚举值
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="jobData"></param>
-    /// <param name="key"></param>
-    /// <returns></returns>
+    /// <typeparam name="T">枚举类型</typeparam>
+    /// <returns>枚举值；键不存在、值为空或数值无效时为 <see langword="null"/></returns>
     public static T? GetNullableEnum<T>(this JobDataMap jobData, string key) where T : struct, Enum
     {
         // ReSharper disable once CanSimplifyDictionaryLookupWithTryGetValue
@@ -111,11 +107,9 @@ public static class JobDataMapExtension
     }
 
     /// <summary>
-    /// 获取 Int 类型值
+    /// 获取可空的 <see langword="int"/> 值
     /// </summary>
-    /// <param name="jobData"></param>
-    /// <param name="key"></param>
-    /// <returns></returns>
+    /// <returns>对应的值；键不存在或值为空时为 <see langword="null"/></returns>
     public static int? GetNullableInt(this JobDataMap jobData, string key)
     {
         // 判断是否存在
@@ -134,11 +128,9 @@ public static class JobDataMapExtension
     }
 
     /// <summary>
-    /// 获取 Long 类型值
+    /// 获取可空的 <see langword="long"/> 值
     /// </summary>
-    /// <param name="jobData"></param>
-    /// <param name="key"></param>
-    /// <returns></returns>
+    /// <returns>对应的值；键不存在或值为空时为 <see langword="null"/></returns>
     public static long? GetNullableLong(this JobDataMap jobData, string key)
     {
         // 判断是否存在
@@ -157,11 +149,9 @@ public static class JobDataMapExtension
     }
 
     /// <summary>
-    /// 获取 DateTime 类型值
+    /// 获取可空的 <see cref="DateTime"/> 值
     /// </summary>
-    /// <param name="jobData"></param>
-    /// <param name="key"></param>
-    /// <returns></returns>
+    /// <returns>对应的值；键不存在或值为空时为 <see langword="null"/></returns>
     public static DateTime? GetNullableDateTime(this JobDataMap jobData, string key)
     {
         // 判断是否存在
@@ -181,11 +171,9 @@ public static class JobDataMapExtension
     }
 
     /// <summary>
-    /// 获取 Boolean 类型值
+    /// 获取可空的 <see langword="bool"/> 值
     /// </summary>
-    /// <param name="jobData"></param>
-    /// <param name="key"></param>
-    /// <returns></returns>
+    /// <returns>对应的布尔值；键不存在或值为空时为 <see langword="null"/></returns>
     public static bool? GetNullableBoolean(this JobDataMap jobData, string key)
     {
         // 判断是否存在

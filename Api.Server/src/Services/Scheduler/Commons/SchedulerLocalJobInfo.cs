@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="SchedulerLocalJobInfo"/> 本地调度作业信息
+/// 本地调度作业信息
 /// </summary>
 [SuppressSniffer]
 public class SchedulerLocalJobInfo

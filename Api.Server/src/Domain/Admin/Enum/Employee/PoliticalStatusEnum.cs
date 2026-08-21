@@ -23,7 +23,7 @@
 namespace Fast.Admin.Enum;
 
 /// <summary>
-/// <see cref="PoliticalStatusEnum"/> 政治面貌枚举
+/// 政治面貌枚举
 /// </summary>
 [Flags]
 [FastEnum("政治面貌枚举")]

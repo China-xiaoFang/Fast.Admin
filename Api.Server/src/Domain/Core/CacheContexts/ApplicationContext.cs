@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -27,7 +27,7 @@ using SqlSugar;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ApplicationContext"/> 应用上下文
+/// 应用上下文
 /// </summary>
 [SuppressSniffer]
 public class ApplicationContext
@@ -45,9 +45,7 @@ public class ApplicationContext
     /// <summary>
     /// 获取应用
     /// </summary>
-    /// <param name="openId"><see cref="string"/> 应用标识</param>
-    /// <param name="throwError"><see cref="bool"/> 抛出错误</param>
-    /// <returns></returns>
+    /// <returns>应用信息；未找到且不要求抛出异常时为 <see langword="null"/></returns>
     public static ApplicationOpenIdModel GetApplicationSync(string openId, bool throwError = true)
     {
         if (string.IsNullOrWhiteSpace(openId))
@@ -98,9 +96,7 @@ public class ApplicationContext
     /// <summary>
     /// 获取应用
     /// </summary>
-    /// <param name="openId"><see cref="string"/> 应用标识</param>
-    /// <param name="throwError"><see cref="bool"/> 抛出错误</param>
-    /// <returns></returns>
+    /// <returns>应用信息；未找到且不要求抛出异常时为 <see langword="null"/></returns>
     public static async Task<ApplicationOpenIdModel> GetApplication(string openId, bool throwError = true)
     {
         if (string.IsNullOrWhiteSpace(openId))
@@ -151,8 +147,6 @@ public class ApplicationContext
     /// <summary>
     /// 删除应用
     /// </summary>
-    /// <param name="openId"><see cref="string"/> 应用标识</param>
-    /// <returns></returns>
     public static async Task DeleteApplication(string openId)
     {
         if (string.IsNullOrWhiteSpace(openId))
@@ -177,7 +171,6 @@ public class ApplicationContext
     /// <summary>
     /// 删除所有应用
     /// </summary>
-    /// <returns></returns>
     public static async Task DeleteAllApplication()
     {
         if (FastContext.HttpContext != null)

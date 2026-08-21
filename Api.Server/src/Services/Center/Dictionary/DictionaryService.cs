@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -31,7 +31,7 @@ using Yitter.IdGenerator;
 namespace Fast.Center.Service.Dictionary;
 
 /// <summary>
-/// <see cref="DictionaryService"/> 字典服务
+/// 字典服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "Dictionary", Order = 995)]
 public class DictionaryService : IDynamicApplication
@@ -51,7 +51,6 @@ public class DictionaryService : IDynamicApplication
     /// <summary>
     /// 获取字典
     /// </summary>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取字典", HttpRequestActionEnum.Query)]
     [AllowAnonymous, DisabledRequestLog]
@@ -107,11 +106,10 @@ public class DictionaryService : IDynamicApplication
     /// <summary>
     /// 字典分页选择器
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("字典分页选择器", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Dictionary.Paged)]
+    [PlatformOnly]
     public async Task<PagedResult<ElSelectorOutput<long>>> SelectorPaged(PagedInput input)
     {
         var pagedData = await _typeRepository.Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
@@ -129,11 +127,10 @@ public class DictionaryService : IDynamicApplication
     /// <summary>
     /// 获取字典分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取字典分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Dictionary.Paged)]
+    [PlatformOnly]
     public async Task<PagedResult<QueryDictionaryPagedOutput>> QueryDictionaryPaged(PagedInput input)
     {
         return await _typeRepository.Entities.OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
@@ -159,11 +156,10 @@ public class DictionaryService : IDynamicApplication
     /// <summary>
     /// 获取字典详情
     /// </summary>
-    /// <param name="dictionaryId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取字典详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Dictionary.Detail)]
+    [PlatformOnly]
     public async Task<QueryDictionaryDetailOutput> QueryDictionaryDetail([Required(ErrorMessage = "字典Id不能为空")] long? dictionaryId)
     {
         var result = await _typeRepository.Entities.Includes(e => e.DictionaryItemList)
@@ -210,11 +206,10 @@ public class DictionaryService : IDynamicApplication
     /// <summary>
     /// 添加字典
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加字典", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.Dictionary.Add)]
+    [PlatformOnly]
     public async Task AddDictionary(AddDictionaryInput input)
     {
         // 判断key是否重复
@@ -263,11 +258,10 @@ public class DictionaryService : IDynamicApplication
     /// <summary>
     /// 编辑字典
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑字典", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Dictionary.Edit)]
+    [PlatformOnly]
     public async Task EditDictionary(EditDictionaryInput input)
     {
         var dictionaryTypeModel = await _typeRepository.Entities.Includes(e => e.DictionaryItemList)
@@ -338,11 +332,10 @@ public class DictionaryService : IDynamicApplication
     /// <summary>
     /// 删除字典
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除字典", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Dictionary.Delete)]
+    [PlatformOnly]
     public async Task DeleteDictionary(DictionaryIdInput input)
     {
         var dictionaryTypeModel = await _typeRepository.Entities.Includes(e => e.DictionaryItemList)

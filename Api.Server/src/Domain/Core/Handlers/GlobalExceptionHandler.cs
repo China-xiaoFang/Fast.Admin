@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -36,12 +36,12 @@ using Yitter.IdGenerator;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="GlobalExceptionHandler"/> 全局异常处理
+/// 全局异常处理
 /// </summary>
 public class GlobalExceptionHandler : IGlobalExceptionHandler
 {
     /// <summary>
-    /// SqlSugar实体服务
+    /// SqlSugar 实体服务
     /// </summary>
     private readonly ISqlSugarEntityService _sqlSugarEntityService;
 
@@ -51,21 +51,15 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
     private readonly ILogger _logger;
 
     /// <summary>
-    /// <see cref="GlobalExceptionHandler"/> 全局异常处理
+    /// 全局异常处理
     /// </summary>
-    /// <param name="sqlSugarEntityService"><see cref="ISqlSugarEntityService"/> SqlSugar实体服务</param>
-    /// <param name="logger"><see cref="ILogger"/> 日志</param>
     public GlobalExceptionHandler(ISqlSugarEntityService sqlSugarEntityService, ILogger<IGlobalExceptionHandler> logger)
     {
         _sqlSugarEntityService = sqlSugarEntityService;
         _logger = logger;
     }
 
-    /// <summary>异常拦截</summary>
-    /// <param name="context"><see cref="T:Microsoft.AspNetCore.Mvc.Filters.ExceptionContext" /></param>
-    /// <param name="isUserFriendlyException"><see cref="T:System.Boolean" /> 是否友好异常</param>
-    /// <param name="isValidationException"><see cref="T:System.Boolean" /> 是否验证异常</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task OnExceptionAsync(ExceptionContext context, bool isUserFriendlyException, bool isValidationException)
     {
         // 行版本更新异常直接忽略
@@ -91,7 +85,7 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
             message.AppendLine($"device: {deviceType}, {deviceId}");
             if (httpContext.Items.TryGetValue($"{nameof(Fast)}.RequestParams", out var requestParams))
             {
-                message.AppendLine($"请求参数: {requestParams}");
+                message.AppendLine($"请求参数: {requestParams?.ToString()}");
             }
             else
             {
@@ -173,60 +167,56 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
             if (groupCollection.Count > 1)
                 methodName = groupCollection[1].Value;
 
-            // 获取 CenterLog 库的连接字符串配置
-            var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-                CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-            var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
-
-            var _user = httpContext.RequestServices.GetService<IUser>();
-            var exceptionLogModel = new ExceptionLogModel
+            try
             {
-                RecordId = YitIdHelper.NextId(),
-                AccountId = _user?.AccountId,
-                Mobile = _user?.Mobile,
-                NickName = _user?.NickName,
-                ClassName = context.Exception.TargetSite?.DeclaringType?.FullName,
-                MethodName = methodName,
-                Message = context.Exception.Message,
-                Source = context.Exception.Source,
-                StackTrace = context.Exception.StackTrace,
-                ParamsObj = context.Exception.TargetSite?.GetParameters()
-                    .Select(sl => new
-                    {
-                        PropertyName = sl.Name, TypeName = sl.ParameterType.Name, TypeFullName = sl.ParameterType.FullName
-                    })
-                    .ToList()
-                    .ToJsonString(),
-                DepartmentId = _user?.DepartmentId,
-                DepartmentName = _user?.DepartmentName,
-                CreatedUserId = _user?.EmployeeId,
-                CreatedUserName = _user?.EmployeeName,
-                CreatedTime = DateTime.Now,
-                TenantId = _user?.TenantId,
-                TenantName = _user?.TenantName
-            };
-            exceptionLogModel.RecordCreate(httpContext);
+                // 获取 CenterLog 库的连接字符串配置
+                var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
+                    CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
+                var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
-            _ = Task.Run(async () =>
+                var _user = httpContext.RequestServices.GetService<IUser>();
+                var exceptionLogModel = new ExceptionLogModel
+                {
+                    RecordId = YitIdHelper.NextId(),
+                    AccountId = _user?.AccountId,
+                    Mobile = _user?.Mobile,
+                    NickName = _user?.NickName,
+                    ClassName = context.Exception.TargetSite?.DeclaringType?.FullName,
+                    MethodName = methodName,
+                    Message = context.Exception.Message,
+                    Source = context.Exception.Source,
+                    StackTrace = context.Exception.StackTrace,
+                    ParamsObj = context.Exception.TargetSite?.GetParameters()
+                        .Select(sl => new
+                        {
+                            PropertyName = sl.Name, TypeName = sl.ParameterType.Name, TypeFullName = sl.ParameterType.FullName
+                        })
+                        .ToList()
+                        .ToJsonString(),
+                    DepartmentId = _user?.DepartmentId,
+                    DepartmentName = _user?.DepartmentName,
+                    CreatedUserId = _user?.EmployeeId,
+                    CreatedUserName = _user?.EmployeeName,
+                    CreatedTime = DateTime.Now,
+                    TenantId = _user?.TenantId,
+                    TenantName = _user?.TenantName
+                };
+                exceptionLogModel.RecordCreate(httpContext);
+
+                // 独立客户端不加载 AOP，避免异常审计失败后递归生成新异常审计；主异常返回前等待持久化完成
+                using var db = new SqlSugarClient(connectionConfig);
+                await db.Insertable(exceptionLogModel)
+                    .ExecuteCommandAsync();
+            }
+            catch (Exception ex)
             {
-                try
-                {
-                    // 这里不能使用Aop
-                    var db = new SqlSugarClient(connectionConfig);
-
-                    // 异步不等待
-                    await db.Insertable(exceptionLogModel)
-                        .ExecuteCommandAsync();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, $"Global Exception 执行Sql，保存失败；{ex.Message}");
-                }
-            });
-            // 写入错误日志
-            _logger.LogError(context.Exception, message.ToString());
+                _logger.LogError(ex, "Global Exception 准备异常审计日志失败，已保留主异常日志。");
+            }
+            finally
+            {
+                // 记录原始异常；数据库审计不可用时也不能丢失主异常或再次抛错
+                _logger.LogError(context.Exception, message.ToString());
+            }
         }
-
-        await Task.CompletedTask;
     }
 }

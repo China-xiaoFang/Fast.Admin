@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,7 +29,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Admin.Service.JobLevel;
 
 /// <summary>
-/// <see cref="JobLevelService"/> 职级服务
+/// 职级服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Admin, Name = "jobLevel")]
 public class JobLevelService : IDynamicApplication
@@ -44,7 +44,6 @@ public class JobLevelService : IDynamicApplication
     /// <summary>
     /// 职级选择器
     /// </summary>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("职级选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> JobLevelSelector()
@@ -63,8 +62,6 @@ public class JobLevelService : IDynamicApplication
     /// <summary>
     /// 获取职级分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取职级分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.JobLevel.Paged)]
@@ -90,8 +87,6 @@ public class JobLevelService : IDynamicApplication
     /// <summary>
     /// 获取职级详情
     /// </summary>
-    /// <param name="jobLevelId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取职级详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.JobLevel.Detail)]
@@ -124,8 +119,6 @@ public class JobLevelService : IDynamicApplication
     /// <summary>
     /// 添加职级
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加职级", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.JobLevel.Add)]
@@ -141,7 +134,7 @@ public class JobLevelService : IDynamicApplication
         await _repository.InsertAsync(jobLevelModel);
 
         // 操作日志
-        LogContext.OperateLog(new OperateLogDto
+        await LogContext.OperateLog(new OperateLogDto
         {
             Title = "添加职级",
             OperateType = OperateLogTypeEnum.Organization,
@@ -154,8 +147,6 @@ public class JobLevelService : IDynamicApplication
     /// <summary>
     /// 编辑职级
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑职级", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.JobLevel.Edit)]
@@ -185,7 +176,7 @@ public class JobLevelService : IDynamicApplication
             .ExecuteCommandAsync();
 
         // 操作日志
-        LogContext.OperateLog(new OperateLogDto
+        await LogContext.OperateLog(new OperateLogDto
         {
             Title = "编辑职级",
             OperateType = OperateLogTypeEnum.Organization,
@@ -198,8 +189,6 @@ public class JobLevelService : IDynamicApplication
     /// <summary>
     /// 删除职级
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除职级", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.JobLevel.Delete)]
@@ -221,7 +210,7 @@ public class JobLevelService : IDynamicApplication
         await _repository.DeleteAsync(jobLevelModel);
 
         // 操作日志
-        LogContext.OperateLog(new OperateLogDto
+        await LogContext.OperateLog(new OperateLogDto
         {
             Title = "删除职级",
             OperateType = OperateLogTypeEnum.Organization,

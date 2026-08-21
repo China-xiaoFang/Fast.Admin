@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="QuartzTriggerModel"/> Quartz 触发器表Model类
+/// Quartz 触发器表Model类
 /// </summary>
 [SugarTable("QRTZ_TRIGGERS", "Quartz 触发器表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -76,7 +76,7 @@ public class QuartzTriggerModel : IDatabaseEntity
     /// 作业分组
     /// </summary>
     [Required]
-    [SugarColumn(ColumnName = "JOB_GROUP", ColumnDescription = "作业名称", Length = 150)]
+    [SugarColumn(ColumnName = "JOB_GROUP", ColumnDescription = "作业分组", Length = 150)]
     public string JobGroup { get; set; }
 
     /// <summary>

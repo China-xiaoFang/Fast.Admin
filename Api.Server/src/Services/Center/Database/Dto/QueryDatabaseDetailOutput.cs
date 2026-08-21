@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Database.Dto;
 
 /// <summary>
-/// <see cref="QueryDatabaseDetailOutput"/> 获取数据库详情输出
+/// 获取数据库详情输出
 /// </summary>
 public class QueryDatabaseDetailOutput : PagedOutput
 {
@@ -85,7 +85,7 @@ public class QueryDatabaseDetailOutput : PagedOutput
     public int CommandTimeOut { get; set; }
 
     /// <summary>
-    /// SqlSugar Sql执行最大秒数，如果超过记录警告日志
+    /// SqlSugar SQL 执行最大秒数，如果超过记录警告日志
     /// </summary>
     public int SugarSqlExecMaxSeconds { get; set; }
 
@@ -95,7 +95,7 @@ public class QueryDatabaseDetailOutput : PagedOutput
     public bool DiffLog { get; set; }
 
     /// <summary>
-    /// 禁用 SqlSugar 的 Aop
+    /// 禁用 SqlSugar 的 AOP
     /// </summary>
     public bool DisableAop { get; set; }
 

@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Login.Dto;
 
 /// <summary>
-/// <see cref="LoginOutput"/> 登录输出
+/// 登录输出
 /// </summary>
 public class LoginOutput
 {

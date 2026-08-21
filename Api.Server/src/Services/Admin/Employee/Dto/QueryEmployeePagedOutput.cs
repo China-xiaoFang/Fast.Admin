@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.Admin.Enum;
 namespace Fast.Admin.Service.Employee.Dto;
 
 /// <summary>
-/// <see cref="QueryEmployeePagedOutput"/> 获取职员分页列表输出
+/// 获取职员分页列表输出
 /// </summary>
 public class QueryEmployeePagedOutput
 {
@@ -82,51 +82,6 @@ public class QueryEmployeePagedOutput
     /// 离职日期
     /// </summary>
     public DateTime? ResignDate { get; set; }
-
-    /// <summary>
-    /// 民族
-    /// </summary>
-    public NationEnum? Nation { get; set; }
-
-    /// <summary>
-    /// 籍贯
-    /// </summary>
-    public string NativePlace { get; set; }
-
-    /// <summary>
-    /// 生日
-    /// </summary>
-    public DateTime? Birthday { get; set; }
-
-    /// <summary>
-    /// 文件程度
-    /// </summary>
-    public EducationLevelEnum? EducationLevel { get; set; }
-
-    /// <summary>
-    /// 政治面貌
-    /// </summary>
-    public PoliticalStatusEnum? PoliticalStatus { get; set; }
-
-    /// <summary>
-    /// 毕业学院
-    /// </summary>
-    public string GraduationCollege { get; set; }
-
-    /// <summary>
-    /// 学历
-    /// </summary>
-    public AcademicQualificationsEnum? AcademicQualifications { get; set; }
-
-    /// <summary>
-    /// 学制
-    /// </summary>
-    public AcademicSystemEnum? AcademicSystem { get; set; }
-
-    /// <summary>
-    /// 学位
-    /// </summary>
-    public DegreeEnum? Degree { get; set; }
 
     /// <summary>
     /// 备注

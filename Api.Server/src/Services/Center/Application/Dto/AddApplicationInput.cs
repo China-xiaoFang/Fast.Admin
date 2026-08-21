@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Application.Dto;
 
 /// <summary>
-/// <see cref="AddApplicationInput"/> 添加应用输入
+/// 添加应用输入
 /// </summary>
 public class AddApplicationInput
 {
@@ -40,7 +40,7 @@ public class AddApplicationInput
     public string AppName { get; set; }
 
     /// <summary>
-    /// LogoUrl
+    /// Logo URL
     /// </summary>
     [StringRequired(ErrorMessage = "LogoUrl不能为空")]
     public string LogoUrl { get; set; }
@@ -50,31 +50,6 @@ public class AddApplicationInput
     /// </summary>
     [StringRequired(ErrorMessage = "主题色不能为空")]
     public string ThemeColor { get; set; }
-
-    /// <summary>
-    /// ICP备案号
-    /// </summary>
-    public string ICPSecurityCode { get; set; }
-
-    /// <summary>
-    /// 公安备案号
-    /// </summary>
-    public string PublicSecurityCode { get; set; }
-
-    /// <summary>
-    /// 用户协议
-    /// </summary>
-    public string UserAgreement { get; set; }
-
-    /// <summary>
-    /// 隐私协议
-    /// </summary>
-    public string PrivacyAgreement { get; set; }
-
-    /// <summary>
-    /// 服务协议
-    /// </summary>
-    public string ServiceAgreement { get; set; }
 
     /// <summary>
     /// 备注

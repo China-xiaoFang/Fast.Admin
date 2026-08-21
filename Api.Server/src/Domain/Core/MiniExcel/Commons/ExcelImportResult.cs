@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,9 +23,9 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ExcelImportResult{T}"/> Excel导入结果
+/// Excel导入结果
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">导入数据类型</typeparam>
 [SuppressSniffer]
 public class ExcelImportResult<T> where T : class, new()
 {
@@ -44,8 +44,7 @@ public class ExcelImportResult<T> where T : class, new()
     /// </summary>
     public bool HasError => Errors?.Count > 0;
 
-    /// <summary>Returns a string that represents the current object.</summary>
-    /// <returns>A string that represents the current object.</returns>
+    /// <inheritdoc />
     public override string ToString()
     {
         if (Errors == null || Errors.Count == 0)

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,7 +28,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.SqlDiffLog;
 
 /// <summary>
-/// <see cref="SqlDiffLogService"/> Sql差异日志服务
+/// SQL 差异日志服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "sqlDiffLog")]
 public class SqlDiffLogService : IDynamicApplication
@@ -43,10 +43,8 @@ public class SqlDiffLogService : IDynamicApplication
     }
 
     /// <summary>
-    /// 获取Sql差异日志分页列表
+    /// 获取 SQL 差异日志分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取Sql差异日志分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.SqlDiffLogPaged)]

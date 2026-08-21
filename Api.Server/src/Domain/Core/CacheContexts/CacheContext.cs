@@ -25,7 +25,7 @@ using Fast.Center.Entity;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="CacheContext"/> 缓存上下文
+/// 缓存上下文
 /// </summary>
 /// <remarks>存放一些启动时可加载的静态变量</remarks>
 [SuppressSniffer]

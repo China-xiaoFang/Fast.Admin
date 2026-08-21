@@ -23,9 +23,9 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="MailSettingsOptions"/> 邮件配置选项
+/// 邮件配置选项
 /// </summary>
-public class MailSettingsOptions
+public class MailSettingsOptions : IPostConfigure
 {
     /// <summary>
     /// 发件服务器地址
@@ -57,7 +57,7 @@ public class MailSettingsOptions
     /// </summary>
     public List<string> ReceiveEmails { get; set; }
 
-    /// <summary>后期配置</summary>
+    /// <inheritdoc />
     public void PostConfigure()
     {
         Smtp ??= "smtp.qq.com";

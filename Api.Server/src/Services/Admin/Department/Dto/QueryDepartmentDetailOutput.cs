@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Department.Dto;
 
 /// <summary>
-/// <see cref="QueryDepartmentDetailOutput"/> 获取部门详情输出
+/// 获取部门详情输出
 /// </summary>
 public class QueryDepartmentDetailOutput
 {

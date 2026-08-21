@@ -23,7 +23,7 @@
 namespace Fast.CenterLog.Enum;
 
 /// <summary>
-/// <see cref="DiffLogTypeEnum"/> 差异日志类型枚举
+/// 差异日志类型枚举
 /// </summary>
 [Flags]
 [FastEnum("差异日志类型枚举")]

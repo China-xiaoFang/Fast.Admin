@@ -23,7 +23,7 @@
 namespace Fast.Admin.Entity;
 
 /// <summary>
-/// <see cref="EmployeeOrgModel"/> 职员角色表Model类
+/// 职员角色表Model类
 /// </summary>
 [SugarTable("EmployeeRole", "职员角色表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]

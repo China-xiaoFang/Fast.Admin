@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Complaint.Dto;
 
 /// <summary>
-/// <see cref="HandleComplaintInput"/> 处理投诉输入
+/// 处理投诉输入
 /// </summary>
 public class HandleComplaintInput : UpdateVersionInput
 {

@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Table.Dto;
 
 /// <summary>
-/// <see cref="QueryTableColumnConfigOutput"/> 获取表格列配置输出
+/// 获取表格列配置输出
 /// </summary>
 public class QueryTableColumnConfigOutput
 {

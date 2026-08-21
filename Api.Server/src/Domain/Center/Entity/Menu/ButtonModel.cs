@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="ButtonModel"/> 按钮表Model类
+/// 按钮表Model类
 /// </summary>
 [SugarTable("Button", "按钮表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -72,6 +72,7 @@ public class ButtonModel : BaseEntity
     /// <summary>
     /// 角色类型
     /// </summary>
+    /// <remarks>仅用于初始化角色默认按钮</remarks>
     [SugarColumn(ColumnDescription = "角色类型")]
     public RoleTypeEnum RoleType { get; set; }
 

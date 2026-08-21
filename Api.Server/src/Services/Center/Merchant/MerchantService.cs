@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,9 +28,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.Merchant;
 
 /// <summary>
-/// <see cref="MerchantService"/> 商户号服务
+/// 商户号服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "merchant")]
+[PlatformOnly]
 public class MerchantService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<MerchantModel> _repository;
@@ -43,8 +44,6 @@ public class MerchantService : IDynamicApplication
     /// <summary>
     /// 商户号选择器
     /// </summary>
-    /// <param name="merchantType"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("商户号选择器", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Merchant.Paged)]
@@ -65,8 +64,6 @@ public class MerchantService : IDynamicApplication
     /// <summary>
     /// 获取商户号分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取商户号分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Merchant.Paged)]
@@ -94,8 +91,6 @@ public class MerchantService : IDynamicApplication
     /// <summary>
     /// 获取商户号详情
     /// </summary>
-    /// <param name="merchantId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取商户号详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Merchant.Detail)]
@@ -135,8 +130,6 @@ public class MerchantService : IDynamicApplication
     /// <summary>
     /// 添加商户号
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加商户号", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.Merchant.Add)]
@@ -167,8 +160,6 @@ public class MerchantService : IDynamicApplication
     /// <summary>
     /// 编辑商户号
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑商户号", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Merchant.Edit)]
@@ -217,8 +208,6 @@ public class MerchantService : IDynamicApplication
     /// <summary>
     /// 删除商户号
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除商户号", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Merchant.Delete)]

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Position.Dto;
 
 /// <summary>
-/// <see cref="EditPositionInput"/> 编辑职位输入
+/// 编辑职位输入
 /// </summary>
 public class EditPositionInput : UpdateVersionInput
 {

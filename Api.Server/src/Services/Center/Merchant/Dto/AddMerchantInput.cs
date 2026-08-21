@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Merchant.Dto;
 
 /// <summary>
-/// <see cref="AddMerchantInput"/> 添加商户号输入
+/// 添加商户号输入
 /// </summary>
 public class AddMerchantInput
 {

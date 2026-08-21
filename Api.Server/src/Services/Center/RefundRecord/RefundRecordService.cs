@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -27,7 +27,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.RefundRecord;
 
 /// <summary>
-/// <see cref="RefundRecordService"/> 退款记录服务
+/// 退款记录服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "refundRecord")]
 public class RefundRecordService : IDynamicApplication
@@ -42,8 +42,6 @@ public class RefundRecordService : IDynamicApplication
     /// <summary>
     /// 获取退款记录分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取退款记录分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.RefundRecordPaged)]

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -27,7 +27,7 @@ using SqlSugar;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="MerchantContext"/> 商户号上下文
+/// 商户号上下文
 /// </summary>
 [SuppressSniffer]
 public class MerchantContext
@@ -45,9 +45,7 @@ public class MerchantContext
     /// <summary>
     /// 获取商户号
     /// </summary>
-    /// <param name="merchantNo"><see cref="string"/> 商户号</param>
-    /// <param name="throwError"><see cref="bool"/> 抛出错误</param>
-    /// <returns></returns>
+    /// <returns>商户信息；未找到且不要求抛出异常时为 <see langword="null"/></returns>
     public static MerchantModel GetMerchantSync(string merchantNo, bool throwError = true)
     {
         if (string.IsNullOrWhiteSpace(merchantNo))
@@ -96,9 +94,7 @@ public class MerchantContext
     /// <summary>
     /// 获取商户号
     /// </summary>
-    /// <param name="merchantNo"><see cref="string"/> 商户号</param>
-    /// <param name="throwError"><see cref="bool"/> 抛出错误</param>
-    /// <returns></returns>
+    /// <returns>商户信息；未找到且不要求抛出异常时为 <see langword="null"/></returns>
     public static async Task<MerchantModel> GetMerchant(string merchantNo, bool throwError = true)
     {
         if (string.IsNullOrWhiteSpace(merchantNo))
@@ -147,8 +143,6 @@ public class MerchantContext
     /// <summary>
     /// 删除商户号
     /// </summary>
-    /// <param name="merchantNo"><see cref="string"/> 商户号</param>
-    /// <returns></returns>
     public static async Task DeleteMerchant(string merchantNo)
     {
         if (string.IsNullOrWhiteSpace(merchantNo))
@@ -173,7 +167,6 @@ public class MerchantContext
     /// <summary>
     /// 删除所有商户号
     /// </summary>
-    /// <returns></returns>
     public static async Task DeleteAllMerchant()
     {
         if (FastContext.HttpContext != null)

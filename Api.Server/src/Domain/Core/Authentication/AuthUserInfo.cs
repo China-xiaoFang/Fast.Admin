@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="AuthUserInfo"/> 授权用户信息
+/// 授权用户信息
 /// </summary>
 [SuppressSniffer]
 public class AuthUserInfo
@@ -37,6 +37,11 @@ public class AuthUserInfo
     /// 设备Id
     /// </summary>
     public virtual string DeviceId { get; set; }
+
+    /// <summary>
+    /// 会话Id
+    /// </summary>
+    public virtual string SessionId { get; set; }
 
     /// <summary>
     /// WebStock 连接Id
@@ -117,6 +122,11 @@ public class AuthUserInfo
     /// 租户编码
     /// </summary>
     public virtual string TenantCode { get; set; }
+
+    /// <summary>
+    /// 是否系统租户
+    /// </summary>
+    public virtual bool IsSystemTenant { get; set; }
 
     #endregion
 
@@ -214,6 +224,11 @@ public class AuthUserInfo
     /// 数据范围类型
     /// </summary>
     public virtual DataScopeTypeEnum DataScopeType { get; set; }
+
+    /// <summary>
+    /// 自定义数据范围部门Id集合
+    /// </summary>
+    public virtual List<long> DataScopeDepartmentIdList { get; set; } = new();
 
     /// <summary>
     /// 菜单编码集合

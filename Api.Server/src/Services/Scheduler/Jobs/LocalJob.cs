@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -30,9 +30,9 @@ using Quartz;
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="LocalJob"/> Local调度作业
+/// 本地调度作业
 /// </summary>
-internal class LocalJob : JobBase<SchedulerJobLogInfo>
+internal sealed class LocalJob : JobBase<SchedulerJobLogInfo>
 {
     public LocalJob(IServiceProvider serviceProvider, ISchedulerCenter schedulerCenter, IMailService mailService,
         IOptions<MvcNewtonsoftJsonOptions> jsonOptions, ILogger<IJob> logger) : base(serviceProvider, mailService, jsonOptions,
@@ -40,13 +40,7 @@ internal class LocalJob : JobBase<SchedulerJobLogInfo>
     {
     }
 
-    /// <summary>
-    /// 执行调度作业
-    /// </summary>
-    /// <param name="serviceProvider"><see cref="IServiceProvider"/> 服务提供者</param>
-    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
-    /// <param name="context"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     protected override async Task JobExecute(IServiceProvider serviceProvider, ISqlSugarClient db, IJobExecutionContext context)
     {
         // 作业类型

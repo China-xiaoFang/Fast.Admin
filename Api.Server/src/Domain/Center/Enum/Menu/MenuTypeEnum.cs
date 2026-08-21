@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="MenuTypeEnum"/> 菜单类型枚举
+/// 菜单类型枚举
 /// </summary>
 [Flags]
 [FastEnum("菜单类型枚举")]

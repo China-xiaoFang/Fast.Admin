@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,7 +28,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.Complaint;
 
 /// <summary>
-/// <see cref="ComplaintService"/> 投诉服务
+/// 投诉服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "Complaint")]
 public class ComplaintService : IDynamicApplication
@@ -45,8 +45,6 @@ public class ComplaintService : IDynamicApplication
     /// <summary>
     /// 获取投诉工单分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取投诉工单分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Complaint.Paged)]
@@ -79,8 +77,6 @@ public class ComplaintService : IDynamicApplication
     /// <summary>
     /// 获取用户投诉分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取用户投诉分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Complaint.TenantPaged)]
@@ -114,8 +110,6 @@ public class ComplaintService : IDynamicApplication
     /// <summary>
     /// 获取投诉详情
     /// </summary>
-    /// <param name="complaintId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取投诉详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Complaint.Detail, PermissionConst.Complaint.TenantDetail)]
@@ -154,8 +148,6 @@ public class ComplaintService : IDynamicApplication
     /// <summary>
     /// 添加投诉
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加投诉", HttpRequestActionEnum.Add)]
     public async Task AddComplaint(AddComplaintInput input)
@@ -190,8 +182,6 @@ public class ComplaintService : IDynamicApplication
     /// <summary>
     /// 处理投诉
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("处理投诉", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Complaint.Handle, PermissionConst.Complaint.TenantHandle)]

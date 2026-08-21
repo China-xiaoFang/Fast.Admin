@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="MailMessageEnum"/> 邮件消息枚举
+/// 邮件消息枚举
 /// </summary>
 [Flags]
 [FastEnum("邮件消息枚举")]

@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="SerialSpacerEnum"/> 序号分隔符枚举
+/// 序号分隔符枚举
 /// </summary>
 [Flags]
 [FastEnum("序号分隔符枚举")]

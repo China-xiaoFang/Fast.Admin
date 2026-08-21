@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,13 +23,13 @@
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="SchedulerJobUrlLogInfo"/> Url调度作业日志信息
+/// URL 调度作业日志信息
 /// </summary>
 [SuppressSniffer]
-internal class SchedulerJobUrlLogInfo : SchedulerJobLogInfo
+internal sealed class SchedulerJobUrlLogInfo : SchedulerJobLogInfo
 {
     /// <summary>
-    /// 请求Url
+    /// 请求 URL
     /// </summary>
     public string RequestUrl { get; set; }
 

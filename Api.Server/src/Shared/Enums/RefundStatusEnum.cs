@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="RefundStatusEnum"/> 退款状态枚举
+/// 退款状态枚举
 /// </summary>
 [Flags]
 [FastEnum("退款状态枚举")]

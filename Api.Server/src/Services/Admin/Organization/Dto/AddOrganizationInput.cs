@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Organization.Dto;
 
 /// <summary>
-/// <see cref="AddOrganizationInput"/> 添加机构输入
+/// 添加机构输入
 /// </summary>
 public class AddOrganizationInput
 {

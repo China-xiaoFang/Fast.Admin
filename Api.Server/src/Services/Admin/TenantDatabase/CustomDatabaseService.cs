@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -26,18 +26,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Admin.Service.TenantDatabase;
 
 /// <summary>
-/// <see cref="TenantDatabaseService"/> 自定义 Database 服务
+/// 租户数据库自定义初始化逻辑
 /// </summary>
 public partial class TenantDatabaseService
 {
     /// <summary>
     /// 初始化数据库（自定义）
     /// </summary>
-    /// <param name="tenantModel"><see cref="TenantModel"/> 租户</param>
-    /// <param name="databaseType"><see cref="DatabaseTypeEnum"/> 数据库类型</param>
-    /// <param name="db"><see cref="ISqlSugarClient"/> 数据库上下文</param>
-    /// <param name="newDb"><see cref="ISqlSugarClient"/> 数据库上下文</param>
-    /// <returns></returns>
     [NonAction]
     public async Task InitCustomDatabase(TenantModel tenantModel, DatabaseTypeEnum databaseType, ISqlSugarClient db,
         ISqlSugarClient newDb)

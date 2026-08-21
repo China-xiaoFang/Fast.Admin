@@ -23,11 +23,11 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ApiGroupConst"/> 接口分组常量
+/// 接口分组常量
 /// </summary>
 /// <remarks>这里需要和配置文件中的“SwaggerSettings”节点对应</remarks>
 [SuppressSniffer]
-public class ApiGroupConst
+public static class ApiGroupConst
 {
     /// <summary>
     /// 鉴权

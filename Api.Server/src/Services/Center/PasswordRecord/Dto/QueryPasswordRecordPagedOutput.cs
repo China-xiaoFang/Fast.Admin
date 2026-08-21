@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.PasswordRecord.Dto;
 
 /// <summary>
-/// <see cref="QueryPasswordRecordPagedOutput"/> 获取密码记录分页列表输出
+/// 获取密码记录分页列表输出
 /// </summary>
 public class QueryPasswordRecordPagedOutput
 {
@@ -48,12 +48,6 @@ public class QueryPasswordRecordPagedOutput
     /// 类型
     /// </summary>
     public PasswordTypeEnum Type { get; set; }
-
-    /// <summary>
-    /// 密码
-    /// </summary>
-    [Required]
-    public string Password { get; set; }
 
     /// <summary>
     /// 创建时间

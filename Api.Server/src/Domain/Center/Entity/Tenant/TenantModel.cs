@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="TenantModel"/> 租户信息表Model类
+/// 租户信息表Model类
 /// </summary>
 [SugarTable("Tenant", "租户信息表")]
 [SugarDbType(DatabaseTypeEnum.Center)]

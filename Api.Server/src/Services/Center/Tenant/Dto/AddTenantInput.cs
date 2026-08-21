@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Tenant.Dto;
 
 /// <summary>
-/// <see cref="AddTenantInput"/> 添加租户输入
+/// 添加租户输入
 /// </summary>
 public class AddTenantInput
 {
@@ -89,7 +89,7 @@ public class AddTenantInput
     public string RobotName { get; set; }
 
     /// <summary>
-    /// LogoUrl
+    /// Logo URL
     /// </summary>
     [StringRequired(ErrorMessage = "LogoUrl不能为空")]
     public string LogoUrl { get; set; }

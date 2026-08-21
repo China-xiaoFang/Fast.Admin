@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Login.Dto;
 
 /// <summary>
-/// <see cref="WeChatClientLoginOutput"/> 微信客户端登录输出
+/// 微信客户端登录输出
 /// </summary>
 public class WeChatClientLoginOutput
 {

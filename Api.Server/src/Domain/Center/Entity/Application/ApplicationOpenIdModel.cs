@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="ApplicationOpenIdModel"/> 应用标识表Model类
+/// 应用标识表Model类
 /// </summary>
 [SugarTable("ApplicationOpenId", "应用标识表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -90,42 +90,6 @@ public class ApplicationOpenIdModel : BaseEntity, IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "请求加密")]
     public bool RequestEncipher { get; set; }
-
-    /// <summary>
-    /// 状态栏图片地址
-    /// </summary>
-    [SugarColumn(ColumnDescription = "状态栏图片地址", Length = 200)]
-    public string StatusBarImageUrl { get; set; }
-
-    /// <summary>
-    /// 联系电话
-    /// </summary>
-    [SugarColumn(ColumnDescription = "联系电话", Length = 20)]
-    public string ContactPhone { get; set; }
-
-    /// <summary>
-    /// 纬度
-    /// </summary>
-    [SugarColumn(ColumnDescription = "纬度", Length = 20, DecimalDigits = 7)]
-    public decimal? Latitude { get; set; }
-
-    /// <summary>
-    /// 经度
-    /// </summary>
-    [SugarColumn(ColumnDescription = "经度", Length = 20, DecimalDigits = 7)]
-    public decimal? Longitude { get; set; }
-
-    /// <summary>
-    /// 地址
-    /// </summary>
-    [SugarColumn(ColumnDescription = "地址", Length = 100)]
-    public string Address { get; set; }
-
-    /// <summary>
-    /// Banner图
-    /// </summary>
-    [SugarColumn(ColumnDescription = "Banner图", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
-    public List<string> BannerImages { get; set; }
 
     /// <summary>
     /// 微信商户号Id

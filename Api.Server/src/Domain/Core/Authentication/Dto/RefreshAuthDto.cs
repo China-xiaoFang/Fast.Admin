@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,57 +23,62 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="RefreshAuthDto"/> 刷新授权信息Dto
+/// 授权刷新信息Dto
 /// </summary>
 public class RefreshAuthDto
 {
     /// <summary>
     /// 设备类型
     /// </summary>
-    public virtual AppEnvironmentEnum DeviceType { get; set; }
+    public AppEnvironmentEnum DeviceType { get; set; }
 
     /// <summary>
     /// 应用编号
     /// </summary>
-    public virtual string AppNo { get; set; }
+    public string AppNo { get; set; }
 
     /// <summary>
     /// 租户编号
     /// </summary>
-    public virtual string TenantNo { get; set; }
+    public string TenantNo { get; set; }
 
     /// <summary>
     /// 工号
     /// </summary>
-    public virtual string EmployeeNo { get; set; }
+    public string EmployeeNo { get; set; }
 
     /// <summary>
     /// 角色Id集合
     /// </summary>
-    public virtual List<long> RoleIdList { get; set; } = new();
+    public List<long> RoleIdList { get; set; } = new();
 
     /// <summary>
     /// 角色名称集合
     /// </summary>
-    public virtual List<string> RoleNameList { get; set; } = new();
+    public List<string> RoleNameList { get; set; } = new();
 
     /// <summary>
     /// 角色类型
     /// </summary>
-    public virtual RoleTypeEnum RoleType { get; set; }
+    public RoleTypeEnum RoleType { get; set; }
 
     /// <summary>
     /// 数据范围类型
     /// </summary>
-    public virtual DataScopeTypeEnum DataScopeType { get; set; }
+    public DataScopeTypeEnum DataScopeType { get; set; }
+
+    /// <summary>
+    /// 自定义数据范围部门Id集合
+    /// </summary>
+    public List<long> DataScopeDepartmentIdList { get; set; } = new();
 
     /// <summary>
     /// 菜单编码集合
     /// </summary>
-    public virtual List<string> MenuCodeList { get; set; } = new();
+    public List<string> MenuCodeList { get; set; } = new();
 
     /// <summary>
     /// 按钮编码集合
     /// </summary>
-    public virtual List<string> ButtonCodeList { get; set; } = new();
+    public List<string> ButtonCodeList { get; set; } = new();
 }

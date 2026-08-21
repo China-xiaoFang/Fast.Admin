@@ -23,7 +23,7 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="UploadFileSettingsOptions"/> 上传文件配置选项
+/// 上传文件配置选项
 /// </summary>
 public class UploadFileSettingsOptions : IPostConfigure
 {
@@ -52,12 +52,12 @@ public class UploadFileSettingsOptions : IPostConfigure
     /// </summary>
     public UploadFileInfoSettings Default { get; set; }
 
-    /// <summary>后期配置</summary>
+    /// <inheritdoc />
     public void PostConfigure()
     {
         Logo ??= new UploadFileInfoSettings
         {
-            Path = "Upload\\Logo",
+            Path = "Upload/Logo",
             MaxSize = 2048,
             ContentType =
             [
@@ -66,7 +66,7 @@ public class UploadFileSettingsOptions : IPostConfigure
         };
         Avatar ??= new UploadFileInfoSettings
         {
-            Path = "Upload\\Avatar",
+            Path = "Upload/Avatar",
             MaxSize = 2048,
             ContentType =
             [
@@ -75,7 +75,7 @@ public class UploadFileSettingsOptions : IPostConfigure
         };
         IdPhoto ??= new UploadFileInfoSettings
         {
-            Path = "Upload\\IdPhoto",
+            Path = "Upload/IdPhoto",
             MaxSize = 5120,
             ContentType =
             [
@@ -84,7 +84,7 @@ public class UploadFileSettingsOptions : IPostConfigure
         };
         Editor ??= new UploadFileInfoSettings
         {
-            Path = "Upload\\Editor",
+            Path = "Upload/Editor",
             MaxSize = 10240,
             UseDateFolder = true,
             ContentType =
@@ -97,7 +97,7 @@ public class UploadFileSettingsOptions : IPostConfigure
         };
         Default ??= new UploadFileInfoSettings
         {
-            Path = "Upload\\Default",
+            Path = "Upload/Default",
             MaxSize = 102400,
             UseTypeFolder = true,
             UseDateFolder = true,
@@ -134,7 +134,7 @@ public class UploadFileSettingsOptions : IPostConfigure
 }
 
 /// <summary>
-/// <see cref="UploadFileInfoSettings"/> 上传文件信息配置
+/// 上传文件信息配置
 /// </summary>
 public class UploadFileInfoSettings
 {

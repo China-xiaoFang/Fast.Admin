@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="RegionModel"/> 地区表Model类
+/// 地区表Model类
 /// </summary>
 [SugarTable("Region", "地区表")]
 [SugarDbType(DatabaseTypeEnum.Center)]

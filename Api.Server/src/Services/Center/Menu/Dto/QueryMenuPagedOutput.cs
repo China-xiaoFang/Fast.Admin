@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -26,7 +26,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.Menu.Dto;
 
 /// <summary>
-/// <see cref="QueryMenuPagedOutput"/> 获取菜单列表输出
+/// 获取菜单列表输出
 /// </summary>
 public class QueryMenuPagedOutput : PagedOutput, ITreeNode<long>
 {
@@ -167,29 +167,25 @@ public class QueryMenuPagedOutput : PagedOutput, ITreeNode<long>
     /// </summary>
     public List<QueryMenuPagedOutput> Children { get; set; }
 
-    /// <summary>获取节点id</summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public long GetId()
     {
         return MenuId;
     }
 
-    /// <summary>获取节点父id</summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public long GetPid()
     {
         return ParentId;
     }
 
-    /// <summary>获取排序字段</summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public long GetSort()
     {
         return Sort;
     }
 
-    /// <summary>设置Children</summary>
-    /// <param name="children"></param>
+    /// <inheritdoc />
     public void SetChildren(IList children)
     {
         Children = (List<QueryMenuPagedOutput>) children;

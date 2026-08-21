@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="RoleTypeEnum"/> 角色类型枚举
+/// 角色类型枚举
 /// </summary>
 [Flags]
 [FastEnum("角色类型枚举")]
@@ -55,5 +55,12 @@ public enum RoleTypeEnum
     /// </summary>
     [TagType(TagTypeEnum.Primary)]
     [Description("财务")]
-    Finance = 1 << 3
+    Finance = 1 << 3,
+
+    /// <summary>
+    /// 默认
+    /// </summary>
+    [TagType(TagTypeEnum.Info)]
+    [Description("默认")]
+    Default = 1 << 30
 }

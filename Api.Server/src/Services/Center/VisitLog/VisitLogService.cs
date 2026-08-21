@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,7 +28,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.VisitLog;
 
 /// <summary>
-/// <see cref="VisitLogService"/> 访问日志服务
+/// 访问日志服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "visitLog")]
 public class VisitLogService : IDynamicApplication
@@ -45,8 +45,6 @@ public class VisitLogService : IDynamicApplication
     /// <summary>
     /// 获取访问日志分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取访问日志分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.VisitLogPaged)]

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,7 +29,7 @@ using Yitter.IdGenerator;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="SysSerialContext"/> 系统序号规则上下文
+/// 系统序号规则上下文
 /// </summary>
 [SuppressSniffer]
 public class SysSerialContext
@@ -78,8 +78,7 @@ public class SysSerialContext
     /// <summary>
     /// 生成应用编号
     /// </summary>
-    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
-    /// <returns></returns>
+    /// <returns>生成的应用编号</returns>
     public static string GenAppNo(ISqlSugarClient db)
     {
         return GenerateSerialNo(db, SysSerialRuleTypeEnum.AppNo);
@@ -88,8 +87,7 @@ public class SysSerialContext
     /// <summary>
     /// 生成租户编号
     /// </summary>
-    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
-    /// <returns></returns>
+    /// <returns>生成的租户编号</returns>
     public static string GenTenantNo(ISqlSugarClient db)
     {
         return GenerateSerialNo(db, SysSerialRuleTypeEnum.TenantNo);
@@ -98,9 +96,7 @@ public class SysSerialContext
     /// <summary>
     /// 生成序号
     /// </summary>
-    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
-    /// <param name="ruleType"><see cref="SysSerialRuleTypeEnum"/> 系统序号规则类型</param>
-    /// <returns></returns>
+    /// <returns>生成的序号</returns>
     private static string GenerateSerialNo(ISqlSugarClient db, SysSerialRuleTypeEnum ruleType)
     {
         if (!db.Ado.IsAnyTran())

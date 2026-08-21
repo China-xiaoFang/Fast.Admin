@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,7 +29,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Admin.Service.Position;
 
 /// <summary>
-/// <see cref="PositionService"/> 职位服务
+/// 职位服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Admin, Name = "position")]
 public class PositionService : IDynamicApplication
@@ -44,7 +44,6 @@ public class PositionService : IDynamicApplication
     /// <summary>
     /// 职位选择器
     /// </summary>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("职位选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> PositionSelector()
@@ -60,8 +59,6 @@ public class PositionService : IDynamicApplication
     /// <summary>
     /// 获取职位分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取职位分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Position.Paged)]
@@ -87,8 +84,6 @@ public class PositionService : IDynamicApplication
     /// <summary>
     /// 获取职位详情
     /// </summary>
-    /// <param name="positionId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取职位详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Position.Detail)]
@@ -121,8 +116,6 @@ public class PositionService : IDynamicApplication
     /// <summary>
     /// 添加职位
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加职位", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.Position.Add)]
@@ -138,7 +131,7 @@ public class PositionService : IDynamicApplication
         await _repository.InsertAsync(positionModel);
 
         // 操作日志
-        LogContext.OperateLog(new OperateLogDto
+        await LogContext.OperateLog(new OperateLogDto
         {
             Title = "添加职位",
             OperateType = OperateLogTypeEnum.Organization,
@@ -151,8 +144,6 @@ public class PositionService : IDynamicApplication
     /// <summary>
     /// 编辑职位
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑职位", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Position.Edit)]
@@ -182,7 +173,7 @@ public class PositionService : IDynamicApplication
             .ExecuteCommandAsync();
 
         // 操作日志
-        LogContext.OperateLog(new OperateLogDto
+        await LogContext.OperateLog(new OperateLogDto
         {
             Title = "编辑职位",
             OperateType = OperateLogTypeEnum.Organization,
@@ -195,8 +186,6 @@ public class PositionService : IDynamicApplication
     /// <summary>
     /// 删除职位
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除职位", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Position.Delete)]
@@ -218,7 +207,7 @@ public class PositionService : IDynamicApplication
         await _repository.DeleteAsync(positionModel);
 
         // 操作日志
-        LogContext.OperateLog(new OperateLogDto
+        await LogContext.OperateLog(new OperateLogDto
         {
             Title = "删除职位",
             OperateType = OperateLogTypeEnum.Organization,

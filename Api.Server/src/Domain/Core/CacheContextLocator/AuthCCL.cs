@@ -23,10 +23,10 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="AuthCCL"/> 授权缓存上下文
+/// <see cref="ICacheContextLocator"/> 的授权缓存上下文实现
 /// </summary>
 public class AuthCCL : ICacheContextLocator
 {
-    /// <summary>服务名称</summary>
+    /// <inheritdoc />
     public string ServiceName => "Auth";
 }

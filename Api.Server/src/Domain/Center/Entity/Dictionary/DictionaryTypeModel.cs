@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="DictionaryTypeModel"/> 字典类型表Model类
+/// 字典类型表Model类
 /// </summary>
 [SugarTable("DictionaryType", "字典类型表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -92,18 +92,14 @@ public class DictionaryTypeModel : BaseEntity, IUpdateVersion
     [Navigate(NavigateType.OneToMany, nameof(DictionaryItemModel.DictionaryId), nameof(DictionaryId))]
     public List<DictionaryItemModel> DictionaryItemList { get; set; }
 
-    /// <summary>Serves as the default hash function.</summary>
-    /// <returns>A hash code for the current object.</returns>
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         // ReSharper disable once NonReadonlyMemberInGetHashCode
         return DictionaryId.GetHashCode();
     }
 
-    /// <summary>Determines whether the specified object is equal to the current object.</summary>
-    /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns>
-    /// <see langword="true" /> if the specified object  is equal to the current object; otherwise, <see langword="false" />.</returns>
+    /// <inheritdoc />
     public override bool Equals(object obj)
     {
         if (obj is not DictionaryTypeModel oldDictionaryTypeModel)

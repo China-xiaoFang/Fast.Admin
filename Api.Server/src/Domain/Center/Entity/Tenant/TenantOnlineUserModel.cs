@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="TenantOnlineUserModel"/> 租户在线用户表Model类
+/// 租户在线用户表Model类
 /// </summary>
 [SugarTable("TenantOnlineUser", "租户在线用户表")]
 [SugarDbType(DatabaseTypeEnum.Center)]

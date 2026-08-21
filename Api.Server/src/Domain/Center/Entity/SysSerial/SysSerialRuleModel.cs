@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="SysSerialRuleModel"/> 系统序号规则表Model类
+/// 系统序号规则表Model类
 /// </summary>
 [SugarTable("SysSerialRule", "系统序号规则表")]
 [SugarDbType(DatabaseTypeEnum.Center)]

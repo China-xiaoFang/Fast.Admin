@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.SqlExecutionLog.Dto;
 
 /// <summary>
-/// <see cref="QuerySqlExecutionLogPagedInput"/> 获取Sql执行日志分页列表输入
+/// 获取 SQL 执行日志分页列表输入
 /// </summary>
 public class QuerySqlExecutionLogPagedInput : PagedInput
 {

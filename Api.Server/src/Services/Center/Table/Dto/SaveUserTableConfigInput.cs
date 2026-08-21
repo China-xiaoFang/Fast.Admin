@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Table.Dto;
 
 /// <summary>
-/// <see cref="SaveUserTableConfigInput"/> 保存用户表格配置输入
+/// 保存用户表格配置输入
 /// </summary>
 public class SaveUserTableConfigInput
 {

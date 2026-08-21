@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Login.Dto;
 
 /// <summary>
-/// <see cref="TryLoginInput"/> 尝试登录输入
+/// 尝试登录输入
 /// </summary>
 public class TryLoginInput
 {

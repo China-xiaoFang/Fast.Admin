@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Position.Dto;
 
 /// <summary>
-/// <see cref="AddPositionInput"/> 添加职位输入
+/// 添加职位输入
 /// </summary>
 public class AddPositionInput
 {

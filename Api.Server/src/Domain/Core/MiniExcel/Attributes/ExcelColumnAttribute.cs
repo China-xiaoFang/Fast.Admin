@@ -23,24 +23,22 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ExcelColumnAttribute"/> Excel列特性
+/// Excel列特性
 /// </summary>
 [SuppressSniffer]
 [AttributeUsage(AttributeTargets.Property)]
-public class ExcelColumnAttribute : Attribute
+public sealed class ExcelColumnAttribute : Attribute
 {
     /// <summary>
-    /// <see cref="ExcelColumnAttribute"/> Excel列特性
+    /// Excel列特性
     /// </summary>
     public ExcelColumnAttribute()
     {
     }
 
     /// <summary>
-    /// <see cref="ExcelColumnAttribute"/> Excel列特性
+    /// Excel列特性
     /// </summary>
-    /// <param name="name"><see cref="string"/> 列名称</param>
-    /// <param name="order"><see cref="int"/> 列排序</param>
     public ExcelColumnAttribute(string name, int order)
     {
         Name = name;
@@ -77,13 +75,13 @@ public class ExcelColumnAttribute : Attribute
     public bool Ignore { get; set; }
 
     /// <summary>
-    /// Bool 类型 true 显示文本
+    /// <see langword="bool"/> 类型为 <see langword="true"/> 时的显示文本
     /// </summary>
     /// <remarks>默认 "是"</remarks>
     public string TrueText { get; set; } = "是";
 
     /// <summary>
-    /// Bool 类型 false 显示文本
+    /// <see langword="bool"/> 类型为 <see langword="false"/> 时的显示文本
     /// </summary>
     /// <remarks>默认 "否"</remarks>
     public string FalseText { get; set; } = "否";

@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="QuartzPausedTriggerGroupModel"/> Quartz 暂停的触发器分组表Model类
+/// Quartz 暂停的触发器分组表Model类
 /// </summary>
 [SugarTable("QRTZ_PAUSED_TRIGGER_GRPS", "Quartz 暂停的触发器分组表")]
 [SugarDbType(DatabaseTypeEnum.Center)]

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Dictionary.Dto;
 
 /// <summary>
-/// <see cref="EditDictionaryItemInput"/> 编辑字典项输入
+/// 编辑字典项输入
 /// </summary>
 public class EditDictionaryItemInput
 {

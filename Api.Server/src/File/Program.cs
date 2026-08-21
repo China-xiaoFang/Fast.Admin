@@ -35,6 +35,7 @@ using Fast.Swagger;
 using Fast.UnifyResult;
 using IGeekFan.AspNetCore.Knife4jUI;
 using Microsoft.AspNetCore.HttpOverrides;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,9 +57,6 @@ builder.Services.AddGzipCompression();
 // 添加依赖注入服务
 builder.Services.AddDependencyInjection();
 
-// 邮件配置验证
-builder.Services.AddConfigurableOptions<MailSettingsOptions>();
-
 // 上传文件配置验证
 builder.Services.AddConfigurableOptions<UploadFileSettingsOptions>();
 
@@ -72,8 +70,13 @@ if (redisOptions != null)
     // 添加分布式缓存
     builder.Services.AddStackExchangeRedisCache(options =>
     {
-        options.Configuration =
-            $"{redisOptions.ServiceIp}:{redisOptions.Port ?? 6379},password={redisOptions.DbPwd},defaultDatabase={redisOptions.DbName ?? 2},abortConnect=false";
+        options.ConfigurationOptions = new ConfigurationOptions
+        {
+            Password = redisOptions.DbPwd,
+            DefaultDatabase = redisOptions.DbName ?? 2,
+            AbortOnConnectFail = false,
+            EndPoints = {{redisOptions.ServiceIp, redisOptions.Port ?? 6379}}
+        };
         options.InstanceName = $"{nameof(Fast)}:";
     });
 }
@@ -86,11 +89,16 @@ builder.Services.AddSqlSugar(builder.Configuration, builder.Environment);
 
 builder.Services.AddHttpClient();
 
+// 添加 API 限流
+builder.Services.AddApiRateLimit();
+
 // 添加 JwtBearer 授权
 builder.Services.AddJwtBearer(builder.Configuration);
 
-// Add Controllers.
+// Add Controllers
 builder.Services.AddControllers()
+    // 平台控制面租户边界
+    .AddMvcFilter<PlatformAccessFilter>()
     // 请求日志拦截
     .AddMvcFilter<RequestActionFilter>()
     .AddSerialization();
@@ -111,13 +119,16 @@ builder.Services.AddOpenApi(builder.Configuration);
 builder.Services.AddSwaggerGenNewtonsoftSupport();
 
 // 添加删除日志托管服务
-builder.Services.AddHostedService<DeleteLogHostedService>();
+builder.Services.AddHostedService<DeleteLogBackgroundService>();
+
+// 添加 SqlSugar 日志后台服务
+builder.Services.AddHostedService<SqlSugarLogBackgroundService>();
 
 // 添加同步 Api 托管服务
 builder.Services.AddHostedService<SyncApiHostedService>();
 
 // 添加生成Api文件托管服务
-builder.Services.AddHostedService<GenerateApiFileHostedService>();
+builder.Services.AddHostedService<GenerateApiFileBackgroundService>();
 
 var app = builder.Build();
 
@@ -127,8 +138,11 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-// 强制使用 Https
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+    app.UseHttpsRedirection();
+}
 
 // 启用静态文件
 app.UseStaticFiles();
@@ -140,6 +154,8 @@ app.EnableBuffering();
 app.UseMiddleware<RequestMiddleware>();
 
 app.UseRouting();
+
+app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -157,6 +173,7 @@ app.UseKnife4UI(options =>
     }
 });
 
-app.MapControllers();
+app.MapControllers()
+    .RequireRateLimiting(CommonConst.GlobalApiRateLimit);
 
 app.Run();

@@ -23,7 +23,7 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ExcelImportError"/> Excel导入错误信息
+/// Excel导入错误信息
 /// </summary>
 [SuppressSniffer]
 public class ExcelImportError

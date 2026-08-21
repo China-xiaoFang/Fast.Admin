@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -31,9 +31,10 @@ using SKIT.FlurlHttpClient.Wechat.Api.Models;
 namespace Fast.Center.Service.ApplicationOpenId;
 
 /// <summary>
-/// <see cref="ApplicationOpenIdService"/> 应用标识服务
+/// 应用标识服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "applicationOpenId")]
+[PlatformOnly]
 public class ApplicationOpenIdService : IDynamicApplication
 {
     private readonly IUser _user;
@@ -48,8 +49,6 @@ public class ApplicationOpenIdService : IDynamicApplication
     /// <summary>
     /// 获取应用标识分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取应用标识分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.AppOpenId.Paged)]
@@ -93,8 +92,6 @@ public class ApplicationOpenIdService : IDynamicApplication
     /// <summary>
     /// 获取应用标识详情
     /// </summary>
-    /// <param name="recordId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取应用标识详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.AppOpenId.Detail)]
@@ -116,12 +113,6 @@ public class ApplicationOpenIdService : IDynamicApplication
                 WebSocketUrl = sl.WebSocketUrl,
                 RequestTimeout = sl.RequestTimeout,
                 RequestEncipher = sl.RequestEncipher,
-                StatusBarImageUrl = sl.StatusBarImageUrl,
-                ContactPhone = sl.ContactPhone,
-                Latitude = sl.Latitude,
-                Longitude = sl.Longitude,
-                Address = sl.Address,
-                BannerImages = sl.BannerImages,
                 WeChatMerchantId = sl.WeChatMerchantId,
                 WeChatMerchantNo = sl.WeChatMerchantNo,
                 AlipayMerchantId = sl.AlipayMerchantId,
@@ -157,8 +148,6 @@ public class ApplicationOpenIdService : IDynamicApplication
     /// <summary>
     /// 添加应用标识
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加应用标识", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.AppOpenId.Add)]
@@ -187,12 +176,6 @@ public class ApplicationOpenIdService : IDynamicApplication
             WebSocketUrl = input.WebSocketUrl,
             RequestTimeout = input.RequestTimeout,
             RequestEncipher = input.RequestEncipher,
-            StatusBarImageUrl = input.StatusBarImageUrl,
-            ContactPhone = input.ContactPhone,
-            Latitude = input.Latitude,
-            Longitude = input.Longitude,
-            Address = input.Address,
-            BannerImages = input.BannerImages,
             WeChatMerchantId = input.WeChatMerchantId,
             WeChatMerchantNo = input.WeChatMerchantNo,
             AlipayMerchantId = input.AlipayMerchantId,
@@ -242,8 +225,6 @@ public class ApplicationOpenIdService : IDynamicApplication
     /// <summary>
     /// 编辑应用标识
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑应用标识", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.AppOpenId.Edit)]
@@ -302,12 +283,6 @@ public class ApplicationOpenIdService : IDynamicApplication
         applicationOpenIdModel.WebSocketUrl = input.WebSocketUrl;
         applicationOpenIdModel.RequestTimeout = input.RequestTimeout;
         applicationOpenIdModel.RequestEncipher = input.RequestEncipher;
-        applicationOpenIdModel.StatusBarImageUrl = input.StatusBarImageUrl;
-        applicationOpenIdModel.ContactPhone = input.ContactPhone;
-        applicationOpenIdModel.Latitude = input.Latitude;
-        applicationOpenIdModel.Longitude = input.Longitude;
-        applicationOpenIdModel.Address = input.Address;
-        applicationOpenIdModel.BannerImages = input.BannerImages;
         applicationOpenIdModel.WeChatMerchantId = input.WeChatMerchantId;
         applicationOpenIdModel.WeChatMerchantNo = input.WeChatMerchantNo;
         applicationOpenIdModel.AlipayMerchantId = input.AlipayMerchantId;
@@ -403,8 +378,6 @@ public class ApplicationOpenIdService : IDynamicApplication
     /// <summary>
     /// 删除应用标识
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除应用标识", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.AppOpenId.Delete)]

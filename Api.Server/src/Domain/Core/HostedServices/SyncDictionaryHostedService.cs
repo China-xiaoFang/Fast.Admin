@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -33,16 +33,11 @@ using Yitter.IdGenerator;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="SyncDictionaryHostedService"/> 同步字典托管服务
+/// 同步字典托管服务
 /// </summary>
-[Order(105)]
+[Order(106)]
 public class SyncDictionaryHostedService : IHostedService
 {
-    /// <summary>
-    /// 托管应用程序生命周期
-    /// </summary>
-    private readonly IHostApplicationLifetime _hostApplicationLifetime;
-
     /// <summary>
     /// 缓存
     /// </summary>
@@ -54,311 +49,289 @@ public class SyncDictionaryHostedService : IHostedService
     private readonly ILogger _logger;
 
     /// <summary>
-    /// <see cref="SyncDictionaryHostedService"/> 同步字典托管服务
+    /// 同步字典托管服务
     /// </summary>
-    /// <param name="hostApplicationLifetime"><see cref="IHostApplicationLifetime"/> 托管应用程序生命周期</param>
-    /// <param name="centerCache"><see cref="ICache"/> 缓存</param>
-    /// <param name="logger"><see cref="ILogger"/> 日志</param>
-    public SyncDictionaryHostedService(IHostApplicationLifetime hostApplicationLifetime, ICache<CenterCCL> centerCache,
-        ILogger<SyncDictionaryHostedService> logger)
+    public SyncDictionaryHostedService(ICache<CenterCCL> centerCache, ILogger<SyncDictionaryHostedService> logger)
     {
-        _hostApplicationLifetime = hostApplicationLifetime;
         _centerCache = centerCache;
         _logger = logger;
     }
 
-    /// <summary>
-    /// Triggered when the application host is ready to start the service.
-    /// </summary>
-    /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
-    /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous Start operation.</returns>
+    /// <inheritdoc />
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        // 订阅 ApplicationStarted 事件
-        _hostApplicationLifetime?.ApplicationStarted.Register(() =>
+        var dateTime = DateTime.Now;
+
+        var serviceName = Assembly.GetEntryAssembly()!.GetName()
+            .Name;
+        var addDictionaryTypeList = new List<DictionaryTypeModel>();
+        var addDictionaryItemList = new List<DictionaryItemModel>();
+        var updateDictionaryTypeList = new List<DictionaryTypeModel>();
+        var updateDictionaryItemList = new List<DictionaryItemModel>();
+        var deleteDictionaryItemList = new List<DictionaryItemModel>();
+
         {
-            _ = Task.Run(async () =>
+            var logSb = new StringBuilder();
+            logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
+            logSb.Append("info");
+            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+            logSb.Append(": ");
+            logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+            logSb.Append(Environment.NewLine);
+            logSb.Append("\u001b[40m\u001b[90m");
+            logSb.Append("      ");
+            logSb.Append("开始同步字典信息...");
+            logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+            Console.WriteLine(logSb.ToString());
+        }
+
+        try
+        {
+            using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+
+            var dictionaryTypeList = await db.Queryable<DictionaryTypeModel>()
+                .ToListAsync(cancellationToken);
+            var dictionaryItemList = await db.Queryable<DictionaryItemModel>()
+                .ToListAsync(cancellationToken);
+
+            // 获取所有带 FastEnumAttribute 特性的枚举
+            var enumTypes = MAppContext.EffectiveTypes.Where(wh => wh.IsEnum)
+                .Select(sl => new
+                {
+                    Type = sl,
+                    FastEnumAttribute = sl.GetCustomAttribute<FastEnumAttribute>(),
+                    FlagsAttribute = sl.GetCustomAttribute<FlagsAttribute>()
+                })
+                .Where(wh => wh.FastEnumAttribute != null)
+                .ToList();
+
+            if (!dictionaryTypeList.Any(a => a.DictionaryKey == "BooleanEnum" && a.ServiceName == serviceName))
             {
-                var dateTime = DateTime.Now;
-
-                var serviceName = Assembly.GetEntryAssembly()!.GetName()
-                    .Name;
-                var addDictionaryTypeList = new List<DictionaryTypeModel>();
-                var addDictionaryItemList = new List<DictionaryItemModel>();
-                var updateDictionaryTypeList = new List<DictionaryTypeModel>();
-                var updateDictionaryItemList = new List<DictionaryItemModel>();
-                var deleteDictionaryItemList = new List<DictionaryItemModel>();
-
+                var dictionaryId = YitIdHelper.NextId();
+                addDictionaryTypeList.Add(new DictionaryTypeModel
                 {
-                    var logSb = new StringBuilder();
-                    logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-                    logSb.Append("info");
-                    logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                    logSb.Append(": ");
-                    logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-                    logSb.Append(Environment.NewLine);
-                    logSb.Append("\u001b[40m\u001b[90m");
-                    logSb.Append("      ");
-                    logSb.Append("开始同步字典信息...");
-                    logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                    Console.WriteLine(logSb.ToString());
-                }
-
-                try
+                    DictionaryId = dictionaryId,
+                    DictionaryKey = "BooleanEnum",
+                    ServiceName = serviceName,
+                    DictionaryName = "Boolean类型枚举",
+                    ValueType = DictionaryValueTypeEnum.Boolean,
+                    HasFlags = false,
+                    Status = CommonStatusEnum.Enable,
+                    Remark = null,
+                    CreatedTime = dateTime
+                });
+                addDictionaryItemList.AddRange(new List<DictionaryItemModel>
                 {
-                    var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
-
-                    var dictionaryTypeList = await db.Queryable<DictionaryTypeModel>()
-                        .ToListAsync(cancellationToken);
-                    var dictionaryItemList = await db.Queryable<DictionaryItemModel>()
-                        .ToListAsync(cancellationToken);
-
-                    // 获取所有带 FastEnumAttribute 特性的枚举
-                    var enumTypes = MAppContext.EffectiveTypes.Where(wh => wh.IsEnum)
-                        .Select(sl => new
-                        {
-                            Type = sl,
-                            FastEnumAttribute = sl.GetCustomAttribute<FastEnumAttribute>(),
-                            FlagsAttribute = sl.GetCustomAttribute<FlagsAttribute>()
-                        })
-                        .Where(wh => wh.FastEnumAttribute != null)
-                        .ToList();
-
-                    if (!dictionaryTypeList.Any(a => a.DictionaryKey == "BooleanEnum" && a.ServiceName == serviceName))
+                    new()
                     {
-                        var dictionaryId = YitIdHelper.NextId();
-                        addDictionaryTypeList.Add(new DictionaryTypeModel
+                        DictionaryItemId = YitIdHelper.NextId(),
+                        DictionaryId = dictionaryId,
+                        Label = "是",
+                        Value = "true",
+                        Type = TagTypeEnum.Success,
+                        Order = 1,
+                        Visible = true,
+                        Status = CommonStatusEnum.Enable,
+                        CreatedTime = dateTime
+                    },
+                    new()
+                    {
+                        DictionaryItemId = YitIdHelper.NextId(),
+                        DictionaryId = dictionaryId,
+                        Label = "否",
+                        Value = "false",
+                        Type = TagTypeEnum.Danger,
+                        Order = 2,
+                        Visible = true,
+                        Status = CommonStatusEnum.Enable,
+                        CreatedTime = dateTime
+                    }
+                });
+            }
+
+            // 循环所有枚举类型
+            foreach (var enumType in enumTypes)
+            {
+                var enumItemList = enumType.Type.EnumToList<long>();
+
+                var dictionaryTypeInfo = dictionaryTypeList.SingleOrDefault(s => s.DictionaryKey == enumType.Type.Name);
+
+                var dictionaryTypeModel = new DictionaryTypeModel
+                {
+                    DictionaryKey = enumType.Type.Name,
+                    ServiceName = serviceName,
+                    DictionaryName =
+                        enumType.FastEnumAttribute?.ChName ?? enumType.FastEnumAttribute?.EnName ?? enumType.Type.Name,
+                    ValueType = Enum.GetUnderlyingType(enumType.Type) == typeof(long)
+                        ? DictionaryValueTypeEnum.Long
+                        : DictionaryValueTypeEnum.Int,
+                    HasFlags = enumType.FlagsAttribute != null,
+                    Status = CommonStatusEnum.Enable,
+                    Remark = enumType.FastEnumAttribute?.Remark,
+                    UpdatedTime = dateTime
+                };
+
+                if (dictionaryTypeInfo != null)
+                {
+                    dictionaryTypeModel.DictionaryId = dictionaryTypeInfo.DictionaryId;
+                    // 不相同才修改
+                    if (!dictionaryTypeInfo.Equals(dictionaryTypeModel))
+                    {
+                        dictionaryTypeInfo.DictionaryName = dictionaryTypeModel.DictionaryName;
+                        // 这里只会存在 long 或者 int
+                        dictionaryTypeInfo.ValueType = dictionaryTypeModel.ValueType;
+                        dictionaryTypeInfo.HasFlags = dictionaryTypeModel.HasFlags;
+                        if (string.IsNullOrWhiteSpace(dictionaryTypeInfo.Remark))
                         {
-                            DictionaryId = dictionaryId,
-                            DictionaryKey = "BooleanEnum",
-                            ServiceName = serviceName,
-                            DictionaryName = "Boolean类型枚举",
-                            ValueType = DictionaryValueTypeEnum.Boolean,
-                            HasFlags = false,
-                            Status = CommonStatusEnum.Enable,
-                            Remark = null,
-                            CreatedTime = dateTime
-                        });
-                        addDictionaryItemList.AddRange(new List<DictionaryItemModel>
-                        {
-                            new()
-                            {
-                                DictionaryItemId = YitIdHelper.NextId(),
-                                DictionaryId = dictionaryId,
-                                Label = "是",
-                                Value = "true",
-                                Type = TagTypeEnum.Success,
-                                Order = 1,
-                                Visible = true,
-                                Status = CommonStatusEnum.Enable,
-                                CreatedTime = dateTime
-                            },
-                            new()
-                            {
-                                DictionaryItemId = YitIdHelper.NextId(),
-                                DictionaryId = dictionaryId,
-                                Label = "否",
-                                Value = "false",
-                                Type = TagTypeEnum.Danger,
-                                Order = 2,
-                                Visible = true,
-                                Status = CommonStatusEnum.Enable,
-                                CreatedTime = dateTime
-                            }
-                        });
+                            dictionaryTypeInfo.Remark = dictionaryTypeModel.Remark;
+                        }
+
+                        dictionaryTypeInfo.UpdatedTime = dateTime;
+                        updateDictionaryTypeList.Add(dictionaryTypeInfo);
                     }
 
-                    // 循环所有枚举类型
-                    foreach (var enumType in enumTypes)
+                    deleteDictionaryItemList.AddRange(dictionaryItemList
+                        .Where(wh => wh.DictionaryId == dictionaryTypeInfo.DictionaryId)
+                        .Where(wh => enumItemList.All(a => a.Value.ToString() != wh.Value))
+                        .ToList());
+
+                    var orderIndex = 1;
+
+                    foreach (var enumItem in enumItemList)
                     {
-                        var enumItemList = enumType.Type.EnumToList<long>();
+                        var fieldInfo = enumType.Type.GetField(enumItem.Name);
+                        var tagType = fieldInfo.GetCustomAttribute<TagTypeAttribute>();
 
-                        var dictionaryTypeInfo = dictionaryTypeList.SingleOrDefault(s => s.DictionaryKey == enumType.Type.Name);
-
-                        var dictionaryTypeModel = new DictionaryTypeModel
+                        var dictionaryItemModel = new DictionaryItemModel
                         {
-                            DictionaryKey = enumType.Type.Name,
-                            ServiceName = serviceName,
-                            DictionaryName =
-                                enumType.FastEnumAttribute?.ChName
-                                ?? enumType.FastEnumAttribute?.EnName ?? enumType.Type.Name,
-                            ValueType = Enum.GetUnderlyingType(enumType.Type) == typeof(long)
-                                ? DictionaryValueTypeEnum.Long
-                                : DictionaryValueTypeEnum.Int,
-                            HasFlags = enumType.FlagsAttribute != null,
+                            DictionaryId = dictionaryTypeInfo.DictionaryId,
+                            Label = enumItem.Describe ?? enumItem.Name,
+                            Value = enumItem.Value.ToString(),
+                            Type = tagType?.TagType ?? TagTypeEnum.Primary,
+                            Order = orderIndex,
+                            Visible = true,
                             Status = CommonStatusEnum.Enable,
-                            Remark = enumType.FastEnumAttribute?.Remark,
                             UpdatedTime = dateTime
                         };
 
-                        if (dictionaryTypeInfo != null)
+                        var dictionaryItemInfo = dictionaryItemList
+                            .Where(wh => wh.DictionaryId == dictionaryTypeInfo.DictionaryId)
+                            .SingleOrDefault(s => s.Value == enumItem.Value.ToString());
+                        if (dictionaryItemInfo != null)
                         {
-                            dictionaryTypeModel.DictionaryId = dictionaryTypeInfo.DictionaryId;
+                            dictionaryItemModel.DictionaryItemId = dictionaryItemInfo.DictionaryItemId;
                             // 不相同才修改
-                            if (!dictionaryTypeInfo.Equals(dictionaryTypeModel))
+                            if (!dictionaryItemInfo.Equals(dictionaryItemModel))
                             {
-                                dictionaryTypeInfo.DictionaryName = dictionaryTypeModel.DictionaryName;
-                                // 这里只会存在 long 或者 int
-                                dictionaryTypeInfo.ValueType = dictionaryTypeModel.ValueType;
-                                dictionaryTypeInfo.HasFlags = dictionaryTypeModel.HasFlags;
-                                if (string.IsNullOrWhiteSpace(dictionaryTypeInfo.Remark))
-                                {
-                                    dictionaryTypeInfo.Remark = dictionaryTypeModel.Remark;
-                                }
-
-                                dictionaryTypeInfo.UpdatedTime = dateTime;
-                                updateDictionaryTypeList.Add(dictionaryTypeInfo);
-                            }
-
-                            deleteDictionaryItemList.AddRange(dictionaryItemList
-                                .Where(wh => wh.DictionaryId == dictionaryTypeInfo.DictionaryId)
-                                .Where(wh => enumItemList.All(a => a.Value.ToString() != wh.Value))
-                                .ToList());
-
-                            var orderIndex = 1;
-
-                            foreach (var enumItem in enumItemList)
-                            {
-                                var fieldInfo = enumType.Type.GetField(enumItem.Name);
-                                var tagType = fieldInfo.GetCustomAttribute<TagTypeAttribute>();
-
-                                var dictionaryItemModel = new DictionaryItemModel
-                                {
-                                    DictionaryId = dictionaryTypeInfo.DictionaryId,
-                                    Label = enumItem.Describe ?? enumItem.Name,
-                                    Value = enumItem.Value.ToString(),
-                                    Type = tagType?.TagType ?? TagTypeEnum.Primary,
-                                    Order = orderIndex,
-                                    Visible = true,
-                                    Status = CommonStatusEnum.Enable,
-                                    UpdatedTime = dateTime
-                                };
-
-                                var dictionaryItemInfo = dictionaryItemList
-                                    .Where(wh => wh.DictionaryId == dictionaryTypeInfo.DictionaryId)
-                                    .SingleOrDefault(s => s.Value == enumItem.Value.ToString());
-                                if (dictionaryItemInfo != null)
-                                {
-                                    dictionaryItemModel.DictionaryItemId = dictionaryItemInfo.DictionaryItemId;
-                                    // 不相同才修改
-                                    if (!dictionaryItemInfo.Equals(dictionaryItemModel))
-                                    {
-                                        dictionaryItemInfo.Label = dictionaryItemModel.Label;
-                                        dictionaryItemInfo.Value = dictionaryItemModel.Value;
-                                        dictionaryItemInfo.Type = dictionaryItemModel.Type;
-                                        dictionaryItemInfo.Order = dictionaryItemModel.Order;
-                                        dictionaryItemInfo.UpdatedTime = dateTime;
-                                        updateDictionaryItemList.Add(dictionaryItemInfo);
-                                    }
-                                }
-                                else
-                                {
-                                    dictionaryItemModel.DictionaryItemId = YitIdHelper.NextId();
-                                    dictionaryItemModel.CreatedTime = dateTime;
-                                    addDictionaryItemList.Add(dictionaryItemModel);
-                                }
-
-                                orderIndex++;
+                                dictionaryItemInfo.Label = dictionaryItemModel.Label;
+                                dictionaryItemInfo.Value = dictionaryItemModel.Value;
+                                dictionaryItemInfo.Type = dictionaryItemModel.Type;
+                                dictionaryItemInfo.Order = dictionaryItemModel.Order;
+                                dictionaryItemInfo.UpdatedTime = dateTime;
+                                updateDictionaryItemList.Add(dictionaryItemInfo);
                             }
                         }
                         else
                         {
-                            dictionaryTypeModel.DictionaryId = YitIdHelper.NextId();
-                            dictionaryTypeModel.CreatedTime = dateTime;
-                            addDictionaryTypeList.Add(dictionaryTypeModel);
-
-                            var orderIndex = 1;
-
-                            foreach (var enumItem in enumItemList)
-                            {
-                                var fieldInfo = enumType.Type.GetField(enumItem.Name);
-                                var tagType = fieldInfo.GetCustomAttribute<TagTypeAttribute>();
-
-                                var dictionaryItemModel = new DictionaryItemModel
-                                {
-                                    DictionaryItemId = YitIdHelper.NextId(),
-                                    DictionaryId = dictionaryTypeModel.DictionaryId,
-                                    Label = enumItem.Describe ?? enumItem.Name,
-                                    Value = enumItem.Value.ToString(),
-                                    Type = tagType?.TagType ?? TagTypeEnum.Primary,
-                                    Order = orderIndex,
-                                    Visible = true,
-                                    Status = CommonStatusEnum.Enable,
-                                    CreatedTime = dateTime,
-                                    UpdatedTime = dateTime
-                                };
-                                addDictionaryItemList.Add(dictionaryItemModel);
-
-                                orderIndex++;
-                            }
+                            dictionaryItemModel.DictionaryItemId = YitIdHelper.NextId();
+                            dictionaryItemModel.CreatedTime = dateTime;
+                            addDictionaryItemList.Add(dictionaryItemModel);
                         }
-                    }
 
-                    // 加载Aop
-                    SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
-
-                    if (deleteDictionaryItemList.Count > 0)
-                    {
-                        await db.Deleteable(deleteDictionaryItemList)
-                            .ExecuteCommandAsync(cancellationToken);
-                    }
-
-                    // 只删除当前服务的
-                    var deleteDictionaryTypeList = dictionaryTypeList.Where(wh => wh.ServiceName == serviceName)
-                        .Where(wh => !enumTypes.Select(sl => sl.Type.Name)
-                                         .ToHashSet()
-                                         .Contains(wh.DictionaryKey)
-                                     && wh.DictionaryKey != "BooleanEnum")
-                        .ToList();
-                    if (deleteDictionaryTypeList.Count > 0)
-                    {
-                        await db.Deleteable(deleteDictionaryTypeList)
-                            .ExecuteCommandAsync(cancellationToken);
-                    }
-
-                    await db.Updateable(updateDictionaryTypeList)
-                        .ExecuteCommandAsync(cancellationToken);
-                    await db.Updateable(updateDictionaryItemList)
-                        .ExecuteCommandAsync(cancellationToken);
-                    await db.Insertable(addDictionaryTypeList)
-                        .ExecuteCommandAsync(cancellationToken);
-                    await db.Insertable(addDictionaryItemList)
-                        .ExecuteCommandAsync(cancellationToken);
-
-                    // 删除缓存
-                    await _centerCache.DelAsync(CacheConst.Center.Dictionary);
-
-                    {
-                        var logSb = new StringBuilder();
-                        logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
-                        logSb.Append("info");
-                        logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                        logSb.Append(": ");
-                        logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
-                        logSb.Append(Environment.NewLine);
-                        logSb.Append("\u001b[40m\u001b[90m");
-                        logSb.Append("      ");
-                        logSb.Append(
-                            $"同步字典信息成功。新增 {addDictionaryTypeList.Count}/{addDictionaryItemList.Count} 个，更新 {updateDictionaryTypeList.Count}/{updateDictionaryItemList.Count} 个，删除 {deleteDictionaryTypeList.Count}/{deleteDictionaryItemList.Count} 个。");
-                        logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
-                        Console.WriteLine(logSb.ToString());
+                        orderIndex++;
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    _logger.LogError(ex, "Sync dictionary error...");
-                }
-            }, cancellationToken);
-        });
+                    dictionaryTypeModel.DictionaryId = YitIdHelper.NextId();
+                    dictionaryTypeModel.CreatedTime = dateTime;
+                    addDictionaryTypeList.Add(dictionaryTypeModel);
 
-        await Task.CompletedTask;
+                    var orderIndex = 1;
+
+                    foreach (var enumItem in enumItemList)
+                    {
+                        var fieldInfo = enumType.Type.GetField(enumItem.Name);
+                        var tagType = fieldInfo.GetCustomAttribute<TagTypeAttribute>();
+
+                        var dictionaryItemModel = new DictionaryItemModel
+                        {
+                            DictionaryItemId = YitIdHelper.NextId(),
+                            DictionaryId = dictionaryTypeModel.DictionaryId,
+                            Label = enumItem.Describe ?? enumItem.Name,
+                            Value = enumItem.Value.ToString(),
+                            Type = tagType?.TagType ?? TagTypeEnum.Primary,
+                            Order = orderIndex,
+                            Visible = true,
+                            Status = CommonStatusEnum.Enable,
+                            CreatedTime = dateTime,
+                            UpdatedTime = dateTime
+                        };
+                        addDictionaryItemList.Add(dictionaryItemModel);
+
+                        orderIndex++;
+                    }
+                }
+            }
+
+            // 加载Aop
+            SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
+
+            if (deleteDictionaryItemList.Count > 0)
+            {
+                await db.Deleteable(deleteDictionaryItemList)
+                    .ExecuteCommandAsync(cancellationToken);
+            }
+
+            // 只删除当前服务的
+            var deleteDictionaryTypeList = dictionaryTypeList.Where(wh => wh.ServiceName == serviceName)
+                .Where(wh => !enumTypes.Select(sl => sl.Type.Name)
+                                 .ToHashSet()
+                                 .Contains(wh.DictionaryKey)
+                             && wh.DictionaryKey != "BooleanEnum")
+                .ToList();
+            if (deleteDictionaryTypeList.Count > 0)
+            {
+                await db.Deleteable(deleteDictionaryTypeList)
+                    .ExecuteCommandAsync(cancellationToken);
+            }
+
+            await db.Updateable(updateDictionaryTypeList)
+                .ExecuteCommandAsync(cancellationToken);
+            await db.Updateable(updateDictionaryItemList)
+                .ExecuteCommandAsync(cancellationToken);
+            await db.Insertable(addDictionaryTypeList)
+                .ExecuteCommandAsync(cancellationToken);
+            await db.Insertable(addDictionaryItemList)
+                .ExecuteCommandAsync(cancellationToken);
+
+            // 删除缓存
+            await _centerCache.DelAsync(CacheConst.Center.Dictionary);
+
+            {
+                var logSb = new StringBuilder();
+                logSb.Append("\u001b[40m\u001b[1m\u001b[32m");
+                logSb.Append("info");
+                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                logSb.Append(": ");
+                logSb.Append($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fffffff zzz dddd}");
+                logSb.Append(Environment.NewLine);
+                logSb.Append("\u001b[40m\u001b[90m");
+                logSb.Append("      ");
+                logSb.Append(
+                    $"同步字典信息成功。新增 {addDictionaryTypeList.Count}/{addDictionaryItemList.Count} 个，更新 {updateDictionaryTypeList.Count}/{updateDictionaryItemList.Count} 个，删除 {deleteDictionaryTypeList.Count}/{deleteDictionaryItemList.Count} 个。");
+                logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
+                Console.WriteLine(logSb.ToString());
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Sync dictionary error...");
+            throw;
+        }
     }
 
-    /// <summary>
-    /// Triggered when the application host is performing a graceful shutdown.
-    /// </summary>
-    /// <param name="cancellationToken">Indicates that the shutdown process should no longer be graceful.</param>
-    /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous Stop operation.</returns>
+    /// <inheritdoc />
     public async Task StopAsync(CancellationToken cancellationToken)
     {
         await Task.CompletedTask;

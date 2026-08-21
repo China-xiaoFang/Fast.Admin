@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="FaTableEnumColumnCtx"/> FastElementPlus FaTable 枚举列上下文
+/// FastElementPlus FaTable 枚举列上下文
 /// </summary>
 public class FaTableEnumColumnCtx
 {

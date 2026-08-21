@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="TagTypeEnum"/> 标签类型枚举
+/// 标签类型枚举
 /// </summary>
 [Flags]
 [FastEnum("标签类型枚举")]

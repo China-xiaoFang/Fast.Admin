@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Config.Dto;
 
 /// <summary>
-/// <see cref="EditConfigInput"/> 编辑配置输入
+/// 编辑配置输入
 /// </summary>
 public class EditConfigInput : UpdateVersionInput
 {

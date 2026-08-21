@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="TenantUserModel"/> 租户用户表Model类
+/// 租户用户表Model类
 /// </summary>
 [SugarTable("TenantUser", "租户用户表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -33,7 +33,7 @@ public class TenantUserModel : IBaseTEntity, IUpdateVersion
     /// 职员Id
     /// </summary>
     /// <remarks>绑定 Admin 库 Employee 表主键Id</remarks>
-    [SugarColumn(ColumnDescription = "用户Id", IsPrimaryKey = true)]
+    [SugarColumn(ColumnDescription = "职员Id", IsPrimaryKey = true)]
     public long EmployeeId { get; set; }
 
     /// <summary>

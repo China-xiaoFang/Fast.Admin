@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Config.Dto;
 
 /// <summary>
-/// <see cref="DeleteConfigCacheInput"/> 删除配置缓存输入
+/// 删除配置缓存输入
 /// </summary>
 public class DeleteConfigCacheInput
 {

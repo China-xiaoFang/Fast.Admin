@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="DataScopeTypeEnum"/> 数据范围类型枚举
+/// 数据范围类型枚举
 /// </summary>
 [FastEnum("数据范围类型枚举")]
 public enum DataScopeTypeEnum : byte
@@ -56,5 +56,11 @@ public enum DataScopeTypeEnum : byte
     /// 仅本人数据
     /// </summary>
     [Description("仅本人数据")]
-    Self = 16
+    Self = 16,
+
+    /// <summary>
+    /// 自定义部门数据
+    /// </summary>
+    [Description("自定义部门数据")]
+    CustomDept = 32
 }

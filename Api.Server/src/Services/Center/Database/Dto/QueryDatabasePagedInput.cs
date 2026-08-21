@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Database.Dto;
 
 /// <summary>
-/// <see cref="QueryDatabasePagedInput"/> 获取数据库分页列表输入
+/// 获取数据库分页列表输入
 /// </summary>
 public class QueryDatabasePagedInput : PagedInput
 {

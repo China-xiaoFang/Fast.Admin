@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,62 +23,67 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="RefreshEmployeeDto"/> 刷新职员信息Dto
+/// 职员刷新信息Dto
 /// </summary>
 public class RefreshEmployeeDto
 {
     /// <summary>
     /// 设备类型
     /// </summary>
-    public virtual AppEnvironmentEnum DeviceType { get; set; }
+    public AppEnvironmentEnum DeviceType { get; set; }
 
     /// <summary>
     /// 应用编号
     /// </summary>
-    public virtual string AppNo { get; set; }
+    public string AppNo { get; set; }
 
     /// <summary>
     /// 租户编号
     /// </summary>
-    public virtual string TenantNo { get; set; }
+    public string TenantNo { get; set; }
 
     /// <summary>
     /// 工号
     /// </summary>
-    public virtual string EmployeeNo { get; set; }
+    public string EmployeeNo { get; set; }
 
     /// <summary>
     /// 姓名
     /// </summary>
-    public virtual string EmployeeName { get; set; }
+    public string EmployeeName { get; set; }
 
     /// <summary>
     /// 部门Id
     /// </summary>
-    public virtual long? DepartmentId { get; set; }
+    public long? DepartmentId { get; set; }
 
     /// <summary>
     /// 部门名称
     /// </summary>
-    public virtual string DepartmentName { get; set; }
+    public string DepartmentName { get; set; }
 
     /// <summary>
     /// 角色Id集合
     /// </summary>
-    public virtual List<long> RoleIdList { get; set; } = new();
+    public List<long> RoleIdList { get; set; } = new();
 
     /// <summary>
     /// 角色名称集合
     /// </summary>
-    public virtual List<string> RoleNameList { get; set; } = new();
+    public List<string> RoleNameList { get; set; } = new();
 
     /// <summary>
     /// 角色类型
     /// </summary>
-    public virtual RoleTypeEnum RoleType { get; set; }
+    public RoleTypeEnum RoleType { get; set; }
 
     /// <summary>
     /// 数据范围类型
     /// </summary>
-    public virtual DataScopeTypeEnum DataScopeType { get; set; }
+    public DataScopeTypeEnum DataScopeType { get; set; }
+
+    /// <summary>
+    /// 自定义数据范围部门Id集合
+    /// </summary>
+    public List<long> DataScopeDepartmentIdList { get; set; } = new();
 }

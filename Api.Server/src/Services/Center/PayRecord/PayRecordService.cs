@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -27,7 +27,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.PayRecord;
 
 /// <summary>
-/// <see cref="PayRecordService"/> 支付记录服务
+/// 支付记录服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "payRecord")]
 public class PayRecordService : IDynamicApplication
@@ -42,8 +42,6 @@ public class PayRecordService : IDynamicApplication
     /// <summary>
     /// 获取支付记录分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取支付记录分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.PayRecordPaged)]

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -30,14 +30,11 @@ using SqlSugar;
 namespace Fast.Scheduler.LocalJob;
 
 /// <summary>
-/// <see cref="RefreshWeChatAccessTokenLocalJob"/> 刷新微信 AccessToken 本地作业
+/// 刷新微信 AccessToken 本地作业
 /// </summary>
 public class RefreshWeChatAccessTokenLocalJob : ISchedulerJob
 {
-    /// <summary>
-    /// 获取本地作业
-    /// </summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public SchedulerLocalJobInfo GetLocalJob()
     {
         return new SchedulerLocalJobInfo
@@ -61,13 +58,7 @@ public class RefreshWeChatAccessTokenLocalJob : ISchedulerJob
         };
     }
 
-    /// <summary>
-    /// 执行作业
-    /// </summary>
-    /// <param name="serviceProvider"><see cref="IServiceProvider"/> 服务提供者（请求作用域类似于，如果存在 TenantId 则自动注入 IUser 服务）</param>
-    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
-    /// <param name="logInfo"><see cref="SchedulerJobLocalLogInfo"/> 日志信息</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<string> Execute(IServiceProvider serviceProvider, ISqlSugarClient db, SchedulerJobLocalLogInfo logInfo)
     {
         // 进入方法的一瞬间记录时间

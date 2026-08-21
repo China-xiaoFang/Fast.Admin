@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -26,7 +26,7 @@ using Quartz;
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="SchedulerJobInfo"/> 调度作业信息
+/// 调度作业信息
 /// </summary>
 [SuppressSniffer]
 public class SchedulerJobInfo
@@ -38,7 +38,7 @@ public class SchedulerJobInfo
     public bool IsSystem { get; set; }
 
     /// <summary>
-    /// 租户ID
+    /// 租户Id
     /// </summary>
     public long? TenantId { get; set; }
 
@@ -132,7 +132,7 @@ public class SchedulerJobInfo
     #region Url
 
     /// <summary>
-    /// 请求Url
+    /// 请求 URL
     /// </summary>
     public string RequestUrl { get; set; }
 

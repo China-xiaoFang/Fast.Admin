@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="GlobalContext"/> 系统通用上下文
+/// 系统通用上下文
 /// </summary>
 [SuppressSniffer]
 public class GlobalContext
@@ -68,13 +68,13 @@ public class GlobalContext
             var httpContext = FastContext.HttpContext;
             if (httpContext.IsWebSocketRequest())
             {
-                result = FastContext.HttpContext.Request.Query[HttpHeaderConst.DeviceType]
+                result = httpContext.Request.Query[HttpHeaderConst.DeviceType]
                     .ToString()
                     .UrlDecode();
             }
             else
             {
-                result = FastContext.HttpContext.Request.Headers[HttpHeaderConst.DeviceType]
+                result = httpContext.Request.Headers[HttpHeaderConst.DeviceType]
                     .ToString()
                     .UrlDecode();
             }
@@ -118,15 +118,15 @@ public class GlobalContext
     /// <summary>
     /// 是否为Web端
     /// </summary>
-    public static bool IsWeb = (DeviceType & AppEnvironmentEnum.Web) != 0;
+    public static bool IsWeb => (DeviceType & AppEnvironmentEnum.Web) != 0;
 
     /// <summary>
     /// 是否为桌面端
     /// </summary>
-    public static bool IsDesktop = (DeviceType & AppEnvironmentEnum.Desktop) != 0;
+    public static bool IsDesktop => (DeviceType & AppEnvironmentEnum.Desktop) != 0;
 
     /// <summary>
     /// 是否为移动端
     /// </summary>
-    public static bool IsMobile = (DeviceType & AppEnvironmentEnum.MobileThree) != 0;
+    public static bool IsMobile => (DeviceType & AppEnvironmentEnum.MobileThree) != 0;
 }

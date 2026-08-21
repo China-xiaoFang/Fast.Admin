@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="PasswordOperationTypeEnum"/> 密码操作类型枚举
+/// 密码操作类型枚举
 /// </summary>
 [Flags]
 [FastEnum("密码操作类型枚举")]

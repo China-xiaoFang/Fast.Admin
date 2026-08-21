@@ -23,14 +23,14 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ExcelEnumMapping"/> Excel枚举映射信息
+/// Excel枚举映射信息
 /// </summary>
 /// <remarks>
-/// 缓存枚举类型的双向映射关系：
+/// 缓存枚举类型的双向映射关系
 /// <para>- 导出方向：枚举值 → Description 文本（用于将枚举值转换为可读中文）</para>
 /// <para>- 导入方向：文本 → 枚举值（支持按 Description、枚举名称、数值字符串反向解析）</para>
 /// </remarks>
-internal class ExcelEnumMapping
+internal sealed class ExcelEnumMapping
 {
     /// <summary>
     /// 导出映射：枚举值 → 描述文本

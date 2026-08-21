@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Department.Dto;
 
 /// <summary>
-/// <see cref="QueryDepartmentPagedInput"/> 获取部门分页列表输入
+/// 获取部门分页列表输入
 /// </summary>
 public class QueryDepartmentPagedInput : PagedInput
 {

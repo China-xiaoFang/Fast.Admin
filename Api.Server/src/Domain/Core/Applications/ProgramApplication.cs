@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,13 +23,12 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Fast.DynamicApplication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ProgramApplication"/> 程序信息
+/// 程序信息
 /// </summary>
 [ApiDescriptionSettings(false)]
 public class ProgramApplication : IDynamicApplication
@@ -37,10 +36,9 @@ public class ProgramApplication : IDynamicApplication
     /// <summary>
     /// 程序信息
     /// </summary>
-    /// <returns></returns>
     [HttpGet("/program"), HttpGet("/program/index")]
     [ApiInfo("程序信息", HttpRequestActionEnum.Other)]
-    [AllowAnonymous]
+    [PlatformOnly]
     [ResponseEncipher]
     public async Task<IActionResult> Index()
     {
