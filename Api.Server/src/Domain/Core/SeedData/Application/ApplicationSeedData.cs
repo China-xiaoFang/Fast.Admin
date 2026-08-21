@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,16 +28,14 @@ using Yitter.IdGenerator;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ApplicationSeedData"/> 应用种子数据
+/// 应用种子数据
 /// </summary>
 internal static class ApplicationSeedData
 {
     /// <summary>
     /// 应用种子数据
     /// </summary>
-    /// <param name="db"></param>
-    /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
-    /// <returns></returns>
+    /// <returns>默认应用种子数据</returns>
     public static async Task<ApplicationModel> SeedData(ISqlSugarClient db, DateTime dateTime)
     {
         var applicationModel = new ApplicationModel
@@ -48,9 +46,6 @@ internal static class ApplicationSeedData
             AppName = "Fast.Admin",
             LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
             ThemeColor = "#409EFF",
-            UserAgreement = "<p><br></p>",
-            PrivacyAgreement = "<p><br></p>",
-            ServiceAgreement = "<p><br></p>",
             CreatedTime = dateTime
         };
         applicationModel = await db.Insertable(applicationModel)
@@ -97,7 +92,6 @@ internal static class ApplicationSeedData
                     WebSocketUrl = "/hubs/chatHub",
                     RequestTimeout = 60000,
                     RequestEncipher = true,
-                    StatusBarImageUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/TopImage.png",
                     CreatedTime = dateTime
                 },
                 new()
@@ -112,7 +106,6 @@ internal static class ApplicationSeedData
                     WebSocketUrl = "/hubs/chatHub",
                     RequestTimeout = 60000,
                     RequestEncipher = true,
-                    StatusBarImageUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/TopImage.png",
                     CreatedTime = dateTime
                 },
                 new()
@@ -127,7 +120,6 @@ internal static class ApplicationSeedData
                     WebSocketUrl = "/hubs/chatHub",
                     RequestTimeout = 60000,
                     RequestEncipher = true,
-                    StatusBarImageUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/TopImage.png",
                     CreatedTime = dateTime
                 }
             })

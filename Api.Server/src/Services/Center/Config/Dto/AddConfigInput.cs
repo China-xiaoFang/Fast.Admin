@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Config.Dto;
 
 /// <summary>
-/// <see cref="AddConfigInput"/> 添加配置输入
+/// 添加配置输入
 /// </summary>
 public class AddConfigInput
 {

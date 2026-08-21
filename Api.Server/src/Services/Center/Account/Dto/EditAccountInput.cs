@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Account.Dto;
 
 /// <summary>
-/// <see cref="EditAccountInput"/> 编辑账号输入
+/// 编辑账号输入
 /// </summary>
 public class EditAccountInput : UpdateVersionInput
 {
@@ -51,20 +51,4 @@ public class EditAccountInput : UpdateVersionInput
     /// 头像
     /// </summary>
     public string Avatar { get; set; }
-
-    /// <summary>
-    /// 电话
-    /// </summary>
-    public string Phone { get; set; }
-
-    /// <summary>
-    /// 性别
-    /// </summary>
-    [EnumRequired(ErrorMessage = "性别不能为空", AllowZero = true)]
-    public GenderEnum Sex { get; set; }
-
-    /// <summary>
-    /// 生日
-    /// </summary>
-    public DateTime? Birthday { get; set; }
 }

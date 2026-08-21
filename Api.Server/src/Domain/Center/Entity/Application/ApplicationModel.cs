@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="ApplicationModel"/> 应用表Model类
+/// 应用表Model类
 /// </summary>
 [SugarTable("Application", "应用表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -70,36 +70,6 @@ public class ApplicationModel : BaseEntity, IUpdateVersion
     [Required]
     [SugarColumn(ColumnDescription = "主题色", Length = 7)]
     public string ThemeColor { get; set; }
-
-    /// <summary>
-    /// ICP备案号
-    /// </summary>
-    [SugarColumn(ColumnDescription = "ICP备案号", Length = 20)]
-    public string ICPSecurityCode { get; set; }
-
-    /// <summary>
-    /// 公安备案号
-    /// </summary>
-    [SugarColumn(ColumnDescription = "公安备案号", Length = 30)]
-    public string PublicSecurityCode { get; set; }
-
-    /// <summary>
-    /// 用户协议
-    /// </summary>
-    [SugarColumn(ColumnDescription = "用户协议", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string UserAgreement { get; set; }
-
-    /// <summary>
-    /// 隐私协议
-    /// </summary>
-    [SugarColumn(ColumnDescription = "隐私协议", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string PrivacyAgreement { get; set; }
-
-    /// <summary>
-    /// 服务协议
-    /// </summary>
-    [SugarColumn(ColumnDescription = "服务协议", ColumnDataType = StaticConfig.CodeFirst_BigString)]
-    public string ServiceAgreement { get; set; }
 
     /// <summary>
     /// 备注

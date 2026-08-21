@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -21,8 +21,8 @@
 // ------------------------------------------------------------------------
 
 using Fast.Center.Entity;
-using Fast.JwtBearer;
 using Fast.SqlSugar;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -31,9 +31,10 @@ using SqlSugar;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ChatHub"/> 集线器客户端
+/// 集线器客户端
 /// </summary>
 [MapHub("/hubs/chatHub")]
+[Authorize]
 public class ChatHub : Hub<IChatClient>
 {
     /// <summary>
@@ -52,11 +53,8 @@ public class ChatHub : Hub<IChatClient>
     private readonly ILogger _logger;
 
     /// <summary>
-    /// <see cref="ChatHub"/> 集线器客户端
+    /// 集线器客户端
     /// </summary>
-    /// <param name="authCache"><see cref="ICache"/> 缓存</param>
-    /// <param name="repository"><see cref="ISqlSugarClient"/> 仓储</param>
-    /// <param name="logger"><see cref="ILogger"/> 日志</param>
     public ChatHub(ICache<AuthCCL> authCache, ISqlSugarClient repository, ILogger<ChatHub> logger)
     {
         _authCache = authCache;
@@ -65,33 +63,26 @@ public class ChatHub : Hub<IChatClient>
     }
 
     /// <summary>
-    /// 从AccessToken中获取授权用户信息
+    /// 从认证中间件已经验证的 Claims 中获取授权用户信息
     /// </summary>
-    /// <returns></returns>
+    /// <returns>当前连接对应的授权用户信息；未认证、Claims 无效或缓存不存在时返回 <see langword="null"/></returns>
     private async Task<AuthUserInfo> GetAuthUserInfo()
     {
         try
         {
-            // 读取 Token
-            var token = Context.GetHttpContext()
-                ?.Request.Query["access_token"]
-                .ToString();
-
-            if (string.IsNullOrWhiteSpace(token))
-            {
+            if (Context.User?.Identity?.IsAuthenticated != true)
                 return null;
-            }
 
-            // 读取 Token 不验证
-            var claims = JwtBearerUtil.ReadJwtToken(token)
-                ?.Claims;
-            // 从 AccessToken 中读取 Data
-            var data = claims?.FirstOrDefault(f => f.Type == "Data")!.Value;
+            // API 宿主会提取 SignalR 的 access_token 查询参数；只有 JWT 认证完整验证通过后
+            // 签名可信的 Data Claim 才会进入这里，禁止在 Hub 中自行解析未经验证的 JWT
+            var data = Context.User.FindFirst("Data")
+                ?.Value;
             var payload = data?.Base64ToString()
                 .ToObject<Dictionary<string, string>>();
-            // 从 payload 中读取 DeviceType,DeviceId,AppNo,TenantNo,EmployeeNo
+            // 从 payload 中读取 DeviceType,SessionId,AppNo,TenantNo,EmployeeNo
             if (payload != null
                 && payload.TryGetValue(nameof(AuthUserInfo.DeviceType), out var deviceType)
+                && payload.TryGetValue(nameof(AuthUserInfo.SessionId), out var sessionId)
                 && payload.TryGetValue(nameof(AuthUserInfo.AppNo), out var appNo)
                 && payload.TryGetValue(nameof(AuthUserInfo.TenantNo), out var tenantNo)
                 && payload.TryGetValue(nameof(AuthUserInfo.EmployeeNo), out var employeeNo))
@@ -100,7 +91,7 @@ public class ChatHub : Hub<IChatClient>
                 var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType, employeeNo);
                 var authUserInfo = await _authCache.GetAsync<AuthUserInfo>(cacheKey);
 
-                return authUserInfo;
+                return authUserInfo?.SessionId == sessionId ? authUserInfo : null;
             }
 
             return null;
@@ -112,11 +103,7 @@ public class ChatHub : Hub<IChatClient>
         }
     }
 
-    /// <summary>
-    /// 集线器连接
-    /// Called when a new connection is established with the hub.
-    /// </summary>
-    /// <returns>A <see cref="Task"/> that represents the asynchronous connect.</returns>
+    /// <inheritdoc />
     public override async Task OnConnectedAsync()
     {
         if (string.IsNullOrWhiteSpace(Context.ConnectionId))
@@ -136,11 +123,7 @@ public class ChatHub : Hub<IChatClient>
             .ConnectSuccess();
     }
 
-    /// <summary>
-    /// 集线器断开
-    /// Called when a connection with the hub is terminated.
-    /// </summary>
-    /// <returns>A <see cref="Task"/> that represents the asynchronous disconnect.</returns>
+    /// <inheritdoc />
     public override async Task OnDisconnectedAsync(Exception exception)
     {
         if (string.IsNullOrWhiteSpace(Context.ConnectionId))
@@ -179,7 +162,6 @@ public class ChatHub : Hub<IChatClient>
     /// <summary>
     /// 前端调用登录
     /// </summary>
-    /// <returns></returns>
     public async Task Login()
     {
         if (string.IsNullOrWhiteSpace(Context.ConnectionId))
@@ -317,7 +299,6 @@ public class ChatHub : Hub<IChatClient>
     /// <summary>
     /// 前端调用退出登录
     /// </summary>
-    /// <returns></returns>
     public async Task Logout()
     {
         if (string.IsNullOrWhiteSpace(Context.ConnectionId))

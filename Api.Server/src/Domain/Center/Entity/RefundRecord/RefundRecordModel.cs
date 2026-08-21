@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -26,13 +26,13 @@ using Microsoft.AspNetCore.Http;
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="RefundRecordModel"/> 退款记录表Model类
+/// 退款记录表Model类
 /// </summary>
 [SugarTable("RefundRecord", "退款记录表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(BizOrderNo)}", nameof(BizOrderId), OrderByType.Desc, nameof(BizOrderNo), OrderByType.Desc)]
 [SugarIndex($"IX_{{table}}_{nameof(RefundId)}", nameof(RefundId), OrderByType.Desc)]
-public class RefundRecordModel : IUpdateVersion
+public class RefundRecordModel : IBaseTEntity, IUpdateVersion
 {
     /// <summary>
     /// 记录Id
@@ -165,9 +165,9 @@ public class RefundRecordModel : IUpdateVersion
     public string City { get; set; }
 
     /// <summary>
-    /// Ip
+    /// Ip地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "Ip", Length = 15, CreateTableFieldSort = 988)]
+    [SugarColumn(ColumnDescription = "Ip地址", Length = 15, CreateTableFieldSort = 988)]
     public string Ip { get; set; }
 
     /// <summary>
@@ -198,7 +198,6 @@ public class RefundRecordModel : IUpdateVersion
     /// <summary>
     /// 记录表创建
     /// </summary>
-    /// <param name="httpContext"><see cref="HttpContext"/> 请求上下文</param>
     public void RecordCreate(HttpContext httpContext)
     {
         var userAgentInfo = httpContext.RequestUserAgentInfo();

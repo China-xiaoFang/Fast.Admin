@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="UserTypeEnum"/> 用户类型枚举
+/// 用户类型枚举
 /// </summary>
 [Flags]
 [FastEnum("用户类型枚举")]

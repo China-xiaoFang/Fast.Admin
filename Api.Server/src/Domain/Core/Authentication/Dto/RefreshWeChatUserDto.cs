@@ -23,42 +23,42 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="RefreshWeChatUserDto"/> 刷新微信用户信息Dto
+/// 微信用户刷新信息Dto
 /// </summary>
 public class RefreshWeChatUserDto
 {
     /// <summary>
     /// 设备类型
     /// </summary>
-    public virtual AppEnvironmentEnum DeviceType { get; set; }
+    public AppEnvironmentEnum DeviceType { get; set; }
 
     /// <summary>
     /// 应用编号
     /// </summary>
-    public virtual string AppNo { get; set; }
+    public string AppNo { get; set; }
 
     /// <summary>
     /// 手机
     /// </summary>
-    public virtual string Mobile { get; set; }
+    public string Mobile { get; set; }
 
     /// <summary>
     /// 昵称
     /// </summary>
-    public virtual string NickName { get; set; }
+    public string NickName { get; set; }
 
     /// <summary>
     /// 头像
     /// </summary>
-    public virtual string Avatar { get; set; }
+    public string Avatar { get; set; }
 
     /// <summary>
     /// 租户编号
     /// </summary>
-    public virtual string TenantNo { get; set; }
+    public string TenantNo { get; set; }
 
     /// <summary>
     /// 微信唯一用户标识
     /// </summary>
-    public virtual string WeChatOpenId { get; set; }
+    public string WeChatOpenId { get; set; }
 }

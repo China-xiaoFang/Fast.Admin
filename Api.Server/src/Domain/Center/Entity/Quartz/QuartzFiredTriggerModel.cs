@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="QuartzFiredTriggerModel"/> Quartz 触发器快照表Model类
+/// Quartz 触发器快照表Model类
 /// </summary>
 [SugarTable("QRTZ_FIRED_TRIGGERS", "Quartz 触发器快照表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -122,7 +122,7 @@ public class QuartzFiredTriggerModel : IDatabaseEntity
     /// <summary>
     /// 是否请求恢复
     /// </summary>
-    /// <remarks>true 表示当调度器崩溃或中断后允许重新恢复执行</remarks>
+    /// <remarks><see langword="true"/> 表示当调度器崩溃或中断后允许重新恢复执行</remarks>
     [SugarColumn(ColumnName = "REQUESTS_RECOVERY", ColumnDescription = "是否请求恢复")]
     public bool? RequestsRecovery { get; set; }
 }

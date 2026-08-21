@@ -23,7 +23,7 @@
 namespace Fast.Admin.Enum;
 
 /// <summary>
-/// <see cref="EmployeeStatusEnum"/> 职员状态枚举
+/// 职员状态枚举
 /// </summary>
 [Flags]
 [FastEnum("职员状态枚举")]

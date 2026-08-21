@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -22,79 +22,61 @@
 
 using Fast.AdminLog.Entity;
 using Fast.AdminLog.Enum;
-using Fast.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Yitter.IdGenerator;
 
 namespace Fast.Admin.Service;
 
 /// <summary>
-/// <see cref="LogContext"/> 日志上下文
+/// 日志上下文
 /// </summary>
 [SuppressSniffer]
 public class LogContext
 {
     /// <summary>
-    /// 添加操作日志（异步）
-    /// <para>注：这里即便有问题也不会抛出错误，只会记录日志</para>
+    /// 添加操作日志，并等待日志持久化完成
     /// </summary>
-    /// <param name="logDto"></param>
-    public static async void OperateLog(OperateLogDto logDto)
+    public static async Task OperateLog(OperateLogDto logDto)
     {
-        try
+        var httpContext = FastContext.HttpContext;
+        var _user = httpContext.RequestServices.GetRequiredService<IUser>();
+
+        // 组装数据
+        var operateLogModel = new OperateLogModel
         {
-            var _user = FastContext.HttpContext.RequestServices.GetService<IUser>();
-            var _sqlSugarEntityService = FastContext.HttpContext.RequestServices.GetService<ISqlSugarEntityService>();
+            RecordId = YitIdHelper.NextId(),
+            EmployeeNo = _user.EmployeeNo,
+            Mobile = _user.Mobile,
+            Title = logDto.Title?.GetNVarcharMaxLen(50, true),
+            OperateType = logDto.OperateType,
+            BizId = logDto.BizId,
+            BizNo = logDto.BizNo,
+            Description = logDto.Description?.GetNVarcharMaxLen(500, true),
+            DepartmentId = _user.DepartmentId,
+            DepartmentName = _user.DepartmentName,
+            CreatedUserId = _user.EmployeeId,
+            CreatedUserName = _user.EmployeeName,
+            CreatedTime = DateTime.Now
+        };
+        operateLogModel.RecordCreate(httpContext);
 
-            // 获取 AdminLog 库的连接字符串配置
-            var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId,
-                _user.TenantNo, DatabaseTypeEnum.AdminLog);
-            var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+        // 获取 AdminLog 库的连接字符串配置
+        var sqlSugarEntityService = httpContext.RequestServices.GetRequiredService<ISqlSugarEntityService>();
+        var connectionSetting = await sqlSugarEntityService.GetConnectionSetting(_user.TenantId, _user.TenantNo,
+            DatabaseTypeEnum.AdminLog);
+        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
-            // 组装数据
-            var operateLogModel = new OperateLogModel
-            {
-                RecordId = YitIdHelper.NextId(),
-                EmployeeNo = _user.EmployeeNo,
-                Mobile = _user.Mobile,
-                Title = logDto.Title?.GetNVarcharMaxLen(50, true),
-                OperateType = logDto.OperateType,
-                BizId = logDto.BizId,
-                BizNo = logDto.BizNo,
-                Description = logDto.Description?.GetNVarcharMaxLen(500, true),
-                DepartmentId = _user.DepartmentId,
-                DepartmentName = _user.DepartmentName,
-                CreatedUserId = _user.EmployeeId,
-                CreatedUserName = _user.EmployeeName,
-                CreatedTime = DateTime.Now
-            };
-            operateLogModel.RecordCreate(FastContext.HttpContext);
-
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    // 这里不能使用Aop
-                    var db = new SqlSugarClient(connectionConfig);
-
-                    // 异步不等待
-                    await db.Insertable(operateLogModel)
-                        .SplitTable()
-                        .ExecuteCommandAsync();
-                }
-                catch (Exception ex)
-                {
-                    Log.Error($"添加操作日志（OperateLog），执行 Sql 错误：{ex.Message}", ex);
-                }
-            });
-        }
-        catch (Exception ex)
-        {
-            Log.Error("添加操作日志（OperateLog）错误！", ex);
-        }
+        // 独立客户端不加载 AOP，避免操作日志写入再次触发 SQL 审计；返回业务响应前等待写入完成
+        using var db = new SqlSugarClient(connectionConfig);
+        await db.Insertable(operateLogModel)
+            .SplitTable()
+            .ExecuteCommandAsync();
     }
 }
 
+/// <summary>
+/// 操作日志上下文数据
+/// </summary>
 public class OperateLogDto
 {
     /// <summary>

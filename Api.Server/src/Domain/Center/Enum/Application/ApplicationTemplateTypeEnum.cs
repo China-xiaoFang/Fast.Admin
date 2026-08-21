@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="ApplicationTemplateTypeEnum"/> 应用模板类型枚举
+/// 应用模板类型枚举
 /// </summary>
 [Flags]
 [FastEnum("应用模板类型枚举")]

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using System.Collections.Concurrent;
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="SchedulerContext"/> 作业调度程序上下文
+/// 作业调度程序上下文
 /// </summary>
 [SuppressSniffer]
 public class SchedulerContext
@@ -39,7 +39,7 @@ public class SchedulerContext
     /// 已经存在调度器的 TenantId
     /// <para>租户名称</para>
     /// <para>租户编号</para>
-    /// <para>虚拟的设备ID</para>
+    /// <para>虚拟的设备Id</para>
     /// </summary>
     public static ConcurrentDictionary<long, (string tenantName, string tenantNo, string tenantCode, string deviceId)>
         SchedulerTenantList { get; internal set; } = [];

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.ApplicationOpenId.Dto;
 
 /// <summary>
-/// <see cref="QueryApplicationOpenIdPagedOutput"/> 获取应用标识分页列表输出
+/// 获取应用标识分页列表输出
 /// </summary>
 public class QueryApplicationOpenIdPagedOutput : PagedOutput
 {
@@ -74,7 +74,7 @@ public class QueryApplicationOpenIdPagedOutput : PagedOutput
     public DateTime? WeChatAccessTokenRefreshTime { get; set; }
 
     /// <summary>
-    /// 微信 JsApi Ticket 刷新时间
+    /// 微信 JSAPI Ticket 刷新时间
     /// </summary>
     public DateTime? WeChatJsApiTicketRefreshTime { get; set; }
 

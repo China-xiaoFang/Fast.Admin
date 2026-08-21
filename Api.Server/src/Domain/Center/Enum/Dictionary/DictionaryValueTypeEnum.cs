@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="DictionaryValueTypeEnum"/> 字典值类型枚举
+/// 字典值类型枚举
 /// </summary>
 [Flags]
 [FastEnum("字典值类型枚举")]

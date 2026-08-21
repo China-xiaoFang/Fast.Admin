@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -20,19 +20,21 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.Center.Entity;
 using Fast.CenterLog.Entity;
 using Fast.CenterLog.Enum;
 using Fast.JwtBearer;
 using Fast.SqlSugar;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SqlSugar;
 using Yitter.IdGenerator;
 
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="User"/> 授权用户信息
+/// <see cref="IUser"/> 默认实现
 /// </summary>
 /// <remarks>作用域注册，保证当前请求管道中是唯一的，并且只会加载一次</remarks>
 public sealed class User : AuthUserInfo, IUser, IScopedDependency
@@ -53,23 +55,22 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     private readonly HttpContext _httpContext;
 
     /// <summary>
-    /// <see cref="User"/> 授权用户信息
+    /// 日志
     /// </summary>
-    /// <param name="authCache"><see cref="ICache"/> 缓存</param>
-    /// <param name="httpContextAccessor"><see cref="IHttpContextAccessor"/> 请求上下文</param>
+    private readonly ILogger _logger;
+
+    /// <summary>
+    /// 授权用户信息
+    /// </summary>
     /// <remarks>作用域注册，保证当前请求管道中是唯一的，并且只会加载一次</remarks>
-    public User(ICache<AuthCCL> authCache, IHttpContextAccessor httpContextAccessor)
+    public User(ICache<AuthCCL> authCache, IHttpContextAccessor httpContextAccessor, ILogger<IUser> logger)
     {
         _authCache = authCache;
         _httpContext = httpContextAccessor.HttpContext;
+        _logger = logger;
     }
 
-    /// <summary>
-    /// 设置授权用户
-    /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
-    /// <param name="forceUserInfo"><see cref="bool"/> 强制覆盖用户信息，默认 <c>false</c></param>
-    /// <remarks>只会赋值一次</remarks>
+    /// <inheritdoc />
     public void SetAuthUser(AuthUserInfo authUserInfo, bool forceUserInfo = false)
     {
         if (_hasUserInfo && !forceUserInfo)
@@ -83,6 +84,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         // 设置授权用户信息
         DeviceType = authUserInfo.DeviceType;
         DeviceId = authUserInfo.DeviceId;
+        SessionId = authUserInfo.SessionId;
 
         AppNo = authUserInfo.AppNo;
         AppName = authUserInfo.AppName;
@@ -103,6 +105,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         TenantNo = authUserInfo.TenantNo;
         TenantName = authUserInfo.TenantName;
         TenantCode = authUserInfo.TenantCode;
+        IsSystemTenant = authUserInfo.IsSystemTenant;
 
         UserKey = authUserInfo.UserKey;
         EmployeeId = authUserInfo.EmployeeId;
@@ -123,33 +126,24 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         RoleNameList = authUserInfo.RoleNameList;
         RoleType = authUserInfo.RoleType;
         DataScopeType = authUserInfo.DataScopeType;
+        DataScopeDepartmentIdList = authUserInfo.DataScopeDepartmentIdList;
         MenuCodeList = authUserInfo.MenuCodeList;
         ButtonCodeList = authUserInfo.ButtonCodeList;
         _hasUserInfo = true;
     }
 
-    /// <summary>
-    /// 从缓存中获取授权用户信息
-    /// </summary>
-    /// <param name="deviceType"><see cref="AppEnvironmentEnum"/> 设备类型</param>
-    /// <param name="appNo"><see cref="string"/> 应用编号</param>
-    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
-    /// <param name="employeeNo"><see cref="string"/> 工号</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<AuthUserInfo> GetAuthUserInfo(AppEnvironmentEnum deviceType, string appNo, string tenantNo,
-        string employeeNo)
+        string employeeNo, string sessionId)
     {
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType.ToString(), employeeNo);
 
-        return await _authCache.GetAsync<AuthUserInfo>(cacheKey);
+        var authUserInfo = await _authCache.GetAsync<AuthUserInfo>(cacheKey);
+        return authUserInfo?.SessionId == sessionId ? authUserInfo : null;
     }
 
-    /// <summary>
-    /// 统一登录
-    /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task Login(AuthUserInfo authUserInfo)
     {
         if (authUserInfo == null || string.IsNullOrWhiteSpace(authUserInfo.Mobile))
@@ -182,10 +176,20 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             // 设置授权用户信息
             SetAuthUser(authUserInfo, true);
 
+            // 单点登录时撤销同一应用、租户和用户在其他设备上的授权缓存
+            var singleLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleLogin));
+            if (singleLogin)
+            {
+                var delCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo, "*",
+                    authUserInfo.EmployeeNo);
+                await _authCache.DelByPatternAsync(delCacheKey);
+            }
+
             var payload = new Dictionary<string, string>
             {
                 {nameof(DeviceType), authUserInfo.DeviceType.ToString()},
                 {nameof(DeviceId), authUserInfo.DeviceId},
+                {nameof(SessionId), authUserInfo.SessionId},
                 {nameof(AppNo), authUserInfo.AppNo},
                 {nameof(TenantNo), authUserInfo.TenantNo},
                 {nameof(EmployeeNo), authUserInfo.EmployeeNo},
@@ -220,15 +224,12 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         }
         catch (Exception ex)
         {
-            throw new UnauthorizedAccessException($"401 登录鉴权失败：{ex.Message}");
+            _logger.LogError(ex, "登录鉴权失败。");
+            throw new UnauthorizedAccessException("401 登录鉴权失败！");
         }
     }
 
-    /// <summary>
-    /// 客户端统一登录
-    /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task ClientLogin(AuthUserInfo authUserInfo)
     {
         if (authUserInfo == null)
@@ -261,10 +262,20 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             // 设置授权用户信息
             SetAuthUser(authUserInfo, true);
 
+            // 单点登录时撤销同一应用、租户和用户在其他设备上的授权缓存
+            var singleLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleLogin));
+            if (singleLogin)
+            {
+                var delCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo, "*",
+                    authUserInfo.WeChatOpenId);
+                await _authCache.DelByPatternAsync(delCacheKey);
+            }
+
             var payload = new Dictionary<string, string>
             {
                 {nameof(DeviceType), authUserInfo.DeviceType.ToString()},
                 {nameof(DeviceId), authUserInfo.DeviceId},
+                {nameof(SessionId), authUserInfo.SessionId},
                 {nameof(AppNo), authUserInfo.AppNo},
                 {nameof(TenantNo), authUserInfo.TenantNo},
                 {nameof(EmployeeNo), authUserInfo.WeChatOpenId},
@@ -299,21 +310,19 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         }
         catch (Exception ex)
         {
-            throw new UnauthorizedAccessException($"401 登录鉴权失败：{ex.Message}");
+            _logger.LogError(ex, "客户端登录鉴权失败。");
+            throw new UnauthorizedAccessException("401 登录鉴权失败！");
         }
     }
 
-    /// <summary>
-    /// 机器人登录
-    /// </summary>
-    /// <remarks>非调度作业请勿使用</remarks>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<string> RobotLogin()
     {
         var payload = new Dictionary<string, string>
         {
             {nameof(DeviceType), DeviceType.ToString()},
             {nameof(DeviceId), DeviceId},
+            {nameof(SessionId), SessionId},
             {nameof(AppNo), "Scheduler"},
             {nameof(TenantNo), TenantNo},
             {nameof(EmployeeNo), EmployeeNo},
@@ -336,11 +345,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         return accessToken;
     }
 
-    /// <summary>
-    /// 刷新授权信息
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task RefreshAuth(RefreshAuthDto input)
     {
         if (string.IsNullOrWhiteSpace(input.AppNo))
@@ -363,6 +368,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         RoleNameList = input.RoleNameList;
         RoleType = input.RoleType;
         DataScopeType = input.DataScopeType;
+        DataScopeDepartmentIdList = input.DataScopeDepartmentIdList;
         MenuCodeList = input.MenuCodeList;
         ButtonCodeList = input.ButtonCodeList;
 
@@ -374,11 +380,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         await _authCache.SetAsync(cacheKey, this);
     }
 
-    /// <summary>
-    /// 刷新账号信息
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task RefreshAccount(RefreshAccountDto input)
     {
         if (string.IsNullOrWhiteSpace(input.Mobile))
@@ -414,11 +416,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         await _authCache.SetAsync(cacheKey, this);
     }
 
-    /// <summary>
-    /// 刷新微信用户信息
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task RefreshWeChatUser(RefreshWeChatUserDto input)
     {
         if (string.IsNullOrWhiteSpace(input.AppNo))
@@ -449,11 +447,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         await _authCache.SetAsync(cacheKey, this);
     }
 
-    /// <summary>
-    /// 刷新职员信息
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task RefreshEmployee(RefreshEmployeeDto input)
     {
         if (string.IsNullOrWhiteSpace(input.AppNo))
@@ -479,6 +473,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         RoleNameList = input.RoleNameList;
         RoleType = input.RoleType;
         DataScopeType = input.DataScopeType;
+        DataScopeDepartmentIdList = input.DataScopeDepartmentIdList;
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
@@ -488,10 +483,45 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         await _authCache.SetAsync(cacheKey, this);
     }
 
-    /// <summary>
-    /// 统一退出登录
-    /// </summary>
-    /// <returns></returns>
+    /// <inheritdoc />
+    public async Task RevokeAccount(long accountId)
+    {
+        var _repository = _httpContext.RequestServices.GetRequiredService<ISqlSugarClient>();
+        var tenantUserList = await _repository.Queryable<TenantUserModel>()
+            .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
+            .ClearFilter<IBaseTEntity>()
+            .Where((t1, t2) => t1.AccountId == accountId)
+            .Select((t1, t2) => new {t1.EmployeeNo, t2.TenantNo})
+            .ToListAsync();
+
+        foreach (var cacheKey in tenantUserList.Select(tenantUser =>
+                     CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantUser.TenantNo, "*", tenantUser.EmployeeNo)))
+        {
+            await _authCache.DelByPatternAsync(cacheKey);
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task RevokeTenant(string tenantNo)
+    {
+        if (string.IsNullOrWhiteSpace(tenantNo))
+            return;
+
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantNo, "*", "*");
+        await _authCache.DelByPatternAsync(cacheKey);
+    }
+
+    /// <inheritdoc />
+    public async Task RevokeEmployee(string tenantNo, string employeeNo)
+    {
+        if (string.IsNullOrWhiteSpace(tenantNo) || string.IsNullOrWhiteSpace(employeeNo))
+            return;
+
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantNo, "*", employeeNo);
+        await _authCache.DelByPatternAsync(cacheKey);
+    }
+
+    /// <inheritdoc />
     public async Task Logout()
     {
         /*
@@ -506,7 +536,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         if (!string.IsNullOrWhiteSpace(accessToken))
         {
             // 标记过期
-            JwtBearerUtil.SetExpiredToken(_httpContext, accessToken);
+            await JwtBearerUtil.SetExpiredTokenAsync(_httpContext, accessToken);
 
             try
             {
@@ -516,9 +546,10 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                 var data = accessTokenIdentity.Claims.FirstOrDefault(f => f.Type == "Data")!.Value;
                 var payload = data.Base64ToString()
                     .ToObject<Dictionary<string, string>>();
-                // 从 payload 中读取 DeviceType,DeviceId,AppNo,TenantNo,EmployeeNo
+                // 从 payload 中读取 DeviceType,DeviceId,SessionId,AppNo,TenantNo,EmployeeNo
                 if (payload.TryGetValue(nameof(DeviceType), out var deviceType)
                     && payload.TryGetValue(nameof(DeviceId), out var deviceId)
+                    && payload.TryGetValue(nameof(SessionId), out var sessionId)
                     && payload.TryGetValue(nameof(AppNo), out var appNo)
                     && payload.TryGetValue(nameof(TenantNo), out var tenantNo)
                     && payload.TryGetValue(nameof(EmployeeNo), out var employeeNo))
@@ -553,7 +584,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
                         // 这里不能使用Aop
-                        var db = new SqlSugarClient(connectionConfig);
+                        using var db = new SqlSugarClient(connectionConfig);
 
                         // 异步不等待
                         await db.Insertable(visitLogModel)
@@ -561,7 +592,9 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                             .ExecuteCommandAsync();
 
                         // 判断缓存中的设备信息是否和当前 AccessToken 中的相同
-                        if (authUserInfo.DeviceId == deviceId && authUserInfo.DeviceType.ToString() == deviceType)
+                        if (authUserInfo.DeviceId == deviceId
+                            && authUserInfo.DeviceType.ToString() == deviceType
+                            && authUserInfo.SessionId == sessionId)
                         {
                             // 清除缓存用户信息
                             await _authCache.DelAsync(cacheKey);
@@ -569,9 +602,9 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // ignored
+                _logger.LogWarning(ex, "退出登录时清理会话失败。");
             }
         }
 

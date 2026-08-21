@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="ColumnAdvancedTypeEnum"/> 列高级选项类型枚举
+/// 列高级选项类型枚举
 /// </summary>
 [Flags]
 [FastEnum("列高级选项类型枚举")]

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="MainDatabaseModel"/> 主数据库表Model类
+/// 主数据库表Model类
 /// </summary>
 [SugarTable("DatabaseMain", "主数据库表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -44,9 +44,9 @@ public class MainDatabaseModel : BaseTEntity, IUpdateVersion
     public DatabaseTypeEnum DatabaseType { get; set; }
 
     /// <summary>
-    /// 数据库类型，用于区分使用的是那个类型的数据库
+    /// 数据库类型，用于区分所使用的数据库引擎
     /// </summary>
-    [SugarColumn(ColumnDescription = "数据库类型")]
+    [SugarColumn(ColumnDescription = "数据库类型，用于区分所使用的数据库引擎")]
     public SugarDbType DbType { get; set; }
 
     /// <summary>
@@ -72,28 +72,27 @@ public class MainDatabaseModel : BaseTEntity, IUpdateVersion
     /// <summary>
     /// 数据库名称
     /// </summary>
+    /// <remarks>或 SQLite 文件路径</remarks>
     [Required]
-    [SugarColumn(ColumnDescription = "数据库名称", Length = 50)]
+    [SugarColumn(ColumnDescription = "数据库名称", Length = 500)]
     public string DbName { get; set; }
 
     /// <summary>
     /// 数据库用户
     /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "数据库用户", Length = 20)]
+    [SugarColumn(ColumnDescription = "数据库用户", Length = 128)]
     public string DbUser { get; set; }
 
     /// <summary>
     /// 数据库密码
     /// </summary>
-    [Required]
-    [SugarColumn(ColumnDescription = "数据库密码", Length = 20)]
+    [SugarColumn(ColumnDescription = "数据库密码", Length = 512)]
     public string DbPwd { get; set; }
 
     /// <summary>
     /// 自定义连接字符串
     /// </summary>
-    [SugarColumn(ColumnDescription = "自定义连接字符串", Length = 100)]
+    [SugarColumn(ColumnDescription = "自定义连接字符串", Length = 2000)]
     public string CustomConnectionStr { get; set; }
 
     /// <summary>
@@ -103,9 +102,9 @@ public class MainDatabaseModel : BaseTEntity, IUpdateVersion
     public int CommandTimeOut { get; set; }
 
     /// <summary>
-    /// SqlSugar Sql执行最大秒数，如果超过记录警告日志
+    /// SqlSugar SQL执行警告阈值（秒）
     /// </summary>
-    [SugarColumn(ColumnDescription = "SqlSugar Sql执行最大秒数，如果超过记录警告日志")]
+    [SugarColumn(ColumnDescription = "SqlSugar SQL执行警告阈值（秒）")]
     public int SugarSqlExecMaxSeconds { get; set; }
 
     /// <summary>
@@ -115,14 +114,13 @@ public class MainDatabaseModel : BaseTEntity, IUpdateVersion
     public bool DiffLog { get; set; }
 
     /// <summary>
-    /// 禁用 SqlSugar 的 Aop
+    /// 是否禁用 SqlSugar AOP
     /// </summary>
     /// <remarks>
-    /// <para>如果是通过 <see cref="ISqlSugarEntityHandler"/> 进行保存日志到数据库中</para>
-    /// <para>必须要将相关 AOP 中涉及到的日志表，单独进行分库设置，并且禁用 AOP</para>
-    /// <para>或通过 new <see cref="SqlSugarClient"/>() 的方式进行保存。不然会存在死循环的问题</para>
+    /// <para>使用 <see cref="ISqlSugarEntityHandler"/> 将日志保存到数据库时，必须为 AOP 涉及的日志表单独配置分库，并禁用 AOP</para>
+    /// <para>也可以通过 <c>new</c> <see cref="SqlSugarClient"/> 的方式保存日志，否则可能产生递归调用</para>
     /// </remarks>
-    [SugarColumn(ColumnDescription = "禁用 SqlSugar 的 Aop")]
+    [SugarColumn(ColumnDescription = "是否禁用 SqlSugar AOP")]
     public bool DisableAop { get; set; }
 
     /// <summary>

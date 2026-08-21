@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,15 +28,13 @@ using Yitter.IdGenerator;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="SysSerialSeedData"/> 系统序号种子数据
+/// 系统序号种子数据
 /// </summary>
 internal static class SysSerialSeedData
 {
     /// <summary>
     /// 系统序号种子数据
     /// </summary>
-    /// <param name="db"></param>
-    /// <returns></returns>
     public static async Task SeedData(ISqlSugarClient db)
     {
         await db.Insertable(new List<SysSerialRuleModel>

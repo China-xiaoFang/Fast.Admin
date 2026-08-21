@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,9 +29,10 @@ using Microsoft.Extensions.Hosting;
 namespace Fast.Center.Service.Database;
 
 /// <summary>
-/// <see cref="DatabaseService"/> 数据库服务
+/// 数据库服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "database")]
+[PlatformOnly]
 public class DatabaseService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<MainDatabaseModel> _repository;
@@ -46,8 +47,6 @@ public class DatabaseService : IDynamicApplication
     /// <summary>
     /// 获取数据库分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取数据库分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Database.Paged)]
@@ -90,8 +89,6 @@ public class DatabaseService : IDynamicApplication
     /// <summary>
     /// 获取数据库详情
     /// </summary>
-    /// <param name="mainId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取数据库详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Database.Detail)]
@@ -152,8 +149,6 @@ public class DatabaseService : IDynamicApplication
     /// <summary>
     /// 添加数据库
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加数据库", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.Database.Add)]
@@ -165,7 +160,7 @@ public class DatabaseService : IDynamicApplication
             throw new UserFriendlyException("当前数据库类型已经存在主库信息！");
         }
 
-        var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(new ConnectionSettingsOptions
+        using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(new ConnectionSettingsOptions
         {
             ConnectionId = DateTime.Now.ToShortTimeString(),
             DbType = input.DbType.ToDbType(),
@@ -233,8 +228,6 @@ public class DatabaseService : IDynamicApplication
     /// <summary>
     /// 编辑数据库
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑数据库", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Database.Edit)]
@@ -379,8 +372,6 @@ public class DatabaseService : IDynamicApplication
     /// <summary>
     /// 删除数据库
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除数据库", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Database.Delete)]

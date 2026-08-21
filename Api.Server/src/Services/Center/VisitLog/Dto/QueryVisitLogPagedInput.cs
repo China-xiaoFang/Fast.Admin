@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.CenterLog.Enum;
 namespace Fast.Center.Service.VisitLog.Dto;
 
 /// <summary>
-/// <see cref="QueryVisitLogPagedInput"/> 获取访问日志分页列表输入
+/// 获取访问日志分页列表输入
 /// </summary>
 public class QueryVisitLogPagedInput : PagedInput
 {

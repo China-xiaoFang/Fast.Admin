@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="RegionLevelEnum"/> 区域层级枚举
+/// 区域层级枚举
 /// </summary>
 [Flags]
 [FastEnum("区域层级枚举")]

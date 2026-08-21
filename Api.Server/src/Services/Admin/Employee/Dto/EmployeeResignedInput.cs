@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Employee.Dto;
 
 /// <summary>
-/// <see cref="EmployeeResignedInput"/> 职员离职输入
+/// 职员离职输入
 /// </summary>
 public class EmployeeResignedInput : UpdateVersionInput
 {

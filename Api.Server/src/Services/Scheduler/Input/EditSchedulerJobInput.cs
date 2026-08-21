@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="EditSchedulerJobInput"/> 编辑调度作业输入
+/// 编辑调度作业输入
 /// </summary>
 public class EditSchedulerJobInput : AddSchedulerJobInput
 {

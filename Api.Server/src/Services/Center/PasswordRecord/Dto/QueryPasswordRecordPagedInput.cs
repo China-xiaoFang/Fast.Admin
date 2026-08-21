@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.PasswordRecord.Dto;
 
 /// <summary>
-/// <see cref="QueryPasswordRecordPagedInput"/> 获取密码记录分页列表输入
+/// 获取密码记录分页列表输入
 /// </summary>
 public class QueryPasswordRecordPagedInput : PagedInput
 {

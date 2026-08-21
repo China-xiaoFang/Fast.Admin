@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -33,22 +33,16 @@ using Quartz;
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="UrlJob"/> Url调度作业
+/// URL 调度作业
 /// </summary>
-internal class UrlJob : JobBase<SchedulerJobUrlLogInfo>
+internal sealed class UrlJob : JobBase<SchedulerJobUrlLogInfo>
 {
     public UrlJob(IServiceProvider serviceProvider, IMailService mailService, IOptions<MvcNewtonsoftJsonOptions> jsonOptions,
         ILogger<IJob> logger) : base(serviceProvider, mailService, jsonOptions, logger, new SchedulerJobUrlLogInfo())
     {
     }
 
-    /// <summary>
-    /// 执行调度作业
-    /// </summary>
-    /// <param name="serviceProvider"><see cref="IServiceProvider"/> 服务提供者</param>
-    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
-    /// <param name="context"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     protected override async Task JobExecute(IServiceProvider serviceProvider, ISqlSugarClient db, IJobExecutionContext context)
     {
         // 作业类型
@@ -116,7 +110,7 @@ internal class UrlJob : JobBase<SchedulerJobUrlLogInfo>
             }
         }
 
-        _logInfo.RequestUrl = $"<span class='url'>{requestUrl}</span>";
+        _logInfo.RequestUrl = $"<span class='url'>{HttpUtility.HtmlEncode(requestUrl)}</span>";
 
         // 响应数据
         string responseData;

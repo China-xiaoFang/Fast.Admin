@@ -23,7 +23,7 @@
 namespace Fast.CenterLog.Entity;
 
 /// <summary>
-/// <see cref="RequestLogModel"/> 请求日志Model类
+/// 请求日志表Model类
 /// </summary>
 [SugarTable("RequestLog_{year}{month}{day}", "请求日志表")]
 [SplitTable(SplitType.Week)]

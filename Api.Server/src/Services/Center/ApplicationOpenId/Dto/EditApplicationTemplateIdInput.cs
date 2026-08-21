@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.ApplicationOpenId.Dto;
 
 /// <summary>
-/// <see cref="EditApplicationTemplateIdInput"/> 编辑应用模板Id输入
+/// 编辑应用模板Id输入
 /// </summary>
 public class EditApplicationTemplateIdInput
 {

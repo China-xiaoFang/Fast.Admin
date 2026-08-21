@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,7 +28,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.RequestLog;
 
 /// <summary>
-/// <see cref="RequestLogService"/> 请求日志服务
+/// 请求日志服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "requestLog")]
 public class RequestLogService : IDynamicApplication
@@ -45,8 +45,6 @@ public class RequestLogService : IDynamicApplication
     /// <summary>
     /// 获取请求日志分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取请求日志分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.RequestLogPaged), DisabledRequestLog]

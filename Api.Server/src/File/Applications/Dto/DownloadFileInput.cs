@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Fast.File.Applications.Dto;
 
 /// <summary>
-/// <see cref="DownloadFileInput"/> 下载文件输入
+/// 下载文件输入
 /// </summary>
 public class DownloadFileInput
 {

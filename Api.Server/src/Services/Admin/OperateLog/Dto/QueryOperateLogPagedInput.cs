@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.AdminLog.Enum;
 namespace Fast.Admin.Service.OperateLog.Dto;
 
 /// <summary>
-/// <see cref="QueryOperateLogPagedInput"/> 获取操作日志分页列表输入
+/// 获取操作日志分页列表输入
 /// </summary>
 public class QueryOperateLogPagedInput : PagedInput
 {

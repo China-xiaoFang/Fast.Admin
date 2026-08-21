@@ -25,7 +25,7 @@ using Fast.AdminLog.Enum;
 namespace Fast.AdminLog.Entity;
 
 /// <summary>
-/// <see cref="OperateLogModel"/> 操作日志Model类
+/// 操作日志表Model类
 /// </summary>
 [SugarTable("OperateLog_{year}{month}{day}", "操作日志表")]
 [SplitTable(SplitType.Month)]
@@ -59,7 +59,7 @@ public class OperateLogModel : BaseRecordEntity
     /// 标题
     /// </summary>
     [SugarSearchValue]
-    [SugarColumn(ColumnDescription = "操作名称", Length = 50)]
+    [SugarColumn(ColumnDescription = "标题", Length = 50)]
     public string Title { get; set; }
 
     /// <summary>

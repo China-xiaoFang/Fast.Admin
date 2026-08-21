@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -22,6 +22,9 @@
 
 namespace Fast.Center.Service.Tenant.Dto;
 
+/// <summary>
+/// 租户编辑输入
+/// </summary>
 public class EditTenantInput : UpdateVersionInput
 {
     /// <summary>
@@ -98,7 +101,7 @@ public class EditTenantInput : UpdateVersionInput
     public string RobotName { get; set; }
 
     /// <summary>
-    /// LogoUrl
+    /// Logo URL
     /// </summary>
     [StringRequired(ErrorMessage = "LogoUrl不能为空")]
     public string LogoUrl { get; set; }

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -26,14 +26,14 @@ using Microsoft.AspNetCore.Http;
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="PayRecordModel"/> 支付记录表Model类
+/// 支付记录表Model类
 /// </summary>
 [SugarTable("PayRecord", "支付记录表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(BizOrderNo)}", nameof(BizOrderId), OrderByType.Desc, nameof(BizOrderNo), OrderByType.Desc,
     true)]
 [SugarIndex($"IX_{{table}}_{nameof(TransactionId)}", nameof(TransactionId), OrderByType.Desc)]
-public class PayRecordModel : IUpdateVersion
+public class PayRecordModel : IBaseTEntity, IUpdateVersion
 {
     /// <summary>
     /// 记录Id
@@ -114,7 +114,7 @@ public class PayRecordModel : IUpdateVersion
     /// <summary>
     /// 支付过期时间
     /// </summary>
-    [SugarColumn(ColumnDescription = "支付订单过期时间")]
+    [SugarColumn(ColumnDescription = "支付过期时间")]
     public DateTime PayExpireTime { get; set; }
 
     /// <summary>
@@ -178,9 +178,9 @@ public class PayRecordModel : IUpdateVersion
     public string City { get; set; }
 
     /// <summary>
-    /// Ip
+    /// Ip地址
     /// </summary>
-    [SugarColumn(ColumnDescription = "Ip", Length = 15, CreateTableFieldSort = 988)]
+    [SugarColumn(ColumnDescription = "Ip地址", Length = 15, CreateTableFieldSort = 988)]
     public string Ip { get; set; }
 
     /// <summary>
@@ -211,7 +211,6 @@ public class PayRecordModel : IUpdateVersion
     /// <summary>
     /// 记录表创建
     /// </summary>
-    /// <param name="httpContext"><see cref="HttpContext"/> 请求上下文</param>
     public void RecordCreate(HttpContext httpContext)
     {
         var userAgentInfo = httpContext.RequestUserAgentInfo();

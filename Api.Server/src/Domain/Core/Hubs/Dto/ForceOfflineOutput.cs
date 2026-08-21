@@ -23,7 +23,7 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ForceOfflineOutput"/> 强制下线输出
+/// 强制下线输出
 /// </summary>
 public class ForceOfflineOutput
 {

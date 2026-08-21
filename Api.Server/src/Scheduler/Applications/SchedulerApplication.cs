@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -32,20 +32,19 @@ using Quartz.Impl.Triggers;
 namespace Fast.Scheduler.Applications;
 
 /// <summary>
-/// <see cref="SchedulerApplication"/> 调度作业
+/// 调度作业
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Scheduler, Name = "scheduler")]
 public class SchedulerApplication : IDynamicApplication
 {
     /// <summary>
-    /// <see cref="ISchedulerCenter"/> 调度中心
+    /// 调度中心
     /// </summary>
     private readonly ISchedulerCenter _schedulerCenter;
 
     /// <summary>
-    /// <see cref="SchedulerApplication"/> 调度作业
+    /// 调度作业
     /// </summary>
-    /// <param name="schedulerCenter"><see cref="ISchedulerCenter"/> 调度中心</param>
     public SchedulerApplication(ISchedulerCenter schedulerCenter)
     {
         _schedulerCenter = schedulerCenter;
@@ -54,8 +53,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 运行并验证Cron表达式
     /// </summary>
-    /// <param name="cron"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("运行并验证Cron表达式", HttpRequestActionEnum.Other)]
     public List<string> RunVerifyCron(string cron)
@@ -84,8 +81,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 获取调度器详情
     /// </summary>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取调度器详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Scheduler.Detail)]
@@ -97,8 +92,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 启动调度器
     /// </summary>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("启动调度器", HttpRequestActionEnum.Other)]
     [Permission(PermissionConst.Scheduler.Start)]
@@ -110,8 +103,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 停止调度器
     /// </summary>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("停止调度器", HttpRequestActionEnum.Other)]
     [Permission(PermissionConst.Scheduler.Stop)]
@@ -123,9 +114,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 暂停调度作业
     /// </summary>
-    /// <param name="input"></param>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("暂停调度作业", HttpRequestActionEnum.Other)]
     [Permission(PermissionConst.Scheduler.StopJob)]
@@ -137,9 +125,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 恢复调度作业
     /// </summary>
-    /// <param name="input"></param>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("恢复调度作业", HttpRequestActionEnum.Other)]
     [Permission(PermissionConst.Scheduler.ResumeJob)]
@@ -151,9 +136,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 立即执行调度作业
     /// </summary>
-    /// <param name="input"></param>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("立即执行调度作业", HttpRequestActionEnum.Other)]
     [Permission(PermissionConst.Scheduler.Trigger)]
@@ -165,9 +147,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 获取调度作业日志
     /// </summary>
-    /// <param name="input"></param>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取调度作业日志", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Scheduler.Detail)]
@@ -179,9 +158,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 获取调度作业运行次数
     /// </summary>
-    /// <param name="input"></param>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取调度作业运行次数", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Scheduler.Detail)]
@@ -193,9 +169,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 获取全部调度作业
     /// </summary>
-    /// <param name="tenantId"></param>
-    /// <param name="jobGroup"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取全部调度作业", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Scheduler.Paged)]
@@ -208,9 +181,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 获取调度作业
     /// </summary>
-    /// <param name="input"></param>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取调度作业", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Scheduler.Detail)]
@@ -222,8 +192,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 添加调度作业
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加调度作业", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.Scheduler.Add)]
@@ -235,8 +203,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 编辑调度作业
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑调度作业", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Scheduler.Edit)]
@@ -248,9 +214,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 删除调度作业
     /// </summary>
-    /// <param name="input"></param>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除调度作业", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Scheduler.Delete)]
@@ -262,9 +225,6 @@ public class SchedulerApplication : IDynamicApplication
     /// <summary>
     /// 移除调度作业异常信息
     /// </summary>
-    /// <param name="tenantId"></param>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("移除调度作业异常信息", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Scheduler.Delete)]

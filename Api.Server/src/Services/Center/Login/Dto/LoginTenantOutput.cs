@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Login.Dto;
 
 /// <summary>
-/// <see cref="LoginTenantOutput"/> 登录租户输出
+/// 登录租户输出
 /// </summary>
 public class LoginTenantOutput
 {
@@ -53,7 +53,7 @@ public class LoginTenantOutput
     public EditionEnum Edition { get; set; }
 
     /// <summary>
-    /// LogoUrl
+    /// Logo URL
     /// </summary>
     public string LogoUrl { get; set; }
 

@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="SysSerialRuleTypeEnum"/> 系统序号规则类型枚举
+/// 系统序号规则类型枚举
 /// </summary>
 [FastEnum("系统序号规则类型枚举")]
 public enum SysSerialRuleTypeEnum : byte

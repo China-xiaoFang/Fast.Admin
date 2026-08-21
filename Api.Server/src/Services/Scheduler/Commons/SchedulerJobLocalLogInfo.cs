@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.Center.Entity;
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="SchedulerJobLocalLogInfo"/> Local调度作业日志信息
+/// 本地调度作业日志信息
 /// </summary>
 [SuppressSniffer]
 public class SchedulerJobLocalLogInfo

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Menu.Dto;
 
 /// <summary>
-/// <see cref="EditMenuButtonInput"/> 编辑菜单按钮输入
+/// 编辑菜单按钮输入
 /// </summary>
 public class EditMenuButtonInput
 {

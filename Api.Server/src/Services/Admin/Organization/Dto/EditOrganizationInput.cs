@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Organization.Dto;
 
 /// <summary>
-/// <see cref="EditOrganizationInput"/> 编辑机构输入
+/// 编辑机构输入
 /// </summary>
 public class EditOrganizationInput : UpdateVersionInput
 {

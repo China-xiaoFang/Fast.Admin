@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -33,9 +33,9 @@ using Quartz.Util;
 namespace Quartz;
 
 /// <summary>
-/// <see cref="DependencySchedulerFactory"/> DI注入调度器工厂
+/// <see cref="IDependencySchedulerFactory"/> 默认实现
 /// </summary>
-internal class DependencySchedulerFactory : StdSchedulerFactory, IDependencySchedulerFactory
+internal sealed class DependencySchedulerFactory : StdSchedulerFactory, IDependencySchedulerFactory
 {
     /// <summary>
     /// 服务提供者
@@ -71,12 +71,7 @@ internal class DependencySchedulerFactory : StdSchedulerFactory, IDependencySche
         _logger = logger;
     }
 
-    /// <summary>
-    /// 获取调度器
-    /// </summary>
-    /// <param name="tenantId"><see cref="long"/> 租户Id，如果不传入则获取的是默认调度器</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<IScheduler> GetScheduler(long? tenantId = null, CancellationToken cancellationToken = new())
     {
         // 获取锁
@@ -132,12 +127,7 @@ internal class DependencySchedulerFactory : StdSchedulerFactory, IDependencySche
         }
     }
 
-    /// <summary>
-    /// 获取调度器
-    /// </summary>
-    /// <param name="schedulerName"><see cref="string"/> 调度器名称</param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public override async Task<IScheduler> GetScheduler(string schedulerName, CancellationToken cancellationToken = new())
     {
         // 获取锁
@@ -188,37 +178,22 @@ internal class DependencySchedulerFactory : StdSchedulerFactory, IDependencySche
         }
     }
 
-    /// <summary>
-    /// 尝试获取调度器
-    /// </summary>
-    /// <param name="schedulerName"><see cref="string"/> 调度器名称</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<IScheduler> TryGetScheduler(string schedulerName)
     {
         return await Task.FromResult(_schedulerRepository.Lookup(schedulerName));
     }
 
-    /// <summary>
-    /// 获取所有调度器
-    /// </summary>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public override async Task<IReadOnlyList<IScheduler>> GetAllSchedulers(CancellationToken cancellationToken = new())
     {
         return await Task.FromResult(_schedulerRepository.LookupAll());
     }
 
-    /// <summary>
-    /// Returns a handle to the Scheduler produced by this factory.
-    /// </summary>
-    /// <remarks>
-    /// If one of the <see cref="M:Quartz.Impl.StdSchedulerFactory.Initialize" /> methods has not be previously
-    /// called, then the default (no-arg) <see cref="M:Quartz.Impl.StdSchedulerFactory.Initialize" /> method
-    /// will be called by this method.
-    /// </remarks>
+    /// <inheritdoc />
     public override async Task<IScheduler> GetScheduler(CancellationToken cancellationToken = default)
     {
-        // 获取调度器，这里需要注意的是：如果原来的调度器被停止了，则调用 GetScheduler 会返回一个新的调度器。
+        // 获取调度器，这里需要注意的是：如果原来的调度器被停止了，则调用 GetScheduler 会返回一个新的调度器
         var scheduler = await base.GetScheduler(cancellationToken)
             .ConfigureAwait(false);
 
@@ -232,9 +207,8 @@ internal class DependencySchedulerFactory : StdSchedulerFactory, IDependencySche
     /// <summary>
     /// 初始化调度器
     /// </summary>
-    /// <param name="scheduler"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <param name="scheduler">Quartz 调度器</param>
+    /// <param name="cancellationToken">用于取消异步操作的令牌</param>
     private async Task InitializeScheduler(IScheduler scheduler, CancellationToken cancellationToken)
     {
         foreach (var listener in _serviceProvider.GetServices<ISchedulerListener>())
@@ -272,16 +246,19 @@ internal class DependencySchedulerFactory : StdSchedulerFactory, IDependencySche
             .ConfigureAwait(false);
     }
 
+    /// <inheritdoc />
     protected override ISchedulerRepository GetSchedulerRepository()
     {
         return _schedulerRepository;
     }
 
+    /// <inheritdoc />
     protected override IDbConnectionManager GetDBConnectionManager()
     {
         return _serviceProvider.GetService<IDbConnectionManager>();
     }
 
+    /// <inheritdoc />
     protected override string GetNamedConnectionString(string connectionStringName)
     {
         var configuration = _serviceProvider.GetService<IConfiguration>();
@@ -294,6 +271,7 @@ internal class DependencySchedulerFactory : StdSchedulerFactory, IDependencySche
         return base.GetNamedConnectionString(connectionStringName);
     }
 
+    /// <inheritdoc />
     protected override T InstantiateType<T>(Type implementationType)
     {
         var service = _serviceProvider.GetService<T>();

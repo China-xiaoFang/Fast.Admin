@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -27,7 +27,7 @@ using Microsoft.Extensions.Logging;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ConfigContext"/> 配置上下文
+/// 配置上下文
 /// </summary>
 [SuppressSniffer]
 public class ConfigContext
@@ -45,8 +45,7 @@ public class ConfigContext
     /// <summary>
     /// 获取配置
     /// </summary>
-    /// <param name="configCode"><see cref="string"/> 配置编码</param>
-    /// <returns></returns>
+    /// <returns>配置值</returns>
     public static string GetConfigSync(string configCode)
     {
         if (string.IsNullOrWhiteSpace(configCode))
@@ -100,8 +99,7 @@ public class ConfigContext
     /// <summary>
     /// 获取配置
     /// </summary>
-    /// <param name="configCode"><see cref="string"/> 配置编码</param>
-    /// <returns></returns>
+    /// <returns>配置值</returns>
     public static async Task<string> GetConfig(string configCode)
     {
         if (string.IsNullOrWhiteSpace(configCode))
@@ -155,8 +153,6 @@ public class ConfigContext
     /// <summary>
     /// 删除配置
     /// </summary>
-    /// <param name="configCode"><see cref="string"/> 配置编码</param>
-    /// <returns></returns>
     public static async Task DeleteConfig(string configCode)
     {
         if (string.IsNullOrWhiteSpace(configCode))
@@ -181,7 +177,6 @@ public class ConfigContext
     /// <summary>
     /// 删除所有配置
     /// </summary>
-    /// <returns></returns>
     public static async Task DeleteAllConfig()
     {
         if (FastContext.HttpContext != null)

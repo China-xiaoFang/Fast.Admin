@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,9 +29,10 @@ using Yitter.IdGenerator;
 namespace Fast.Center.Service.Menu;
 
 /// <summary>
-/// <see cref="MenuService"/> 菜单服务
+/// 菜单服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "menu")]
+[PlatformOnly]
 public class MenuService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<MenuModel> _repository;
@@ -44,7 +45,6 @@ public class MenuService : IDynamicApplication
     /// <summary>
     /// 菜单选择器
     /// </summary>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("菜单选择器", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Menu.Paged)]
@@ -65,8 +65,6 @@ public class MenuService : IDynamicApplication
     /// <summary>
     /// 获取菜单列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取菜单列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Menu.Paged)]
@@ -126,8 +124,6 @@ public class MenuService : IDynamicApplication
     /// <summary>
     /// 获取菜单详情
     /// </summary>
-    /// <param name="menuId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取菜单详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Menu.Detail)]
@@ -201,8 +197,6 @@ public class MenuService : IDynamicApplication
     /// <summary>
     /// 添加菜单
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加菜单", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.Menu.Add)]
@@ -292,8 +286,6 @@ public class MenuService : IDynamicApplication
     /// <summary>
     /// 编辑菜单
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑菜单", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Menu.Edit)]
@@ -439,8 +431,6 @@ public class MenuService : IDynamicApplication
     /// <summary>
     /// 删除菜单
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除菜单", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Menu.Delete)]
@@ -469,8 +459,6 @@ public class MenuService : IDynamicApplication
     /// <summary>
     /// 菜单更改状态
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("菜单更改状态", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Menu.Status)]

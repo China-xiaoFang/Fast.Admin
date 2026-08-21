@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.Complaint.Dto;
 
 /// <summary>
-/// <see cref="AddComplaintInput"/> 添加投诉输入
+/// 添加投诉输入
 /// </summary>
 public class AddComplaintInput
 {

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,7 +29,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.Application;
 
 /// <summary>
-/// <see cref="ApplicationService"/> 应用服务
+/// 应用服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "application")]
 public class ApplicationService : IDynamicApplication
@@ -46,7 +46,6 @@ public class ApplicationService : IDynamicApplication
     /// <summary>
     /// 应用选择器
     /// </summary>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("应用选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> ApplicationSelector()
@@ -79,11 +78,10 @@ public class ApplicationService : IDynamicApplication
     /// <summary>
     /// 获取应用分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取应用分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.App.Paged)]
+    [PlatformOnly]
     public async Task<PagedResult<QueryApplicationPagedOutput>> QueryApplicationPaged(QueryApplicationPagedInput input)
     {
         var queryable = _repository.Entities;
@@ -103,8 +101,6 @@ public class ApplicationService : IDynamicApplication
                 AppName = sl.AppName,
                 LogoUrl = sl.LogoUrl,
                 ThemeColor = sl.ThemeColor,
-                ICPSecurityCode = sl.ICPSecurityCode,
-                PublicSecurityCode = sl.PublicSecurityCode,
                 Remark = sl.Remark,
                 TenantName = sl.TenantName,
                 DepartmentName = sl.DepartmentName,
@@ -120,11 +116,10 @@ public class ApplicationService : IDynamicApplication
     /// <summary>
     /// 获取应用详情
     /// </summary>
-    /// <param name="appId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取应用详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.App.Detail)]
+    [PlatformOnly]
     public async Task<QueryApplicationDetailOutput> QueryApplicationDetail([Required(ErrorMessage = "应用Id不能为空")] long? appId)
     {
         var result = await _repository.Entities.Where(wh => wh.AppId == appId)
@@ -136,11 +131,6 @@ public class ApplicationService : IDynamicApplication
                 AppName = sl.AppName,
                 LogoUrl = sl.LogoUrl,
                 ThemeColor = sl.ThemeColor,
-                ICPSecurityCode = sl.ICPSecurityCode,
-                PublicSecurityCode = sl.PublicSecurityCode,
-                UserAgreement = sl.UserAgreement,
-                PrivacyAgreement = sl.PrivacyAgreement,
-                ServiceAgreement = sl.ServiceAgreement,
                 Remark = sl.Remark,
                 TenantId = sl.TenantId,
                 TenantName = sl.TenantName,
@@ -164,11 +154,10 @@ public class ApplicationService : IDynamicApplication
     /// <summary>
     /// 添加应用
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加应用", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.App.Add)]
+    [PlatformOnly]
     public async Task AddApplication(AddApplicationInput input)
     {
         if (await _repository.AnyAsync(a => a.AppName == input.AppName))
@@ -182,11 +171,6 @@ public class ApplicationService : IDynamicApplication
             AppName = input.AppName,
             LogoUrl = input.LogoUrl,
             ThemeColor = input.ThemeColor?.ToUpper(),
-            ICPSecurityCode = input.ICPSecurityCode,
-            PublicSecurityCode = input.PublicSecurityCode,
-            UserAgreement = input.UserAgreement,
-            PrivacyAgreement = input.PrivacyAgreement,
-            ServiceAgreement = input.ServiceAgreement,
             Remark = input.Remark,
             TenantId = input.TenantId,
             TenantName = input.TenantName
@@ -203,11 +187,10 @@ public class ApplicationService : IDynamicApplication
     /// <summary>
     /// 编辑应用
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑应用", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.App.Edit)]
+    [PlatformOnly]
     public async Task EditApplication(EditApplicationInput input)
     {
         if (await _repository.AnyAsync(a => a.AppName == input.AppName && a.AppId != input.AppId))
@@ -225,11 +208,6 @@ public class ApplicationService : IDynamicApplication
         applicationModel.AppName = input.AppName;
         applicationModel.LogoUrl = input.LogoUrl;
         applicationModel.ThemeColor = input.ThemeColor?.ToUpper();
-        applicationModel.ICPSecurityCode = input.ICPSecurityCode;
-        applicationModel.PublicSecurityCode = input.PublicSecurityCode;
-        applicationModel.UserAgreement = input.UserAgreement;
-        applicationModel.PrivacyAgreement = input.PrivacyAgreement;
-        applicationModel.ServiceAgreement = input.ServiceAgreement;
         applicationModel.Remark = input.Remark;
         applicationModel.TenantId = input.TenantId;
         applicationModel.TenantName = input.TenantName;
@@ -249,11 +227,10 @@ public class ApplicationService : IDynamicApplication
     /// <summary>
     /// 删除应用
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除应用", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.App.Delete)]
+    [PlatformOnly]
     public async Task DeleteApplication(AppIdInput input)
     {
         var applicationModel = await _repository.SingleOrDefaultAsync(input.AppId);

@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.WeChat.Dto;
 
 /// <summary>
-/// <see cref="WeChatCode2SessionOutput"/> 换取微信用户身份信息输出
+/// 换取微信用户身份信息输出
 /// </summary>
 public class WeChatCode2SessionOutput
 {

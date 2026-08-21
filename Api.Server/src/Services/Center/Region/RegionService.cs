@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,7 +28,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.Region;
 
 /// <summary>
-/// <see cref="RegionService"/> 地区服务
+/// 地区服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "region")]
 public class RegionService : IDynamicApplication
@@ -45,7 +45,6 @@ public class RegionService : IDynamicApplication
     /// <summary>
     /// 地区选择器
     /// </summary>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("地区选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> RegionSelector()
@@ -92,7 +91,6 @@ public class RegionService : IDynamicApplication
     /// <summary>
     /// 省份选择器
     /// </summary>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("省份选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> ProvinceSelector()
@@ -128,7 +126,6 @@ public class RegionService : IDynamicApplication
     /// <summary>
     /// 城市选择器
     /// </summary>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("城市选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> CitySelector()

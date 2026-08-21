@@ -29,9 +29,9 @@ using Quartz.Xml;
 namespace Quartz;
 
 /// <summary>
-/// Reuse logic for adding and removing items by using XMLSchedulingDataProcessor.
+/// 使用 <see cref="XMLSchedulingDataProcessor"/> 复用配置项的添加与移除逻辑
 /// </summary>
-internal class ContainerConfigurationProcessor : XMLSchedulingDataProcessor
+internal sealed class ContainerConfigurationProcessor : XMLSchedulingDataProcessor
 {
     private readonly IOptions<QuartzOptions> options;
 
@@ -40,12 +40,19 @@ internal class ContainerConfigurationProcessor : XMLSchedulingDataProcessor
         this.options = options;
     }
 
+    /// <inheritdoc />
     public override bool OverWriteExistingData => options.Value.Scheduling.OverWriteExistingData;
+
+    /// <inheritdoc />
     public override bool IgnoreDuplicates => options.Value.Scheduling.IgnoreDuplicates;
 
+    /// <inheritdoc />
     public override bool ScheduleTriggerRelativeToReplacedTrigger =>
         options.Value.Scheduling.ScheduleTriggerRelativeToReplacedTrigger;
 
+    /// <inheritdoc />
     protected override IReadOnlyList<IJobDetail> LoadedJobs => options.Value.JobDetails;
+
+    /// <inheritdoc />
     protected override IReadOnlyList<ITrigger> LoadedTriggers => options.Value.Triggers;
 }

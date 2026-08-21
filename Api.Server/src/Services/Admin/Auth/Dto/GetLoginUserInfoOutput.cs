@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Auth.Dto;
 
 /// <summary>
-/// <see cref="GetLoginUserInfoOutput"/> 获取登录用户信息输出
+/// 获取登录用户信息输出
 /// </summary>
 public class GetLoginUserInfoOutput
 {
@@ -73,7 +73,7 @@ public class GetLoginUserInfoOutput
     public string TenantCode { get; set; }
 
     /// <summary>
-    /// 租户LogoUrl
+    /// 租户Logo URL
     /// </summary>
     public string LogoUrl { get; set; }
 

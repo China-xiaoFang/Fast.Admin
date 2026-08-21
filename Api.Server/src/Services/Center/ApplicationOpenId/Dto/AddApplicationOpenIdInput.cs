@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.ApplicationOpenId.Dto;
 
 /// <summary>
-/// <see cref="AddApplicationOpenIdInput"/> 添加应用标识输入
+/// 添加应用标识输入
 /// </summary>
 public class AddApplicationOpenIdInput
 {
@@ -77,36 +77,6 @@ public class AddApplicationOpenIdInput
     /// </summary>
     [Required(ErrorMessage = "请求加密不能为空")]
     public bool RequestEncipher { get; set; }
-
-    /// <summary>
-    /// 状态栏图片地址
-    /// </summary>
-    public string StatusBarImageUrl { get; set; }
-
-    /// <summary>
-    /// 联系电话
-    /// </summary>
-    public string ContactPhone { get; set; }
-
-    /// <summary>
-    /// 纬度
-    /// </summary>
-    public decimal? Latitude { get; set; }
-
-    /// <summary>
-    /// 经度
-    /// </summary>
-    public decimal? Longitude { get; set; }
-
-    /// <summary>
-    /// 地址
-    /// </summary>
-    public string Address { get; set; }
-
-    /// <summary>
-    /// Banner图
-    /// </summary>
-    public List<string> BannerImages { get; set; }
 
     /// <summary>
     /// 微信商户号Id

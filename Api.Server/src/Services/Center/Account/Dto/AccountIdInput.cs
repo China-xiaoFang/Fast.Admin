@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Account.Dto;
 
 /// <summary>
-/// <see cref="AccountIdInput"/> 账号Id输入
+/// 账号Id输入
 /// </summary>
 public class AccountIdInput : UpdateVersionInput
 {

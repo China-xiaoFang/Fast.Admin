@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.ApplicationOpenId.Dto;
 
 /// <summary>
-/// <see cref="QueryApplicationOpenIdPagedInput"/> 获取应用标识分页列表输入
+/// 获取应用标识分页列表输入
 /// </summary>
 public class QueryApplicationOpenIdPagedInput : PagedInput
 {

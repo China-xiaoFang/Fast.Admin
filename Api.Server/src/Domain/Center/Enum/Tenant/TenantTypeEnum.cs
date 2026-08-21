@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="TenantTypeEnum"/> 租户类型枚举
+/// 租户类型枚举
 /// </summary>
 [FastEnum("租户类型枚举")]
 public enum TenantTypeEnum : byte

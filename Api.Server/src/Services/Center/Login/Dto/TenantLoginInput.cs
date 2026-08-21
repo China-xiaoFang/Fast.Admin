@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Login.Dto;
 
 /// <summary>
-/// <see cref="TenantLoginInput"/> 租户登录输入
+/// 租户登录输入
 /// </summary>
 public class TenantLoginInput
 {
@@ -39,7 +39,8 @@ public class TenantLoginInput
     public string UserKey { get; set; }
 
     /// <summary>
-    /// 密码
+    /// 原始密码；生产环境必须通过 HTTPS 传输
     /// </summary>
+    [StringRequired(ErrorMessage = "密码不能为空"), MaxLength(512, ErrorMessage = "密码不能超过512位字符")]
     public string Password { get; set; }
 }

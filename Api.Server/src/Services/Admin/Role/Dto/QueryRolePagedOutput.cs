@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Role.Dto;
 
 /// <summary>
-/// <see cref="QueryRolePagedOutput"/> 获取角色分页列表输出
+/// 获取角色分页列表输出
 /// </summary>
 public class QueryRolePagedOutput : PagedOutput
 {

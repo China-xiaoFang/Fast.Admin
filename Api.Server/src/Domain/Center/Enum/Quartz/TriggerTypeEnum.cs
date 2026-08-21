@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="TriggerTypeEnum"/> 触发器类型枚举
+/// 触发器类型枚举
 /// </summary>
 [Flags]
 [FastEnum("触发器类型枚举")]

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.Admin.Enum;
 namespace Fast.Admin.Service.Employee.Dto;
 
 /// <summary>
-/// <see cref="ChangeStatusInput"/> 职员更改状态输入
+/// 职员更改状态输入
 /// </summary>
 public class ChangeStatusInput : UpdateVersionInput
 {

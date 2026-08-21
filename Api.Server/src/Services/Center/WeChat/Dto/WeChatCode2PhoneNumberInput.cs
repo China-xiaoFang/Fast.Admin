@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.WeChat.Dto;
 
 /// <summary>
-/// <see cref="WeChatCode2PhoneNumberInput"/> 换取微信用户手机号输入
+/// 换取微信用户手机号输入
 /// </summary>
 public class WeChatCode2PhoneNumberInput
 {

@@ -23,10 +23,8 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="DisabledRequestLogAttribute"/> 禁用请求日志特性
+/// 禁用请求日志特性
 /// </summary>
 [SuppressSniffer]
 [AttributeUsage(AttributeTargets.Method)]
-public class DisabledRequestLogAttribute : Attribute
-{
-}
+public sealed class DisabledRequestLogAttribute : Attribute;

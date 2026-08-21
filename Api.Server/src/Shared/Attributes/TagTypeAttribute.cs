@@ -23,11 +23,11 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="TagTypeAttribute"/> 标签类型特性
+/// 标签类型特性
 /// </summary>
 [SuppressSniffer]
 [AttributeUsage(AttributeTargets.Field)]
-public class TagTypeAttribute : Attribute
+public sealed class TagTypeAttribute : Attribute
 {
     /// <summary>
     /// 标签类型
@@ -35,9 +35,8 @@ public class TagTypeAttribute : Attribute
     public TagTypeEnum TagType { get; set; }
 
     /// <summary>
-    /// <see cref="TagTypeAttribute"/> 标签类型特性
+    /// 标签类型特性
     /// </summary>
-    /// <param name="tagType"><see cref="TagTypeEnum"/> 标签类型</param>
     public TagTypeAttribute(TagTypeEnum tagType)
     {
         TagType = tagType;

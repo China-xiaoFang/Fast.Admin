@@ -23,9 +23,8 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="CommonStatusEnum"/> 公共状态枚举
+/// 公共状态枚举
 /// </summary>
-[Flags]
 [FastEnum("公共状态枚举")]
 public enum CommonStatusEnum : byte
 {

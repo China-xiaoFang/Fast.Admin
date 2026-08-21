@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.Tenant.Dto;
 
 /// <summary>
-/// <see cref="QueryTenantPagedInput"/> 获取租户分页列表输入
+/// 获取租户分页列表输入
 /// </summary>
 public class QueryTenantPagedInput : PagedInput
 {

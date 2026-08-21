@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Database.Dto;
 
 /// <summary>
-/// <see cref="EditSlaveDatabaseInput"/> 编辑从数据库输入
+/// 编辑从数据库输入
 /// </summary>
 public class EditSlaveDatabaseInput
 {

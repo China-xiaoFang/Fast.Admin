@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.Tenant.Dto;
 
 /// <summary>
-/// <see cref="QueryTenantDetailOutput"/> 获取租户详情输出
+/// 获取租户详情输出
 /// </summary>
 public class QueryTenantDetailOutput : PagedOutput
 {
@@ -105,7 +105,7 @@ public class QueryTenantDetailOutput : PagedOutput
     public TenantTypeEnum TenantType { get; set; }
 
     /// <summary>
-    /// LogoUrl
+    /// Logo URL
     /// </summary>
     public string LogoUrl { get; set; }
 

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -22,13 +22,12 @@
 
 using System.Runtime.InteropServices;
 using Fast.DynamicApplication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="MachineApplication"/> 服务器信息
+/// 服务器信息
 /// </summary>
 [ApiDescriptionSettings(false)]
 public class MachineApplication : IDynamicApplication
@@ -36,10 +35,9 @@ public class MachineApplication : IDynamicApplication
     /// <summary>
     /// 服务器信息
     /// </summary>
-    /// <returns></returns>
     [HttpGet("/machine"), HttpGet("/machine/index")]
     [ApiInfo("服务器信息", HttpRequestActionEnum.Other)]
-    [AllowAnonymous]
+    [PlatformOnly]
     [ResponseEncipher]
     public IActionResult Index()
     {

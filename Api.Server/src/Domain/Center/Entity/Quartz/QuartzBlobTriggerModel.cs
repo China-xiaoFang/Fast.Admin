@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="QuartzCalendarModel"/> Quartz Blob二进制触发器表Model类
+/// Quartz Blob二进制触发器表Model类
 /// </summary>
 [SugarTable("QRTZ_BLOB_TRIGGERS", "Quartz Blob二进制触发器表")]
 [SugarDbType(DatabaseTypeEnum.Center)]

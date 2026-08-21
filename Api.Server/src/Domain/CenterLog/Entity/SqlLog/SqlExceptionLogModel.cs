@@ -23,7 +23,7 @@
 namespace Fast.CenterLog.Entity;
 
 /// <summary>
-/// <see cref="SqlExceptionLogModel"/> Sql异常日志Model类
+/// Sql异常日志表Model类
 /// </summary>
 [SugarTable("Sql_ExceptionLog", "Sql异常日志表")]
 [SugarDbType(DatabaseTypeEnum.CenterLog)]
@@ -94,9 +94,9 @@ public class SqlExceptionLogModel : BaseRecordEntity
     public string StackTrace { get; set; }
 
     /// <summary>
-    /// 纯Sql，参数化之后的Sql
+    /// 纯SQL，参数化后的SQL
     /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
+    [SugarColumn(ColumnDescription = "纯SQL，参数化后的SQL", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string PureSql { get; set; }
 
     /// <summary>

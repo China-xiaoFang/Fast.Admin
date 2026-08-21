@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Role.Dto;
 
 /// <summary>
-/// <see cref="QueryRolePagedInput"/> 获取角色分页列表输入
+/// 获取角色分页列表输入
 /// </summary>
 public class QueryRolePagedInput : PagedInput
 {

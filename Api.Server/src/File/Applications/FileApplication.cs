@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -32,6 +32,7 @@ using Fast.Shared;
 using Fast.SqlSugar;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
@@ -41,11 +42,16 @@ using Yitter.IdGenerator;
 namespace Fast.File.Applications;
 
 /// <summary>
-/// <see cref="FileApplication"/> 文件服务
+/// 文件服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.File, Name = "fileStorage", Order = 997)]
 public class FileApplication : IDynamicApplication
 {
+    /// <summary>
+    /// 单张图片允许的最大像素总数（宽 × 高），用于避免超大图片解码时占用过多服务器内存
+    /// </summary>
+    private const long MaxImagePixels = 40_000_000;
+
     private readonly IUser _user;
     private readonly ISqlSugarRepository<FileModel> _repository;
     private readonly UploadFileSettingsOptions _uploadFileSettingsOptions;
@@ -108,12 +114,12 @@ public class FileApplication : IDynamicApplication
     private readonly Dictionary<string, int> ImageSizes = new() {{"thumb", 100}, {"small", 300}, {"normal", 600}};
 
     /// <summary>
-    /// <see cref="FileApplication"/> 文件服务
+    /// 文件服务
     /// </summary>
-    /// <param name="user"></param>
-    /// <param name="repository"></param>
-    /// <param name="uploadFileSettingsOptions"></param>
-    /// <param name="httpContextAccessor"></param>
+    /// <param name="user">当前登录用户</param>
+    /// <param name="repository">数据仓储</param>
+    /// <param name="uploadFileSettingsOptions">文件上传配置</param>
+    /// <param name="httpContextAccessor">HTTP 请求上下文访问器</param>
     public FileApplication(IUser user, ISqlSugarRepository<FileModel> repository,
         IOptions<UploadFileSettingsOptions> uploadFileSettingsOptions, IHttpContextAccessor httpContextAccessor)
     {
@@ -126,12 +132,10 @@ public class FileApplication : IDynamicApplication
     /// <summary>
     /// 预览文件
     /// </summary>
-    /// <param name="fileName"></param>
-    /// <returns></returns>
     [ApiDescriptionSettings(false)]
     [HttpGet("/fileStorage/{fileName}")]
     [ApiInfo("预览文件", HttpRequestActionEnum.Download)]
-    [AllowAnonymous, DisabledRequestLog]
+    [AllowAnonymous, DisabledRequestLog, DisableRateLimiting]
     public async Task<IActionResult> Preview([FromRoute, Required(ErrorMessage = "文件名称不能为空")] string fileName)
     {
         return await LocalPreview(fileName);
@@ -140,18 +144,17 @@ public class FileApplication : IDynamicApplication
     /// <summary>
     /// 预览文件
     /// </summary>
-    /// <param name="fileName"></param>
+    /// <param name="fileName">文件名称</param>
     /// <param name="size">
-    /// <see cref="string"/> 尺寸
-    /// <para>thumb：缩略图</para>
-    /// <para>small：小图</para>
-    /// <para>normal：正常</para>
+    /// 图片尺寸
+    /// <para><c>thumb</c>：缩略图</para>
+    /// <para><c>small</c>：小图</para>
+    /// <para><c>normal</c>：正常尺寸</para>
     /// </param>
-    /// <returns></returns>
     [ApiDescriptionSettings(false)]
     [HttpGet("/fileStorage/{fileName}@!{size}")]
     [ApiInfo("预览文件", HttpRequestActionEnum.Download)]
-    [AllowAnonymous, DisabledRequestLog]
+    [AllowAnonymous, DisabledRequestLog, DisableRateLimiting]
     public async Task<IActionResult> Preview([FromRoute, Required(ErrorMessage = "文件名称不能为空")] string fileName,
         [FromRoute, Required(ErrorMessage = "文件大小不能为空")] string size)
     {
@@ -159,16 +162,37 @@ public class FileApplication : IDynamicApplication
     }
 
     /// <summary>
+    /// 将配置或数据库中的跨平台路径转换为当前操作系统使用的本地路径
+    /// </summary>
+    /// <param name="filePath">配置或数据库中的相对目录，兼容“/”和“\”</param>
+    /// <param name="fileName">可选文件名</param>
+    /// <returns>绝对配置保持原位置；相对配置基于应用程序目录解析</returns>
+    private static string GetLocalPath(string filePath, string fileName = null)
+    {
+        if (string.IsNullOrWhiteSpace(filePath))
+            throw new UserFriendlyException("文件存储路径不能为空！");
+
+        var rootPath = Path.GetFullPath(AppContext.BaseDirectory);
+        var localPath = filePath.Replace('\\', Path.DirectorySeparatorChar)
+            .Replace('/', Path.DirectorySeparatorChar);
+        var fullPath = string.IsNullOrEmpty(fileName)
+            ? Path.GetFullPath(Path.Combine(rootPath, localPath))
+            : Path.GetFullPath(Path.Combine(rootPath, localPath, fileName));
+
+        return fullPath;
+    }
+
+    /// <summary>
     /// 预览文件
     /// </summary>
-    /// <param name="fileName"></param>
+    /// <param name="fileName">文件名称</param>
     /// <param name="size">
-    /// <see cref="string"/> 尺寸
-    /// <para>thumb：缩略图</para>
-    /// <para>small：小图</para>
-    /// <para>normal：正常</para>
+    /// 图片尺寸
+    /// <para><c>thumb</c>：缩略图</para>
+    /// <para><c>small</c>：小图</para>
+    /// <para><c>normal</c>：正常尺寸</para>
     /// </param>
-    /// <returns></returns>
+    /// <returns>文件预览响应</returns>
     private async Task<IActionResult> LocalPreview(string fileName, string size = null)
     {
         if (!string.IsNullOrWhiteSpace(size))
@@ -192,29 +216,25 @@ public class FileApplication : IDynamicApplication
             throw new UserFriendlyException("文件不存在！");
 
         // 这里作为预览文件，必须禁用 AOP，所以直接使用 NEW 的方式
-        var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+        using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
         var fileInfoModel = await db.Queryable<FileModel>()
             .InSingleAsync(fileId);
         if (fileInfoModel == null)
             throw new UserFriendlyException("文件不存在！");
 
-        // 判断是否为图片
-        if (Images.Contains(fileInfoModel.FileMimeType.ToLower()))
+        // 匿名预览仅允许图片。文档、压缩包和 HTML 等文件必须通过租户鉴权下载
+        // 防止通过可猜测的 FileId 越权读取或在同源下执行活动内容
+        if (!Images.Contains(fileInfoModel.FileMimeType.ToLowerInvariant()))
         {
-            // 添加缓存
-            _httpContext.Response.Headers.CacheControl = "public,max-age=31536000";
+            throw new UserFriendlyException("该文件不支持公开预览，请登录后下载！");
         }
-        else
-        {
-            if (!string.IsNullOrWhiteSpace(size))
-            {
-                throw new UserFriendlyException("非图片类型不支持大小设置！");
-            }
-        }
+
+        _httpContext.Response.Headers.CacheControl = "public,max-age=31536000";
+        _httpContext.Response.Headers.XContentTypeOptions = "nosniff";
 
         var localFileName = $"{fileInfoModel.FileId}{size}.{fileInfoModel.FileSuffix}";
 
-        var localFilePath = Path.Combine(Environment.CurrentDirectory, fileInfoModel.FilePath, localFileName);
+        var localFilePath = GetLocalPath(fileInfoModel.FilePath, localFileName);
         if (!System.IO.File.Exists(localFilePath))
             throw new UserFriendlyException("文件丢失或已被删除！");
 
@@ -225,32 +245,29 @@ public class FileApplication : IDynamicApplication
     /// <summary>
     /// 下载文件
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("下载文件", HttpRequestActionEnum.Download)]
     public async Task<IActionResult> Download(DownloadFileInput input)
     {
-        var fileInfoModel = await _repository.Entities.ClearFilter<IBaseTEntity>()
-            .InSingleAsync(input.FileId);
+        var fileInfoModel = await _repository.Entities.InSingleAsync(input.FileId);
         if (fileInfoModel == null)
             throw new UserFriendlyException("文件不存在！");
 
-        var filePath = Path.Combine(Environment.CurrentDirectory, fileInfoModel.FilePath, fileInfoModel.FileObjectName);
+        var filePath = GetLocalPath(fileInfoModel.FilePath, fileInfoModel.FileObjectName);
         if (!System.IO.File.Exists(filePath))
             throw new UserFriendlyException("文件丢失或已被删除！");
 
         var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        _httpContext.Response.Headers.XContentTypeOptions = "nosniff";
         return new FileStreamResult(stream, fileInfoModel.FileMimeType) {FileDownloadName = fileInfoModel.FileOriginName};
     }
 
     /// <summary>
     /// 上传Logo
     /// </summary>
-    /// <param name="file"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("上传Logo", HttpRequestActionEnum.Upload)]
+    [RequestSizeLimit(3 * 1024 * 1024)]
     public async Task<string> UploadLogo(IFormFile file)
     {
         return await LocalUploadFile(file, _uploadFileSettingsOptions.Logo);
@@ -259,10 +276,9 @@ public class FileApplication : IDynamicApplication
     /// <summary>
     /// 上传头像
     /// </summary>
-    /// <param name="file"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("上传头像", HttpRequestActionEnum.Upload)]
+    [RequestSizeLimit(3 * 1024 * 1024)]
     public async Task<string> UploadAvatar(IFormFile file)
     {
         return await LocalUploadFile(file, _uploadFileSettingsOptions.Avatar);
@@ -271,10 +287,9 @@ public class FileApplication : IDynamicApplication
     /// <summary>
     /// 上传证件照
     /// </summary>
-    /// <param name="file"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("上传证件照", HttpRequestActionEnum.Upload)]
+    [RequestSizeLimit(6 * 1024 * 1024)]
     public async Task<string> UploadIdPhoto(IFormFile file)
     {
         return await LocalUploadFile(file, _uploadFileSettingsOptions.IdPhoto);
@@ -283,10 +298,9 @@ public class FileApplication : IDynamicApplication
     /// <summary>
     /// 上传富文本
     /// </summary>
-    /// <param name="file"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("上传富文本", HttpRequestActionEnum.Upload)]
+    [RequestSizeLimit(11 * 1024 * 1024)]
     public async Task<string> UploadEditor(IFormFile file)
     {
         return await LocalUploadFile(file, _uploadFileSettingsOptions.Editor);
@@ -295,10 +309,10 @@ public class FileApplication : IDynamicApplication
     /// <summary>
     /// 上传文件
     /// </summary>
-    /// <param name="file"></param>
     /// <returns></returns>
     [HttpPost]
     [ApiInfo("上传文件", HttpRequestActionEnum.Upload)]
+    [RequestSizeLimit(101 * 1024 * 1024)]
     public async Task<string> UploadFile(IFormFile file)
     {
         return await LocalUploadFile(file);
@@ -307,9 +321,7 @@ public class FileApplication : IDynamicApplication
     /// <summary>
     /// 上传文件
     /// </summary>
-    /// <param name="file"><see cref="IFormFile"/> 文件</param>
-    /// <param name="fileInfoSettings"><see cref="UploadFileInfoSettings"/> 文件配置信息</param>
-    /// <returns></returns>
+    /// <returns>文件访问地址</returns>
     private async Task<string> LocalUploadFile(IFormFile file, UploadFileInfoSettings fileInfoSettings = null)
     {
         if (file == null || file.Length == 0)
@@ -320,35 +332,110 @@ public class FileApplication : IDynamicApplication
         var dateTime = DateTime.Now;
 
         // 文件大小
-        var fileSizeKb = file.Length / 1024L;
+        var fileSizeKb = (file.Length + 1023L) / 1024L;
         if (fileInfoSettings.MaxSize > 0 && fileSizeKb > fileInfoSettings.MaxSize)
             throw new UserFriendlyException($"文件大小超出限制，最大允许{fileInfoSettings.MaxSize / 1024}MB。");
 
-        // 文件后缀
-        var fileSuffix = Path.GetExtension(file.FileName)
-            .ToLower();
+        // 浏览器可能提交带 Windows 或 Unix 路径的文件名，存储前只保留最后一段名称
+        var fileOriginName = Path.GetFileName(file.FileName.Replace('\\', '/'));
+        var fileSuffix = Path.GetExtension(fileOriginName)
+            .ToLowerInvariant();
         if (string.IsNullOrWhiteSpace(fileSuffix))
             throw new UserFriendlyException("文件没有有效后缀名!");
+        if (fileSuffix.Length > 17)
+            throw new UserFriendlyException("文件后缀名过长！");
+
+        var normalizedContentType = file.ContentType?.Trim()
+            .ToLowerInvariant();
+        if (string.IsNullOrWhiteSpace(normalizedContentType))
+            throw new UserFriendlyException("文件内容类型不能为空！");
 
         if (fileInfoSettings.ContentType?.Any() == true)
         {
-            var contentType = file.ContentType.ToLower();
-            if (!fileInfoSettings.ContentType.Contains(contentType))
-                throw new UserFriendlyException($"文件类型不支持，当前类型：{contentType}");
+            if (!fileInfoSettings.ContentType.Contains(normalizedContentType, StringComparer.OrdinalIgnoreCase))
+                throw new UserFriendlyException($"文件类型不支持，当前类型：{normalizedContentType}");
+        }
+
+        // 根据当前已支持的 MIME 类型校验文件后缀，防止客户端声明的类型与文件名不一致
+        var isFileExtensionCompatible = normalizedContentType switch
+        {
+            "image/jpg" or "image/jpeg" => fileSuffix is ".jpg" or ".jpeg",
+            "image/png" => fileSuffix == ".png",
+            "image/gif" => fileSuffix == ".gif",
+            "image/bmp" => fileSuffix is ".bmp" or ".dib",
+            "video/mp4" => fileSuffix is ".mp4" or ".m4v",
+            "video/mpeg" => fileSuffix is ".mpeg" or ".mpg" or ".mpe",
+            "video/quicktime" => fileSuffix is ".mov" or ".qt",
+            "video/x-msvideo" => fileSuffix == ".avi",
+            "video/x-ms-wmv" => fileSuffix == ".wmv",
+            "video/webm" => fileSuffix == ".webm",
+            "video/ogg" => fileSuffix is ".ogv" or ".ogg",
+            "audio/mpeg" => fileSuffix is ".mp3" or ".mpga",
+            "audio/wav" => fileSuffix == ".wav",
+            "audio/ogg" => fileSuffix is ".ogg" or ".oga" or ".opus",
+            "audio/mp4" => fileSuffix is ".m4a" or ".mp4",
+            "audio/flac" => fileSuffix == ".flac",
+            "text/plain" => fileSuffix == ".txt",
+            "text/csv" => fileSuffix == ".csv",
+            "text/html" => fileSuffix is ".html" or ".htm",
+            "text/markdown" => fileSuffix is ".md" or ".markdown",
+            "application/pdf" => fileSuffix == ".pdf",
+            "application/msword" => fileSuffix == ".doc",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document" => fileSuffix == ".docx",
+            "application/vnd.ms-excel" => fileSuffix == ".xls",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" => fileSuffix == ".xlsx",
+            "application/vnd.ms-powerpoint" => fileSuffix == ".ppt",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation" => fileSuffix == ".pptx",
+            "application/zip" => fileSuffix == ".zip",
+            "application/x-rar-compressed" => fileSuffix == ".rar",
+            "application/x-7z-compressed" => fileSuffix == ".7z",
+            "application/gzip" => fileSuffix is ".gz" or ".gzip" or ".tgz",
+            _ => false
+        };
+        if (!isFileExtensionCompatible)
+            throw new UserFriendlyException("文件后缀与声明的文件类型不一致！");
+
+        if (Images.Contains(normalizedContentType))
+        {
+            try
+            {
+                await using var formatStream = file.OpenReadStream();
+                var imageFormat = await Image.DetectFormatAsync(formatStream);
+                var expectedMimeType = normalizedContentType == "image/jpg" ? "image/jpeg" : normalizedContentType;
+                if (imageFormat == null
+                    || !string.Equals(imageFormat.DefaultMimeType, expectedMimeType, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new UserFriendlyException("图片内容与声明的文件类型不一致！");
+                }
+
+                await using var identifyStream = file.OpenReadStream();
+                var imageInfo = await Image.IdentifyAsync(identifyStream);
+                if (imageInfo == null || (long) imageInfo.Width * imageInfo.Height > MaxImagePixels)
+                    throw new UserFriendlyException("图片像素尺寸超出限制！");
+            }
+            catch (UnknownImageFormatException)
+            {
+                throw new UserFriendlyException("图片内容与声明的文件类型不一致！");
+            }
+            catch (InvalidImageContentException)
+            {
+                throw new UserFriendlyException("图片内容已损坏或格式不受支持！");
+            }
         }
 
         // 计算文件哈希
-        using var md5 = MD5.Create();
         await using var stream = file.OpenReadStream();
-        var hashBytes = await md5.ComputeHashAsync(stream);
-        var fileHash = BitConverter.ToString(hashBytes)
-            .Replace("-", "")
-            .ToLower();
+        var hashBytes = await SHA256.HashDataAsync(stream);
+        var fileHash = Convert.ToHexStringLower(hashBytes);
 
         // 判断是否存在重复文件
         var existFileModel = await _repository.SingleOrDefaultAsync(s => s.FileHash == fileHash);
         if (existFileModel != null)
+        {
+            if (!System.IO.File.Exists(GetLocalPath(existFileModel.FilePath, existFileModel.FileObjectName)))
+                throw new UserFriendlyException("相同文件的存储记录存在，但物理文件已丢失，请联系管理员处理！");
             return existFileModel.FileLocation;
+        }
 
         var httpRequest = FastContext.HttpContext.Request;
 
@@ -367,17 +454,17 @@ public class FileApplication : IDynamicApplication
         // 判断是否启用类型文件夹
         if (fileInfoSettings.UseTypeFolder)
         {
-            if (Images.Contains(file.ContentType.ToLower()))
+            if (Images.Contains(normalizedContentType))
                 filePath = Path.Combine(filePath, "image");
-            else if (Videos.Contains(file.ContentType.ToLower()))
+            else if (Videos.Contains(normalizedContentType))
                 filePath = Path.Combine(filePath, "video");
-            else if (Audios.Contains(file.ContentType.ToLower()))
+            else if (Audios.Contains(normalizedContentType))
                 filePath = Path.Combine(filePath, "audio");
-            else if (Texts.Contains(file.ContentType.ToLower()))
+            else if (Texts.Contains(normalizedContentType))
                 filePath = Path.Combine(filePath, "text");
-            else if (Documents.Contains(file.ContentType.ToLower()))
+            else if (Documents.Contains(normalizedContentType))
                 filePath = Path.Combine(filePath, "document");
-            else if (Archives.Contains(file.ContentType.ToLower()))
+            else if (Archives.Contains(normalizedContentType))
                 filePath = Path.Combine(filePath, "archive");
             else
                 filePath = Path.Combine(filePath, "other");
@@ -389,13 +476,16 @@ public class FileApplication : IDynamicApplication
             filePath = Path.Combine(filePath, dateTime.ToString("yyyy/MM/dd"));
         }
 
+        // 数据库存储统一使用“/”，保证路径记录可以在 Windows、Linux 和 macOS 之间迁移
+        filePath = filePath.Replace('\\', '/');
+
         var fileInfoModel = new FileModel
         {
             FileId = fileId,
             FileObjectName = fileObjectName,
-            FileOriginName = file.FileName,
+            FileOriginName = fileOriginName,
             FileSuffix = fileSuffix.TrimStart('.'),
-            FileMimeType = file.ContentType,
+            FileMimeType = normalizedContentType,
             FileSizeKb = fileSizeKb,
             FilePath = filePath,
             FileLocation = $"{httpRequest.Scheme}://{httpRequest.Host}/fileStorage/{fileObjectName}",
@@ -416,41 +506,43 @@ public class FileApplication : IDynamicApplication
         fileInfoModel.CreatedUserId = _user?.EmployeeId;
         fileInfoModel.CreatedUserName = _user?.NickName;
         fileInfoModel.CreatedTime = dateTime;
-        await _repository.InsertAsync(fileInfoModel);
 
         // 本地存储
-        var localFilePath = Path.Combine(Environment.CurrentDirectory, filePath);
-        if (!Directory.Exists(localFilePath))
-            Directory.CreateDirectory(localFilePath);
+        var localFilePath = GetLocalPath(filePath);
+        Directory.CreateDirectory(localFilePath);
         var localFullPath = Path.Combine(localFilePath, fileObjectName);
-        await using (var fileStream = System.IO.File.Create(localFullPath))
+        await using (var fileStream = new FileStream(localFullPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 81920,
+                         FileOptions.Asynchronous | FileOptions.SequentialScan))
         {
-            await file.CopyToAsync(fileStream);
+            await file.CopyToAsync(fileStream, _httpContext.RequestAborted);
         }
 
         // 判断是否为图片
-        if (Images.Contains(file.ContentType.ToLower()))
+        if (Images.Contains(normalizedContentType))
         {
             // 异步读取原始图片
             using var image = await Image.LoadAsync(localFullPath);
 
             foreach (var item in ImageSizes)
             {
-                var width = item.Value;
+                var width = Math.Min(item.Value, image.Width);
                 // 按原图比例计算高度
                 var ratio = (float) width / image.Width;
-                var height = (int) (image.Height * ratio);
+                var height = Math.Max(1, (int) (image.Height * ratio));
 
                 // 创建图片副本并调整大小
                 using var clone = image.Clone(ctx => ctx.Resize(width, height));
                 // 拼接缩略图文件名
-                var newName = $"{fileId}@{item.Key}{fileSuffix}";
-                var newPath = Path.Combine(localFilePath, newName);
+                var thumbnailName = $"{fileId}@{item.Key}{fileSuffix}";
+                var thumbnailPath = Path.Combine(localFilePath, thumbnailName);
 
                 // 保存图片到本地，格式自动根据后缀判断
-                await clone.SaveAsync(newPath);
+                await clone.SaveAsync(thumbnailPath);
             }
         }
+
+        // 物理文件及缩略图全部写入成功后再保存记录，失败时只会产生冗余文件，不会产生无效数据库记录
+        await _repository.InsertAsync(fileInfoModel);
 
         return fileInfoModel.FileLocation;
     }

@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="PasswordRecordModel"/> 密码记录表Model类
+/// 密码记录表Model类
 /// </summary>
 [SugarTable("PasswordRecord", "密码记录表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -58,7 +58,7 @@ public class PasswordRecordModel : IDatabaseEntity
     /// 密码
     /// </summary>
     [Required]
-    [SugarColumn(ColumnDescription = "密码", Length = 50)]
+    [SugarColumn(ColumnDescription = "密码", Length = 200)]
     public string Password { get; set; }
 
     /// <summary>

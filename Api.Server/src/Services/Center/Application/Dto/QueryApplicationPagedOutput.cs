@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Application.Dto;
 
 /// <summary>
-/// <see cref="QueryApplicationPagedOutput"/> 获取应用分页列表输出
+/// 获取应用分页列表输出
 /// </summary>
 public class QueryApplicationPagedOutput : PagedOutput
 {
@@ -50,7 +50,7 @@ public class QueryApplicationPagedOutput : PagedOutput
     public string AppName { get; set; }
 
     /// <summary>
-    /// LogoUrl
+    /// Logo URL
     /// </summary>
     public string LogoUrl { get; set; }
 
@@ -58,16 +58,6 @@ public class QueryApplicationPagedOutput : PagedOutput
     /// 主题色
     /// </summary>
     public string ThemeColor { get; set; }
-
-    /// <summary>
-    /// ICP备案号
-    /// </summary>
-    public string ICPSecurityCode { get; set; }
-
-    /// <summary>
-    /// 公安备案号
-    /// </summary>
-    public string PublicSecurityCode { get; set; }
 
     /// <summary>
     /// 备注

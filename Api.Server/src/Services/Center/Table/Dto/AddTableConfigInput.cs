@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Table.Dto;
 
 /// <summary>
-/// <see cref="AddTableConfigInput"/> 添加表格配置输入
+/// 添加表格配置输入
 /// </summary>
 public class AddTableConfigInput
 {

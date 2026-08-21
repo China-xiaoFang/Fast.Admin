@@ -23,10 +23,10 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="CenterCCL"/> Center 缓存上下文
+/// <see cref="ICacheContextLocator"/> 的 Center 缓存上下文实现
 /// </summary>
 public class CenterCCL : ICacheContextLocator
 {
-    /// <summary>服务名称</summary>
+    /// <inheritdoc />
     public string ServiceName => "Center";
 }

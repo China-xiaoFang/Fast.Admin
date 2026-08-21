@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -34,9 +34,10 @@ using Yitter.IdGenerator;
 namespace Fast.Admin.Service.TenantDatabase;
 
 /// <summary>
-/// <see cref="TenantDatabaseService"/> 租户 Database 服务
+/// <see cref="ITenantDatabaseService"/> 默认实现
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Admin, Name = "tenantDatabase")]
+[PlatformOnly]
 public partial class TenantDatabaseService : ITenantDatabaseService, ITransientDependency, IDynamicApplication
 {
     private readonly IUser _user;
@@ -46,16 +47,11 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
         _user = user;
     }
 
-    /// <summary>
-    /// 初始化数据库
-    /// </summary>
-    /// <param name="tenantId"><see cref="long"/> 租户Id</param>
-    /// <param name="databaseType"><see cref="DatabaseTypeEnum"/> 数据库类型</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     [NonAction]
     public async Task InitDatabase(long tenantId, DatabaseTypeEnum databaseType)
     {
-        var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+        using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
         var tenantModel = await db.Queryable<TenantModel>()
             .Where(wh => wh.TenantId == tenantId)
@@ -81,7 +77,7 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
         // 加载Aop
         SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
 
-        var newDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(new ConnectionSettingsOptions
+        using var newDb = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(new ConnectionSettingsOptions
         {
             ConnectionId = databaseModel.MainId.ToString(),
             DbType = databaseModel.DbType.ToDbType(),
@@ -184,27 +180,75 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                     ParentNames = [],
                     OrgName = tenantModel.TenantName,
                     OrgCode = $"{tenantModel.TenantCode.ToLower()}_hq",
-                    Contacts = tenantModel.AdminName,
-                    Phone = tenantModel.AdminMobile,
-                    Email = tenantModel.AdminEmail,
                     Sort = 1,
                     DataPublic = false,
                     Remark = null
                 })
                 .ExecuteCommandAsync();
 
-            // 初始化租户管理员角色
-            await newDb.Insertable(new RoleModel
+            // 初始化租户默认角色
+            await newDb.Insertable(new List<RoleModel>
                 {
-                    RoleId = YitIdHelper.NextId(),
-                    RoleType = RoleTypeEnum.Admin,
-                    IsSystemMenu = true,
-                    RoleName = "管理员",
-                    RoleCode = "manager_role",
-                    Sort = 1,
-                    DataScopeType = DataScopeTypeEnum.All,
-                    AssignableRoleIds = [],
-                    Remark = null
+                    new()
+                    {
+                        RoleId = YitIdHelper.NextId(),
+                        RoleType = RoleTypeEnum.Admin,
+                        IsSystemMenu = true,
+                        RoleName = "管理员",
+                        RoleCode = "manager_role",
+                        Sort = 1,
+                        DataScopeType = DataScopeTypeEnum.All,
+                        AssignableRoleIds = [],
+                        Remark = null
+                    },
+                    new()
+                    {
+                        RoleId = YitIdHelper.NextId(),
+                        RoleType = RoleTypeEnum.IT,
+                        IsSystemMenu = true,
+                        RoleName = "技术",
+                        RoleCode = "it_role",
+                        Sort = 2,
+                        DataScopeType = DataScopeTypeEnum.OrgWithChild,
+                        AssignableRoleIds = [],
+                        Remark = null
+                    },
+                    new()
+                    {
+                        RoleId = YitIdHelper.NextId(),
+                        RoleType = RoleTypeEnum.HR,
+                        IsSystemMenu = true,
+                        RoleName = "人事",
+                        RoleCode = "hr_role",
+                        Sort = 3,
+                        DataScopeType = DataScopeTypeEnum.DeptWithChild,
+                        AssignableRoleIds = [],
+                        Remark = null
+                    },
+                    new()
+                    {
+                        RoleId = YitIdHelper.NextId(),
+                        RoleType = RoleTypeEnum.Finance,
+                        IsSystemMenu = true,
+                        RoleName = "财务",
+                        RoleCode = "finance_role",
+                        Sort = 4,
+                        DataScopeType = DataScopeTypeEnum.DeptWithChild,
+                        AssignableRoleIds = [],
+                        Remark = null
+                    },
+                    new()
+                    {
+                        RoleId = YitIdHelper.NextId(),
+                        RoleType = RoleTypeEnum.Default,
+                        IsSystemMenu = true,
+                        RoleName = "默认",
+                        RoleCode = "default_role",
+                        Sort = 5,
+                        DataScopeType = DataScopeTypeEnum.Self,
+                        AssignableRoleIds = [],
+                        Remark = null
+                    }
                 })
                 .ExecuteCommandAsync();
 
@@ -216,6 +260,7 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                     .SingleAsync();
                 if (accountModel == null)
                 {
+                    var passwordHash = CryptoUtil.HashPasswordPBKDF2SHA256(CommonConst.Default.Password);
                     var accountId = YitIdHelper.NextId();
                     accountModel = new AccountModel
                     {
@@ -223,12 +268,10 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                         AccountKey = NumberUtil.IdToCodeByLong(accountId),
                         Mobile = tenantModel.AdminMobile,
                         Email = tenantModel.AdminEmail,
-                        Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
-                            .ToUpper(),
+                        Password = passwordHash,
                         NickName = tenantModel.AdminName,
                         Avatar = tenantModel.LogoUrl,
-                        Status = CommonStatusEnum.Enable,
-                        Sex = GenderEnum.Unknown
+                        Status = CommonStatusEnum.Enable
                     };
                     accountModel = await db.Insertable(accountModel)
                         .ExecuteReturnEntityAsync();
@@ -242,9 +285,8 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                             {
                                 AccountId = accountModel.AccountId,
                                 OperationType = PasswordOperationTypeEnum.Create,
-                                Type = PasswordTypeEnum.SHA1,
-                                Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
-                                    .ToUpper()
+                                Type = PasswordTypeEnum.PBKDF2_SHA256,
+                                Password = passwordHash
                             }
                         })
                         .ExecuteCommandAsync();
@@ -318,8 +360,6 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
     /// <summary>
     /// 初始化数据库
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("初始化数据库", HttpRequestActionEnum.Submit)]
     [Permission(PermissionConst.Database.Edit)]

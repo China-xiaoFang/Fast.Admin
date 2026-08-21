@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="IUser"/> 授权用户信息
+/// 授权用户信息
 /// </summary>
 /// <remarks>作用域注册，保证当前请求管道中是唯一的，并且只会加载一次</remarks>
 public interface IUser
@@ -37,6 +37,11 @@ public interface IUser
     /// 设备Id
     /// </summary>
     string DeviceId { get; set; }
+
+    /// <summary>
+    /// 会话Id
+    /// </summary>
+    string SessionId { get; set; }
 
     /// <summary>
     /// WebStock 连接Id
@@ -117,6 +122,11 @@ public interface IUser
     /// 租户编码
     /// </summary>
     string TenantCode { get; set; }
+
+    /// <summary>
+    /// 是否系统租户
+    /// </summary>
+    bool IsSystemTenant { get; set; }
 
     #endregion
 
@@ -216,6 +226,11 @@ public interface IUser
     DataScopeTypeEnum DataScopeType { get; set; }
 
     /// <summary>
+    /// 自定义数据范围部门Id集合
+    /// </summary>
+    List<long> DataScopeDepartmentIdList { get; set; }
+
+    /// <summary>
     /// 菜单编码集合
     /// </summary>
     List<string> MenuCodeList { get; set; }
@@ -228,73 +243,72 @@ public interface IUser
     /// <summary>
     /// 设置授权用户
     /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
-    /// <param name="forceUserInfo"><see cref="bool"/> 强制覆盖用户信息，默认 <c>false</c></param>
+    /// <param name="authUserInfo">授权用户信息</param>
+    /// <param name="forceUserInfo">强制覆盖用户信息，默认 <see langword="false"/></param>
     /// <remarks>只会赋值一次</remarks>
     void SetAuthUser(AuthUserInfo authUserInfo, bool forceUserInfo = false);
 
     /// <summary>
     /// 从缓存中获取授权用户信息
     /// </summary>
-    /// <param name="deviceType"><see cref="AppEnvironmentEnum"/> 设备类型</param>
-    /// <param name="appNo"><see cref="string"/> 应用编号</param>
-    /// <param name="tenantNo"><see cref="string"/> 租户编号</param>
-    /// <param name="employeeNo"><see cref="string"/> 工号</param>
-    /// <returns></returns>
-    Task<AuthUserInfo> GetAuthUserInfo(AppEnvironmentEnum deviceType, string appNo, string tenantNo, string employeeNo);
+    /// <returns>缓存中的授权用户信息</returns>
+    Task<AuthUserInfo> GetAuthUserInfo(AppEnvironmentEnum deviceType, string appNo, string tenantNo, string employeeNo,
+        string sessionId);
 
     /// <summary>
     /// 统一登录
     /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
-    /// <returns></returns>
     Task Login(AuthUserInfo authUserInfo);
 
     /// <summary>
     /// 客户端统一登录
     /// </summary>
-    /// <param name="authUserInfo"><see cref="AuthUserInfo"/> 授权用户信息</param>
-    /// <returns></returns>
     Task ClientLogin(AuthUserInfo authUserInfo);
 
     /// <summary>
     /// 机器人登录
     /// </summary>
     /// <remarks>非调度作业请勿使用</remarks>
-    /// <returns></returns>
+    /// <returns>机器人登录令牌</returns>
     Task<string> RobotLogin();
 
     /// <summary>
     /// 刷新授权信息
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     Task RefreshAuth(RefreshAuthDto input);
 
     /// <summary>
     /// 刷新账号信息
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     Task RefreshAccount(RefreshAccountDto input);
 
     /// <summary>
     /// 刷新微信用户信息
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     Task RefreshWeChatUser(RefreshWeChatUserDto input);
 
     /// <summary>
     /// 刷新职员信息
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     Task RefreshEmployee(RefreshEmployeeDto input);
+
+    /// <summary>
+    /// 撤销账号在所有租户和设备上的会话
+    /// </summary>
+    Task RevokeAccount(long accountId);
+
+    /// <summary>
+    /// 撤销租户的全部会话
+    /// </summary>
+    Task RevokeTenant(string tenantNo);
+
+    /// <summary>
+    /// 撤销指定租户职员的全部会话
+    /// </summary>
+    Task RevokeEmployee(string tenantNo, string employeeNo);
 
     /// <summary>
     /// 统一退出登录
     /// </summary>
-    /// <returns></returns>
     Task Logout();
 }

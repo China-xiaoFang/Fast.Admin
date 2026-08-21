@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Organization.Dto;
 
 /// <summary>
-/// <see cref="QueryOrganizationDetailOutput"/> 获取机构详情输出
+/// 获取机构详情输出
 /// </summary>
 public class QueryOrganizationDetailOutput : PagedOutput
 {

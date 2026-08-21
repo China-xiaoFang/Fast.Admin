@@ -23,7 +23,7 @@
 namespace Fast.AdminLog.Enum;
 
 /// <summary>
-/// <see cref="OperateLogTypeEnum"/> 操作日志类型枚举
+/// 操作日志类型枚举
 /// </summary>
 [Flags]
 [FastEnum("操作日志类型枚举")]

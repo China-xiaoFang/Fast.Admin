@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -33,7 +33,7 @@ using ZXing.Rendering;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ImageUtil"/> 图片工具类
+/// 图片工具类
 /// </summary>
 [SuppressSniffer]
 public static class ImageUtil
@@ -55,7 +55,7 @@ public static class ImageUtil
 
     static ImageUtil()
     {
-        // 加载根目录下面的字体
+        // 使用随宿主发布的字体，避免不同操作系统的系统字体差异影响图片布局
         var basePath = Path.Combine(AppContext.BaseDirectory, "Assets/Fonts");
         var fontCollection = new FontCollection();
         DefaultFont = fontCollection.Add(Path.Combine(basePath, "NotoSansSC-Regular.ttf"));
@@ -65,22 +65,21 @@ public static class ImageUtil
     /// <summary>
     /// 生成图片
     /// </summary>
-    /// <param name="drawAction"><see cref="Action{T}"/> 操作 drawAction(image, font, color, lineHeight, width, height)</param>
-    /// <param name="width"><see cref="int"/> 宽度</param>
-    /// <param name="height"><see cref="int"/> 高度</param>
-    /// <param name="fontSize"><see cref="float"/> 文字大小</param>
-    /// <param name="lineHeight"><see cref="int"/> 行高</param>
-    /// <returns></returns>
+    /// <param name="drawAction">操作 drawAction(image, font, color, lineHeight, width, height)</param>
+    /// <param name="width">宽度</param>
+    /// <param name="height">高度</param>
+    /// <param name="fontSize">文字大小</param>
+    /// <param name="lineHeight">行高</param>
+    /// <returns>生成的图片</returns>
     public static Image<Rgba32> GenImage(Action<Image<Rgba32>, Font, Color, int, int, int> drawAction, int width = 450,
         int height = 750, float fontSize = 16f, int? lineHeight = null)
     {
         lineHeight ??= DefaultLineHeight;
 
-        // 创建图片
         using var image = new Image<Rgba32>(width, height);
 
-        // 设置图片背景颜色
-        var backgroundColor = new Rgba32(255, 255, 255); // 白色
+        // 设置图片背景颜色，白色
+        var backgroundColor = new Rgba32(255, 255, 255);
         image.Mutate(x => x.BackgroundColor(backgroundColor));
 
         // 固定字体
@@ -106,15 +105,15 @@ public static class ImageUtil
 
         drawAction?.Invoke(image, font, color, lineHeight.Value, width, height);
 
-        // 这里克隆一份，避免被提前释放
+        // 返回独立副本，避免 using 释放画布后调用方持有失效图像
         return image.Clone();
     }
 
     /// <summary>
-    /// 图片转为Base64图片
+    /// 将图片转换为 Base64 编码
     /// </summary>
-    /// <param name="image"></param>
-    /// <returns></returns>
+    /// <param name="image">待处理的图像</param>
+    /// <returns>PNG 图像的 Base64 编码字符串</returns>
     public static async Task<string> ConvertToBase64Image(Image image)
     {
         // 将图片转换为 Base64 字符串
@@ -125,10 +124,10 @@ public static class ImageUtil
     }
 
     /// <summary>
-    /// 图片转为Base64图片
+    /// 将图片转换为 Base64 编码
     /// </summary>
-    /// <param name="image"></param>
-    /// <returns></returns>
+    /// <param name="image">待处理的图像</param>
+    /// <returns>PNG 图像的 Base64 编码字符串</returns>
     public static string ConvertToBase64ImageSync(Image image)
     {
         // 将图片转换为 Base64 字符串
@@ -141,9 +140,7 @@ public static class ImageUtil
     /// <summary>
     /// 获取对应文本字体的文本宽度
     /// </summary>
-    /// <param name="content"><see cref="string"/> 文本</param>
-    /// <param name="font"><see cref="Font"/> 字体</param>
-    /// <returns></returns>
+    /// <returns>对应文本字体的文本宽度</returns>
     public static float GetFontWidthByContent(string content, Font font)
     {
         // 获取要渲染的文字宽度
@@ -154,14 +151,14 @@ public static class ImageUtil
     /// <summary>
     /// 生成 Code_128 条形码
     /// </summary>
-    /// <param name="content"><see cref="string"/> 条码内容</param>
-    /// <param name="width"><see cref="int"/> 条码宽度</param>
-    /// <param name="height"><see cref="int"/> 条码高度</param>
-    /// <param name="dWidth"><see cref="int"/> 底图宽度</param>
-    /// <param name="showContent"><see cref="bool"/> 显示文字</param>
-    /// <param name="fontSize"><see cref="float"/> 文字大小</param>
-    /// <param name="drawAction"><see cref="Action{T}"/> 操作 drawAction(image, font, color, lineHeight, width, height)</param>
-    /// <returns></returns>
+    /// <param name="content">条码内容</param>
+    /// <param name="width">条码宽度</param>
+    /// <param name="height">条码高度</param>
+    /// <param name="dWidth">底图宽度</param>
+    /// <param name="showContent">显示文字</param>
+    /// <param name="fontSize">文字大小</param>
+    /// <param name="drawAction">操作 drawAction(image, font, color, lineHeight, width, height)</param>
+    /// <returns>生成的 Code 128 条形码</returns>
     public static Image GenBarCode_128(string content, int width = 200, int height = 200, int dWidth = 300,
         bool showContent = true, float fontSize = 16f, Action<Image<Rgba32>, Font, Color, int, int, int> drawAction = null)
     {
@@ -171,11 +168,11 @@ public static class ImageUtil
     /// <summary>
     /// 生成 QrCode 二维码
     /// </summary>
-    /// <param name="content"><see cref="string"/> 二维码内容</param>
-    /// <param name="width"><see cref="int"/> 二维码宽度</param>
-    /// <param name="height"><see cref="int"/> 二维码高度</param>
-    /// <param name="drawAction"><see cref="Action{T}"/> 操作 drawAction(image, font, color, lineHeight, width, height)</param>
-    /// <returns></returns>
+    /// <param name="content">二维码内容</param>
+    /// <param name="width">二维码宽度</param>
+    /// <param name="height">二维码高度</param>
+    /// <param name="drawAction">操作 drawAction(image, font, color, lineHeight, width, height)</param>
+    /// <returns>生成的 QR Code 二维码</returns>
     public static Image GenQrCode(string content, int width = 200, int height = 200,
         Action<Image<Rgba32>, Font, Color, int, int, int> drawAction = null)
     {
@@ -185,7 +182,7 @@ public static class ImageUtil
     /// <summary>
     /// 生成条码或二维码
     /// </summary>
-    /// <returns></returns>
+    /// <returns>生成的条码或二维码</returns>
     private static Image GenQrOrBarCode(BarcodeFormat barcodeFormat, string content, int width = 100, int height = 100,
         int dWidth = 100, bool showContent = true, float fontSize = 16f,
         Action<Image<Rgba32>, Font, Color, int, int, int> drawAction = null)

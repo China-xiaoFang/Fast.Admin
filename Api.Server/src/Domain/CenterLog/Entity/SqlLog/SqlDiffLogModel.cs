@@ -23,7 +23,7 @@
 namespace Fast.CenterLog.Entity;
 
 /// <summary>
-/// <see cref="SqlDiffLogModel"/> Sql差异日志Model类
+/// Sql差异日志表Model类
 /// </summary>
 [SugarTable("Sql_DiffLog_{year}{month}{day}", "Sql差异日志表")]
 [SplitTable(SplitType.Month)]
@@ -95,9 +95,9 @@ public class SqlDiffLogModel : BaseRecordEntity
     public double? ExecuteSeconds { get; set; }
 
     /// <summary>
-    /// 纯Sql，参数化之后的Sql
+    /// 纯SQL，参数化后的SQL
     /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
+    [SugarColumn(ColumnDescription = "纯SQL，参数化后的SQL", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string PureSql { get; set; }
 
     /// <summary>

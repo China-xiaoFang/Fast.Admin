@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,24 +29,33 @@ using Yitter.IdGenerator;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="DatabaseSeedData"/> 系统数据库种子数据
+/// 系统数据库种子数据
 /// </summary>
 public static class DatabaseSeedData
 {
     /// <summary>
+    /// 获取数据库名称
+    /// </summary>
+    private static string GetDatabaseName(bool isDevelopment, SugarDbType dbType, string dbName)
+    {
+        if (dbType == SugarDbType.Sqlite)
+        {
+            // 这里默认使用 Data 目录
+            return Path.Combine("Data", $"{dbName}{(isDevelopment ? "_Dev" : "")}.db");
+        }
+
+        return $"{dbName}{(isDevelopment ? "_Dev" : "")}";
+    }
+
+    /// <summary>
     /// 系统数据库种子数据
     /// </summary>
-    /// <param name="db"></param>
-    /// <param name="tenantId"><see cref="long"/> 租户Id</param>
-    /// <param name="tenantCode"><see cref="string"/> 租户编码</param>
-    /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
-    /// <returns></returns>
     public static async Task SystemDatabaseSeedData(ISqlSugarClient db, long tenantId, string tenantCode, DateTime dateTime)
     {
         var isDevelopment = FastContext.HostEnvironment.IsDevelopment();
         var dbType = SqlSugarContext.ConnectionSettings.DbType != null
             ? SqlSugarContext.ConnectionSettings.DbType.Value.ToSugarDbType()
-            : SugarDbType.SqlServer;
+            : SugarDbType.Sqlite;
         await db.Insertable(new List<MainDatabaseModel>
             {
                 // 初始化日志库
@@ -58,7 +67,7 @@ public static class DatabaseSeedData
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
-                    DbName = isDevelopment ? "FaCenter_Log_Dev" : "FaCenter_Log",
+                    DbName = GetDatabaseName(isDevelopment, dbType, "FaCenter_Log"),
                     DbUser = SqlSugarContext.ConnectionSettings.DbUser,
                     DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
                     CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
@@ -78,7 +87,7 @@ public static class DatabaseSeedData
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
-                    DbName = isDevelopment ? "FaGateway_Dev" : "FaGateway",
+                    DbName = GetDatabaseName(isDevelopment, dbType, "FaGateway"),
                     DbUser = SqlSugarContext.ConnectionSettings.DbUser,
                     DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
                     CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
@@ -98,7 +107,7 @@ public static class DatabaseSeedData
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
-                    DbName = isDevelopment ? "FaDeploy_Dev" : "FaDeploy",
+                    DbName = GetDatabaseName(isDevelopment, dbType, "FaDeploy"),
                     DbUser = SqlSugarContext.ConnectionSettings.DbUser,
                     DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
                     CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
@@ -118,7 +127,7 @@ public static class DatabaseSeedData
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
-                    DbName = isDevelopment ? "FaAdmin_Dev" : "FaAdmin",
+                    DbName = GetDatabaseName(isDevelopment, dbType, "FaAdmin"),
                     DbUser = SqlSugarContext.ConnectionSettings.DbUser,
                     DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
                     CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,
@@ -138,7 +147,7 @@ public static class DatabaseSeedData
                     PublicIp = SqlSugarContext.ConnectionSettings.ServiceIp,
                     IntranetIp = "127.0.0.1",
                     Port = SqlSugarContext.ConnectionSettings.Port ?? 1433,
-                    DbName = isDevelopment ? "FaAdmin_Log_Dev" : "FaAdmin_Log",
+                    DbName = GetDatabaseName(isDevelopment, dbType, "FaAdmin_Log"),
                     DbUser = SqlSugarContext.ConnectionSettings.DbUser,
                     DbPwd = SqlSugarContext.ConnectionSettings.DbPwd,
                     CommandTimeOut = SqlSugarContext.ConnectionSettings.CommandTimeOut!.Value,

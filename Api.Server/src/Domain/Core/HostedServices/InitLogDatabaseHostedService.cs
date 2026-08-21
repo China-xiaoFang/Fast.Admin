@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -30,13 +30,13 @@ using SqlSugar;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="InitLogDatabaseHostedService"/> 初始化日志 Database 托管服务
+/// 日志数据库初始化托管服务
 /// </summary>
-[Order(102)]
+[Order(103)]
 public class InitLogDatabaseHostedService : IHostedService
 {
     /// <summary>
-    /// SqlSugar实体服务
+    /// SqlSugar 实体服务
     /// </summary>
     private readonly ISqlSugarEntityService _sqlSugarEntityService;
 
@@ -46,10 +46,8 @@ public class InitLogDatabaseHostedService : IHostedService
     private readonly ILogger _logger;
 
     /// <summary>
-    /// <see cref="InitLogDatabaseHostedService"/> 初始化日志 Database 托管服务
+    /// 初始化日志数据库托管服务
     /// </summary>
-    /// <param name="sqlSugarEntityService"><see cref="ISqlSugarEntityService"/> SqlSugar实体服务</param>
-    /// <param name="logger"><see cref="ILogger"/> 日志</param>
     public InitLogDatabaseHostedService(ISqlSugarEntityService sqlSugarEntityService,
         ILogger<InitLogDatabaseHostedService> logger)
     {
@@ -57,11 +55,7 @@ public class InitLogDatabaseHostedService : IHostedService
         _logger = logger;
     }
 
-    /// <summary>
-    /// Triggered when the application host is ready to start the service.
-    /// </summary>
-    /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
-    /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous Start operation.</returns>
+    /// <inheritdoc />
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         try
@@ -70,7 +64,7 @@ public class InitLogDatabaseHostedService : IHostedService
             var connectionSettings = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
                 CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
 
-            var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(connectionSettings));
+            using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(connectionSettings));
 
             // 创建库
             db.DbMaintenance.CreateDatabase();
@@ -130,15 +124,12 @@ public class InitLogDatabaseHostedService : IHostedService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Init database error...");
+            _logger.LogError(ex, "中心日志数据库初始化失败，应用停止启动。");
+            throw;
         }
     }
 
-    /// <summary>
-    /// Triggered when the application host is performing a graceful shutdown.
-    /// </summary>
-    /// <param name="cancellationToken">Indicates that the shutdown process should no longer be graceful.</param>
-    /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous Stop operation.</returns>
+    /// <inheritdoc />
     public async Task StopAsync(CancellationToken cancellationToken)
     {
         await Task.CompletedTask;

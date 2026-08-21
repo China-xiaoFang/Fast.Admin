@@ -23,7 +23,7 @@
 namespace Fast.CenterLog.Entity;
 
 /// <summary>
-/// <see cref="VisitLogModel"/> 访问日志Model类
+/// 访问日志表Model类
 /// </summary>
 [SugarTable("VisitLog_{year}{month}{day}", "访问日志表")]
 [SplitTable(SplitType.Month)]

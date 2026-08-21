@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.TenantOnlineUser.Dto;
 
 /// <summary>
-/// <see cref="ForceOfflineInput"/> 强制下线输入
+/// 强制下线输入
 /// </summary>
 public class ForceOfflineInput
 {

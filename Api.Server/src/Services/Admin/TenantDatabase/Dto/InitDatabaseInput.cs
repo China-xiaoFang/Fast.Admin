@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.TenantDatabase.Dto;
 
 /// <summary>
-/// <see cref="InitDatabaseInput"/> 同初始化数据库输入
+/// 同初始化数据库输入
 /// </summary>
 public class InitDatabaseInput
 {

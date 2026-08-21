@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,7 +28,7 @@ using Yitter.IdGenerator;
 namespace Fast.Admin.Service;
 
 /// <summary>
-/// <see cref="SerialContext"/> 序号规则上下文
+/// 序号规则上下文
 /// </summary>
 [SuppressSniffer]
 public class SerialContext
@@ -78,9 +78,7 @@ public class SerialContext
     /// 生成工号
     /// </summary>
     /// <remarks>因涉及到登录，所以必须存在租户编码</remarks>
-    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
-    /// <param name="tenantCode"><see cref="string"/>租户编码</param>
-    /// <returns></returns>
+    /// <returns>生成的工号</returns>
     public static string GenEmployeeNo(ISqlSugarClient db, string tenantCode)
     {
         return GenerateSerialNo(db, SerialRuleTypeEnum.EmployeeNo, tenantCode);
@@ -89,10 +87,7 @@ public class SerialContext
     /// <summary>
     /// 生成序号
     /// </summary>
-    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
-    /// <param name="ruleType"><see cref="SerialRuleTypeEnum"/> 序号规则类型</param>
-    /// <param name="tenantCode"><see cref="string"/>租户编码</param>
-    /// <returns></returns>
+    /// <returns>生成的序号</returns>
     public static string GenerateSerialNo(ISqlSugarClient db, SerialRuleTypeEnum ruleType, string tenantCode = null)
     {
         if (!db.Ado.IsAnyTran())

@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="FileModel"/> 文件表Model类
+/// 文件表Model类
 /// </summary>
 [SugarTable("File", "文件表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -44,9 +44,9 @@ public class FileModel : IBaseTEntity
     public string FileObjectName { get; set; }
 
     /// <summary>
-    /// 文件名称（上传时候的文件名）
+    /// 原始文件名
     /// </summary>
-    [SugarColumn(ColumnDescription = "文件名称（上传时候的文件名）", Length = 255)]
+    [SugarColumn(ColumnDescription = "原始文件名", Length = 255)]
     public string FileOriginName { get; set; }
 
     /// <summary>
@@ -82,7 +82,7 @@ public class FileModel : IBaseTEntity
     /// <summary>
     /// 文件哈希
     /// </summary>
-    [SugarColumn(ColumnDescription = "文件哈希", Length = 32)]
+    [SugarColumn(ColumnDescription = "文件哈希", Length = 64)]
     public string FileHash { get; set; }
 
     /// <summary>

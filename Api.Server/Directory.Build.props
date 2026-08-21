@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
-        <LangVersion>12.0</LangVersion>
         <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
 
@@ -29,10 +28,6 @@
 
         <!-- 解决多个SDK版本生成报错的问题 -->
         <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <!--<NoWarn>1701;1702;</NoWarn>-->
     </PropertyGroup>
 
     <ItemGroup>

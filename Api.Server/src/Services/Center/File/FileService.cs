@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,7 +29,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.File;
 
 /// <summary>
-/// <see cref="FileService"/> 文件服务
+/// 文件服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.File, Name = "file", Order = 997)]
 public class FileService : IDynamicApplication
@@ -46,8 +46,6 @@ public class FileService : IDynamicApplication
     /// <summary>
     /// 获取文件分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取文件分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.FilePaged)]

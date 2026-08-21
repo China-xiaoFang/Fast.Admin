@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Tenant.Dto;
 
 /// <summary>
-/// <see cref="TenantIdInput"/> 租户Id输入
+/// 租户Id输入
 /// </summary>
 public class TenantIdInput : UpdateVersionInput
 {

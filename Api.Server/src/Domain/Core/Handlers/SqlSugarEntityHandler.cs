@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -24,14 +24,13 @@ using Fast.CenterLog.Entity;
 using Fast.CenterLog.Enum;
 using Fast.SqlSugar;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using SqlSugar;
 using Yitter.IdGenerator;
 
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="SqlSugarEntityHandler"/> Sugar实体处理
+/// Sugar实体处理
 /// </summary>
 public class SqlSugarEntityHandler : ISqlSugarEntityHandler
 {
@@ -41,7 +40,7 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     private readonly IUser _user;
 
     /// <summary>
-    /// SqlSugar实体服务
+    /// SqlSugar 实体服务
     /// </summary>
     private readonly ISqlSugarEntityService _sqlSugarEntityService;
 
@@ -51,32 +50,23 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     private readonly HttpContext _httpContext;
 
     /// <summary>
-    /// 日志
+    /// SQL 日志专用通道
     /// </summary>
-    private readonly ILogger _logger;
+    private readonly SqlSugarLogChannel _sqlSugarLogChannel;
 
     /// <summary>
-    /// <see cref="SqlSugarEntityHandler"/> Sugar实体处理
+    /// 初始化 SqlSugar 实体处理器
     /// </summary>
-    /// <param name="user"><see cref="IUser"/> 授权用户</param>
-    /// <param name="sqlSugarEntityService"><see cref="ISqlSugarEntityService"/> SqlSugar实体服务</param>
-    /// <param name="httpContextAccessor"><see cref="IHttpContextAccessor"/> 请求上下文访问器</param>
-    /// <param name="logger"><see cref="ILogger"/> 日志</param>
     public SqlSugarEntityHandler(IUser user, ISqlSugarEntityService sqlSugarEntityService,
-        IHttpContextAccessor httpContextAccessor, ILogger<ISqlSugarEntityHandler> logger)
+        IHttpContextAccessor httpContextAccessor, SqlSugarLogChannel sqlSugarLogChannel)
     {
         _user = user;
         _sqlSugarEntityService = sqlSugarEntityService;
         _httpContext = httpContextAccessor.HttpContext;
-        _logger = logger;
+        _sqlSugarLogChannel = sqlSugarLogChannel;
     }
 
-    /// <summary>根据实体类型获取连接字符串</summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="sqlSugarClient"><see cref="T:ISqlSugarClient" /> 默认库SqlSugar客户端</param>
-    /// <param name="sugarDbType">实体类头部的 <see cref="T:Fast.SqlSugar.SugarDbTypeAttribute" /> 特性，如果不存在可能为空</param>
-    /// <param name="entityType"><see cref="T:System.Type" /> 实体类型</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<ConnectionSettingsOptions> GetConnectionSettings<TEntity>(ISqlSugarClient sqlSugarClient,
         SugarDbTypeAttribute sugarDbType, Type entityType)
     {
@@ -103,21 +93,13 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         }
     }
 
-    /// <summary>执行Sql</summary>
-    /// <param name="rawSql"><see cref="T:System.String" /> 原始Sql语句</param>
-    /// <param name="parameters"><see cref="T:SugarParameter" /> Sql参数</param>
-    /// <param name="executeTime"><see cref="T:System.TimeSpan" /> 执行时间</param>
-    /// <param name="handlerSql"><see cref="T:System.String" /> 参数化处理后的Sql语句</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task ExecuteAsync(string rawSql, SugarParameter[] parameters, TimeSpan executeTime, string handlerSql)
     {
         // 获取 CenterLog 库的连接字符串配置
         var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
             CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
-
-        var tenantId = _user.TenantId;
-        var tenantNo = _user.TenantNo;
 
         // 组装数据
         var sqlExecutionLogModel = new SqlExecutionLogModel
@@ -138,37 +120,11 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         };
         sqlExecutionLogModel.RecordCreate(_httpContext);
 
-        _ = Task.Run(async () =>
-        {
-            try
-            {
-                // 这里不能使用Aop
-                var db = new SqlSugarClient(connectionConfig);
-
-                // 异步不等待
-                await db.Insertable(sqlExecutionLogModel)
-                    .SplitTable()
-                    .ExecuteCommandAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"TenantId：{tenantId}；TenantNo：{tenantNo}；SqlSugar Aop 执行Sql，保存失败；{ex.Message}");
-            }
-        });
-
-        await Task.CompletedTask;
+        // 只等待日志进入有界通道；通道满时自然施加背压，不在业务请求中等待日志数据库写入
+        await _sqlSugarLogChannel.WriteAsync(connectionConfig, sqlExecutionLogModel);
     }
 
-    /// <summary>执行Sql超时</summary>
-    /// <param name="fileName"><see cref="T:System.String" /> 文件名称</param>
-    /// <param name="fileLine"><see cref="T:System.Int32" /> 文件行数</param>
-    /// <param name="methodName"><see cref="T:System.String" /> 方法名称</param>
-    /// <param name="rawSql"><see cref="T:System.String" /> 未处理的Sql语句</param>
-    /// <param name="parameters"><see cref="T:SugarParameter" /> Sql参数</param>
-    /// <param name="executeTime"><see cref="T:System.TimeSpan" /> 执行时间</param>
-    /// <param name="handlerSql"><see cref="T:System.String" /> 参数化处理后的Sql语句</param>
-    /// <param name="message"><see cref="T:System.String" /></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task ExecuteTimeoutAsync(string fileName, int fileLine, string methodName, string rawSql,
         SugarParameter[] parameters, TimeSpan executeTime, string handlerSql, string message)
     {
@@ -176,9 +132,6 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
             CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
-
-        var tenantId = _user.TenantId;
-        var tenantNo = _user.TenantNo;
 
         // 组装数据
         var sqlTimeoutLogModel = new SqlTimeoutLogModel
@@ -202,38 +155,11 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         };
         sqlTimeoutLogModel.RecordCreate(_httpContext);
 
-        _ = Task.Run(async () =>
-        {
-            try
-            {
-                // 这里不能使用Aop
-                var db = new SqlSugarClient(connectionConfig);
-
-                // 异步不等待
-                await db.Insertable(sqlTimeoutLogModel)
-                    .ExecuteCommandAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"TenantId：{tenantId}；TenantNo：{tenantNo}；SqlSugar Aop 执行Sql超时，保存失败；{ex.Message}");
-            }
-        });
-
-        await Task.CompletedTask;
+        // 只等待日志进入有界通道；通道满时自然施加背压，不在业务请求中等待日志数据库写入
+        await _sqlSugarLogChannel.WriteAsync(connectionConfig, sqlTimeoutLogModel);
     }
 
-    /// <summary>执行Sql差异</summary>
-    /// <param name="diffType"><see cref="T:DiffType" /> 差异类型</param>
-    /// <param name="tableName"><see cref="T:System.String" /> 表名称</param>
-    /// <param name="tableDescription"><see cref="T:System.String" /> 表描述</param>
-    /// <param name="businessData"><see cref="object"/> 业务数据</param>
-    /// <param name="beforeColumnList"><see cref="T:System.String" /> 执行前列信息</param>
-    /// <param name="afterColumnList"><see cref="T:System.String" /> 执行后列信息</param>
-    /// <param name="rawSql"><see cref="T:System.String" /> 原始Sql语句</param>
-    /// <param name="parameters"><see cref="T:SugarParameter" /> Sql参数</param>
-    /// <param name="executeTime"><see cref="T:System.TimeSpan" /> 执行时间</param>
-    /// <param name="handlerSql"><see cref="T:System.String" /> 参数化处理后的Sql语句</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task ExecuteDiffLogAsync(DiffType diffType, string tableName, string tableDescription, object businessData,
         List<List<DiffLogColumnInfo>> beforeColumnList, List<List<DiffLogColumnInfo>> afterColumnList, string rawSql,
         SugarParameter[] parameters, TimeSpan? executeTime, string handlerSql)
@@ -242,9 +168,6 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
             CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
-
-        var tenantId = _user.TenantId;
-        var tenantNo = _user.TenantNo;
 
         var diffLogType = diffType switch
         {
@@ -278,36 +201,11 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         };
         sqlDiffLogModel.RecordCreate(_httpContext);
 
-        _ = Task.Run(async () =>
-        {
-            try
-            {
-                // 这里不能使用Aop
-                var db = new SqlSugarClient(connectionConfig);
-
-                // 异步不等待
-                await db.Insertable(sqlDiffLogModel)
-                    .SplitTable()
-                    .ExecuteCommandAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"TenantId：{tenantId}；TenantNo：{tenantNo}；SqlSugar Aop 执行Sql差异，保存失败；{ex.Message}");
-            }
-        });
-
-        await Task.CompletedTask;
+        // 只等待日志进入有界通道；通道满时自然施加背压，不在业务请求中等待日志数据库写入
+        await _sqlSugarLogChannel.WriteAsync(connectionConfig, sqlDiffLogModel);
     }
 
-    /// <summary>执行Sql错误</summary>
-    /// <param name="fileName"><see cref="T:System.String" /> 文件名称</param>
-    /// <param name="fileLine"><see cref="T:System.Int32" /> 文件行数</param>
-    /// <param name="methodName"><see cref="T:System.String" /> 方法名称</param>
-    /// <param name="rawSql"><see cref="T:System.String" /> 原始Sql语句</param>
-    /// <param name="parameters"><see cref="T:SugarParameter" /> Sql参数</param>
-    /// <param name="handlerSql"><see cref="T:System.String" /> 参数化处理后的Sql语句</param>
-    /// <param name="exception"><see cref="T:SqlSugarException" /> 异常信息</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task ExecuteErrorAsync(string fileName, int fileLine, string methodName, string rawSql,
         SugarParameter[] parameters, string handlerSql, SqlSugarException exception)
     {
@@ -315,9 +213,6 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
             CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
         var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
-
-        var tenantId = _user.TenantId;
-        var tenantNo = _user.TenantNo;
 
         // 组装数据
         var sqlExceptionLogModel = new SqlExceptionLogModel
@@ -343,70 +238,47 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
         };
         sqlExceptionLogModel.RecordCreate(_httpContext);
 
-        _ = Task.Run(async () =>
-        {
-            try
-            {
-                // 这里不能使用Aop
-                var db = new SqlSugarClient(connectionConfig);
-
-                // 异步不等待
-                await db.Insertable(sqlExceptionLogModel)
-                    .ExecuteCommandAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"TenantId：{tenantId}；TenantNo：{tenantNo}；SqlSugar Aop 执行Sql错误，保存失败；{ex.Message}");
-            }
-        });
-
-        await Task.CompletedTask;
+        // 只等待日志进入有界通道；通道满时自然施加背压，不在业务请求中等待日志数据库写入
+        await _sqlSugarLogChannel.WriteAsync(connectionConfig, sqlExceptionLogModel);
     }
 
-    /// <summary>是否为超级管理员</summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public bool IsSuperAdmin()
     {
         return _user.IsSuperAdmin;
     }
 
-    /// <summary>是否为管理员</summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public bool IsAdmin()
     {
         return _user.IsAdmin;
     }
 
-    /// <summary>指派租户Id</summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public long? AssignTenantId()
     {
         return _user.TenantId;
     }
 
-    /// <summary>指派部门Id</summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public long? AssignDepartmentId()
     {
         return _user.DepartmentId;
     }
 
-    /// <summary>指派部门名称</summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public string AssignDepartmentName()
     {
         return _user.DepartmentName;
     }
 
-    /// <summary>指派用户Id</summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public long? AssignUserId()
     {
         return _user.EmployeeId;
     }
 
-    /// <summary>指派用户名称</summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public string AssignUserName()
     {
         return string.IsNullOrWhiteSpace(_user.EmployeeName) ? _user.NickName : _user.EmployeeName;

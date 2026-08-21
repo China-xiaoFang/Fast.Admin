@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -21,17 +21,16 @@
 // ------------------------------------------------------------------------
 
 using System.Text;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="DeleteLogHostedService"/> 删除日志托管服务
+/// 删除日志后台服务
 /// </summary>
 [Order(1)]
-public class DeleteLogHostedService : IHostedService
+public class DeleteLogBackgroundService : BackgroundService
 {
     /// <summary>
     /// 最大保留天数
@@ -39,9 +38,9 @@ public class DeleteLogHostedService : IHostedService
     private const int MaxRetainDay = 90;
 
     /// <summary>
-    /// 日志文件正则表达式
+    /// 应用程序生命周期
     /// </summary>
-    private readonly Regex LogRegex = new(@"^(?:\\[^\\]+)*\\[^\\]+\.log$", RegexOptions.IgnoreCase);
+    private readonly IHostApplicationLifetime _hostApplicationLifetime;
 
     /// <summary>
     /// 日志
@@ -49,19 +48,20 @@ public class DeleteLogHostedService : IHostedService
     private readonly ILogger _logger;
 
     /// <summary>
-    /// <see cref="DeleteLogHostedService"/> 删除日志托管服务
+    /// 删除日志托管服务
     /// </summary>
-    /// <param name="logger"><see cref="ILogger"/> 日志</param>
-    public DeleteLogHostedService(ILogger<DeleteLogHostedService> logger)
+    public DeleteLogBackgroundService(IHostApplicationLifetime hostApplicationLifetime,
+        ILogger<DeleteLogBackgroundService> logger)
     {
+        _hostApplicationLifetime = hostApplicationLifetime;
         _logger = logger;
     }
 
     /// <summary>
     /// 处理空文件夹
     /// </summary>
-    /// <param name="stopDirectory"></param>
-    /// <param name="directoryInfo"></param>
+    /// <param name="stopDirectory">停止递归扫描的根目录</param>
+    /// <param name="directoryInfo">当前扫描目录</param>
     private void HandleEmptyDirectory(string stopDirectory, DirectoryInfo directoryInfo)
     {
         while (directoryInfo != null)
@@ -88,53 +88,46 @@ public class DeleteLogHostedService : IHostedService
         }
     }
 
-    /// <summary>
-    /// Triggered when the application host is ready to start the service.
-    /// </summary>
-    /// <param name="cancellationToken">Indicates that the start process has been aborted.</param>
-    /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous Start operation.</returns>
-    public async Task StartAsync(CancellationToken cancellationToken)
+    /// <inheritdoc />
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var logPath = Path.Combine(Environment.CurrentDirectory, "logs");
-
-        if (Directory.Exists(logPath))
+        try
         {
-            // 空文件数量
-            var emptyFileNum = 0;
-            var oldFileNum = 0;
-
-            _ = Task.Run(() =>
+            // 日志组件会在启动阶段创建当前日志文件；等待应用完全启动并写入启动日志后再检查空文件
+            if (!_hostApplicationLifetime.ApplicationStarted.IsCancellationRequested)
             {
+                var applicationStarted = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+                await using var registration =
+                    _hostApplicationLifetime.ApplicationStarted.Register(() => applicationStarted.TrySetResult());
+                await applicationStarted.Task.WaitAsync(stoppingToken);
+            }
+
+            var logPath = Path.Combine(Environment.CurrentDirectory, "logs");
+
+            if (Directory.Exists(logPath))
+            {
+                // 空文件数量
+                var emptyFileNum = 0;
+                var oldFileNum = 0;
+
                 try
                 {
-                    // 查找当前目录下所有的文件
-                    var files = Directory.GetFiles(logPath, "*.*", SearchOption.AllDirectories);
+                    // SearchPattern 由运行时按当前平台处理路径分隔符，可同时支持 Windows、Linux 和 macOS
+                    var matchedFiles = Directory.EnumerateFiles(logPath, "*.log", SearchOption.AllDirectories);
 
-                    // 过滤符合条件的文件
-                    var matchedFiles = files.Select(sl =>
-                        {
-                            var relativePath = sl.Substring(logPath.Length);
-                            if (!relativePath.StartsWith("\\"))
-                            {
-                                relativePath = "\\" + relativePath;
-                            }
-
-                            return new {FullPath = sl, RelativePath = relativePath};
-                        })
-                        .Where(wh => LogRegex.IsMatch(wh.RelativePath))
-                        .ToList();
-
-                    foreach (var item in matchedFiles)
+                    foreach (var filePath in matchedFiles)
                     {
-                        var fileInfo = new FileInfo(item.FullPath);
+                        stoppingToken.ThrowIfCancellationRequested();
+
+                        var fileInfo = new FileInfo(filePath);
 
                         // 删除空文件
                         if (fileInfo.Length == 0)
                         {
                             try
                             {
-                                File.Delete(item.FullPath);
-                                HandleEmptyDirectory(logPath, new DirectoryInfo(Path.GetDirectoryName(item.FullPath)));
+                                File.Delete(filePath);
+                                HandleEmptyDirectory(logPath, new DirectoryInfo(Path.GetDirectoryName(filePath)));
                                 emptyFileNum++;
                             }
                             catch
@@ -147,8 +140,8 @@ public class DeleteLogHostedService : IHostedService
                         {
                             try
                             {
-                                File.Delete(item.FullPath);
-                                HandleEmptyDirectory(logPath, new DirectoryInfo(Path.GetDirectoryName(item.FullPath)));
+                                File.Delete(filePath);
+                                HandleEmptyDirectory(logPath, new DirectoryInfo(Path.GetDirectoryName(filePath)));
                                 oldFileNum++;
                             }
                             catch
@@ -158,7 +151,7 @@ public class DeleteLogHostedService : IHostedService
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (!stoppingToken.IsCancellationRequested)
                 {
                     _logger.LogError(ex, "Delete log error...");
                 }
@@ -175,19 +168,11 @@ public class DeleteLogHostedService : IHostedService
                 logSb.Append($"删除日志文件，空文件 {emptyFileNum} 个，超过最长保留{MaxRetainDay}天文件 {oldFileNum} 个。");
                 logSb.Append("\u001b[39m\u001b[22m\u001b[49m");
                 Console.WriteLine(logSb.ToString());
-            }, cancellationToken);
+            }
         }
-
-        await Task.CompletedTask;
-    }
-
-    /// <summary>
-    /// Triggered when the application host is performing a graceful shutdown.
-    /// </summary>
-    /// <param name="cancellationToken">Indicates that the shutdown process should no longer be graceful.</param>
-    /// <returns>A <see cref="T:System.Threading.Tasks.Task" /> that represents the asynchronous Stop operation.</returns>
-    public async Task StopAsync(CancellationToken cancellationToken)
-    {
-        await Task.CompletedTask;
+        catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+        {
+            // 宿主停止时取消启动等待或日志扫描属于正常停机流程
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,7 +28,7 @@ using Microsoft.Extensions.Logging;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="RequestMiddleware"/> 请求中间件
+/// 请求中间件
 /// </summary>
 [SuppressSniffer]
 public class RequestMiddleware
@@ -44,10 +44,8 @@ public class RequestMiddleware
     private readonly ILogger _logger;
 
     /// <summary>
-    /// <see cref="RequestMiddleware"/> 请求中间件
+    /// 请求中间件
     /// </summary>
-    /// <param name="next"><see cref="RequestDelegate"/> 请求委托</param>
-    /// <param name="logger"><see cref="ILogger"/> 日志</param>
     public RequestMiddleware(RequestDelegate next, ILogger<RequestMiddleware> logger)
     {
         _next = next;
@@ -57,8 +55,6 @@ public class RequestMiddleware
     /// <summary>
     /// 中间件执行方法
     /// </summary>
-    /// <param name="httpContext"><see cref="HttpContext"/></param>
-    /// <returns></returns>
     public async Task InvokeAsync(HttpContext httpContext)
     {
         var httpRequest = httpContext.Request;
@@ -103,7 +99,8 @@ public class RequestMiddleware
             httpContext.Request.Body.Position = 0;
         }
 
-        // 请求解密
+        // 请求加密只用于兼容客户端的数据封装，密钥可由请求时间戳推导，不能替代 HTTPS、身份认证和防重放校验
+        // 登录密码等敏感字段在生产环境仍必须通过 HTTPS 传输；此开关开启时仅在 HTTPS 之上增加一层协议加密
         var requestEncipher = false;
 
         // 判断是否存在加密头部标识

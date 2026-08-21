@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="EditionEnum"/> 版本枚举
+/// 版本枚举
 /// </summary>
 [Flags]
 [FastEnum("版本枚举")]

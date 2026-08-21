@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="ElSelectorOutput{T}"/> ElementPlus ElSelect 通用输出
+/// ElementPlus ElSelect 通用输出
 /// </summary>
 [SuppressSniffer]
 public class ElSelectorOutput<T>

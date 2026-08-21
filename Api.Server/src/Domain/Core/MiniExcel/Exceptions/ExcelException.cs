@@ -23,7 +23,7 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ExcelException"/> Excel异常
+/// Excel异常
 /// </summary>
 [SuppressSniffer]
 public class ExcelException : UserFriendlyException
@@ -38,7 +38,6 @@ public class ExcelException : UserFriendlyException
     /// <summary>
     /// <inheritdoc cref="ExcelException" />
     /// </summary>
-    /// <param name="message">异常信息</param>
     public ExcelException(string message) : base(message ?? "Excel Error")
     {
     }
@@ -46,8 +45,6 @@ public class ExcelException : UserFriendlyException
     /// <summary>
     /// <inheritdoc cref="ExcelException" />
     /// </summary>
-    /// <param name="message">异常信息</param>
-    /// <param name="innerException">内部异常</param>
     public ExcelException(string message, Exception innerException) : base(message ?? "Excel Error", innerException)
     {
     }

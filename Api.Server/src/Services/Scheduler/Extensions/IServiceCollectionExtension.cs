@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,7 +28,7 @@ using Quartz;
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="IServiceCollectionExtension"/> 拓展类
+/// <see cref="IServiceCollection"/> 的 Quartz 扩展方法
 /// </summary>
 [SuppressSniffer]
 public static class IServiceCollectionExtension
@@ -36,9 +36,7 @@ public static class IServiceCollectionExtension
     /// <summary>
     /// 添加 Quartz 服务
     /// </summary>
-    /// <param name="services"><see cref="IServiceCollection"/></param>
-    /// <param name="configuration"><see cref="IConfiguration"/></param>
-    /// <returns><see cref="IServiceCollection"/></returns>
+    /// <returns>用于继续链式配置的服务集合</returns>
     public static IServiceCollection AddQuartzService(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddQuartz(options =>
@@ -141,8 +139,7 @@ public static class IServiceCollectionExtension
     /// <summary>
     /// 添加 Quartz 托管服务
     /// </summary>
-    /// <param name="services"><see cref="IServiceCollection"/></param>
-    /// <returns><see cref="IServiceCollection"/></returns>
+    /// <returns>用于继续链式配置的服务集合</returns>
     public static IServiceCollection AddQuartzHostedService(this IServiceCollection services)
     {
         services.AddQuartzHostedService(options =>

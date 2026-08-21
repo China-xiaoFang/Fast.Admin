@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ITenantDatabaseService"/> 租户数据库服务
+/// 租户数据库服务
 /// </summary>
 /// <remarks>需要在 Admin 服务中实现</remarks>
 public interface ITenantDatabaseService
@@ -31,8 +31,5 @@ public interface ITenantDatabaseService
     /// <summary>
     /// 初始化数据库
     /// </summary>
-    /// <param name="tenantId"><see cref="long"/> 租户Id</param>
-    /// <param name="databaseType"><see cref="DatabaseTypeEnum"/> 数据库类型</param>
-    /// <returns></returns>
     Task InitDatabase(long tenantId, DatabaseTypeEnum databaseType);
 }

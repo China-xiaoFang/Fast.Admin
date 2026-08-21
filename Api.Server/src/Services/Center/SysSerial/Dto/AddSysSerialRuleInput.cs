@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.SysSerial.Dto;
 
 /// <summary>
-/// <see cref="AddSysSerialRuleInput"/> 添加系统序号规则输入
+/// 添加系统序号规则输入
 /// </summary>
 public class AddSysSerialRuleInput
 {

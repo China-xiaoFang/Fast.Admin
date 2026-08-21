@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,15 +23,25 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="CommonConst"/> 公共常量
+/// 公共常量
 /// </summary>
 [SuppressSniffer]
-public class CommonConst
+public static class CommonConst
 {
     /// <summary>
-    /// <see cref="Default"/> 默认
+    /// 全局 API 限流规则
     /// </summary>
-    public class Default
+    public const string GlobalApiRateLimit = "GlobalApiRateLimit";
+
+    /// <summary>
+    /// 登录 API 限流规则
+    /// </summary>
+    public const string LoginApiRateLimit = "LoginApiRateLimit";
+
+    /// <summary>
+    /// 默认
+    /// </summary>
+    public static class Default
     {
         /// <summary>
         /// 管理员密码

@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="SchedulerJobGroupEnum"/> 调度作业分组枚举
+/// 调度作业分组枚举
 /// </summary>
 [Flags]
 [FastEnum("调度作业分组枚举")]

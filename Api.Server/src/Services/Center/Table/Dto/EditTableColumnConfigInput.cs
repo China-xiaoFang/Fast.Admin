@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Table.Dto;
 
 /// <summary>
-/// <see cref="EditTableColumnConfigInput"/> 编辑表格列配置输入
+/// 编辑表格列配置输入
 /// </summary>
 public class EditTableColumnConfigInput : UpdateVersionInput
 {

@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="MenuModel"/> 菜单表Model类
+/// 菜单表Model类
 /// </summary>
 [SugarTable("Menu", "菜单表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -91,6 +91,7 @@ public class MenuModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 角色类型
     /// </summary>
+    /// <remarks>仅用于初始化角色默认菜单</remarks>
     [SugarColumn(ColumnDescription = "角色类型")]
     public RoleTypeEnum RoleType { get; set; }
 

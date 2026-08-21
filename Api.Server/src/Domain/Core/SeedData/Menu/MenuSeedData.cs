@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -26,7 +26,7 @@ using SqlSugar;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="MenuSeedData"/> 菜单种子数据
+/// 菜单种子数据
 /// </summary>
 internal static partial class MenuSeedData
 {
@@ -48,16 +48,34 @@ internal static partial class MenuSeedData
     /// <summary>
     /// 默认菜单种子数据
     /// </summary>
-    /// <param name="db"></param>
-    /// <param name="applicationModel"><see cref="ApplicationModel"/> 应用</param>
-    /// <param name="dateTime"><see cref="DateTime"/> 时间</param>
-    /// <returns></returns>
     public static async Task DefaultMenuSeedData(ISqlSugarClient db, ApplicationModel applicationModel, DateTime dateTime)
     {
-        // 系统模块
-        await SystemModuleSeedData(db, applicationModel, dateTime);
+        #region 系统模块
 
-        // 开发模块
-        await DevModuleSeedData(db, applicationModel, dateTime);
+        // 重置菜单排序
+        menuSort = 1000;
+
+        await SeedSystemMonitor(db, applicationModel, dateTime);
+        await SeedFileStorage(db, applicationModel, dateTime);
+        await SeedAccountManagement(db, applicationModel, dateTime);
+        await SeedSystemManagement(db, applicationModel, dateTime);
+        await SeedConfigManagement(db, applicationModel, dateTime);
+        await SeedOrganizationManagement(db, applicationModel, dateTime);
+        await SeedFinanceManagement(db, applicationModel, dateTime);
+        await SeedPlatformManagement(db, applicationModel, dateTime);
+        await SeedLogManagement(db, applicationModel, dateTime);
+
+        #endregion
+
+        #region 开发模块
+
+        // 重置菜单排序
+        menuSort = 0;
+
+        await SeedDevApi(db, applicationModel, dateTime);
+        await SeedDevTools(db, applicationModel, dateTime);
+        await SeedDevLogs(db, applicationModel, dateTime);
+
+        #endregion
     }
 }

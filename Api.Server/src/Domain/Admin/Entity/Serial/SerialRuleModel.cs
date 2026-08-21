@@ -23,7 +23,7 @@
 namespace Fast.Admin.Entity;
 
 /// <summary>
-/// <see cref="SerialRuleModel"/> 序号规则表Model类
+/// 序号规则表Model类
 /// </summary>
 [SugarTable("SerialRule", "序号规则表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]

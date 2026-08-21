@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -27,9 +27,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.Api;
 
 /// <summary>
-/// <see cref="ApiService"/> Api
+/// API 服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "api")]
+[PlatformOnly]
 public class ApiService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<ApiInfoModel> _repository;
@@ -42,8 +43,6 @@ public class ApiService : IDynamicApplication
     /// <summary>
     /// 获取接口分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取接口分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.ApiPaged)]

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,23 +23,23 @@
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="ISchedulerJob"/> 调度作业
+/// 调度作业
 /// </summary>
-/// <remarks>注：如果存在DI注入，已经要包含一个空的构造函数</remarks>
+/// <remarks>实现类通过依赖注入创建，构造函数参数必须能够从服务容器中解析</remarks>
 public interface ISchedulerJob
 {
     /// <summary>
     /// 获取本地作业
     /// </summary>
-    /// <returns></returns>
+    /// <returns>本地作业</returns>
     SchedulerLocalJobInfo GetLocalJob();
 
     /// <summary>
     /// 执行作业
     /// </summary>
-    /// <param name="serviceProvider"><see cref="IServiceProvider"/> 服务提供者（请求作用域类似于，如果存在 TenantId 则自动注入 IUser 服务）</param>
-    /// <param name="db"><see cref="ISqlSugarClient"/> SqlSugar上下文</param>
-    /// <param name="logInfo"><see cref="SchedulerJobLocalLogInfo"/> 日志信息</param>
-    /// <returns></returns>
+    /// <param name="serviceProvider">当前作业的请求作用域服务提供者；指定租户时，作用域内的 <see cref="IUser"/> 已设置为对应租户机器人用户</param>
+    /// <param name="db">SqlSugar 上下文</param>
+    /// <param name="logInfo">日志信息</param>
+    /// <returns>作业执行日志</returns>
     Task<string> Execute(IServiceProvider serviceProvider, ISqlSugarClient db, SchedulerJobLocalLogInfo logInfo);
 }

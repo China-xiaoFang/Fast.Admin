@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Config.Dto;
 
 /// <summary>
-/// <see cref="QueryConfigDetailOutput"/> 获取配置详情输出
+/// 获取配置详情输出
 /// </summary>
 public class QueryConfigDetailOutput : PagedOutput
 {

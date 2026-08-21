@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="QuerySchedulerDetailOutput"/> 获取调度器详情输出
+/// 获取调度器详情输出
 /// </summary>
 public class QuerySchedulerDetailOutput
 {

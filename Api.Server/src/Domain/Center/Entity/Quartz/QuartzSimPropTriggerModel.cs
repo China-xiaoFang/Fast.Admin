@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="QuartzSimPropTriggerModel"/> Quartz 简单属性触发器表Model类
+/// Quartz 简单属性触发器表Model类
 /// </summary>
 [SugarTable("QRTZ_SIMPROP_TRIGGERS", "Quartz 简单属性触发器表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
@@ -51,69 +51,69 @@ public class QuartzSimPropTriggerModel : IDatabaseEntity
     public string TriggerGroup { get; set; }
 
     /// <summary>
-    /// 
+    /// 字符串属性1
     /// </summary>
-    [SugarColumn(ColumnName = "STR_PROP_1", Length = 512)]
+    [SugarColumn(ColumnName = "STR_PROP_1", ColumnDescription = "字符串属性1", Length = 512)]
     public string Str_Prop_1 { get; set; }
 
     /// <summary>
-    /// 
+    /// 字符串属性2
     /// </summary>
-    [SugarColumn(ColumnName = "STR_PROP_2", Length = 512)]
+    [SugarColumn(ColumnName = "STR_PROP_2", ColumnDescription = "字符串属性2", Length = 512)]
     public string Str_Prop_2 { get; set; }
 
     /// <summary>
-    /// 
+    /// 字符串属性3
     /// </summary>
-    [SugarColumn(ColumnName = "STR_PROP_3", Length = 512)]
+    [SugarColumn(ColumnName = "STR_PROP_3", ColumnDescription = "字符串属性3", Length = 512)]
     public string Str_Prop_3 { get; set; }
 
     /// <summary>
-    /// 
+    /// 整数属性1
     /// </summary>
-    [SugarColumn(ColumnName = "INT_PROP_1")]
+    [SugarColumn(ColumnName = "INT_PROP_1", ColumnDescription = "整数属性1")]
     public int? Int_Prop_1 { get; set; }
 
     /// <summary>
-    /// 
+    /// 整数属性2
     /// </summary>
-    [SugarColumn(ColumnName = "INT_PROP_2")]
+    [SugarColumn(ColumnName = "INT_PROP_2", ColumnDescription = "整数属性2")]
     public int? Int_Prop_2 { get; set; }
 
     /// <summary>
-    /// 
+    /// 长整数属性1
     /// </summary>
-    [SugarColumn(ColumnName = "LONG_PROP_1")]
+    [SugarColumn(ColumnName = "LONG_PROP_1", ColumnDescription = "长整数属性1")]
     public long? Long_Prop_1 { get; set; }
 
     /// <summary>
-    /// 
+    /// 长整数属性2
     /// </summary>
-    [SugarColumn(ColumnName = "LONG_PROP_2")]
+    [SugarColumn(ColumnName = "LONG_PROP_2", ColumnDescription = "长整数属性2")]
     public long? Long_Prop_2 { get; set; }
 
     /// <summary>
-    /// 
+    /// 小数属性1
     /// </summary>
-    [SugarColumn(ColumnName = "DEC_PROP_1", Length = 13, DecimalDigits = 4)]
+    [SugarColumn(ColumnName = "DEC_PROP_1", ColumnDescription = "小数属性1", Length = 13, DecimalDigits = 4)]
     public decimal? Dec_Prop_1 { get; set; }
 
     /// <summary>
-    /// 
+    /// 小数属性2
     /// </summary>
-    [SugarColumn(ColumnName = "DEC_PROP_2", Length = 13, DecimalDigits = 4)]
+    [SugarColumn(ColumnName = "DEC_PROP_2", ColumnDescription = "小数属性2", Length = 13, DecimalDigits = 4)]
     public decimal? Dec_Prop_2 { get; set; }
 
     /// <summary>
-    /// 
+    /// 布尔属性1
     /// </summary>
-    [SugarColumn(ColumnName = "BOOL_PROP_1")]
+    [SugarColumn(ColumnName = "BOOL_PROP_1", ColumnDescription = "布尔属性1")]
     public bool? Bool_Prop_1 { get; set; }
 
     /// <summary>
-    /// 
+    /// 布尔属性2
     /// </summary>
-    [SugarColumn(ColumnName = "BOOL_PROP_2")]
+    [SugarColumn(ColumnName = "BOOL_PROP_2", ColumnDescription = "布尔属性2")]
     public bool? Bool_Prop_2 { get; set; }
 
     /// <summary>

@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="PasswordTypeEnum"/> 密码类型枚举
+/// 密码类型枚举
 /// </summary>
 [Flags]
 [FastEnum("密码类型枚举")]
@@ -39,5 +39,11 @@ public enum PasswordTypeEnum : byte
     /// SHA1
     /// </summary>
     [Description("SHA1")]
-    SHA1 = 2
+    SHA1 = 2,
+
+    /// <summary>
+    /// PBKDF2-SHA256
+    /// </summary>
+    [Description("PBKDF2-SHA256")]
+    PBKDF2_SHA256 = 4
 }

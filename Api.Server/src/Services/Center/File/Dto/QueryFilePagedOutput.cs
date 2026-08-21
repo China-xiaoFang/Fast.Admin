@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.File.Dto;
 
 /// <summary>
-/// <see cref="QueryFilePagedOutput"/> 获取文件分页列表输出
+/// 获取文件分页列表输出
 /// </summary>
 public class QueryFilePagedOutput
 {
@@ -39,7 +39,7 @@ public class QueryFilePagedOutput
     public string FileObjectName { get; set; }
 
     /// <summary>
-    /// 文件名称（上传时候的文件名）
+    /// 原始文件名
     /// </summary>
     [SugarSearchValue]
     public string FileOriginName { get; set; }

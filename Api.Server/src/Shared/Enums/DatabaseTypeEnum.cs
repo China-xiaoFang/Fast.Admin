@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="DatabaseTypeEnum"/> 数据库类型枚举
+/// 数据库类型枚举
 /// </summary>
 [Flags]
 [FastEnum("数据库类型枚举")]

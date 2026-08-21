@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.Role.Dto;
 
 /// <summary>
-/// <see cref="RoleIdInput"/> 角色Id输入
+/// 角色Id输入
 /// </summary>
 public class RoleIdInput : UpdateVersionInput
 {

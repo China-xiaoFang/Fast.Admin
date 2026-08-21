@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -26,7 +26,7 @@ using System.Net.Sockets;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="MetadataContext"/> 元数据上下文
+/// 元数据上下文
 /// </summary>
 [SuppressSniffer]
 public class MetadataContext
@@ -51,7 +51,7 @@ public class MetadataContext
     /// 获取服务器Ip地址
     /// </summary>
     /// <remarks>从Metadata Service中获取</remarks>
-    /// <returns></returns>
+    /// <returns>服务器元数据；无法识别云平台时返回本机信息</returns>
     private static async Task<ServerMetadataInfo> GetServerMetadata()
     {
         // 阿里云

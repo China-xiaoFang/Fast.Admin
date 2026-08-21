@@ -23,7 +23,7 @@
 namespace Fast.Admin.Service.JobLevel.Dto;
 
 /// <summary>
-/// <see cref="AddJobLevelInput"/> 添加职级输入
+/// 添加职级输入
 /// </summary>
 public class AddJobLevelInput
 {

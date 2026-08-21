@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,17 +23,15 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="CacheConst"/> 缓存常量
+/// 缓存常量
 /// </summary>
 [SuppressSniffer]
-public class CacheConst
+public static class CacheConst
 {
     /// <summary>
     /// 获取缓存Key
     /// </summary>
-    /// <param name="cacheKey"><see cref="string"/> 缓存Key</param>
-    /// <param name="args"></param>
-    /// <returns></returns>
+    /// <returns>缓存键</returns>
     public static string GetCacheKey(string cacheKey, params object[] args)
     {
         return string.Format(cacheKey, args);
@@ -46,9 +44,9 @@ public class CacheConst
     public const string AuthUser = "{0}:{1}:Auth:{2}:{3}";
 
     /// <summary>
-    /// <see cref="Center"/> 管理后台
+    /// 管理后台
     /// </summary>
-    public class Center
+    public static class Center
     {
         /// <summary>
         /// 数据库

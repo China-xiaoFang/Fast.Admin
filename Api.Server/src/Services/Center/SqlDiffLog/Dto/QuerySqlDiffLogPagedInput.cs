@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.CenterLog.Enum;
 namespace Fast.Center.Service.SqlDiffLog.Dto;
 
 /// <summary>
-/// <see cref="QuerySqlDiffLogPagedInput"/> 获取Sql差异日志分页列表输入
+/// 获取 SQL 差异日志分页列表输入
 /// </summary>
 public class QuerySqlDiffLogPagedInput : PagedInput
 {

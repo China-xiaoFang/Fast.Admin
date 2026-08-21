@@ -26,7 +26,7 @@ using Quartz;
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="QueryAllSchedulerJobOutput"/> 获取全部调度作业输出
+/// 获取全部调度作业输出
 /// </summary>
 public class QueryAllSchedulerJobOutput
 {
@@ -94,7 +94,7 @@ public class QueryAllSchedulerJobOutput
         #region Url
 
         /// <summary>
-        /// 请求Url
+        /// 请求 URL
         /// </summary>
         public string RequestUrl { get; set; }
 

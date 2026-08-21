@@ -23,7 +23,7 @@
 namespace Fast.Admin.Entity;
 
 /// <summary>
-/// <see cref="SerialSettingModel"/> 序号配置表Model类
+/// 序号配置表Model类
 /// </summary>
 [SugarTable("SerialSetting", "序号配置表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]

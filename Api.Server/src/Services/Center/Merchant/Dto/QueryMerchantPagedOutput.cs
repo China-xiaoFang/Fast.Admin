@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Merchant.Dto;
 
 /// <summary>
-/// <see cref="QueryMerchantPagedOutput"/> 获取商户号分页列表输出
+/// 获取商户号分页列表输出
 /// </summary>
 public class QueryMerchantPagedOutput : PagedOutput
 {

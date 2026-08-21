@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="TableColumnConfigCacheModel"/> 表格列配置缓存表Model类
+/// 表格列配置缓存表Model类
 /// </summary>
 [SugarTable("TableColumnConfigCache", "表格列配置缓存表")]
 [SugarDbType(DatabaseTypeEnum.Center)]

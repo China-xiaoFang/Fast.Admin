@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -26,30 +26,30 @@ using Fast.Center.Service.Tenant.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.DependencyInjection;
 using Yitter.IdGenerator;
 
 namespace Fast.Center.Service.Tenant;
 
 /// <summary>
-/// <see cref="TenantService"/> 租户服务
+/// 租户服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "tenant")]
 public class TenantService : IDynamicApplication
 {
     private readonly IUser _user;
     private readonly ISqlSugarRepository<TenantModel> _repository;
+    private readonly IHubContext<ChatHub, IChatClient> _hubContext;
 
-    public TenantService(IUser user, ISqlSugarRepository<TenantModel> repository)
+    public TenantService(IUser user, ISqlSugarRepository<TenantModel> repository, IHubContext<ChatHub, IChatClient> hubContext)
     {
         _user = user;
         _repository = repository;
+        _hubContext = hubContext;
     }
 
     /// <summary>
     /// 租户选择器
     /// </summary>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("租户选择器", HttpRequestActionEnum.Query)]
     public async Task<PagedResult<ElSelectorOutput<long>>> TenantSelector(PagedInput input)
@@ -89,11 +89,10 @@ public class TenantService : IDynamicApplication
     /// <summary>
     /// 获取租户分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取租户分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Tenant.Paged)]
+    [PlatformOnly]
     public async Task<PagedResult<QueryTenantPagedOutput>> QueryTenantPaged(QueryTenantPagedInput input)
     {
         return await _repository.Entities.WhereIF(input.Status != null, wh => wh.Status == input.Status)
@@ -135,11 +134,10 @@ public class TenantService : IDynamicApplication
     /// <summary>
     /// 获取租户详情
     /// </summary>
-    /// <param name="tenantId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取租户详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Tenant.Detail)]
+    [PlatformOnly]
     public async Task<QueryTenantDetailOutput> QueryTenantDetail([Required(ErrorMessage = "租户Id不能为空")] long? tenantId)
     {
         var result = await _repository.Queryable<TenantModel>()
@@ -201,11 +199,10 @@ public class TenantService : IDynamicApplication
     /// <summary>
     /// 添加租户
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加租户", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.Tenant.Add)]
+    [PlatformOnly]
     public async Task AddTenant(AddTenantInput input)
     {
         if (await _repository.AnyAsync(a => a.TenantCode == input.TenantCode))
@@ -250,11 +247,10 @@ public class TenantService : IDynamicApplication
     /// <summary>
     /// 编辑租户
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑租户", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Tenant.Edit)]
+    [PlatformOnly]
     public async Task EditTenant(EditTenantInput input)
     {
         if (await _repository.AnyAsync(a => a.TenantCode == input.TenantCode && a.TenantId != input.TenantId))
@@ -297,6 +293,7 @@ public class TenantService : IDynamicApplication
                         .SingleAsync();
                     if (accountModel == null)
                     {
+                        var passwordHash = CryptoUtil.HashPasswordPBKDF2SHA256(CommonConst.Default.Password);
                         var accountId = YitIdHelper.NextId();
                         accountModel = new AccountModel
                         {
@@ -304,12 +301,10 @@ public class TenantService : IDynamicApplication
                             AccountKey = NumberUtil.IdToCodeByLong(accountId),
                             Mobile = input.AdminMobile,
                             Email = input.AdminEmail,
-                            Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
-                                .ToUpper(),
+                            Password = passwordHash,
                             NickName = input.AdminName,
                             Avatar = tenantModel.LogoUrl,
-                            Status = CommonStatusEnum.Enable,
-                            Sex = GenderEnum.Unknown
+                            Status = CommonStatusEnum.Enable
                         };
                         accountModel = await _repository.Insertable(accountModel)
                             .ExecuteReturnEntityAsync();
@@ -323,9 +318,8 @@ public class TenantService : IDynamicApplication
                                 {
                                     AccountId = accountModel.AccountId,
                                     OperationType = PasswordOperationTypeEnum.Create,
-                                    Type = PasswordTypeEnum.SHA1,
-                                    Password = CryptoUtil.SHA1Encrypt(CommonConst.Default.Password)
-                                        .ToUpper()
+                                    Type = PasswordTypeEnum.PBKDF2_SHA256,
+                                    Password = passwordHash
                                 }
                             })
                             .ExecuteCommandAsync();
@@ -365,6 +359,12 @@ public class TenantService : IDynamicApplication
             await _repository.UpdateAsync(tenantModel);
         }, ex => throw ex);
 
+        if (tenantModel.Status == CommonStatusEnum.Disable)
+        {
+            // 撤销租户全部会话
+            await _user.RevokeTenant(tenantModel.TenantNo);
+        }
+
         // 删除缓存
         await TenantContext.DeleteTenant(tenantModel.TenantNo);
     }
@@ -372,11 +372,10 @@ public class TenantService : IDynamicApplication
     /// <summary>
     /// 租户更改状态
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("租户更改状态", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Tenant.Status)]
+    [PlatformOnly]
     public async Task ChangeStatus(TenantIdInput input)
     {
         var tenantModel = await _repository.SingleOrDefaultAsync(input.TenantId);
@@ -403,10 +402,11 @@ public class TenantService : IDynamicApplication
 
         if (tenantModel.Status == CommonStatusEnum.Disable)
         {
-            // 强制下线当前租户所有在线用户
-            var _hubContext = FastContext.HttpContext.RequestServices.GetService<IHubContext<ChatHub, IChatClient>>();
+            await _user.RevokeTenant(tenantModel.TenantNo);
 
+            // 强制下线当前租户所有在线用户
             var connectionIdList = await _repository.Queryable<TenantOnlineUserModel>()
+                .ClearFilter<IBaseTEntity>()
                 .Where(wh => wh.IsOnline)
                 .Where(wh => wh.TenantId == tenantModel.TenantId)
                 .Select(sl => sl.ConnectionId)

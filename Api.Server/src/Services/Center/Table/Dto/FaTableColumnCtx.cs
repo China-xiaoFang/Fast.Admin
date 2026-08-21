@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,7 +23,7 @@
 namespace Fast.Center.Service.Table.Dto;
 
 /// <summary>
-/// <see cref="FaTableColumnCtx"/> FastElementPlus FaTable 列上下文
+/// FastElementPlus FaTable 列上下文
 /// </summary>
 public class FaTableColumnCtx
 {

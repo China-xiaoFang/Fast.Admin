@@ -23,7 +23,7 @@
 namespace Fast.Admin.Entity;
 
 /// <summary>
-/// <see cref="RoleModel"/> 组织架构表Model类
+/// 角色表Model类
 /// </summary>
 [SugarTable("Role", "角色表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
@@ -40,12 +40,14 @@ public class RoleModel : BaseEntity, IUpdateVersion
     /// <summary>
     /// 角色类型
     /// </summary>
+    /// <remarks>仅用于初始化默认菜单和按钮，运行时权限以角色菜单、角色按钮关联为准</remarks>
     [SugarColumn(ColumnDescription = "角色类型")]
     public RoleTypeEnum RoleType { get; set; }
 
     /// <summary>
     /// 是否使用系统菜单
     /// </summary>
+    /// <remarks>仅在新增角色时按模板初始化当前应用的菜单和按钮</remarks>
     [SugarColumn(ColumnDescription = "是否使用系统菜单")]
     public bool IsSystemMenu { get; set; }
 
@@ -77,14 +79,18 @@ public class RoleModel : BaseEntity, IUpdateVersion
     public DataScopeTypeEnum DataScopeType { get; set; }
 
     /// <summary>
+    /// 自定义数据范围部门Id集合
+    /// </summary>
+    /// <remarks>仅在 <see cref="DataScopeTypeEnum.CustomDept"/> 时生效</remarks>
+    [SugarColumn(ColumnDescription = "自定义数据范围部门Id集合", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
+    public List<long> DataScopeDepartmentIds { get; set; } = [];
+
+    /// <summary>
     /// 可分配的角色Id集合
     /// </summary>
-    /// <remarks>
-    /// <para>为 null 或空集合时，表示不限制（可分配所有角色）</para>
-    /// <para>有值时，只允许分配集合内的角色给其他人</para>
-    /// </remarks>
+    /// <remarks>普通用户为空时不能分配任何角色；有值时只能分配集合内的角色，且集合不得包含角色自身</remarks>
     [SugarColumn(ColumnDescription = "可分配的角色Id集合", ColumnDataType = StaticConfig.CodeFirst_BigString, IsJson = true)]
-    public List<long> AssignableRoleIds { get; set; }
+    public List<long> AssignableRoleIds { get; set; } = [];
 
     /// <summary>
     /// 备注

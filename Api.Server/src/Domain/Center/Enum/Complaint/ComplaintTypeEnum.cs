@@ -23,7 +23,7 @@
 namespace Fast.Center.Enum;
 
 /// <summary>
-/// <see cref="ComplaintTypeEnum"/> 投诉类型枚举
+/// 投诉类型枚举
 /// </summary>
 [Flags]
 [FastEnum("投诉类型枚举")]

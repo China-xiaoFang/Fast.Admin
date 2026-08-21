@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.Admin.Enum;
 namespace Fast.Admin.Service.Serial.Dto;
 
 /// <summary>
-/// <see cref="QuerySerialRulePagedOutput"/> 获取序号规则分页列表输出
+/// 获取序号规则分页列表输出
 /// </summary>
 public class QuerySerialRulePagedOutput : PagedOutput
 {

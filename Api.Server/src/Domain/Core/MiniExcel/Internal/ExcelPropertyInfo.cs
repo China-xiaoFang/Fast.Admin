@@ -26,9 +26,9 @@ using System.Text.RegularExpressions;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ExcelPropertyInfo"/> Excel属性信息
+/// Excel属性信息
 /// </summary>
-internal class ExcelPropertyInfo
+internal sealed class ExcelPropertyInfo
 {
     /// <summary>
     /// 属性信息
@@ -68,7 +68,7 @@ internal class ExcelPropertyInfo
     public List<(Regex CompiledRegex, string ErrorMessage)> CompiledRegexPatterns { get; set; } = [];
 
     /// <summary>
-    /// 属性的原始类型（如 int?、List&lt;string&gt;）
+    /// 属性的原始类型（如 <c>int?</c>、<c>List&lt;string&gt;</c>）
     /// </summary>
     public Type PropertyType { get; set; }
 
@@ -99,28 +99,28 @@ internal class ExcelPropertyInfo
     public bool IsDateTime { get; set; }
 
     /// <summary>
-    /// 是否为 DateTimeOffset 类型
+    /// 是否为 <see cref="DateTimeOffset"/> 类型
     /// </summary>
     public bool IsDateTimeOffset { get; set; }
 
     /// <summary>
-    /// 是否为 Guid 类型
+    /// 是否为 <see cref="Guid"/> 类型
     /// </summary>
     public bool IsGuid { get; set; }
 
     /// <summary>
-    /// 是否为值类型集合（如 List&lt;int&gt;、List&lt;string&gt;）
+    /// 是否为值类型集合（如 <c>List&lt;int&gt;</c>、<c>List&lt;string&gt;</c>）
     /// </summary>
     public bool IsValueTypeCollection { get; set; }
 
     /// <summary>
-    /// 是否为复杂对象集合（非值类型的 IEnumerable）
+    /// 是否为复杂对象集合（实现 <see cref="System.Collections.IEnumerable"/> 的非值类型集合）
     /// </summary>
     public bool IsComplexCollection { get; set; }
 
     /// <summary>
     /// 值类型集合的元素类型
-    /// <remarks>仅当 IsValueTypeCollection 为 true 时有值，避免每次调用 GetGenericArguments</remarks>
+    /// <remarks>仅当 <see cref="IsValueTypeCollection"/> 为 <see langword="true"/> 时有值，避免重复调用 <see cref="Type.GetGenericArguments()"/></remarks>
     /// </summary>
     public Type CollectionElementType { get; set; }
 }

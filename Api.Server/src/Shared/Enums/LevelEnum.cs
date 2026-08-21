@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="LevelEnum"/> 级别枚举
+/// 级别枚举
 /// </summary>
 [Flags]
 [FastEnum("级别枚举")]

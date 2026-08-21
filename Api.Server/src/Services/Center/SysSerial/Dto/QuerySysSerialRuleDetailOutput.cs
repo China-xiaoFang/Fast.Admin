@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Center.Service.SysSerial.Dto;
 
 /// <summary>
-/// <see cref="QuerySysSerialRuleDetailOutput"/>  获取系统序号规则详情输出
+/// 获取系统序号规则详情输出
 /// </summary>
 public class QuerySysSerialRuleDetailOutput : PagedOutput
 {

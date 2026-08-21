@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,9 +28,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Center.Service.Config;
 
 /// <summary>
-/// <see cref="ConfigService"/> 配置服务
+/// 配置服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "config")]
+[PlatformOnly]
 public class ConfigService : IDynamicApplication
 {
     private readonly IUser _user;
@@ -45,8 +46,6 @@ public class ConfigService : IDynamicApplication
     /// <summary>
     /// 获取配置分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取配置分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Config.Paged)]
@@ -72,8 +71,6 @@ public class ConfigService : IDynamicApplication
     /// <summary>
     /// 获取配置详情
     /// </summary>
-    /// <param name="configId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取配置详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Config.Detail)]
@@ -107,8 +104,6 @@ public class ConfigService : IDynamicApplication
     /// <summary>
     /// 添加配置
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加配置", HttpRequestActionEnum.Add)]
     public async Task AddConfig(AddConfigInput input)
@@ -135,8 +130,6 @@ public class ConfigService : IDynamicApplication
     /// <summary>
     /// 编辑配置
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑配置", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Config.Edit)]
@@ -161,8 +154,6 @@ public class ConfigService : IDynamicApplication
     /// <summary>
     /// 删除配置缓存
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除配置缓存", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Config.Edit)]
@@ -175,7 +166,6 @@ public class ConfigService : IDynamicApplication
     /// <summary>
     /// 删除所有配置缓存
     /// </summary>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("删除所有配置缓存", HttpRequestActionEnum.Delete)]
     [Permission(PermissionConst.Config.Edit)]

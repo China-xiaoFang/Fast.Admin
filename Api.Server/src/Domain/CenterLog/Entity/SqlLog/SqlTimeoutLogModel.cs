@@ -23,7 +23,7 @@
 namespace Fast.CenterLog.Entity;
 
 /// <summary>
-/// <see cref="SqlTimeoutLogModel"/> Sql超时日志Model类
+/// Sql超时日志表Model类
 /// </summary>
 [SugarTable("Sql_TimeoutLog", "Sql超时日志表")]
 [SugarDbType(DatabaseTypeEnum.CenterLog)]
@@ -81,9 +81,9 @@ public class SqlTimeoutLogModel : BaseRecordEntity
     public double TimeoutSeconds { get; set; }
 
     /// <summary>
-    /// 纯Sql，参数化之后的Sql
+    /// 纯SQL，参数化后的SQL
     /// </summary>
-    [SugarColumn(ColumnDescription = "纯Sql，参数化之后的Sql", ColumnDataType = StaticConfig.CodeFirst_BigString)]
+    [SugarColumn(ColumnDescription = "纯SQL，参数化后的SQL", ColumnDataType = StaticConfig.CodeFirst_BigString)]
     public string PureSql { get; set; }
 
     /// <summary>

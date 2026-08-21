@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,42 +29,30 @@ using MimeKit;
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="MailService"/> 邮件服务
+/// <see cref="IMailService"/> 默认实现
 /// </summary>
-public class MailService : IMailService, ISingletonDependency
+public class MailService : IMailService
 {
     /// <summary>
-    /// <see cref="MailSettingsOptions"/> 邮件配置
+    /// 邮件配置
     /// </summary>
     private readonly MailSettingsOptions _mailSettingsOptions;
 
     /// <summary>
-    /// <see cref="ILogger"/> 日志
+    /// 日志
     /// </summary>
     private readonly ILogger _logger;
 
     /// <summary>
-    /// 
+    /// 初始化邮件服务
     /// </summary>
-    /// <param name="options"><see cref="MailSettingsOptions"/> 邮件配置</param>
-    /// <param name="logger"><see cref="ILogger"/> 日志</param>
     public MailService(IOptions<MailSettingsOptions> options, ILogger<IMailService> logger)
     {
         _mailSettingsOptions = options.Value;
         _logger = logger;
     }
 
-    /// <summary>
-    /// 获取公用邮件模板
-    /// </summary>
-    /// <param name="title"></param>
-    /// <param name="msg"></param>
-    /// <param name="type">
-    /// <para>info</para>
-    /// <para>warn</para>
-    /// <para>error</para>
-    /// </param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public string GetEmailTemplate(string title, string msg, string type = null)
     {
         return """
@@ -189,24 +177,13 @@ public class MailService : IMailService, ISingletonDependency
                """;
     }
 
-    /// <summary>
-    /// 发送邮件
-    /// </summary>
-    /// <param name="title"><see cref="string"/> 标题</param>
-    /// <param name="content"><see cref="string"/> 正文内容</param>
-    /// <param name="receiveEmails"><see cref="string"/> 收件人邮箱</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task SendEmail(string title, string content, string receiveEmails)
     {
         await SendEmail(title, new BodyBuilder {HtmlBody = content}, [receiveEmails]);
     }
 
-    /// <summary>
-    /// 发送邮件 - 默认收件人
-    /// </summary>
-    /// <param name="title"><see cref="string"/> 标题</param>
-    /// <param name="content"><see cref="string"/> 正文内容</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task SendEmail(string title, string content)
     {
         if (_mailSettingsOptions.ReceiveEmails?.Count == 0)
@@ -215,24 +192,13 @@ public class MailService : IMailService, ISingletonDependency
         await SendEmail(title, new BodyBuilder {HtmlBody = content}, _mailSettingsOptions.ReceiveEmails);
     }
 
-    /// <summary>
-    /// 发送邮件
-    /// </summary>
-    /// <param name="title"><see cref="string"/> 标题</param>
-    /// <param name="content"><see cref="BodyBuilder"/> 正文内容</param>
-    /// <param name="receiveEmails"><see cref="string"/> 收件人邮箱</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task SendEmail(string title, BodyBuilder content, string receiveEmails)
     {
         await SendEmail(title, content, [receiveEmails]);
     }
 
-    /// <summary>
-    /// 发送邮件 - 默认收件人
-    /// </summary>
-    /// <param name="title"><see cref="string"/> 标题</param>
-    /// <param name="content"><see cref="BodyBuilder"/> 正文内容</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task SendEmail(string title, BodyBuilder content)
     {
         if (_mailSettingsOptions.ReceiveEmails?.Count == 0)
@@ -241,25 +207,13 @@ public class MailService : IMailService, ISingletonDependency
         await SendEmail(title, content, _mailSettingsOptions.ReceiveEmails);
     }
 
-    /// <summary>
-    /// 发送邮件
-    /// </summary>
-    /// <param name="title"><see cref="string"/> 标题</param>
-    /// <param name="content"><see cref="string"/> 正文内容</param>
-    /// <param name="receiveEmails"><see cref="List{T}"/> 收件人邮箱</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task SendEmail(string title, string content, List<string> receiveEmails)
     {
         await SendEmail(title, new BodyBuilder {HtmlBody = content}, receiveEmails);
     }
 
-    /// <summary>
-    /// 发送邮件
-    /// </summary>
-    /// <param name="title"><see cref="string"/> 标题</param>
-    /// <param name="content"><see cref="BodyBuilder"/> 正文内容</param>
-    /// <param name="receiveEmails"><see cref="List{T}"/> 收件人邮箱</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task SendEmail(string title, BodyBuilder content, List<string> receiveEmails)
     {
         try

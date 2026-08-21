@@ -23,7 +23,7 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ServerMetadataInfo"/> 服务器元数据信息
+/// 服务器元数据信息
 /// </summary>
 public class ServerMetadataInfo
 {

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -28,7 +28,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Admin.Service.Serial;
 
 /// <summary>
-/// <see cref="SerialService"/> 序号规则服务
+/// 序号规则服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Admin, Name = "serial")]
 public class SerialService : IDynamicApplication
@@ -43,8 +43,6 @@ public class SerialService : IDynamicApplication
     /// <summary>
     /// 获取序号规则分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取序号规则分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.Serial.Paged)]
@@ -76,8 +74,6 @@ public class SerialService : IDynamicApplication
     /// <summary>
     /// 获取序号规则详情
     /// </summary>
-    /// <param name="serialRuleId"></param>
-    /// <returns></returns>
     [HttpGet]
     [ApiInfo("获取序号规则详情", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.Serial.Detail)]
@@ -113,8 +109,6 @@ public class SerialService : IDynamicApplication
     /// <summary>
     /// 添加序号规则
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("添加序号规则", HttpRequestActionEnum.Add)]
     [Permission(PermissionConst.Serial.Add)]
@@ -140,8 +134,6 @@ public class SerialService : IDynamicApplication
     /// <summary>
     /// 编辑序号规则
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("编辑序号规则", HttpRequestActionEnum.Edit)]
     [Permission(PermissionConst.Serial.Edit)]

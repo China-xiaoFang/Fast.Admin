@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,7 +29,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fast.Admin.Service.OperateLog;
 
 /// <summary>
-/// <see cref="OperateLogService"/> 操作日志服务
+/// 操作日志服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Admin, Name = "operateLog")]
 public class OperateLogService : IDynamicApplication
@@ -49,8 +49,6 @@ public class OperateLogService : IDynamicApplication
     /// <summary>
     /// 获取操作日志分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取操作日志分页列表", HttpRequestActionEnum.Paged)]
     [Permission(PermissionConst.OperateLogPaged)]
@@ -64,22 +62,26 @@ public class OperateLogService : IDynamicApplication
         var queryable = _repository.Entities.WhereIF(input.OperateType != null, wh => wh.OperateType == input.OperateType)
             .WhereIF(input.EmployeeId != null, wh => wh.CreatedUserId == input.EmployeeId)
             .WhereIF(input.BizId != null, wh => wh.BizId == input.BizId);
+        var customDepartmentIds = _user.DataScopeDepartmentIdList ?? [];
 
         // 仅本人数据
         if (_user.DataScopeType == DataScopeTypeEnum.Self)
         {
-            queryable = queryable.Where(wh => wh.CreatedUserId == _user.EmployeeId);
+            queryable = queryable.Where(wh => wh.CreatedUserId == _user.EmployeeId
+                                              || customDepartmentIds.Contains(wh.DepartmentId ?? 0));
         }
         // 本部门数据
         else if (_user.DataScopeType == DataScopeTypeEnum.Dept)
         {
-            queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId);
+            queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId
+                                              || customDepartmentIds.Contains(wh.DepartmentId ?? 0));
         }
         // 本机构及以下数据
         else if (_user.DataScopeType == DataScopeTypeEnum.OrgWithChild)
         {
             var departmentIds = await _adminRepository.Queryable<DepartmentModel>()
                 .Where(wh => wh.DataPublic
+                             || customDepartmentIds.Contains(wh.DepartmentId)
                              || wh.OrgId
                              == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                  // 主部门
@@ -94,11 +96,21 @@ public class OperateLogService : IDynamicApplication
         {
             var departmentIds = await _adminRepository.Queryable<DepartmentModel>()
                 .Where(wh => wh.DataPublic
+                             || customDepartmentIds.Contains(wh.DepartmentId)
                              || wh.DepartmentId == _user.DepartmentId
                              || wh.ParentIds.Contains(_user.DepartmentId ?? 0))
                 .Select(sl => sl.DepartmentId)
                 .ToListAsync();
             queryable = queryable.Where(wh => departmentIds.Contains(wh.DepartmentId ?? 0));
+        }
+        // 自定义部门数据
+        else if (_user.DataScopeType == DataScopeTypeEnum.CustomDept)
+        {
+            queryable = queryable.Where(wh => customDepartmentIds.Contains(wh.DepartmentId ?? 0));
+        }
+        else if (_user.DataScopeType != DataScopeTypeEnum.All)
+        {
+            queryable = queryable.Where(_ => false);
         }
 
         return await queryable.SplitTable()

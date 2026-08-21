@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="GenderEnum"/> 性别枚举
+/// 性别枚举
 /// </summary>
 [Flags]
 [FastEnum("性别枚举")]

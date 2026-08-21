@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -25,7 +25,7 @@ using Fast.Center.Enum;
 namespace Fast.Scheduler;
 
 /// <summary>
-/// <see cref="AddSchedulerJobInput"/> 添加调度作业输入
+/// 添加调度作业输入
 /// </summary>
 public class AddSchedulerJobInput
 {
@@ -128,7 +128,7 @@ public class AddSchedulerJobInput
     #region Url
 
     /// <summary>
-    /// 请求Url
+    /// 请求 URL
     /// </summary>
     public string RequestUrl { get; set; }
 

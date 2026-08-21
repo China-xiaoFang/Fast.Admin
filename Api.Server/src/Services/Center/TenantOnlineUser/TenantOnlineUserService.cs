@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -29,7 +29,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace Fast.Center.Service.TenantOnlineUser;
 
 /// <summary>
-/// <see cref="TenantOnlineUserService"/> 在线用户服务
+/// 在线用户服务
 /// </summary>
 [ApiDescriptionSettings(ApiGroupConst.Center, Name = "tenantOnlineUser")]
 public class TenantOnlineUserService : IDynamicApplication
@@ -49,8 +49,6 @@ public class TenantOnlineUserService : IDynamicApplication
     /// <summary>
     /// 获取在线用户分页列表
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("获取在线用户分页列表", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.TenantOnlineUser.Paged)]
@@ -67,8 +65,6 @@ public class TenantOnlineUserService : IDynamicApplication
     /// <summary>
     /// 强制下线
     /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("强制下线", HttpRequestActionEnum.Query)]
     [Permission(PermissionConst.TenantOnlineUser.ForceOffline)]

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,15 +23,15 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="ElSelectorOutput{T}"/> 拓展类
+/// <see cref="ElSelectorOutput{T}"/> 扩展方法
 /// </summary>
 public static class ElSelectorOutputExtension
 {
     /// <summary>
     /// 构造树形
     /// </summary>
-    /// <param name="list"><see cref="List{T}"/></param>
-    /// <returns><see cref="List{T}"/></returns>
+    /// <param name="list">待构建的选择器节点列表</param>
+    /// <returns>构建后的根节点列表</returns>
     public static List<ElSelectorOutput<T>> Build<T>(this List<ElSelectorOutput<T>> list)
     {
         // 构建所有节点 Value 的集合
@@ -48,8 +48,8 @@ public static class ElSelectorOutputExtension
     /// <summary>
     /// 构造子节点集合
     /// </summary>
-    /// <param name="totalNodes"></param>
-    /// <param name="node"></param>
+    /// <param name="totalNodes">节点总数</param>
+    /// <param name="node">当前节点序号</param>
     private static void BuildChildNodes<T>(List<ElSelectorOutput<T>> totalNodes, ElSelectorOutput<T> node)
     {
         var nodeSubList = totalNodes.Where(wh => wh.ParentId.Equals(node.Value))

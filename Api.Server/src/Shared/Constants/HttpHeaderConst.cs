@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -23,10 +23,10 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="HttpHeaderConst"/> Http Header 常量
+/// HTTP Header 常量
 /// </summary>
 [SuppressSniffer]
-public class HttpHeaderConst
+public static class HttpHeaderConst
 {
     /// <summary>
     /// 来源

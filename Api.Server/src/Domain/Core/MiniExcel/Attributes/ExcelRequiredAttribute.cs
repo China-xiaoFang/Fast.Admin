@@ -23,23 +23,22 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="ExcelRequiredAttribute"/> Excel必填验证特性
+/// Excel必填验证特性
 /// </summary>
 [SuppressSniffer]
 [AttributeUsage(AttributeTargets.Property)]
-public class ExcelRequiredAttribute : Attribute
+public sealed class ExcelRequiredAttribute : Attribute
 {
     /// <summary>
-    /// <see cref="ExcelRequiredAttribute"/> Excel必填验证特性
+    /// Excel必填验证特性
     /// </summary>
     public ExcelRequiredAttribute()
     {
     }
 
     /// <summary>
-    /// <see cref="ExcelRequiredAttribute"/> Excel必填验证特性
+    /// Excel必填验证特性
     /// </summary>
-    /// <param name="errorMessage"><see cref="string"/> 错误消息</param>
     public ExcelRequiredAttribute(string errorMessage)
     {
         ErrorMessage = errorMessage;

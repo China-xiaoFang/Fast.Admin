@@ -23,7 +23,7 @@
 namespace Fast.Center.Entity;
 
 /// <summary>
-/// <see cref="TableColumnConfigModel"/> 表格列配置表Model类
+/// 表格列配置表Model类
 /// </summary>
 [SugarTable("TableColumnConfig", "表格列配置表")]
 [SugarDbType(DatabaseTypeEnum.Center)]

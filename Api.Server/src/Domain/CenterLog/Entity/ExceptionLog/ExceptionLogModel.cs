@@ -23,7 +23,7 @@
 namespace Fast.CenterLog.Entity;
 
 /// <summary>
-/// <see cref="ExceptionLogModel"/> 异常日志Model类
+/// 异常日志表Model类
 /// </summary>
 [SugarTable("ExceptionLog", "异常日志表")]
 [SugarDbType(DatabaseTypeEnum.CenterLog)]

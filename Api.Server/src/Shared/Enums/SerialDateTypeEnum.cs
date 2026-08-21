@@ -23,7 +23,7 @@
 namespace Fast.Shared;
 
 /// <summary>
-/// <see cref="SerialDateTypeEnum"/> 序号时间类型枚举
+/// 序号时间类型枚举
 /// </summary>
 [Flags]
 [FastEnum("序号时间类型枚举")]

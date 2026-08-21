@@ -23,9 +23,9 @@
 namespace Fast.Core;
 
 /// <summary>
-/// <see cref="PermissionConst"/> 权限常量
+/// 权限常量
 /// </summary>
 /// <remarks>自己的业务权限放这里</remarks>
-public partial class PermissionConst
+public static partial class PermissionConst
 {
 }
