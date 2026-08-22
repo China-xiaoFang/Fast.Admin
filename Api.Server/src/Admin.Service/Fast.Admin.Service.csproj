@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Description>Fast.Admin 应用 Admin 服务库。</Description>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <NoWarn>1591;</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="$(SolutionDir)src\Core\Fast.Core.csproj" />
+        <ProjectReference Include="$(SolutionDir)src\Admin.Domain\Fast.Admin.Domain.csproj" />
+        <ProjectReference Include="$(SolutionDir)src\AdminLog.Domain\Fast.AdminLog.Domain.csproj" />
+    </ItemGroup>
+
+</Project>
