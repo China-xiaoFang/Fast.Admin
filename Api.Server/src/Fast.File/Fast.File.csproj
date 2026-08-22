@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <Description>Fast.File 应用入口启动层。</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="logs\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="$(SolutionDir)src\Core\Fast.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="IGeekFan.AspNetCore.Knife4jUI" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" />
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <Content Update="appsettings.json">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Content>
+        <Content Update="appsettings.Development.json">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+</Project>
