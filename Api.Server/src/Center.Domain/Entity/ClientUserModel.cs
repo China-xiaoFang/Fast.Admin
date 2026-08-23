@@ -25,11 +25,11 @@ namespace Fast.Center.Domain;
 /// <summary>
 /// 客户端用户表Model类
 /// </summary>
-[SugarTable("User", "客户端用户表")]
+[SugarTable("ClientUser", "客户端用户表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(AppId), OrderByType.Asc, nameof(OpenId), OrderByType.Asc, nameof(Mobile),
     OrderByType.Asc, true)]
-public class UserModel : IUpdateVersion
+public class ClientUserModel : IUpdateVersion
 {
     /// <summary>
     /// 客户端用户Id
@@ -47,7 +47,7 @@ public class UserModel : IUpdateVersion
     /// 用户类型
     /// </summary>
     [SugarColumn(ColumnDescription = "用户类型")]
-    public WeChatUserTypeEnum UserType { get; set; }
+    public ClientUserTypeEnum UserType { get; set; }
 
     /// <summary>
     /// 唯一用户标识
@@ -80,9 +80,9 @@ public class UserModel : IUpdateVersion
     public string SessionKey { get; set; }
 
     /// <summary>
-    /// 微信昵称
+    /// 昵称
     /// </summary>
-    [SugarColumn(ColumnDescription = "微信昵称", Length = 20)]
+    [SugarColumn(ColumnDescription = "昵称", Length = 20)]
     public string NickName { get; set; }
 
     /// <summary>

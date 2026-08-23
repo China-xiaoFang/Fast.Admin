@@ -63,16 +63,16 @@ internal static partial class MenuSeedData
         platformCLMenuModel = await db.Insertable(platformCLMenuModel)
             .ExecuteReturnEntityAsync();
 
-        #region 微信用户
+        #region 客户端用户
 
-        var wechatUserMenuModel = new MenuModel
+        var clientUserMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
             Edition = EditionEnum.Professional,
             AppId = applicationModel.AppId,
-            MenuCode = PermissionConst.WeChat.Paged,
-            MenuName = "微信用户",
-            MenuTitle = "微信用户",
+            MenuCode = PermissionConst.ClientUser.Paged,
+            MenuName = "客户端用户",
+            MenuTitle = "客户端用户",
             ParentId = platformCLMenuModel.MenuId,
             ParentIds = [0, platformCLMenuModel.MenuId],
             MenuType = MenuTypeEnum.Menu,
@@ -81,19 +81,19 @@ internal static partial class MenuSeedData
             DesktopIcon = "menu",
             HasWeb = true,
             WebIcon = null,
-            WebRouter = "/system/weChatUser",
-            WebComponent = "system/weChatUser/index",
+            WebRouter = "/system/clientUser",
+            WebComponent = "system/clientUser/index",
             WebTab = true,
             WebKeepAlive = true,
             HasMobile = true,
             MobileIcon = "https://image.fastdotnet.com/menu/mobile/user.png",
-            MobileRouter = "pages_system/weChatUser/page/index",
+            MobileRouter = "pages_system/clientUser/page/index",
             Visible = true,
             Sort = menuSort,
             Status = CommonStatusEnum.Enable,
             CreatedTime = dateTime
         };
-        wechatUserMenuModel = await db.Insertable(wechatUserMenuModel)
+        clientUserMenuModel = await db.Insertable(clientUserMenuModel)
             .ExecuteReturnEntityAsync();
         await db.Insertable(new List<ButtonModel>
             {
@@ -102,8 +102,8 @@ internal static partial class MenuSeedData
                     ButtonId = YitIdHelper.NextId(),
                     Edition = EditionEnum.Professional,
                     AppId = applicationModel.AppId,
-                    MenuId = wechatUserMenuModel.MenuId,
-                    ButtonCode = PermissionConst.WeChat.Paged,
+                    MenuId = clientUserMenuModel.MenuId,
+                    ButtonCode = PermissionConst.ClientUser.Paged,
                     ButtonName = "列表",
                     RoleType = RoleTypeEnum.Admin | RoleTypeEnum.IT,
                     HasDesktop = true,

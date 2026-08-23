@@ -430,11 +430,11 @@ public static partial class PermissionConst
     /// <summary>退款记录列表</summary>
     public const string RefundRecordPaged = "RefundRecord:Paged";
 
-    /// <summary>微信用户</summary>
-    public static class WeChat
+    /// <summary>客户端用户</summary>
+    public static class ClientUser
     {
-        /// <summary>微信用户列表</summary>
-        public const string Paged = "WeChat:Paged";
+        /// <summary>客户端用户列表</summary>
+        public const string Paged = "ClientUser:Paged";
     }
 
     /// <summary>投诉</summary>

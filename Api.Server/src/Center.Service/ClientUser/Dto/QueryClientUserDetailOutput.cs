@@ -22,22 +22,22 @@
 
 using Fast.Center.Domain;
 
-namespace Fast.Center.Service.WeChat.Dto;
+namespace Fast.Center.Service.ClientUser.Dto;
 
 /// <summary>
-/// 获取微信用户详情输出
+/// 获取客户端用户详情输出
 /// </summary>
-public class QueryWeChatUserDetailOutput : UpdateVersionInput
+public class QueryClientUserDetailOutput : UpdateVersionInput
 {
     /// <summary>
-    /// 微信用户Id
+    /// 客户端用户Id
     /// </summary>
-    public long WeChatId { get; set; }
+    public long UserId { get; set; }
 
     /// <summary>
     /// 用户类型
     /// </summary>
-    public WeChatUserTypeEnum UserType { get; set; }
+    public ClientUserTypeEnum UserType { get; set; }
 
     /// <summary>
     /// 唯一用户标识
@@ -50,22 +50,12 @@ public class QueryWeChatUserDetailOutput : UpdateVersionInput
     public string UnionId { get; set; }
 
     /// <summary>
-    /// 用户纯手机号码
+    /// 手机
     /// </summary>
-    public string PurePhoneNumber { get; set; }
+    public string Mobile { get; set; }
 
     /// <summary>
-    /// 用户手机号码
-    /// </summary>
-    public string PhoneNumber { get; set; }
-
-    /// <summary>
-    /// 用户手机号码区号
-    /// </summary>
-    public string CountryCode { get; set; }
-
-    /// <summary>
-    /// 微信昵称
+    /// 昵称
     /// </summary>
     public string NickName { get; set; }
 
@@ -78,30 +68,6 @@ public class QueryWeChatUserDetailOutput : UpdateVersionInput
     /// 性别
     /// </summary>
     public GenderEnum Sex { get; set; }
-
-    /// <summary>
-    /// 国家
-    /// </summary>
-
-    public string Country { get; set; }
-
-    /// <summary>
-    /// 省份
-    /// </summary>
-
-    public string Province { get; set; }
-
-    /// <summary>
-    /// 城市
-    /// </summary>
-
-    public string City { get; set; }
-
-    /// <summary>
-    /// 语言
-    /// </summary>
-
-    public string Language { get; set; }
 
     /// <summary>
     /// 最后登录设备

@@ -22,12 +22,12 @@
 
 using Fast.Center.Domain;
 
-namespace Fast.Center.Service.WeChat.Dto;
+namespace Fast.Center.Service.ClientUser.Dto;
 
 /// <summary>
-/// 获取微信用户分页列表输入
+/// 获取客户端用户分页列表输入
 /// </summary>
-public class QueryWeChatUserPagedInput : PagedInput
+public class QueryClientUserPagedInput : PagedInput
 {
     /// <summary>
     /// 应用Id
@@ -37,7 +37,7 @@ public class QueryWeChatUserPagedInput : PagedInput
     /// <summary>
     /// 用户类型
     /// </summary>
-    public WeChatUserTypeEnum? UserType { get; set; }
+    public ClientUserTypeEnum? UserType { get; set; }
 
     /// <summary>
     /// 性别

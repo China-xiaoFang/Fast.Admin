@@ -36,61 +36,61 @@ namespace Fast.Center.Service.Login;
 
 public partial class LoginService
 {
-    private const string DefaultWeChatUserAvatar =
+    private const string DefaultClientUserAvatar =
         "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132";
 
-    private static WeChatUserTypeEnum GetWeChatUserType(AppEnvironmentEnum appType)
+    private static ClientUserTypeEnum GetClientUserType(AppEnvironmentEnum appType)
     {
         return appType switch
         {
-            AppEnvironmentEnum.WeChatMiniProgram => WeChatUserTypeEnum.MiniProgram,
-            AppEnvironmentEnum.WeChatOfficialAccount => WeChatUserTypeEnum.OfficialAccount,
-            AppEnvironmentEnum.WeChatServiceAccount => WeChatUserTypeEnum.ServiceAccount,
-            AppEnvironmentEnum.WeChatOpenPlatform => WeChatUserTypeEnum.OpenPlatform,
-            AppEnvironmentEnum.WorkWeChat => WeChatUserTypeEnum.WorkWeChat,
+            AppEnvironmentEnum.WeChatMiniProgram => ClientUserTypeEnum.MiniProgram,
+            AppEnvironmentEnum.WeChatOfficialAccount => ClientUserTypeEnum.OfficialAccount,
+            AppEnvironmentEnum.WeChatServiceAccount => ClientUserTypeEnum.ServiceAccount,
+            AppEnvironmentEnum.WeChatOpenPlatform => ClientUserTypeEnum.OpenPlatform,
+            AppEnvironmentEnum.WorkWeChat => ClientUserTypeEnum.WorkWeChat,
             _ => throw new UserFriendlyException("暂不支持此类微信客户端！")
         };
     }
 
-    private static UserModel CreateWeChatUser(long appId, AppEnvironmentEnum appType, string openId, string unionId)
+    private static ClientUserModel CreateClientUser(long appId, AppEnvironmentEnum appType, string openId, string unionId)
     {
-        return new UserModel
+        return new ClientUserModel
         {
             UserId = YitIdHelper.NextId(),
             AppId = appId,
-            UserType = GetWeChatUserType(appType),
+            UserType = GetClientUserType(appType),
             OpenId = openId,
             UnionId = unionId,
             NickName = "微信用户",
-            Avatar = DefaultWeChatUserAvatar,
+            Avatar = DefaultClientUserAvatar,
             Sex = GenderEnum.Unknown
         };
     }
 
-    private static void UpdateMobile(UserModel userModel, string mobile)
+    private static void UpdateMobile(ClientUserModel clientUserModel, string mobile)
     {
-        if (string.IsNullOrWhiteSpace(mobile) || userModel.Mobile == mobile)
+        if (string.IsNullOrWhiteSpace(mobile) || clientUserModel.Mobile == mobile)
             return;
 
-        userModel.Mobile = mobile;
-        userModel.MobileUpdateTime = DateTime.Now;
+        clientUserModel.Mobile = mobile;
+        clientUserModel.MobileUpdateTime = DateTime.Now;
     }
 
-    private async Task<DateTime> UpdateClientUserLastLogin(UserModel userModel)
+    private async Task<DateTime> UpdateClientUserLastLogin(ClientUserModel clientUserModel)
     {
         var dateTime = DateTime.Now;
         var userAgentInfo = _httpContext.RequestUserAgentInfo();
         var ip = _httpContext.RemoteIpv4();
         var wanNetIpInfo = await _httpContext.RemoteIpv4InfoAsync();
 
-        userModel.LastLoginDevice = userAgentInfo.Device;
-        userModel.LastLoginOS = userAgentInfo.OS;
-        userModel.LastLoginBrowser = userAgentInfo.Browser;
-        userModel.LastLoginProvince = wanNetIpInfo.Province;
-        userModel.LastLoginCity = wanNetIpInfo.City;
-        userModel.LastLoginIp = ip;
-        userModel.LastLoginTime = dateTime;
-        await _repository.Updateable(userModel)
+        clientUserModel.LastLoginDevice = userAgentInfo.Device;
+        clientUserModel.LastLoginOS = userAgentInfo.OS;
+        clientUserModel.LastLoginBrowser = userAgentInfo.Browser;
+        clientUserModel.LastLoginProvince = wanNetIpInfo.Province;
+        clientUserModel.LastLoginCity = wanNetIpInfo.City;
+        clientUserModel.LastLoginIp = ip;
+        clientUserModel.LastLoginTime = dateTime;
+        await _repository.Updateable(clientUserModel)
             .ExecuteCommandAsync();
 
         return dateTime;
@@ -100,18 +100,18 @@ public partial class LoginService
     /// 处理微信登录
     /// </summary>
     /// <returns>微信登录结果</returns>
-    private async Task<LoginOutput> HandleWeChatLogin(ApplicationModel applicationModel, UserModel userModel)
+    private async Task<LoginOutput> HandleWeChatLogin(ApplicationModel applicationModel, ClientUserModel clientUserModel)
     {
-        var dateTime = await UpdateClientUserLastLogin(userModel);
+        var dateTime = await UpdateClientUserLastLogin(clientUserModel);
 
         // 判断客户端用户是否已绑定手机号
-        if (string.IsNullOrWhiteSpace(userModel.Mobile))
+        if (string.IsNullOrWhiteSpace(clientUserModel.Mobile))
         {
             return new LoginOutput {Status = LoginStatusEnum.NotAccount, Message = "客户端用户未绑定手机号，请先授权手机号！"};
         }
 
         var accountModel = await _repository.Queryable<AccountModel>()
-            .Where(wh => wh.Mobile == userModel.Mobile)
+            .Where(wh => wh.Mobile == clientUserModel.Mobile)
             .SingleAsync();
 
         if (accountModel == null)
@@ -120,16 +120,16 @@ public partial class LoginService
         }
 
         // 保证一个客户端用户只绑定一个账号，并持久化首次绑定关系
-        if (accountModel.WeChatId != userModel.UserId)
+        if (accountModel.ClientUserId != clientUserModel.UserId)
         {
             await _repository.Ado.UseTranAsync(async () =>
             {
                 await _repository.Updateable<AccountModel>()
-                    .SetColumns(e => e.WeChatId == null)
-                    .Where(wh => wh.WeChatId == userModel.UserId)
+                    .SetColumns(e => e.ClientUserId == null)
+                    .Where(wh => wh.ClientUserId == clientUserModel.UserId)
                     .ExecuteCommandAsync();
 
-                accountModel.WeChatId = userModel.UserId;
+                accountModel.ClientUserId = clientUserModel.UserId;
                 await _repository.Updateable(accountModel)
                     .ExecuteCommandAsync();
             }, ex => throw ex);
@@ -226,11 +226,11 @@ public partial class LoginService
         }
 
         // 根据 OpenId 获取微信用户信息
-        var userModel = await _repository.Queryable<UserModel>()
+        var clientUserModel = await _repository.Queryable<ClientUserModel>()
             .Where(wh => wh.AppId == applicationModel.AppId)
             .Where(wh => wh.OpenId == response.OpenId)
             .SingleAsync();
-        if (userModel == null)
+        if (clientUserModel == null)
         {
             // 这里的 IV 和 EncryptedData 在没有授权的情况下是为空的
             if (string.IsNullOrWhiteSpace(input.IV) || string.IsNullOrWhiteSpace(input.EncryptedData))
@@ -249,15 +249,16 @@ public partial class LoginService
             }
 
             // 保存微信用户
-            userModel = CreateWeChatUser(applicationModel.AppId, GlobalContext.DeviceType, response.OpenId, response.UnionId);
-            userModel.SessionKey = response.SessionKey;
-            userModel.NickName = decryptData.NickName;
-            userModel.Sex = decryptData.Gender;
-            await _repository.Insertable(userModel)
+            clientUserModel = CreateClientUser(applicationModel.AppId, GlobalContext.DeviceType, response.OpenId,
+                response.UnionId);
+            clientUserModel.SessionKey = response.SessionKey;
+            clientUserModel.NickName = decryptData.NickName;
+            clientUserModel.Sex = decryptData.Gender;
+            await _repository.Insertable(clientUserModel)
                 .ExecuteCommandAsync();
         }
 
-        return await HandleWeChatLogin(applicationModel.Application, userModel);
+        return await HandleWeChatLogin(applicationModel.Application, clientUserModel);
     }
 
     /// <summary>
@@ -289,11 +290,11 @@ public partial class LoginService
         }
 
         // 根据 OpenId 获取微信用户信息
-        var userModel = await _repository.Queryable<UserModel>()
+        var clientUserModel = await _repository.Queryable<ClientUserModel>()
             .Where(wh => wh.AppId == applicationModel.AppId)
             .Where(wh => wh.OpenId == response.OpenId)
             .SingleAsync();
-        if (userModel == null)
+        if (clientUserModel == null)
         {
             return new LoginOutput {Status = LoginStatusEnum.NotAccount, Message = "未找到微信用户信息，请先授权登录！"};
         }
@@ -307,9 +308,9 @@ public partial class LoginService
                 $"解析Code失败，获取用户手机号失败：ErrorCode：{phoneNumberResponse.ErrorCode}。ErrorMessage：{phoneNumberResponse.ErrorMessage}");
         }
 
-        UpdateMobile(userModel, phoneNumberResponse.PhoneInfo.PurePhoneNumber);
+        UpdateMobile(clientUserModel, phoneNumberResponse.PhoneInfo.PurePhoneNumber);
 
-        return await HandleWeChatLogin(applicationModel.Application, userModel);
+        return await HandleWeChatLogin(applicationModel.Application, clientUserModel);
     }
 
     /// <summary>
@@ -333,7 +334,7 @@ public partial class LoginService
             .Create(new WechatApiClientOptions {AppId = applicationModel.OpenId, AppSecret = applicationModel.OpenSecret})
             .Build();
 
-        UserModel userModel = null;
+        ClientUserModel clientUserModel = null;
 
         // 微信小程序
         if (applicationModel.AppType == AppEnvironmentEnum.WeChatMiniProgram)
@@ -348,15 +349,16 @@ public partial class LoginService
             }
 
             // 根据 OpenId 获取微信用户信息
-            userModel = await _repository.Queryable<UserModel>()
+            clientUserModel = await _repository.Queryable<ClientUserModel>()
                 .Where(wh => wh.AppId == applicationModel.AppId)
                 .Where(wh => wh.OpenId == response.OpenId)
                 .SingleAsync();
-            if (userModel == null)
+            if (clientUserModel == null)
             {
                 // 保存微信用户
-                userModel = CreateWeChatUser(applicationModel.AppId, GlobalContext.DeviceType, response.OpenId, response.UnionId);
-                userModel.SessionKey = response.SessionKey;
+                clientUserModel = CreateClientUser(applicationModel.AppId, GlobalContext.DeviceType, response.OpenId,
+                    response.UnionId);
+                clientUserModel.SessionKey = response.SessionKey;
 
                 // 这里的 IV 和 EncryptedData 在没有授权的情况下是为空的
                 if (string.IsNullOrWhiteSpace(input.IV) != string.IsNullOrWhiteSpace(input.EncryptedData))
@@ -374,11 +376,11 @@ public partial class LoginService
                         throw new UserFriendlyException("解析加密用户信息失败！");
                     }
 
-                    userModel.NickName = decryptData.NickName;
-                    userModel.Sex = decryptData.Gender;
+                    clientUserModel.NickName = decryptData.NickName;
+                    clientUserModel.Sex = decryptData.Gender;
                 }
 
-                await _repository.Insertable(userModel)
+                await _repository.Insertable(clientUserModel)
                     .ExecuteCommandAsync();
             }
 
@@ -397,7 +399,7 @@ public partial class LoginService
                         $"解析Code失败，获取用户手机号失败：ErrorCode：{phoneNumberResponse.ErrorCode}。ErrorMessage：{phoneNumberResponse.ErrorMessage}");
                 }
 
-                UpdateMobile(userModel, phoneNumberResponse.PhoneInfo.PurePhoneNumber);
+                UpdateMobile(clientUserModel, phoneNumberResponse.PhoneInfo.PurePhoneNumber);
             }
         }
         // 微信服务号
@@ -427,32 +429,33 @@ public partial class LoginService
             }
 
             // 根据 OpenId 获取微信用户信息
-            userModel = await _repository.Queryable<UserModel>()
+            clientUserModel = await _repository.Queryable<ClientUserModel>()
                 .Where(wh => wh.AppId == applicationModel.AppId)
                 .Where(wh => wh.OpenId == response.OpenId)
                 .SingleAsync();
-            if (userModel == null)
+            if (clientUserModel == null)
             {
                 // 保存微信用户
-                userModel = CreateWeChatUser(applicationModel.AppId, GlobalContext.DeviceType, response.OpenId, response.UnionId);
-                userModel.NickName = response.Nickname;
-                userModel.Avatar = response.HeadImageUrl;
-                await _repository.Insertable(userModel)
+                clientUserModel = CreateClientUser(applicationModel.AppId, GlobalContext.DeviceType, response.OpenId,
+                    response.UnionId);
+                clientUserModel.NickName = response.Nickname;
+                clientUserModel.Avatar = response.HeadImageUrl;
+                await _repository.Insertable(clientUserModel)
                     .ExecuteCommandAsync();
             }
             else
             {
-                userModel.NickName = response.Nickname;
-                userModel.Avatar = response.HeadImageUrl;
+                clientUserModel.NickName = response.Nickname;
+                clientUserModel.Avatar = response.HeadImageUrl;
             }
         }
 
-        if (userModel == null)
+        if (clientUserModel == null)
         {
             throw new UserFriendlyException("暂不支持此类客户端！");
         }
 
-        await UpdateClientUserLastLogin(userModel);
+        await UpdateClientUserLastLogin(clientUserModel);
 
         TenantModel tenantMode = null;
         if (applicationModel.Application.TenantId != null)
@@ -468,38 +471,38 @@ public partial class LoginService
             DeviceId = GlobalContext.DeviceId,
             AppNo = applicationModel.Application.AppNo,
             AppName = applicationModel.Application.AppName,
-            AccountId = userModel.UserId,
-            Mobile = userModel.Mobile,
-            NickName = userModel.NickName,
-            Avatar = userModel.Avatar,
+            AccountId = clientUserModel.UserId,
+            Mobile = clientUserModel.Mobile,
+            NickName = clientUserModel.NickName,
+            Avatar = clientUserModel.Avatar,
             TenantId = applicationModel.Application.TenantId ?? 0,
             TenantNo = tenantMode?.TenantNo ?? applicationModel.Application.AppNo,
             TenantName = applicationModel.Application.TenantName,
             TenantCode = tenantMode?.TenantCode ?? "",
             IsSystemTenant = false,
-            EmployeeId = userModel.UserId,
-            EmployeeName = userModel.NickName,
-            WeChatId = userModel.UserId,
-            WeChatOpenId = userModel.OpenId,
+            EmployeeId = clientUserModel.UserId,
+            EmployeeName = clientUserModel.NickName,
+            ClientUserId = clientUserModel.UserId,
+            ClientUserOpenId = clientUserModel.OpenId,
             IsSuperAdmin = false,
             IsAdmin = false,
-            LastLoginDevice = userModel.LastLoginDevice,
-            LastLoginOS = userModel.LastLoginOS,
-            LastLoginBrowser = userModel.LastLoginBrowser,
-            LastLoginProvince = userModel.LastLoginProvince,
-            LastLoginCity = userModel.LastLoginCity,
-            LastLoginIp = userModel.LastLoginIp,
-            LastLoginTime = userModel.LastLoginTime.Value,
+            LastLoginDevice = clientUserModel.LastLoginDevice,
+            LastLoginOS = clientUserModel.LastLoginOS,
+            LastLoginBrowser = clientUserModel.LastLoginBrowser,
+            LastLoginProvince = clientUserModel.LastLoginProvince,
+            LastLoginCity = clientUserModel.LastLoginCity,
+            LastLoginIp = clientUserModel.LastLoginIp,
+            LastLoginTime = clientUserModel.LastLoginTime.Value,
             ButtonCodeList = [PermissionConst.ClientService]
         });
 
         return new WeChatClientLoginOutput
         {
-            OpenId = userModel.OpenId,
-            UnionId = userModel.UnionId,
-            Mobile = userModel.Mobile,
-            NickName = userModel.NickName,
-            Avatar = userModel.Avatar
+            OpenId = clientUserModel.OpenId,
+            UnionId = clientUserModel.UnionId,
+            Mobile = clientUserModel.Mobile,
+            NickName = clientUserModel.NickName,
+            Avatar = clientUserModel.Avatar
         };
     }
 }

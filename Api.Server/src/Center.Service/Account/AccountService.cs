@@ -189,7 +189,7 @@ public class AccountService : IDynamicApplication
                 AccountId = t1.AccountId,
                 Mobile = t1.Mobile,
                 Email = t1.Email,
-                WeChatId = t1.WeChatId,
+                ClientUserId = t1.ClientUserId,
                 Status = t1.Status,
                 NickName = t1.NickName,
                 Avatar = t1.Avatar,
@@ -287,30 +287,30 @@ public class AccountService : IDynamicApplication
         accountModel.Avatar = input.Avatar;
         accountModel.RowVersion = input.RowVersion;
 
-        // 同步微信用户信息
-        UserModel userModel = null;
-        if (accountModel.WeChatId != null)
+        // 同步客户端用户信息
+        ClientUserModel clientUserModel = null;
+        if (accountModel.ClientUserId != null)
         {
-            userModel = await _repository.Queryable<UserModel>()
-                .InSingleAsync(accountModel.WeChatId);
+            clientUserModel = await _repository.Queryable<ClientUserModel>()
+                .InSingleAsync(accountModel.ClientUserId);
 
-            if (userModel == null)
+            if (clientUserModel == null)
             {
                 // 自动解绑
-                accountModel.WeChatId = null;
+                accountModel.ClientUserId = null;
             }
             else
             {
-                userModel.NickName = input.NickName;
-                userModel.Avatar = input.Avatar;
+                clientUserModel.NickName = input.NickName;
+                clientUserModel.Avatar = input.Avatar;
             }
         }
 
         await _repository.Ado.UseTranAsync(async () =>
         {
-            if (userModel != null)
+            if (clientUserModel != null)
             {
-                await _repository.Updateable(userModel)
+                await _repository.Updateable(clientUserModel)
                     .ExecuteCommandAsync();
             }
 

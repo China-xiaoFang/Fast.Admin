@@ -96,9 +96,9 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         NickName = authUserInfo.NickName;
         Avatar = authUserInfo.Avatar;
 
-        // 微信用户
-        WeChatId = authUserInfo.WeChatId;
-        WeChatOpenId = authUserInfo.WeChatOpenId;
+        // 客户端用户
+        ClientUserId = authUserInfo.ClientUserId;
+        ClientUserOpenId = authUserInfo.ClientUserOpenId;
 
         // 租户
         TenantId = authUserInfo.TenantId;
@@ -256,7 +256,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.WeChatOpenId))
+        if (string.IsNullOrWhiteSpace(authUserInfo.ClientUserOpenId))
         {
             throw new UnauthorizedAccessException("用户信息不存在！");
         }
@@ -275,7 +275,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             if (singleLogin)
             {
                 var delCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo, "*",
-                    authUserInfo.WeChatOpenId, "*");
+                    authUserInfo.ClientUserOpenId, "*");
                 await _authCache.DelByPatternAsync(delCacheKey);
             }
 
@@ -286,7 +286,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                 {nameof(SessionId), authUserInfo.SessionId},
                 {nameof(AppNo), authUserInfo.AppNo},
                 {nameof(TenantNo), authUserInfo.TenantNo},
-                {nameof(EmployeeNo), authUserInfo.WeChatOpenId},
+                {nameof(EmployeeNo), authUserInfo.ClientUserOpenId},
                 {nameof(LastLoginIp), authUserInfo.LastLoginIp},
                 {nameof(LastLoginTime), authUserInfo.LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")}
             };
@@ -302,7 +302,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
 
             // 获取缓存Key
             var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
-                authUserInfo.DeviceType.ToString(), authUserInfo.WeChatOpenId, authUserInfo.SessionId);
+                authUserInfo.DeviceType.ToString(), authUserInfo.ClientUserOpenId, authUserInfo.SessionId);
 
             // 设置缓存信息
             await _authCache.SetAsync(cacheKey, authUserInfo);
@@ -425,7 +425,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     }
 
     /// <inheritdoc />
-    public async Task RefreshWeChatUser(RefreshWeChatUserDto input)
+    public async Task RefreshClientUser(RefreshClientUserDto input)
     {
         if (string.IsNullOrWhiteSpace(input.AppNo))
         {
@@ -437,7 +437,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(input.WeChatOpenId))
+        if (string.IsNullOrWhiteSpace(input.ClientUserOpenId))
         {
             throw new UnauthorizedAccessException("用户信息不存在！");
         }
@@ -449,7 +449,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.WeChatOpenId, SessionId);
+            input.ClientUserOpenId, SessionId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
