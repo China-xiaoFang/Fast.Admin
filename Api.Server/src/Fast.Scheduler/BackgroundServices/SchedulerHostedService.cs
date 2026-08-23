@@ -95,9 +95,9 @@ public class SchedulerHostedService : BackgroundService
             if (!_hostApplicationLifetime.ApplicationStarted.IsCancellationRequested)
             {
                 var startedCompletion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-                using var startedRegistration =
+                await using var startedRegistration =
                     _hostApplicationLifetime.ApplicationStarted.Register(() => startedCompletion.TrySetResult());
-                using var stoppingRegistration = stoppingToken.Register(() => startedCompletion.TrySetCanceled(stoppingToken));
+                await using var stoppingRegistration = stoppingToken.Register(() => startedCompletion.TrySetCanceled(stoppingToken));
                 await startedCompletion.Task;
             }
 
