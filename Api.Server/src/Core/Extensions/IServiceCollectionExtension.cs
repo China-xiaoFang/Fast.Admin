@@ -47,6 +47,11 @@ public static class IServiceCollectionExtension
 
         var hostedServiceTypes = MAppContext.EffectiveTypes.Where(wh =>
                 IHostedServiceType.IsAssignableFrom(wh) && wh.IsClass && !wh.IsInterface && !wh.IsAbstract)
+            // 只自动注册项目自身的托管服务；第三方托管服务必须通过对应扩展方法显式启用，
+            // 避免 QuartzHostedService 等服务在核心数据库初始化前启动并连接尚未创建的数据库。
+            .Where(wh => wh.Assembly.GetName()
+                             .Name?.StartsWith($"{nameof(Fast)}.", StringComparison.Ordinal)
+                         == true)
             .Select(sl => new
             {
                 Type = sl,
