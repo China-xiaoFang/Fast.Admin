@@ -20,43 +20,42 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using System.Collections.Concurrent;
+using Microsoft.Extensions.Hosting;
+using Quartz;
 
 namespace Fast.Scheduler;
 
 /// <summary>
-/// 作业调度程序上下文
+/// 调度器关闭托管服务
 /// </summary>
-[SuppressSniffer]
-public class SchedulerContext
+internal sealed class SchedulerShutdownHostedService : IHostedService
 {
     /// <summary>
-    /// 是否为调度执行宿主
+    /// 调度器工厂
     /// </summary>
-    public static bool IsExecutionHost { get; internal set; }
+    private readonly IDependencySchedulerFactory _schedulerFactory;
 
     /// <summary>
-    /// 初始化
+    /// 调度器关闭托管服务
     /// </summary>
-    internal static bool Initialized { get; set; } = false;
+    public SchedulerShutdownHostedService(IDependencySchedulerFactory schedulerFactory)
+    {
+        _schedulerFactory = schedulerFactory;
+    }
 
-    /// <summary>
-    /// 已经存在调度器的 TenantId
-    /// <para>租户名称</para>
-    /// <para>租户编号</para>
-    /// <para>虚拟的设备Id</para>
-    /// </summary>
-    public static ConcurrentDictionary<long, (string tenantName, string tenantNo, string tenantCode, string deviceId)>
-        SchedulerTenantList { get; internal set; } = [];
+    /// <inheritdoc />
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
 
-    /// <summary>
-    /// 本地调度作业类型
-    /// </summary>
-    public static ConcurrentDictionary<string, Type> LocalSchedulerJobTypes { get; internal set; } =
-        new(StringComparer.OrdinalIgnoreCase);
-
-    /// <summary>
-    /// 本地调度作业Entity
-    /// </summary>
-    public static List<SchedulerLocalJobInfo> LocalSchedulerJobList { get; internal set; } = [];
+    /// <inheritdoc />
+    public async Task StopAsync(CancellationToken cancellationToken)
+    {
+        var schedulerList = await _schedulerFactory.GetAllSchedulers(cancellationToken);
+        foreach (var scheduler in schedulerList.Where(wh => !wh.IsShutdown))
+        {
+            await scheduler.Shutdown(true, cancellationToken);
+        }
+    }
 }

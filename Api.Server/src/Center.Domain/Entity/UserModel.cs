@@ -27,7 +27,8 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("User", "客户端用户表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(AppId), OrderByType.Asc, nameof(OpenId), OrderByType.Asc, true)]
+[SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(AppId), OrderByType.Asc, nameof(OpenId), OrderByType.Asc, nameof(Mobile),
+    OrderByType.Asc, true)]
 public class UserModel : IUpdateVersion
 {
     /// <summary>
@@ -51,7 +52,6 @@ public class UserModel : IUpdateVersion
     /// <summary>
     /// 唯一用户标识
     /// </summary>
-    [Required]
     [SugarColumn(ColumnDescription = "唯一用户标识", Length = 28)]
     public string OpenId { get; set; }
 

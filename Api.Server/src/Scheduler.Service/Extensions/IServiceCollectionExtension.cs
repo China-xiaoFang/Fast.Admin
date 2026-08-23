@@ -36,9 +36,15 @@ public static class IServiceCollectionExtension
     /// <summary>
     /// 添加 Quartz 服务
     /// </summary>
+    /// <param name="services">要注册调度服务的服务集合</param>
+    /// <param name="configuration">应用配置</param>
+    /// <param name="isExecutionHost">是否为调度执行宿主</param>
     /// <returns>用于继续链式配置的服务集合</returns>
-    public static IServiceCollection AddQuartzService(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddQuartzService(this IServiceCollection services, IConfiguration configuration,
+        bool isExecutionHost = true)
     {
+        SchedulerContext.IsExecutionHost = isExecutionHost;
+
         services.AddQuartz(options =>
         {
             // 设置调度器Id
@@ -53,8 +59,16 @@ public static class IServiceCollectionExtension
             // 默认最大批处理作业数量为 1，这里修改为 10
             options.MaxBatchSize = 10;
 
-            // 默认最大并发为 10，这里修改为 100
-            options.UseDefaultThreadPool(100);
+            if (isExecutionHost)
+            {
+                // 默认最大并发为 10，这里修改为 100
+                options.UseDefaultThreadPool(100);
+            }
+            else
+            {
+                // 管理节点只操作持久化存储，不执行调度作业
+                options.UseZeroSizeThreadPool();
+            }
 
             // 配置持久化存储策略
             options.UsePersistentStore(x =>
@@ -121,15 +135,19 @@ public static class IServiceCollectionExtension
         // 调度器工厂
         services.TryAddSingleton<ContainerConfigurationProcessor>();
         services.TryAddSingleton<IDependencySchedulerFactory, DependencySchedulerFactory>();
+        services.AddHostedService<SchedulerShutdownHostedService>();
 
-        // 本地作业服务
-        var ISchedulerJobType = typeof(ISchedulerJob);
-        var schedulerJobTypes = MAppContext.EffectiveTypes.Where(wh =>
-                ISchedulerJobType.IsAssignableFrom(wh) && wh.IsClass && !wh.IsInterface && !wh.IsAbstract)
-            .ToList();
-        foreach (var type in schedulerJobTypes)
+        if (isExecutionHost)
         {
-            services.TryAddScoped(type);
+            // 本地作业服务
+            var ISchedulerJobType = typeof(ISchedulerJob);
+            var schedulerJobTypes = MAppContext.EffectiveTypes.Where(wh =>
+                    ISchedulerJobType.IsAssignableFrom(wh) && wh.IsClass && !wh.IsInterface && !wh.IsAbstract)
+                .ToList();
+            foreach (var type in schedulerJobTypes)
+            {
+                services.TryAddScoped(type);
+            }
         }
 
         return services;
