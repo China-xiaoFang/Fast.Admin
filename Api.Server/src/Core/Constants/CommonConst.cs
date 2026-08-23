@@ -68,4 +68,10 @@ public static class CommonConst
         /// </summary>
         public const string TenantNo = "Fast2018";
     }
+
+    /// <summary>
+    /// 默认头像
+    /// </summary>
+    public const string DefaultAvatar =
+        "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132";
 }

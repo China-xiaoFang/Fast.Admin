@@ -30,7 +30,7 @@ namespace Fast.Center.Service.App;
 /// <summary>
 /// App
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "app", Order = 996)]
+[ApiDescriptionSettings(ApiGroupConst.Center, Name = "app")]
 public class AppService : IDynamicApplication
 {
     private readonly ISqlSugarRepository<ApplicationModel> _repository;

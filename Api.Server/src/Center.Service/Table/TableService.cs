@@ -28,7 +28,7 @@ namespace Fast.Center.Service.Table;
 /// <summary>
 /// 表格服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "table", Order = 994)]
+[ApiDescriptionSettings(ApiGroupConst.Center, Name = "table")]
 public partial class TableService : IDynamicApplication
 {
     private readonly IUser _user;
