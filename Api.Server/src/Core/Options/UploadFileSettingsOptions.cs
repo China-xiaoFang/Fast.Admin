@@ -28,6 +28,11 @@ namespace Fast.Core;
 public class UploadFileSettingsOptions : IPostConfigure
 {
     /// <summary>
+    /// 公网域名，未配置时使用当前请求地址
+    /// </summary>
+    public string PublicDomain { get; set; }
+
+    /// <summary>
     /// Logo
     /// </summary>
     public UploadFileInfoSettings Logo { get; set; }
@@ -55,6 +60,16 @@ public class UploadFileSettingsOptions : IPostConfigure
     /// <inheritdoc />
     public void PostConfigure()
     {
+        if (string.IsNullOrWhiteSpace(PublicDomain))
+        {
+            PublicDomain = null;
+        }
+        else
+        {
+            PublicDomain = PublicDomain.Trim()
+                .TrimEnd('/');
+        }
+
         Logo ??= new UploadFileInfoSettings
         {
             Path = "Upload/Logo",

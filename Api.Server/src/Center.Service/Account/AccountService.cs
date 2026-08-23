@@ -377,7 +377,8 @@ public class AccountService : IDynamicApplication
         accountModel.Password = CryptoUtil.HashPasswordPBKDF2SHA256(input.NewPassword);
         accountModel.RowVersion = input.RowVersion;
 
-        var _visitLogRepository = FastContext.HttpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>();
+        var httpContext = FastContext.HttpContext;
+        var _visitLogRepository = httpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>();
 
         // 添加访问日志
         var visitLogModel = new VisitLogModel
@@ -395,7 +396,7 @@ public class AccountService : IDynamicApplication
             TenantId = _user.TenantId,
             TenantName = _user.TenantName
         };
-        visitLogModel.RecordCreate(FastContext.HttpContext);
+        visitLogModel.RecordCreate(httpContext);
 
         await _repository.Ado.UseTranAsync(async () =>
         {

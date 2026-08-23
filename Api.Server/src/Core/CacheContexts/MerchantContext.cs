@@ -53,10 +53,9 @@ public class MerchantContext
             throw new UserFriendlyException("商户号不能为空！");
         }
 
+        var httpContext = FastContext.HttpContext;
         // 优先从 HttpContext.Items 中获取
-        if (FastContext.HttpContext?.Items.TryGetValue($"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}.{merchantNo}",
-                out var obj)
-            == true
+        if (httpContext?.Items.TryGetValue($"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}.{merchantNo}", out var obj) == true
             && obj is MerchantModel merchantModel)
         {
             return merchantModel;
@@ -82,10 +81,10 @@ public class MerchantContext
             return result;
         });
 
-        if (FastContext.HttpContext != null)
+        if (httpContext != null)
         {
             // 放入 HttpContext.Items 中
-            FastContext.HttpContext.Items[$"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}.{merchantNo}"] = merchantModel;
+            httpContext.Items[$"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}.{merchantNo}"] = merchantModel;
         }
 
         return merchantModel;
@@ -102,10 +101,9 @@ public class MerchantContext
             throw new UserFriendlyException("商户号不能为空！");
         }
 
+        var httpContext = FastContext.HttpContext;
         // 优先从 HttpContext.Items 中获取
-        if (FastContext.HttpContext?.Items.TryGetValue($"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}.{merchantNo}",
-                out var obj)
-            == true
+        if (httpContext?.Items.TryGetValue($"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}.{merchantNo}", out var obj) == true
             && obj is MerchantModel merchantModel)
         {
             return merchantModel;
@@ -131,10 +129,10 @@ public class MerchantContext
             return result;
         });
 
-        if (FastContext.HttpContext != null)
+        if (httpContext != null)
         {
             // 放入 HttpContext.Items 中
-            FastContext.HttpContext.Items[$"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}.{merchantNo}"] = merchantModel;
+            httpContext.Items[$"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}.{merchantNo}"] = merchantModel;
         }
 
         return merchantModel;
@@ -150,12 +148,13 @@ public class MerchantContext
             throw new UserFriendlyException("商户号不能为空！");
         }
 
-        if (FastContext.HttpContext != null)
+        var httpContext = FastContext.HttpContext;
+        if (httpContext != null)
         {
             // 删除 HttpContext.Items 中的
-            if (FastContext.HttpContext.Items.ContainsKey($"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}.{merchantNo}"))
+            if (httpContext.Items.ContainsKey($"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}.{merchantNo}"))
             {
-                FastContext.HttpContext.Items.Remove($"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}.{merchantNo}");
+                httpContext.Items.Remove($"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}.{merchantNo}");
             }
         }
 
@@ -169,15 +168,16 @@ public class MerchantContext
     /// </summary>
     public static async Task DeleteAllMerchant()
     {
-        if (FastContext.HttpContext != null)
+        var httpContext = FastContext.HttpContext;
+        if (httpContext != null)
         {
             // 清空 HttpContext.Items 中的
-            var keys = FastContext.HttpContext.Items.Keys.Where(wh =>
+            var keys = httpContext.Items.Keys.Where(wh =>
                     wh is string key && key.StartsWith($"{nameof(Fast)}.{nameof(MerchantModel.MerchantNo)}."))
                 .ToList();
             foreach (var key in keys)
             {
-                FastContext.HttpContext.Items.Remove(key);
+                httpContext.Items.Remove(key);
             }
         }
 
