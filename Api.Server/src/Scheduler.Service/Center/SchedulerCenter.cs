@@ -70,6 +70,78 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     private static readonly SemaphoreSlim semaphoreSlim = new(1, 1);
 
     /// <summary>
+    /// 调度器期望待机控制日历名称
+    /// <para>由管理宿主写入，执行宿主读取，用于保存用户希望调度器达到的状态。</para>
+    /// <para>复用 Quartz 持久化日历，避免额外增加调度状态表。</para>
+    /// </summary>
+    private const string SchedulerDesiredStandbyCalendarName = "__FAST_SCHEDULER_STANDBY__";
+
+    /// <summary>
+    /// 调度器实际待机状态日历名称
+    /// <para>仅在执行宿主成功切换状态后更新，用于区分期望状态是否已经生效。</para>
+    /// </summary>
+    private const string SchedulerActualStandbyCalendarName = "__FAST_SCHEDULER_ACTUAL_STANDBY__";
+
+    private const string SchedulerRunningStatus = "Running (运行)";
+
+    private const string SchedulerStandbyStatus = "Standby (待机)";
+
+    private const string SchedulerOfflineStatus = "Offline (离线)";
+
+    /// <summary>
+    /// 获取调度器是否期望待机
+    /// </summary>
+    private static async Task<bool> GetSchedulerDesiredStandbyState(IScheduler scheduler)
+    {
+        return await scheduler.GetCalendar(SchedulerDesiredStandbyCalendarName) != null;
+    }
+
+    /// <summary>
+    /// 获取调度器是否实际待机
+    /// </summary>
+    private static async Task<bool> GetSchedulerActualStandbyState(IScheduler scheduler)
+    {
+        return await scheduler.GetCalendar(SchedulerActualStandbyCalendarName) != null;
+    }
+
+    /// <summary>
+    /// 设置调度器实际待机状态
+    /// </summary>
+    private static async Task SetSchedulerActualStandbyState(IScheduler scheduler, bool standby)
+    {
+        if (standby)
+        {
+            await scheduler.AddCalendar(SchedulerActualStandbyCalendarName, new BaseCalendar(), true, false);
+        }
+        else
+        {
+            await scheduler.DeleteCalendar(SchedulerActualStandbyCalendarName);
+        }
+    }
+
+    /// <summary>
+    /// 获取调度执行宿主是否在线
+    /// <para>Quartz 执行实例启动后会定期向 QRTZ_SCHEDULER_STATE 写入集群心跳。</para>
+    /// </summary>
+    private static async Task<bool> GetExecutionHostOnline(string schedulerName)
+    {
+        using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+        SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
+
+        var schedulerStateList = await db.Queryable<QuartzSchedulerStateModel>()
+            .Where(wh => wh.SchedName == schedulerName)
+            .ToListAsync();
+        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        return schedulerStateList.Any(state =>
+        {
+            // 允许最多丢失一次心跳，并保证至少有 15 秒容错时间，避免短暂抖动被误判为离线
+            var offlineThreshold = Math.Max(state.CheckInInterval * 2, 15000L);
+            return state.LastCheckInTime >= currentTime - offlineThreshold;
+        });
+    }
+
+    /// <summary>
     /// 调度作业属性验证
     /// </summary>
     private void SchedulerJobVerify(SchedulerJobInfo jobInfo)
@@ -576,21 +648,68 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     }
 
     /// <inheritdoc />
+    public async Task SyncSchedulerState()
+    {
+        // 管理宿主只维护数据库中的期望状态，不能启动或停止本进程中的 Quartz 调度线程
+        if (!SchedulerContext.IsExecutionHost)
+        {
+            return;
+        }
+
+        var schedulerList = await _schedulerFactory.GetAllSchedulers();
+        foreach (var scheduler in schedulerList)
+        {
+            // 期望状态由管理宿主写入，实际状态由执行宿主在状态切换成功后确认
+            var desiredStandby = await GetSchedulerDesiredStandbyState(scheduler);
+            var actualStandby = await GetSchedulerActualStandbyState(scheduler);
+
+            // 将当前执行实例同步到管理宿主要求的状态
+            if (desiredStandby && !scheduler.InStandbyMode)
+            {
+                await scheduler.Standby();
+            }
+            else if (!desiredStandby && scheduler.InStandbyMode)
+            {
+                await scheduler.Start();
+            }
+
+            // 只有上面的状态切换没有发生异常，才记录已经生效的实际状态
+            if (desiredStandby != actualStandby)
+            {
+                await SetSchedulerActualStandbyState(scheduler, desiredStandby);
+            }
+        }
+    }
+
+    /// <inheritdoc />
     public async Task<QuerySchedulerDetailOutput> QuerySchedulerDetail(long? tenantId = null)
     {
         var scheduler = await _schedulerFactory.GetScheduler(tenantId);
         var metaData = await scheduler.GetMetaData();
 
+        // 期望状态表示用户设置，实际状态表示执行宿主最后一次成功应用的状态
+        var desiredStandby = await GetSchedulerDesiredStandbyState(scheduler);
+        var actualStandby = await GetSchedulerActualStandbyState(scheduler);
+
+        // 执行宿主离线时，实际状态优先显示为 Offline，不根据期望状态推测正在运行
+        var executionOnline = await GetExecutionHostOnline(metaData.SchedulerName);
+        var desiredStatus = desiredStandby ? SchedulerStandbyStatus : SchedulerRunningStatus;
+        var actualStatus = !executionOnline ? SchedulerOfflineStatus :
+            actualStandby ? SchedulerStandbyStatus : SchedulerRunningStatus;
+        var schedulerStarted = executionOnline && !actualStandby;
+
         return new QuerySchedulerDetailOutput
         {
-            IsStarted = !metaData.InStandbyMode,
+            IsStarted = schedulerStarted,
             QuartzVersion = metaData.Version,
-            SchedulerStatus = metaData.Shutdown ? "Shutdown (关闭)" :
-                metaData.InStandbyMode ? "Standby (待机)" :
-                metaData.Started ? "Started (启动)" : "Unknown (未知)",
-            SchedulerShutdown = metaData.Shutdown,
-            SchedulerInStandbyMode = metaData.InStandbyMode,
-            SchedulerStarted = metaData.Started,
+            DesiredStatus = desiredStatus,
+            ExecutionOnline = executionOnline,
+            ActualStatus = actualStatus,
+            // 以下旧字段继续返回，避免影响现有调用方；状态语义与新增字段保持一致
+            SchedulerStatus = actualStatus,
+            SchedulerShutdown = !executionOnline,
+            SchedulerInStandbyMode = desiredStandby,
+            SchedulerStarted = schedulerStarted,
             SchedulerInstanceId = metaData.SchedulerInstanceId,
             SchedulerName = metaData.SchedulerName,
             SchedulerRemote = metaData.SchedulerRemote,
@@ -617,13 +736,38 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
         // 获取调度器
         var scheduler = await _schedulerFactory.GetScheduler(tenantId);
 
-        // 判断调度器是否处于待机模式
-        if (scheduler.InStandbyMode)
+        // 管理宿主不启动本地调度线程，只删除待机标记，将期望状态设置为运行
+        if (!SchedulerContext.IsExecutionHost)
         {
-            // 启动调度器
+            await scheduler.DeleteCalendar(SchedulerDesiredStandbyCalendarName);
+            return !await GetSchedulerDesiredStandbyState(scheduler);
+        }
+
+        // 执行宿主首次启动调度器后才会注册 Quartz 集群心跳
+        if (!scheduler.IsStarted)
+        {
             await scheduler.Start();
         }
 
+        // 初始化时仍需尊重管理宿主之前保存的期望待机状态
+        if (await GetSchedulerDesiredStandbyState(scheduler))
+        {
+            if (!scheduler.InStandbyMode)
+            {
+                await scheduler.Standby();
+            }
+
+            await SetSchedulerActualStandbyState(scheduler, true);
+            return false;
+        }
+
+        // 没有待机标记时，恢复调度线程并确认实际状态为运行
+        if (scheduler.InStandbyMode)
+        {
+            await scheduler.Start();
+        }
+
+        await SetSchedulerActualStandbyState(scheduler, false);
         return !scheduler.InStandbyMode;
     }
 
@@ -633,13 +777,21 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
         // 获取调度器
         var scheduler = await _schedulerFactory.GetScheduler(tenantId);
 
-        // 判断调度器是否已经关闭
+        // 管理宿主只保存期望待机状态，执行宿主会在下一次状态同步时应用
+        if (!SchedulerContext.IsExecutionHost)
+        {
+            await scheduler.AddCalendar(SchedulerDesiredStandbyCalendarName, new BaseCalendar(), true, false);
+            return await GetSchedulerDesiredStandbyState(scheduler);
+        }
+
+        // 执行宿主进入待机后不再获取新作业，已经开始的作业仍可继续完成
         if (!scheduler.InStandbyMode)
         {
-            // 等待任务运行完成
             await scheduler.Standby();
         }
 
+        // 状态切换成功后，再确认实际状态为待机
+        await SetSchedulerActualStandbyState(scheduler, true);
         return scheduler.InStandbyMode;
     }
 

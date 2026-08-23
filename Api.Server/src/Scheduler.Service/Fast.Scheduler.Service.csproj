@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <RootNamespace>Fast.Scheduler</RootNamespace>
         <Description>Fast.Admin 应用调度服务库。</Description>
     </PropertyGroup>
 

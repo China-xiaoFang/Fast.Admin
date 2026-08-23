@@ -29,6 +29,7 @@ using Fast.Logging;
 using Fast.NET.Core;
 using Fast.OpenApi;
 using Fast.Runtime;
+using Fast.Scheduler;
 using Fast.Serialization;
 using Fast.SqlSugar;
 using Fast.Swagger;
@@ -118,6 +119,9 @@ builder.Services.AddSwaggerDocuments(builder.Configuration);
 
 // 添加 OpenApi 服务
 builder.Services.AddOpenApi(builder.Configuration);
+
+// 添加调度管理服务，主 API 不执行调度作业
+builder.Services.AddQuartzService(builder.Configuration, false);
 
 // 添加 Swagger Newtonsoft.Json 库支持
 builder.Services.AddSwaggerGenNewtonsoftSupport();

@@ -71,6 +71,21 @@ public class SchedulerHostedService : BackgroundService
     }
 
     /// <summary>
+    /// 同步调度程序运行状态
+    /// </summary>
+    private async Task SyncSchedulerStateAsync()
+    {
+        try
+        {
+            await _schedulerCenter.SyncSchedulerState();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Sync scheduler state error. {ex.Message}");
+        }
+    }
+
+    /// <summary>
     /// 在应用启动完成后初始化调度器，并每半小时同步一次调度定义
     /// </summary>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -109,13 +124,25 @@ public class SchedulerHostedService : BackgroundService
 
             _logger.LogInformation("Next execute sync scheduler time {NextExecuteTime:yyyy-MM-dd HH:mm:ss}", nextExecTime);
 
-            await Task.Delay(nextExecTime - dateTime, stoppingToken);
-            using var timer = new PeriodicTimer(TimeSpan.FromMinutes(30));
-            do
+            using var timer = new PeriodicTimer(TimeSpan.FromSeconds(5));
+            while (await timer.WaitForNextTickAsync(stoppingToken))
             {
+                await SyncSchedulerStateAsync();
+
+                if (DateTime.Now < nextExecTime)
+                {
+                    continue;
+                }
+
                 // 串行等待每次同步完成，禁止 Timer 回调重叠造成重复调度或数据库并发写入
                 await SyncSchedulerAsync();
-            } while (await timer.WaitForNextTickAsync(stoppingToken));
+                do
+                {
+                    nextExecTime = nextExecTime.AddMinutes(30);
+                } while (nextExecTime <= DateTime.Now);
+
+                _logger.LogInformation("Next execute sync scheduler time {NextExecuteTime:yyyy-MM-dd HH:mm:ss}", nextExecTime);
+            }
         }
         catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
         {

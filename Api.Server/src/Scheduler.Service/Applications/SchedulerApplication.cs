@@ -21,15 +21,13 @@
 // ------------------------------------------------------------------------
 
 using Fast.Center.Domain;
-using Fast.Core;
-using Fast.DynamicApplication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quartz;
 using Quartz.Impl.Calendar;
 using Quartz.Impl.Triggers;
 
-namespace Fast.Scheduler.Applications;
+namespace Fast.Scheduler;
 
 /// <summary>
 /// 调度作业

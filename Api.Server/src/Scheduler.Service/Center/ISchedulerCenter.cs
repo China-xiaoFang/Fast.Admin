@@ -40,6 +40,11 @@ public interface ISchedulerCenter
     Task SyncScheduler();
 
     /// <summary>
+    /// 同步调度程序运行状态
+    /// </summary>
+    Task SyncSchedulerState();
+
+    /// <summary>
     /// 获取调度器详情
     /// </summary>
     /// <returns>调度器详情</returns>
@@ -48,13 +53,13 @@ public interface ISchedulerCenter
     /// <summary>
     /// 启动调度器
     /// </summary>
-    /// <returns>调度器是否已启动</returns>
+    /// <returns>管理宿主返回期望状态是否保存，执行宿主返回是否实际运行</returns>
     Task<bool> StartScheduler(long? tenantId = null);
 
     /// <summary>
     /// 停止调度器
     /// </summary>
-    /// <returns>调度器是否已进入待机状态</returns>
+    /// <returns>管理宿主返回期望状态是否保存，执行宿主返回是否实际待机</returns>
     Task<bool> StopScheduler(long? tenantId = null);
 
     /// <summary>

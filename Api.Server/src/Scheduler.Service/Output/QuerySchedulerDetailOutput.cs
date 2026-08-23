@@ -28,7 +28,7 @@ namespace Fast.Scheduler;
 public class QuerySchedulerDetailOutput
 {
     /// <summary>
-    /// 是否启动
+    /// 是否实际运行
     /// </summary>
     public bool IsStarted { get; set; }
 
@@ -38,22 +38,37 @@ public class QuerySchedulerDetailOutput
     public string QuartzVersion { get; set; }
 
     /// <summary>
-    /// 调度器状态
+    /// 期望状态
+    /// </summary>
+    public string DesiredStatus { get; set; }
+
+    /// <summary>
+    /// 调度执行宿主是否在线
+    /// </summary>
+    public bool ExecutionOnline { get; set; }
+
+    /// <summary>
+    /// 实际状态
+    /// </summary>
+    public string ActualStatus { get; set; }
+
+    /// <summary>
+    /// 调度器实际状态
     /// </summary>
     public string SchedulerStatus { get; set; }
 
     /// <summary>
-    /// 调度器关闭
+    /// 调度执行宿主是否离线
     /// </summary>
     public bool SchedulerShutdown { get; set; }
 
     /// <summary>
-    /// 调度器待机
+    /// 是否期望调度器待机
     /// </summary>
     public bool SchedulerInStandbyMode { get; set; }
 
     /// <summary>
-    /// 调度器启动
+    /// 调度器是否实际运行
     /// </summary>
     public bool SchedulerStarted { get; set; }
 
