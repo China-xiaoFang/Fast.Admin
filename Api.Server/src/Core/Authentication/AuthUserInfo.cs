@@ -87,17 +87,17 @@ public class AuthUserInfo
 
     #endregion
 
-    #region 微信用户
+    #region 客户端用户
 
     /// <summary>
-    /// 微信用户Id
+    /// 客户端用户Id
     /// </summary>
-    public virtual long WeChatId { get; set; }
+    public virtual long ClientUserId { get; set; }
 
     /// <summary>
-    /// 微信唯一用户标识
+    /// 客户端唯一用户标识
     /// </summary>
-    public virtual string WeChatOpenId { get; set; }
+    public virtual string ClientUserOpenId { get; set; }
 
     #endregion
 

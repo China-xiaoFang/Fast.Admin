@@ -59,10 +59,10 @@ public class AccountModel : IUpdateVersion
     public string Email { get; set; }
 
     /// <summary>
-    /// 微信用户Id
+    /// 客户端用户Id
     /// </summary>
-    [SugarColumn(ColumnDescription = "微信用户Id")]
-    public long? WeChatId { get; set; }
+    [SugarColumn(ColumnDescription = "客户端用户Id")]
+    public long? ClientUserId { get; set; }
 
     /// <summary>
     /// 密码

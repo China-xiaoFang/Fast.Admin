@@ -87,17 +87,17 @@ public interface IUser
 
     #endregion
 
-    #region 微信用户
+    #region 客户端用户
 
     /// <summary>
-    /// 微信用户Id
+    /// 客户端用户Id
     /// </summary>
-    long WeChatId { get; set; }
+    long ClientUserId { get; set; }
 
     /// <summary>
-    /// 微信唯一用户标识
+    /// 客户端唯一用户标识
     /// </summary>
-    string WeChatOpenId { get; set; }
+    string ClientUserOpenId { get; set; }
 
     #endregion
 
@@ -283,9 +283,9 @@ public interface IUser
     Task RefreshAccount(RefreshAccountDto input);
 
     /// <summary>
-    /// 刷新微信用户信息
+    /// 刷新客户端用户信息
     /// </summary>
-    Task RefreshWeChatUser(RefreshWeChatUserDto input);
+    Task RefreshClientUser(RefreshClientUserDto input);
 
     /// <summary>
     /// 刷新职员信息

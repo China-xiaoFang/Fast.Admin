@@ -45,9 +45,9 @@ public class QueryAccountDetailOutput
     public string Email { get; set; }
 
     /// <summary>
-    /// 微信用户Id
+    /// 客户端用户Id
     /// </summary>
-    public long? WeChatId { get; set; }
+    public long? ClientUserId { get; set; }
 
     /// <summary>
     /// 状态

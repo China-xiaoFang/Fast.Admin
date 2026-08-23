@@ -20,45 +20,42 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Core;
+namespace Fast.Center.Domain;
 
 /// <summary>
-/// 微信用户刷新信息Dto
+/// 客户端用户类型枚举
 /// </summary>
-public class RefreshWeChatUserDto
+[Flags]
+[FastEnum("客户端用户类型枚举")]
+public enum ClientUserTypeEnum : byte
 {
     /// <summary>
-    /// 设备类型
+    /// 小程序
     /// </summary>
-    public AppEnvironmentEnum DeviceType { get; set; }
+    [Description("小程序")]
+    MiniProgram = 1,
 
     /// <summary>
-    /// 应用编号
+    /// 公众号
     /// </summary>
-    public string AppNo { get; set; }
+    [Description("公众号")]
+    OfficialAccount = 2,
 
     /// <summary>
-    /// 手机
+    /// 服务号
     /// </summary>
-    public string Mobile { get; set; }
+    [Description("服务号")]
+    ServiceAccount = 4,
 
     /// <summary>
-    /// 昵称
+    /// 开放平台
     /// </summary>
-    public string NickName { get; set; }
+    [Description("开放平台")]
+    OpenPlatform = 8,
 
     /// <summary>
-    /// 头像
+    /// 企业微信
     /// </summary>
-    public string Avatar { get; set; }
-
-    /// <summary>
-    /// 租户编号
-    /// </summary>
-    public string TenantNo { get; set; }
-
-    /// <summary>
-    /// 微信唯一用户标识
-    /// </summary>
-    public string WeChatOpenId { get; set; }
+    [Description("企业微信")]
+    WorkWeChat = 16
 }

@@ -1,4 +1,4 @@
-﻿// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // Apache开源许可证
 // 
 // 版权所有 © 2018-Now 小方
@@ -20,31 +20,52 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Service.WeChat.Dto;
+using Fast.Center.Domain;
+
+namespace Fast.Center.Service.ClientUser.Dto;
 
 /// <summary>
-/// 编辑微信用户输入
+/// 获取客户端用户分页列表输出
 /// </summary>
-public class EditWeChatUserInput : UpdateVersionInput
+public class QueryClientUserPagedOutput : PagedOutput
 {
     /// <summary>
-    /// 用户纯手机号码
+    /// 客户端用户Id
     /// </summary>
-    public string PurePhoneNumber { get; set; }
+    public long UserId { get; set; }
 
     /// <summary>
-    /// 用户手机号码
+    /// 应用Id
     /// </summary>
-    public string PhoneNumber { get; set; }
+    public long AppId { get; set; }
 
     /// <summary>
-    /// 用户手机号码区号
+    /// 用户类型
     /// </summary>
-    public string CountryCode { get; set; }
+    public ClientUserTypeEnum UserType { get; set; }
 
     /// <summary>
-    /// 微信昵称
+    /// 唯一用户标识
     /// </summary>
+    [SugarSearchValue]
+    public string OpenId { get; set; }
+
+    /// <summary>
+    /// 统一用户标识
+    /// </summary>
+    [SugarSearchValue]
+    public string UnionId { get; set; }
+
+    /// <summary>
+    /// 手机
+    /// </summary>
+    [SugarSearchValue]
+    public string Mobile { get; set; }
+
+    /// <summary>
+    /// 昵称
+    /// </summary>
+    [SugarSearchValue]
     public string NickName { get; set; }
 
     /// <summary>
@@ -58,20 +79,46 @@ public class EditWeChatUserInput : UpdateVersionInput
     public GenderEnum Sex { get; set; }
 
     /// <summary>
-    /// 国家
+    /// 最后登录设备
     /// </summary>
-
-    public string Country { get; set; }
+    public string LastLoginDevice { get; set; }
 
     /// <summary>
-    /// 省份
+    /// 最后登录操作系统（版本）
     /// </summary>
-
-    public string Province { get; set; }
+    public string LastLoginOS { get; set; }
 
     /// <summary>
-    /// 城市
+    /// 最后登录浏览器（版本）
     /// </summary>
+    public string LastLoginBrowser { get; set; }
 
-    public string City { get; set; }
+    /// <summary>
+    /// 最后登录省份
+    /// </summary>
+    public string LastLoginProvince { get; set; }
+
+    /// <summary>
+    /// 最后登录城市
+    /// </summary>
+    public string LastLoginCity { get; set; }
+
+    /// <summary>
+    /// 最后登录Ip
+    /// </summary>
+    public string LastLoginIp { get; set; }
+
+    /// <summary>
+    /// 最后登录时间
+    /// </summary>
+    public DateTime? LastLoginTime { get; set; }
+
+    /// <summary>
+    /// 手机号更新时间
+    /// </summary>
+    public DateTime? MobileUpdateTime { get; set; }
+
+    /// <summary>创建时间</summary>
+    [SugarSearchTime]
+    public override DateTime? CreatedTime { get; set; }
 }
