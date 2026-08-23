@@ -29,6 +29,11 @@ namespace Fast.Core;
 public class AuthUserInfo
 {
     /// <summary>
+    /// 会话Id
+    /// </summary>
+    public virtual string SessionId { get; set; }
+
+    /// <summary>
     /// 设备类型
     /// </summary>
     public virtual AppEnvironmentEnum DeviceType { get; set; }
@@ -37,11 +42,6 @@ public class AuthUserInfo
     /// 设备Id
     /// </summary>
     public virtual string DeviceId { get; set; }
-
-    /// <summary>
-    /// 会话Id
-    /// </summary>
-    public virtual string SessionId { get; set; }
 
     /// <summary>
     /// WebStock 连接Id

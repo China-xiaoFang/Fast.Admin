@@ -29,6 +29,11 @@ namespace Fast.Core;
 public interface IUser
 {
     /// <summary>
+    /// 会话Id
+    /// </summary>
+    string SessionId { get; set; }
+
+    /// <summary>
     /// 设备类型
     /// </summary>
     AppEnvironmentEnum DeviceType { get; set; }
@@ -37,11 +42,6 @@ public interface IUser
     /// 设备Id
     /// </summary>
     string DeviceId { get; set; }
-
-    /// <summary>
-    /// 会话Id
-    /// </summary>
-    string SessionId { get; set; }
 
     /// <summary>
     /// WebStock 连接Id
