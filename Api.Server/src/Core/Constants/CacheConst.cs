@@ -40,8 +40,8 @@ public static class CacheConst
     /// <summary>
     /// 授权用户
     /// </summary>
-    /// <remarks>{0}应用编号, {1}租户编号, {2}登录环境，{3}工号</remarks>
-    public const string AuthUser = "{0}:{1}:Auth:{2}:{3}";
+    /// <remarks>{0}应用编号，{1}租户编号，{2}登录环境，{3}工号，{4}会话Id</remarks>
+    public const string AuthUser = "{0}:{1}:Auth:{2}:{3}:{4}";
 
     /// <summary>
     /// 管理后台

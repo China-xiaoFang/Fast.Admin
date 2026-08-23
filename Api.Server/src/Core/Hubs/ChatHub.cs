@@ -88,7 +88,7 @@ public class ChatHub : Hub<IChatClient>
                 && payload.TryGetValue(nameof(AuthUserInfo.EmployeeNo), out var employeeNo))
             {
                 // 尝试获取缓存
-                var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType, employeeNo);
+                var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType, employeeNo, sessionId);
                 var authUserInfo = await _authCache.GetAsync<AuthUserInfo>(cacheKey);
 
                 return authUserInfo?.SessionId == sessionId ? authUserInfo : null;
@@ -208,7 +208,7 @@ public class ChatHub : Hub<IChatClient>
         authUserInfo.LastLoginTime = dateTime;
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
-            authUserInfo.DeviceType, authUserInfo.EmployeeNo);
+            authUserInfo.DeviceType, authUserInfo.EmployeeNo, authUserInfo.SessionId);
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, authUserInfo);
 

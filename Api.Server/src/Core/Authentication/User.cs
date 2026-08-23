@@ -80,10 +80,11 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("授权用户信息不存在！");
         }
 
+        SessionId = authUserInfo.SessionId;
+
         // 设置授权用户信息
         DeviceType = authUserInfo.DeviceType;
         DeviceId = authUserInfo.DeviceId;
-        SessionId = authUserInfo.SessionId;
 
         AppNo = authUserInfo.AppNo;
         AppName = authUserInfo.AppName;
@@ -136,7 +137,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         string employeeNo, string sessionId)
     {
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType.ToString(), employeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType.ToString(), employeeNo, sessionId);
 
         var authUserInfo = await _authCache.GetAsync<AuthUserInfo>(cacheKey);
         return authUserInfo?.SessionId == sessionId ? authUserInfo : null;
@@ -172,6 +173,10 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
 
         try
         {
+            // 每次登录生成独立会话Id，用于区分同一用户的多个登录会话
+            authUserInfo.SessionId = Guid.NewGuid()
+                .ToString("N");
+
             // 设置授权用户信息
             SetAuthUser(authUserInfo, true);
 
@@ -180,7 +185,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             if (singleLogin)
             {
                 var delCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo, "*",
-                    authUserInfo.EmployeeNo);
+                    authUserInfo.EmployeeNo, "*");
                 await _authCache.DelByPatternAsync(delCacheKey);
             }
 
@@ -207,7 +212,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
 
             // 获取缓存Key
             var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
-                authUserInfo.DeviceType.ToString(), authUserInfo.EmployeeNo);
+                authUserInfo.DeviceType.ToString(), authUserInfo.EmployeeNo, authUserInfo.SessionId);
 
             // 设置缓存信息
             await _authCache.SetAsync(cacheKey, authUserInfo);
@@ -258,6 +263,10 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
 
         try
         {
+            // 每次登录生成独立会话Id，用于区分同一用户的多个登录会话
+            authUserInfo.SessionId = Guid.NewGuid()
+                .ToString("N");
+
             // 设置授权用户信息
             SetAuthUser(authUserInfo, true);
 
@@ -266,7 +275,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             if (singleLogin)
             {
                 var delCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo, "*",
-                    authUserInfo.WeChatOpenId);
+                    authUserInfo.WeChatOpenId, "*");
                 await _authCache.DelByPatternAsync(delCacheKey);
             }
 
@@ -293,7 +302,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
 
             // 获取缓存Key
             var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
-                authUserInfo.DeviceType.ToString(), authUserInfo.WeChatOpenId);
+                authUserInfo.DeviceType.ToString(), authUserInfo.WeChatOpenId, authUserInfo.SessionId);
 
             // 设置缓存信息
             await _authCache.SetAsync(cacheKey, authUserInfo);
@@ -336,7 +345,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         var accessToken = JwtBearerUtil.GenerateToken(new Dictionary<string, object> {{"Data", data}}, 1);
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, AppNo, TenantNo, DeviceType.ToString(), EmployeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, AppNo, TenantNo, DeviceType.ToString(), EmployeeNo, SessionId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -373,7 +382,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.EmployeeNo);
+            input.EmployeeNo, SessionId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -409,7 +418,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.EmployeeNo);
+            input.EmployeeNo, SessionId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -440,7 +449,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.WeChatOpenId);
+            input.WeChatOpenId, SessionId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -476,7 +485,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
 
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.EmployeeNo);
+            input.EmployeeNo, SessionId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -494,7 +503,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             .ToListAsync();
 
         foreach (var cacheKey in tenantUserList.Select(tenantUser =>
-                     CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantUser.TenantNo, "*", tenantUser.EmployeeNo)))
+                     CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantUser.TenantNo, "*", tenantUser.EmployeeNo, "*")))
         {
             await _authCache.DelByPatternAsync(cacheKey);
         }
@@ -506,7 +515,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         if (string.IsNullOrWhiteSpace(tenantNo))
             return;
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantNo, "*", "*");
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantNo, "*", "*", "*");
         await _authCache.DelByPatternAsync(cacheKey);
     }
 
@@ -516,7 +525,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         if (string.IsNullOrWhiteSpace(tenantNo) || string.IsNullOrWhiteSpace(employeeNo))
             return;
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantNo, "*", employeeNo);
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantNo, "*", employeeNo, "*");
         await _authCache.DelByPatternAsync(cacheKey);
     }
 
@@ -554,7 +563,8 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                     && payload.TryGetValue(nameof(EmployeeNo), out var employeeNo))
                 {
                     // 尝试获取缓存
-                    var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType, employeeNo);
+                    var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType, employeeNo,
+                        sessionId);
                     var authUserInfo = await _authCache.GetAsync<AuthUserInfo>(cacheKey);
                     if (authUserInfo != null)
                     {
