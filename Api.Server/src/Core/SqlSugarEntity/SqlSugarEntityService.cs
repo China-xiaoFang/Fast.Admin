@@ -68,9 +68,10 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
             throw new UserFriendlyException("租户编号不能为空！");
         }
 
+        var httpContext = FastContext.HttpContext;
         // 优先从 HttpContext.Items 中获取
         var connectionSettingsObj =
-            FastContext.HttpContext?.Items[
+            httpContext?.Items[
                 $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"];
 
         if (connectionSettingsObj is ConnectionSettingsOptions connectionSettings)
@@ -131,10 +132,10 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
             };
         });
 
-        if (FastContext.HttpContext != null)
+        if (httpContext != null)
         {
             // 放入 HttpContext.Items 中
-            FastContext.HttpContext.Items[
+            httpContext.Items[
                 $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"] = result;
         }
 
@@ -149,13 +150,14 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
             throw new UserFriendlyException("租户编号不能为空！");
         }
 
-        if (FastContext.HttpContext != null)
+        var httpContext = FastContext.HttpContext;
+        if (httpContext != null)
         {
             // 删除 HttpContext.Items 中的
-            if (FastContext.HttpContext.Items.ContainsKey(
+            if (httpContext.Items.ContainsKey(
                     $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"))
             {
-                FastContext.HttpContext.Items.Remove(
+                httpContext.Items.Remove(
                     $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}");
             }
         }

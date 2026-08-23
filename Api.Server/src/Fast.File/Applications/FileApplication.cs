@@ -26,7 +26,6 @@ using Fast.Center.Domain;
 using Fast.Core;
 using Fast.DynamicApplication;
 using Fast.File.Applications.Dto;
-using Fast.NET.Core;
 using Fast.Runtime;
 using Fast.Shared;
 using Fast.SqlSugar;
@@ -44,7 +43,7 @@ namespace Fast.File.Applications;
 /// <summary>
 /// 文件服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.File, Name = "fileStorage", Order = 997)]
+[ApiDescriptionSettings(ApiGroupConst.File, Name = "file", Order = 997)]
 public class FileApplication : IDynamicApplication
 {
     /// <summary>
@@ -133,7 +132,7 @@ public class FileApplication : IDynamicApplication
     /// 预览文件
     /// </summary>
     [ApiDescriptionSettings(false)]
-    [HttpGet("/fileStorage/{fileName}")]
+    [HttpGet("/file/{fileName}")]
     [ApiInfo("预览文件", HttpRequestActionEnum.Download)]
     [AllowAnonymous, DisabledRequestLog, DisableRateLimiting]
     public async Task<IActionResult> Preview([FromRoute, Required(ErrorMessage = "文件名称不能为空")] string fileName)
@@ -152,7 +151,7 @@ public class FileApplication : IDynamicApplication
     /// <para><c>normal</c>：正常尺寸</para>
     /// </param>
     [ApiDescriptionSettings(false)]
-    [HttpGet("/fileStorage/{fileName}@!{size}")]
+    [HttpGet("/file/{fileName}@!{size}")]
     [ApiInfo("预览文件", HttpRequestActionEnum.Download)]
     [AllowAnonymous, DisabledRequestLog, DisableRateLimiting]
     public async Task<IActionResult> Preview([FromRoute, Required(ErrorMessage = "文件名称不能为空")] string fileName,
@@ -180,6 +179,20 @@ public class FileApplication : IDynamicApplication
             : Path.GetFullPath(Path.Combine(rootPath, localPath, fileName));
 
         return fullPath;
+    }
+
+    /// <summary>
+    /// 获取文件访问地址
+    /// </summary>
+    private string GetFileLocation(string fileObjectName)
+    {
+        var publicDomain = _uploadFileSettingsOptions.PublicDomain;
+        if (string.IsNullOrWhiteSpace(publicDomain))
+        {
+            publicDomain = $"{_httpContext.Request.Scheme}://{_httpContext.Request.Host}";
+        }
+
+        return $"{publicDomain}/file/{fileObjectName}";
     }
 
     /// <summary>
@@ -309,7 +322,6 @@ public class FileApplication : IDynamicApplication
     /// <summary>
     /// 上传文件
     /// </summary>
-    /// <returns></returns>
     [HttpPost]
     [ApiInfo("上传文件", HttpRequestActionEnum.Upload)]
     [RequestSizeLimit(101 * 1024 * 1024)]
@@ -437,8 +449,6 @@ public class FileApplication : IDynamicApplication
             return existFileModel.FileLocation;
         }
 
-        var httpRequest = FastContext.HttpContext.Request;
-
         var fileId = YitIdHelper.NextId();
         // 本地文件名称
         var fileObjectName = $"{fileId}{fileSuffix}";
@@ -488,15 +498,15 @@ public class FileApplication : IDynamicApplication
             FileMimeType = normalizedContentType,
             FileSizeKb = fileSizeKb,
             FilePath = filePath,
-            FileLocation = $"{httpRequest.Scheme}://{httpRequest.Host}/fileStorage/{fileObjectName}",
+            FileLocation = GetFileLocation(fileObjectName),
             FileHash = fileHash
         };
         // 获取设备信息
-        var userAgentInfo = FastContext.HttpContext.RequestUserAgentInfo();
+        var userAgentInfo = _httpContext.RequestUserAgentInfo();
         // 获取Ip信息
-        var ip = FastContext.HttpContext.RemoteIpv4();
+        var ip = _httpContext.RemoteIpv4();
         // 获取万网信息
-        var wanNetIpInfo = await FastContext.HttpContext.RemoteIpv4InfoAsync();
+        var wanNetIpInfo = await _httpContext.RemoteIpv4InfoAsync();
         fileInfoModel.UploadDevice = userAgentInfo.Device;
         fileInfoModel.UploadOS = userAgentInfo.OS;
         fileInfoModel.UploadBrowser = userAgentInfo.Browser;

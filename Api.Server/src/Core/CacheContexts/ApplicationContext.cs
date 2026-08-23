@@ -53,9 +53,9 @@ public class ApplicationContext
             throw new UserFriendlyException("应用标识不能为空！");
         }
 
+        var httpContext = FastContext.HttpContext;
         // 优先从 HttpContext.Items 中获取
-        if (FastContext.HttpContext?.Items.TryGetValue($"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}",
-                out var obj)
+        if (httpContext?.Items.TryGetValue($"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}", out var obj)
             == true
             && obj is ApplicationOpenIdModel applicationOpenIdModel)
         {
@@ -83,11 +83,10 @@ public class ApplicationContext
             return result;
         });
 
-        if (FastContext.HttpContext != null)
+        if (httpContext != null)
         {
             // 放入 HttpContext.Items 中
-            FastContext.HttpContext.Items[$"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}"] =
-                applicationOpenIdModel;
+            httpContext.Items[$"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}"] = applicationOpenIdModel;
         }
 
         return applicationOpenIdModel;
@@ -104,9 +103,9 @@ public class ApplicationContext
             throw new UserFriendlyException("应用标识不能为空！");
         }
 
+        var httpContext = FastContext.HttpContext;
         // 优先从 HttpContext.Items 中获取
-        if (FastContext.HttpContext?.Items.TryGetValue($"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}",
-                out var obj)
+        if (httpContext?.Items.TryGetValue($"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}", out var obj)
             == true
             && obj is ApplicationOpenIdModel applicationOpenIdModel)
         {
@@ -134,11 +133,10 @@ public class ApplicationContext
             return result;
         });
 
-        if (FastContext.HttpContext != null)
+        if (httpContext != null)
         {
             // 放入 HttpContext.Items 中
-            FastContext.HttpContext.Items[$"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}"] =
-                applicationOpenIdModel;
+            httpContext.Items[$"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}"] = applicationOpenIdModel;
         }
 
         return applicationOpenIdModel;
@@ -154,12 +152,13 @@ public class ApplicationContext
             throw new UserFriendlyException("应用标识不能为空！");
         }
 
-        if (FastContext.HttpContext != null)
+        var httpContext = FastContext.HttpContext;
+        if (httpContext != null)
         {
             // 删除 HttpContext.Items 中的
-            if (FastContext.HttpContext.Items.ContainsKey($"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}"))
+            if (httpContext.Items.ContainsKey($"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}"))
             {
-                FastContext.HttpContext.Items.Remove($"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}");
+                httpContext.Items.Remove($"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}.{openId}");
             }
         }
 
@@ -173,15 +172,16 @@ public class ApplicationContext
     /// </summary>
     public static async Task DeleteAllApplication()
     {
-        if (FastContext.HttpContext != null)
+        var httpContext = FastContext.HttpContext;
+        if (httpContext != null)
         {
             // 清空 HttpContext.Items 中的
-            var keys = FastContext.HttpContext.Items.Keys.Where(wh =>
+            var keys = httpContext.Items.Keys.Where(wh =>
                     wh is string key && key.StartsWith($"{nameof(Fast)}.{nameof(ApplicationOpenIdModel.OpenId)}."))
                 .ToList();
             foreach (var key in keys)
             {
-                FastContext.HttpContext.Items.Remove(key);
+                httpContext.Items.Remove(key);
             }
         }
 

@@ -53,9 +53,9 @@ public class TenantContext
             throw new UserFriendlyException("租户编号不能为空！");
         }
 
+        var httpContext = FastContext.HttpContext;
         // 优先从 HttpContext.Items 中获取
-        if (FastContext.HttpContext?.Items.TryGetValue($"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}", out var obj)
-            == true
+        if (httpContext?.Items.TryGetValue($"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}", out var obj) == true
             && obj is TenantModel tenantModel)
         {
             return tenantModel;
@@ -81,10 +81,10 @@ public class TenantContext
             return result;
         });
 
-        if (FastContext.HttpContext != null)
+        if (httpContext != null)
         {
             // 放入 HttpContext.Items 中
-            FastContext.HttpContext.Items[$"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}"] = tenantModel;
+            httpContext.Items[$"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}"] = tenantModel;
         }
 
         return tenantModel;
@@ -101,9 +101,9 @@ public class TenantContext
             throw new UserFriendlyException("租户编号不能为空！");
         }
 
+        var httpContext = FastContext.HttpContext;
         // 优先从 HttpContext.Items 中获取
-        if (FastContext.HttpContext?.Items.TryGetValue($"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}", out var obj)
-            == true
+        if (httpContext?.Items.TryGetValue($"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}", out var obj) == true
             && obj is TenantModel tenantModel)
         {
             return tenantModel;
@@ -129,10 +129,10 @@ public class TenantContext
             return result;
         });
 
-        if (FastContext.HttpContext != null)
+        if (httpContext != null)
         {
             // 放入 HttpContext.Items 中
-            FastContext.HttpContext.Items[$"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}"] = tenantModel;
+            httpContext.Items[$"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}"] = tenantModel;
         }
 
         return tenantModel;
@@ -148,12 +148,13 @@ public class TenantContext
             throw new UserFriendlyException("租户编号不能为空！");
         }
 
-        if (FastContext.HttpContext != null)
+        var httpContext = FastContext.HttpContext;
+        if (httpContext != null)
         {
             // 删除 HttpContext.Items 中的
-            if (FastContext.HttpContext.Items.ContainsKey($"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}"))
+            if (httpContext.Items.ContainsKey($"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}"))
             {
-                FastContext.HttpContext.Items.Remove($"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}");
+                httpContext.Items.Remove($"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}.{tenantNo}");
             }
         }
 
@@ -167,15 +168,16 @@ public class TenantContext
     /// </summary>
     public static async Task DeleteAllTenant()
     {
-        if (FastContext.HttpContext != null)
+        var httpContext = FastContext.HttpContext;
+        if (httpContext != null)
         {
             // 清空 HttpContext.Items 中的
-            var keys = FastContext.HttpContext.Items.Keys.Where(wh =>
+            var keys = httpContext.Items.Keys.Where(wh =>
                     wh is string key && key.StartsWith($"{nameof(Fast)}.{nameof(TenantModel.TenantNo)}."))
                 .ToList();
             foreach (var key in keys)
             {
-                FastContext.HttpContext.Items.Remove(key);
+                httpContext.Items.Remove(key);
             }
         }
 
