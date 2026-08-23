@@ -31,7 +31,7 @@ namespace Fast.Admin.Service.Auth;
 /// <summary>
 /// 鉴权服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "auth", Order = 998)]
+[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "auth")]
 public class AuthService : IDynamicApplication
 {
     private readonly IUser _user;

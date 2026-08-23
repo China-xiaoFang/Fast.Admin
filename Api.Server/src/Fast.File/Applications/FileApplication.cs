@@ -43,7 +43,7 @@ namespace Fast.File.Applications;
 /// <summary>
 /// 文件服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.File, Name = "file", Order = 997)]
+[ApiDescriptionSettings(ApiGroupConst.File, Name = "file")]
 public class FileApplication : IDynamicApplication
 {
     /// <summary>

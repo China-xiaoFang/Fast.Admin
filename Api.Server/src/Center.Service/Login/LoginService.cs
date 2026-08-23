@@ -27,7 +27,7 @@ namespace Fast.Center.Service.Login;
 /// <summary>
 /// 登录服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "login", Order = 999)]
+[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "login")]
 public partial class LoginService : IDynamicApplication
 {
     private readonly IUser _user;

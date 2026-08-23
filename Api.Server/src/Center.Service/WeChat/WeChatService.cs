@@ -35,7 +35,7 @@ namespace Fast.Center.Service.WeChat;
 /// <summary>
 /// 微信服务
 /// </summary>
-[ApiDescriptionSettings(ApiGroupConst.Center, Name = "weChat")]
+[ApiDescriptionSettings(ApiGroupConst.Auth, Name = "weChat")]
 public class WeChatService : IDynamicApplication
 {
     /// <summary>
@@ -73,8 +73,7 @@ public class WeChatService : IDynamicApplication
             UnionId = response.UnionId,
             SessionKey = response.SessionKey,
             NickName = "微信用户",
-            Avatar =
-                "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132",
+            Avatar = CommonConst.DefaultAvatar,
             Sex = GenderEnum.Unknown
         };
 

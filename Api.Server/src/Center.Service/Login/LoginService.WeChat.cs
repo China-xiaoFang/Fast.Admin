@@ -36,9 +36,6 @@ namespace Fast.Center.Service.Login;
 
 public partial class LoginService
 {
-    private const string DefaultClientUserAvatar =
-        "https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132";
-
     private static ClientUserTypeEnum GetClientUserType(AppEnvironmentEnum appType)
     {
         return appType switch
@@ -62,7 +59,7 @@ public partial class LoginService
             OpenId = openId,
             UnionId = unionId,
             NickName = "微信用户",
-            Avatar = DefaultClientUserAvatar,
+            Avatar = CommonConst.DefaultAvatar,
             Sex = GenderEnum.Unknown
         };
     }
