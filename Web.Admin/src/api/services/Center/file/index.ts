@@ -24,7 +24,7 @@ export const fileApi = {
 	 */
 	download(data: DownloadFileInput): Promise<unknown> {
 		return axiosUtil.request({
-			url: "http://127.0.0.1:38082/file/download",
+			url: "/file/download",
 			method: "post",
 			data,
 			responseType: "blob",
@@ -37,7 +37,7 @@ export const fileApi = {
 	 */
 	uploadLogo(data: FormData): Promise<string> {
 		return axiosUtil.request<string>({
-			url: "http://127.0.0.1:38082/file/uploadLogo",
+			url: "/file/uploadLogo",
 			method: "post",
 			data,
 			cancelDuplicateRequest: false,
@@ -49,7 +49,7 @@ export const fileApi = {
 	 */
 	uploadAvatar(data: FormData): Promise<string> {
 		return axiosUtil.request<string>({
-			url: "http://127.0.0.1:38082/file/uploadAvatar",
+			url: "/file/uploadAvatar",
 			method: "post",
 			data,
 			cancelDuplicateRequest: false,
@@ -61,7 +61,7 @@ export const fileApi = {
 	 */
 	uploadIdPhoto(data: FormData): Promise<string> {
 		return axiosUtil.request<string>({
-			url: "http://127.0.0.1:38082/file/uploadIdPhoto",
+			url: "/file/uploadIdPhoto",
 			method: "post",
 			data,
 			cancelDuplicateRequest: false,
@@ -73,7 +73,7 @@ export const fileApi = {
 	 */
 	uploadEditor(data: FormData): Promise<string> {
 		return axiosUtil.request<string>({
-			url: "http://127.0.0.1:38082/file/uploadEditor",
+			url: "/file/uploadEditor",
 			method: "post",
 			data,
 			cancelDuplicateRequest: false,
@@ -85,7 +85,7 @@ export const fileApi = {
 	 */
 	uploadFile(data: FormData): Promise<string> {
 		return axiosUtil.request<string>({
-			url: "http://127.0.0.1:38082/file/uploadFile",
+			url: "/file/uploadFile",
 			method: "post",
 			data,
 			cancelDuplicateRequest: false,
