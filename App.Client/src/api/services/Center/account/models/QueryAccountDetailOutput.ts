@@ -18,9 +18,9 @@ export interface QueryAccountDetailOutput {
    */
   email?: string;
   /**
-   * 微信用户Id
+   * 客户端用户Id
    */
-  weChatId?: number;
+  clientUserId?: number;
   /**
    * 
    */

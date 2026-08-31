@@ -98,7 +98,18 @@ const state = reactive({
 /** 处理上传 */
 const handleUpload: UploadMethod = async (file, formData, options) => {
 	fileApi
-		.uploadFile(file.url)
+		.uploadFile(file.url, (progressEvent) => {
+			const total = progressEvent.total ?? 0;
+			const progress = progressEvent.progress ?? (total > 0 ? progressEvent.loaded / total : 0);
+			options.onProgress(
+				{
+					progress: Math.min(100, Math.round(progress * 100)),
+					totalBytesSent: progressEvent.loaded,
+					totalBytesExpectedToSend: total,
+				},
+				file
+			);
+		})
 		.then((res) => {
 			options.onSuccess({ data: res, statusCode: 200 }, file, formData);
 		})

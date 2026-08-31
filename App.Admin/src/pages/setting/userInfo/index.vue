@@ -27,16 +27,16 @@
 			<!-- #ifdef MP-WEIXIN -->
 			<wd-cell v-if="state.userInfo.allowModifyMobile" title="手机" clickable isLink center>
 				<button v-if="appStore.isClient" class="btn_phone" size="mini" :plain="true" openType="getPhoneNumber" @getphonenumber="handlePhone">
-					{{ state.userInfo.purePhoneNumber || "暂未授权手机号" }}
+					{{ state.userInfo.mobile || "暂未授权手机号" }}
 				</button>
 				<button v-else class="btn_phone" size="mini" :plain="true" openType="getRealtimePhoneNumber" @getrealtimephonenumber="handlePhone">
-					{{ state.userInfo.purePhoneNumber || "暂未授权手机号" }}
+					{{ state.userInfo.mobile || "暂未授权手机号" }}
 				</button>
 			</wd-cell>
 			<wd-cell
 				v-else
 				title="手机"
-				:value="state.userInfo.purePhoneNumber || '暂未授权手机号'"
+				:value="state.userInfo.mobile || '暂未授权手机号'"
 				clickable
 				isLink
 				@click="useToast.warning('24 小时内不可再次修改手机号')"
@@ -44,7 +44,7 @@
 			<!-- #endif -->
 
 			<!-- #ifndef MP-WEIXIN -->
-			<wd-cell title="手机" :value="state.userInfo.purePhoneNumber || '暂未授权手机号'" clickable isLink @click="handlePhone" />
+			<wd-cell title="手机" :value="state.userInfo.mobile || '暂未授权手机号'" clickable isLink @click="handlePhone" />
 			<!-- #endif -->
 
 			<wd-picker label="性别" alignRight :columns="genderEnum" v-model="state.userInfo.sex" @confirm="handleSex" />
@@ -57,11 +57,12 @@ import { onLoad } from "@dcloudio/uni-app";
 import { reactive } from "vue";
 import { clickUtil, consoleLog, withDefineType } from "@fast-china/utils";
 import { weChatApi } from "@/api/services/Center/weChat";
+import { clientUserApi } from "@/api/services/Center/clientUser";
 import { fileApi } from "@/api/services/File";
 import { RegExps } from "@/constants";
 import { useMessageBox, useToast } from "@/hooks";
 import { useApp, useUserInfo } from "@/stores";
-import type { QueryWeChatUserDetailOutput } from "@/api/services/Center/weChat/models/QueryWeChatUserDetailOutput";
+import type { QueryClientUserDetailOutput } from "@/api/services/Center/clientUser/models/QueryClientUserDetailOutput";
 import type { MessageOptions } from "wot-design-uni/components/wd-message-box/types";
 
 definePage({
@@ -79,12 +80,12 @@ const genderEnum = appStore.getDictionary("GenderEnum");
 
 const state = reactive({
 	/** 用户信息 */
-	userInfo: withDefineType<QueryWeChatUserDetailOutput>({}),
+	userInfo: withDefineType<QueryClientUserDetailOutput>({}),
 });
 
 /** 页面刷新 */
 const loadRefresh = async () => {
-	state.userInfo = await weChatApi.queryWeChatUserDetail();
+	state.userInfo = await clientUserApi.queryClientUserDetail();
 };
 
 onLoad(async () => {
@@ -95,9 +96,9 @@ onLoad(async () => {
 const handleAvatarUpload = async (url: string) => {
 	const avatar = await fileApi.uploadAvatar(url);
 	if (avatar) {
-		await weChatApi.editWeChatUser({
+		await clientUserApi.editClientUser({
 			...state.userInfo,
-			purePhoneNumber: undefined,
+			mobile: undefined,
 			avatar,
 		});
 		userInfoStore.avatar = avatar;
@@ -152,9 +153,9 @@ const handleNickName = () => {
 	useMessageBox.prompt(options).then(async (res) => {
 		const nickName = res.value as string;
 		if (nickName !== state.userInfo.nickName) {
-			await weChatApi.editWeChatUser({
+			await clientUserApi.editClientUser({
 				...state.userInfo,
-				purePhoneNumber: undefined,
+				mobile: undefined,
 				nickName,
 			});
 			userInfoStore.nickName = nickName;
@@ -170,15 +171,13 @@ const handlePhone = async (event: UniHelper.ButtonOnGetrealtimephonenumberEvent 
 	consoleLog("UserInfo", "PhoneNumber", event.detail);
 	const { code } = event.detail;
 	if (!code) return;
-	// 解析微信用户手机号
+	// 解析微信手机号
 	const apiRes = await weChatApi.weChatCode2PhoneNumber({
 		code,
 	});
-	await weChatApi.editWeChatUser({
+	await clientUserApi.editClientUser({
 		...state.userInfo,
-		purePhoneNumber: apiRes.purePhoneNumber,
-		phoneNumber: apiRes.phoneNumber,
-		countryCode: apiRes.countryCode,
+		mobile: apiRes.purePhoneNumber,
 	});
 	userInfoStore.mobile = apiRes.purePhoneNumber;
 	useToast.success("修改成功！");
@@ -191,19 +190,19 @@ const handlePhone = async (event: UniHelper.ButtonOnGetrealtimephonenumberEvent 
 			title: "请输入手机号",
 			inputType: "number",
 			inputPlaceholder: "请输入手机号",
-			inputValue: state.userInfo.purePhoneNumber,
+			inputValue: state.userInfo.mobile,
 			inputPattern: RegExps.Mobile,
 			inputError: "请输入正确的手机号",
 			confirmButtonText: "保存",
 		})
 		.then(async (res) => {
-			const purePhoneNumber = res.value as string;
-			if (res.value !== state.userInfo.purePhoneNumber) {
-				await weChatApi.editWeChatUser({
+			const mobile = res.value as string;
+			if (res.value !== state.userInfo.mobile) {
+				await clientUserApi.editClientUser({
 					...state.userInfo,
-					purePhoneNumber,
+					mobile,
 				});
-				userInfoStore.mobile = purePhoneNumber;
+				userInfoStore.mobile = mobile;
 				useToast.success("修改成功！");
 				await loadRefresh();
 			}
@@ -213,9 +212,9 @@ const handlePhone = async (event: UniHelper.ButtonOnGetrealtimephonenumberEvent 
 
 /** 处理性别 */
 const handleSex = async (item: ElSelectorOutput) => {
-	await weChatApi.editWeChatUser({
+	await clientUserApi.editClientUser({
 		...state.userInfo,
-		purePhoneNumber: undefined,
+		mobile: undefined,
 		sex: item.value,
 	});
 	useToast.success("修改成功！");

@@ -3,6 +3,8 @@ packages:
 
 storeDir: .pnpm-store
 
+minimumReleaseAge: 0
+
 patchedDependencies:
     element-plus: patches/element-plus.patch
 

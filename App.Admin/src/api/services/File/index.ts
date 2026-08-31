@@ -1,7 +1,8 @@
 import { axiosUtil } from "@fast-china/axios";
-import { QueryFilePagedOutput } from "./models/QueryFilePagedOutput";
-import { QueryFilePagedInput } from "./models/QueryFilePagedInput";
-import { DownloadFileInput } from "./models/DownloadFileInput";
+import type { AxiosProgressEvent } from "axios";
+import type { QueryFilePagedOutput } from "./models/QueryFilePagedOutput";
+import type { QueryFilePagedInput } from "./models/QueryFilePagedInput";
+import type { DownloadFileInput } from "./models/DownloadFileInput";
 
 /**
  * Fast.Center.Service.File.FileService 文件服务Api
@@ -34,12 +35,13 @@ export const fileApi = {
   /**
    * 上传Logo
    */
-  uploadLogo(filePath: string) {
+  uploadLogo(filePath: string, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void) {
     return axiosUtil.request<string>({
       url: "/file/uploadLogo",
       method: "upload",
       name: "file",
       filePath,
+      onUploadProgress,
       cancelDuplicateRequest: false,
       requestType: "upload",
     });
@@ -47,12 +49,13 @@ export const fileApi = {
   /**
    * 上传头像
    */
-  uploadAvatar(filePath: string) {
+  uploadAvatar(filePath: string, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void) {
     return axiosUtil.request<string>({
       url: "/file/uploadAvatar",
       method: "upload",
       name: "file",
       filePath,
+      onUploadProgress,
       cancelDuplicateRequest: false,
       requestType: "upload",
     });
@@ -60,12 +63,13 @@ export const fileApi = {
   /**
    * 上传证件照
    */
-  uploadIdPhoto(filePath: string) {
+  uploadIdPhoto(filePath: string, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void) {
     return axiosUtil.request<string>({
       url: "/file/uploadIdPhoto",
       method: "upload",
       name: "file",
       filePath,
+      onUploadProgress,
       cancelDuplicateRequest: false,
       requestType: "upload",
     });
@@ -73,12 +77,13 @@ export const fileApi = {
   /**
    * 上传富文本
    */
-  uploadEditor(filePath: string) {
+  uploadEditor(filePath: string, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void) {
     return axiosUtil.request<string>({
       url: "/file/uploadEditor",
       method: "upload",
       name: "file",
       filePath,
+      onUploadProgress,
       cancelDuplicateRequest: false,
       requestType: "upload",
     });
@@ -86,12 +91,13 @@ export const fileApi = {
   /**
    * 上传文件
    */
-  uploadFile(filePath: string) {
+  uploadFile(filePath: string, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void) {
     return axiosUtil.request<string>({
       url: "/file/uploadFile",
       method: "upload",
       name: "file",
       filePath,
+      onUploadProgress,
       cancelDuplicateRequest: false,
       requestType: "upload",
     });

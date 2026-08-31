@@ -36,8 +36,8 @@ export default defineConfig(({ command, mode }): UserConfig => {
 			open: false,
 			/* 允许开发服务器响应跨域请求。 */
 			cors: true,
-			/* 端口被占用时自动尝试下一个可用端口。 */
-			strictPort: false,
+			/* 后端按 2001 端口识别应用来源，端口被占用时直接终止启动。 */
+			strictPort: true,
 			/* 将本地接口请求代理到后端服务。 */
 			proxy: {
 				"/api": {
