@@ -5,11 +5,11 @@ export interface QueryDepartmentDetailOutput {
 	/**
 	 * 部门Id
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 机构Id
 	 */
-	orgId?: number;
+	orgId?: string;
 	/**
 	 * 机构名称
 	 */
@@ -17,7 +17,7 @@ export interface QueryDepartmentDetailOutput {
 	/**
 	 * 父级Id
 	 */
-	parentId?: number;
+	parentId?: string;
 	/**
 	 * 父级名称
 	 */
@@ -25,7 +25,7 @@ export interface QueryDepartmentDetailOutput {
 	/**
 	 * 父级Id集合
 	 */
-	parentIds?: number[];
+	parentIds?: string[];
 	/**
 	 * 父级名称集合
 	 */
@@ -81,6 +81,6 @@ export interface QueryDepartmentDetailOutput {
 	/**
 	 * 更新版本控制字段
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

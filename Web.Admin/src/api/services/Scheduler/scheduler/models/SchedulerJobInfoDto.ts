@@ -58,7 +58,7 @@ export interface SchedulerJobInfoDto {
 	/**
 	 * 运行次数
 	 */
-	runNumber?: number;
+	runNumber?: string;
 	/**
 	 * 异常
 	 */

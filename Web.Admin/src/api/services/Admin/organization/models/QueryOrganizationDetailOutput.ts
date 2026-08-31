@@ -5,11 +5,11 @@ export interface QueryOrganizationDetailOutput {
 	/**
 	 * 机构Id
 	 */
-	orgId?: number;
+	orgId?: string;
 	/**
 	 * 父级Id
 	 */
-	parentId?: number;
+	parentId?: string;
 	/**
 	 * 父级名称
 	 */
@@ -17,7 +17,7 @@ export interface QueryOrganizationDetailOutput {
 	/**
 	 * 父级Id集合
 	 */
-	parentIds?: number[];
+	parentIds?: string[];
 	/**
 	 * 父级名称集合
 	 */
@@ -77,6 +77,6 @@ export interface QueryOrganizationDetailOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

@@ -8,11 +8,11 @@ export interface RequestLogModel {
 	/**
 	 * 记录Id
 	 */
-	recordId?: number;
+	recordId?: string;
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 手机
 	 */
@@ -60,11 +60,11 @@ export interface RequestLogModel {
 	/**
 	 * 耗时（毫秒）
 	 */
-	elapsedTime?: number;
+	elapsedTime?: string;
 	/**
 	 * 操作者用户Id
 	 */
-	createdUserId?: number;
+	createdUserId?: string;
 	/**
 	 * 操作者用户名称
 	 */
@@ -76,7 +76,7 @@ export interface RequestLogModel {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 租户名称
 	 */
@@ -108,7 +108,7 @@ export interface RequestLogModel {
 	/**
 	 * 
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 
 	 */

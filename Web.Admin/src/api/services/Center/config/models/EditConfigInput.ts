@@ -5,7 +5,7 @@ export interface EditConfigInput {
 	/**
 	 * 配置Id
 	 */
-	configId?: number;
+	configId?: string;
 	/**
 	 * 配置名称
 	 */
@@ -21,6 +21,6 @@ export interface EditConfigInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

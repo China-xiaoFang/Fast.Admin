@@ -7,7 +7,7 @@ export interface AuthMenuInfoDto {
 	/**
 	 * 菜单Id
 	 */
-	menuId?: number;
+	menuId?: string;
 	/**
 	 * 菜单编码
 	 */
@@ -23,7 +23,7 @@ export interface AuthMenuInfoDto {
 	/**
 	 * 父级Id
 	 */
-	parentId?: number;
+	parentId?: string;
 	/**
 	 * 
 	 */

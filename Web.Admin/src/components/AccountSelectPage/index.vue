@@ -35,7 +35,7 @@ defineOptions({
 
 const props = withDefaults(
 	defineProps<{
-		modelValue?: number | string;
+		modelValue?: string;
 		mobile?: string;
 		email?: string;
 		accountKey?: string;
@@ -44,7 +44,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (_value: number | string) => true,
+	"update:modelValue": (_value: string) => true,
 	"update:mobile": (_value: string) => true,
 	"update:email": (_value: string) => true,
 	"update:accountKey": (_value: string) => true,

@@ -9,18 +9,18 @@ export interface RoleAuthInput {
 	/**
 	 * 菜单Id集合
 	 */
-	menuIds?: number[];
+	menuIds?: string[];
 	/**
 	 * 按钮Id集合
 	 */
-	buttonIds?: number[];
+	buttonIds?: string[];
 	/**
 	 * 角色Id
 	 */
-	roleId?: number;
+	roleId?: string;
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

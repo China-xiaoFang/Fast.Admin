@@ -36,7 +36,7 @@ defineOptions({
 
 const props = withDefaults(
 	defineProps<{
-		modelValue?: number | string;
+		modelValue?: string;
 		tenantName?: string;
 		tenantNo?: string;
 		tenantCode?: string;
@@ -45,7 +45,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (_value: number | string) => true,
+	"update:modelValue": (_value: string) => true,
 	"update:tenantName": (_value: string) => true,
 	"update:tenantNo": (_value: string) => true,
 	"update:tenantCode": (_value: string) => true,

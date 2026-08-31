@@ -17,7 +17,7 @@ export interface QueryEmployeePagedInput extends PagedInput  {
 	/**
 	 * 部门Id
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 
 	 */

@@ -82,7 +82,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	faDialogRef.value.close(async () => {
+	void faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -99,10 +99,10 @@ const handleConfirm = () => {
 };
 
 const detail = (orgId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await organizationApi.queryOrganizationDetail(orgId);
-		if (apiRes.parentId === 0) {
+		if (apiRes.parentId === "0") {
 			apiRes.parentId = undefined;
 		}
 		state.formData = apiRes;
@@ -111,22 +111,24 @@ const detail = (orgId: number) => {
 };
 
 const add = () => {
-	faDialogRef.value.open(() => {
+	void faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加机构";
 		state.formDisabled = false;
 		state.formData = {
+			parentId: undefined,
+			parentName: undefined,
 			dataPublic: false,
 		};
 	});
 };
 
 const edit = (orgId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await organizationApi.queryOrganizationDetail(orgId);
-		if (apiRes.parentId === 0) {
+		if (apiRes.parentId === "0") {
 			apiRes.parentId = undefined;
 		}
 		state.formData = apiRes;

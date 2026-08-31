@@ -9,7 +9,7 @@ export interface QueryApplicationOpenIdPagedInput extends PagedInput  {
 	/**
 	 * 应用Id
 	 */
-	appId?: number;
+	appId?: string;
 	/**
 	 * 
 	 */

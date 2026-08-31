@@ -9,7 +9,7 @@ export interface EditEmployeeInput {
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 姓名
 	 */
@@ -49,6 +49,6 @@ export interface EditEmployeeInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

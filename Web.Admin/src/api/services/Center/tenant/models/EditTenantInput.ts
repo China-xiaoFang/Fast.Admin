@@ -8,7 +8,7 @@ export interface EditTenantInput {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 租户编码
 	 */
@@ -60,6 +60,6 @@ export interface EditTenantInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

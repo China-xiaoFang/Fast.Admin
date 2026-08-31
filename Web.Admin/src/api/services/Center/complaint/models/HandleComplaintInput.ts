@@ -5,7 +5,7 @@ export interface HandleComplaintInput {
 	/**
 	 * 投诉Id
 	 */
-	complaintId?: number;
+	complaintId?: string;
 	/**
 	 * 处理描述
 	 */
@@ -17,6 +17,6 @@ export interface HandleComplaintInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

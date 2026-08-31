@@ -5,7 +5,7 @@ export interface EditSlaveDatabaseInput {
 	/**
 	 * 从库Id
 	 */
-	slaveId?: number;
+	slaveId?: string;
 	/**
 	 * 公网Ip地址
 	 */

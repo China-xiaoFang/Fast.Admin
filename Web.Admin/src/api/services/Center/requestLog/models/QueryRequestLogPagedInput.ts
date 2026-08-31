@@ -9,7 +9,7 @@ export interface QueryRequestLogPagedInput extends PagedInput  {
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 是否执行成功
 	 */
@@ -25,7 +25,7 @@ export interface QueryRequestLogPagedInput extends PagedInput  {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 
 	 */

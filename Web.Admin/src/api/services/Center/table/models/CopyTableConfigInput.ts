@@ -5,7 +5,7 @@ export interface CopyTableConfigInput {
 	/**
 	 * 表格Id
 	 */
-	tableId?: number;
+	tableId?: string;
 	/**
 	 * 表格名称
 	 */

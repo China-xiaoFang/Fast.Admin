@@ -5,7 +5,7 @@ export interface QueryConfigPagedOutput {
 	/**
 	 * 配置Id
 	 */
-	configId?: number;
+	configId?: string;
 	/**
 	 * 配置编码
 	 */
@@ -45,6 +45,6 @@ export interface QueryConfigPagedOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

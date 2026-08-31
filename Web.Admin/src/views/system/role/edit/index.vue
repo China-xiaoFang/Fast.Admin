@@ -28,6 +28,19 @@
 			<FaFormItem prop="dataScopeType" label="数据范围">
 				<RadioGroup name="DataScopeTypeEnum" v-model="state.formData.dataScopeType" />
 			</FaFormItem>
+			<FaFormItem v-if="state.formData.dataScopeType === DataScopeTypeEnum.CustomDept" prop="dataScopeDepartmentIds" label="自定义部门">
+				<FaTreeSelect
+					:request-api="() => departmentApi.departmentSelector(null)"
+					v-model="state.formData.dataScopeDepartmentIds"
+					placeholder="请选择部门"
+					multiple
+					check-strictly
+					filterable
+					clearable
+					collapse-tags
+					collapse-tags-tooltip
+				/>
+			</FaFormItem>
 			<FaFormItem prop="assignableRoleIds" label="可分配角色" tips="为空则代表可分配所有角色，有值则只能分配勾选的角色">
 				<el-checkbox-group v-model="state.formData.assignableRoleIds">
 					<el-checkbox v-for="(item, index) of state.roleList" :key="index" :value="item.value">
@@ -48,6 +61,7 @@ import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
+import { departmentApi } from "@/api/services/Admin/department";
 import { roleApi } from "@/api/services/Admin/role";
 import type { FormRules } from "element-plus";
 import type { ElSelectorOutput, FaDialogInstance, FaFormInstance } from "fast-element-plus";
@@ -69,6 +83,7 @@ const state = reactive({
 		roleName: [{ required: true, message: "请输入角色名称", trigger: "blur" }],
 		roleCode: [{ required: true, message: "请输入角色编码", trigger: "blur" }],
 		sort: [{ required: true, message: "请输入排序", trigger: "blur" }],
+		dataScopeDepartmentIds: [{ required: true, message: "请选择自定义部门", trigger: "change" }],
 	}),
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),
@@ -77,7 +92,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	faDialogRef.value.close(async () => {
+	void faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -94,7 +109,7 @@ const handleConfirm = () => {
 };
 
 const detail = (roleId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await roleApi.queryRoleDetail(roleId);
 		state.formData = apiRes;
@@ -104,7 +119,7 @@ const detail = (roleId: number) => {
 };
 
 const add = () => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加角色";
 		state.formDisabled = false;
@@ -112,6 +127,7 @@ const add = () => {
 			roleType: RoleTypeEnum.Admin,
 			isSystemMenu: true,
 			dataScopeType: DataScopeTypeEnum.All,
+			dataScopeDepartmentIds: [],
 			assignableRoleIds: [],
 			sort: 1,
 		};
@@ -120,7 +136,7 @@ const add = () => {
 };
 
 const edit = (roleId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await roleApi.queryRoleDetail(roleId);

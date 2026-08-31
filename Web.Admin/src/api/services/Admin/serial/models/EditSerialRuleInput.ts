@@ -8,7 +8,7 @@ export interface EditSerialRuleInput {
 	/**
 	 * 序号规则Id
 	 */
-	serialRuleId?: number;
+	serialRuleId?: string;
 	/**
 	 * 前缀
 	 */
@@ -28,6 +28,6 @@ export interface EditSerialRuleInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

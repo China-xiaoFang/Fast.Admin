@@ -10,7 +10,7 @@ export interface QueryMenuPagedOutput {
 	/**
 	 * 菜单Id
 	 */
-	menuId?: number;
+	menuId?: string;
 	/**
 	 * 
 	 */
@@ -18,7 +18,7 @@ export interface QueryMenuPagedOutput {
 	/**
 	 * 应用Id
 	 */
-	appId?: number;
+	appId?: string;
 	/**
 	 * 应用名称
 	 */
@@ -38,7 +38,7 @@ export interface QueryMenuPagedOutput {
 	/**
 	 * 父级Id
 	 */
-	parentId?: number;
+	parentId?: string;
 	/**
 	 * 
 	 */
@@ -138,6 +138,6 @@ export interface QueryMenuPagedOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

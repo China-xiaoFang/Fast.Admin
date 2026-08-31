@@ -17,7 +17,7 @@ export interface SchedulerJobInfo {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 作业名称
 	 */
@@ -117,7 +117,7 @@ export interface SchedulerJobInfo {
 	/**
 	 * 运行次数
 	 */
-	runNumber?: number;
+	runNumber?: string;
 	/**
 	 * 异常
 	 */

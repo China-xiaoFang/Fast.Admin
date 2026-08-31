@@ -7,7 +7,7 @@ export interface FaTableColumnCtx {
 	/**
 	 * 表格列Id
 	 */
-	columnId?: number;
+	columnId?: string;
 	/**
 	 * 绑定字段
 	 */

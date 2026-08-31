@@ -7,11 +7,11 @@ export interface QueryExceptionLogPagedInput extends PagedInput  {
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 
 	 */

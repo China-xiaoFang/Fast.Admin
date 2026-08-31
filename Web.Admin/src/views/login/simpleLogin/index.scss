@@ -12,7 +12,7 @@
 
 .simple-shell {
 	position: relative;
-	width: min(470px, 100%);
+	width: min(var(--login-form-card-width), 100%);
 	animation: loginPageReveal 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -69,7 +69,7 @@
 
 .simple-form-card {
 	position: relative;
-	padding: clamp(32px, 5vw, 46px);
+	padding: var(--login-form-card-padding);
 	overflow: hidden;
 	border: 1px solid rgb(255 255 255 / 76%);
 	border-radius: 26px;

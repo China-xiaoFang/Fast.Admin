@@ -7,7 +7,7 @@ export interface QueryComplaintPagedOutput {
 	/**
 	 * 投诉Id
 	 */
-	complaintId?: number;
+	complaintId?: string;
 	/**
 	 * 应用名称
 	 */
@@ -67,6 +67,6 @@ export interface QueryComplaintPagedOutput {
 	/**
 	 * 更新版本控制字段
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

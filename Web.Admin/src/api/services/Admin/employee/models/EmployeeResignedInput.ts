@@ -5,7 +5,7 @@ export interface EmployeeResignedInput {
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 离职日期
 	 */
@@ -17,6 +17,6 @@ export interface EmployeeResignedInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

@@ -5,10 +5,10 @@ export interface MenuIdInput {
 	/**
 	 * 菜单Id
 	 */
-	menuId?: number;
+	menuId?: string;
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

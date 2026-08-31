@@ -5,11 +5,11 @@ export interface AddDepartmentInput {
 	/**
 	 * 机构Id
 	 */
-	orgId?: number;
+	orgId?: string;
 	/**
 	 * 父级Id
 	 */
-	parentId?: number;
+	parentId?: string;
 	/**
 	 * 部门名称
 	 */

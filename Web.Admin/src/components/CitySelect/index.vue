@@ -25,7 +25,7 @@ defineOptions({
 
 const props = withDefaults(
 	defineProps<{
-		modelValue?: number | string;
+		modelValue?: string;
 		provinceName?: string;
 		cityName?: string;
 	}>(),
@@ -33,10 +33,10 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (_value: number | string) => true,
+	"update:modelValue": (_value: string) => true,
 	"update:provinceName": (_value: string) => true,
 	"update:cityName": (_value: string) => true,
-	change: (_value: ElSelectorOutput<number | string>) => true,
+	change: (_value: ElSelectorOutput<string>) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit);
@@ -44,11 +44,11 @@ const provinceName = useVModel(props, "provinceName", emit, { passive: true });
 const cityName = useVModel(props, "cityName", emit, { passive: true });
 
 const state = reactive({
-	regionList: withDefineType<ElSelectorOutput<number | string>[]>([]),
+	regionList: withDefineType<ElSelectorOutput<string>[]>([]),
 });
 
 const handleChange = (val: CascaderValue) => {
-	const value = val as number[];
+	const value = val as string[];
 	if (value && value.length > 0) {
 		const provinceInfo = state.regionList.find((f) => f.value === value[0]);
 		provinceName.value = provinceInfo.label;

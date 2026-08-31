@@ -45,6 +45,12 @@ public class QueryClientUserPagedOutput : PagedOutput
     public ClientUserTypeEnum UserType { get; set; }
 
     /// <summary>
+    /// 手机
+    /// </summary>
+    [SugarSearchValue]
+    public string Mobile { get; set; }
+
+    /// <summary>
     /// 唯一用户标识
     /// </summary>
     [SugarSearchValue]
@@ -55,12 +61,6 @@ public class QueryClientUserPagedOutput : PagedOutput
     /// </summary>
     [SugarSearchValue]
     public string UnionId { get; set; }
-
-    /// <summary>
-    /// 手机
-    /// </summary>
-    [SugarSearchValue]
-    public string Mobile { get; set; }
 
     /// <summary>
     /// 昵称

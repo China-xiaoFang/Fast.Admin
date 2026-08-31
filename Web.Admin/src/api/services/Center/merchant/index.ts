@@ -15,8 +15,8 @@ export const merchantApi = {
 	/**
 	 * 商户号选择器
 	 */
-	merchantSelector(merchantType: PaymentChannelEnum): Promise<ElSelectorOutput<number>[]> {
-		return axiosUtil.request<ElSelectorOutput<number>[]>({
+	merchantSelector(merchantType: PaymentChannelEnum): Promise<ElSelectorOutput<string>[]> {
+		return axiosUtil.request<ElSelectorOutput<string>[]>({
 			url: "/merchant/merchantSelector",
 			method: "get",
 			params: {
@@ -39,7 +39,7 @@ export const merchantApi = {
 	/**
 	 * 获取商户号详情
 	 */
-	queryMerchantDetail(merchantId: number): Promise<QueryMerchantDetailOutput> {
+	queryMerchantDetail(merchantId: string): Promise<QueryMerchantDetailOutput> {
 		return axiosUtil.request<QueryMerchantDetailOutput>({
 			url: "/merchant/queryMerchantDetail",
 			method: "get",

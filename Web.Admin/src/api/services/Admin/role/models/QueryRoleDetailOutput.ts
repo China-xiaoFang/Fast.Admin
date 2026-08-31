@@ -8,7 +8,7 @@ export interface QueryRoleDetailOutput {
 	/**
 	 * 角色Id
 	 */
-	roleId?: number;
+	roleId?: string;
 	/**
 	 * 
 	 */
@@ -36,11 +36,11 @@ export interface QueryRoleDetailOutput {
 	/**
 	 * 自定义数据范围部门Id集合
 	 */
-	dataScopeDepartmentIds?: number[];
+	dataScopeDepartmentIds?: string[];
 	/**
 	 * 可分配的角色Id集合
 	 */
-	assignableRoleIds?: number[];
+	assignableRoleIds?: string[];
 	/**
 	 * 备注
 	 */
@@ -68,6 +68,6 @@ export interface QueryRoleDetailOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

@@ -52,7 +52,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	faDialogRef.value.close(async () => {
+	void faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -76,7 +76,7 @@ const handleConfirm = () => {
 };
 
 const detail = (tableId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await tableApi.queryTableConfigDetail(tableId);
 		state.formData = apiRes;
@@ -85,7 +85,7 @@ const detail = (tableId: number) => {
 };
 
 const add = () => {
-	faDialogRef.value.open(() => {
+	void faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加表格";
 		state.formDisabled = false;
@@ -94,7 +94,7 @@ const add = () => {
 };
 
 const edit = (tableId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await tableApi.queryTableConfigDetail(tableId);
@@ -104,7 +104,7 @@ const edit = (tableId: number) => {
 };
 
 const copy = (tableId: number) => {
-	faDialogRef.value.open(() => {
+	void faDialogRef.value.open(() => {
 		state.copyTableId = tableId;
 		state.dialogState = "copy";
 		state.formDisabled = false;

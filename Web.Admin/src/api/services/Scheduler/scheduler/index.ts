@@ -27,7 +27,7 @@ export const schedulerApi = {
 	/**
 	 * 获取调度器详情
 	 */
-	querySchedulerDetail(tenantId: number): Promise<QuerySchedulerDetailOutput> {
+	querySchedulerDetail(tenantId: string): Promise<QuerySchedulerDetailOutput> {
 		return axiosUtil.request<QuerySchedulerDetailOutput>({
 			url: "/scheduler/querySchedulerDetail",
 			method: "get",
@@ -40,7 +40,7 @@ export const schedulerApi = {
 	/**
 	 * 启动调度器
 	 */
-	startScheduler(tenantId: number): Promise<unknown> {
+	startScheduler(tenantId: string): Promise<unknown> {
 		return axiosUtil.request({
 			url: "/scheduler/startScheduler",
 			method: "post",
@@ -53,7 +53,7 @@ export const schedulerApi = {
 	/**
 	 * 停止调度器
 	 */
-	stopScheduler(tenantId: number): Promise<unknown> {
+	stopScheduler(tenantId: string): Promise<unknown> {
 		return axiosUtil.request({
 			url: "/scheduler/stopScheduler",
 			method: "post",
@@ -66,7 +66,7 @@ export const schedulerApi = {
 	/**
 	 * 暂停调度作业
 	 */
-	stopSchedulerJob(tenantId: number, data: SchedulerJobKeyInput): Promise<unknown> {
+	stopSchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<unknown> {
 		return axiosUtil.request({
 			url: "/scheduler/stopSchedulerJob",
 			method: "post",
@@ -80,7 +80,7 @@ export const schedulerApi = {
 	/**
 	 * 恢复调度作业
 	 */
-	resumeSchedulerJob(tenantId: number, data: SchedulerJobKeyInput): Promise<unknown> {
+	resumeSchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<unknown> {
 		return axiosUtil.request({
 			url: "/scheduler/resumeSchedulerJob",
 			method: "post",
@@ -94,7 +94,7 @@ export const schedulerApi = {
 	/**
 	 * 立即执行调度作业
 	 */
-	triggerSchedulerJob(tenantId: number, data: SchedulerJobKeyInput): Promise<unknown> {
+	triggerSchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<unknown> {
 		return axiosUtil.request({
 			url: "/scheduler/triggerSchedulerJob",
 			method: "post",
@@ -108,7 +108,7 @@ export const schedulerApi = {
 	/**
 	 * 获取调度作业日志
 	 */
-	querySchedulerJobLogs(tenantId: number, data: SchedulerJobKeyInput): Promise<string[]> {
+	querySchedulerJobLogs(tenantId: string, data: SchedulerJobKeyInput): Promise<string[]> {
 		return axiosUtil.request<string[]>({
 			url: "/scheduler/querySchedulerJobLogs",
 			method: "post",
@@ -122,8 +122,8 @@ export const schedulerApi = {
 	/**
 	 * 获取调度作业运行次数
 	 */
-	querySchedulerJobRunNumber(tenantId: number, data: SchedulerJobKeyInput): Promise<number> {
-		return axiosUtil.request<number>({
+	querySchedulerJobRunNumber(tenantId: string, data: SchedulerJobKeyInput): Promise<string> {
+		return axiosUtil.request<string>({
 			url: "/scheduler/querySchedulerJobRunNumber",
 			method: "post",
 			params: {
@@ -136,7 +136,7 @@ export const schedulerApi = {
 	/**
 	 * 获取全部调度作业
 	 */
-	queryAllSchedulerJob(jobGroup: SchedulerJobGroupEnum, tenantId: number): Promise<QueryAllSchedulerJobOutput[]> {
+	queryAllSchedulerJob(jobGroup: SchedulerJobGroupEnum, tenantId: string): Promise<QueryAllSchedulerJobOutput[]> {
 		return axiosUtil.request<QueryAllSchedulerJobOutput[]>({
 			url: "/scheduler/queryAllSchedulerJob",
 			method: "get",
@@ -150,7 +150,7 @@ export const schedulerApi = {
 	/**
 	 * 获取调度作业
 	 */
-	querySchedulerJob(tenantId: number, data: SchedulerJobKeyInput): Promise<SchedulerJobInfo> {
+	querySchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<SchedulerJobInfo> {
 		return axiosUtil.request<SchedulerJobInfo>({
 			url: "/scheduler/querySchedulerJob",
 			method: "post",
@@ -186,7 +186,7 @@ export const schedulerApi = {
 	/**
 	 * 删除调度作业
 	 */
-	deleteSchedulerJob(tenantId: number, data: SchedulerJobKeyInput): Promise<unknown> {
+	deleteSchedulerJob(tenantId: string, data: SchedulerJobKeyInput): Promise<unknown> {
 		return axiosUtil.request({
 			url: "/scheduler/deleteSchedulerJob",
 			method: "post",
@@ -200,7 +200,7 @@ export const schedulerApi = {
 	/**
 	 * 移除调度作业异常信息
 	 */
-	deleteSchedulerJobException(tenantId: number, data: SchedulerJobKeyInput): Promise<unknown> {
+	deleteSchedulerJobException(tenantId: string, data: SchedulerJobKeyInput): Promise<unknown> {
 		return axiosUtil.request({
 			url: "/scheduler/deleteSchedulerJobException",
 			method: "post",

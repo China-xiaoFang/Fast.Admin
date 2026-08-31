@@ -5,10 +5,10 @@ export interface MainIdInput {
 	/**
 	 * 主库Id
 	 */
-	mainId?: number;
+	mainId?: string;
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

@@ -7,7 +7,7 @@ export interface PayRecordModel {
 	/**
 	 * 记录Id
 	 */
-	recordId?: number;
+	recordId?: string;
 	/**
 	 * 应用标识
 	 */
@@ -19,7 +19,7 @@ export interface PayRecordModel {
 	/**
 	 * 业务订单Id
 	 */
-	bizOrderId?: number;
+	bizOrderId?: string;
 	/**
 	 * 业务订单号
 	 */
@@ -111,10 +111,10 @@ export interface PayRecordModel {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 更新版本控制字段
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

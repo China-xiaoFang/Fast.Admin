@@ -8,7 +8,7 @@ export interface QueryRolePagedOutput {
 	/**
 	 * 角色Id
 	 */
-	roleId?: number;
+	roleId?: string;
 	/**
 	 * 
 	 */
@@ -60,6 +60,6 @@ export interface QueryRolePagedOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

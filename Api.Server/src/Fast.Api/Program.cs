@@ -58,6 +58,9 @@ builder.Services.AddGzipCompression();
 // 添加邮件服务
 builder.Services.AddMailService();
 
+// 添加短信服务
+builder.Services.AddSmsService();
+
 // 添加依赖注入服务
 builder.Services.AddDependencyInjection();
 

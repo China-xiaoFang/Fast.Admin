@@ -8,8 +8,8 @@ export const regionApi = {
 	/**
 	 * 地区选择器
 	 */
-	regionSelector(): Promise<ElSelectorOutput<number>[]> {
-		return axiosUtil.request<ElSelectorOutput<number>[]>({
+	regionSelector(): Promise<ElSelectorOutput<string>[]> {
+		return axiosUtil.request<ElSelectorOutput<string>[]>({
 			url: "/region/regionSelector",
 			method: "get",
 			requestType: "query",
@@ -19,8 +19,8 @@ export const regionApi = {
 	/**
 	 * 省份选择器
 	 */
-	provinceSelector(): Promise<ElSelectorOutput<number>[]> {
-		return axiosUtil.request<ElSelectorOutput<number>[]>({
+	provinceSelector(): Promise<ElSelectorOutput<string>[]> {
+		return axiosUtil.request<ElSelectorOutput<string>[]>({
 			url: "/region/provinceSelector",
 			method: "get",
 			requestType: "query",
@@ -30,8 +30,8 @@ export const regionApi = {
 	/**
 	 * 城市选择器
 	 */
-	citySelector(): Promise<ElSelectorOutput<number>[]> {
-		return axiosUtil.request<ElSelectorOutput<number>[]>({
+	citySelector(): Promise<ElSelectorOutput<string>[]> {
+		return axiosUtil.request<ElSelectorOutput<string>[]>({
 			url: "/region/citySelector",
 			method: "get",
 			requestType: "query",

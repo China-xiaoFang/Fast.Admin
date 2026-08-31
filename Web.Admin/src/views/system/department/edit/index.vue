@@ -23,7 +23,8 @@
 			</FaFormItem>
 			<FaFormItem prop="parentId" label="父级">
 				<FaTreeSelect
-					:request-api="() => departmentApi.departmentSelector(state.formData.orgId)"
+					:request-api="(orgId) => departmentApi.departmentSelector(orgId as number)"
+					:init-param="state.formData.orgId"
 					v-model="state.formData.parentId"
 					v-model:label="state.formData.parentName"
 					placeholder="请选择父级部门"
@@ -95,7 +96,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	faDialogRef.value.close(async () => {
+	void faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -112,10 +113,10 @@ const handleConfirm = () => {
 };
 
 const detail = (departmentId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await departmentApi.queryDepartmentDetail(departmentId);
-		if (apiRes.parentId === 0) {
+		if (apiRes.parentId === "0") {
 			apiRes.parentId = undefined;
 		}
 		state.formData = apiRes;
@@ -124,22 +125,24 @@ const detail = (departmentId: number) => {
 };
 
 const add = () => {
-	faDialogRef.value.open(() => {
+	void faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加部门";
 		state.formDisabled = false;
 		state.formData = {
+			parentId: undefined,
+			parentName: undefined,
 			dataPublic: false,
 		};
 	});
 };
 
 const edit = (departmentId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await departmentApi.queryDepartmentDetail(departmentId);
-		if (apiRes.parentId === 0) {
+		if (apiRes.parentId === "0") {
 			apiRes.parentId = undefined;
 		}
 		state.formData = apiRes;

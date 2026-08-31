@@ -14,8 +14,8 @@ export const departmentApi = {
 	/**
 	 * 部门选择器
 	 */
-	departmentSelector(orgId: number): Promise<ElSelectorOutput<number>[]> {
-		return axiosUtil.request<ElSelectorOutput<number>[]>({
+	departmentSelector(orgId: string): Promise<ElSelectorOutput<string>[]> {
+		return axiosUtil.request<ElSelectorOutput<string>[]>({
 			url: "/department/departmentSelector",
 			method: "get",
 			params: {
@@ -38,7 +38,7 @@ export const departmentApi = {
 	/**
 	 * 获取部门详情
 	 */
-	queryDepartmentDetail(departmentId: number): Promise<QueryDepartmentDetailOutput> {
+	queryDepartmentDetail(departmentId: string): Promise<QueryDepartmentDetailOutput> {
 		return axiosUtil.request<QueryDepartmentDetailOutput>({
 			url: "/department/queryDepartmentDetail",
 			method: "get",

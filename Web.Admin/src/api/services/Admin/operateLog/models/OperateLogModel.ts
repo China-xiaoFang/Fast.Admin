@@ -7,7 +7,7 @@ export interface OperateLogModel {
 	/**
 	 * 记录Id
 	 */
-	recordId?: number;
+	recordId?: string;
 	/**
 	 * 工号
 	 */
@@ -27,7 +27,7 @@ export interface OperateLogModel {
 	/**
 	 * 业务Id
 	 */
-	bizId?: number;
+	bizId?: string;
 	/**
 	 * 业务编码
 	 */
@@ -39,7 +39,7 @@ export interface OperateLogModel {
 	/**
 	 * 操作者用户Id
 	 */
-	createdUserId?: number;
+	createdUserId?: string;
 	/**
 	 * 操作者用户名称
 	 */
@@ -75,7 +75,7 @@ export interface OperateLogModel {
 	/**
 	 * 
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 
 	 */

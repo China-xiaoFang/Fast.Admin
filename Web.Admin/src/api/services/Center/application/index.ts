@@ -14,8 +14,8 @@ export const applicationApi = {
 	/**
 	 * 应用选择器
 	 */
-	applicationSelector(): Promise<ElSelectorOutput<number>[]> {
-		return axiosUtil.request<ElSelectorOutput<number>[]>({
+	applicationSelector(): Promise<ElSelectorOutput<string>[]> {
+		return axiosUtil.request<ElSelectorOutput<string>[]>({
 			url: "/application/applicationSelector",
 			method: "get",
 			requestType: "query",
@@ -35,7 +35,7 @@ export const applicationApi = {
 	/**
 	 * 获取应用详情
 	 */
-	queryApplicationDetail(appId: number): Promise<QueryApplicationDetailOutput> {
+	queryApplicationDetail(appId: string): Promise<QueryApplicationDetailOutput> {
 		return axiosUtil.request<QueryApplicationDetailOutput>({
 			url: "/application/queryApplicationDetail",
 			method: "get",

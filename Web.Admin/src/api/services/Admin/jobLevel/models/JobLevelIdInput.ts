@@ -5,10 +5,10 @@ export interface JobLevelIdInput {
 	/**
 	 * 职级Id
 	 */
-	jobLevelId?: number;
+	jobLevelId?: string;
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

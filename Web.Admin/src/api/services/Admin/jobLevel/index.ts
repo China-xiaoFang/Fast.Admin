@@ -13,8 +13,8 @@ export const jobLevelApi = {
 	/**
 	 * 职级选择器
 	 */
-	jobLevelSelector(): Promise<ElSelectorOutput<number>[]> {
-		return axiosUtil.request<ElSelectorOutput<number>[]>({
+	jobLevelSelector(): Promise<ElSelectorOutput<string>[]> {
+		return axiosUtil.request<ElSelectorOutput<string>[]>({
 			url: "/jobLevel/jobLevelSelector",
 			method: "get",
 			requestType: "query",
@@ -34,7 +34,7 @@ export const jobLevelApi = {
 	/**
 	 * 获取职级详情
 	 */
-	queryJobLevelDetail(jobLevelId: number): Promise<QueryJobLevelDetailOutput> {
+	queryJobLevelDetail(jobLevelId: string): Promise<QueryJobLevelDetailOutput> {
 		return axiosUtil.request<QueryJobLevelDetailOutput>({
 			url: "/jobLevel/queryJobLevelDetail",
 			method: "get",

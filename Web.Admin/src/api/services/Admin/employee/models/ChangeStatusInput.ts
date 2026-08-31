@@ -7,7 +7,7 @@ export interface ChangeStatusInput {
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 
 	 */
@@ -15,6 +15,6 @@ export interface ChangeStatusInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

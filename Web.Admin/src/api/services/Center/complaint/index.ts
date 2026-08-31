@@ -34,7 +34,7 @@ export const complaintApi = {
 	/**
 	 * 获取投诉详情
 	 */
-	queryComplaintDetail(complaintId: number): Promise<QueryComplaintPagedOutput> {
+	queryComplaintDetail(complaintId: string): Promise<QueryComplaintPagedOutput> {
 		return axiosUtil.request<QueryComplaintPagedOutput>({
 			url: "/complaint/queryComplaintDetail",
 			method: "get",

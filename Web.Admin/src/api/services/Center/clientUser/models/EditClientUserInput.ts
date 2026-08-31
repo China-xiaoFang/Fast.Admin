@@ -23,6 +23,6 @@ export interface EditClientUserInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

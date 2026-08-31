@@ -40,6 +40,11 @@ public class QueryClientUserDetailOutput : UpdateVersionInput
     public ClientUserTypeEnum UserType { get; set; }
 
     /// <summary>
+    /// 手机
+    /// </summary>
+    public string Mobile { get; set; }
+
+    /// <summary>
     /// 唯一用户标识
     /// </summary>
     public string OpenId { get; set; }
@@ -48,11 +53,6 @@ public class QueryClientUserDetailOutput : UpdateVersionInput
     /// 统一用户标识
     /// </summary>
     public string UnionId { get; set; }
-
-    /// <summary>
-    /// 手机
-    /// </summary>
-    public string Mobile { get; set; }
 
     /// <summary>
     /// 昵称

@@ -7,7 +7,7 @@ export interface EditApplicationTemplateIdInput {
 	/**
 	 * 记录Id
 	 */
-	recordId?: number;
+	recordId?: string;
 	/**
 	 * 
 	 */

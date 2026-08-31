@@ -18,7 +18,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (_value: number | string) => true,
+	"update:modelValue": (_value: string) => true,
 });
 
 const predefineColorList = [

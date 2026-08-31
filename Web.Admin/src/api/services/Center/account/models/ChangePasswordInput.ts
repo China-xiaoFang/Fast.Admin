@@ -17,6 +17,6 @@ export interface ChangePasswordInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

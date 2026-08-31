@@ -5,7 +5,7 @@ export interface SaveUserTableColumnConfigDto {
 	/**
 	 * 表格列Id
 	 */
-	columnId?: number;
+	columnId?: string;
 	/**
 	 * 名称
 	 */

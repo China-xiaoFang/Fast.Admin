@@ -5,7 +5,7 @@ export interface BindLoginAccountInput {
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 手机
 	 */
@@ -17,6 +17,6 @@ export interface BindLoginAccountInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

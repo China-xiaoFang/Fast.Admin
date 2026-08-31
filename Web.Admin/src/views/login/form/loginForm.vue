@@ -26,6 +26,7 @@
 					<el-form-item v-if="formStep === 'TenantAccount' && tenantList.length > 0" prop="userKey" label="工作空间">
 						<el-select
 							v-model="formData.userKey"
+							fit-input-width
 							popper-class="login-tenant-popper"
 							placeholder="选择已保存的租户"
 							@change="handleTenantChange"
@@ -480,7 +481,6 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 }
 
 :global(.login-tenant-popper) {
-	max-width: min(430px, calc(100vw - 24px));
 	border: 1px solid var(--el-border-color-lighter);
 	border-radius: 14px;
 	box-shadow: 0 18px 50px rgb(15 23 42 / 18%);

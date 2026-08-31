@@ -8,11 +8,11 @@ export interface QueryPasswordRecordPagedOutput {
 	/**
 	 * 记录Id
 	 */
-	recordId?: number;
+	recordId?: string;
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 
 	 */

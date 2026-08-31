@@ -8,7 +8,7 @@ export interface QueryPasswordRecordPagedInput extends PagedInput  {
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 
 	 */

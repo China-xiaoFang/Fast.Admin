@@ -14,7 +14,7 @@ export interface AddMenuInput {
 	/**
 	 * 应用Id
 	 */
-	appId?: number;
+	appId?: string;
 	/**
 	 * 菜单编码
 	 */
@@ -30,7 +30,7 @@ export interface AddMenuInput {
 	/**
 	 * 父级Id
 	 */
-	parentId?: number;
+	parentId?: string;
 	/**
 	 * 
 	 */

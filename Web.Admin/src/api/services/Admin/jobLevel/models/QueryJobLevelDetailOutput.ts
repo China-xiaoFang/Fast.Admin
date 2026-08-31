@@ -5,7 +5,7 @@ export interface QueryJobLevelDetailOutput {
 	/**
 	 * 职级Id
 	 */
-	jobLevelId?: number;
+	jobLevelId?: string;
 	/**
 	 * 职级名称
 	 */
@@ -41,6 +41,6 @@ export interface QueryJobLevelDetailOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

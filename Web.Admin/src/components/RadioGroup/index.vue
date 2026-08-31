@@ -1,5 +1,5 @@
 <template>
-	<ElRadioGroup v-bind="elRadioGroupProps" v-model="modelValue" @change="(value: string | number | boolean) => emit('change', value)">
+	<ElRadioGroup v-bind="elRadioGroupProps" v-model="modelValue" @change="(value) => emit('change', value)">
 		<template v-if="props.button">
 			<ElRadioButton
 				v-for="(item, index) in dictionaries"

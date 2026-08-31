@@ -7,7 +7,7 @@ export interface QueryMerchantPagedOutput {
 	/**
 	 * 商户号Id
 	 */
-	merchantId?: number;
+	merchantId?: string;
 	/**
 	 * 
 	 */
@@ -47,6 +47,6 @@ export interface QueryMerchantPagedOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

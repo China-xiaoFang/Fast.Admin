@@ -7,7 +7,7 @@ export interface QueryApplicationPagedOutput {
 	/**
 	 * 应用Id
 	 */
-	appId?: number;
+	appId?: string;
 	/**
 	 * 
 	 */
@@ -59,6 +59,6 @@ export interface QueryApplicationPagedOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

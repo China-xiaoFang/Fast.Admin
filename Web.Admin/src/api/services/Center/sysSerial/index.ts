@@ -23,7 +23,7 @@ export const sysSerialApi = {
 	/**
 	 * 获取系统序号规则详情
 	 */
-	querySysSerialRuleDetail(serialRuleId: number): Promise<QuerySysSerialRuleDetailOutput> {
+	querySysSerialRuleDetail(serialRuleId: string): Promise<QuerySysSerialRuleDetailOutput> {
 		return axiosUtil.request<QuerySysSerialRuleDetailOutput>({
 			url: "/sysSerial/querySysSerialRuleDetail",
 			method: "get",

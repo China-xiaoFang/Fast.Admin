@@ -23,8 +23,8 @@ export const dictionaryApi = {
 	/**
 	 * 字典分页选择器
 	 */
-	selectorPaged(data: PagedInput): Promise<PagedResult<ElSelectorOutput<number>>> {
-		return axiosUtil.request<PagedResult<ElSelectorOutput<number>>>({
+	selectorPaged(data: PagedInput): Promise<PagedResult<ElSelectorOutput<string>>> {
+		return axiosUtil.request<PagedResult<ElSelectorOutput<string>>>({
 			url: "/dictionary/selectorPaged",
 			method: "post",
 			data,
@@ -45,7 +45,7 @@ export const dictionaryApi = {
 	/**
 	 * 获取字典详情
 	 */
-	queryDictionaryDetail(dictionaryId: number): Promise<QueryDictionaryDetailOutput> {
+	queryDictionaryDetail(dictionaryId: string): Promise<QueryDictionaryDetailOutput> {
 		return axiosUtil.request<QueryDictionaryDetailOutput>({
 			url: "/dictionary/queryDictionaryDetail",
 			method: "get",

@@ -5,11 +5,11 @@ export interface ExceptionLogModel {
 	/**
 	 * 记录Id
 	 */
-	recordId?: number;
+	recordId?: string;
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 手机
 	 */
@@ -49,7 +49,7 @@ export interface ExceptionLogModel {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 租户名称
 	 */
@@ -81,7 +81,7 @@ export interface ExceptionLogModel {
 	/**
 	 * 
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 
 	 */
@@ -89,7 +89,7 @@ export interface ExceptionLogModel {
 	/**
 	 * 
 	 */
-	createdUserId?: number;
+	createdUserId?: string;
 	/**
 	 * 
 	 */

@@ -140,15 +140,6 @@
 					<el-switch v-model="configStore.layout.footer" :active-action-icon="View" :inactive-action-icon="Hide" />
 				</div>
 				<div class="box-item">
-					<span>
-						水印
-						<el-tooltip effect="dark" content="出于安全考虑，请不要手动禁用水印功能" placement="top">
-							<el-icon><QuestionFilled /></el-icon>
-						</el-tooltip>
-					</span>
-					<el-switch v-model="configStore.layout.watermark" :active-action-icon="View" :inactive-action-icon="Hide" />
-				</div>
-				<div class="box-item">
 					<span>菜单宽度</span>
 					<el-input-number v-model="configStore.layout.menuWidth" :max="240" :min="150" style="width: 80px">
 						<template #suffix>

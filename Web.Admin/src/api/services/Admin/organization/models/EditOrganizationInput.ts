@@ -5,11 +5,11 @@ export interface EditOrganizationInput {
 	/**
 	 * 机构Id
 	 */
-	orgId?: number;
+	orgId?: string;
 	/**
 	 * 父级Id
 	 */
-	parentId?: number;
+	parentId?: string;
 	/**
 	 * 机构名称
 	 */
@@ -45,6 +45,6 @@ export interface EditOrganizationInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

@@ -8,7 +8,7 @@ export interface QueryDictionaryPagedOutput {
 	/**
 	 * 字典Id
 	 */
-	dictionaryId?: number;
+	dictionaryId?: string;
 	/**
 	 * 字典Key
 	 */
@@ -56,6 +56,6 @@ export interface QueryDictionaryPagedOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 
