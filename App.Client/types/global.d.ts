@@ -19,11 +19,11 @@ declare global {
 		disable?: boolean;
 	};
 
-	/** @description 日期范围 */
+	/** FaTable 默认时间搜索支持的快捷日期范围。 */
 	type FaTableDataRange = "Past1D" | "Past3D" | "Past1W" | "Past1M" | "Past3M" | "Past6M" | "Past1Y" | "Past3Y";
 
-	/** @description FaTable 表格枚举列上下文 */
-	type FaTableEnumColumnCtx = {
+	/** FaTable 枚举列的选项配置。 */
+	interface FaTableEnumColumnCtx {
 		/**
 		 * 选项框显示的文字
 		 */
@@ -52,10 +52,13 @@ declare global {
 		 * Tag的类型，默认 "primary"
 		 */
 		type?: "primary" | "success" | "info" | "warning" | "danger";
-	};
 
-	/** @description FaTable 统一分页返回结果类 */
-	type PagedResult<Output = any> = {
+		[key: string]: any;
+	}
+
+	/** FaTable 统一分页返回结果。 */
+
+	export interface PagedResult<Output = Record<string, any>> {
 		/**
 		 * 当前页
 		 */
@@ -75,7 +78,7 @@ declare global {
 		/**
 		 * Data
 		 */
-		rows?: Array<Output>;
+		rows?: Output[];
 		/**
 		 * 是否有上一页
 		 */
@@ -92,9 +95,9 @@ declare global {
 		 * 完全限定名称
 		 */
 		fullName?: string;
-	};
+	}
 
-	/** @description FaTable 分页搜索类型枚举 */
+	/** FaTable 分页搜索运算符。 */
 	enum PagedSearchTypeEnum {
 		/**
 		 * 模糊匹配
@@ -134,8 +137,8 @@ declare global {
 		NotInclude = 9,
 	}
 
-	/** @description FaTable 统一分页搜索输入 */
-	type PagedSearchInput = {
+	/** FaTable 单个分页搜索条件。 */
+	interface PagedSearchInput {
 		/**
 		 * 搜索字段英文
 		 */
@@ -152,10 +155,10 @@ declare global {
 		 * 搜索类型
 		 */
 		type?: PagedSearchTypeEnum;
-	};
+	}
 
-	/** @description FaTable 统一分页排序输入 */
-	type PagedSortInput = {
+	/** FaTable 单个分页排序条件。 */
+	interface PagedSortInput {
 		/**
 		 * 排序字段英文
 		 */
@@ -169,10 +172,10 @@ declare global {
 		 * 'ascending' | 'descending'
 		 */
 		mode?: string;
-	};
+	}
 
-	/** @description FaTable 统一分页输入 */
-	type PagedInput = {
+	/** FaTable 分页、搜索和排序请求参数。 */
+	interface PagedInput {
 		/**
 		 * 当前页面索引值，默认为1
 		 */
@@ -188,91 +191,94 @@ declare global {
 		/**
 		 * 搜索时间
 		 */
-		searchTimeList?: Array<Date | string>;
+		searchTimeList?: (Date | string)[];
 		/**
 		 * 搜索集合
 		 */
-		searchList?: Array<PagedSearchInput>;
+		searchList?: PagedSearchInput[];
 		/**
 		 * 排序集合
 		 */
-		sortList?: Array<PagedSortInput>;
+		sortList?: PagedSortInput[];
 		/**
 		 * 启用分页
 		 * @default true
 		 */
 		enablePaged?: boolean;
-	};
+		/** 业务接口附加的查询字段。 */
 
-	/** @description 选择器数据 */
-	type ElSelectorOutput<T = any> = T extends string | number | boolean | object
-		? {
-				/**
-				 * 显示
-				 */
-				label?: string;
-				/**
-				 * 值
-				 */
-				value?: T;
-				/**
-				 * 附加数据
-				 */
-				data?: any;
-				/**
-				 * 是否隐藏
-				 */
-				hide?: boolean;
-				/**
-				 * 是否禁用
-				 */
-				disabled?: boolean;
-				/**
-				 * 子节点
-				 */
-				children?: Array<ElSelectorOutput<T>>;
-				[key: string]: any;
-			}
-		: never;
+		[key: string]: any;
+	}
 
-	/** @description 树形数据 */
-	type ElTreeOutput<T = any> = T extends string | number | boolean | object
-		? {
-				/**
-				 * 显示
-				 */
-				label?: string;
-				/**
-				 * 值
-				 */
-				value?: T;
-				/**
-				 * 附加数据
-				 */
-				data?: any;
-				/**
-				 * 是否隐藏
-				 */
-				hide?: boolean;
-				/**
-				 * 是否禁用
-				 */
-				disabled?: boolean;
-				/**
-				 * 子节点
-				 */
-				children?: Array<ElTreeOutput<T>>;
-				/**
-				 * 是否显示数量
-				 */
-				showQuantity?: boolean;
-				/**
-				 * 数量
-				 */
-				quantity?: number;
-				[key: string]: any;
-			}
-		: never;
+	/** 选择器标准化后的选项数据。 */
+
+	interface ElSelectorOutput<T = ElSelectorValue, Data = any> {
+		/**
+		 * 显示
+		 */
+		label?: string;
+		/**
+		 * 值
+		 */
+		value?: T;
+		/**
+		 * 附加数据
+		 */
+		data?: Data;
+		/**
+		 * 是否隐藏
+		 */
+		hide?: boolean;
+		/**
+		 * 是否禁用
+		 */
+		disabled?: boolean;
+		/**
+		 * 子节点
+		 */
+		children?: ElSelectorOutput<T, Data>[];
+
+		[key: string]: any;
+	}
+
+	/** 树组件标准化后的节点数据。 */
+
+	interface ElTreeOutput<T = ElTreeValue, Data = any> {
+		/**
+		 * 显示
+		 */
+		label?: string;
+		/**
+		 * 值
+		 */
+		value?: T;
+		/**
+		 * 附加数据
+		 */
+		data?: Data;
+		/**
+		 * 是否隐藏
+		 */
+		hide?: boolean;
+		/**
+		 * 是否禁用
+		 */
+		disabled?: boolean;
+		/**
+		 * 子节点
+		 */
+		children?: ElTreeOutput<T, Data>[];
+		/**
+		 * 是否显示数量
+		 */
+		showQuantity?: boolean;
+		/**
+		 * 数量
+		 */
+		quantity?: number;
+
+		[key: string]: any;
+	}
 }
 
 export {};

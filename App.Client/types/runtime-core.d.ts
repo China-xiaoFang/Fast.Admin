@@ -20,7 +20,7 @@ declare module "uni-mini-router" {
 		footer?: boolean;
 		/**
 		 * 显示水印
-		 * - 默认是 false，为 true 是代表显示水印，优先级最高
+		 * - 默认是 true，为 false 是代表不显示水印，优先级最高
 		 */
 		watermark?: boolean;
 		/**
@@ -34,10 +34,20 @@ declare module "uni-mini-router" {
 		 */
 		pageScroll?: boolean;
 		/**
+		 * 登录后是否禁止查看该页面
+		 * - 默认是 false，为 true 是代表登录后此页面不能再进入，否则跳转到首页
+		 */
+		authForbidView?: boolean;
+		/**
 		 * 必须存在手机号才能查看该页面
 		 * - 默认是 false，为 true 是代表手机号不存在此页面不能再进入，否则跳转到授权页面
 		 */
 		mobileRequired?: boolean;
+		/**
+		 * 跳过登录
+		 * - 默认是 false，为 true 是代表不用登录即可进入该页面
+		 */
+		noLogin?: boolean;
 	}
 }
 
@@ -82,10 +92,20 @@ declare module "@uni-helper/vite-plugin-uni-pages" {
 		 */
 		pageScroll?: boolean;
 		/**
+		 * 登录后是否禁止查看该页面
+		 * - 默认是 false，为 true 是代表登录后此页面不能再进入，否则跳转到首页
+		 */
+		authForbidView?: boolean;
+		/**
 		 * 必须存在手机号才能查看该页面
 		 * - 默认是 false，为 true 是代表手机号不存在此页面不能再进入，否则跳转到授权页面
 		 */
 		mobileRequired?: boolean;
+		/**
+		 * 跳过登录
+		 * - 默认是 false，为 true 是代表不用登录即可进入该页面
+		 */
+		noLogin?: boolean;
 	}
 }
 

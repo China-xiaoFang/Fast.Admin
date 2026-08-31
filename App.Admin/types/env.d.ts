@@ -3,17 +3,13 @@
 /** 声明 vite 环境变量的类型（如果未声明则默认是 any） */
 declare interface ImportMetaEnv {
 	/**
-	 * 环境
+	 * 接口基础地址
 	 */
-	readonly VITE_ENV: "production" | "development" | "test" | "staging";
+	readonly VITE_API_BASE_URL: string;
 	/**
 	 * 接口请求地址
 	 */
-	readonly VITE_AXIOS_REQUEST_URL: string;
-	/**
-	 * 接口版本
-	 */
-	readonly VITE_AXIOS_API_VERSION: string;
+	readonly VITE_API_REQUEST_URL: string;
 	/**
 	 * 本地缓存加密
 	 */
