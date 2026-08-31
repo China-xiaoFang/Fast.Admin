@@ -3,7 +3,7 @@
  */
 export interface QuerySchedulerDetailOutput {
   /**
-   * 是否启动
+   * 是否实际运行
    */
   isStarted?: boolean;
   /**
@@ -11,19 +11,31 @@ export interface QuerySchedulerDetailOutput {
    */
   quartzVersion?: string;
   /**
-   * 调度器状态
+   * 期望状态
+   */
+  desiredStatus?: string;
+  /**
+   * 调度执行宿主是否在线
+   */
+  executionOnline?: boolean;
+  /**
+   * 实际状态
+   */
+  actualStatus?: string;
+  /**
+   * 调度器实际状态
    */
   schedulerStatus?: string;
   /**
-   * 调度器关闭
+   * 调度执行宿主是否离线
    */
   schedulerShutdown?: boolean;
   /**
-   * 调度器待机
+   * 是否期望调度器待机
    */
   schedulerInStandbyMode?: boolean;
   /**
-   * 调度器启动
+   * 调度器是否实际运行
    */
   schedulerStarted?: boolean;
   /**
