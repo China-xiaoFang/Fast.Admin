@@ -98,7 +98,7 @@ public class OperateLogService : IDynamicApplication
                 .Where(wh => wh.DataPublic
                              || customDepartmentIds.Contains(wh.DepartmentId)
                              || wh.DepartmentId == _user.DepartmentId
-                             || wh.ParentIds.Contains(_user.DepartmentId ?? 0))
+                             || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0))
                 .Select(sl => sl.DepartmentId)
                 .ToListAsync();
             queryable = queryable.Where(wh => departmentIds.Contains(wh.DepartmentId ?? 0));

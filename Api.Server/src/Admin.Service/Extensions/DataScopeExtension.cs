@@ -200,7 +200,7 @@ public static class DataScopeExtension
                 .Where(wh => wh.DataPublic
                              || departmentIds.Contains(wh.DepartmentId)
                              || wh.DepartmentId == departmentId
-                             || wh.ParentIds.Contains(departmentId))
+                             || SqlFunc.JsonArrayAny(wh.ParentIds, departmentId))
                 .Select(sl => new DepartmentModel {DepartmentId = sl.DepartmentId});
 
             return BuildInnerJoin(queryable, departmentIdFieldSelector, dataScopeQueryable);
