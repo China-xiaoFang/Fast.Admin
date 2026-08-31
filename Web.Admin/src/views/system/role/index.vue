@@ -2,10 +2,10 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1D1KG9P5FG"
-			rowKey="roleId"
-			:requestApi="roleApi.queryRolePaged"
-			hideSearchTime
+			table-key="1D1KG9P5FG"
+			row-key="roleId"
+			:request-api="roleApi.queryRolePaged"
+			hide-search-time
 			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
@@ -29,37 +29,36 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { roleApi } from "@/api/services/Admin/role";
-import { QueryRolePagedOutput } from "@/api/services/Admin/role/models/QueryRolePagedOutput";
 import AuthEdit from "./edit/authEdit.vue";
 import RoleEdit from "./edit/index.vue";
+import type { QueryRolePagedOutput } from "@/api/services/Admin/role/models/QueryRolePagedOutput";
 import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemRole",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof RoleEdit>>();
-const authEditRef = ref<InstanceType<typeof AuthEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof RoleEdit>>("editFormRef");
+const authEditRef = useTemplateRef<InstanceType<typeof AuthEdit>>("authEditRef");
 
-const handleCustomCellClick = (_, { row }: { row: QueryRolePagedOutput }) => {
+const handleCustomCellClick = (_emitName: string, { row }: { row: QueryRolePagedOutput }) => {
 	editFormRef.value.detail(row.roleId);
 };
 
 /** 处理删除 */
 const handleDelete = (row: QueryRolePagedOutput) => {
 	const { roleId, rowVersion } = row;
-	ElMessageBox.confirm("确定要删除角色？", {
+	void ElMessageBox.confirm("确定要删除角色？", {
 		type: "warning",
-		async beforeClose() {
-			await roleApi.deleteRole({ roleId, rowVersion });
-			ElMessage.success("删除成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await roleApi.deleteRole({ roleId, rowVersion });
+		ElMessage.success("删除成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

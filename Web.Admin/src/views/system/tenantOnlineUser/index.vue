@@ -2,10 +2,10 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1D1K3NW4XY"
-			rowKey="connectionId"
-			:requestApi="tenantOnlineUserApi.queryTenantOnlineUserPaged"
-			hideSearchTime
+			table-key="1D1K3NW4XY"
+			row-key="connectionId"
+			:request-api="tenantOnlineUserApi.queryTenantOnlineUserPaged"
+			hide-search-time
 		>
 			<template #mobile="{ row }: { row?: TenantOnlineUserModel }">
 				<span>{{ row.mobile }}</span>
@@ -34,7 +34,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.lastLoginTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.lastLoginTime" type="info" round effect="light" size="small" class="ml5">
-					{{ dateUtil.dateTimeFix(String(row.lastLoginTime)) }}
+					{{ formatChineseRelativeTime(String(row.lastLoginTime)) }}
 				</el-tag>
 			</template>
 
@@ -57,31 +57,30 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { useTemplateRef } from "vue";
 import { ElMessage, ElMessageBox, dayjs } from "element-plus";
-import { dateUtil } from "@fast-china/utils";
+import { formatChineseRelativeTime } from "@fast-china/utils";
 import { tenantOnlineUserApi } from "@/api/services/Center/tenantOnlineUser";
-import { TenantOnlineUserModel } from "@/api/services/Center/tenantOnlineUser/models/TenantOnlineUserModel";
+import type { TenantOnlineUserModel } from "@/api/services/Center/tenantOnlineUser/models/TenantOnlineUserModel";
 import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemTenantOnlineUser",
 });
 
-const fastTableRef = ref<FastTableInstance>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
 
 /** 处理重置密码 */
 const handleForceOffline = (row: TenantOnlineUserModel) => {
 	const { connectionId, mobile } = row;
-	ElMessageBox.confirm(`确定踢掉账号：【${mobile}】`, {
+	void ElMessageBox.confirm(`确定踢掉账号：【${mobile}】`, {
 		type: "warning",
-		async beforeClose() {
-			await tenantOnlineUserApi.forceOffline({
-				connectionId,
-			});
-			ElMessage.success("强制下线成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await tenantOnlineUserApi.forceOffline({
+			connectionId,
+		});
+		ElMessage.success("强制下线成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

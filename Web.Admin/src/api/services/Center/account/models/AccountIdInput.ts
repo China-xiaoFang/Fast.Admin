@@ -1,14 +1,14 @@
 /**
- * Fast.Center.Service.Account.Dto.AccountIdInput 账号Id输入
+ * 账号Id输入
  */
 export interface AccountIdInput {
-  /**
-   * 账号Id
-   */
-  accountId?: number;
-  /**
-   * 
-   */
-  rowVersion?: number;
+	/**
+	 * 账号Id
+	 */
+	accountId?: number;
+	/**
+	 * 
+	 */
+	rowVersion?: number;
 }
 

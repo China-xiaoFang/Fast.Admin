@@ -1,10 +1,10 @@
 <template>
 	<el-scrollbar>
 		<el-menu
-			uniqueOpened
-			:defaultActive="activeMenu"
+			unique-opened
+			:default-active="activeMenu"
 			:collapse="configStore.layout.menuCollapse"
-			:style="{ '--el-menu-item-height': addUnit(configStore.layout.menuHeight) }"
+			:style="{ '--el-menu-item-height': addCssUnit(configStore.layout.menuHeight) }"
 		>
 			<el-menu-item index="/dashboard" @click="router.push('/dashboard')">
 				<FaIcon name="fa-icon-Dashboard" />
@@ -19,8 +19,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
+import { addCssUnit } from "@fast-china/utils";
 import MenuItem from "@/layouts/components/MenuItem/index.vue";
 import { useConfig, useUserInfo } from "@/stores";
 

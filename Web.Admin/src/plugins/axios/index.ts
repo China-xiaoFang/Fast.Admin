@@ -1,10 +1,11 @@
 import { ElLoading, ElMessage, ElMessageBox } from "element-plus";
 import { createFastAxios } from "@fast-china/axios";
-import { Local, cryptoUtil, useIdentity, withDefineType } from "@fast-china/utils";
+import { AESDecrypt, AESEncrypt, Local, installationIdentity, logger, withDefineType } from "@fast-china/utils";
+import { isAxiosError } from "axios";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { useUserInfo } from "@/stores";
 import type { ApiResponse } from "@fast-china/axios";
-import type { AxiosHeaders, AxiosResponse } from "axios";
+import type { AxiosHeaders, AxiosRequestConfig, AxiosResponse } from "axios";
 
 /** 加载实例 */
 const loadingInstance = {
@@ -21,19 +22,21 @@ let loginCallBack = false;
 const handleReloadLogin = (response: AxiosResponse): boolean => {
 	// 尝试获取 Restful 风格返回Code，或者获取响应状态码
 	const code = response?.data?.code || response?.status;
-	if (code && [401].includes(code)) {
+	if (code === 401) {
 		if (!loginCallBack) {
 			loginCallBack = true;
 			ElMessageBox.alert("登录已失效，请重新登录！", {
 				title: "温馨提示",
 				type: "warning",
 				confirmButtonText: "重新登录",
-				callback: () => {
+			})
+				.then(async () => {
+					await useUserInfo().logout();
+				})
+				.catch((error) => logger.error("Admin", "重新登录处理失败。", error))
+				.finally(() => {
 					loginCallBack = false;
-					const userInfoStore = useUserInfo();
-					userInfoStore.logout();
-				},
-			});
+				});
 		}
 		return true;
 	}
@@ -42,18 +45,17 @@ const handleReloadLogin = (response: AxiosResponse): boolean => {
 
 /** 加载 FastAxios */
 export function loadFastAxios(): void {
-	let baseUrl = import.meta.env.VITE_AXIOS_REQUEST_URL;
+	let baseUrl = import.meta.env.VITE_API_BASE_URL;
 	if (baseUrl?.endsWith("/")) {
 		baseUrl = baseUrl.slice(0, -1);
 	}
-	baseUrl += import.meta.env.VITE_AXIOS_API_VERSION;
 
 	const fastAxios = createFastAxios({
 		baseUrl,
 		headers: {
 			"Fast-Origin": import.meta.env.DEV ? import.meta.env.VITE_APP_ORIGIN || window.location.host : window.location.host,
-			"Fast-Device-Type": Object.keys(AppEnvironmentEnum).find((f) => AppEnvironmentEnum[f] === AppEnvironmentEnum.Web),
-			"Fast-Device-Id": useIdentity().deviceId,
+			"Fast-Device-Type": Object.entries(AppEnvironmentEnum).find(([, value]) => value === AppEnvironmentEnum.Web)?.[0],
+			"Fast-Device-Id": installationIdentity.deviceId,
 		},
 		requestCipher: true,
 	});
@@ -72,7 +74,7 @@ export function loadFastAxios(): void {
 			loadingInstance.target.setText(text ?? "加载中...");
 		}
 	});
-	fastAxios.loading.close.use((options) => {
+	fastAxios.loading.close.use((_options) => {
 		if (loadingInstance.count > 0) loadingInstance.count--;
 		if (loadingInstance.count === 0) {
 			loadingInstance.target.close();
@@ -85,18 +87,17 @@ export function loadFastAxios(): void {
 	fastAxios.message.info.use((message) => ElMessage.info(message));
 	fastAxios.message.error.use((message) => ElMessage.error(message));
 
-	fastAxios.cache.get.use((key) => Local.get(`HTTP_CACHE_${key}`, null));
-	fastAxios.cache.set.use((key, value) => Local.set(`HTTP_CACHE_${key}`, value, 24 * 60, null));
+	fastAxios.cache.get.use((key) => Local.get(`HTTP_CACHE_${key}`));
+	fastAxios.cache.set.use((key, value) => Local.set(`HTTP_CACHE_${key}`, value, { ttlMs: 24 * 60 * 60 * 1000 }));
 
-	fastAxios.crypto.encrypt.use((config, timestamp) => {
-		let requestData = config.data || config.params;
+	fastAxios.crypto.encrypt.use((config: AxiosRequestConfig, timestamp) => {
+		const requestData = config.data ?? config.params;
 		const dataStr = JSON.stringify(requestData);
-		if (dataStr != null && dataStr != "" && dataStr != "{}") {
-			// eslint-disable-next-line no-console
-			console.debug("Fast-Axios", `HTTP request data("${config.url}")`, requestData);
-			const decryptData = cryptoUtil.aes.encrypt(dataStr, `${timestamp}`, `FIV${timestamp}`);
+		if (dataStr !== undefined && dataStr !== "" && dataStr !== "{}") {
+			logger.debug("Fast-Axios", `HTTP request data("${config.url}")`, requestData);
+			const decryptData = AESEncrypt(dataStr, `${timestamp}`, `FIV${timestamp}`);
 			// 组装请求格式
-			requestData = {
+			const encryptedRequestData = {
 				data: decryptData,
 				timestamp,
 			};
@@ -104,12 +105,12 @@ export function loadFastAxios(): void {
 				case "GET":
 				case "DELETE":
 				case "HEAD":
-					config.params = requestData;
+					config.params = encryptedRequestData;
 					break;
 				case "POST":
 				case "PUT":
 				case "PATCH":
-					config.data = requestData;
+					config.data = encryptedRequestData;
 					break;
 				case "OPTIONS":
 				case "CONNECT":
@@ -121,7 +122,7 @@ export function loadFastAxios(): void {
 		}
 	});
 
-	fastAxios.crypto.decrypt.use((response, options) => {
+	fastAxios.crypto.decrypt.use((response, _options) => {
 		const restfulData = response.data as ApiResponse;
 		const responseHeader = response.headers as AxiosHeaders;
 		// 判断响应头部是否有加密标识
@@ -129,13 +130,12 @@ export function loadFastAxios(): void {
 			if (!restfulData?.data) {
 				return restfulData;
 			}
-			restfulData.data = cryptoUtil.aes.decrypt(restfulData.data as string, `${restfulData.timestamp}`, `FIV${restfulData.timestamp}`);
+			restfulData.data = AESDecrypt(restfulData.data as string, `${restfulData.timestamp}`, `FIV${restfulData.timestamp}`).parseJson();
 			// 处理 ""xxx"" 这种数据
 			if (typeof restfulData.data === "string" && restfulData.data.startsWith('"') && restfulData.data.endsWith('"')) {
 				restfulData.data = restfulData.data.replace(/"/g, "");
 			}
-			// eslint-disable-next-line no-console
-			console.debug("Fast-Axios", `HTTP response data("${response.config.url}")`, restfulData.data);
+			logger.debug("Fast-Axios", `HTTP response data("${response.config.url}")`, restfulData.data);
 		}
 		return restfulData;
 	});
@@ -150,22 +150,18 @@ export function loadFastAxios(): void {
 		refreshToken && (config.headers["X-Authorization"] = refreshToken);
 	});
 
-	fastAxios.interceptors.response.use((response, options) => {
+	fastAxios.interceptors.response.use((response, _options) => {
 		const userInfoStore = useUserInfo();
 		userInfoStore.setToken(response);
-		if (handleReloadLogin(response)) {
-			return response?.data ?? response;
-		}
+		return handleReloadLogin(response) ? (response?.data ?? response) : undefined;
 	});
 
-	fastAxios.interceptors.responseError.use((error, options) => {
-		if (error?.response) {
+	fastAxios.interceptors.responseError.use((error, _options) => {
+		if (isAxiosError(error) && error.response) {
 			// 避免报错的同时刷新Token
 			const userInfoStore = useUserInfo();
-			userInfoStore.setToken(error?.response);
+			userInfoStore.setToken(error.response);
 		}
-		if (handleReloadLogin(error?.response)) {
-			return error?.response?.data ?? error?.response;
-		}
+		return isAxiosError(error) && error.response && handleReloadLogin(error.response) ? (error.response.data ?? error.response) : undefined;
 	});
 }

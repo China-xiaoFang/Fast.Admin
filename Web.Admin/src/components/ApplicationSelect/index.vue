@@ -1,17 +1,17 @@
 <template>
 	<FaSelect
 		v-bind="$attrs"
-		:requestApi="applicationApi.applicationSelector"
+		:request-api="applicationApi.applicationSelector"
 		v-model="modelValue"
 		v-model:label="appName"
 		placeholder="请选择应用"
 		clearable
-		moreDetail
-		@change="(value) => emit('change', value)"
+		more-detail
+		@change="(data) => emit('change', data)"
 	>
 		<template #default="data">
 			<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%">
-				<FaAvatar v-if="data.data?.logoUrl" :src="data.data?.logoUrl" thumb size="small" />
+				<FaAvatar v-if="data.data?.logoUrl" :src="data.data.logoUrl" thumb size="small" />
 				<div style="flex: 1">
 					<span>{{ data.label }}</span>
 					<span style="display: flex; justify-content: space-between; width: 100%">
@@ -42,9 +42,9 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (value: number | string) => true,
-	"update:appName": (value: string) => true,
-	change: (value: ElSelectorOutput<number | string>) => true,
+	"update:modelValue": (_value: number | string) => true,
+	"update:appName": (_value: string) => true,
+	change: (_value: ElSelectorOutput) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });

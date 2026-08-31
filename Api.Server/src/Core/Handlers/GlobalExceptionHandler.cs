@@ -80,7 +80,8 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
                 .UrlDecode();
             var deviceId = httpContext.Request.Headers[HttpHeaderConst.DeviceId]
                 .ToString()
-                .UrlDecode();
+                .UrlDecode()
+                .Trim();
 
             message.AppendLine($"device: {deviceType}, {deviceId}");
             if (httpContext.Items.TryGetValue($"{nameof(Fast)}.RequestParams", out var requestParams))

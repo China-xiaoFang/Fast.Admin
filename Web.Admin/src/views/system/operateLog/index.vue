@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable tableKey="1D1KHQS53T" rowKey="recordId" :requestApi="operateLogApi.queryOperateLogPaged" stripe>
+		<FastTable table-key="1D1KHQS53T" row-key="recordId" :request-api="operateLogApi.queryOperateLogPaged" stripe>
 			<template #employeeNo="{ row }: { row?: OperateLogModel }">
 				{{ row.createdUserName }}
 				<br />
@@ -24,7 +24,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.createdTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small" class="ml5">
-					{{ dateUtil.dateTimeFix(String(row.createdTime)) }}
+					{{ formatChineseRelativeTime(String(row.createdTime)) }}
 				</el-tag>
 			</template>
 		</FastTable>
@@ -33,9 +33,9 @@
 
 <script lang="ts" setup>
 import { dayjs } from "element-plus";
-import { dateUtil } from "@fast-china/utils";
+import { formatChineseRelativeTime } from "@fast-china/utils";
 import { operateLogApi } from "@/api/services/Admin/operateLog";
-import { OperateLogModel } from "@/api/services/Admin/operateLog/models/OperateLogModel";
+import type { OperateLogModel } from "@/api/services/Admin/operateLog/models/OperateLogModel";
 
 defineOptions({
 	name: "SystemOperateLog",

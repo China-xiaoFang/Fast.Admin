@@ -2,9 +2,9 @@
 	<FaDialog
 		ref="faDialogRef"
 		width="1000"
-		fullHeight
+		full-height
 		:title="state.dialogTitle"
-		confirmButtonText="保存"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="
 			() => {
@@ -16,17 +16,17 @@
 			}
 		"
 	>
-		<el-collapse :modelValue="state.menuList.map((item) => item.value)">
+		<el-collapse :model-value="state.menuList.map((item) => item.value)">
 			<el-collapse-item v-for="menu in state.menuList" :key="menu.value" :name="menu.value">
 				<template #title>
 					{{ menu.label }}
-					<el-checkbox border :modelValue="isMenuChecked(menu.value)" @click.stop @change="handleMenuChange(menu.value, $event)">
+					<el-checkbox border :model-value="isMenuChecked(menu.value)" @click.stop @change="handleMenuChange(menu.value, $event)">
 						<template #default>{{ getButtonCheckedCount(menu.value) }} / {{ menu.children.length }}</template>
 					</el-checkbox>
 					<el-checkbox
 						class="checkbox__right"
 						border
-						:modelValue="isButtonAllChecked(menu.value)"
+						:model-value="isButtonAllChecked(menu.value)"
 						:indeterminate="isButtonIndeterminate(menu.value)"
 						@click.stop
 						@change="handleButtonAllChange(menu.value, $event)"
@@ -51,12 +51,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { CheckboxValueType, ElMessage } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
+import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { roleApi } from "@/api/services/Admin/role";
-import { RoleAuthInput } from "@/api/services/Admin/role/models/RoleAuthInput";
+import type { CheckboxValueType } from "element-plus";
 import type { ElSelectorOutput, FaDialogInstance } from "fast-element-plus";
+import type { RoleAuthInput } from "@/api/services/Admin/role/models/RoleAuthInput";
 
 defineOptions({
 	name: "SystemRoleAuthEdit",
@@ -64,7 +65,7 @@ defineOptions({
 
 const emit = defineEmits(["ok"]);
 
-const faDialogRef = ref<FaDialogInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 
 const state = reactive({
 	formData: withDefineType<RoleAuthInput>({

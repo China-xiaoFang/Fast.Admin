@@ -5,25 +5,25 @@
 				ref="orgTreeRef"
 				title="机构列表"
 				width="240"
-				:requestApi="organizationApi.organizationSelector"
+				:request-api="organizationApi.organizationSelector"
 				@change="handleOrgChange"
 				@node-contextmenu="(event, data) => handleOrgContextmenu(event as MouseEvent, data)"
 			>
-				<template #label="{ data }: { data: ElTreeOutput<number> }">
+				<template #label="{ data }">
 					<span>{{ data.label }}</span>
 				</template>
-				<template #default="{ data }: { data: ElTreeOutput<number> }">
-					<el-text type="info">{{ data.data.orgCode }}</el-text>
+				<template #default="{ data }">
+					<el-text type="info">{{ data.data?.orgCode }}</el-text>
 				</template>
 			</FaTree>
 			<FastTable
 				ref="fastTableRef"
-				tableKey="1D1KGFUXKQ"
-				rowKey="departmentId"
-				:requestApi="departmentApi.queryDepartmentPaged"
-				hideSearchTime
+				table-key="1D1KGFUXKQ"
+				row-key="departmentId"
+				:request-api="departmentApi.queryDepartmentPaged"
+				hide-search-time
 				:pagination="false"
-				defaultExpandAll
+				default-expand-all
 				@custom-cell-click="handleCustomCellClick"
 			>
 				<!-- 表格按钮操作区域 -->
@@ -48,27 +48,27 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
-import { ElTreeOutput, FaContextMenuData, FaContextMenuInstance, FaTreeInstance } from "fast-element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { departmentApi } from "@/api/services/Admin/department";
-import { QueryDepartmentPagedOutput } from "@/api/services/Admin/department/models/QueryDepartmentPagedOutput";
 import { organizationApi } from "@/api/services/Admin/organization";
 import DepartmentEdit from "./edit/index.vue";
 import OrgEdit from "./edit/orgEdit.vue";
+import type { ElTreeOutput, FaContextMenuData, FaContextMenuInstance, FaTreeInstance } from "fast-element-plus";
+import type { QueryDepartmentPagedOutput } from "@/api/services/Admin/department/models/QueryDepartmentPagedOutput";
 import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemDepartment",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const orgTreeRef = ref<FaTreeInstance>();
-const faContextMenuRef = ref<FaContextMenuInstance>();
-const editFormRef = ref<InstanceType<typeof DepartmentEdit>>();
-const orgEditFormRef = ref<InstanceType<typeof OrgEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const orgTreeRef = useTemplateRef<FaTreeInstance>("orgTreeRef");
+const faContextMenuRef = useTemplateRef<FaContextMenuInstance>("faContextMenuRef");
+const editFormRef = useTemplateRef<InstanceType<typeof DepartmentEdit>>("editFormRef");
+const orgEditFormRef = useTemplateRef<InstanceType<typeof OrgEdit>>("orgEditFormRef");
 
 const state = reactive({
 	contextMenuList: withDefineType<FaContextMenuData[]>([
@@ -85,6 +85,7 @@ const state = reactive({
 			label: "编辑机构",
 			icon: "el-icon-EditPen",
 			click: (_, { data }: { data?: ElTreeOutput<number> }) => {
+				if (!data || typeof data.value !== "number") return;
 				orgEditFormRef.value.edit(data.value);
 			},
 		},
@@ -93,30 +94,31 @@ const state = reactive({
 			label: "删除机构",
 			icon: "el-icon-Delete",
 			click: (_, { data }: { data?: ElTreeOutput<number> }) => {
-				ElMessageBox.confirm("确定要删除机构？", {
+				if (!data || typeof data.value !== "number") return;
+				void ElMessageBox.confirm("确定要删除机构？", {
 					type: "warning",
-					async beforeClose() {
-						await organizationApi.deleteOrganization({ orgId: data.value, rowVersion: data.data?.rowVersion });
-						ElMessage.success("删除成功！");
-						orgTreeRef.value?.refresh();
-					},
+				}).then(async () => {
+					await organizationApi.deleteOrganization({ orgId: data.value, rowVersion: data.data?.rowVersion });
+					ElMessage.success("删除成功！");
+					await orgTreeRef.value?.refresh();
 				});
 			},
 		},
 	]),
 });
 
-const handleCustomCellClick = (_, { row }: { row: QueryDepartmentPagedOutput }) => {
+const handleCustomCellClick = (_emitName: string, { row }: { row: QueryDepartmentPagedOutput }) => {
 	editFormRef.value.detail(row.departmentId);
 };
 
 /** 机构更改 */
-const handleOrgChange = (data: ElTreeOutput<number>) => {
+const handleOrgChange = async (data: ElTreeOutput) => {
+	if (typeof data.value !== "number") return;
 	fastTableRef.value.searchParam.orgId = data.value;
-	fastTableRef.value.refresh();
+	await fastTableRef.value.refresh();
 };
 
-const handleOrgContextmenu = (event: MouseEvent, data: ElTreeOutput<number>) => {
+const handleOrgContextmenu = (event: MouseEvent, data: ElTreeOutput) => {
 	if (data.all) {
 		state.contextMenuList[0].hide = false;
 		state.contextMenuList[1].hide = true;
@@ -135,13 +137,12 @@ const handleOrgContextmenu = (event: MouseEvent, data: ElTreeOutput<number>) => 
 /** 处理删除 */
 const handleDelete = (row: QueryDepartmentPagedOutput) => {
 	const { departmentId, rowVersion } = row;
-	ElMessageBox.confirm("确定要删除部门？", {
+	void ElMessageBox.confirm("确定要删除部门？", {
 		type: "warning",
-		async beforeClose() {
-			await departmentApi.deleteDepartment({ departmentId, rowVersion });
-			ElMessage.success("删除成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await departmentApi.deleteDepartment({ departmentId, rowVersion });
+		ElMessage.success("删除成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

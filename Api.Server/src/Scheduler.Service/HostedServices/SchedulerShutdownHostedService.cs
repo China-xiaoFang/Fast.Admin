@@ -20,7 +20,9 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.Center.Domain;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Quartz;
 
 namespace Fast.Scheduler;
@@ -36,11 +38,18 @@ internal sealed class SchedulerShutdownHostedService : IHostedService
     private readonly IDependencySchedulerFactory _schedulerFactory;
 
     /// <summary>
+    /// 日志
+    /// </summary>
+    private readonly ILogger _logger;
+
+    /// <summary>
     /// 调度器关闭托管服务
     /// </summary>
-    public SchedulerShutdownHostedService(IDependencySchedulerFactory schedulerFactory)
+    public SchedulerShutdownHostedService(IDependencySchedulerFactory schedulerFactory,
+        ILogger<SchedulerShutdownHostedService> logger)
     {
         _schedulerFactory = schedulerFactory;
+        _logger = logger;
     }
 
     /// <inheritdoc />
@@ -53,9 +62,41 @@ internal sealed class SchedulerShutdownHostedService : IHostedService
     public async Task StopAsync(CancellationToken cancellationToken)
     {
         var schedulerList = await _schedulerFactory.GetAllSchedulers(cancellationToken);
-        foreach (var scheduler in schedulerList.Where(wh => !wh.IsShutdown))
+        foreach (var scheduler in schedulerList)
         {
-            await scheduler.Shutdown(true, cancellationToken);
+            var schedulerName = scheduler.SchedulerName;
+            var schedulerInstanceId = scheduler.SchedulerInstanceId;
+
+            if (!scheduler.IsShutdown)
+            {
+                await scheduler.Shutdown(true, cancellationToken);
+            }
+
+            if (!SchedulerContext.IsExecutionHost)
+            {
+                continue;
+            }
+
+            try
+            {
+                using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+
+                // Quartz 正常关闭不会删除集群心跳，执行宿主需要主动移除当前实例状态
+                using var cleanupCancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+                await db.Deleteable<QuartzSchedulerStateModel>()
+                    .Where(wh => wh.SchedName == schedulerName && wh.InstanceName == schedulerInstanceId)
+                    .ExecuteCommandAsync(cleanupCancellationTokenSource.Token);
+
+                _logger.LogInformation("Remove scheduler {SchedulerName} instance {SchedulerInstanceId} state on shutdown.",
+                    schedulerName, schedulerInstanceId);
+            }
+            catch (Exception ex)
+            {
+                // 清理失败时保留 Quartz 原有的心跳超时机制，避免影响宿主正常退出
+                _logger.LogError(ex, "Remove scheduler {SchedulerName} instance {SchedulerInstanceId} state on shutdown failed.",
+                    schedulerName, schedulerInstanceId);
+            }
         }
     }
 }

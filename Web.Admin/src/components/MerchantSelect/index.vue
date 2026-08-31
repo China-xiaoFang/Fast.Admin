@@ -1,14 +1,13 @@
 <template>
 	<FaSelect
 		v-bind="$attrs"
-		:initParam="props.merchantType"
-		:requestApi="merchantApi.merchantSelector"
+		:request-api="() => merchantApi.merchantSelector(props.merchantType)"
 		v-model="modelValue"
 		v-model:label="merchantNo"
 		placeholder="请选择商户号"
 		clearable
-		moreDetail
-		@change="(value) => emit('change', value)"
+		more-detail
+		@change="(data) => emit('change', data)"
 	>
 		<template #default="data">
 			<span>{{ data.data?.merchantName }}</span>
@@ -22,9 +21,9 @@
 
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
-import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 import { merchantApi } from "@/api/services/Center/merchant";
 import type { ElSelectorOutput } from "fast-element-plus";
+import type { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 
 defineOptions({
 	name: "MerchantSelect",
@@ -40,9 +39,9 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (value: number | string) => true,
-	"update:merchantNo": (value: string) => true,
-	change: (value: ElSelectorOutput<number | string>) => true,
+	"update:modelValue": (_value: number | string) => true,
+	"update:merchantNo": (_value: string) => true,
+	change: (_value: ElSelectorOutput) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });

@@ -3,32 +3,31 @@
 		ref="faDialogRef"
 		width="500"
 		:title="state.dialogTitle"
-		:showConfirmButton="!state.formDisabled"
-		:showBeforeClose="!state.formDisabled"
-		confirmButtonText="保存"
+		:show-confirm-button="!state.formDisabled"
+		:show-before-close="!state.formDisabled"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled">
 			<FaFormItem prop="orgId" label="机构">
 				<FaTreeSelect
-					:requestApi="organizationApi.organizationSelector"
+					:request-api="organizationApi.organizationSelector"
 					v-model="state.formData.orgId"
 					v-model:label="state.formData.orgName"
 					placeholder="请选择机构"
-					checkStrictly
+					check-strictly
 					filterable
 					clearable
 				/>
 			</FaFormItem>
 			<FaFormItem prop="parentId" label="父级">
 				<FaTreeSelect
-					:requestApi="departmentApi.departmentSelector"
-					:initParam="state.formData.orgId"
+					:request-api="() => departmentApi.departmentSelector(state.formData.orgId)"
 					v-model="state.formData.parentId"
 					v-model:label="state.formData.parentName"
 					placeholder="请选择父级部门"
-					checkStrictly
+					check-strictly
 					filterable
 					clearable
 				/>
@@ -62,14 +61,15 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
+import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { departmentApi } from "@/api/services/Admin/department";
-import { AddDepartmentInput } from "@/api/services/Admin/department/models/AddDepartmentInput";
-import { EditDepartmentInput } from "@/api/services/Admin/department/models/EditDepartmentInput";
 import { organizationApi } from "@/api/services/Admin/organization";
+import type { FormRules } from "element-plus";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { AddDepartmentInput } from "@/api/services/Admin/department/models/AddDepartmentInput";
+import type { EditDepartmentInput } from "@/api/services/Admin/department/models/EditDepartmentInput";
 
 defineOptions({
 	name: "SystemDepartmentEdit",
@@ -77,8 +77,8 @@ defineOptions({
 
 const emit = defineEmits(["ok"]);
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditDepartmentInput & AddDepartmentInput & { orgName?: string; parentName?: string }>({}),
@@ -115,7 +115,7 @@ const detail = (departmentId: number) => {
 	faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await departmentApi.queryDepartmentDetail(departmentId);
-		if (apiRes.parentId == 0) {
+		if (apiRes.parentId === 0) {
 			apiRes.parentId = undefined;
 		}
 		state.formData = apiRes;
@@ -139,7 +139,7 @@ const edit = (departmentId: number) => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await departmentApi.queryDepartmentDetail(departmentId);
-		if (apiRes.parentId == 0) {
+		if (apiRes.parentId === 0) {
 			apiRes.parentId = undefined;
 		}
 		state.formData = apiRes;

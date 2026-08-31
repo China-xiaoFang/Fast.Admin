@@ -33,7 +33,11 @@ namespace Fast.Core;
 /// </summary>
 internal abstract class ApiRateLimiterPolicy : IRateLimiterPolicy<string>
 {
-    private readonly string _partitionPrefix;
+    /// <summary>
+    /// 限流分区前缀
+    /// </summary>
+    protected string PartitionPrefix { get; }
+
     private readonly int _permitLimit;
     private readonly int _windowSeconds;
 
@@ -41,11 +45,11 @@ internal abstract class ApiRateLimiterPolicy : IRateLimiterPolicy<string>
     /// API 限流规则基类
     /// </summary>
     /// <param name="partitionPrefix">分区前缀</param>
-    /// <param name="permitLimit">单个Ip与设备Id组合的请求限额</param>
+    /// <param name="permitLimit">单个限流分区的请求限额</param>
     /// <param name="windowSeconds">统计窗口秒数</param>
     protected ApiRateLimiterPolicy(string partitionPrefix, int permitLimit, int windowSeconds)
     {
-        _partitionPrefix = partitionPrefix;
+        PartitionPrefix = partitionPrefix;
         _permitLimit = permitLimit;
         _windowSeconds = windowSeconds;
     }
@@ -53,16 +57,7 @@ internal abstract class ApiRateLimiterPolicy : IRateLimiterPolicy<string>
     /// <inheritdoc />
     public RateLimitPartition<string> GetPartition(HttpContext httpContext)
     {
-        var ipAddress = httpContext.RemoteIpv4();
-        var deviceId = httpContext.Request.Headers[HttpHeaderConst.DeviceId]
-            .ToString()
-            .Trim();
-        if (string.IsNullOrWhiteSpace(deviceId))
-            return RateLimitPartition.GetNoLimiter($"{_partitionPrefix}:device:not-applicable");
-
-        // 请求头由客户端控制，使用固定长度摘要作为分区键，避免超长设备Id持续占用内存
-        var deviceFingerprint = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(deviceId)));
-        var partitionKey = $"{_partitionPrefix}:ip:{ipAddress}:device:{deviceFingerprint}";
+        var partitionKey = GetPartitionKey(httpContext);
         return RateLimitPartition.GetSlidingWindowLimiter(partitionKey,
             _ => new SlidingWindowRateLimiterOptions
             {
@@ -72,6 +67,31 @@ internal abstract class ApiRateLimiterPolicy : IRateLimiterPolicy<string>
                 QueueLimit = 0,
                 AutoReplenishment = true
             });
+    }
+
+    /// <summary>
+    /// 获取限流分区键
+    /// </summary>
+    /// <remarks>默认按照 Ip 与设备Id组合分区，供登录和未登录请求使用。</remarks>
+    protected virtual string GetPartitionKey(HttpContext httpContext)
+    {
+        var ipAddress = httpContext.RemoteIpv4();
+        var deviceId = httpContext.Request.Headers[HttpHeaderConst.DeviceId]
+            .ToString()
+            .UrlDecode()
+            .Trim();
+
+        // 未提供设备Id时空字符串会生成固定摘要，确保匿名请求仍受组合限流约束；
+        // 请求头由客户端控制，使用固定长度摘要作为分区键，避免超长设备Id持续占用内存
+        return $"{PartitionPrefix}:ip:{ipAddress}:device:{GetFingerprint(deviceId)}";
+    }
+
+    /// <summary>
+    /// 获取固定长度的限流分区指纹
+    /// </summary>
+    protected static string GetFingerprint(string value)
+    {
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(value)));
     }
 
     /// <inheritdoc />

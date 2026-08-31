@@ -7,8 +7,8 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
-import { useScreenFull } from "fast-element-plus";
 import { FullScreen, FullScreenExit } from "@fast-element-plus/icons-vue";
+import { useScreenFull } from "fast-element-plus";
 
 defineOptions({
 	name: "ScreenFull",
@@ -16,7 +16,7 @@ defineOptions({
 
 const isFullscreen = computed(() => useScreenFull.isFullscreen());
 
-const handleScreenFullClick = (): void => {
+const handleScreenFullClick = () => {
 	useScreenFull.toggle();
 };
 

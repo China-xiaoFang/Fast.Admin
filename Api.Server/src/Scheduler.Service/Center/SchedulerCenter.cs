@@ -123,7 +123,7 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
     /// 获取调度执行宿主是否在线
     /// <para>Quartz 执行实例启动后会定期向 QRTZ_SCHEDULER_STATE 写入集群心跳。</para>
     /// </summary>
-    private static async Task<bool> GetExecutionHostOnline(string schedulerName)
+    private static async Task<bool> GetExecutionHostOnline(string schedulerName, string localSchedulerInstanceId)
     {
         using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
         SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), db);
@@ -135,6 +135,12 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
 
         return schedulerStateList.Any(state =>
         {
+            // 当前进程只负责管理调度器，排除自身心跳后剩余实例即为执行宿主
+            if (state.InstanceName == localSchedulerInstanceId)
+            {
+                return false;
+            }
+
             // 允许最多丢失一次心跳，并保证至少有 15 秒容错时间，避免短暂抖动被误判为离线
             var offlineThreshold = Math.Max(state.CheckInInterval * 2, 15000L);
             return state.LastCheckInTime >= currentTime - offlineThreshold;
@@ -692,7 +698,8 @@ public class SchedulerCenter : ISchedulerCenter, ISingletonDependency
         var actualStandby = await GetSchedulerActualStandbyState(scheduler);
 
         // 执行宿主离线时，实际状态优先显示为 Offline，不根据期望状态推测正在运行
-        var executionOnline = await GetExecutionHostOnline(metaData.SchedulerName);
+        var localSchedulerInstanceId = SchedulerContext.IsExecutionHost ? null : metaData.SchedulerInstanceId;
+        var executionOnline = await GetExecutionHostOnline(metaData.SchedulerName, localSchedulerInstanceId);
         var desiredStatus = desiredStandby ? SchedulerStandbyStatus : SchedulerRunningStatus;
         var actualStatus = !executionOnline ? SchedulerOfflineStatus :
             actualStandby ? SchedulerStandbyStatus : SchedulerRunningStatus;

@@ -1,8 +1,8 @@
-import { ElMessage, ElNotification } from "element-plus";
-import { consoleError, dateUtil, envUtil, stringUtil } from "@fast-china/utils";
 import { useTitle } from "@vueuse/core";
-import NProgress from "nprogress";
 import { createRouter, createWebHistory } from "vue-router";
+import { ElMessage, ElNotification } from "element-plus";
+import { getLocalTimeGreeting, isMobileUserAgent, isTabletUserAgent, logger } from "@fast-china/utils";
+import NProgress from "nprogress";
 import { initWebSocket } from "@/signalR";
 import { useApp, useUserInfo } from "@/stores";
 import { defaultRoute } from "./modules/defaultRoute";
@@ -17,6 +17,12 @@ const router = createRouter({
 });
 
 const defaultRoutePath = defaultRoute.map((m) => m.path);
+
+/** 获取登录后的站内重定向地址 */
+const getLoginRedirect = (value: unknown): string => {
+	const redirect = Array.isArray(value) ? value[0] : value;
+	return typeof redirect === "string" && redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : "";
+};
 
 /** 配置 NProgress */
 NProgress.configure({
@@ -37,7 +43,7 @@ router.beforeEach(async (to, from) => {
 	// 开启进度条
 	NProgress.start();
 
-	if (import.meta.env.VITE_ENABLE_MOBILE !== "true" && to.path != "/mobileBlocked" && envUtil.isMobile()) {
+	if (import.meta.env.VITE_ENABLE_MOBILE !== "true" && to.path !== "/mobileBlocked" && (isMobileUserAgent() || isTabletUserAgent())) {
 		return "/mobileBlocked";
 	}
 
@@ -57,7 +63,7 @@ router.beforeEach(async (to, from) => {
 			else if (defaultRoutePath.includes(to.path)) {
 				return { path: "/login" };
 			} else {
-				return { path: "/login", query: { redirect: encodeURIComponent(to?.redirectedFrom?.fullPath ?? to.fullPath) } };
+				return { path: "/login", query: { redirect: to.redirectedFrom?.fullPath ?? to.fullPath } };
 			}
 		}
 	} else {
@@ -74,13 +80,13 @@ router.beforeEach(async (to, from) => {
 				userInfoStore.asyncRouterGen = true;
 
 				// 初始化 WebSocket
-				initWebSocket();
+				void initWebSocket();
 
 				// 延迟 0.5 秒显示欢迎信息
 				setTimeout(() => {
 					ElNotification({
 						title: "欢迎",
-						message: `${dateUtil.getGreet()}${userInfoStore.employeeName}`,
+						message: `${getLocalTimeGreeting()}${userInfoStore.employeeName}`,
 						type: "success",
 						duration: 1500,
 					});
@@ -89,20 +95,24 @@ router.beforeEach(async (to, from) => {
 				// 由于新添加的路由在本次不存在，所以进行重定向
 				return { ...(to.redirectedFrom ?? to), replace: true };
 			} catch (error) {
-				consoleError("InitRoute", error);
+				logger.error("InitRoute", "发生异常", error);
 				// 退出登录
-				userInfoStore.logout();
+				void userInfoStore.logout();
 				return false;
 			}
 		}
 
 		// 判断是否存在重定向路径，如果有则跳转
-		const redirect = decodeURIComponent((from.query.redirect as string) || "");
-		if (redirect && redirect != to.fullPath) {
-			delete from.query.redirect;
-			const _query = stringUtil.getUrlParams(redirect);
+		const redirect = getLoginRedirect(from.query.redirect);
+		if (redirect && redirect !== to.fullPath) {
+			const redirectRoute = router.resolve(redirect);
 			// 设置 replace: true, 因此导航将不会留下历史记录
-			return { path: redirect, replace: true, query: _query };
+			return {
+				path: redirectRoute.path,
+				query: redirectRoute.query,
+				hash: redirectRoute.hash,
+				replace: true,
+			};
 		}
 
 		// 判断登录后是否禁止查看该页面

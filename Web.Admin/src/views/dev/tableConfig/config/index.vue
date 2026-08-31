@@ -1,12 +1,12 @@
 <template>
 	<div class="el-card h100" style="display: flex; flex-direction: column">
-		<el-divider contentPosition="left">
+		<el-divider content-position="left">
 			<el-icon>
 				<StarFilled />
 			</el-icon>
 			{{ state.tableName }}
 		</el-divider>
-		<FaTable ref="faTableRef" :data="state.tableData" :pagination="false" :toolBtn="false">
+		<FaTable ref="faTableRef" :data="state.tableData" :pagination="false" :tool-btn="false">
 			<template #header="{ loading }">
 				<el-button :icon="ArrowLeftBold" @click="handleBack">返回</el-button>
 				<el-button :disabled="loading" type="primary" :icon="Plus" @click="handleAdd">新增</el-button>
@@ -40,7 +40,7 @@
 			</FaTableColumn>
 			<FaTableColumn prop="width" label="宽度" width="200">
 				<template #default="{ row }: { row: FaTableColumnCtx }">
-					<el-input-number v-model="row.width" :min="0" :max="999" stepStrictly :controls="false" placeholder="请输入宽度">
+					<el-input-number v-model="row.width" :min="0" :max="999" step-strictly :controls="false" placeholder="请输入宽度">
 						<template #suffix>
 							<span>px</span>
 						</template>
@@ -49,7 +49,7 @@
 			</FaTableColumn>
 			<FaTableColumn prop="smallWidth" label="最小宽度" width="200">
 				<template #default="{ row }: { row: FaTableColumnCtx }">
-					<el-input-number v-model="row.smallWidth" :min="0" :max="999" stepStrictly :controls="false" placeholder="请输入最小宽度">
+					<el-input-number v-model="row.smallWidth" :min="0" :max="999" step-strictly :controls="false" placeholder="请输入最小宽度">
 						<template #suffix>
 							<span>px</span>
 						</template>
@@ -62,7 +62,7 @@
 						v-model="row.order"
 						:min="0"
 						:max="999"
-						stepStrictly
+						step-strictly
 						:controls="false"
 						placeholder="请输入顺序"
 						@change="handleOrderChange"
@@ -107,15 +107,15 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { reactive, useTemplateRef, watch } from "vue";
 import { ArrowLeftBold, Close, Plus, Select, StarFilled } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { tableApi } from "@/api/services/Center/table";
 import AdvancedConfigForm from "./components/advancedConfig.vue";
-import type { FaTableColumnCtx } from "@/api/services/Center/table/models/FaTableColumnCtx";
 import type { FaTableInstance } from "fast-element-plus";
 import type { WatchHandle } from "vue";
+import type { FaTableColumnCtx } from "@/api/services/Center/table/models/FaTableColumnCtx";
 
 defineOptions({
 	name: "DevTableColumnConfig",
@@ -123,8 +123,8 @@ defineOptions({
 
 const emit = defineEmits(["back", "ok"]);
 
-const faTableRef = ref<FaTableInstance>();
-const advancedConfigRef = ref<InstanceType<typeof AdvancedConfigForm>>();
+const faTableRef = useTemplateRef<FaTableInstance>("faTableRef");
+const advancedConfigRef = useTemplateRef<InstanceType<typeof AdvancedConfigForm>>("advancedConfigRef");
 
 const state = reactive({
 	/** 是否存在改变 */
@@ -145,11 +145,10 @@ let tableWatch: WatchHandle;
 const handleBack = () => {
 	tableWatch();
 	if (state.change) {
-		ElMessageBox.confirm("确定要取消编辑？", {
+		void ElMessageBox.confirm("确定要取消编辑？", {
 			type: "warning",
-			async beforeClose() {
-				emit("back");
-			},
+		}).then(() => {
+			emit("back");
 		});
 	} else {
 		emit("back");
@@ -213,19 +212,18 @@ const handleOrderChange = () => {
 
 /** 处理保存 */
 const handleSave = () => {
-	ElMessageBox.confirm("确认要保存表格配置？", {
+	void ElMessageBox.confirm("确认要保存表格配置？", {
 		type: "warning",
-		async beforeClose() {
-			await tableApi.editTableColumnConfig({
-				tableId: state.tableId,
-				columns: state.tableData,
-				rowVersion: state.rowVersion,
-			});
-			state.change = false;
-			ElMessage.success("保存成功！");
-			handleBack();
-			emit("ok");
-		},
+	}).then(async () => {
+		await tableApi.editTableColumnConfig({
+			tableId: state.tableId,
+			columns: state.tableData,
+			rowVersion: state.rowVersion,
+		});
+		state.change = false;
+		ElMessage.success("保存成功！");
+		handleBack();
+		emit("ok");
 	});
 };
 

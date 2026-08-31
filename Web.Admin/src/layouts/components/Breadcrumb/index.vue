@@ -1,7 +1,7 @@
 <template>
 	<el-breadcrumb separator="/">
-		<transition-group appear name="slide-left" leaveActiveClass="">
-			<el-breadcrumb-item key="/" to="/">首页</el-breadcrumb-item>
+		<transition-group appear name="slide-left" leave-active-class="">
+			<el-breadcrumb-item v-if="!isHome" key="/dashboard" to="/dashboard">首页</el-breadcrumb-item>
 			<el-breadcrumb-item v-for="item in breadcrumbs" :key="item.path" :to="item.redirect ? item.redirect.toString() : undefined">
 				{{ item.meta.title }}
 			</el-breadcrumb-item>
@@ -19,7 +19,12 @@ defineOptions({
 
 const route = useRoute();
 
-const breadcrumbs = computed(() => route.matched.filter((f) => !f.meta?.tab && f.meta?.title));
+const isHome = computed(() => route.path === "/dashboard");
+
+const breadcrumbs = computed(() => {
+	const matched = route.matched.filter((item) => item.meta?.title && item.path !== "/dashboard");
+	return matched.filter((item, index) => item.meta.title !== matched[index - 1]?.meta.title);
+});
 </script>
 
 <style scoped lang="scss">

@@ -3,9 +3,9 @@
 		ref="faDialogRef"
 		width="500"
 		:title="state.dialogTitle"
-		:showConfirmButton="!state.formDisabled"
-		:showBeforeClose="!state.formDisabled"
-		confirmButtonText="保存"
+		:show-confirm-button="!state.formDisabled"
+		:show-before-close="!state.formDisabled"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
@@ -44,17 +44,17 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { type FormRules } from "element-plus";
+import { useVModel } from "@vueuse/core";
+import { reactive, useTemplateRef } from "vue";
 import { FaDialog } from "fast-element-plus";
 import { definePropType, withDefineType } from "@fast-china/utils";
-import { useVModel } from "@vueuse/core";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
-import { EditMenuButtonInput } from "@/api/services/Center/menu/models/EditMenuButtonInput";
 import { useApp } from "@/stores";
+import type { FormRules } from "element-plus";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { EditMenuButtonInput } from "@/api/services/Center/menu/models/EditMenuButtonInput";
 
 defineOptions({
 	name: "DevMenuEditButtonEdit",
@@ -72,8 +72,8 @@ const roleTypeEnum = appStore.getDictionary("RoleTypeEnum");
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<
@@ -157,7 +157,7 @@ const add = () => {
 };
 
 const edit = (row: EditMenuButtonInput, index: number) => {
-	faDialogRef.value.open(async () => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		state.tableIndex = index;

@@ -1,12 +1,12 @@
 <template>
-	<FaDialog ref="faDialogRef" width="1000" :title="state.dialogTitle" :showConfirmButton="false">
+	<FaDialog ref="faDialogRef" width="1000" :title="state.dialogTitle" :show-confirm-button="false">
 		<el-row>
 			<el-col :span="4" style="text-align: center">
 				<FaImage style="height: 100px; width: 100px" :src="state.formData.avatar" />
 			</el-col>
 
 			<el-col :span="20">
-				<FaForm :model="state.formData" detailForm cols="2">
+				<FaForm :model="state.formData" detail-form cols="2">
 					<FaFormItem prop="mobile" label="手机">
 						<el-text type="primary">{{ state.formData.mobile }}</el-text>
 					</FaFormItem>
@@ -16,17 +16,8 @@
 					<FaFormItem prop="nickName" label="昵称">
 						{{ state.formData.nickName }}
 					</FaFormItem>
-					<FaFormItem prop="phone" label="电话">
-						{{ state.formData.phone }}
-					</FaFormItem>
 					<FaFormItem prop="status" label="状态">
 						<Text name="CommonStatusEnum" :value="state.formData.status" />
-					</FaFormItem>
-					<FaFormItem prop="sex" label="性别">
-						<Text name="GenderEnum" :value="state.formData.sex" />
-					</FaFormItem>
-					<FaFormItem prop="birthday" label="生日">
-						<el-text>{{ state.formData.birthday }}</el-text>
 					</FaFormItem>
 					<FaFormItem prop="createdTime" label="创建时间">
 						{{ dayjs(state.formData.createdTime).format("YYYY-MM-DD HH:mm:ss") }}
@@ -41,9 +32,9 @@
 			</el-col>
 		</el-row>
 
-		<FaForm :model="state.formData" detailForm cols="2">
+		<FaForm :model="state.formData" detail-form cols="2">
 			<FaLayoutGridItem span="2">
-				<el-divider contentPosition="left">初次登录信息</el-divider>
+				<el-divider content-position="left">初次登录信息</el-divider>
 			</FaLayoutGridItem>
 			<FaFormItem prop="firstLoginTenantName" label="租户">
 				<el-text type="primary">{{ state.formData.firstLoginTenantName }}</el-text>
@@ -71,7 +62,7 @@
 			</FaFormItem>
 
 			<FaLayoutGridItem span="2">
-				<el-divider contentPosition="left">最后登录信息</el-divider>
+				<el-divider content-position="left">最后登录信息</el-divider>
 			</FaLayoutGridItem>
 			<FaFormItem prop="lastLoginTenantName" label="租户">
 				<el-text type="primary">{{ state.formData.lastLoginTenantName }}</el-text>
@@ -99,7 +90,7 @@
 			</FaFormItem>
 
 			<FaLayoutGridItem span="2">
-				<el-divider contentPosition="left">验证信息</el-divider>
+				<el-divider content-position="left">验证信息</el-divider>
 			</FaLayoutGridItem>
 			<FaFormItem prop="passwordErrorTime" label="错误次数">
 				<template v-if="state.formData.passwordErrorTime > 0">
@@ -122,18 +113,18 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive, useTemplateRef } from "vue";
 import { dayjs } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { accountApi } from "@/api/services/Center/account";
-import { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
 import type { FaDialogInstance } from "fast-element-plus";
+import type { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
 
 defineOptions({
 	name: "SystemAccountEdit",
 });
 
-const faDialogRef = ref<FaDialogInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 
 const state = reactive({
 	formData: withDefineType<QueryAccountDetailOutput>({}),

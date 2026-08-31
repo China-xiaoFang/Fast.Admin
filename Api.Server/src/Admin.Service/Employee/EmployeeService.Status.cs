@@ -27,7 +27,6 @@ using Fast.AdminLog.Domain.Enum;
 using Fast.Center.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Yitter.IdGenerator;
 
 namespace Fast.Admin.Service.Employee;
@@ -81,6 +80,16 @@ public partial class EmployeeService
     {
         var employeeModel = await GetEmployeeWithinDataScope(input.EmployeeId);
 
+        if (employeeModel.EmployeeId == _user.EmployeeId)
+        {
+            throw new UserFriendlyException("禁止将当前登录职员设为离职！");
+        }
+
+        if (employeeModel.Status == EmployeeStatusEnum.Resigned)
+        {
+            throw new UserFriendlyException("该职员已离职，请勿重复操作！");
+        }
+
         // 开启事务
         await _repository.Ado.BeginTranAsync();
         await _centerRepository.Ado.BeginTranAsync();
@@ -115,6 +124,7 @@ public partial class EmployeeService
         }
 
         await _user.RevokeEmployee(_user.TenantNo, employeeModel.EmployeeNo);
+        await ForceEmployeeOffline(employeeModel.EmployeeId, "职员已离职");
 
         // 操作日志
         await LogContext.OperateLog(new OperateLogDto
@@ -141,6 +151,11 @@ public partial class EmployeeService
         }
 
         var employeeModel = await GetEmployeeWithinDataScope(input.EmployeeId);
+
+        if (employeeModel.Status == EmployeeStatusEnum.Resigned)
+        {
+            throw new UserFriendlyException("禁止为已离职的职员绑定登录账号！");
+        }
 
         if (await _centerRepository.Queryable<TenantUserModel>()
                 .AnyAsync(a => a.EmployeeId == employeeModel.EmployeeId))
@@ -259,6 +274,11 @@ public partial class EmployeeService
     {
         var employeeModel = await GetEmployeeWithinDataScope(input.EmployeeId);
 
+        if (employeeModel.RowVersion != input.RowVersion)
+        {
+            throw new UserFriendlyException("职员信息已发生变化，请刷新后重试！");
+        }
+
         if (employeeModel.Status == EmployeeStatusEnum.Resigned)
         {
             throw new UserFriendlyException("禁止操作已离职的职员！");
@@ -276,6 +296,11 @@ public partial class EmployeeService
             throw new UserFriendlyException("禁止更改当前登录账号状态！");
         }
 
+        if (input.AccountStatus != null && input.AccountStatus != tenantUserModel.Status)
+        {
+            throw new UserFriendlyException("登录账号状态已发生变化，请刷新后重试！");
+        }
+
         tenantUserModel.Status = tenantUserModel.Status switch
         {
             CommonStatusEnum.Enable => CommonStatusEnum.Disable,
@@ -289,26 +314,7 @@ public partial class EmployeeService
         if (tenantUserModel.Status == CommonStatusEnum.Disable)
         {
             await _user.RevokeEmployee(_user.TenantNo, employeeModel.EmployeeNo);
-
-            // 强制下线在线用户
-            var connectionId = await _centerRepository.Queryable<TenantOnlineUserModel>()
-                .Where(wh => wh.IsOnline)
-                .Where(wh => wh.EmployeeId == tenantUserModel.EmployeeId)
-                .Select(sl => sl.ConnectionId)
-                .SingleAsync();
-
-            if (!string.IsNullOrWhiteSpace(connectionId))
-            {
-                await _hubContext.Clients.Clients(connectionId)
-                    .ForceOffline(new ForceOfflineOutput
-                    {
-                        IsAdmin = _user.IsSuperAdmin || _user.IsAdmin,
-                        NickName = _user.NickName,
-                        EmployeeNo = _user.EmployeeNo,
-                        OfflineTime = DateTime.Now,
-                        Message = "账号已被禁用"
-                    });
-            }
+            await ForceEmployeeOffline(employeeModel.EmployeeId, "账号已被禁用");
         }
 
         // 操作日志
@@ -320,5 +326,30 @@ public partial class EmployeeService
             BizNo = employeeModel.EmployeeNo,
             Description = $"职员：{employeeModel.EmployeeName}，{tenantUserModel.Status.GetDescription()}登录账号"
         });
+    }
+
+    /// <summary>
+    /// 强制下线职员的全部在线会话
+    /// </summary>
+    private async Task ForceEmployeeOffline(long employeeId, string message)
+    {
+        var connectionIds = await _centerRepository.Queryable<TenantOnlineUserModel>()
+            .Where(wh => wh.IsOnline)
+            .Where(wh => wh.TenantId == _user.TenantId)
+            .Where(wh => wh.EmployeeId == employeeId)
+            .Select(sl => sl.ConnectionId)
+            .ToListAsync();
+        if (connectionIds.Count == 0)
+            return;
+
+        await _hubContext.Clients.Clients(connectionIds)
+            .ForceOffline(new ForceOfflineOutput
+            {
+                IsAdmin = _user.IsSuperAdmin || _user.IsAdmin,
+                NickName = _user.NickName,
+                EmployeeNo = _user.EmployeeNo,
+                OfflineTime = DateTime.Now,
+                Message = message
+            });
     }
 }

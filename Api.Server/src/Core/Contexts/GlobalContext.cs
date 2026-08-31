@@ -37,7 +37,7 @@ public class GlobalContext
         {
             string result;
             var httpContext = FastContext.HttpContext;
-            if (httpContext.IsWebSocketRequest())
+            if (httpContext.WebSockets.IsWebSocketRequest)
             {
                 result = httpContext.Request.Query[HttpHeaderConst.Origin]
                     .ToString()
@@ -66,7 +66,7 @@ public class GlobalContext
         {
             string result;
             var httpContext = FastContext.HttpContext;
-            if (httpContext.IsWebSocketRequest())
+            if (httpContext.WebSockets.IsWebSocketRequest)
             {
                 result = httpContext.Request.Query[HttpHeaderConst.DeviceType]
                     .ToString()
@@ -95,17 +95,19 @@ public class GlobalContext
         {
             string result;
             var httpContext = FastContext.HttpContext;
-            if (httpContext.IsWebSocketRequest())
+            if (httpContext.WebSockets.IsWebSocketRequest)
             {
                 result = httpContext.Request.Query[HttpHeaderConst.DeviceId]
                     .ToString()
-                    .UrlDecode();
+                    .UrlDecode()
+                    .Trim();
             }
             else
             {
                 result = httpContext.Request.Headers[HttpHeaderConst.DeviceId]
                     .ToString()
-                    .UrlDecode();
+                    .UrlDecode()
+                    .Trim();
             }
 
             if (!string.IsNullOrWhiteSpace(result))

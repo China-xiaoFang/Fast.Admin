@@ -146,18 +146,18 @@ if (!app.Environment.IsDevelopment())
 // 启用 Body 重复读功能
 app.EnableBuffering();
 
+// 启用 WebSocket
+app.UseWebSockets();
+
 // 请求中间件
 app.UseMiddleware<RequestMiddleware>();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseRateLimiter();
 
-app.UseAuthentication();
 app.UseAuthorization();
-
-// 启用 WebSocket
-app.UseWebSockets();
 
 // 启用集线器
 app.UseMapHub();

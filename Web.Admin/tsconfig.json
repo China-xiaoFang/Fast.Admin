@@ -1,59 +1,86 @@
 {
 	"compilerOptions": {
-		/* 项目是否需要编译 Enable project compilation */
-		"composite": false,
-		/* 编译目标版本，ESNext 表示使用最新的 ECMAScript 特性 */
+		/* 仅用于类型检查；Vite 的实际浏览器兼容目标由 build.target 控制。 */
 		"target": "ESNext",
-		/* JSX 的编译方式 */
+		/* 保留 JSX/TSX 语法，交给 Vue JSX 插件和 Vite 继续转换。 */
 		"jsx": "preserve",
-		/* 编译时包含的库类型 */
-		"lib": ["ESNext", "DOM"],
+		/* 使用 Vue 3 的 JSX 类型定义，避免被识别为 React JSX。 */
+		"jsxImportSource": "vue",
+		/* 提供最新 ECMAScript、浏览器 DOM 及可迭代 DOM 集合类型。 */
+		"lib": ["ESNext", "DOM", "DOM.Iterable"],
+		/* 将所有源码按模块处理，避免无 import/export 文件污染全局作用域。 */
 		"moduleDetection": "force",
-		/** https://cn.vitejs.dev/guide/features.html#typescript-compiler-options */
+		/* 使用符合 ECMAScript 标准的类字段初始化语义。 */
 		"useDefineForClassFields": true,
-		"experimentalDecorators": true,
-		/** baseUrl 用来告诉编译器到哪里去查找模块，使用非相对模块时必须配置此项 */
-		"baseUrl": "./",
+
+		/* 保留 ESM，由 Vite 负责打包和降级转换。 */
 		"module": "ESNext",
-		"moduleResolution": "bundler",
-		/** 非相对模块导入的路径映射配置，根据 baseUrl 配置进行路径计算 */
+		/* 使用适合 Vite 等打包器的模块解析策略，并支持 package.json 的 imports/exports。 */
+		"moduleResolution": "Bundler",
+		/* 路径别名必须与 vite.config.ts 中的 resolve.alias 保持一致。 */
 		"paths": {
-			"@": ["src"],
-			"@/*": ["src/*"]
+			"@": ["./src"],
+			"@/*": ["./src/*"]
 		},
+		/* 允许直接导入 JSON，并获得其结构类型。 */
 		"resolveJsonModule": true,
+		/* 限定通用全局类型；框架或组件库的专属类型应在项目自己的 .d.ts 文件中引入。 */
 		"types": [
+			/* 提供 Node.js 全局变量、内置模块和 Vite 配置文件所需类型。 */
 			"node",
-			/** Element Plus 的 Volar 插件支持 */
+			/* 提供 import.meta.env、HMR、CSS/LESS/SCSS 和静态资源导入声明。 */
+			"vite/client",
+			/* 注册 Element Plus 全局组件类型，供 Volar 提示和模板类型检查。 */
 			"element-plus/global",
-			/** 组件库 的 Volar 插件支持 */
+			/* 注册 Fast Element Plus 全局组件类型，供 Volar 提示和模板类型检查。 */
 			"fast-element-plus/global"
 		],
+		/* 允许通过 *.d.<extension>.ts 为 CSS、LESS、SCSS 等任意扩展名提供精确声明。 */
+		"allowArbitraryExtensions": true,
+		/* noEmit 模式下允许显式导入 .ts、.tsx 等 TypeScript 扩展名。 */
 		"allowImportingTsExtensions": true,
-		/* 报告.js文件中的错误  Report errors in .js files. */
+
+		/* 允许项目逐步接入现有 JavaScript 和 JSX 文件。 */
+		"allowJs": true,
+		/* 纳入 JavaScript 模块解析，但不强制检查旧 JavaScript 文件内部错误。 */
 		"checkJs": false,
-		/** TS 严格模式 */
+
+		/* 启用 TypeScript 完整严格模式。 */
 		"strict": true,
-		/* 启用严格null检查 Enable strict null checks. */
+		/* 关闭 null 和 undefined 的严格类型检查。 */
 		"strictNullChecks": false,
-		/* 如果编译器无法根据变量的使用来判断类型时，将用 any 类型代替 Raise error on expressions and declarations with an implied 'any' type. */
-		"noImplicitAny": false,
-		/* 报告值为undefined的错误 Include 'undefined' in index signature results */
-		"noUncheckedIndexedAccess": false,
-		/* 报告没有使用的变量错误的地方 Report errors on unused locals. */
+		/* 防止 switch 分支意外贯穿。 */
+		"noFallthroughCasesInSwitch": true,
+		/* 派生类覆盖基类成员时必须显式使用 override。 */
+		"noImplicitOverride": true,
+		/* 要求函数的所有可达分支显式返回，避免意外得到 undefined。 */
+		"noImplicitReturns": true,
+		/* 索引访问结果包含 undefined，强制处理数组越界和不存在的动态键。 */
+		"noUncheckedIndexedAccess": true,
+		/* 报告未使用的局部变量。 */
 		"noUnusedLocals": true,
-		"declaration": true,
-		"importHelpers": true,
+		/* 报告未使用的函数参数；有意忽略的参数可使用下划线前缀。 */
+		"noUnusedParameters": true,
+		/* catch 变量使用 unknown，必须先缩小类型再访问。 */
+		"useUnknownInCatchVariables": true,
+
+		/* 只执行类型检查，不让 TypeScript 输出文件；构建产物统一由 Vite 生成。 */
 		"noEmit": true,
-		/* 编译是否需要移除注释信息 Do not emit comments to output. */
-		"removeComments": false,
-		"sourceMap": true,
-		"allowSyntheticDefaultImports": true,
+
+		/* 改善 CommonJS 与 ESM 默认导入的互操作类型行为。 */
 		"esModuleInterop": true,
-		/** https://cn.vitejs.dev/guide/features.html#typescript-compiler-options */
+		/* 防止不同操作系统的文件名大小写差异导致构建失败。 */
+		"forceConsistentCasingInFileNames": true,
+		/* 保证每个文件都能被 Vite 独立转换，不依赖跨文件类型信息生成代码。 */
 		"isolatedModules": true,
+		/* 完整保留值导入，强制使用 import type/export type 表达纯类型依赖。 */
+		"verbatimModuleSyntax": true,
+
+		/* 跳过第三方声明文件内部检查，避免依赖类型版本差异拖慢或阻断应用构建。 */
 		"skipLibCheck": true
 	},
-	/** 编译器默认排除的编译文件 */
-	"exclude": ["node_modules", "dist"]
+	/* src 覆盖应用源码，types 集中存放公共声明；HTML 与样式文件由 Vite 处理。 */
+	"include": ["src", "types", "vite.config.*"],
+	/* 依赖、构建结果和覆盖率产物不参与项目类型检查。 */
+	"exclude": ["node_modules", "dist", "coverage"]
 }

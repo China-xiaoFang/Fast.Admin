@@ -1,7 +1,8 @@
+import { defineStore } from "pinia";
 import { reactive } from "vue";
 import { ElMessage } from "element-plus";
-import { colorUtil, withDefineType } from "@fast-china/utils";
-import { defineStore } from "pinia";
+import { mixHexColors, withDefineType } from "@fast-china/utils";
+import { useApp } from "../app";
 import type { componentSizes } from "element-plus";
 import type { FaTableDataRange } from "fast-element-plus";
 
@@ -24,7 +25,6 @@ const defaultSize: (typeof componentSizes)[number] = "default";
 const defaultMode: IModeName = "Classic";
 const defaultNavTab: INavTabStyle = "Smart";
 const defaultAnimation: IAnimationName = "slide-right";
-export const defaultThemeColor = "#409EFF";
 
 const defaultLayoutSize = {
 	navBarHeight: 45,
@@ -60,7 +60,7 @@ export const useConfig = defineStore(
 			/** 切换动画 */
 			mainAnimation: withDefineType<IAnimationName>(defaultAnimation),
 			/** 主题颜色 */
-			themeColor: withDefineType<string>(defaultThemeColor),
+			themeColor: "",
 			/** 导航栏高度 */
 			navBarHeight: 45,
 			/** 页签高度 */
@@ -85,6 +85,12 @@ export const useConfig = defineStore(
 			isWeak: false,
 			/** 是否显示页签 */
 			navTab: true,
+			/** 是否显示面包屑 */
+			breadcrumb: true,
+			/** 是否显示菜单搜索 */
+			menuSearch: true,
+			/** 是否显示全屏入口 */
+			screenFull: true,
 			/** 是否显示页脚 */
 			footer: true,
 			/** 是否显示水印 */
@@ -122,23 +128,24 @@ export const useConfig = defineStore(
 		/** 设置主题色 */
 		const setTheme = (color: string): void => {
 			if (!color) {
-				color = defaultThemeColor;
-				ElMessage({ type: "success", message: `主题颜色已重置为 ${defaultThemeColor}` });
+				color = useApp().themeColor;
+				ElMessage({ type: "success", message: `主题颜色已重置为 ${color}` });
 			}
 			// 计算主题颜色变化
 			document.documentElement.style.setProperty("--el-color-primary", color);
 			for (let i = 1; i <= 9; i++) {
-				const primaryColor = layout.isDark ? `${colorUtil.getDarkColor(color, i / 10)}` : `${colorUtil.getLightColor(color, i / 10)}`;
+				const primaryColor = layout.isDark ? mixHexColors(color, "#141414", i / 10) : mixHexColors(color, "#ffffff", i / 10);
 				document.documentElement.style.setProperty(`--el-color-primary-light-${i}`, primaryColor);
 			}
 			for (let i = 1; i <= 9; i++) {
-				const primaryColor = layout.isDark ? `${colorUtil.getDarkColor(color, i / 10)}` : `${colorUtil.getLightColor(color, i / 10)}`;
+				const primaryColor = layout.isDark ? mixHexColors(color, "#141414", i / 10) : mixHexColors(color, "#ffffff", i / 10);
 				document.documentElement.style.setProperty(`--el-color-primary-dark-${i}`, primaryColor);
 			}
 			layout.themeColor = color;
 		};
 
 		const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+		let themeMediaListening = false;
 
 		/** 切换深色模式 */
 		const switchDark = (): void => {
@@ -188,7 +195,10 @@ export const useConfig = defineStore(
 		/** 初始化主题 */
 		const initTheme = (): void => {
 			switchAutoThemMode();
-			darkModeMediaQuery.addEventListener("change", switchAutoThemMode);
+			if (!themeMediaListening) {
+				darkModeMediaQuery.addEventListener("change", switchAutoThemMode);
+				themeMediaListening = true;
+			}
 			switchDark();
 			if (layout.isGrey) switchGreyOrWeak("grey", true);
 			if (layout.isWeak) switchGreyOrWeak("weak", true);
@@ -196,16 +206,12 @@ export const useConfig = defineStore(
 
 		/** 设置默认布局大小 */
 		const setDefaultLayoutSize = (): void => {
-			Object.keys(defaultLayoutSize).forEach((key) => {
-				layout[key] = defaultLayoutSize[key];
-			});
+			Object.assign(layout, defaultLayoutSize);
 		};
 
 		/** 设置小的布局大小 */
 		const setSmallLayoutSize = (): void => {
-			Object.keys(smallLayoutSize).forEach((key) => {
-				layout[key] = smallLayoutSize[key];
-			});
+			Object.assign(layout, smallLayoutSize);
 		};
 
 		/** 重置 */
@@ -216,12 +222,15 @@ export const useConfig = defineStore(
 			layout.layoutMode = defaultMode;
 			layout.navTabStyle = defaultNavTab;
 			layout.mainAnimation = defaultAnimation;
-			layout.themeColor = defaultThemeColor;
+			layout.themeColor = useApp().themeColor;
 			layout.autoThemMode = true;
 			layout.isDark = false;
 			layout.isGrey = false;
 			layout.isWeak = false;
 			layout.navTab = true;
+			layout.breadcrumb = true;
+			layout.menuSearch = true;
+			layout.screenFull = true;
 			layout.footer = true;
 			layout.watermark = true;
 			setDefaultLayoutSize();

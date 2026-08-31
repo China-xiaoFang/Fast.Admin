@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1D1FXFM1GH" rowKey="accountId" :requestApi="accountApi.queryAccountPaged" hideSearchTime>
+		<FastTable ref="fastTableRef" table-key="1D1FXFM1GH" row-key="accountId" :request-api="accountApi.queryAccountPaged" hide-search-time>
 			<template #mobile="{ row }: { row?: QueryAccountPagedOutput }">
 				<el-button link type="primary" @click="editFormRef.detail(row.accountId)">{{ row.nickName }}</el-button>
 				<br />
@@ -16,7 +16,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.firstLoginTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.firstLoginTime" type="info" round effect="light" size="small" class="ml5">
-					{{ dateUtil.dateTimeFix(String(row.firstLoginTime)) }}
+					{{ formatChineseRelativeTime(String(row.firstLoginTime)) }}
 				</el-tag>
 			</template>
 
@@ -35,7 +35,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.lastLoginTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.lastLoginTime" type="info" round effect="light" size="small" class="ml5">
-					{{ dateUtil.dateTimeFix(String(row.lastLoginTime)) }}
+					{{ formatChineseRelativeTime(String(row.lastLoginTime)) }}
 				</el-tag>
 			</template>
 
@@ -85,67 +85,64 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { useTemplateRef } from "vue";
 import { ElMessage, ElMessageBox, dayjs } from "element-plus";
-import { dateUtil } from "@fast-china/utils";
+import { formatChineseRelativeTime } from "@fast-china/utils";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { accountApi } from "@/api/services/Center/account";
-import { QueryAccountPagedOutput } from "@/api/services/Center/account/models/QueryAccountPagedOutput";
 import AccountEdit from "./edit/index.vue";
+import type { QueryAccountPagedOutput } from "@/api/services/Center/account/models/QueryAccountPagedOutput";
 import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemAccount",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof AccountEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof AccountEdit>>("editFormRef");
 
 /** 处理重置密码 */
 const handleResetPassword = (row: QueryAccountPagedOutput) => {
 	const { accountId, rowVersion } = row;
-	ElMessageBox.confirm(`确定重置密码？`, {
+	void ElMessageBox.confirm("确定重置密码？", {
 		type: "warning",
-		async beforeClose() {
-			await accountApi.resetPassword({
-				accountId,
-				rowVersion,
-			});
-			ElMessage.success("操作成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await accountApi.resetPassword({
+			accountId,
+			rowVersion,
+		});
+		ElMessage.success("操作成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 
 /** 处理解锁 */
 const handleUnlock = (row: QueryAccountPagedOutput) => {
 	const { accountId, rowVersion } = row;
-	ElMessageBox.confirm(`确定解锁账号？`, {
+	void ElMessageBox.confirm("确定解锁账号？", {
 		type: "warning",
-		async beforeClose() {
-			await accountApi.unlock({
-				accountId,
-				rowVersion,
-			});
-			ElMessage.success("操作成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await accountApi.unlock({
+			accountId,
+			rowVersion,
+		});
+		ElMessage.success("操作成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 
 /** 处理状态变更 */
 const handleChangeStatus = (row: QueryAccountPagedOutput) => {
 	const { accountId, status, rowVersion } = row;
-	ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}账号？`, {
+	void ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}账号？`, {
 		type: "warning",
-		async beforeClose() {
-			await accountApi.changeStatus({
-				accountId,
-				rowVersion,
-			});
-			ElMessage.success("操作成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await accountApi.changeStatus({
+			accountId,
+			rowVersion,
+		});
+		ElMessage.success("操作成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

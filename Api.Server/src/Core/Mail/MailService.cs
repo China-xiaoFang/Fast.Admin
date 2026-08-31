@@ -20,6 +20,8 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using System.Net;
+using System.Text.RegularExpressions;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
@@ -34,6 +36,11 @@ namespace Fast.Core;
 public class MailService : IMailService
 {
     /// <summary>
+    /// 缓存
+    /// </summary>
+    private readonly ICache<CenterCCL> _centerCache;
+
+    /// <summary>
     /// 邮件配置
     /// </summary>
     private readonly MailSettingsOptions _mailSettingsOptions;
@@ -46,135 +53,241 @@ public class MailService : IMailService
     /// <summary>
     /// 初始化邮件服务
     /// </summary>
-    public MailService(IOptions<MailSettingsOptions> options, ILogger<IMailService> logger)
+    public MailService(IOptions<MailSettingsOptions> options, ICache<CenterCCL> centerCache, ILogger<IMailService> logger)
     {
         _mailSettingsOptions = options.Value;
+        _centerCache = centerCache;
         _logger = logger;
     }
 
     /// <inheritdoc />
     public string GetEmailTemplate(string title, string msg, string type = null)
     {
-        return """
-               <style>
-                 p {
-                   padding: 0;
-                   margin: 0;
-                 }
-                 pre {
-                   padding: 20px 30px;
-                   margin: 20px 10px;
-                   white-space: pre-wrap;
-                   word-wrap: break-word;
-                   color: #909399;
-                   background-color: #f2f3f5;
-                 }
-                 .email_main {
-                   display: flex;
-                   flex-direction: column;
-                   justify-content: start;
-                   align-items: center;
-                   height: 100%;
-                   width: 100%;
-                   font-family: "Helvetica", "Arial", sans-serif;
-                   font-weight: normal;
-                   line-height: 24px;
-                   font-size: 14px;
-                   margin: 0;
-                   padding: 0;
-                   color: #303133;
-                   background-color: #f2f3f5;
-                 }
-                 .email_main_warp {
-                   width: 100%;
-                   max-width: 780px;
-                   min-width: 280px;
-                   padding: 20px;
-                   text-align: center;
-                   box-sizing: border-box;
-                 }
-                 .header {
-                   font-size: 32px;
-                   font-weight: bold;
-                   color: #303133;
-                   display: flex;
-                   align-items: center;
-                   justify-content: center;
-                   gap: 10px;
-                 }
-                 .content {
-                   margin: 20px 0;
-                   background-color: #ffffff;
-                   border: 1px solid #dcdfe6;
-                 }
-                 .footer a {
-                   color: #909399;
-                   text-decoration: none !important;
-                   letter-spacing: 0.5px;
-                 }
-                 .logo {
-                   height: 80px !important;
-                 }
-                 .content_header {
-                   /* color: #ffffff; */
-                   font-size: 18px;
-                   font-weight: bold;
-                   padding: 20px 0;
-                 }
-                 .content_header.info {
-                   background-color: #303133;
-                 }
-                 .content_header.warn {
-                   background-color: #e6a23c;
-                 }
-                 .content_header.error {
-                   background-color: #f56c6c;
-                 }
-                 .content_warp {
-                   padding: 20px 0;
-                   margin: 0 50px;
-                   text-align: left;
-                   border-bottom: 1px solid #dcdfe6;
-                 }
-                 .content_warp.warn,
-                 .content_warp .warn {
-                   color: #e6a23c !important;
-                   font-weight: bold !important;
-                 }
-                 .content_warp.error,
-                 .content_warp .error {
-                   color: #f56c6c !important;
-                   font-weight: bold !important;
-                 }
-                 .content_footer {
-                   padding: 20px 0;
-                   color: #909399;
-                   font-size: 12px;
-                 }
-               </style>
-               <div class="email_main">
-                 <div class="email_main_warp">
-                   <div class="header">
-                     <img class="logo" src="https://cdn.fastdotnet.com/logo/fast/logo.png" />
-                     <span>FastDotNet</span>
-                   </div>
-                   <div class="content">
-                     <div class="content_header {{type}}">{{title}}</div>
-                     <div class="content_warp {{type}}">{{msg}}</div>
-                     <div class="content_footer">
-                       If you have any questions, please contact the administrator. Send time
-                       {{DateTime.Now:yyyy-MM-dd HH:mm:ss}}.
-                     </div>
-                   </div>
-                   <div class="footer">
-                     <a href="http://fastdotnet.com" target="_blank">
-                       Copyright © {{DateTime.Now:yyyy}} FastDotNet All rights reserved.
-                     </a>
-                   </div>
-                 </div>
-               </div>
+        var (accentColor, badgeBackgroundColor, badgeText) = type?.Trim()
+                .ToLowerInvariant() switch
+            {
+                "warn" => ("#d97706", "#fff7ed", "重要提醒"),
+                "error" => ("#dc2626", "#fef2f2", "异常通知"),
+                _ => ("#2563eb", "#eff6ff", "系统通知")
+            };
+        var displayName = string.IsNullOrWhiteSpace(_mailSettingsOptions.DisplayName)
+            ? "FastDotNet"
+            : _mailSettingsOptions.DisplayName;
+        var encodedTitle = WebUtility.HtmlEncode(title);
+        var encodedDisplayName = WebUtility.HtmlEncode(displayName);
+        var sendTime = DateTime.Now;
 
-               """;
+        return $$"""
+                 <!doctype html>
+                 <html lang="zh-CN">
+                 <head>
+                 	<meta charset="utf-8" />
+                 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+                 	<meta name="color-scheme" content="light only" />
+                 	<title>{{encodedTitle}}</title>
+                 	<style>
+                 		body, table, td, p { margin: 0; padding: 0; }
+                 		table { border-collapse: collapse; }
+                 		.mail-content p { margin: 0 0 14px; }
+                 		.mail-content p:last-child { margin-bottom: 0; }
+                 		.mail-content pre {
+                 			margin: 16px 0 0;
+                 			padding: 16px;
+                 			overflow-wrap: anywhere;
+                 			white-space: pre-wrap;
+                 			word-break: break-word;
+                 			border: 1px solid #e2e8f0;
+                 			border-radius: 8px;
+                 			color: #475569;
+                 			background-color: #f8fafc;
+                 			font:
+                 				12px/1.6 Consolas,
+                 				Monaco,
+                 				monospace;
+                 		}
+                 		.mail-content .warn { color: #d97706 !important; font-weight: 700 !important; }
+                 		.mail-content .error { color: #dc2626 !important; font-weight: 700 !important; }
+                 		@media only screen and (max-width: 680px) {
+                 			.mail-shell { padding: 24px 12px !important; }
+                 			.mail-card-content { padding: 28px 22px !important; }
+                 		}
+                 	</style>
+                 </head>
+                 <body style="width: 100%; margin: 0; padding: 0; color: #334155; background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Arial, sans-serif;">
+                 	<div style="display: none; max-height: 0; overflow: hidden; opacity: 0; color: transparent">
+                 		{{encodedTitle}} · {{encodedDisplayName}}
+                 	</div>
+                 	<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width: 100%; margin: 0 auto; background-color: #f1f5f9">
+                 		<tr>
+                 			<td class="mail-shell" align="center" style="padding: 40px 16px">
+                 				<table role="presentation" align="center" width="640" cellpadding="0" cellspacing="0" style="width: 100%; max-width: 640px; margin: 0 auto">
+                 					<tr>
+                 						<td align="center" style="padding: 0 4px 20px">
+                 							<table role="presentation" align="center" cellpadding="0" cellspacing="0" style="margin: 0 auto">
+                 								<tr>
+                 									<td width="58" height="58" align="center" style="width: 58px; height: 58px">
+                 										<img src="https://cdn.fastdotnet.com/logo/fast/logo.png" alt="{{encodedDisplayName}}" width="58" height="58" style="display: block; width: 58px; height: 58px; border: 0; outline: none; text-decoration: none" />
+                 									</td>
+                 									<td style="padding-left: 12px; color: #0f172a; font-size: 24px; font-weight: 700; letter-spacing: -0.2px">
+                 										{{encodedDisplayName}}
+                 									</td>
+                 								</tr>
+                 							</table>
+                 						</td>
+                 					</tr>
+                 					<tr>
+                 						<td style="border: 1px solid #e2e8f0; border-radius: 16px;background-color: #ffffff; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);overflow: hidden;">
+                 							<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                 								<tr>
+                 									<td height="5" style="height: 5px; background-color:{{accentColor}}; font-size:0; line-height:0;">
+                 										&nbsp;
+                 									</td>
+                 								</tr>
+                 								<tr>
+                 									<td class="mail-card-content" style="padding: 36px 42px 32px">
+                 										<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                 											<tr>
+                 												<td>
+                 													<span style="display: inline-block; padding: 5px 10px; border-radius: 999px; color: {{accentColor}}; background-color: {{badgeBackgroundColor}}; font-size: 12px; font-weight: 700; line-height: 18px;">
+                 														{{badgeText}}
+                 													</span>
+                 												</td>
+                 											</tr>
+                 											<tr>
+                 												<td style="padding: 16px 0 22px; color: #0f172a; font-size: 24px; font-weight: 750; line-height: 1.4;">
+                 													{{encodedTitle}}
+                 												</td>
+                 											</tr>
+                 											<tr>
+                 												<td class="mail-content" style="padding-top: 22px; border-top: 1px solid #e2e8f0; color: #475569; font-size: 15px; line-height: 1.75;">
+                 													{{msg}}
+                 												</td>
+                 											</tr>
+                 										</table>
+                 									</td>
+                 								</tr>
+                 								<tr>
+                 									<td style="padding: 18px 42px; border-top: 1px solid #e2e8f0; color: #94a3b8; background-color: #f8fafc; font-size: 12px; line-height: 1.7; ">
+                 										If you have any questions, please contact the administrator.<br />
+                 										This email was sent automatically. Please do not reply.<br />
+                 										发送时间：{{sendTime:yyyy-MM-dd HH:mm:ss}}
+                 									</td>
+                 								</tr>
+                 							</table>
+                 						</td>
+                 					</tr>
+                 					<tr>
+                 						<td align="center" style="padding: 22px 16px 0; color: #94a3b8; font-size: 12px; line-height: 1.7">
+                 							<a href="https://fastdotnet.com" target="_blank" style="color: #64748b; text-decoration: none">
+                 								{{encodedDisplayName}}
+                 							</a>
+                 							<br />
+                 							Copyright © 2018 ~ {{sendTime:yyyy}} FastDotNet. All rights reserved.
+                 						</td>
+                 					</tr>
+                 				</table>
+                 			</td>
+                 		</tr>
+                 	</table>
+                 </body>
+                 </html>
+
+                 """;
+    }
+
+    /// <summary>
+    /// 验证码缓存Dto
+    /// </summary>
+    private class VerificationCodeCacheDto
+    {
+        /// <summary>
+        /// 验证码
+        /// </summary>
+        public string VerificationCode { get; set; }
+
+        /// <summary>
+        /// 发送时间
+        /// </summary>
+        public DateTime SendTime { get; set; }
+
+        /// <summary>
+        /// 错误次数
+        /// </summary>
+        /// <remarks>超过5次自动失效</remarks>
+        public int ErrorCount { get; set; }
+    }
+
+    /// <inheritdoc />
+    public async Task SendVerificationCode(MailTypeEnum mailType, string email)
+    {
+        if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, RegexConst.EmailAddress))
+        {
+            throw new UserFriendlyException("邮箱地址不正确！");
+        }
+
+        email = email.Trim()
+            .ToLowerInvariant();
+
+        // 获取缓存Key
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.Mail, mailType.ToString(), email);
+        var dto = await _centerCache.GetAsync<VerificationCodeCacheDto>(cacheKey);
+        if (dto != null && dto.SendTime.AddSeconds(60) > DateTime.Now)
+        {
+            throw new UserFriendlyException("验证码发送过于频繁，请稍后重试！");
+        }
+
+        // 生成验证码
+        dto ??= new VerificationCodeCacheDto();
+        dto.VerificationCode = VerificationUtil.GenNumVerCode();
+        dto.SendTime = DateTime.Now;
+        dto.ErrorCount = 0;
+
+        var mailTypeDescription = mailType.GetDescription();
+        var title = $"【{mailTypeDescription}】邮箱验证码";
+        var content = $$"""
+                        <p>您好：</p>
+                        <p>您正在进行<strong>{{mailTypeDescription}}</strong>操作，请使用以下验证码完成身份校验。</p>
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin: 24px 0;">
+                          <tr>
+                            <td align="center" style="padding: 22px 16px; border: 1px solid #bfdbfe; border-radius: 10px; color: #1d4ed8; background-color: #eff6ff; font-size: 32px; font-weight: 700; letter-spacing: 10px; line-height: 1;">
+                              {{WebUtility.HtmlEncode(dto.VerificationCode)}}
+                            </td>
+                          </tr>
+                        </table>
+                        <p style="color: #64748b;">验证码 5 分钟内有效，请勿向任何人泄露。如非本人操作，请忽略此邮件。</p>
+                        """;
+
+        await SendEmail(title, GetEmailTemplate(title, content), email);
+        await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+    }
+
+    /// <inheritdoc />
+    public async Task SendVerificationCode(MailTypeEnum mailType, string email, string verificationCode)
+    {
+        if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, RegexConst.EmailAddress))
+        {
+            throw new UserFriendlyException("邮箱地址不正确！");
+        }
+
+        email = email.Trim()
+            .ToLowerInvariant();
+
+        // 获取缓存Key
+        var cacheKey = CacheConst.GetCacheKey(CacheConst.Mail, mailType.ToString(), email);
+        var dto = await _centerCache.GetAsync<VerificationCodeCacheDto>(cacheKey);
+        if (dto is not {ErrorCount: < 5})
+        {
+            throw new UserFriendlyException("验证码无效或已过期！");
+        }
+
+        if (!string.Equals(dto.VerificationCode, verificationCode, StringComparison.Ordinal))
+        {
+            dto.ErrorCount++;
+            await _centerCache.SetAsync(cacheKey, dto);
+            throw new UserFriendlyException("验证码无效或已过期！");
+        }
+
+        await _centerCache.DelAsync(cacheKey);
     }
 
     /// <inheritdoc />

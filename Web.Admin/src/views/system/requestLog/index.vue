@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable tableKey="1D1KMSURSS" rowKey="recordId" :requestApi="requestLogApi.queryRequestLogPaged" stripe>
+		<FastTable table-key="1D1KMSURSS" row-key="recordId" :request-api="requestLogApi.queryRequestLogPaged" stripe>
 			<template #mobile="{ row }: { row?: RequestLogModel }">
 				{{ row.nickName }}
 				<br />
@@ -22,7 +22,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.createdTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small" class="ml5">
-					{{ dateUtil.dateTimeFix(String(row.createdTime)) }}
+					{{ formatChineseRelativeTime(String(row.createdTime)) }}
 				</el-tag>
 			</template>
 
@@ -64,15 +64,15 @@
 				<span v-else>--</span>
 			</template>
 		</FastTable>
-		<el-dialog v-model="state.visible" :title="state.title" width="1000px" alignCenter draggable destroyOnClose>
+		<el-dialog v-model="state.visible" :title="state.title" width="1000px" align-center draggable destroy-on-close>
 			<el-scrollbar>
 				<div style="max-height: 500px; padding-bottom: 20px; padding-right: 10px">
 					<VueJsonPretty
 						:data="jsonContent"
 						:deep="3"
-						showLength
-						showLineNumber
-						showIcon
+						show-length
+						show-line-number
+						show-icon
 						virtual
 						:height="500"
 						:theme="configStore.layout.isDark ? 'dark' : 'light'"
@@ -86,11 +86,12 @@
 <script lang="ts" setup>
 import { computed, reactive } from "vue";
 import { dayjs } from "element-plus";
-import { cryptoUtil, dateUtil } from "@fast-china/utils";
+import { AESDecrypt, formatChineseRelativeTime } from "@fast-china/utils";
 import VueJsonPretty from "vue-json-pretty";
 import { requestLogApi } from "@/api/services/Center/requestLog";
-import { RequestLogModel } from "@/api/services/Center/requestLog/models/RequestLogModel";
 import { useConfig, useUserInfo } from "@/stores";
+import type { JSONDataType } from "vue-json-pretty/types/utils";
+import type { RequestLogModel } from "@/api/services/Center/requestLog/models/RequestLogModel";
 
 defineOptions({
 	name: "SystemRequestLog",
@@ -106,12 +107,19 @@ const state = reactive({
 	content: "",
 });
 
-const jsonContent = computed(() => {
+const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null;
+
+const jsonContent = computed<JSONDataType>(() => {
 	try {
-		const result = JSON.parse(state.content);
+		const result = JSON.parse(state.content) as JSONDataType;
 		try {
-			if (state.decrypt && result?.value && result?.value?.timestamp && result?.value?.data) {
-				result.value.data = cryptoUtil.aes.decrypt(result.value.data, `${result.value.timestamp}`, `FIV${result.value.timestamp}`);
+			if (state.decrypt && isRecord(result) && isRecord(result.value)) {
+				const timestamp = result.value.timestamp;
+				const data = result.value.data;
+				if ((typeof timestamp === "string" || typeof timestamp === "number") && typeof data === "string") {
+					const timestampText = String(timestamp);
+					result.value.data = AESDecrypt(data, timestampText, `FIV${timestampText}`).parseJson();
+				}
 				// 处理 ""xxx"" 这种数据
 				if (typeof result.value.data === "string" && result.value.data.startsWith('"') && result.value.data.endsWith('"')) {
 					result.value.data = result.value.data.replace(/"/g, "");

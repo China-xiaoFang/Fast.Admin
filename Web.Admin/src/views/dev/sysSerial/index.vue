@@ -1,6 +1,12 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1D11MFM59S" rowKey="serialRuleId" :requestApi="sysSerialApi.querySysSerialRulePaged" hideSearchTime>
+		<FastTable
+			ref="fastTableRef"
+			table-key="1D11MFM59S"
+			row-key="serialRuleId"
+			:request-api="sysSerialApi.querySysSerialRulePaged"
+			hide-search-time
+		>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button v-auth="'SysSerial:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
@@ -17,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { sysSerialApi } from "@/api/services/Center/sysSerial";
 import SysSerialEdit from "./edit/index.vue";
@@ -28,6 +34,6 @@ defineOptions({
 	name: "DevSysSerial",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof SysSerialEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof SysSerialEdit>>("editFormRef");
 </script>

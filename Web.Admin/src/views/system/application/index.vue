@@ -2,10 +2,10 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1D1F9HNVPQ"
-			rowKey="appId"
-			:requestApi="applicationApi.queryApplicationPaged"
-			hideSearchTime
+			table-key="1D1F9HNVPQ"
+			row-key="appId"
+			:request-api="applicationApi.queryApplicationPaged"
+			hide-search-time
 			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
@@ -31,9 +31,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { applicationApi } from "@/api/services/Center/application";
 import ApplicationEdit from "./edit/index.vue";
 import type { QueryApplicationPagedOutput } from "@/api/services/Center/application/models/QueryApplicationPagedOutput";
@@ -43,23 +43,22 @@ defineOptions({
 	name: "SystemApplication",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof ApplicationEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof ApplicationEdit>>("editFormRef");
 
-const handleCustomCellClick = (_, { row }: { row: QueryApplicationPagedOutput }) => {
+const handleCustomCellClick = (_emitName: string, { row }: { row: QueryApplicationPagedOutput }) => {
 	editFormRef.value.detail(row.appId);
 };
 
 /** 处理删除 */
 const handleDelete = (row: QueryApplicationPagedOutput) => {
 	const { appId, rowVersion } = row;
-	ElMessageBox.confirm("确定要删除应用？", {
+	void ElMessageBox.confirm("确定要删除应用？", {
 		type: "warning",
-		async beforeClose() {
-			await applicationApi.deleteApplication({ appId, rowVersion });
-			ElMessage.success("删除成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await applicationApi.deleteApplication({ appId, rowVersion });
+		ElMessage.success("删除成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

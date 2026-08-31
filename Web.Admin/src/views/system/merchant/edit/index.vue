@@ -3,9 +3,9 @@
 		ref="faDialogRef"
 		width="800"
 		:title="state.dialogTitle"
-		:showConfirmButton="!state.formDisabled"
-		:showBeforeClose="!state.formDisabled"
-		confirmButtonText="保存"
+		:show-confirm-button="!state.formDisabled"
+		:show-before-close="!state.formDisabled"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
@@ -45,14 +45,15 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
+import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 import { merchantApi } from "@/api/services/Center/merchant";
-import { AddMerchantInput } from "@/api/services/Center/merchant/models/AddMerchantInput";
-import { EditMerchantInput } from "@/api/services/Center/merchant/models/EditMerchantInput";
+import type { FormRules } from "element-plus";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { AddMerchantInput } from "@/api/services/Center/merchant/models/AddMerchantInput";
+import type { EditMerchantInput } from "@/api/services/Center/merchant/models/EditMerchantInput";
 
 defineOptions({
 	name: "DevConfigEdit",
@@ -60,8 +61,8 @@ defineOptions({
 
 const emit = defineEmits(["ok"]);
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditMerchantInput & AddMerchantInput>({}),

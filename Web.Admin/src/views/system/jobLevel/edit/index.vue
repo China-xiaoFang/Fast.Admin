@@ -3,9 +3,9 @@
 		ref="faDialogRef"
 		width="500"
 		:title="state.dialogTitle"
-		:showConfirmButton="!state.formDisabled"
-		:showBeforeClose="!state.formDisabled"
-		confirmButtonText="保存"
+		:show-confirm-button="!state.formDisabled"
+		:show-before-close="!state.formDisabled"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
@@ -24,13 +24,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
+import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { jobLevelApi } from "@/api/services/Admin/jobLevel";
-import { AddJobLevelInput } from "@/api/services/Admin/jobLevel/models/AddJobLevelInput";
-import { EditJobLevelInput } from "@/api/services/Admin/jobLevel/models/EditJobLevelInput";
+import type { FormRules } from "element-plus";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { AddJobLevelInput } from "@/api/services/Admin/jobLevel/models/AddJobLevelInput";
+import type { EditJobLevelInput } from "@/api/services/Admin/jobLevel/models/EditJobLevelInput";
 
 defineOptions({
 	name: "SystemJobLevelEdit",
@@ -38,8 +39,8 @@ defineOptions({
 
 const emit = defineEmits(["ok"]);
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditJobLevelInput & AddJobLevelInput>({}),

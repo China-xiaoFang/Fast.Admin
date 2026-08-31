@@ -4,12 +4,12 @@
 			<ApplicationTree @change="handleApplicationChange" />
 			<FastTable
 				ref="fastTableRef"
-				tableKey="1D11Q5S4P2"
-				rowKey="menuId"
-				:requestApi="menuApi.queryMenuPaged"
-				hideSearchTime
+				table-key="1D11Q5S4P2"
+				row-key="menuId"
+				:request-api="menuApi.queryMenuPaged"
+				hide-search-time
 				:pagination="false"
-				defaultExpandAll
+				default-expand-all
 			>
 				<!-- 表格按钮操作区域 -->
 				<template #header>
@@ -78,13 +78,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
-import { ElSelectorOutput } from "fast-element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { menuApi } from "@/api/services/Center/menu";
 import MenuEdit from "./edit/index.vue";
+import type { ElSelectorOutput } from "fast-element-plus";
 import type { QueryMenuPagedOutput } from "@/api/services/Center/menu/models/QueryMenuPagedOutput";
 import type { FastTableInstance } from "@/components";
 
@@ -92,41 +92,39 @@ defineOptions({
 	name: "DevMenu",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof MenuEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof MenuEdit>>("editFormRef");
 
 /** 应用更改 */
 const handleApplicationChange = (data: ElSelectorOutput) => {
 	fastTableRef.value.searchParam.appId = data.value;
-	fastTableRef.value.refresh();
+	void fastTableRef.value.refresh();
 };
 
 /** 处理删除 */
 const handleDelete = (row: QueryMenuPagedOutput) => {
 	const { menuId, rowVersion } = row;
-	ElMessageBox.confirm("确定要删除菜单？", {
+	void ElMessageBox.confirm("确定要删除菜单？", {
 		type: "warning",
-		async beforeClose() {
-			await menuApi.deleteMenu({ menuId, rowVersion });
-			ElMessage.success("删除成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await menuApi.deleteMenu({ menuId, rowVersion });
+		ElMessage.success("删除成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 
 /** 处理状态变更 */
 const handleChangeStatus = (row: QueryMenuPagedOutput) => {
 	const { menuId, status, rowVersion } = row;
-	ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}菜单？`, {
+	void ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}菜单？`, {
 		type: "warning",
-		async beforeClose() {
-			await menuApi.changeStatus({
-				menuId,
-				rowVersion,
-			});
-			ElMessage.success("操作成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await menuApi.changeStatus({
+			menuId,
+			rowVersion,
+		});
+		ElMessage.success("操作成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

@@ -3,9 +3,9 @@
 		ref="faDialogRef"
 		width="500"
 		:title="state.dialogTitle"
-		:showConfirmButton="!state.formDisabled"
-		:showBeforeClose="!state.formDisabled"
-		confirmButtonText="保存"
+		:show-confirm-button="!state.formDisabled"
+		:show-before-close="!state.formDisabled"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
@@ -21,14 +21,15 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
+import { ElMessage } from "element-plus";
 import { FaDialog } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { tableApi } from "@/api/services/Center/table";
+import type { FormRules } from "element-plus";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import type { AddTableConfigInput } from "@/api/services/Center/table/models/AddTableConfigInput";
 import type { EditTableConfigInput } from "@/api/services/Center/table/models/EditTableConfigInput";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "DevTableConfigEdit",
@@ -36,8 +37,8 @@ defineOptions({
 
 const emit = defineEmits(["ok"]);
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditTableConfigInput & AddTableConfigInput>({}),
@@ -103,7 +104,7 @@ const edit = (tableId: number) => {
 };
 
 const copy = (tableId: number) => {
-	faDialogRef.value.open(async () => {
+	faDialogRef.value.open(() => {
 		state.copyTableId = tableId;
 		state.dialogState = "copy";
 		state.formDisabled = false;

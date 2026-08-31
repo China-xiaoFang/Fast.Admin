@@ -155,9 +155,9 @@ app.UseMiddleware<RequestMiddleware>();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseRateLimiter();
 
-app.UseAuthentication();
 app.UseAuthorization();
 
 // 启用 Swagger 文档

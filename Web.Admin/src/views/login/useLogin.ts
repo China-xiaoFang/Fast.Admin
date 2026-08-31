@@ -1,14 +1,32 @@
 import { computed, inject, ref } from "vue";
-import { ElMessage, ElMessageBox, type FormInstance } from "element-plus";
-import { type FaButtonInstance, formUtil } from "fast-element-plus";
-import { Local, cryptoUtil } from "@fast-china/utils";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { formUtil } from "fast-element-plus";
+import { Local } from "@fast-china/utils";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
 import { useUserInfo } from "@/stores";
-import type { IFormData, IFormStep, ITenantData } from "./index.vue";
+import type { FormInstance } from "element-plus";
+import type { FaButtonInstance } from "fast-element-plus";
+import type { Ref } from "vue";
+import type { LoginInput } from "@/api/services/Auth/login/models/LoginInput";
 import type { LoginOutput } from "@/api/services/Auth/login/models/LoginOutput";
 import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
-import type { Ref } from "vue";
+import type { TenantLoginInput } from "@/api/services/Auth/login/models/TenantLoginInput";
+
+export type IFormData = {
+	/** 记住登录信息 */
+	rememberMe?: boolean;
+} & LoginInput &
+	TenantLoginInput;
+
+export type ITenantData = {
+	/** 租户 */
+	tenant: LoginTenantOutput & { userKey: string };
+	/** 表单数据 */
+	formData: IFormData;
+};
+
+export type IFormStep = "Account" | "TenantAccount" | "SelectTenant" | "NewAccount";
 
 /** 登录服务 */
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
@@ -27,7 +45,7 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 	/** 租户选择器 */
 	const tenantSelector = ref<LoginTenantOutput[]>([]);
 	/** 当前选择租户 */
-	const currentTenant = computed<LoginTenantOutput>(() => tenantList.value?.find((f) => f.tenant.userKey === formData.value.userKey)?.tenant);
+	const currentTenant = computed<LoginTenantOutput>(() => tenantList.value.find((item) => item.tenant.userKey === formData.value.userKey)?.tenant);
 
 	/** 租户改变 */
 	const handleTenantChange = (value: string): void => {
@@ -42,20 +60,19 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 	/** 租户刷新 */
 	const handleRefreshTenant = (): void => {
 		if (tenantList.value.length === 0) {
-			formData.value = { account: undefined, password: undefined, userKey: undefined, rememberMe: false, encryptPassword: false };
+			formData.value = { account: undefined, password: undefined, userKey: undefined, rememberMe: false };
 			Local.remove(cFormKey);
 			formStep.value = "Account";
 		} else {
-			const _tenant = tenantList.value[0];
-			formData.value = { ..._tenant.formData, userKey: _tenant.tenant.userKey };
-			formData.value.encryptPassword = formData.value.rememberMe;
+			const tenant = tenantList.value[0];
+			formData.value = { ...tenant.formData, userKey: tenant.tenant.userKey };
 			Local.set(cFormKey, tenantList.value);
 		}
 	};
 
 	/** 租户删除 */
 	const handleTenantRemove = (index: number, value: ITenantData): void => {
-		ElMessageBox.confirm("您确定要移除此登录信息吗？", {
+		void ElMessageBox.confirm("您确定要移除此登录信息吗？", {
 			dangerouslyUseHTMLString: true,
 		}).then(() => {
 			if (value.tenant.userKey === formData.value.userKey) {
@@ -69,62 +86,55 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 	/** 新账号 */
 	const handleNewAccount = (): void => {
 		formStep.value = "NewAccount";
-		formData.value = { account: undefined, password: undefined, userKey: undefined, rememberMe: false, encryptPassword: false };
+		formData.value = { account: undefined, password: undefined, userKey: undefined, rememberMe: false };
 	};
 
 	/** 新账号返回 */
 	const handleNewAccountBack = (): void => {
 		handleRefreshTenant();
-		formStep.value = "TenantAccount";
+		formStep.value = tenantList.value.length > 0 ? "TenantAccount" : "Account";
 	};
 
 	/** 账号改变 */
 	const handleAccountChange = (): void => {
 		formData.value.password = undefined;
-		formData.value.encryptPassword = false;
-	};
-
-	/** 密码输入 */
-	const handlePasswordInput = (value: string): void => {
-		if (formData.value.encryptPassword) {
-			const newValue = value.substring(value.length - 1);
-			formData.value.password = newValue;
-			formData.value.encryptPassword = false;
-		}
 	};
 
 	/** 登录 */
-	const handleLogin = async (_, done?: () => void): Promise<void> => {
+	const handleLogin = async (_event?: MouseEvent | null, done?: () => void): Promise<void> => {
 		try {
-			const { account, password, userKey, rememberMe, encryptPassword } = formData.value;
-			if (!encryptPassword) {
-				formData.value.password = cryptoUtil.sha1.encrypt(password);
-				formData.value.encryptPassword = true;
+			const { account, password, userKey, rememberMe } = formData.value;
+			if (!password) {
+				ElMessage.warning("请输入密码");
+				return;
 			}
 			let apiRes: LoginOutput;
 			// 判断是否存在租户编号和用户Key，如果存在直接租户登录
 			if (userKey) {
 				apiRes = await loginApi.tenantLogin({
 					userKey,
-					password: formData.value.password,
+					password,
 				});
 			} else {
 				apiRes = await loginApi.login({
 					account,
-					password: formData.value.password,
+					password,
 				});
 			}
 			switch (apiRes.status) {
 				// 登录成功
 				case LoginStatusEnum.Success:
 					{
-						const tenantInfo = apiRes.tenantList[0];
+						const tenantInfo = apiRes.tenantList?.[0];
+						if (!tenantInfo?.userKey) {
+							throw new Error("登录成功响应缺少租户信息");
+						}
 						const fIdx = tenantList.value.findIndex((f) => f.tenant.userKey === tenantInfo.userKey);
 						if (fIdx >= 0) {
 							tenantList.value.splice(fIdx, 1);
 						}
 						tenantList.value.unshift({
-							tenant: apiRes.tenantList[0],
+							tenant: { ...tenantInfo, userKey: tenantInfo.userKey },
 							formData: rememberMe
 								? formData.value
 								: {
@@ -139,27 +149,32 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 					break;
 				// 选择租户登录
 				case LoginStatusEnum.SelectTenant:
-					ElMessage.success(apiRes.message);
+					if (!apiRes.tenantList?.length) {
+						throw new Error("登录响应要求选择租户，但未返回租户列表");
+					}
+					ElMessage.success(apiRes.message || "请选择租户");
 					tenantSelector.value = apiRes.tenantList;
 					formStep.value = "SelectTenant";
 					break;
+				default:
+					ElMessage.error(apiRes.message || "登录失败，请稍后重试");
 			}
 		} finally {
-			done && done();
+			done?.();
 		}
 	};
 
 	/** 表单登录 */
-	const handleFormLogin = (_, done?: () => void): void => {
-		formUtil
+	const handleFormLogin = (event?: MouseEvent | null, done?: () => void): void => {
+		void formUtil
 			.validate(elFormRef)
-			.then(() => handleLogin(_, done))
-			.finally(() => done && done());
+			.then(() => handleLogin(event, done))
+			.finally(() => done?.());
 	};
 
 	/** 回车键摁下 */
 	const handleKeyupEnter = (): void => {
-		faButtonRef.value.doLoading(() => handleFormLogin(null));
+		faButtonRef.value?.doLoading(() => handleFormLogin(null));
 	};
 
 	return {
@@ -173,7 +188,6 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 		handleNewAccount,
 		handleNewAccountBack,
 		handleAccountChange,
-		handlePasswordInput,
 		handleLogin,
 		handleFormLogin,
 		handleKeyupEnter,

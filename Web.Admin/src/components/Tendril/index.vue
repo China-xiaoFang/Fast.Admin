@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, reactive, ref } from "vue";
-import { colorUtil, withDefineType } from "@fast-china/utils";
+import { onMounted, onUnmounted, reactive, useTemplateRef } from "vue";
+import { parseHexColor, withDefineType } from "@fast-china/utils";
 
 defineOptions({
 	name: "Tendril",
@@ -38,9 +38,9 @@ const props = defineProps({
 	},
 });
 
-const canvasRef = ref<HTMLCanvasElement>();
+const canvasRef = useTemplateRef<HTMLCanvasElement>("canvasRef");
 let ctx: CanvasRenderingContext2D = null;
-let animationFrameId: number | null = null;
+let animationFrameId: number = null;
 
 const state = reactive({
 	/** 鼠标当前位置作为丝带目标点 */
@@ -126,7 +126,7 @@ class Tendril {
 	}
 
 	/** 更新节点位置，根据目标点和上一节点计算运动 */
-	update(): void {
+	update() {
 		let spring = this.spring;
 		let node = this.nodes[0];
 		node.vx += (state.target.x - node.x) * spring;
@@ -151,7 +151,7 @@ class Tendril {
 	}
 
 	/** 绘制丝带曲线 */
-	draw(): void {
+	draw() {
 		if (!ctx) return;
 		let x = this.nodes[0].x;
 		let y = this.nodes[0].y;
@@ -222,8 +222,8 @@ const loop = () => {
 		t.opacity -= 0.005;
 
 		const textColor = getComputedStyle(document.documentElement).getPropertyValue("--el-text-color-regular").trim();
-		const [r, g, b] = colorUtil.hexToRgb(textColor);
-		ctx.fillStyle = `rgba(${r},${g},${b},${t.opacity.toFixed(3)})`;
+		const { red, green, blue } = parseHexColor(textColor);
+		ctx.fillStyle = `rgba(${red},${green},${blue},${t.opacity.toFixed(3)})`;
 		ctx.fillText(t.text, t.x, t.y);
 
 		if (t.opacity <= 0) {

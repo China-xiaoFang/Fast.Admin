@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable tableKey="1D1K9GNFPT" rowKey="recordId" :requestApi="payRecordApi.queryPayRecordPaged" stripe>
+		<FastTable table-key="1D1K9GNFPT" row-key="recordId" :request-api="payRecordApi.queryPayRecordPaged" stripe>
 			<template #mobile="{ row }: { row?: PayRecordModel }">
 				<span v-iconCopy="row.mobile">{{ row.mobile }}</span>
 				<br />
@@ -24,7 +24,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.createdTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small" class="ml5">
-					{{ dateUtil.dateTimeFix(String(row.createdTime)) }}
+					{{ formatChineseRelativeTime(String(row.createdTime)) }}
 				</el-tag>
 			</template>
 
@@ -36,7 +36,7 @@
 				<template v-if="row.paymentTime">
 					<span>时间：{{ dayjs(row.paymentTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 					<el-tag v-if="row.paymentTime" type="info" round effect="light" size="small" class="ml5">
-						{{ dateUtil.dateTimeFix(String(row.paymentTime)) }}
+						{{ formatChineseRelativeTime(String(row.paymentTime)) }}
 					</el-tag>
 				</template>
 				<span v-else>--</span>
@@ -52,7 +52,7 @@
 					<template v-if="row.closeTime">
 						<span>时间：{{ dayjs(row.closeTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 						<el-tag v-if="row.closeTime" type="info" round effect="light" size="small" class="ml5">
-							{{ dateUtil.dateTimeFix(String(row.closeTime)) }}
+							{{ formatChineseRelativeTime(String(row.closeTime)) }}
 						</el-tag>
 					</template>
 					<span v-else>--</span>
@@ -64,9 +64,9 @@
 
 <script lang="ts" setup>
 import { dayjs } from "element-plus";
-import { dateUtil } from "@fast-china/utils";
+import { formatChineseRelativeTime } from "@fast-china/utils";
 import { payRecordApi } from "@/api/services/Center/payRecord";
-import { PayRecordModel } from "@/api/services/Center/payRecord/models/PayRecordModel";
+import type { PayRecordModel } from "@/api/services/Center/payRecord/models/PayRecordModel";
 
 defineOptions({
 	name: "SystemPayRecord",

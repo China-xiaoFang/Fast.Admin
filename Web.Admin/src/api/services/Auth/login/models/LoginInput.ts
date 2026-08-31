@@ -1,14 +1,14 @@
 /**
- * Fast.Center.Service.Login.Dto.LoginInput 登录输入
+ * 登录输入
  */
 export interface LoginInput {
-  /**
-   * 账号
-   */
-  account?: string;
-  /**
-   * 密码
-   */
-  password?: string;
+	/**
+	 * 账号
+	 */
+	account?: string;
+	/**
+	 * 原始密码；生产环境必须通过 HTTPS 传输
+	 */
+	password?: string;
 }
 

@@ -1,39 +1,29 @@
-/// <reference types="vite/client" />
-
 /** 声明 vite 环境变量的类型（如果未声明则默认是 any） */
 declare interface ImportMetaEnv {
 	/**
-	 * 环境
+	 * 运行端口号
 	 */
-	readonly VITE_ENV: "production" | "development" | "test" | "staging";
-	/**
-	 * 运行 npm run dev 时绑定的端口号
-	 */
-	readonly VITE_PORT: number;
+	readonly VITE_PORT: string;
 	/**
 	 * 网站根目录
 	 */
 	readonly VITE_PUBLIC_PATH: string;
 	/**
-	 * 打包路径（静态资源）
+	 * 静态资源公共地址，可配置为 CDN 地址
 	 */
-	readonly VITE_BASE_PATH: string;
+	readonly STATIC_ASSET_BASE_URL: string;
 	/**
 	 * CDN 地址
 	 */
-	readonly VITE_CDN_URL: string;
+	readonly CDN_URL: string;
 	/**
-	 * 打包输出路径
+	 * 构建输出目录
 	 */
-	readonly VITE_OUT_DIR: string;
+	readonly BUILD_OUT_DIR: string;
 	/**
-	 * 接口请求地址
+	 * 接口基础地址
 	 */
-	readonly VITE_AXIOS_REQUEST_URL: string;
-	/**
-	 * 接口版本
-	 */
-	readonly VITE_AXIOS_API_VERSION: string;
+	readonly VITE_API_BASE_URL: string;
 	/**
 	 * 本地缓存加密
 	 */
@@ -43,7 +33,7 @@ declare interface ImportMetaEnv {
 	 */
 	readonly VITE_ENABLE_MOBILE: "true" | "false";
 	/**
-	 * APP 版本号
+	 * 应用版本号
 	 */
 	readonly VITE_APP_VERSION: string;
 	/**
@@ -51,7 +41,7 @@ declare interface ImportMetaEnv {
 	 */
 	readonly VITE_APP_ORIGIN: string;
 	/**
-	 * 接口请求代理地址
+	 * 接口代理地址
 	 */
-	readonly VITE_AXIOS_PROXY_URL: string;
+	readonly API_PROXY_URL: string;
 }

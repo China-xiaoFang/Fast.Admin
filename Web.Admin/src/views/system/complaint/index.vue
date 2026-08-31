@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1D1K7QDL5Y" rowKey="complaintId" :requestApi="complaintApi.queryComplaintPaged" hideSearchTime>
+		<FastTable ref="fastTableRef" table-key="1D1K7QDL5Y" row-key="complaintId" :request-api="complaintApi.queryComplaintPaged" hide-search-time>
 			<template #attachmentImages="{ row }: { row?: QueryComplaintPagedOutput }">
 				<el-button size="small" plain @click="state.previewSrcList = row.attachmentImages"> 查看 </el-button>
 			</template>
@@ -22,28 +22,28 @@
 		<ComplaintEdit ref="editFormRef" @ok="fastTableRef.refresh()" />
 		<el-image-viewer
 			v-if="state.previewSrcList.length > 0"
-			:urlList="state.previewSrcList"
-			hideOnClickModal
+			:url-list="state.previewSrcList"
+			hide-on-click-modal
 			teleported
-			showProgress
+			show-progress
 			@close="state.previewSrcList = []"
 		/>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive, useTemplateRef } from "vue";
 import { complaintApi } from "@/api/services/Center/complaint";
-import { QueryComplaintPagedOutput } from "@/api/services/Center/complaint/models/QueryComplaintPagedOutput";
 import ComplaintEdit from "./edit/index.vue";
+import type { QueryComplaintPagedOutput } from "@/api/services/Center/complaint/models/QueryComplaintPagedOutput";
 import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemComplaint",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof ComplaintEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof ComplaintEdit>>("editFormRef");
 
 const state = reactive({
 	previewSrcList: [],

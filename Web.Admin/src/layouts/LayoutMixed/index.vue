@@ -7,13 +7,13 @@
 			},
 		]"
 	>
-		<el-aside :style="{ '--el-aside-width': addUnit(configStore.layout.menuWidth) }">
+		<el-aside :style="{ '--el-aside-width': addCssUnit(configStore.layout.menuWidth) }">
 			<LayoutLogo />
-			<LayoutSideMenu :activeTopMenu="activeTopMenu" />
+			<LayoutSideMenu :active-top-menu="activeTopMenu" />
 		</el-aside>
 		<el-container>
 			<el-header>
-				<div class="nav-bar" :style="{ '--height': addUnit(configStore.layout.navBarHeight) }">
+				<div class="nav-bar" :style="{ '--height': addCssUnit(configStore.layout.navBarHeight) }">
 					<div class="left">
 						<LayoutTopMenu @menu-change="handleMenuChange" />
 					</div>
@@ -22,11 +22,11 @@
 							ref="faTenantSelectRef"
 							width="180px"
 							size="default"
-							valueKey="userKey"
+							value-key="userKey"
 							:props="{ label: 'tenantName' }"
 							:lazy="false"
-							moreDetail
-							:requestApi="loginApi.queryLoginUser"
+							more-detail
+							:request-api="loginApi.queryLoginUser"
 							@change="handleTenantChange"
 							@data-change-call-back="() => faTenantSelectRef.setSelection(userInfoStore.userKey)"
 						>
@@ -45,15 +45,20 @@
 								</div>
 							</template>
 						</FaSelect>
-						<el-icon class="menu-search fa__hover__twinkle" title="搜索菜单" @click="menuSearchRef.open()">
+						<el-icon
+							v-if="configStore.layout.menuSearch"
+							class="menu-search fa__hover__twinkle"
+							title="搜索菜单"
+							@click="menuSearchRef?.open()"
+						>
 							<Search />
 						</el-icon>
-						<LayoutScreenFull />
+						<LayoutScreenFull v-if="configStore.layout.screenFull" />
 						<el-dropdown
 							class="avatar"
 							placement="bottom"
 							trigger="click"
-							hideOnClick
+							hide-on-click
 							:title="userInfoStore.employeeName || userInfoStore.nickName"
 						>
 							<div class="user-info">
@@ -73,11 +78,12 @@
 							</template>
 						</el-dropdown>
 						<el-icon class="setting fa__hover__twinkle" title="高级配置" @click="layoutConfigRef.open()"><Setting /></el-icon>
+						<el-icon class="logout fa__hover__twinkle" title="退出登录" @click="handleLogout"><SwitchButton /></el-icon>
 					</div>
 				</div>
 				<LayoutNavTab />
 			</el-header>
-			<el-main :style="{ '--el-main-padding': addUnit(configStore.layout.mainPadding) }">
+			<el-main :style="{ '--el-main-padding': addCssUnit(configStore.layout.mainPadding) }">
 				<el-scrollbar>
 					<RouterView v-slot="{ Component, route }">
 						<transition mode="out-in" :name="configStore.layout.mainAnimation">
@@ -88,7 +94,7 @@
 					</RouterView>
 				</el-scrollbar>
 			</el-main>
-			<el-footer :style="{ '--el-footer-height': configStore.layout.footer ? addUnit(configStore.layout.footerHeight) : 0 }">
+			<el-footer :style="{ '--el-footer-height': configStore.layout.footer ? addCssUnit(configStore.layout.footerHeight) : 0 }">
 				<Footer />
 			</el-footer>
 		</el-container>
@@ -101,11 +107,11 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
-import { Key, Lock, Refresh, Search, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
-import { Local, addUnit } from "@fast-china/utils";
+import { inject, ref, useTemplateRef } from "vue";
 import { RouterView, useRouter } from "vue-router";
+import { Key, Lock, Refresh, Search, Setting, SwitchButton, User, UserFilled } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { Local, addCssUnit } from "@fast-china/utils";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
 import { changePasswordKey, layoutConfigKey, menuSearchKey } from "@/layouts";
@@ -117,9 +123,8 @@ import { routerUtil } from "@/router";
 import { useConfig, useNavTabs, useUserInfo } from "@/stores";
 import LayoutSideMenu from "./components/sideMenu.vue";
 import LayoutTopMenu from "./components/topMenu.vue";
+import type { ElSelectorOutput, FaSelectInstance } from "fast-element-plus";
 import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
-import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
-import type { FaSelectInstance } from "fast-element-plus";
 
 defineOptions({
 	name: "LayoutMixed",
@@ -133,7 +138,7 @@ const userInfoStore = useUserInfo();
 const layoutConfigRef = inject(layoutConfigKey);
 const menuSearchRef = inject(menuSearchKey);
 const changePasswordRef = inject(changePasswordKey);
-const faTenantSelectRef = ref<FaSelectInstance>();
+const faTenantSelectRef = useTemplateRef<FaSelectInstance>("faTenantSelectRef");
 
 const activeTopMenu = ref<AuthMenuInfoDto>(null);
 
@@ -142,7 +147,7 @@ const handleMenuChange = (menu: AuthMenuInfoDto) => {
 };
 
 const handleRefreshSystem = () => {
-	ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {
+	void ElMessageBox.confirm("此操作会强制刷新当前页面，是否继续操作？", {
 		type: "warning",
 	}).then(() => {
 		Local.removeByPrefix("HTTP_CACHE_");
@@ -150,13 +155,14 @@ const handleRefreshSystem = () => {
 	});
 };
 
-const handleTenantChange = async (value: LoginTenantOutput) => {
+const handleTenantChange = async (data: ElSelectorOutput | ElSelectorOutput[] | null): Promise<void> => {
+	if (Array.isArray(data)) return;
 	const { accountKey, userKey } = userInfoStore;
-	if (value.userKey !== userKey) {
+	if (data.userKey !== userKey) {
 		await userInfoStore.logout();
-		const loginRes = await loginApi.tenantLogin({ accountKey, userKey: value.userKey });
+		const loginRes = await loginApi.tenantLogin({ accountKey, userKey: data.userKey });
 		if (loginRes.status === LoginStatusEnum.Success) {
-			ElMessage.success(`切换租户【${value.tenantName}】成功`);
+			ElMessage.success(`切换租户【${data.tenantName}】成功`);
 			userInfoStore.login();
 			Local.removeByPrefix("HTTP_CACHE_");
 			window.location.reload();
@@ -167,14 +173,14 @@ const handleTenantChange = async (value: LoginTenantOutput) => {
 };
 
 const handleScreenLock = () => {
-	ElMessageBox.prompt("请输入锁屏密码", {
+	void ElMessageBox.prompt("请输入锁屏密码", {
 		showClose: false,
 		confirmButtonText: "锁定",
 		closeOnPressEscape: true,
 		inputType: "password",
 		inputPlaceholder: "请输入锁屏密码",
 		inputValidator(value) {
-			if (!value || !value.trim()) {
+			if (!value?.trim()) {
 				return "锁屏密码不能为空";
 			}
 			return true;
@@ -185,13 +191,10 @@ const handleScreenLock = () => {
 	});
 };
 
-const handleLogout = async () => {
-	ElMessageBox.confirm(`确定要退出登录？`, {
-		type: "warning",
-		async beforeClose() {
-			await userInfoStore.logout();
-			ElMessage.success(`退出登录成功`);
-		},
+const handleLogout = () => {
+	void ElMessageBox.confirm(`确定要退出登录？`, { type: "warning" }).then(async () => {
+		await userInfoStore.logout();
+		ElMessage.success(`退出登录成功`);
 	});
 };
 </script>

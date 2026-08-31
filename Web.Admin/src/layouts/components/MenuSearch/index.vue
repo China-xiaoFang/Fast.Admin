@@ -2,11 +2,11 @@
 	<div>
 		<el-dialog
 			v-model="state.visible"
-			:showClose="false"
+			:show-close="false"
 			width="600px"
 			top="15vh"
-			:closeOnClickModal="true"
-			:closeOnPressEscape="true"
+			:close-on-click-modal="true"
+			:close-on-press-escape="true"
 			@opened="handleDialogOpened"
 		>
 			<el-input
@@ -14,15 +14,15 @@
 				v-model="state.keyword"
 				size="large"
 				placeholder="搜索菜单..."
-				:prefixIcon="Search"
+				:prefix-icon="Search"
 				clearable
 				@input="handleSearch"
 			/>
 
 			<div class="search-result">
-				<el-scrollbar maxHeight="400px">
+				<el-scrollbar max-height="400px">
 					<div v-if="state.resultList.length === 0 && state.keyword" class="search-empty">
-						<el-empty description="暂无搜索结果" :imageSize="80" />
+						<el-empty description="暂无搜索结果" :image-size="80" />
 					</div>
 
 					<div
@@ -74,13 +74,13 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, reactive, ref, watch } from "vue";
-import { Menu, Right, Search } from "@element-plus/icons-vue";
+import { nextTick, onMounted, onUnmounted, reactive, useTemplateRef, watch } from "vue";
 import { useRouter } from "vue-router";
+import { Menu, Right, Search } from "@element-plus/icons-vue";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import { useUserInfo } from "@/stores";
-import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
 import type { InputInstance } from "element-plus";
+import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
 
 defineOptions({
 	name: "MenuSearch",
@@ -91,15 +91,15 @@ type ISearchItem = {
 	icon?: string;
 	router?: string;
 	link?: string;
-	menuType?: number;
+	menuType?: MenuTypeEnum;
 	parentName?: string;
 };
 
 const router = useRouter();
 const userInfoStore = useUserInfo();
 
-const inputRef = ref<InputInstance>();
-const itemRefs = ref<HTMLElement[]>([]);
+const inputRef = useTemplateRef<InputInstance>("inputRef");
+const itemRefs = useTemplateRef<HTMLDivElement[]>("itemRefs");
 
 const state = reactive({
 	visible: false,
@@ -145,7 +145,7 @@ const handleOpen = () => {
 
 /** dialog 打开完成 */
 const handleDialogOpened = () => {
-	nextTick(() => {
+	void nextTick(() => {
 		inputRef.value?.focus();
 	});
 };
@@ -170,11 +170,11 @@ const handleSelect = (item: ISearchItem) => {
 
 	switch (item.menuType) {
 		case MenuTypeEnum.Menu:
-			router.push(item.router);
+			void router.push(item.router);
 			break;
 
 		case MenuTypeEnum.Internal:
-			router.push({
+			void router.push({
 				path: "/iframe",
 				query: { url: item.link },
 			});
@@ -188,7 +188,7 @@ const handleSelect = (item: ISearchItem) => {
 
 /** 滚动到选中项 */
 const scrollToActive = () => {
-	nextTick(() => {
+	void nextTick(() => {
 		const el = itemRefs.value[state.activeIndex];
 		if (!el) return;
 

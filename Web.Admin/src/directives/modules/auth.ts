@@ -15,18 +15,18 @@ interface AuthElement extends HTMLElement {
 	__authType: "hide" | "disabled" | "disablePointer" | "none";
 	__auth_isAuth__: boolean;
 	__auth_timer__?: ReturnType<typeof setTimeout>;
-	__tag_originClick__: (...args) => any;
+	__tag_originClick__?: () => void;
 }
 
 interface AuthVNode extends VNode {
 	props: {
 		/** @description 点击事件 */
-		onClick?: (...args) => any;
+		onClick?: () => void;
 		/** @description 类型 */
 		authType?: "hide" | "disabled" | "disablePointer" | "none";
 		/** @description 禁用 */
 		disabled?: boolean;
-		[key: string]: any;
+		[key: string]: unknown;
 	};
 }
 
@@ -45,32 +45,30 @@ const notAuthMsg = (): void => {
  * 无权限操作
  */
 const notAuthAction = (el: AuthElement, vNode: AuthVNode): void => {
-	try {
-		const authType = vNode.props.authType || "hide";
-		el.__authType = authType;
-		// 不存在权限，根据系统配置执行
-		switch (authType) {
-			case "disabled":
-				// 禁用
-				vNode.props.disabled = true;
-				// 添加一个禁用的样式，这个样式是 ElPlus 自带的
-				el.classList.add("is-disabled");
-				break;
-			case "hide":
-				// 隐藏
-				el.parentElement.removeChild(el);
-				break;
-			case "disablePointer":
-				// 禁止点击
-				el.style.pointerEvents = "none";
-				break;
-			case "none":
-				// 啥也不干
-				break;
-			default:
-				throw "The auth type is incorrect";
-		}
-	} catch {}
+	const authType = vNode.props.authType || "hide";
+	el.__authType = authType;
+	// 不存在权限，根据系统配置执行
+	switch (authType) {
+		case "disabled":
+			// 禁用
+			vNode.props.disabled = true;
+			// 添加一个禁用的样式，这个样式是 ElPlus 自带的
+			el.classList.add("is-disabled");
+			break;
+		case "hide":
+			// 隐藏
+			el.remove();
+			break;
+		case "disablePointer":
+			// 禁止点击
+			el.style.pointerEvents = "none";
+			break;
+		case "none":
+			// 啥也不干
+			break;
+		default:
+			throw new Error("The auth type is incorrect");
+	}
 };
 
 const AuthDirective: Directive = {
@@ -85,7 +83,7 @@ const AuthDirective: Directive = {
 		} else if (typeof binding.value === "string") {
 			el.__tag__ = [binding.value];
 		} else {
-			throw "callback must be a string or string array";
+			throw new TypeError("callback must be a string or string array");
 		}
 		// 记录原来的点击事件方法
 		el.__tag_originClick__ = vNode.props?.onClick;
@@ -115,7 +113,7 @@ const AuthDirective: Directive = {
 					}
 					// 防抖处理
 					el.__auth_timer__ = setTimeout(() => {
-						el?.__tag_originClick__ && el?.__tag_originClick__();
+						el.__tag_originClick__?.();
 					}, 500);
 				};
 			}
@@ -125,7 +123,7 @@ const AuthDirective: Directive = {
 			notAuthAction(el, vNode);
 		}
 	},
-	mounted(el: AuthElement, binding: DirectiveBinding, vNode: AuthVNode) {
+	mounted(el: AuthElement, _binding: DirectiveBinding, vNode: AuthVNode) {
 		// 判断权限是否通过
 		if (!el.__auth_isAuth__) {
 			notAuthAction(el, vNode);

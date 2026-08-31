@@ -37,7 +37,7 @@
 						v-model.trim="state.password"
 						placeholder="请输入锁屏密码"
 						type="password"
-						:prefixIcon="Lock"
+						:prefix-icon="Lock"
 						autocomplete="new-password"
 					/>
 					<span v-show="state.passwordError" class="error">锁屏密码错误</span>
@@ -57,10 +57,10 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from "vue";
-import { dayjs } from "element-plus";
-import { Lock, UserFilled } from "@element-plus/icons-vue";
 import { tryOnMounted, tryOnUnmounted } from "@vueuse/core";
+import { reactive } from "vue";
+import { Lock, UserFilled } from "@element-plus/icons-vue";
+import { dayjs } from "element-plus";
 import { useConfig, useUserInfo } from "@/stores";
 
 defineOptions({

@@ -2,10 +2,10 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1D1KYCMJCP"
-			rowKey="merchantId"
-			:requestApi="merchantApi.queryMerchantPaged"
-			hideSearchTime
+			table-key="1D1KYCMJCP"
+			row-key="merchantId"
+			:request-api="merchantApi.queryMerchantPaged"
+			hide-search-time
 			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
@@ -25,9 +25,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { merchantApi } from "@/api/services/Center/merchant";
 import ConfigEdit from "./edit/index.vue";
 import type { QueryMerchantPagedOutput } from "@/api/services/Center/merchant/models/QueryMerchantPagedOutput";
@@ -37,23 +37,22 @@ defineOptions({
 	name: "SystemMerchant",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof ConfigEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof ConfigEdit>>("editFormRef");
 
-const handleCustomCellClick = (_, { row }: { row: QueryMerchantPagedOutput }) => {
+const handleCustomCellClick = (_emitName: string, { row }: { row: QueryMerchantPagedOutput }) => {
 	editFormRef.value.detail(row.merchantId);
 };
 
 /** 处理删除缓存 */
 const handleDelete = (row: QueryMerchantPagedOutput) => {
 	const { merchantId, rowVersion } = row;
-	ElMessageBox.confirm("确定要删除商户号？", {
+	void ElMessageBox.confirm("确定要删除商户号？", {
 		type: "warning",
-		async beforeClose() {
-			await merchantApi.deleteMerchant({ merchantId, rowVersion });
-			ElMessage.success("删除成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await merchantApi.deleteMerchant({ merchantId, rowVersion });
+		ElMessage.success("删除成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

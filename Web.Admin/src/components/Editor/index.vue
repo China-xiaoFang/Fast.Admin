@@ -4,9 +4,9 @@
 		<Editor
 			class="wang-editor__warp"
 			:style="{
-				'--height': addUnit(props.height),
+				'--height': addCssUnit(props.height),
 			}"
-			:defaultConfig="{
+			:default-config="{
 				placeholder: props.placeholder,
 				readOnly: props.readOnly,
 				MENU_CONF: {
@@ -33,14 +33,14 @@
 </template>
 
 <script lang="ts" setup>
+import { useVModel } from "@vueuse/core";
 import { inject, onBeforeUnmount, shallowRef, watch } from "vue";
 import { ElMessage, formContextKey } from "element-plus";
-import { addUnit, consoleError, definePropType } from "@fast-china/utils";
-import { useVModel } from "@vueuse/core";
-import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
-import { fileApi } from "@/api/services/File";
-import type { IDomEditor } from "@wangeditor/editor";
-import "@wangeditor/editor/dist/css/style.css";
+import { addCssUnit, definePropType, logger } from "@fast-china/utils";
+import { Editor, Toolbar } from "@wangeditor-next/editor-for-vue";
+import { fileApi } from "@/api/services/Center/file";
+import type { IDomEditor } from "@wangeditor-next/editor";
+import "@wangeditor-next/editor/dist/css/style.css";
 
 defineOptions({
 	name: "Editor",
@@ -72,7 +72,7 @@ const props = defineProps({
 
 const emit = defineEmits({
 	/** @description v-model 回调 */
-	"update:modelValue": (value: string) => true,
+	"update:modelValue": (_value: string) => true,
 });
 
 // 编辑器实例，必须用 shallowRef，重要！
@@ -112,7 +112,7 @@ const handleUploadImage = async (file: File, insertFn: InsertFnType) => {
 		const apiRes = await fileApi.uploadEditor(formData);
 		insertFn(apiRes, "", "");
 	} catch (error) {
-		consoleError("Editor", error);
+		logger.error("Editor", "图片上传失败", error);
 		ElMessage.error("图片上传失败");
 	}
 };
@@ -128,7 +128,7 @@ const handleUploadVideo = async (file: File, insertFn: InsertFnType) => {
 		const apiRes = await fileApi.uploadEditor(formData);
 		insertFn(apiRes, "", "");
 	} catch (error) {
-		consoleError("Editor", error);
+		logger.error("Editor", "视频上传失败", error);
 		ElMessage.error("视频上传失败");
 	}
 };

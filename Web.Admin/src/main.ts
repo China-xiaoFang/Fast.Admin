@@ -5,15 +5,18 @@ import { loadPlugins } from "./plugins";
 import router from "./router";
 import { loadPinia, useApp } from "./stores";
 import { checkVersionUpdate } from "./updateVersion";
+import type { Component } from "vue";
 import "./styles/index.scss";
 import "vue-json-pretty/lib/styles.css";
 if (import.meta.env.DEV) {
 	await import("element-plus/dist/index.css");
 	await import("element-plus/theme-chalk/dark/css-vars.css");
-	await import("fast-element-plus/styles/index.scss");
+	await import("fast-element-plus/style.css");
 }
 
-const app = createApp(App);
+checkVersionUpdate(import.meta.env.VITE_APP_VERSION);
+
+const app = createApp(App as Component);
 
 // 注册持久化存储
 loadPinia(app);
@@ -31,5 +34,3 @@ app.use(router);
 loadDirectives(app);
 
 app.mount("#app");
-
-checkVersionUpdate(`v${import.meta.env.VITE_APP_VERSION}`);

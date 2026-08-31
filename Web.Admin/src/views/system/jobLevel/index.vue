@@ -2,10 +2,10 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1D1KRB5KK9"
-			rowKey="jobLevelId"
-			:requestApi="jobLevelApi.queryJobLevelPaged"
-			hideSearchTime
+			table-key="1D1KRB5KK9"
+			row-key="jobLevelId"
+			:request-api="jobLevelApi.queryJobLevelPaged"
+			hide-search-time
 			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
@@ -25,35 +25,34 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { jobLevelApi } from "@/api/services/Admin/jobLevel";
-import { QueryJobLevelPagedOutput } from "@/api/services/Admin/jobLevel/models/QueryJobLevelPagedOutput";
 import JobLevelEdit from "./edit/index.vue";
+import type { QueryJobLevelPagedOutput } from "@/api/services/Admin/jobLevel/models/QueryJobLevelPagedOutput";
 import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemJobLevel",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof JobLevelEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof JobLevelEdit>>("editFormRef");
 
-const handleCustomCellClick = (_, { row }: { row: QueryJobLevelPagedOutput }) => {
+const handleCustomCellClick = (_emitName: string, { row }: { row: QueryJobLevelPagedOutput }) => {
 	editFormRef.value.detail(row.jobLevelId);
 };
 
 /** 处理删除 */
 const handleDelete = (row: QueryJobLevelPagedOutput) => {
 	const { jobLevelId, rowVersion } = row;
-	ElMessageBox.confirm("确定要删除职级？", {
+	void ElMessageBox.confirm("确定要删除职级？", {
 		type: "warning",
-		async beforeClose() {
-			await jobLevelApi.deleteJobLevel({ jobLevelId, rowVersion });
-			ElMessage.success("删除成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await jobLevelApi.deleteJobLevel({ jobLevelId, rowVersion });
+		ElMessage.success("删除成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

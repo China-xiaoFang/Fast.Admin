@@ -1,13 +1,13 @@
 <template>
-	<FaDrawer ref="faDrawerRef" :draggable="false" :withHeader="false" hideFooter size="300">
+	<FaDrawer ref="faDrawerRef" :draggable="false" :with-header="false" hide-footer size="300">
 		<div class="main">
-			<el-divider contentPosition="center">
+			<el-divider content-position="left">
 				<el-icon><Notification /></el-icon>
 				布局样式
 			</el-divider>
 			<div class="main__box">
 				<div class="layout-mode">
-					<el-tooltip effect="dark" placement="top" :showAfter="200" content="经典">
+					<el-tooltip effect="dark" placement="top" :show-after="200" content="经典">
 						<el-container
 							class="layout-mode__Classic"
 							:class="{ active: configStore.layout.layoutMode === 'Classic' }"
@@ -20,7 +20,7 @@
 							</el-container>
 						</el-container>
 					</el-tooltip>
-					<el-tooltip v-if="!isMobile" effect="dark" placement="top" :showAfter="200" content="水平">
+					<el-tooltip v-if="!isMobile" effect="dark" placement="top" :show-after="200" content="水平">
 						<el-container
 							class="layout-mode__Horizontal"
 							:class="{ active: configStore.layout.layoutMode === 'Horizontal' }"
@@ -30,7 +30,7 @@
 							<el-main />
 						</el-container>
 					</el-tooltip>
-					<el-tooltip v-if="!isMobile" effect="dark" placement="top" :showAfter="200" content="混合">
+					<el-tooltip v-if="!isMobile" effect="dark" placement="top" :show-after="200" content="混合">
 						<el-container
 							class="layout-mode__Mixed"
 							:class="{ active: configStore.layout.layoutMode === 'Mixed' }"
@@ -77,7 +77,7 @@
 				</div>
 			</div>
 
-			<el-divider contentPosition="center">
+			<el-divider content-position="left">
 				<el-icon><MagicStick /></el-icon>
 				主题样式
 			</el-divider>
@@ -100,8 +100,8 @@
 					<el-switch
 						v-model="configStore.layout.isDark"
 						:disabled="configStore.layout.autoThemMode"
-						:activeActionIcon="Sunny"
-						:inactiveActionIcon="Moon"
+						:active-action-icon="Sunny"
+						:inactive-action-icon="Moon"
 						@change="configStore.switchDark"
 					/>
 				</div>
@@ -114,18 +114,30 @@
 					<el-switch v-model="configStore.layout.isWeak" @change="configStore.switchGreyOrWeak('weak', !!$event)" />
 				</div>
 			</div>
-			<el-divider contentPosition="center">
+			<el-divider content-position="left">
 				<el-icon><Grid /></el-icon>
 				界面配置
 			</el-divider>
 			<div class="main__box">
 				<div class="box-item">
 					<span>页签</span>
-					<el-switch v-model="configStore.layout.navTab" :activeActionIcon="View" :inactiveActionIcon="Hide" />
+					<el-switch v-model="configStore.layout.navTab" :active-action-icon="View" :inactive-action-icon="Hide" />
+				</div>
+				<div class="box-item">
+					<span>面包屑</span>
+					<el-switch v-model="configStore.layout.breadcrumb" :active-action-icon="View" :inactive-action-icon="Hide" />
+				</div>
+				<div class="box-item">
+					<span>菜单搜索</span>
+					<el-switch v-model="configStore.layout.menuSearch" :active-action-icon="View" :inactive-action-icon="Hide" />
+				</div>
+				<div class="box-item">
+					<span>全屏入口</span>
+					<el-switch v-model="configStore.layout.screenFull" :active-action-icon="View" :inactive-action-icon="Hide" />
 				</div>
 				<div class="box-item">
 					<span>页脚</span>
-					<el-switch v-model="configStore.layout.footer" :activeActionIcon="View" :inactiveActionIcon="Hide" />
+					<el-switch v-model="configStore.layout.footer" :active-action-icon="View" :inactive-action-icon="Hide" />
 				</div>
 				<div class="box-item">
 					<span>
@@ -134,7 +146,7 @@
 							<el-icon><QuestionFilled /></el-icon>
 						</el-tooltip>
 					</span>
-					<el-switch v-model="configStore.layout.watermark" :activeActionIcon="View" :inactiveActionIcon="Hide" />
+					<el-switch v-model="configStore.layout.watermark" :active-action-icon="View" :inactive-action-icon="Hide" />
 				</div>
 				<div class="box-item">
 					<span>菜单宽度</span>
@@ -153,7 +165,7 @@
 					</el-input-number>
 				</div>
 			</div>
-			<el-divider contentPosition="center">
+			<el-divider content-position="left">
 				<el-icon><Grid /></el-icon>
 				表格配置
 			</el-divider>
@@ -161,7 +173,7 @@
 				<div class="box-item">
 					<span>
 						显示搜索
-						<el-tooltip effect="dark" rawContent content="开启 => 显示所有表格的搜索栏<br/>关闭 => 隐藏所有表格的搜索栏" placement="top">
+						<el-tooltip effect="dark" raw-content content="开启 => 显示所有表格的搜索栏<br/>关闭 => 隐藏所有表格的搜索栏" placement="top">
 							<el-icon><QuestionFilled /></el-icon>
 						</el-tooltip>
 					</span>
@@ -172,7 +184,7 @@
 						抽屉式高级搜索
 						<el-tooltip
 							effect="dark"
-							rawContent
+							raw-content
 							content="开启 => 所有表格的高级搜索隐藏为抽屉弹出<br/>关闭 => 所有表格的高级搜索使用展开折叠的方式"
 							placement="top"
 						>
@@ -186,7 +198,7 @@
 						默认折叠搜索
 						<el-tooltip
 							effect="dark"
-							rawContent
+							raw-content
 							content="开启 => 所有表格的高级搜索默认折叠<br/>关闭 => 所有表格的高级搜索默认展开"
 							placement="top"
 						>
@@ -200,7 +212,7 @@
 						隐藏图片
 						<el-tooltip
 							effect="dark"
-							rawContent
+							raw-content
 							content="开启 => 表格所有图片列需要点击才能查看（减少网络资源消耗）<br/>关闭 => 表格所有图片列默认展示（注：此选项可能会增加对应的网络资源消耗）"
 							placement="top"
 						>
@@ -227,20 +239,20 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { useWindowSize } from "@vueuse/core";
+import { computed, useTemplateRef } from "vue";
 import { Grid, Hide, MagicStick, Moon, Notification, QuestionFilled, Refresh, Sunny, View } from "@element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
-import { useWindowSize } from "@vueuse/core";
 import { useConfig } from "@/stores";
-import type { IAnimationName, INavTabStyle } from "@/stores";
 import type { componentSizes } from "element-plus";
 import type { ElSelectorOutput, FaDrawerInstance, FaTableDataRange } from "fast-element-plus";
+import type { IAnimationName, INavTabStyle } from "@/stores";
 
 defineOptions({
 	name: "LayoutConfig",
 });
 
-const faDrawerRef = ref<FaDrawerInstance>();
+const faDrawerRef = useTemplateRef<FaDrawerInstance>("faDrawerRef");
 
 const configStore = useConfig();
 const windowSize = useWindowSize();
@@ -248,7 +260,7 @@ const windowSize = useWindowSize();
 /** 是否移动端（窗口宽度 <= 768） */
 const isMobile = computed(() => windowSize.width.value <= 768);
 
-const animationList: Readonly<ElSelectorOutput<IAnimationName>> = [
+const animationList: Readonly<ElSelectorOutput<IAnimationName>[]> = [
 	{
 		label: "左到右滑动",
 		value: "slide-right",
@@ -302,7 +314,7 @@ const layoutSizeList: Readonly<ElSelectorOutput<(typeof componentSizes)[number]>
 	},
 ];
 
-const navTabStyleList: Readonly<ElSelectorOutput<INavTabStyle>> = [
+const navTabStyleList: Readonly<ElSelectorOutput<INavTabStyle>[]> = [
 	{
 		label: "灵动",
 		value: "Smart",
@@ -357,7 +369,7 @@ const dataSearchRangeList: Readonly<ElSelectorOutput<FaTableDataRange>[]> = [
 ];
 
 const open = () => {
-	faDrawerRef.value.open();
+	void faDrawerRef.value.open();
 };
 
 // 暴露给父组件使用

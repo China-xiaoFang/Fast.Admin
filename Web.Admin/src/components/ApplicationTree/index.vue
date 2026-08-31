@@ -5,23 +5,23 @@
 		v-model:label="appName"
 		title="应用列表"
 		width="240"
-		:requestApi="applicationApi.applicationSelector"
-		@change="(value) => emit('change', value)"
+		:request-api="applicationApi.applicationSelector"
+		@change="(data) => emit('change', data)"
 	>
-		<template #label="{ data }: { data: ElSelectorOutput<number | string> }">
-			<FaAvatar style="margin-right: 5px" :src="data.data.logoUrl" thumb size="small" />
+		<template #label="{ data }">
+			<FaAvatar style="margin-right: 5px" :src="data.data?.logoUrl" thumb size="small" />
 			<span>{{ data.label }}</span>
 		</template>
-		<template #default="{ data }: { data: ElSelectorOutput<number | string> }">
-			<Tag size="small" effect="plain" name="EditionEnum" :value="data.data.edition" />
+		<template #default="{ data }">
+			<Tag size="small" effect="plain" name="EditionEnum" :value="data.data?.edition" />
 		</template>
 	</FaTree>
 </template>
 
 <script lang="ts" setup>
-import { type ElSelectorOutput } from "fast-element-plus";
 import { useVModel } from "@vueuse/core";
 import { applicationApi } from "@/api/services/Center/application";
+import type { ElTreeOutput } from "fast-element-plus";
 
 defineOptions({
 	name: "ApplicationTree",
@@ -33,9 +33,9 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits({
-	"update:modelValue": (value: number | string) => true,
-	"update:appName": (value: string) => true,
-	change: (value: ElSelectorOutput<number | string>) => true,
+	"update:modelValue": (_value: number | string) => true,
+	"update:appName": (_value: string) => true,
+	change: (_value: ElTreeOutput) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });

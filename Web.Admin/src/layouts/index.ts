@@ -1,7 +1,7 @@
+import type { InjectionKey, Ref } from "vue";
 import type ChangePassword from "@/layouts/components/ChangePassword/index.vue";
 import type layoutConfig from "@/layouts/components/Config/index.vue";
 import type menuSearch from "@/layouts/components/MenuSearch/index.vue";
-import type { InjectionKey, Ref } from "vue";
 
 /** 布局配置 */
 export const layoutConfigKey: InjectionKey<Ref<InstanceType<typeof layoutConfig>>> = Symbol("layoutConfigKey");

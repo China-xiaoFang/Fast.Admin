@@ -12,7 +12,7 @@
 							<span class="percentage_label">内存使用率</span>
 						</template>
 					</el-progress>
-					<el-form labelWidth="100%" labelSuffix="：">
+					<el-form label-width="100%" label-suffix="：">
 						<el-form-item label="当前时间">
 							<el-text>{{ state.machineDetail.currentTime }}</el-text>
 						</el-form-item>
@@ -57,7 +57,7 @@
 							</el-progress>
 						</el-col>
 					</el-row>
-					<el-form labelWidth="100%" labelSuffix="：">
+					<el-form label-width="100%" label-suffix="：">
 						<el-form-item label="启动时间">
 							<el-text>{{ state.programDetail.startTime }}</el-text>
 						</el-form-item>
@@ -130,7 +130,7 @@
 <script lang="ts" setup>
 import { onActivated, onDeactivated, onMounted, onUnmounted, reactive } from "vue";
 import { axiosUtil } from "@fast-china/axios";
-import { withDefineType } from "@fast-china/utils";
+import { logger, withDefineType } from "@fast-china/utils";
 
 defineOptions({
 	name: "SystemMonitor",
@@ -292,9 +292,10 @@ const startInterval = () => {
 	state.polling = true;
 	const schedule = () => {
 		if (!state.polling) return;
-		state.interval = setTimeout(async () => {
-			await fetchData().catch(() => {});
-			schedule();
+		state.interval = setTimeout(() => {
+			fetchData()
+				.catch((error) => logger.error("Admin", "刷新系统监控数据失败。", error))
+				.finally(schedule);
 		}, 5 * 1000);
 	};
 	schedule();
@@ -307,7 +308,7 @@ const activate = (showLoading = false) => {
 	const session = ++activeSession;
 	if (showLoading) state.loading = true;
 	fetchData()
-		.catch(() => {})
+		.catch((error) => logger.error("Admin", "加载系统监控数据失败。", error))
 		.finally(() => {
 			if (!isActive || session !== activeSession) return;
 			state.loading = false;

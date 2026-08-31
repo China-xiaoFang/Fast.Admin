@@ -2,8 +2,8 @@
 	<FaDialog
 		ref="faDialogRef"
 		title="修改密码"
-		:showFullscreen="false"
-		showBeforeClose
+		:show-fullscreen="false"
+		show-before-close
 		width="450"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
@@ -22,13 +22,14 @@
 	</FaDialog>
 </template>
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, ElMessageBox, type FormRules } from "element-plus";
-import { FaDialogInstance, FaFormInstance } from "fast-element-plus";
-import { cryptoUtil, withDefineType } from "@fast-china/utils";
+import { reactive, useTemplateRef } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { accountApi } from "@/api/services/Center/account";
-import { ChangePasswordInput } from "@/api/services/Center/account/models/ChangePasswordInput";
 import { useUserInfo } from "@/stores";
+import type { FormRules } from "element-plus";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { ChangePasswordInput } from "@/api/services/Center/account/models/ChangePasswordInput";
 
 defineOptions({
 	name: "ChangePassword",
@@ -36,8 +37,8 @@ defineOptions({
 
 const userInfoStore = useUserInfo();
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<ChangePasswordInput>({}),
@@ -53,31 +54,21 @@ const state = reactive({
 
 const handleConfirm = async () => {
 	await faFormRef.value.validateScrollToField();
-	let { newPassword, confirmPassword } = state.formData;
-	newPassword = cryptoUtil.sha1.encrypt(newPassword);
-	confirmPassword = cryptoUtil.sha1.encrypt(confirmPassword);
+	const { newPassword, confirmPassword } = state.formData;
 	if (newPassword !== confirmPassword) {
 		ElMessage.warning("两次密码输入不一致");
 		return;
 	}
-	faDialogRef.value.close(async () => {
-		await ElMessageBox.confirm("确认修改密码", {
+	faDialogRef.value.close(() => {
+		void ElMessageBox.confirm("确认修改密码", {
 			type: "warning",
-			async beforeClose() {
-				await accountApi.changePassword({
-					...state.formData,
-					oldPassword: cryptoUtil.sha1.encrypt(state.formData.oldPassword),
-					newPassword,
-					confirmPassword,
-				});
-				ElMessageBox.alert("修改成功，请重新登录！", {
-					type: "success",
-					confirmButtonText: "重新登录",
-					callback: () => {
-						userInfoStore.logout();
-					},
-				});
-			},
+		}).then(async () => {
+			await accountApi.changePassword(state.formData);
+			await ElMessageBox.alert("修改成功，请重新登录！", {
+				type: "success",
+				confirmButtonText: "重新登录",
+			});
+			await userInfoStore.logout();
 		});
 	});
 };

@@ -2,10 +2,10 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1D1KR8WZ6U"
-			rowKey="positionId"
-			:requestApi="positionApi.queryPositionPaged"
-			hideSearchTime
+			table-key="1D1KR8WZ6U"
+			row-key="positionId"
+			:request-api="positionApi.queryPositionPaged"
+			hide-search-time
 			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
@@ -25,35 +25,34 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { positionApi } from "@/api/services/Admin/position";
-import { QueryPositionPagedOutput } from "@/api/services/Admin/position/models/QueryPositionPagedOutput";
 import PositionEdit from "./edit/index.vue";
+import type { QueryPositionPagedOutput } from "@/api/services/Admin/position/models/QueryPositionPagedOutput";
 import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemPosition",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof PositionEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof PositionEdit>>("editFormRef");
 
-const handleCustomCellClick = (_, { row }: { row: QueryPositionPagedOutput }) => {
+const handleCustomCellClick = (_emitName: string, { row }: { row: QueryPositionPagedOutput }) => {
 	editFormRef.value.detail(row.positionId);
 };
 
 /** 处理删除 */
 const handleDelete = (row: QueryPositionPagedOutput) => {
 	const { positionId, rowVersion } = row;
-	ElMessageBox.confirm("确定要删除职位？", {
+	void ElMessageBox.confirm("确定要删除职位？", {
 		type: "warning",
-		async beforeClose() {
-			await positionApi.deletePosition({ positionId, rowVersion });
-			ElMessage.success("删除成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await positionApi.deletePosition({ positionId, rowVersion });
+		ElMessage.success("删除成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

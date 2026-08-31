@@ -12,12 +12,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
+import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { employeeApi } from "@/api/services/Admin/employee";
-import { BindLoginAccountInput } from "@/api/services/Admin/employee/models/BindLoginAccountInput";
+import type { FormRules } from "element-plus";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { BindLoginAccountInput } from "@/api/services/Admin/employee/models/BindLoginAccountInput";
 
 defineOptions({
 	name: "SystemEmployeeBindAccount",
@@ -25,8 +26,8 @@ defineOptions({
 
 const emit = defineEmits(["ok"]);
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<BindLoginAccountInput>({}),

@@ -13,12 +13,12 @@
 </template>
 
 <script lang="ts" setup>
-import { CascaderNode } from "element-plus";
+import { useVModel } from "@vueuse/core";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
-import { ElSelectorOutput } from "fast-element-plus";
 import * as FastElementPlusIconsVue from "@fast-element-plus/icons-vue";
 import { withDefineType } from "@fast-china/utils";
-import { useVModel } from "@vueuse/core";
+import type { CascaderNode } from "element-plus";
+import type { ElSelectorOutput } from "fast-element-plus";
 
 defineOptions({
 	name: "IconSelect",
@@ -35,7 +35,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (value: number | string) => true,
+	"update:modelValue": (_value: number | string) => true,
 });
 
 const iconList = withDefineType<ElSelectorOutput<string>[]>([

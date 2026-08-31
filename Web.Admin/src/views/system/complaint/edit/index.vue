@@ -12,12 +12,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
+import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { complaintApi } from "@/api/services/Center/complaint";
-import { HandleComplaintInput } from "@/api/services/Center/complaint/models/HandleComplaintInput";
+import type { FormRules } from "element-plus";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { HandleComplaintInput } from "@/api/services/Center/complaint/models/HandleComplaintInput";
 
 defineOptions({
 	name: "SystemComplaintEdit",
@@ -25,8 +26,8 @@ defineOptions({
 
 const emit = defineEmits(["ok"]);
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<HandleComplaintInput>({}),

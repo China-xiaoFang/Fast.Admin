@@ -15,8 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import { definePropType } from "@fast-china/utils";
 import { useRouter } from "vue-router";
+import { definePropType } from "@fast-china/utils";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import MenuItem from "./index.vue";
 import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
@@ -37,10 +37,10 @@ const handleMenuClick = () => {
 		case MenuTypeEnum.Catalog:
 			break;
 		case MenuTypeEnum.Menu:
-			router.push(props.menu.router);
+			void router.push(props.menu.router);
 			break;
 		case MenuTypeEnum.Internal:
-			router.push({
+			void router.push({
 				path: "/iframe",
 				query: { url: props.menu.link },
 			});

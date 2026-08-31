@@ -31,7 +31,7 @@
     "LoginPermitLimit": 10,
     // 登录限流，单个Ip在统计窗口内允许的请求数
     "LoginIpPermitLimit": 30,
-    // 单个Ip与设备Id组合在统计窗口内允许的请求数
+    // 已登录限流，单个会话在统计窗口内允许的请求数；未登录时按单个Ip与设备Id组合统计
     "PermitLimit": 120,
     // 单个Ip在统计窗口内允许的请求数
     "IpPermitLimit": 60,
@@ -46,6 +46,12 @@
     "AuthCode": "",
     "DisplayName": "FastDotNet",
     "ReceiveEmails": []
+  },
+  // 短信配置
+  "SmsSettingsOptions": {
+    "AccessKeyId": "<LOCAL_ALIYUN_SMS_ACCESS_KEY_ID>",
+    "AccessKeySecret": "<LOCAL_ALIYUN_SMS_ACCESS_KEY_SECRET>",
+    "SignName": "<LOCAL_ALIYUN_SMS_SIGN_NAME>"
   },
   // JWT Token 配置
   "JWTSettings": {

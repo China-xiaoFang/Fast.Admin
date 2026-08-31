@@ -1,6 +1,6 @@
+import { defineStore } from "pinia";
 import { reactive, toRefs } from "vue";
 import { withDefineType } from "@fast-china/utils";
-import { defineStore } from "pinia";
 import router, { routerUtil } from "@/router";
 import type { RouteLocationNormalized, Router } from "vue-router";
 
@@ -43,17 +43,17 @@ export const useNavTabs = defineStore(
 			if (fIdx >= 0) {
 				state.keepAliveComponentNameList.splice(fIdx, 1);
 			}
-			routerUtil.routePushSafe(router, { path: `/redirect${route.path}`, query: route.query });
+			void routerUtil.routePushSafe(router, { path: `/redirect${route.path}`, query: route.query });
 		};
 
 		/** 添加 Tab */
 		const addTab = (route: INavTab): void => {
 			if (route.meta?.tab === false) return;
-			const fRouteIdx = state.navTabs.findIndex((f) => f.path == route.path);
+			const fRouteIdx = state.navTabs.findIndex((f) => f.path === route.path);
 			//  判断警告页面数量
 			if (fRouteIdx === -1) {
 				state.navTabs.push(routerUtil.pickByRoute(route));
-				if (route.meta.keepAlive != false) {
+				if (route.meta.keepAlive !== false) {
 					if (!state.keepAliveComponentNameList.includes(route.name.toString())) {
 						state.keepAliveComponentNameList.push(route.name.toString());
 					}
@@ -83,9 +83,9 @@ export const useNavTabs = defineStore(
 		const toLastTab = (): void => {
 			const lastTab = state.navTabs.slice(-1)[0];
 			if (lastTab) {
-				router.push(lastTab?.fullPath ?? lastTab?.path);
+				void router.push(lastTab?.fullPath ?? lastTab?.path);
 			} else {
-				router.push({ path: "/" });
+				void router.push({ path: "/" });
 			}
 		};
 
@@ -102,7 +102,7 @@ export const useNavTabs = defineStore(
 			}
 			if (state.lastActiveIndex !== -1 && state.lastActiveIndex !== state.activeIndex && state.lastActiveIndex < state.navTabs.length) {
 				const lastTab = state.navTabs[state.lastActiveIndex];
-				router.push(lastTab?.fullPath ?? lastTab?.path);
+				void router.push(lastTab?.fullPath ?? lastTab?.path);
 			} else {
 				toLastTab();
 			}
@@ -141,7 +141,7 @@ export const useNavTabs = defineStore(
 
 		/** 设置活动路由 */
 		const setActiveRoute = (route: INavTab): void => {
-			const fIdx = state.navTabs.findIndex((f) => f.path == route.path);
+			const fIdx = state.navTabs.findIndex((f) => f.path === route.path);
 			if (fIdx === -1) return;
 			state.activeTab = routerUtil.pickByRoute(route);
 			state.lastActiveIndex = state.activeIndex;

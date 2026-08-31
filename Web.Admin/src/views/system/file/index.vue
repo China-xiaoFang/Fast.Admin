@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1D11KCYJJ9" rowKey="fileId" :requestApi="fileApi.queryFilePaged">
+		<FastTable ref="fastTableRef" table-key="1D11KCYJJ9" row-key="fileId" :request-api="fileApi.queryFilePaged">
 			<!-- 表格按钮操作区域 -->
 			<template #header v-if="userInfoStore.isSuperAdmin">
 				<TenantSelectPage
@@ -27,22 +27,22 @@
 		</FastTable>
 		<el-image-viewer
 			v-if="state.previewSrc"
-			:urlList="[state.previewSrc]"
-			hideOnClickModal
+			:url-list="[state.previewSrc]"
+			hide-on-click-modal
 			teleported
-			showProgress
+			show-progress
 			@close="state.previewSrc = ''"
 		/>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElSelectorOutput } from "fast-element-plus";
-import { fileApi } from "@/api/services/File";
-import { QueryFilePagedOutput } from "@/api/services/File/models/QueryFilePagedOutput";
-import { FastTableInstance } from "@/components";
+import { reactive, useTemplateRef } from "vue";
+import { fileApi } from "@/api/services/Center/file";
 import { useUserInfo } from "@/stores";
+import type { ElSelectorOutput } from "fast-element-plus";
+import type { QueryFilePagedOutput } from "@/api/services/Center/file/models/QueryFilePagedOutput";
+import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemFile",
@@ -50,7 +50,7 @@ defineOptions({
 
 const userInfoStore = useUserInfo();
 
-const fastTableRef = ref<FastTableInstance>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
 
 const state = reactive({
 	imageMimeType: ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/bmp"],

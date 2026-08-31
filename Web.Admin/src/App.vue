@@ -5,12 +5,11 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, watch } from "vue";
-import { type componentSizes } from "element-plus";
-import { withDefineType } from "@fast-china/utils";
 import { useWindowSize } from "@vueuse/core";
+import { onMounted, reactive, watch } from "vue";
 import { RouterView } from "vue-router";
 import { useConfig } from "@/stores";
+import type { ConfigProviderProps } from "element-plus";
 
 defineOptions({
 	name: "App",
@@ -19,7 +18,11 @@ defineOptions({
 const windowSize = useWindowSize();
 const configStore = useConfig();
 
-const elConfigProviderProps = reactive({
+type Mutable<T> = {
+	-readonly [K in keyof T]: T[K];
+};
+
+const elConfigProviderProps = reactive<Partial<Mutable<ConfigProviderProps>>>({
 	// 语言
 	locale: undefined,
 	button: {
@@ -28,7 +31,7 @@ const elConfigProviderProps = reactive({
 	},
 	emptyValues: [undefined, null],
 	valueOnClear: null,
-	size: withDefineType<(typeof componentSizes)[number]>("default"),
+	size: "default",
 });
 
 // 初始化主题
