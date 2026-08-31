@@ -39,6 +39,11 @@ declare module "uni-mini-router" {
 		 */
 		authForbidView?: boolean;
 		/**
+		 * 必须存在手机号才能查看该页面
+		 * - 默认是 false，为 true 是代表手机号不存在此页面不能再进入，否则跳转到授权页面
+		 */
+		mobileRequired?: boolean;
+		/**
 		 * 跳过登录
 		 * - 默认是 false，为 true 是代表不用登录即可进入该页面
 		 */
@@ -91,6 +96,11 @@ declare module "@uni-helper/vite-plugin-uni-pages" {
 		 * - 默认是 false，为 true 是代表登录后此页面不能再进入，否则跳转到首页
 		 */
 		authForbidView?: boolean;
+		/**
+		 * 必须存在手机号才能查看该页面
+		 * - 默认是 false，为 true 是代表手机号不存在此页面不能再进入，否则跳转到授权页面
+		 */
+		mobileRequired?: boolean;
 		/**
 		 * 跳过登录
 		 * - 默认是 false，为 true 是代表不用登录即可进入该页面

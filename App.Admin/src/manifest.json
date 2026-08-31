@@ -7,17 +7,17 @@
 	"app-plus": {
 		"compatible": {
 			"ignoreVersion": true,
-			"runtimeVersion": "4.84",
-			"compilerVersion": "4.84"
+			"runtimeVersion": "5.24",
+			"compilerVersion": "5.24"
 		},
 		"usingComponents": true,
 		"nvueStyleCompiler": "uni-app",
 		"compilerVersion": 3,
 		"darkmode": true,
-		"themeLocation": "/src/theme.json",
+		"themeLocation": "theme.json",
 		"safearea": {
 			"background": "#ffffff",
-			"backgroundDark": "#0a0a0a",
+			"backgroundDark": "#07111c",
 			"bottom": {
 				"offset": "auto"
 			}
@@ -37,7 +37,8 @@
 			"Bluetooth": {},
 			"Camera": {},
 			"Contacts": {},
-			"VideoPlayer": {}
+			"VideoPlayer": {},
+			"UIWebview": {}
 		},
 		"distribute": {
 			"android": {
@@ -54,15 +55,14 @@
 					"<uses-permission android:name=\"android.permission.GET_ACCOUNTS\" />",
 					"<uses-permission android:name=\"android.permission.VIBRATE\" />",
 					"<uses-permission android:name=\"android.permission.CAMERA\" />",
-					"<uses-permission android:name=\"android.permission.FLASHLIGHT\" />",
-					"<uses-feature android:name=\"android.hardware.camera\" android:required=\"false\" />",
-					"<uses-feature android:name=\"android.hardware.camera.autofocus\" android:required=\"false\" />",
-					"<uses-permission android:name=\"android.permission.CALL_PHONE\" />",
-					"<uses-permission android:name=\"android.permission.REQUEST_INSTALL_PACKAGES\" />",
-					"<uses-permission android:name=\"android.permission.WRITE_SETTINGS\" />",
-					"<uses-permission android:name=\"com.asus.msa.SupplementaryDID.ACCESS\" />",
-					"<uses-permission android:name=\"com.huawei.android.launcher.permission.CHANGE_BADGE\" />"
+					"<uses-permission android:name=\"android.permission.FLASHLIGHT\" />"
 				],
+				"permissionExternalStorage": {
+					"request": "none"
+				},
+				"permissionPhoneState": {
+					"request": "none"
+				},
 				"minSdkVersion": 24,
 				"targetSdkVersion": 24,
 				"abiFilters": ["armeabi-v7a", "arm64-v8a", "x86"]
@@ -70,7 +70,7 @@
 			"ios": {
 				"dSYMs": false,
 				"idfa": false,
-				"UIBackgroundModes": "audio,location"
+				"UIBackgroundModes": ["audio", "location"]
 			},
 			"sdkConfigs": {
 				"maps": {},
@@ -135,9 +135,21 @@
 			}
 		},
 		"requiredPrivateInfos": ["getLocation", "onLocationChange", "startLocationUpdateBackground", "chooseLocation", "chooseAddress"],
-		"requiredBackgroundModes": ["location"],
+		"requiredBackgroundModes": ["audio", "location"],
 		"optimization": {
 			"subPackages": true
+		}
+	},
+	"h5": {
+		"title": "Fast.App",
+		"darkmode": true,
+		"themeLocation": "theme.json",
+		"devServer": {
+			"port": 3010,
+			"https": false
+		},
+		"router": {
+			"mode": "history"
 		}
 	},
 	"quickapp": {
