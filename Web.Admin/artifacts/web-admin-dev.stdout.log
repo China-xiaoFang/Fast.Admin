@@ -1,8 +1,0 @@
-15:45:06 [vite] (client) Re-optimizing dependencies because vite config has changed
-
-  VITE v8.2.2  ready in 13870 ms
-
-  ➜  Local:   http://127.0.0.1:2001/
-  ➜  Vue DevTools: Open http://127.0.0.1:2001/__devtools__/ as a separate window
-  ➜  Vue DevTools: Press Alt(⌥)+Shift(⇧)+D in App to toggle the Vue DevTools
-  ➜  press h + enter to show help
