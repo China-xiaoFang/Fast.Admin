@@ -80,7 +80,7 @@ public class DepartmentService : IDynamicApplication
                 wh.DataPublic
                 || customDepartmentIds.Contains(wh.DepartmentId)
                 || wh.DepartmentId == _user.DepartmentId
-                || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
+                || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0));
         }
         // 自定义部门数据
         else if (_user.DataScopeType == DataScopeTypeEnum.CustomDept)
@@ -168,7 +168,7 @@ public class DepartmentService : IDynamicApplication
                 wh.DataPublic
                 || customDepartmentIds.Contains(wh.DepartmentId)
                 || wh.DepartmentId == _user.DepartmentId
-                || wh.ParentIds.Contains(_user.DepartmentId ?? 0));
+                || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0));
         }
         // 自定义部门数据
         else if (_user.DataScopeType == DataScopeTypeEnum.CustomDept)
@@ -413,7 +413,8 @@ public class DepartmentService : IDynamicApplication
         await _repository.UpdateAsync(departmentModel);
 
         // 更新所有子级
-        var childrenList = await _repository.Entities.Where(wh => wh.ParentIds.Contains(departmentModel.DepartmentId))
+        var childrenList = await _repository.Entities
+            .Where(wh => SqlFunc.JsonArrayAny(wh.ParentIds, departmentModel.DepartmentId))
             .ToListAsync();
 
         void updateChildrenName(long parentId)
