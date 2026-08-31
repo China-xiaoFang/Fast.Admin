@@ -5,11 +5,11 @@ export interface EmployeeRoleModel {
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 角色Id
 	 */
-	roleId?: number;
+	roleId?: string;
 	/**
 	 * 角色名称
 	 */

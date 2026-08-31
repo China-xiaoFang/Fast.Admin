@@ -28,12 +28,12 @@ defineOptions({
 });
 
 const props = defineProps<{
-	modelValue?: number | string;
+	modelValue?: string;
 	appName?: string;
 }>();
 
 const emit = defineEmits({
-	"update:modelValue": (_value: number | string) => true,
+	"update:modelValue": (_value: string) => true,
 	"update:appName": (_value: string) => true,
 	change: (_value: ElTreeOutput) => true,
 });

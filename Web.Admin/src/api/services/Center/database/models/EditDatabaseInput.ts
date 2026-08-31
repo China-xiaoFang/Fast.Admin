@@ -8,7 +8,7 @@ export interface EditDatabaseInput {
 	/**
 	 * 主库Id
 	 */
-	mainId?: number;
+	mainId?: string;
 	/**
 	 * 
 	 */
@@ -68,6 +68,6 @@ export interface EditDatabaseInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

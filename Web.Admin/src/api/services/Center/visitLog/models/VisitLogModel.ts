@@ -7,11 +7,11 @@ export interface VisitLogModel {
 	/**
 	 * 记录Id
 	 */
-	recordId?: number;
+	recordId?: string;
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 手机
 	 */
@@ -31,7 +31,7 @@ export interface VisitLogModel {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 租户名称
 	 */
@@ -63,7 +63,7 @@ export interface VisitLogModel {
 	/**
 	 * 
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 
 	 */
@@ -71,7 +71,7 @@ export interface VisitLogModel {
 	/**
 	 * 
 	 */
-	createdUserId?: number;
+	createdUserId?: string;
 	/**
 	 * 
 	 */

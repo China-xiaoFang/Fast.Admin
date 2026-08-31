@@ -9,7 +9,7 @@ export interface QueryDatabaseDetailOutput {
 	/**
 	 * 主库Id
 	 */
-	mainId?: number;
+	mainId?: string;
 	/**
 	 * 
 	 */
@@ -69,7 +69,7 @@ export interface QueryDatabaseDetailOutput {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 租户名称
 	 */
@@ -101,6 +101,6 @@ export interface QueryDatabaseDetailOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

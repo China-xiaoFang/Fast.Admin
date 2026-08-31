@@ -5,7 +5,7 @@ export interface QueryPositionPagedOutput {
 	/**
 	 * 职位Id
 	 */
-	positionId?: number;
+	positionId?: string;
 	/**
 	 * 职位名称
 	 */
@@ -41,6 +41,6 @@ export interface QueryPositionPagedOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

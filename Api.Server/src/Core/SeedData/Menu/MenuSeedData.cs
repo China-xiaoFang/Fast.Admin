@@ -50,32 +50,26 @@ internal static partial class MenuSeedData
     /// </summary>
     public static async Task DefaultMenuSeedData(ISqlSugarClient db, ApplicationModel applicationModel, DateTime dateTime)
     {
-        #region 系统模块
-
         // 重置菜单排序
         menuSort = 1000;
 
         await SeedSystemMonitor(db, applicationModel, dateTime);
-        await SeedFileStorage(db, applicationModel, dateTime);
-        await SeedAccountManagement(db, applicationModel, dateTime);
-        await SeedSystemManagement(db, applicationModel, dateTime);
-        await SeedConfigManagement(db, applicationModel, dateTime);
-        await SeedOrganizationManagement(db, applicationModel, dateTime);
-        await SeedFinanceManagement(db, applicationModel, dateTime);
-        await SeedPlatformManagement(db, applicationModel, dateTime);
-        await SeedLogManagement(db, applicationModel, dateTime);
 
-        #endregion
-
-        #region 开发模块
-
-        // 重置菜单排序
-        menuSort = 0;
 
         await SeedDevApi(db, applicationModel, dateTime);
         await SeedDevTools(db, applicationModel, dateTime);
         await SeedDevLogs(db, applicationModel, dateTime);
 
-        #endregion
+
+        await SeedFileStorage(db, applicationModel, dateTime);
+        await SeedAccountManagement(db, applicationModel, dateTime);
+        await SeedSystemManagement(db, applicationModel, dateTime);
+        await SeedConfigManagement(db, applicationModel, dateTime);
+        await SeedFinanceManagement(db, applicationModel, dateTime);
+        await SeedPlatformManagement(db, applicationModel, dateTime);
+
+
+        await SeedOrganizationManagement(db, applicationModel, dateTime);
+        await SeedLogManagement(db, applicationModel, dateTime);
     }
 }

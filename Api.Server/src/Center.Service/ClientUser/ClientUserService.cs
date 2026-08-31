@@ -59,9 +59,9 @@ public class ClientUserService : IDynamicApplication
                 UserId = sl.UserId,
                 AppId = sl.AppId,
                 UserType = sl.UserType,
+                Mobile = sl.Mobile,
                 OpenId = sl.OpenId,
                 UnionId = sl.UnionId,
-                Mobile = sl.Mobile,
                 NickName = sl.NickName,
                 Avatar = sl.Avatar,
                 Sex = sl.Sex,
@@ -102,9 +102,9 @@ public class ClientUserService : IDynamicApplication
             {
                 UserId = sl.UserId,
                 UserType = sl.UserType,
+                Mobile = sl.Mobile,
                 OpenId = sl.OpenId,
                 UnionId = sl.UnionId,
-                Mobile = sl.Mobile,
                 NickName = sl.NickName,
                 Avatar = sl.Avatar,
                 Sex = sl.Sex,
@@ -157,6 +157,12 @@ public class ClientUserService : IDynamicApplication
 
         if (!string.IsNullOrWhiteSpace(input.Mobile) && userModel.Mobile != input.Mobile)
         {
+            // 检查手机号是否已存在账号
+            if (await _repository.AnyAsync(a => a.Mobile == input.Mobile && a.UserId != userModel.UserId))
+            {
+                throw new UserFriendlyException("该手机号已被其他用户绑定，请更换手机号！");
+            }
+
             userModel.Mobile = input.Mobile;
             userModel.MobileUpdateTime = DateTime.Now;
         }

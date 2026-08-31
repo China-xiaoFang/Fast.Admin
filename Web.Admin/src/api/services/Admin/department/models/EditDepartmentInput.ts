@@ -5,15 +5,15 @@ export interface EditDepartmentInput {
 	/**
 	 * 部门Id
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 机构Id
 	 */
-	orgId?: number;
+	orgId?: string;
 	/**
 	 * 父级Id
 	 */
-	parentId?: number;
+	parentId?: string;
 	/**
 	 * 部门名称
 	 */
@@ -49,6 +49,6 @@ export interface EditDepartmentInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

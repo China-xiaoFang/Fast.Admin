@@ -24,7 +24,7 @@ export const configApi = {
 	/**
 	 * 获取配置详情
 	 */
-	queryConfigDetail(configId: number): Promise<QueryConfigDetailOutput> {
+	queryConfigDetail(configId: string): Promise<QueryConfigDetailOutput> {
 		return axiosUtil.request<QueryConfigDetailOutput>({
 			url: "/config/queryConfigDetail",
 			method: "get",

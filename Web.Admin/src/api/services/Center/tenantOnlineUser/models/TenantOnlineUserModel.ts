@@ -27,7 +27,7 @@ export interface TenantOnlineUserModel {
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 手机
 	 */
@@ -43,7 +43,7 @@ export interface TenantOnlineUserModel {
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 工号
 	 */
@@ -55,7 +55,7 @@ export interface TenantOnlineUserModel {
 	/**
 	 * 部门Id
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 部门名称
 	 */
@@ -107,6 +107,6 @@ export interface TenantOnlineUserModel {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 }
 

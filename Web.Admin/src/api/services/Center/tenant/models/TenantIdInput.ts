@@ -5,10 +5,10 @@ export interface TenantIdInput {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

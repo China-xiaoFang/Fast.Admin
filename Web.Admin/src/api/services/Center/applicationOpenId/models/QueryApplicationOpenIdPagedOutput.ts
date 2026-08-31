@@ -8,7 +8,7 @@ export interface QueryApplicationOpenIdPagedOutput {
 	/**
 	 * 记录Id
 	 */
-	recordId?: number;
+	recordId?: string;
 	/**
 	 * 应用标识
 	 */
@@ -72,6 +72,6 @@ export interface QueryApplicationOpenIdPagedOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

@@ -31,7 +31,7 @@ namespace Fast.Core;
 /// <summary>
 /// <see cref="ISmsService"/> 默认实现
 /// </summary>
-public class SMSService : ISmsService, ISingletonDependency
+public class SMSService : ISmsService
 {
     /// <summary>
     /// 缓存

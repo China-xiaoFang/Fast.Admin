@@ -40,7 +40,7 @@ public partial class LoginService
     {
         return appType switch
         {
-            AppEnvironmentEnum.WeChatMiniProgram => ClientUserTypeEnum.MiniProgram,
+            AppEnvironmentEnum.WeChatMiniProgram => ClientUserTypeEnum.Mobile | ClientUserTypeEnum.MiniProgram,
             AppEnvironmentEnum.WeChatOfficialAccount => ClientUserTypeEnum.OfficialAccount,
             AppEnvironmentEnum.WeChatServiceAccount => ClientUserTypeEnum.ServiceAccount,
             AppEnvironmentEnum.WeChatOpenPlatform => ClientUserTypeEnum.OpenPlatform,

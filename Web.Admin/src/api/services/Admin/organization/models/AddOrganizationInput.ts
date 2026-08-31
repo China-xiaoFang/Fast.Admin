@@ -5,7 +5,7 @@ export interface AddOrganizationInput {
 	/**
 	 * 父级Id
 	 */
-	parentId?: number;
+	parentId?: string;
 	/**
 	 * 机构名称
 	 */

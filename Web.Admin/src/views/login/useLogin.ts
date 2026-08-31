@@ -174,7 +174,7 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 
 	/** 回车键摁下 */
 	const handleKeyupEnter = (): void => {
-		faButtonRef.value?.doLoading(() => handleFormLogin(null));
+		void faButtonRef.value?.doLoading(() => handleFormLogin(null));
 	};
 
 	return {

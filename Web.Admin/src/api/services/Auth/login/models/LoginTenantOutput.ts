@@ -45,7 +45,7 @@ export interface LoginTenantOutput {
 	/**
 	 * 部门Id
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 部门名称
 	 */

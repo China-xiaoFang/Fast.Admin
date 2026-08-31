@@ -9,7 +9,7 @@ export interface QuerySerialRuleDetailOutput {
 	/**
 	 * 序号规则Id
 	 */
-	serialRuleId?: number;
+	serialRuleId?: string;
 	/**
 	 * 
 	 */
@@ -53,6 +53,6 @@ export interface QuerySerialRuleDetailOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

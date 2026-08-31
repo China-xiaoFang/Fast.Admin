@@ -10,7 +10,7 @@ export interface QueryEmployeeDetailOutput {
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 工号
 	 */
@@ -74,7 +74,7 @@ export interface QueryEmployeeDetailOutput {
 	/**
 	 * 更新版本控制字段
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 	/**
 	 * 机构信息
 	 */

@@ -377,11 +377,11 @@ const handleConfirm = () => {
 		state.formData.otherConfig = [];
 	}
 	emit("change", state.formData, state.rowIndex);
-	faDialogRef.value.close();
+	void faDialogRef.value.close();
 };
 
 const edit = (row: FaTableColumnCtx, rowIndex: number) => {
-	faDialogRef.value.open(() => {
+	void faDialogRef.value.open(() => {
 		state.formData = row;
 		state.rowIndex = rowIndex;
 	});

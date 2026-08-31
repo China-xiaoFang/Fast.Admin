@@ -8,15 +8,19 @@ export interface QueryClientUserPagedOutput {
 	/**
 	 * 客户端用户Id
 	 */
-	userId?: number;
+	userId?: string;
 	/**
 	 * 应用Id
 	 */
-	appId?: number;
+	appId?: string;
 	/**
-	 * 
+	 *
 	 */
 	userType?: ClientUserTypeEnum;
+	/**
+	 * 手机
+	 */
+	mobile?: string;
 	/**
 	 * 唯一用户标识
 	 */
@@ -26,10 +30,6 @@ export interface QueryClientUserPagedOutput {
 	 */
 	unionId?: string;
 	/**
-	 * 手机
-	 */
-	mobile?: string;
-	/**
 	 * 昵称
 	 */
 	nickName?: string;
@@ -38,7 +38,7 @@ export interface QueryClientUserPagedOutput {
 	 */
 	avatar?: string;
 	/**
-	 * 
+	 *
 	 */
 	sex?: GenderEnum;
 	/**
@@ -78,24 +78,23 @@ export interface QueryClientUserPagedOutput {
 	 */
 	createdTime?: string;
 	/**
-	 * 
+	 *
 	 */
 	departmentName?: string;
 	/**
-	 * 
+	 *
 	 */
 	createdUserName?: string;
 	/**
-	 * 
+	 *
 	 */
 	updatedUserName?: string;
 	/**
-	 * 
+	 *
 	 */
 	updatedTime?: string;
 	/**
-	 * 
+	 *
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
-

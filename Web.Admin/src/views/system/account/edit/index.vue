@@ -132,7 +132,7 @@ const state = reactive({
 });
 
 const detail = (accountId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		const apiRes = await accountApi.queryAccountDetail(accountId);
 		state.formData = apiRes;
 		state.dialogTitle = `账号详情 - ${apiRes.mobile}`;

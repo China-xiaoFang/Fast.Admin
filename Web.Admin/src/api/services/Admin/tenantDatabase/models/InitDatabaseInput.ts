@@ -7,7 +7,7 @@ export interface InitDatabaseInput {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 
 	 */

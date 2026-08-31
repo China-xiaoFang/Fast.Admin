@@ -7,7 +7,7 @@ export interface QueryDepartmentPagedInput extends PagedInput  {
 	/**
 	 * 机构Id
 	 */
-	orgId?: number;
+	orgId?: string;
 	/**
 	 * 
 	 */

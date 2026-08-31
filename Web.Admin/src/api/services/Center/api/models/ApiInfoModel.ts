@@ -8,7 +8,7 @@ export interface ApiInfoModel {
 	/**
 	 * 接口Id
 	 */
-	apiId?: number;
+	apiId?: string;
 	/**
 	 * 服务名称
 	 */

@@ -14,8 +14,8 @@ export const tenantApi = {
 	/**
 	 * 租户选择器
 	 */
-	tenantSelector(data: PagedInput): Promise<PagedResult<ElSelectorOutput<number>>> {
-		return axiosUtil.request<PagedResult<ElSelectorOutput<number>>>({
+	tenantSelector(data: PagedInput): Promise<PagedResult<ElSelectorOutput<string>>> {
+		return axiosUtil.request<PagedResult<ElSelectorOutput<string>>>({
 			url: "/tenant/tenantSelector",
 			method: "post",
 			data,
@@ -36,7 +36,7 @@ export const tenantApi = {
 	/**
 	 * 获取租户详情
 	 */
-	queryTenantDetail(tenantId: number): Promise<QueryTenantDetailOutput> {
+	queryTenantDetail(tenantId: string): Promise<QueryTenantDetailOutput> {
 		return axiosUtil.request<QueryTenantDetailOutput>({
 			url: "/tenant/queryTenantDetail",
 			method: "get",

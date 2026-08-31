@@ -7,7 +7,7 @@ export interface QueryAccountDetailOutput {
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 手机
 	 */
@@ -19,7 +19,7 @@ export interface QueryAccountDetailOutput {
 	/**
 	 * 客户端用户Id
 	 */
-	clientUserId?: number;
+	clientUserId?: string;
 	/**
 	 * 
 	 */
@@ -119,6 +119,6 @@ export interface QueryAccountDetailOutput {
 	/**
 	 * 更新版本控制字段
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

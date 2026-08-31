@@ -9,7 +9,7 @@ export interface QueryDictionaryDetailOutput {
 	/**
 	 * 字典Id
 	 */
-	dictionaryId?: number;
+	dictionaryId?: string;
 	/**
 	 * 字典Key
 	 */
@@ -61,6 +61,6 @@ export interface QueryDictionaryDetailOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

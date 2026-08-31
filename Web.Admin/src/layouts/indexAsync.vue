@@ -1,7 +1,7 @@
 <template>
 	<suspense>
 		<template #default>
-			<Watermark v-if="configStore.layout.watermark">
+			<Watermark>
 				<component
 					:is="layoutComponents[layoutMode]"
 					class="layout"
@@ -11,15 +11,6 @@
 					}"
 				/>
 			</Watermark>
-			<component
-				:is="layoutComponents[layoutMode]"
-				v-else
-				class="layout"
-				:class="{
-					'is-mobile': isMobile,
-					'is-tablet': isTablet,
-				}"
-			/>
 		</template>
 		<template #fallback>
 			<Loading loading-text="系统初始化中..." />

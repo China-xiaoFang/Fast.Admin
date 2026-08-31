@@ -19,7 +19,7 @@ export const tableApi = {
 	/**
 	 * 获取表格列配置详情
 	 */
-	queryTableColumnConfigDetail(tableId: number): Promise<FaTableColumnCtx[]> {
+	queryTableColumnConfigDetail(tableId: string): Promise<FaTableColumnCtx[]> {
 		return axiosUtil.request<FaTableColumnCtx[]>({
 			url: "/table/queryTableColumnConfigDetail",
 			method: "get",
@@ -54,7 +54,7 @@ export const tableApi = {
 	/**
 	 * 获取表格配置详情
 	 */
-	queryTableConfigDetail(tableId: number): Promise<QueryTableConfigDetailOutput> {
+	queryTableConfigDetail(tableId: string): Promise<QueryTableConfigDetailOutput> {
 		return axiosUtil.request<QueryTableConfigDetailOutput>({
 			url: "/table/queryTableConfigDetail",
 			method: "get",

@@ -5,7 +5,7 @@ export interface QueryTableConfigDetailOutput {
 	/**
 	 * 表格Id
 	 */
-	tableId?: number;
+	tableId?: string;
 	/**
 	 * 表格Key
 	 */
@@ -41,6 +41,6 @@ export interface QueryTableConfigDetailOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

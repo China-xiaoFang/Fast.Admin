@@ -9,7 +9,7 @@ export interface EditDictionaryInput {
 	/**
 	 * 字典Id
 	 */
-	dictionaryId?: number;
+	dictionaryId?: string;
 	/**
 	 * 字典名称
 	 */
@@ -33,6 +33,6 @@ export interface EditDictionaryInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

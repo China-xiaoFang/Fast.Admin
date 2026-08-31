@@ -93,8 +93,6 @@ export const useConfig = defineStore(
 			screenFull: true,
 			/** 是否显示页脚 */
 			footer: true,
-			/** 是否显示水印 */
-			watermark: true,
 		});
 
 		/** 表格配置 */
@@ -232,7 +230,6 @@ export const useConfig = defineStore(
 			layout.menuSearch = true;
 			layout.screenFull = true;
 			layout.footer = true;
-			layout.watermark = true;
 			setDefaultLayoutSize();
 			initTheme();
 			tableLayout.showSearch = true;

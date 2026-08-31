@@ -9,11 +9,11 @@ export interface QueryApplicationOpenIdDetailOutput {
 	/**
 	 * 记录Id
 	 */
-	recordId?: number;
+	recordId?: string;
 	/**
 	 * 应用Id
 	 */
-	appId?: number;
+	appId?: string;
 	/**
 	 * 应用名称
 	 */
@@ -53,7 +53,7 @@ export interface QueryApplicationOpenIdDetailOutput {
 	/**
 	 * 微信商户号Id
 	 */
-	weChatMerchantId?: number;
+	weChatMerchantId?: string;
 	/**
 	 * 微信商户号
 	 */
@@ -61,7 +61,7 @@ export interface QueryApplicationOpenIdDetailOutput {
 	/**
 	 * 支付宝商户号Id
 	 */
-	alipayMerchantId?: number;
+	alipayMerchantId?: string;
 	/**
 	 * 支付宝商户号
 	 */
@@ -105,6 +105,6 @@ export interface QueryApplicationOpenIdDetailOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

@@ -12,8 +12,8 @@ export const organizationApi = {
 	/**
 	 * 机构选择器
 	 */
-	organizationSelector(): Promise<ElSelectorOutput<number>[]> {
-		return axiosUtil.request<ElSelectorOutput<number>[]>({
+	organizationSelector(): Promise<ElSelectorOutput<string>[]> {
+		return axiosUtil.request<ElSelectorOutput<string>[]>({
 			url: "/organization/organizationSelector",
 			method: "get",
 			requestType: "query",
@@ -22,7 +22,7 @@ export const organizationApi = {
 	/**
 	 * 获取机构详情
 	 */
-	queryOrganizationDetail(orgId: number): Promise<QueryOrganizationDetailOutput> {
+	queryOrganizationDetail(orgId: string): Promise<QueryOrganizationDetailOutput> {
 		return axiosUtil.request<QueryOrganizationDetailOutput>({
 			url: "/organization/queryOrganizationDetail",
 			method: "get",

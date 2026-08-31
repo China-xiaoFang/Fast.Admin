@@ -8,7 +8,7 @@ export interface QueryOperateLogPagedInput extends PagedInput  {
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 
 	 */
@@ -16,7 +16,7 @@ export interface QueryOperateLogPagedInput extends PagedInput  {
 	/**
 	 * 业务单号
 	 */
-	bizId?: number;
+	bizId?: string;
 	/**
 	 * 
 	 */

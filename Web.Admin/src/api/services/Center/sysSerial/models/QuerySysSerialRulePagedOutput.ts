@@ -9,7 +9,7 @@ export interface QuerySysSerialRulePagedOutput {
 	/**
 	 * 序号规则Id
 	 */
-	serialRuleId?: number;
+	serialRuleId?: string;
 	/**
 	 * 
 	 */
@@ -33,7 +33,7 @@ export interface QuerySysSerialRulePagedOutput {
 	/**
 	 * 最后一个序号
 	 */
-	lastSerial?: number;
+	lastSerial?: string;
 	/**
 	 * 最后一个序号编号
 	 */
@@ -65,6 +65,6 @@ export interface QuerySysSerialRulePagedOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

@@ -25,7 +25,7 @@ export const databaseApi = {
 	/**
 	 * 获取数据库详情
 	 */
-	queryDatabaseDetail(mainId: number): Promise<QueryDatabaseDetailOutput> {
+	queryDatabaseDetail(mainId: string): Promise<QueryDatabaseDetailOutput> {
 		return axiosUtil.request<QueryDatabaseDetailOutput>({
 			url: "/database/queryDatabaseDetail",
 			method: "get",

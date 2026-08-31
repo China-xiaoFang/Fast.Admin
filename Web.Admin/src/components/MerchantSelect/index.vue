@@ -31,7 +31,7 @@ defineOptions({
 
 const props = withDefaults(
 	defineProps<{
-		modelValue?: number | string;
+		modelValue?: string;
 		merchantNo?: string;
 		merchantType?: PaymentChannelEnum;
 	}>(),
@@ -39,7 +39,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (_value: number | string) => true,
+	"update:modelValue": (_value: string) => true,
 	"update:merchantNo": (_value: string) => true,
 	change: (_value: ElSelectorOutput) => true,
 });

@@ -7,7 +7,7 @@ export interface EditMerchantInput {
 	/**
 	 * 商户号Id
 	 */
-	merchantId?: number;
+	merchantId?: string;
 	/**
 	 * 
 	 */
@@ -51,6 +51,6 @@ export interface EditMerchantInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

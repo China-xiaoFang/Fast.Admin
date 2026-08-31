@@ -27,7 +27,7 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("ClientUser", "客户端用户表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(AppId), OrderByType.Asc, nameof(OpenId), OrderByType.Asc, nameof(Mobile),
+[SugarIndex("IX_{table}_Identity", nameof(AppId), OrderByType.Asc, nameof(OpenId), OrderByType.Asc, nameof(Mobile),
     OrderByType.Asc, true)]
 public class ClientUserModel : IUpdateVersion
 {
@@ -50,6 +50,12 @@ public class ClientUserModel : IUpdateVersion
     public ClientUserTypeEnum UserType { get; set; }
 
     /// <summary>
+    /// 手机
+    /// </summary>
+    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
+    public string Mobile { get; set; }
+
+    /// <summary>
     /// 唯一用户标识
     /// </summary>
     [SugarColumn(ColumnDescription = "唯一用户标识", Length = 28)]
@@ -60,12 +66,6 @@ public class ClientUserModel : IUpdateVersion
     /// </summary>
     [SugarColumn(ColumnDescription = "统一用户标识", Length = 28)]
     public string UnionId { get; set; }
-
-    /// <summary>
-    /// 手机
-    /// </summary>
-    [SugarColumn(ColumnDescription = "手机", ColumnDataType = "varchar(11)")]
-    public string Mobile { get; set; }
 
     /// <summary>
     /// 密码

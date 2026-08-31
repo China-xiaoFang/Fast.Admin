@@ -60,7 +60,7 @@ export interface AddDatabaseInput {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 是否创建数据库
 	 */

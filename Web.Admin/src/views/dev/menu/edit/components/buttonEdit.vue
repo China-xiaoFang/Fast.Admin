@@ -93,7 +93,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	faDialogRef.value.close(async () => {
+	void faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		const { formData, dialogState } = state;
 		if (formData.roleTypes?.length > 0) {
@@ -132,7 +132,7 @@ const handleFlagsEnum = () => {
 };
 
 const detail = (row: EditMenuButtonInput) => {
-	faDialogRef.value.open(() => {
+	void faDialogRef.value.open(() => {
 		state.formDisabled = true;
 		state.formData = { ...row };
 		state.dialogTitle = `按钮详情 - ${row.buttonName}`;
@@ -141,7 +141,7 @@ const detail = (row: EditMenuButtonInput) => {
 };
 
 const add = () => {
-	faDialogRef.value.open(() => {
+	void faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加按钮";
 		state.formDisabled = false;
@@ -157,7 +157,7 @@ const add = () => {
 };
 
 const edit = (row: EditMenuButtonInput, index: number) => {
-	faDialogRef.value.open(() => {
+	void faDialogRef.value.open(() => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		state.tableIndex = index;

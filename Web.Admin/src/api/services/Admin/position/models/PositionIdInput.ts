@@ -5,10 +5,10 @@ export interface PositionIdInput {
 	/**
 	 * 职位Id
 	 */
-	positionId?: number;
+	positionId?: string;
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

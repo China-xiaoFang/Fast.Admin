@@ -7,7 +7,7 @@ export interface QueryAccountPagedOutput {
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 手机
 	 */
@@ -119,6 +119,6 @@ export interface QueryAccountPagedOutput {
 	/**
 	 * 更新版本控制字段
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

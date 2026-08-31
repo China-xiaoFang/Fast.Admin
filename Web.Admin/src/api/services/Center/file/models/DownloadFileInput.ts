@@ -5,6 +5,6 @@ export interface DownloadFileInput {
 	/**
 	 * 文件Id
 	 */
-	fileId?: number;
+	fileId?: string;
 }
 

@@ -62,7 +62,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	faDialogRef.value.close(async () => {
+	void faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -79,7 +79,7 @@ const handleConfirm = () => {
 };
 
 const detail = (serialRuleId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await serialApi.querySerialRuleDetail(serialRuleId);
 		state.formData = apiRes;
@@ -88,7 +88,7 @@ const detail = (serialRuleId: number) => {
 };
 
 const add = () => {
-	faDialogRef.value.open(() => {
+	void faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加序号";
 		state.formDisabled = false;
@@ -101,7 +101,7 @@ const add = () => {
 };
 
 const edit = (serialRuleId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await serialApi.querySerialRuleDetail(serialRuleId);

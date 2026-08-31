@@ -147,7 +147,7 @@ const handleButtonAllChange = (menuId: number, val: CheckboxValueType) => {
 };
 
 const handleConfirm = () => {
-	faDialogRef.value.close(async () => {
+	void faDialogRef.value.close(async () => {
 		await roleApi.roleAuth(state.formData);
 		ElMessage.success("授权成功！");
 		emit("ok");
@@ -155,7 +155,7 @@ const handleConfirm = () => {
 };
 
 const open = (roleId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		const apiRes = await roleApi.queryRoleAuthMenu({ roleId });
 		state.formData = apiRes;
 		state.menuList = await roleApi.queryAuthMenu();

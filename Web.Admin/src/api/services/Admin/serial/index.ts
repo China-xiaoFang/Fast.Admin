@@ -23,7 +23,7 @@ export const serialApi = {
 	/**
 	 * 获取序号规则详情
 	 */
-	querySerialRuleDetail(serialRuleId: number): Promise<QuerySerialRuleDetailOutput> {
+	querySerialRuleDetail(serialRuleId: string): Promise<QuerySerialRuleDetailOutput> {
 		return axiosUtil.request<QuerySerialRuleDetailOutput>({
 			url: "/serial/querySerialRuleDetail",
 			method: "get",

@@ -5,11 +5,11 @@ export interface EmployeeOrgModel {
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 机构Id
 	 */
-	orgId?: number;
+	orgId?: string;
 	/**
 	 * 机构名称
 	 */
@@ -21,7 +21,7 @@ export interface EmployeeOrgModel {
 	/**
 	 * 部门Id
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 部门名称
 	 */
@@ -37,7 +37,7 @@ export interface EmployeeOrgModel {
 	/**
 	 * 职位Id
 	 */
-	positionId?: number;
+	positionId?: string;
 	/**
 	 * 职位名称
 	 */
@@ -45,7 +45,7 @@ export interface EmployeeOrgModel {
 	/**
 	 * 职级Id
 	 */
-	jobLevelId?: number;
+	jobLevelId?: string;
 	/**
 	 * 职级名称
 	 */

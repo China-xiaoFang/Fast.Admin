@@ -5,10 +5,10 @@ export interface AccountIdInput {
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

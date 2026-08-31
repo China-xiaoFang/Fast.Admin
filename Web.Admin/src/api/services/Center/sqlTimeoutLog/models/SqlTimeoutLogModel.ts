@@ -5,11 +5,11 @@ export interface SqlTimeoutLogModel {
 	/**
 	 * 记录Id
 	 */
-	recordId?: number;
+	recordId?: string;
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 手机
 	 */
@@ -45,7 +45,7 @@ export interface SqlTimeoutLogModel {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 租户名称
 	 */
@@ -77,7 +77,7 @@ export interface SqlTimeoutLogModel {
 	/**
 	 * 
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 
 	 */
@@ -85,7 +85,7 @@ export interface SqlTimeoutLogModel {
 	/**
 	 * 
 	 */
-	createdUserId?: number;
+	createdUserId?: string;
 	/**
 	 * 
 	 */

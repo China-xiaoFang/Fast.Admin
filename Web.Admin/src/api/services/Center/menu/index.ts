@@ -14,8 +14,8 @@ export const menuApi = {
 	/**
 	 * 菜单选择器
 	 */
-	menuSelector(): Promise<ElSelectorOutput<number>[]> {
-		return axiosUtil.request<ElSelectorOutput<number>[]>({
+	menuSelector(): Promise<ElSelectorOutput<string>[]> {
+		return axiosUtil.request<ElSelectorOutput<string>[]>({
 			url: "/menu/menuSelector",
 			method: "get",
 			requestType: "query",
@@ -35,7 +35,7 @@ export const menuApi = {
 	/**
 	 * 获取菜单详情
 	 */
-	queryMenuDetail(menuId: number): Promise<QueryMenuDetailOutput> {
+	queryMenuDetail(menuId: string): Promise<QueryMenuDetailOutput> {
 		return axiosUtil.request<QueryMenuDetailOutput>({
 			url: "/menu/queryMenuDetail",
 			method: "get",

@@ -7,7 +7,7 @@ export interface QueryApplicationDetailOutput {
 	/**
 	 * 应用Id
 	 */
-	appId?: number;
+	appId?: string;
 	/**
 	 * 
 	 */
@@ -35,7 +35,7 @@ export interface QueryApplicationDetailOutput {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 租户名称
 	 */
@@ -63,6 +63,6 @@ export interface QueryApplicationDetailOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

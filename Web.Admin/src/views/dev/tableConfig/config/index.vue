@@ -232,7 +232,7 @@ const edit = (tableId: number, tableName: string, rowVersion: number) => {
 	state.tableName = tableName;
 	state.rowVersion = rowVersion;
 	state.change = false;
-	faTableRef.value.doLoading(async () => {
+	void faTableRef.value.doLoading(async () => {
 		state.tableData = await tableApi.queryTableColumnConfigDetail(tableId);
 
 		tableWatch = watch(

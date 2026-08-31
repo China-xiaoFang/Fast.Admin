@@ -7,7 +7,7 @@ export interface EmployeeIdInput {
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 
 	 */
@@ -15,6 +15,6 @@ export interface EmployeeIdInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

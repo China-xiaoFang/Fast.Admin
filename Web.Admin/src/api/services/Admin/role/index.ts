@@ -37,8 +37,8 @@ export const roleApi = {
 	/**
 	 * 获取授权菜单
 	 */
-	queryAuthMenu(): Promise<ElSelectorOutput<number>[]> {
-		return axiosUtil.request<ElSelectorOutput<number>[]>({
+	queryAuthMenu(): Promise<ElSelectorOutput<string>[]> {
+		return axiosUtil.request<ElSelectorOutput<string>[]>({
 			url: "/role/queryAuthMenu",
 			method: "get",
 			requestType: "query",
@@ -80,8 +80,8 @@ export const roleApi = {
 	/**
 	 * 角色选择器
 	 */
-	roleSelector(): Promise<ElSelectorOutput<number>[]> {
-		return axiosUtil.request<ElSelectorOutput<number>[]>({
+	roleSelector(): Promise<ElSelectorOutput<string>[]> {
+		return axiosUtil.request<ElSelectorOutput<string>[]>({
 			url: "/role/roleSelector",
 			method: "get",
 			requestType: "query",
@@ -101,7 +101,7 @@ export const roleApi = {
 	/**
 	 * 获取角色详情
 	 */
-	queryRoleDetail(roleId: number): Promise<QueryRoleDetailOutput> {
+	queryRoleDetail(roleId: string): Promise<QueryRoleDetailOutput> {
 		return axiosUtil.request<QueryRoleDetailOutput>({
 			url: "/role/queryRoleDetail",
 			method: "get",

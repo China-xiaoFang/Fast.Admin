@@ -9,7 +9,7 @@ export interface QueryEmployeePagedOutput {
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 工号
 	 */
@@ -69,11 +69,11 @@ export interface QueryEmployeePagedOutput {
 	/**
 	 * 更新版本控制字段
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 	/**
 	 * 机构Id
 	 */
-	orgId?: number;
+	orgId?: string;
 	/**
 	 * 机构名称
 	 */
@@ -85,7 +85,7 @@ export interface QueryEmployeePagedOutput {
 	/**
 	 * 部门Id
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 部门名称
 	 */
@@ -97,7 +97,7 @@ export interface QueryEmployeePagedOutput {
 	/**
 	 * 职位Id
 	 */
-	positionId?: number;
+	positionId?: string;
 	/**
 	 * 职位名称
 	 */
@@ -105,7 +105,7 @@ export interface QueryEmployeePagedOutput {
 	/**
 	 * 职级Id
 	 */
-	jobLevelId?: number;
+	jobLevelId?: string;
 	/**
 	 * 职级名称
 	 */

@@ -20,7 +20,7 @@ export interface EditSchedulerJobInput {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 作业名称
 	 */

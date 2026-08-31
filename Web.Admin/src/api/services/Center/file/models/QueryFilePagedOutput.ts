@@ -5,7 +5,7 @@ export interface QueryFilePagedOutput {
 	/**
 	 * 文件Id
 	 */
-	fileId?: number;
+	fileId?: string;
 	/**
 	 * 文件唯一标识
 	 */
@@ -25,7 +25,7 @@ export interface QueryFilePagedOutput {
 	/**
 	 * 文件大小kb
 	 */
-	fileSizeKb?: number;
+	fileSizeKb?: string;
 	/**
 	 * 存储路径
 	 */

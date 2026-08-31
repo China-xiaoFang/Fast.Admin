@@ -9,7 +9,7 @@ export interface GetLoginUserInfoOutput {
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 账号Key
 	 */
@@ -53,7 +53,7 @@ export interface GetLoginUserInfoOutput {
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 工号
 	 */
@@ -65,7 +65,7 @@ export interface GetLoginUserInfoOutput {
 	/**
 	 * 部门Id
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 部门名称
 	 */

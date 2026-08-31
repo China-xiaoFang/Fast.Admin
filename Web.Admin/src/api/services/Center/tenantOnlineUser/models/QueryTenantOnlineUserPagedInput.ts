@@ -12,11 +12,11 @@ export interface QueryTenantOnlineUserPagedInput extends PagedInput  {
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 职员Id
 	 */
-	employeeId?: number;
+	employeeId?: string;
 	/**
 	 * 
 	 */

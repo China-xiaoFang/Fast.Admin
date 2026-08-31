@@ -21,6 +21,6 @@ export interface EditAccountInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

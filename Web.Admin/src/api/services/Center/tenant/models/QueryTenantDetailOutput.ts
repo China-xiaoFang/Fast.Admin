@@ -9,7 +9,7 @@ export interface QueryTenantDetailOutput {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 租户编号
 	 */
@@ -41,7 +41,7 @@ export interface QueryTenantDetailOutput {
 	/**
 	 * 租户管理员账号Id
 	 */
-	adminAccountId?: number;
+	adminAccountId?: string;
 	/**
 	 * 租户管理员名称
 	 */
@@ -165,6 +165,6 @@ export interface QueryTenantDetailOutput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

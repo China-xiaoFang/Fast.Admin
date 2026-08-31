@@ -5,7 +5,7 @@ export interface EditTableConfigInput {
 	/**
 	 * 表格Id
 	 */
-	tableId?: number;
+	tableId?: string;
 	/**
 	 * 表格名称
 	 */
@@ -17,6 +17,6 @@ export interface EditTableConfigInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

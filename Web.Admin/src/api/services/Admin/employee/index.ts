@@ -50,8 +50,8 @@ export const employeeApi = {
 	/**
 	 * 职员选择器
 	 */
-	employeeSelector(data: PagedInput): Promise<PagedResult<ElSelectorOutput<number>>> {
-		return axiosUtil.request<PagedResult<ElSelectorOutput<number>>>({
+	employeeSelector(data: PagedInput): Promise<PagedResult<ElSelectorOutput<string>>> {
+		return axiosUtil.request<PagedResult<ElSelectorOutput<string>>>({
 			url: "/employee/employeeSelector",
 			method: "post",
 			data,
@@ -72,7 +72,7 @@ export const employeeApi = {
 	/**
 	 * 获取职员详情
 	 */
-	queryEmployeeDetail(employeeId: number): Promise<QueryEmployeeDetailOutput> {
+	queryEmployeeDetail(employeeId: string): Promise<QueryEmployeeDetailOutput> {
 		return axiosUtil.request<QueryEmployeeDetailOutput>({
 			url: "/employee/queryEmployeeDetail",
 			method: "get",

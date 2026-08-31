@@ -233,7 +233,7 @@ const handleComponentChange = (value: CascaderValue) => {
 };
 
 const handleConfirm = () => {
-	faDialogRef.value.close(async () => {
+	void faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		const { formData, dialogState } = state;
 		if (formData.roleTypes?.length > 0) {
@@ -275,11 +275,12 @@ const handleFlagsEnum = () => {
 };
 
 const add = () => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加菜单";
 		state.formDisabled = false;
 		state.formData = {
+			parentId: undefined,
 			menuType: MenuTypeEnum.Catalog,
 			roleType: RoleTypeEnum.Default,
 			edition: EditionEnum.None,
@@ -297,10 +298,13 @@ const add = () => {
 };
 
 const edit = (menuId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await menuApi.queryMenuDetail(menuId);
+		if (apiRes.parentId === "0") {
+			apiRes.parentId = undefined;
+		}
 		state.formData = apiRes;
 		state.menuList = await menuApi.menuSelector();
 		state.componentValue = apiRes.webComponent

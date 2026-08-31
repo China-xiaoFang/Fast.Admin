@@ -5,10 +5,10 @@ export interface RoleIdInput {
 	/**
 	 * 角色Id
 	 */
-	roleId?: number;
+	roleId?: string;
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

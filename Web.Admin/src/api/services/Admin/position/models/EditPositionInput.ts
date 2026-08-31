@@ -5,7 +5,7 @@ export interface EditPositionInput {
 	/**
 	 * 职位Id
 	 */
-	positionId?: number;
+	positionId?: string;
 	/**
 	 * 职位名称
 	 */
@@ -21,6 +21,6 @@ export interface EditPositionInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

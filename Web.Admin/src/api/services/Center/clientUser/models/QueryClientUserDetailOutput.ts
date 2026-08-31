@@ -8,11 +8,15 @@ export interface QueryClientUserDetailOutput {
 	/**
 	 * 客户端用户Id
 	 */
-	userId?: number;
+	userId?: string;
 	/**
-	 * 
+	 *
 	 */
 	userType?: ClientUserTypeEnum;
+	/**
+	 * 手机
+	 */
+	mobile?: string;
 	/**
 	 * 唯一用户标识
 	 */
@@ -22,10 +26,6 @@ export interface QueryClientUserDetailOutput {
 	 */
 	unionId?: string;
 	/**
-	 * 手机
-	 */
-	mobile?: string;
-	/**
 	 * 昵称
 	 */
 	nickName?: string;
@@ -34,7 +34,7 @@ export interface QueryClientUserDetailOutput {
 	 */
 	avatar?: string;
 	/**
-	 * 
+	 *
 	 */
 	sex?: GenderEnum;
 	/**
@@ -82,8 +82,7 @@ export interface QueryClientUserDetailOutput {
 	 */
 	readonly allowModifyMobile?: boolean;
 	/**
-	 * 
+	 *
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
-

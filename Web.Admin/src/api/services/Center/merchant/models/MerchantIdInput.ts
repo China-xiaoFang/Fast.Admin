@@ -5,10 +5,10 @@ export interface MerchantIdInput {
 	/**
 	 * 商户号Id
 	 */
-	merchantId?: number;
+	merchantId?: string;
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

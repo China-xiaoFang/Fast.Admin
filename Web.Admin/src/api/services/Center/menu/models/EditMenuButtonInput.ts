@@ -9,7 +9,7 @@ export interface EditMenuButtonInput {
 	/**
 	 * 按钮Id
 	 */
-	buttonId?: number;
+	buttonId?: string;
 	/**
 	 * 
 	 */

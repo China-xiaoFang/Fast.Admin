@@ -8,11 +8,11 @@ export interface SqlDiffLogModel {
 	/**
 	 * 记录Id
 	 */
-	recordId?: number;
+	recordId?: string;
 	/**
 	 * 账号Id
 	 */
-	accountId?: number;
+	accountId?: string;
 	/**
 	 * 手机
 	 */
@@ -56,7 +56,7 @@ export interface SqlDiffLogModel {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 租户名称
 	 */
@@ -88,7 +88,7 @@ export interface SqlDiffLogModel {
 	/**
 	 * 
 	 */
-	departmentId?: number;
+	departmentId?: string;
 	/**
 	 * 
 	 */
@@ -96,7 +96,7 @@ export interface SqlDiffLogModel {
 	/**
 	 * 
 	 */
-	createdUserId?: number;
+	createdUserId?: string;
 	/**
 	 * 
 	 */

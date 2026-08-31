@@ -5,10 +5,10 @@ export interface DictionaryIdInput {
 	/**
 	 * 字典Id
 	 */
-	dictionaryId?: number;
+	dictionaryId?: string;
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

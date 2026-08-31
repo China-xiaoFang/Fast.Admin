@@ -13,8 +13,8 @@ export const positionApi = {
 	/**
 	 * 职位选择器
 	 */
-	positionSelector(): Promise<ElSelectorOutput<number>[]> {
-		return axiosUtil.request<ElSelectorOutput<number>[]>({
+	positionSelector(): Promise<ElSelectorOutput<string>[]> {
+		return axiosUtil.request<ElSelectorOutput<string>[]>({
 			url: "/position/positionSelector",
 			method: "get",
 			requestType: "query",
@@ -34,7 +34,7 @@ export const positionApi = {
 	/**
 	 * 获取职位详情
 	 */
-	queryPositionDetail(positionId: number): Promise<QueryPositionDetailOutput> {
+	queryPositionDetail(positionId: string): Promise<QueryPositionDetailOutput> {
 		return axiosUtil.request<QueryPositionDetailOutput>({
 			url: "/position/queryPositionDetail",
 			method: "get",

@@ -14,8 +14,8 @@ export const accountApi = {
 	/**
 	 * 账号选择器
 	 */
-	accountSelector(data: PagedInput): Promise<PagedResult<ElSelectorOutput<number>>> {
-		return axiosUtil.request<PagedResult<ElSelectorOutput<number>>>({
+	accountSelector(data: PagedInput): Promise<PagedResult<ElSelectorOutput<string>>> {
+		return axiosUtil.request<PagedResult<ElSelectorOutput<string>>>({
 			url: "/account/accountSelector",
 			method: "post",
 			data,
@@ -36,7 +36,7 @@ export const accountApi = {
 	/**
 	 * 获取账号详情
 	 */
-	queryAccountDetail(accountId: number): Promise<QueryAccountDetailOutput> {
+	queryAccountDetail(accountId: string): Promise<QueryAccountDetailOutput> {
 		return axiosUtil.request<QueryAccountDetailOutput>({
 			url: "/account/queryAccountDetail",
 			method: "get",

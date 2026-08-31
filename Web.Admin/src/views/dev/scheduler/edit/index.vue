@@ -373,7 +373,10 @@ const handleObj = () => {
 	state.requestHeaderObj = [];
 	state.requestParamsObj = [];
 	state.requestHeaderObj = Object.entries(state.formData.requestHeader ?? {}).map(([key, value]) => ({ key, value }));
-	state.requestParamsObj = Object.entries(state.formData.requestParams ?? {}).map(([key, value]) => ({ key, value }));
+	state.requestParamsObj = Object.entries(state.formData.requestParams ?? {}).map(([key, value]) => ({
+		key,
+		value: typeof value === "string" ? value : (JSON.stringify(value) ?? ""),
+	}));
 };
 
 const handleCronRefer = () => {

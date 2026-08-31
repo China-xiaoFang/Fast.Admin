@@ -59,7 +59,7 @@ const handleConfirm = async () => {
 		ElMessage.warning("两次密码输入不一致");
 		return;
 	}
-	faDialogRef.value.close(() => {
+	void faDialogRef.value.close(() => {
 		void ElMessageBox.confirm("确认修改密码", {
 			type: "warning",
 		}).then(async () => {
@@ -74,7 +74,7 @@ const handleConfirm = async () => {
 };
 
 const open = () => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		const apiRes = await accountApi.queryEditAccountDetail();
 		state.formData = {
 			rowVersion: apiRes.rowVersion,

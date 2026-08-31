@@ -7,7 +7,7 @@ export interface EditApplicationInput {
 	/**
 	 * 应用Id
 	 */
-	appId?: number;
+	appId?: string;
 	/**
 	 * 
 	 */
@@ -31,7 +31,7 @@ export interface EditApplicationInput {
 	/**
 	 * 租户Id
 	 */
-	tenantId?: number;
+	tenantId?: string;
 	/**
 	 * 租户名称
 	 */
@@ -39,6 +39,6 @@ export interface EditApplicationInput {
 	/**
 	 * 
 	 */
-	rowVersion?: number;
+	rowVersion?: string;
 }
 

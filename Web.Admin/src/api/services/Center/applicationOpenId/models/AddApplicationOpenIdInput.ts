@@ -12,7 +12,7 @@ export interface AddApplicationOpenIdInput {
 	/**
 	 * 应用Id
 	 */
-	appId?: number;
+	appId?: string;
 	/**
 	 * 
 	 */
@@ -44,7 +44,7 @@ export interface AddApplicationOpenIdInput {
 	/**
 	 * 微信商户号Id
 	 */
-	weChatMerchantId?: number;
+	weChatMerchantId?: string;
 	/**
 	 * 微信商户号
 	 */
@@ -52,7 +52,7 @@ export interface AddApplicationOpenIdInput {
 	/**
 	 * 支付宝商户号Id
 	 */
-	alipayMerchantId?: number;
+	alipayMerchantId?: string;
 	/**
 	 * 支付宝商户号
 	 */

@@ -25,7 +25,7 @@ export const applicationOpenIdApi = {
 	/**
 	 * 获取应用标识详情
 	 */
-	queryApplicationOpenIdDetail(recordId: number): Promise<QueryApplicationOpenIdDetailOutput> {
+	queryApplicationOpenIdDetail(recordId: string): Promise<QueryApplicationOpenIdDetailOutput> {
 		return axiosUtil.request<QueryApplicationOpenIdDetailOutput>({
 			url: "/applicationOpenId/queryApplicationOpenIdDetail",
 			method: "get",

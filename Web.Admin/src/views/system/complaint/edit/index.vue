@@ -39,7 +39,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	faDialogRef.value.close(async () => {
+	void faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		await complaintApi.handleComplaint(state.formData);
 		ElMessage.success("新增成功！");
@@ -48,7 +48,7 @@ const handleConfirm = () => {
 };
 
 const open = (complaintId: number) => {
-	faDialogRef.value.open(async () => {
+	void faDialogRef.value.open(async () => {
 		const apiRes = await complaintApi.queryComplaintDetail(complaintId);
 		state.formData = {
 			complaintId: apiRes.complaintId,
