@@ -2,11 +2,10 @@
 	<FaDialog
 		ref="faDialogRef"
 		width="1000"
-		fullHeight
 		:title="state.dialogTitle"
-		:showConfirmButton="!state.formDisabled"
-		:showBeforeClose="!state.formDisabled"
-		confirmButtonText="保存"
+		:show-confirm-button="!state.formDisabled"
+		:show-before-close="!state.formDisabled"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
@@ -20,44 +19,30 @@
 			<FaFormItem prop="themeColor" label="主题色">
 				<ColorPicker style="width: 32px" v-model="state.formData.themeColor" />
 			</FaFormItem>
-			<FaFormItem prop="icpSecurityCode" label="ICP备案号">
-				<el-input v-model="state.formData.icpSecurityCode" maxlength="20" placeholder="请输入ICP备案号" />
-			</FaFormItem>
-			<FaFormItem prop="publicSecurityCode" label="公安备案号">
-				<el-input v-model="state.formData.publicSecurityCode" maxlength="30" placeholder="请输入公安备案号" />
-			</FaFormItem>
 			<FaFormItem prop="tenantId" label="租户" span="2">
-				<TenantSelectPage v-model="state.formData.tenantId" v-model:tenantName="state.formData.tenantName" />
+				<TenantSelectPage v-model="state.formData.tenantId" v-model:tenant-name="state.formData.tenantName" />
 			</FaFormItem>
 			<FaFormItem prop="remark" label="备注">
 				<el-input type="textarea" v-model="state.formData.remark" :rows="2" maxlength="200" placeholder="请输入备注" />
 			</FaFormItem>
 			<FaFormItem prop="logoUrl" label="Logo">
-				<FaUploadImage v-model="state.formData.logoUrl" :uploadApi="fileApi.uploadLogo" />
-			</FaFormItem>
-			<FaFormItem prop="userAgreement" label="用户协议" span="2">
-				<Editor v-model="state.formData.userAgreement" placeholder="请输入用户协议" />
-			</FaFormItem>
-			<FaFormItem prop="privacyAgreement" label="隐私协议" span="2">
-				<Editor v-model="state.formData.privacyAgreement" placeholder="请输入隐私协议" />
-			</FaFormItem>
-			<FaFormItem prop="serviceAgreement" label="服务协议" span="2">
-				<Editor v-model="state.formData.serviceAgreement" placeholder="请输入服务协议" />
+				<FaUploadImage v-model="state.formData.logoUrl" :upload-api="fileApi.uploadLogo" />
 			</FaFormItem>
 		</FaForm>
 	</FaDialog>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
+import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { applicationApi } from "@/api/services/Center/application";
-import { AddApplicationInput } from "@/api/services/Center/application/models/AddApplicationInput";
-import { EditApplicationInput } from "@/api/services/Center/application/models/EditApplicationInput";
-import { fileApi } from "@/api/services/File";
+import { fileApi } from "@/api/services/Center/file";
+import type { FormRules } from "element-plus";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { AddApplicationInput } from "@/api/services/Center/application/models/AddApplicationInput";
+import type { EditApplicationInput } from "@/api/services/Center/application/models/EditApplicationInput";
 
 defineOptions({
 	name: "SystemApplicationEdit",
@@ -65,8 +50,8 @@ defineOptions({
 
 const emit = defineEmits(["ok"]);
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditApplicationInput & AddApplicationInput>({}),
@@ -113,9 +98,6 @@ const add = () => {
 		state.formDisabled = false;
 		state.formData = {
 			edition: EditionEnum.None,
-			userAgreement: "<p><br></p>",
-			privacyAgreement: "<p><br></p>",
-			serviceAgreement: "<p><br></p>",
 		};
 	});
 };

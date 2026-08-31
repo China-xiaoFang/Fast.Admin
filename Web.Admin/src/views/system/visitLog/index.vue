@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable tableKey="1D1K2Z66L4" rowKey="recordId" :requestApi="visitLogApi.queryVisitLogPaged" stripe>
+		<FastTable table-key="1D1K2Z66L4" row-key="recordId" :request-api="visitLogApi.queryVisitLogPaged" stripe>
 			<template #mobile="{ row }: { row?: VisitLogModel }">
 				{{ row.nickName }}
 				<br />
@@ -22,7 +22,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.createdTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small" class="ml5">
-					{{ dateUtil.dateTimeFix(String(row.createdTime)) }}
+					{{ formatChineseRelativeTime(String(row.createdTime)) }}
 				</el-tag>
 			</template>
 		</FastTable>
@@ -31,9 +31,9 @@
 
 <script lang="ts" setup>
 import { dayjs } from "element-plus";
-import { dateUtil } from "@fast-china/utils";
+import { formatChineseRelativeTime } from "@fast-china/utils";
 import { visitLogApi } from "@/api/services/Center/visitLog";
-import { VisitLogModel } from "@/api/services/Center/visitLog/models/VisitLogModel";
+import type { VisitLogModel } from "@/api/services/Center/visitLog/models/VisitLogModel";
 
 defineOptions({
 	name: "SystemVisitLog",

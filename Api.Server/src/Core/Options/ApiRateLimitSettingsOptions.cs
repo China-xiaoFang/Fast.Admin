@@ -38,7 +38,7 @@ public class ApiRateLimitSettingsOptions : IPostConfigure
     public int? LoginIpPermitLimit { get; set; }
 
     /// <summary>
-    /// 单个Ip与设备Id组合在统计窗口内允许的请求数
+    /// 已登录限流，单个会话在统计窗口内允许的请求数；未登录时按单个Ip与设备Id组合统计
     /// </summary>
     public int? PermitLimit { get; set; }
 

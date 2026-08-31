@@ -2,10 +2,10 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1D1FT74TNX"
-			rowKey="tenantId"
-			:requestApi="tenantApi.queryTenantPaged"
-			hideSearchTime
+			table-key="1D1FT74TNX"
+			row-key="tenantId"
+			:request-api="tenantApi.queryTenantPaged"
+			hide-search-time
 			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
@@ -35,9 +35,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { tenantApi } from "@/api/services/Center/tenant";
 import TenantEdit from "./edit/index.vue";
@@ -48,26 +48,25 @@ defineOptions({
 	name: "SystemTenant",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof TenantEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof TenantEdit>>("editFormRef");
 
-const handleCustomCellClick = (_, { row }: { row: QueryTenantPagedOutput }) => {
+const handleCustomCellClick = (_emitName: string, { row }: { row: QueryTenantPagedOutput }) => {
 	editFormRef.value.detail(row.tenantId);
 };
 
 /** 处理状态变更 */
 const handleChangeStatus = (row: QueryTenantPagedOutput) => {
 	const { tenantId, status, rowVersion } = row;
-	ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}租户？`, {
+	void ElMessageBox.confirm(`确定${status === CommonStatusEnum.Enable ? "禁用" : "启用"}租户？`, {
 		type: "warning",
-		async beforeClose() {
-			await tenantApi.changeStatus({
-				tenantId,
-				rowVersion,
-			});
-			ElMessage.success("操作成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await tenantApi.changeStatus({
+			tenantId,
+			rowVersion,
+		});
+		ElMessage.success("操作成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

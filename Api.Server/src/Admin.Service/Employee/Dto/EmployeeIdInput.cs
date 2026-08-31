@@ -32,4 +32,9 @@ public class EmployeeIdInput : UpdateVersionInput
     /// </summary>
     [LongRequired(ErrorMessage = "职员Id不能为空")]
     public long EmployeeId { get; set; }
+
+    /// <summary>
+    /// 操作前账号状态
+    /// </summary>
+    public CommonStatusEnum? AccountStatus { get; set; }
 }

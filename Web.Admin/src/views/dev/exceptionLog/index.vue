@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable tableKey="1D11ZDNHT5" rowKey="recordId" :requestApi="exceptionLogApi.queryExceptionLogPaged" stripe>
+		<FastTable table-key="1D11ZDNHT5" row-key="recordId" :request-api="exceptionLogApi.queryExceptionLogPaged" stripe>
 			<template #mobile="{ row }: { row?: ExceptionLogModel }">
 				{{ row.nickName }}
 				<br />
@@ -22,7 +22,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.createdTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small" class="ml5">
-					{{ dateUtil.dateTimeFix(String(row.createdTime)) }}
+					{{ formatChineseRelativeTime(String(row.createdTime)) }}
 				</el-tag>
 			</template>
 
@@ -62,15 +62,15 @@
 				<span v-else>--</span>
 			</template>
 		</FastTable>
-		<el-dialog v-model="state.visible" :title="state.title" width="1000px" alignCenter draggable destroyOnClose>
+		<el-dialog v-model="state.visible" :title="state.title" width="1000px" align-center draggable destroy-on-close>
 			<el-scrollbar>
 				<div style="max-height: 500px; padding-bottom: 20px; padding-right: 10px">
 					<VueJsonPretty
 						:data="jsonContent"
 						:deep="3"
-						showLength
-						showLineNumber
-						showIcon
+						show-length
+						show-line-number
+						show-icon
 						virtual
 						:height="500"
 						:theme="configStore.layout.isDark ? 'dark' : 'light'"
@@ -84,11 +84,12 @@
 <script lang="ts" setup>
 import { computed, reactive } from "vue";
 import { dayjs } from "element-plus";
-import { dateUtil } from "@fast-china/utils";
+import { formatChineseRelativeTime } from "@fast-china/utils";
 import VueJsonPretty from "vue-json-pretty";
 import { exceptionLogApi } from "@/api/services/Center/exceptionLog";
-import { ExceptionLogModel } from "@/api/services/Center/exceptionLog/models/ExceptionLogModel";
 import { useConfig } from "@/stores";
+import type { JSONDataType } from "vue-json-pretty/types/utils";
+import type { ExceptionLogModel } from "@/api/services/Center/exceptionLog/models/ExceptionLogModel";
 
 defineOptions({
 	name: "DevExceptionLog",
@@ -102,9 +103,9 @@ const state = reactive({
 	content: "",
 });
 
-const jsonContent = computed(() => {
+const jsonContent = computed<JSONDataType>(() => {
 	try {
-		return JSON.parse(state.content);
+		return JSON.parse(state.content) as JSONDataType;
 	} catch {
 		return state.content;
 	}

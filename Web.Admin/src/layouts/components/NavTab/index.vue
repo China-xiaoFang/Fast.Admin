@@ -1,7 +1,7 @@
 <template>
 	<div
 		:class="['nav-tab', 'nav-tab--' + configStore.layout.navTabStyle.toLowerCase()]"
-		:style="{ '--height': configStore.layout.navTab ? addUnit(configStore.layout.navTabHeight) : 0 }"
+		:style="{ '--height': configStore.layout.navTab ? addCssUnit(configStore.layout.navTabHeight) : 0 }"
 	>
 		<el-icon v-show="state.isShowArrow" class="icon-arrow left fa__hover__twinkle" title="向左滚动" @click="handleScrollTo('left')">
 			<ArrowLeft />
@@ -12,6 +12,7 @@
 					v-for="(tag, idx) in navTabsStore.navTabs"
 					:key="tag.path"
 					ref="tagRefs"
+					:data-path="tag.path"
 					:class="['nav-tab__item', { 'is-active': route.path === tag.path }]"
 					:title="tag.meta?.title"
 					@click.prevent="(event) => handleTabClick(event, tag)"
@@ -23,7 +24,7 @@
 						v-if="!tag.meta?.affix && route.path === tag.path"
 						class="icon-close"
 						title="关闭"
-						@click.prevent.stop="(event) => handleCloseClick(event, tag)"
+						@click.prevent.stop="(event: MouseEvent) => handleCloseClick(event, tag)"
 					>
 						<Close />
 					</el-icon>
@@ -74,13 +75,13 @@
 		</el-dropdown>
 		<el-dropdown
 			ref="dropdownRef"
-			:virtualRef="dropdownTriggerRef"
+			:virtual-ref="dropdownTriggerRef"
 			size="small"
-			:showArrow="false"
-			virtualTriggering
+			:show-arrow="false"
+			virtual-triggering
 			trigger="contextmenu"
 			placement="bottom-start"
-			:popperOptions="{
+			:popper-options="{
 				modifiers: [{ name: 'offset', options: { offset: [0, 0] } }],
 			}"
 			@command="handleCommand"
@@ -114,17 +115,17 @@
 </template>
 
 <script setup lang="ts">
-import { markRaw, nextTick, onMounted, reactive, ref } from "vue";
+import { useResizeObserver } from "@vueuse/core";
+import { markRaw, nextTick, onMounted, reactive, ref, useTemplateRef } from "vue";
+import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
 import { ArrowDown, ArrowLeft, ArrowRight, Close, DArrowLeft, DArrowRight, Minus, Monitor, PriceTag, Refresh } from "@element-plus/icons-vue";
 import { Exit, FullScreen, FullScreenExit } from "@fast-element-plus/icons-vue";
-import { addUnit, withDefineType } from "@fast-china/utils";
-import { useResizeObserver } from "@vueuse/core";
-import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
+import { addCssUnit, withDefineType } from "@fast-china/utils";
 import { routerUtil } from "@/router";
 import { useConfig, useNavTabs } from "@/stores";
-import type { INavTab } from "@/stores";
 import type { DropdownInstance, ElScrollbar } from "element-plus";
 import type { RouteLocationNormalized } from "vue-router";
+import type { INavTab } from "@/stores";
 
 defineOptions({
 	name: "NavTab",
@@ -135,9 +136,9 @@ const router = useRouter();
 const configStore = useConfig();
 const navTabsStore = useNavTabs();
 
-const tagRefs = ref<HTMLElement[]>([]);
-const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>();
-const dropdownRef = ref<DropdownInstance>();
+const tagRefs = useTemplateRef<HTMLDivElement[]>("tagRefs");
+const scrollbarRef = useTemplateRef<InstanceType<typeof ElScrollbar>>("scrollbarRef");
+const dropdownRef = useTemplateRef<DropdownInstance>("dropdownRef");
 
 const contextMenuList = reactive([
 	{
@@ -239,10 +240,15 @@ const handleCommand = (command: string) => {
  * 获取可能需要的宽度
  */
 const getWidth = () => {
+	const wrapRef = scrollbarRef.value?.wrapRef;
+	if (!wrapRef) {
+		return { scrollWidth: 0, clientWidth: 0, lastDistance: 0 };
+	}
+
 	/** 可滚动内容的长度 */
-	const scrollWidth = scrollbarRef.value.wrapRef.scrollWidth;
+	const scrollWidth = wrapRef.scrollWidth;
 	/** 滚动可视区宽度 */
-	const clientWidth = scrollbarRef.value.wrapRef.clientWidth;
+	const clientWidth = wrapRef.clientWidth;
 	/** 最后剩余可滚动的宽度 */
 	const lastDistance = scrollWidth - clientWidth - state.currentScrollLeft;
 
@@ -253,11 +259,11 @@ const getWidth = () => {
  * 左右滚动
  */
 const handleScrollTo = (direction: "left" | "right", distance: number = state.translateDistance) => {
-	let scrollLeft = 0;
 	const { scrollWidth, clientWidth } = getWidth();
 	// 没有横向滚动条，直接结束
-	if (clientWidth > scrollWidth) return;
+	if (clientWidth >= scrollWidth || !scrollbarRef.value) return;
 	const currentScrollLeft = state.currentScrollLeft;
+	let scrollLeft: number;
 	if (direction === "left") {
 		scrollLeft = Math.max(0, currentScrollLeft - distance);
 	} else {
@@ -288,9 +294,9 @@ const handleScroll = ({ scrollLeft }: { scrollLeft: number }) => {
  * 移动到目标位置
  */
 const handleMoveTo = (to?: RouteLocationNormalized) => {
-	nextTick(() => {
+	void nextTick(() => {
 		const curTo = to ?? route;
-		const findTagRef = tagRefs.value.find((f) => f && f["__vnode"]?.key === curTo.path);
+		const findTagRef = tagRefs.value?.find((element) => element?.dataset.path === curTo.path);
 		if (findTagRef) {
 			const { offsetWidth, offsetLeft } = findTagRef;
 			const { clientWidth } = getWidth();
@@ -312,10 +318,10 @@ const handleMoveTo = (to?: RouteLocationNormalized) => {
 	});
 };
 
-const handleTabClick = (event: MouseEvent, tag: INavTab): void => {
+const handleTabClick = (_event: MouseEvent, tag: INavTab) => {
 	if (tag.path === route.path) return;
 	// 左键
-	routerUtil.routePushSafe(router, { path: tag.path, query: tag.query });
+	void routerUtil.routePushSafe(router, { path: tag.path, query: tag.query });
 };
 
 const handleContextMenuList = (tag: INavTab, index: number) => {
@@ -335,7 +341,7 @@ const handleContextMenuList = (tag: INavTab, index: number) => {
 	});
 };
 
-const handleContextmenuClick = (event: MouseEvent, tag: INavTab, index: number): void => {
+const handleContextmenuClick = (event: MouseEvent, tag: INavTab, index: number) => {
 	handleContextMenuList(tag, index);
 
 	const { clientX, clientY } = event;
@@ -346,7 +352,7 @@ const handleContextmenuClick = (event: MouseEvent, tag: INavTab, index: number):
 	dropdownRef.value.handleOpen();
 };
 
-const handleCloseClick = (event: MouseEvent, tag: INavTab): void => {
+const handleCloseClick = (_event: MouseEvent, tag: INavTab) => {
 	if (tag.meta?.affix === true) {
 		return;
 	}
@@ -358,11 +364,13 @@ onMounted(() => {
 	navTabsStore.addTab(router.currentRoute.value);
 	navTabsStore.setActiveRoute(router.currentRoute.value);
 	handleMoveTo(router.currentRoute.value);
-	nextTick(() => {
-		useResizeObserver(scrollbarRef.value.wrapRef, () => {
+	void nextTick(() => {
+		const wrapRef = scrollbarRef.value?.wrapRef;
+		if (!wrapRef) return;
+
+		useResizeObserver(wrapRef, () => {
 			const { scrollWidth, clientWidth } = getWidth();
 			state.isShowArrow = scrollWidth > clientWidth;
-			state.isShowArrow = true;
 			handleMoveTo(router.currentRoute.value);
 		});
 	});

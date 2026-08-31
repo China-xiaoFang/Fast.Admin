@@ -2,10 +2,10 @@
 	<div>
 		<FastTable
 			ref="fastTableRef"
-			tableKey="1D1F3QYJST"
-			rowKey="mainId"
-			:requestApi="databaseApi.queryDatabasePaged"
-			hideSearchTime
+			table-key="1D1F3QYJST"
+			row-key="mainId"
+			:request-api="databaseApi.queryDatabasePaged"
+			hide-search-time
 			@custom-cell-click="handleCustomCellClick"
 		>
 			<!-- 表格按钮操作区域 -->
@@ -28,9 +28,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { tenantDatabaseApi } from "@/api/services/Admin/tenantDatabase";
 import { databaseApi } from "@/api/services/Center/database";
 import DatabaseEdit from "./edit/index.vue";
@@ -41,23 +41,22 @@ defineOptions({
 	name: "SystemDatabase",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof DatabaseEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof DatabaseEdit>>("editFormRef");
 
-const handleCustomCellClick = (_, { row }: { row: QueryDatabasePagedOutput }) => {
+const handleCustomCellClick = (_emitName: string, { row }: { row: QueryDatabasePagedOutput }) => {
 	editFormRef.value.detail(row.mainId);
 };
 
 /** 处理删除 */
 const handleDelete = (row: QueryDatabasePagedOutput) => {
 	const { mainId, rowVersion } = row;
-	ElMessageBox.confirm("确定要删除数据库？", {
+	void ElMessageBox.confirm("确定要删除数据库？", {
 		type: "warning",
-		async beforeClose() {
-			await databaseApi.deleteDatabase({ mainId, rowVersion });
-			ElMessage.success("删除成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await databaseApi.deleteDatabase({ mainId, rowVersion });
+		ElMessage.success("删除成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 
@@ -65,13 +64,12 @@ const handleDelete = (row: QueryDatabasePagedOutput) => {
 const handleInitDatabase = (row: QueryDatabasePagedOutput) => {
 	const { tenantId, databaseType, isInitialized } = row;
 	if (isInitialized) return;
-	ElMessageBox.confirm("确定要初始化数据库？", {
+	void ElMessageBox.confirm("确定要初始化数据库？", {
 		type: "warning",
-		async beforeClose() {
-			await tenantDatabaseApi.initDatabase({ tenantId, databaseType });
-			ElMessage.success("初始化成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await tenantDatabaseApi.initDatabase({ tenantId, databaseType });
+		ElMessage.success("初始化成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

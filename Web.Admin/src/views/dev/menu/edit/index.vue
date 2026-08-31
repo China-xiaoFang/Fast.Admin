@@ -2,21 +2,21 @@
 	<FaDialog
 		ref="faDialogRef"
 		width="1800"
-		fullHeight
+		full-height
 		:title="state.dialogTitle"
-		:showConfirmButton="!state.formDisabled"
-		:showBeforeClose="!state.formDisabled"
-		confirmButtonText="保存"
+		:show-confirm-button="!state.formDisabled"
+		:show-before-close="!state.formDisabled"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
-		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled" cols="4" labelWidth="120">
+		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled" cols="4" label-width="120">
 			<FaLayoutGridItem span="4">
-				<el-divider contentPosition="left">菜单信息</el-divider>
+				<el-divider content-position="left">菜单信息</el-divider>
 			</FaLayoutGridItem>
 
 			<FaFormItem prop="appId" label="应用">
-				<ApplicationSelect v-model="state.formData.appId" v-model:appName="state.formData.appName" />
+				<ApplicationSelect v-model="state.formData.appId" v-model:app-name="state.formData.appName" />
 			</FaFormItem>
 			<FaFormItem prop="parentId" label="父级">
 				<el-cascader
@@ -59,14 +59,19 @@
 			</FaFormItem>
 
 			<FaLayoutGridItem span="4">
-				<el-divider contentPosition="left">Web端</el-divider>
+				<el-divider content-position="left">Web端</el-divider>
 			</FaLayoutGridItem>
 			<FaFormItem prop="hasWeb" label="Web端">
 				<el-checkbox v-model="state.formData.hasWeb">Web端</el-checkbox>
 			</FaFormItem>
 			<template v-if="state.formData.hasWeb">
 				<FaFormItem prop="webIcon" label="图标">
-					<IconSelect v-model="state.formData.webIcon" placeholder="请选择Web端图标" :showAllLevels="false" :props="{ emitPath: false }" />
+					<IconSelect
+						v-model="state.formData.webIcon"
+						placeholder="请选择Web端图标"
+						:show-all-levels="false"
+						:props="{ emitPath: false }"
+					/>
 				</FaFormItem>
 				<template v-if="state.formData.menuType === MenuTypeEnum.Menu">
 					<FaFormItem prop="webComponent" label="组件地址">
@@ -92,7 +97,7 @@
 			</template>
 
 			<FaLayoutGridItem span="4">
-				<el-divider contentPosition="left">移动端</el-divider>
+				<el-divider content-position="left">移动端</el-divider>
 			</FaLayoutGridItem>
 			<FaFormItem prop="hasMobile" label="移动端">
 				<el-checkbox v-model="state.formData.hasMobile">移动端</el-checkbox>
@@ -107,7 +112,7 @@
 			</template>
 
 			<FaLayoutGridItem span="4">
-				<el-divider contentPosition="left">桌面端</el-divider>
+				<el-divider content-position="left">桌面端</el-divider>
 			</FaLayoutGridItem>
 			<FaFormItem prop="hasDesktop" label="桌面端">
 				<el-checkbox v-model="state.formData.hasDesktop">桌面端</el-checkbox>
@@ -123,7 +128,7 @@
 
 			<template v-if="state.formData.menuType === MenuTypeEnum.Internal || state.formData.menuType === MenuTypeEnum.Outside">
 				<FaLayoutGridItem span="4">
-					<el-divider contentPosition="left">其他</el-divider>
+					<el-divider content-position="left">其他</el-divider>
 				</FaLayoutGridItem>
 				<FaFormItem prop="link" label="内链/外链地址">
 					<el-input type="textarea" v-model="state.formData.link" :rows="2" maxlength="200" placeholder="请输入内链/外链地址" />
@@ -136,20 +141,21 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from "vue";
-import { CascaderValue, ElMessage, type FormRules } from "element-plus";
+import { onMounted, reactive, useTemplateRef } from "vue";
+import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
 import { menuApi } from "@/api/services/Center/menu";
-import { AddMenuInput } from "@/api/services/Center/menu/models/AddMenuInput";
-import { EditMenuInput } from "@/api/services/Center/menu/models/EditMenuInput";
-import routerPath from "@/router/index.json";
+import routerPath from "@/router/routes.generated.json";
 import { useApp } from "@/stores";
 import ButtonTable from "./components/buttonTable.vue";
+import type { CascaderValue, FormRules } from "element-plus";
 import type { ElSelectorOutput, FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { AddMenuInput } from "@/api/services/Center/menu/models/AddMenuInput";
+import type { EditMenuInput } from "@/api/services/Center/menu/models/EditMenuInput";
 
 defineOptions({
 	name: "DevMenuEdit",
@@ -159,9 +165,10 @@ const emit = defineEmits(["ok"]);
 
 const appStore = useApp();
 const roleTypeEnum = appStore.getDictionary("RoleTypeEnum");
+const routerPathMap: Readonly<Record<string, string>> = routerPath;
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<
@@ -202,11 +209,20 @@ const handleComponentChange = (value: CascaderValue) => {
 		state.formData.webComponent = "";
 		return;
 	}
+	const componentParts: string[] = [];
+	for (const part of value) {
+		if (typeof part !== "string") {
+			state.formData.webRouter = "";
+			state.formData.webComponent = "";
+			return;
+		}
+		componentParts.push(part);
+	}
 
 	// 拼接路径并去掉 .vue
-	const componentPath = value.join("/").replace(/\.vue$/, "");
+	const componentPath = componentParts.join("/").replace(/\.vue$/, "");
 
-	if (routerPath[`/src/views/${componentPath}.vue`]) {
+	if (routerPathMap[`/src/views/${componentPath}.vue`]) {
 		// 去掉末尾 /index
 		state.formData.webRouter = `/${componentPath}`.replace(/\/index$/, "");
 		state.formData.webComponent = componentPath;
@@ -265,7 +281,7 @@ const add = () => {
 		state.formDisabled = false;
 		state.formData = {
 			menuType: MenuTypeEnum.Catalog,
-			roleType: 0 as any,
+			roleType: RoleTypeEnum.Default,
 			edition: EditionEnum.None,
 			visible: true,
 			hasWeb: true,
@@ -295,11 +311,11 @@ const edit = (menuId: number) => {
 	});
 };
 
-onMounted(async () => {
+onMounted(() => {
 	state.componentList = [];
 
-	for (const path in routerPath) {
-		const label = routerPath[path];
+	for (const path in routerPathMap) {
+		const label = routerPathMap[path];
 		const cleanPath = path.replace(/^\/src\/views\//, "");
 		const parts = cleanPath.split("/").filter(Boolean);
 

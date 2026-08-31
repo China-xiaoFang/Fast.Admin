@@ -1,18 +1,18 @@
-import { ElNotification } from "element-plus";
-import { consoleError, stringUtil } from "@fast-china/utils";
-import { cloneDeep, pick } from "lodash";
 import { NavigationFailureType, isNavigationFailure } from "vue-router";
+import { ElNotification } from "element-plus";
+import { logger, randomString } from "@fast-china/utils";
+import { cloneDeep, pick } from "lodash";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import router from "@/router";
 import { useUserInfo } from "@/stores";
 import { layoutRoute } from "../modules/layoutRoute";
+import type { NavigationFailure, RouteLocationNormalized, RouteLocationRaw, RouteRecordRaw, RouteRecordSingleView, Router } from "vue-router";
 import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
-import type { NavigationFailure, RouteLocationNormalized, RouteLocationRaw, RouteRecordRaw, Router } from "vue-router";
 
 const modules = import.meta.glob("/src/views/**/*.vue");
 
 /** 加载组件 */
-const loadComponent = (component: string): any => {
+const loadComponent = (component: string): RouteRecordSingleView["component"] => {
 	if (component) {
 		if (component.includes("/")) {
 			return modules[`/src/views/${component}.vue`];
@@ -36,7 +36,7 @@ const loadComponentName = (name: string): string => {
 		}
 		return name;
 	} else {
-		return stringUtil.generateRandomString(8);
+		return randomString(8);
 	}
 };
 
@@ -47,15 +47,14 @@ const packageMenu = (menuList: AuthMenuInfoDto[]): RouteRecordRaw[] => {
 	const routeList: RouteRecordRaw[] = [];
 
 	for (const item of menuList) {
-		if ((item.menuType & (MenuTypeEnum.Catalog | MenuTypeEnum.Menu)) == 0) {
+		if ((item.menuType & (MenuTypeEnum.Catalog | MenuTypeEnum.Menu)) === 0) {
 			continue;
 		}
-		const routeInfo = {
-			path: item.menuType === MenuTypeEnum.Catalog ? stringUtil.generateRandomString(8) : item.router,
+		const routeInfo: RouteRecordRaw = {
+			path: item.menuType === MenuTypeEnum.Catalog ? randomString(8) : item.router,
 			// 这里由于 keep-alive 必须设置 name 的问题，所以根据组件的地址，生成固定的 name，需要在每个页面增加 name，不然 keep-alive 会失效
 			name: loadComponentName(item.component || item.menuCode),
 			component: loadComponent(item.component),
-			redirect: undefined,
 			meta: {
 				title: item.menuTitle || item.menuName,
 				icon: item.icon,
@@ -70,7 +69,7 @@ const packageMenu = (menuList: AuthMenuInfoDto[]): RouteRecordRaw[] => {
 		if (item.children && item.children.length > 0) {
 			const childrenRoutes = packageMenu(item.children);
 			routeInfo.children.push(...childrenRoutes);
-			routeInfo.redirect = routeInfo.children[0].path;
+			routeInfo.redirect = childrenRoutes[0].path;
 			delete routeInfo.component;
 			routeInfo.meta.keepAlive = false;
 		}
@@ -112,12 +111,12 @@ export const routerUtil = {
 	 * @param router 路由对象 useRouter()，因必须在 setup 中获取才存在值
 	 * @param to 导航位置，同 router.push
 	 */
-	routePushSafe(router: Router, to: RouteLocationRaw): Promise<NavigationFailure | void | undefined> {
+	routePushSafe(router: Router, to: RouteLocationRaw): Promise<NavigationFailure | void> {
 		if (!router) {
-			consoleError("routerUtil", new Error("useRouter undefined."));
+			logger.error("routerUtil", "useRouter undefined.");
 			return Promise.resolve();
 		}
-		router
+		return router
 			.push(to)
 			.then((failure) => {
 				if (failure) {
@@ -133,15 +132,15 @@ export const routerUtil = {
 						});
 					}
 				}
-				return Promise.resolve(failure);
+				return failure;
 			})
 			.catch((error) => {
 				ElNotification({
 					message: "导航失败，路由无效！",
 					type: "error",
 				});
-				consoleError("routerUtil", error);
-				return Promise.reject(error);
+				logger.error("routerUtil", "发生异常", error);
+				throw error;
 			});
 	},
 	/**

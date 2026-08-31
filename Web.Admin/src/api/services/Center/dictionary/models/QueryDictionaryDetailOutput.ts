@@ -1,66 +1,66 @@
-import { DictionaryValueTypeEnum } from "@/api/enums/DictionaryValueTypeEnum";
-import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
-import { EditDictionaryItemInput } from "./EditDictionaryItemInput";
+import type { EditDictionaryItemInput } from "./EditDictionaryItemInput";
+import type { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
+import type { DictionaryValueTypeEnum } from "@/api/enums/DictionaryValueTypeEnum";
 
 /**
- * Fast.Center.Service.Dictionary.Dto.QueryDictionaryDetailOutput 获取字典详情输出
+ * 获取字典详情输出
  */
 export interface QueryDictionaryDetailOutput {
-  /**
-   * 字典Id
-   */
-  dictionaryId?: number;
-  /**
-   * 字典Key
-   */
-  dictionaryKey?: string;
-  /**
-   * 字典名称
-   */
-  dictionaryName?: string;
-  /**
-   * 
-   */
-  valueType?: DictionaryValueTypeEnum;
-  /**
-   * Flags枚举
-   */
-  hasFlags?: boolean;
-  /**
-   * 
-   */
-  status?: CommonStatusEnum;
-  /**
-   * 备注
-   */
-  remark?: string;
-  /**
-   * 字典项集合
-   */
-  dictionaryItemList?: Array<EditDictionaryItemInput>;
-  /**
-   * 
-   */
-  departmentName?: string;
-  /**
-   * 
-   */
-  createdUserName?: string;
-  /**
-   * 
-   */
-  createdTime?: Date;
-  /**
-   * 
-   */
-  updatedUserName?: string;
-  /**
-   * 
-   */
-  updatedTime?: Date;
-  /**
-   * 
-   */
-  rowVersion?: number;
+	/**
+	 * 字典Id
+	 */
+	dictionaryId?: number;
+	/**
+	 * 字典Key
+	 */
+	dictionaryKey?: string;
+	/**
+	 * 字典名称
+	 */
+	dictionaryName?: string;
+	/**
+	 * 
+	 */
+	valueType?: DictionaryValueTypeEnum;
+	/**
+	 * Flags枚举
+	 */
+	hasFlags?: boolean;
+	/**
+	 * 
+	 */
+	status?: CommonStatusEnum;
+	/**
+	 * 备注
+	 */
+	remark?: string;
+	/**
+	 * 字典项集合
+	 */
+	dictionaryItemList?: EditDictionaryItemInput[];
+	/**
+	 * 
+	 */
+	departmentName?: string;
+	/**
+	 * 
+	 */
+	createdUserName?: string;
+	/**
+	 * 
+	 */
+	createdTime?: string;
+	/**
+	 * 
+	 */
+	updatedUserName?: string;
+	/**
+	 * 
+	 */
+	updatedTime?: string;
+	/**
+	 * 
+	 */
+	rowVersion?: number;
 }
 

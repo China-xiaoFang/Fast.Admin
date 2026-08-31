@@ -12,5 +12,6 @@ defineOptions({
 const route = useRoute();
 const router = useRouter();
 
-router.replace({ path: `/${route.params.path}`, query: route.query });
+const redirectPath = Array.isArray(route.params.path) ? route.params.path.join("/") : route.params.path;
+void router.replace({ path: `/${redirectPath}`, query: route.query });
 </script>

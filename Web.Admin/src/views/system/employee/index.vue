@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1D1KVW17SY" rowKey="employeeId" :requestApi="employeeApi.queryEmployeePaged" hideSearchTime>
+		<FastTable ref="fastTableRef" table-key="1D1KVW17SY" row-key="employeeId" :request-api="employeeApi.queryEmployeePaged" hide-search-time>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button v-auth="'Employee:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
@@ -27,7 +27,7 @@
 					<span>
 						登陆时间：{{ row.lastLoginTime ?? "" }}
 						<el-tag v-if="row.lastLoginTime" type="info" round effect="light" class="ml5">
-							{{ dateUtil.dateTimeFix(row.lastLoginTime) }}
+							{{ formatChineseRelativeTime(row.lastLoginTime) }}
 						</el-tag>
 					</span>
 				</template>
@@ -39,7 +39,7 @@
 			<template #departmentName="{ row }: { row?: QueryEmployeePagedOutput }">
 				机构：<span>{{ row.orgName }}</span>
 				<br />
-				<span>{{ row.departmentNames.join(" > ") }}</span>
+				<span>{{ row.departmentNames?.join(" > ") ?? "-" }}</span>
 				<template v-if="row.isPrincipal">
 					<br />
 					<el-tag type="primary">负责人</el-tag>
@@ -58,7 +58,16 @@
 			<template #operation="{ row }: { row: QueryEmployeePagedOutput }">
 				<div class="mb5">
 					<el-button v-auth="'Employee:Detail'" size="small" plain @click="editFormRef.detail(row.employeeId)">详情</el-button>
-					<el-button v-auth="'Employee:Edit'" size="small" plain type="primary" @click="editFormRef.edit(row.employeeId)">编辑</el-button>
+					<el-button
+						v-if="row.status !== EmployeeStatusEnum.Resigned"
+						v-auth="'Employee:Edit'"
+						size="small"
+						plain
+						type="primary"
+						@click="editFormRef.edit(row.employeeId)"
+					>
+						编辑
+					</el-button>
 					<el-dropdown v-auth="'Employee:Status'" class="pl12" trigger="click">
 						<el-button size="small" plain type="primary">
 							更多
@@ -102,16 +111,21 @@
 								>
 									设为正式
 								</el-dropdown-item>
-								<el-dropdown-item v-if="row.status !== EmployeeStatusEnum.Resigned" @click="resignedEditFormRef.open(row.employeeId)">
+								<el-dropdown-item
+									v-if="row.status !== EmployeeStatusEnum.Resigned && row.employeeId !== userInfoStore.employeeId"
+									@click="resignedEditFormRef.open(row.employeeId)"
+								>
 									职员离职
 								</el-dropdown-item>
 							</el-dropdown-menu>
 						</template>
 					</el-dropdown>
 				</div>
-				<template v-if="row.accountMobile">
+				<el-tag v-if="row.employeeId === userInfoStore.employeeId" type="info" effect="light">当前账号</el-tag>
+				<el-tag v-else-if="row.status === EmployeeStatusEnum.Resigned" type="danger" effect="light">登录已停用</el-tag>
+				<template v-else-if="row.accountMobile">
 					<el-button
-						v-if="row.accountStatus == CommonStatusEnum.Enable"
+						v-if="row.accountStatus === CommonStatusEnum.Enable"
 						v-auth="'Employee:Status'"
 						size="small"
 						plain
@@ -138,58 +152,63 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { useTemplateRef } from "vue";
 import { ArrowDown, Plus } from "@element-plus/icons-vue";
-import { dateUtil } from "@fast-china/utils";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { formatChineseRelativeTime } from "@fast-china/utils";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EmployeeStatusEnum } from "@/api/enums/EmployeeStatusEnum";
 import { employeeApi } from "@/api/services/Admin/employee";
-import { QueryEmployeePagedOutput } from "@/api/services/Admin/employee/models/QueryEmployeePagedOutput";
+import { useUserInfo } from "@/stores";
 import BindAccount from "./edit/bindAccount.vue";
 import EmployeeEdit from "./edit/index.vue";
 import ResignedEdit from "./edit/resignedEdit.vue";
+import type { QueryEmployeePagedOutput } from "@/api/services/Admin/employee/models/QueryEmployeePagedOutput";
 import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemEmployee",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof EmployeeEdit>>();
-const resignedEditFormRef = ref<InstanceType<typeof ResignedEdit>>();
-const bindAccountFormRef = ref<InstanceType<typeof BindAccount>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof EmployeeEdit>>("editFormRef");
+const resignedEditFormRef = useTemplateRef<InstanceType<typeof ResignedEdit>>("resignedEditFormRef");
+const bindAccountFormRef = useTemplateRef<InstanceType<typeof BindAccount>>("bindAccountFormRef");
+const userInfoStore = useUserInfo();
 
 /** 处理状态变更 */
 const handleChangeStatus = (row: QueryEmployeePagedOutput, status: EmployeeStatusEnum) => {
 	const { employeeId, rowVersion } = row;
-	ElMessageBox.confirm(`确定修改职员状态？`, {
+	const message =
+		row.status === EmployeeStatusEnum.Resigned
+			? `确定恢复职员【${row.employeeName}】的在职状态？恢复后仍需单独启用登录账号。`
+			: `确定修改职员【${row.employeeName}】的状态？`;
+	void ElMessageBox.confirm(message, {
 		type: "warning",
-		async beforeClose() {
-			await employeeApi.changeStatus({
-				employeeId,
-				status,
-				rowVersion,
-			});
-			ElMessage.success("操作成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await employeeApi.changeStatus({
+			employeeId,
+			status,
+			rowVersion,
+		});
+		ElMessage.success("操作成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 
 /** 处理状态变更 */
 const handleChangeAccountStatus = (row: QueryEmployeePagedOutput) => {
 	const { employeeId, accountStatus, rowVersion } = row;
-	ElMessageBox.confirm(`确定${accountStatus === CommonStatusEnum.Enable ? "禁用" : "启用"}登录账号？`, {
+	void ElMessageBox.confirm(`确定${accountStatus === CommonStatusEnum.Enable ? "禁用" : "启用"}职员【${row.employeeName}】的登录账号？`, {
 		type: "warning",
-		async beforeClose() {
-			await employeeApi.changeLoginStatus({
-				employeeId,
-				rowVersion,
-			});
-			ElMessage.success("操作成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await employeeApi.changeLoginStatus({
+			employeeId,
+			accountStatus,
+			rowVersion,
+		});
+		ElMessage.success("操作成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

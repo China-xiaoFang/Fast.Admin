@@ -2,9 +2,9 @@
 	<FaDialog
 		ref="faDialogRef"
 		width="1000"
-		fullHeight
+		full-height
 		:title="state.dialogTitle"
-		confirmButtonText="保存"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="handleClose"
 	>
@@ -29,7 +29,7 @@
 						<el-date-picker
 							v-model="state.formData.beginTime"
 							type="datetime"
-							valueFormat="YYYY-MM-DD HH:mm:ss"
+							value-format="YYYY-MM-DD HH:mm:ss"
 							placeholder="请选择开始日期"
 						/>
 					</el-form-item>
@@ -39,7 +39,7 @@
 						<el-date-picker
 							v-model="state.formData.endTime"
 							type="datetime"
-							valueFormat="YYYY-MM-DD HH:mm:ss"
+							value-format="YYYY-MM-DD HH:mm:ss"
 							placeholder="请选择结束时间"
 						/>
 					</el-form-item>
@@ -88,8 +88,8 @@
 			<el-form-item prop="description" label="描述">
 				<el-input v-model="state.formData.description" type="textarea" maxlength="100" placeholder="请输入描述" />
 			</el-form-item>
-			<el-divider contentPosition="left">触发器信息</el-divider>
-			<el-form-item prop="triggerType" labelWidth="0">
+			<el-divider content-position="left">触发器信息</el-divider>
+			<el-form-item prop="triggerType" label-width="0">
 				<el-radio-group v-model="state.formData.triggerType" style="justify-content: center">
 					<el-radio-button v-for="(item, idx) in triggerTypeEnum" :key="idx" :label="item.label" :value="item.value" />
 				</el-radio-group>
@@ -126,12 +126,12 @@
 				<el-row>
 					<el-col :span="12">
 						<el-form-item prop="dailyStartTime" label="每天开始时间">
-							<el-time-picker v-model="state.formData.dailyStartTime" valueFormat="HH:mm:ss" placeholder="请选择每天开始时间" />
+							<el-time-picker v-model="state.formData.dailyStartTime" value-format="HH:mm:ss" placeholder="请选择每天开始时间" />
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item prop="dailyEndTime" label="每天结束时间">
-							<el-time-picker v-model="state.formData.dailyEndTime" valueFormat="HH:mm:ss" placeholder="请选择每天结束时间" />
+							<el-time-picker v-model="state.formData.dailyEndTime" value-format="HH:mm:ss" placeholder="请选择每天结束时间" />
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -154,7 +154,7 @@
 					</el-col>
 				</el-row>
 			</template>
-			<el-divider contentPosition="left">作业信息</el-divider>
+			<el-divider content-position="left">作业信息</el-divider>
 			<el-form-item prop="jobType" label="作业类型">
 				<el-radio-group v-model="state.formData.jobType">
 					<el-radio-button v-for="(item, idx) in schedulerJobTypeEnum" :key="idx" :label="item.label" :value="item.value" />
@@ -225,21 +225,22 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
 import { Delete } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 import { FaDialog } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
-import { HttpRequestMethodEnum } from "@/api/enums/Scheduler/HttpRequestMethodEnum";
-import { MailMessageEnum } from "@/api/enums/Scheduler/MailMessageEnum";
-import { SchedulerJobTypeEnum } from "@/api/enums/Scheduler/SchedulerJobTypeEnum";
-import { TriggerTypeEnum } from "@/api/enums/Scheduler/TriggerTypeEnum";
-import { WeekEnum } from "@/api/enums/Scheduler/WeekEnum";
-import { schedulerApi } from "@/api/services/Scheduler";
+import { HttpRequestMethodEnum } from "@/api/enums/HttpRequestMethodEnum";
+import { MailMessageEnum } from "@/api/enums/MailMessageEnum";
+import { SchedulerJobTypeEnum } from "@/api/enums/SchedulerJobTypeEnum";
+import { TriggerTypeEnum } from "@/api/enums/TriggerTypeEnum";
+import { WeekEnum } from "@/api/enums/WeekEnum";
+import { schedulerApi } from "@/api/services/Scheduler/scheduler";
 import { useApp } from "@/stores";
-import type { SchedulerJobGroupEnum } from "@/api/enums/Scheduler/SchedulerJobGroupEnum";
-import type { EditSchedulerJobInput } from "@/api/services/Scheduler/models/EditSchedulerJobInput";
+import type { FormRules } from "element-plus";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { SchedulerJobGroupEnum } from "@/api/enums/SchedulerJobGroupEnum";
+import type { EditSchedulerJobInput } from "@/api/services/Scheduler/scheduler/models/EditSchedulerJobInput";
 
 defineOptions({
 	name: "DevSchedulerEdit",
@@ -249,8 +250,8 @@ const emit = defineEmits(["ok"]);
 
 const appStore = useApp();
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const schedulerJobGroupEnum = appStore.getDictionary("SchedulerJobGroupEnum");
 const triggerTypeEnum = appStore.getDictionary("TriggerTypeEnum");
@@ -259,7 +260,7 @@ const schedulerJobTypeEnum = appStore.getDictionary("SchedulerJobTypeEnum");
 const state = reactive({
 	formData: withDefineType<EditSchedulerJobInput & { mailMessages?: MailMessageEnum[]; weeks?: WeekEnum[] }>({
 		jobType: SchedulerJobTypeEnum.IntranetUrl,
-		beginTime: "1970-01-01 00:00:00" as any,
+		beginTime: "1970-01-01 00:00:00",
 		triggerType: TriggerTypeEnum.Cron,
 		mailMessages: [MailMessageEnum.None],
 	}),
@@ -293,7 +294,7 @@ const handleClose = () => {
 };
 
 const handleConfirm = () => {
-	faDialogRef.value.close(async () => {
+	void faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		const { dialogState, formData, requestHeaderObj, requestParamsObj } = state;
 		if (formData.mailMessages?.length > 0) {
@@ -307,16 +308,18 @@ const handleConfirm = () => {
 			formData.week = _week;
 		}
 		if (requestHeaderObj?.length > 0) {
-			formData.requestHeader = {};
+			const requestHeader: Record<string, string> = {};
 			requestHeaderObj.forEach((item) => {
-				formData.requestHeader[item.key] = item.value;
+				requestHeader[item.key] = item.value;
 			});
+			formData.requestHeader = requestHeader;
 		}
 		if (requestParamsObj?.length > 0) {
-			formData.requestParams = {};
+			const requestParams: Record<string, string> = {};
 			requestParamsObj.forEach((item) => {
-				formData.requestParams[item.key] = item.value;
+				requestParams[item.key] = item.value;
 			});
+			formData.requestParams = requestParams;
 		}
 		switch (dialogState) {
 			case "add":
@@ -344,7 +347,7 @@ const handleFlagsEnum = () => {
 			if (item === MailMessageEnum.None) {
 				continue;
 			}
-			if ((state.formData.mailMessage & item) != 0) {
+			if ((state.formData.mailMessage & item) !== 0) {
 				state.formData.mailMessages.push(item);
 			}
 		}
@@ -359,7 +362,7 @@ const handleFlagsEnum = () => {
 			if (item === WeekEnum.None) {
 				continue;
 			}
-			if ((state.formData.week & item) != 0) {
+			if ((state.formData.week & item) !== 0) {
 				state.formData.weeks.push(item);
 			}
 		}
@@ -369,16 +372,8 @@ const handleFlagsEnum = () => {
 const handleObj = () => {
 	state.requestHeaderObj = [];
 	state.requestParamsObj = [];
-	if (state.formData.requestHeader) {
-		for (const key in state.formData.requestHeader) {
-			state.requestHeaderObj.push({ key, value: state.formData.requestHeader[key] });
-		}
-	}
-	if (state.formData.requestParams) {
-		for (const key in state.formData.requestParams) {
-			state.requestParamsObj.push({ key, value: state.formData.requestParams[key] });
-		}
-	}
+	state.requestHeaderObj = Object.entries(state.formData.requestHeader ?? {}).map(([key, value]) => ({ key, value }));
+	state.requestParamsObj = Object.entries(state.formData.requestParams ?? {}).map(([key, value]) => ({ key, value }));
 };
 
 const handleCronRefer = () => {
@@ -386,7 +381,7 @@ const handleCronRefer = () => {
 };
 
 const handleCronVerify = () => {
-	faFormRef.value.validateField("cron", async (isValid) => {
+	void faFormRef.value.validateField("cron", async (isValid) => {
 		if (!isValid) return;
 		const { cron } = state.formData;
 		state.cronLogs = await schedulerApi.runVerifyCron(cron);
@@ -401,7 +396,7 @@ const handleDelObj = (name: "requestHeaderObj" | "requestParamsObj", index: numb
 	state[name].splice(index, 1);
 };
 
-const add = (tenantId: number | null, jobGroup: SchedulerJobGroupEnum) => {
+const add = (tenantId: number, jobGroup: SchedulerJobGroupEnum) => {
 	state.dialogState = "add";
 	state.dialogTitle = "添加调度作业";
 	state.formData.tenantId = tenantId;
@@ -410,8 +405,8 @@ const add = (tenantId: number | null, jobGroup: SchedulerJobGroupEnum) => {
 	state.formData.oldJobGroup = undefined;
 };
 
-const edit = (tenantId: number | null, jobName: string, jobGroup: SchedulerJobGroupEnum) => {
-	faDialogRef.value.open(async () => {
+const edit = (tenantId: number, jobName: string, jobGroup: SchedulerJobGroupEnum) => {
+	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		const apiRes = await schedulerApi.querySchedulerJob(tenantId, {
 			jobName,
@@ -426,8 +421,8 @@ const edit = (tenantId: number | null, jobName: string, jobGroup: SchedulerJobGr
 	});
 };
 
-const copy = (tenantId: number | null, jobName: string, jobGroup: SchedulerJobGroupEnum) => {
-	faDialogRef.value.open(async () => {
+const copy = (tenantId: number, jobName: string, jobGroup: SchedulerJobGroupEnum) => {
+	void faDialogRef.value.open(async () => {
 		state.dialogState = "copy";
 		const apiRes = await schedulerApi.querySchedulerJob(tenantId, {
 			jobName,

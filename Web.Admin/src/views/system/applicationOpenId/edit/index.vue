@@ -2,17 +2,17 @@
 	<FaDialog
 		ref="faDialogRef"
 		width="1000"
-		fullHeight
+		full-height
 		:title="state.dialogTitle"
-		:showConfirmButton="!state.formDisabled"
-		:showBeforeClose="!state.formDisabled"
-		confirmButtonText="保存"
+		:show-confirm-button="!state.formDisabled"
+		:show-before-close="!state.formDisabled"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled" cols="2">
 			<FaFormItem prop="appId" label="应用">
-				<ApplicationSelect v-model="state.formData.appId" v-model:appName="state.formData.appName" />
+				<ApplicationSelect v-model="state.formData.appId" v-model:app-name="state.formData.appName" />
 			</FaFormItem>
 			<FaFormItem prop="openId" label="应用标识">
 				<el-input v-model="state.formData.openId" maxlength="50" placeholder="请输入应用标识" />
@@ -31,6 +31,7 @@
 					<el-radio label="ClassicLogin">经典</el-radio>
 					<el-radio label="ModernLogin">现代</el-radio>
 					<el-radio label="SimpleLogin">简约</el-radio>
+					<el-radio label="SplitLogin">分屏</el-radio>
 				</el-radio-group>
 			</FaFormItem>
 			<FaFormItem prop="webSocketUrl" label="WebSocket地址">
@@ -49,59 +50,33 @@
 			</FaFormItem>
 
 			<FaLayoutGridItem span="2">
-				<el-divider contentPosition="left">支付相关</el-divider>
+				<el-divider content-position="left">支付相关</el-divider>
 			</FaLayoutGridItem>
 			<FaFormItem prop="weChatMerchantId" label="微信商户号">
 				<MerchantSelect
-					:merchantType="PaymentChannelEnum.WeChat"
+					:merchant-type="PaymentChannelEnum.WeChat"
 					v-model="state.formData.weChatMerchantId"
-					v-model:merchantNo="state.formData.weChatMerchantNo"
+					v-model:merchant-no="state.formData.weChatMerchantNo"
 					maxlength="20"
 					placeholder="请选择微信商户号"
 				/>
 			</FaFormItem>
 			<FaFormItem prop="alipayMerchantId" label="支付宝商户号">
 				<MerchantSelect
-					:merchantType="PaymentChannelEnum.Alipay"
+					:merchant-type="PaymentChannelEnum.Alipay"
 					v-model="state.formData.alipayMerchantId"
-					v-model:merchantNo="state.formData.alipayMerchantNo"
+					v-model:merchant-no="state.formData.alipayMerchantNo"
 					maxlength="20"
 					placeholder="请选择支付宝商户号"
 				/>
 			</FaFormItem>
 
-			<FaLayoutGridItem span="2">
-				<el-divider contentPosition="left">联系信息</el-divider>
-			</FaLayoutGridItem>
-			<FaFormItem prop="contactPhone" label="联系电话">
-				<el-input v-model="state.formData.contactPhone" maxlength="20" placeholder="请输入联系电话" />
-			</FaFormItem>
-			<FaFormItem prop="address" label="地址">
-				<el-input type="textarea" v-model="state.formData.address" :rows="2" maxlength="200" placeholder="请输入地址" />
-			</FaFormItem>
-			<FaFormItem prop="latitude" label="纬度">
-				<el-input v-model="state.formData.latitude" maxlength="20" placeholder="请输入纬度" />
-			</FaFormItem>
-			<FaFormItem prop="longitude" label="经度">
-				<el-input v-model="state.formData.longitude" maxlength="20" placeholder="请输入经度" />
-			</FaFormItem>
-
-			<FaLayoutGridItem span="2">
-				<el-divider contentPosition="left">图片相关</el-divider>
-			</FaLayoutGridItem>
-			<FaFormItem prop="statusBarImageUrl" label="状态栏图片">
-				<FaUploadImage v-model="state.formData.statusBarImageUrl" :uploadApi="fileApi.uploadFile" />
-			</FaFormItem>
-			<FaFormItem prop="bannerImages" label="Banner图" span="2">
-				<FaUploadImages v-model="state.formData.bannerImages" :uploadApi="fileApi.uploadFile" />
-			</FaFormItem>
-
 			<template v-if="state.dialogState !== 'add'">
 				<FaLayoutGridItem span="2">
-					<el-divider contentPosition="left">模板Id</el-divider>
+					<el-divider content-position="left">模板Id</el-divider>
 				</FaLayoutGridItem>
 				<FaLayoutGridItem span="2" style="min-height: 300px; max-height: 500px">
-					<FaTable rowKey="buttonId" :data="state.formData.templateIdList">
+					<FaTable row-key="buttonId" :data="state.formData.templateIdList">
 						<!-- 表格按钮操作区域 -->
 						<template #header>
 							<el-button type="primary" :icon="Plus" @click="handleTemplateIdAdd">新增</el-button>
@@ -138,20 +113,20 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { EnvironmentTypeEnum } from "@/api/enums/EnvironmentTypeEnum";
 import { PaymentChannelEnum } from "@/api/enums/PaymentChannelEnum";
 import { applicationOpenIdApi } from "@/api/services/Center/applicationOpenId";
-import { AddApplicationOpenIdInput } from "@/api/services/Center/applicationOpenId/models/AddApplicationOpenIdInput";
-import { EditApplicationOpenIdInput } from "@/api/services/Center/applicationOpenId/models/EditApplicationOpenIdInput";
-import { EditApplicationTemplateIdInput } from "@/api/services/Center/applicationOpenId/models/EditApplicationTemplateIdInput";
-import { fileApi } from "@/api/services/File";
 import { useApp } from "@/stores";
+import type { FormRules } from "element-plus";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { AddApplicationOpenIdInput } from "@/api/services/Center/applicationOpenId/models/AddApplicationOpenIdInput";
+import type { EditApplicationOpenIdInput } from "@/api/services/Center/applicationOpenId/models/EditApplicationOpenIdInput";
+import type { EditApplicationTemplateIdInput } from "@/api/services/Center/applicationOpenId/models/EditApplicationTemplateIdInput";
 
 defineOptions({
 	name: "SystemApplicationOpenIdEdit",
@@ -163,8 +138,8 @@ const appStore = useApp();
 const appEnvironmentEnum = appStore.getDictionary("AppEnvironmentEnum");
 const applicationTemplateTypeEnum = appStore.getDictionary("ApplicationTemplateTypeEnum");
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditApplicationOpenIdInput & AddApplicationOpenIdInput & { appName?: string }>({}),

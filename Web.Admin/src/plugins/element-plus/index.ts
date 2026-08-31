@@ -6,7 +6,7 @@ if (import.meta.env.DEV) {
 }
 
 /** 加载 Element Plus */
-export async function loadElementPlus(app: App): Promise<void> {
+export function loadElementPlus(app: App): void {
 	dayjs.locale("zh-cn");
 
 	/** Fast Element Plus 组件完整引入 */

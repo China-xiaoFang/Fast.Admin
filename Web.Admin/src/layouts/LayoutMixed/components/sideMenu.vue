@@ -1,10 +1,10 @@
 <template>
 	<el-scrollbar>
 		<el-menu
-			uniqueOpened
-			:defaultActive="activeMenu"
+			unique-opened
+			:default-active="activeMenu"
 			:collapse="configStore.layout.menuCollapse"
-			:style="{ '--el-menu-item-height': addUnit(configStore.layout.menuHeight) }"
+			:style="{ '--el-menu-item-height': addCssUnit(configStore.layout.menuHeight) }"
 		>
 			<MenuItem v-for="(item, idx) in sideMenuList" :key="idx" :menu="item" />
 		</el-menu>
@@ -13,8 +13,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { addUnit, definePropType } from "@fast-china/utils";
 import { useRouter } from "vue-router";
+import { addCssUnit, definePropType } from "@fast-china/utils";
 import MenuItem from "@/layouts/components/MenuItem/index.vue";
 import { useConfig } from "@/stores";
 import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";

@@ -1,15 +1,16 @@
-import { type App, type ComponentPublicInstance, nextTick } from "vue";
+import { nextTick } from "vue";
 import { ElNotification } from "element-plus";
-import { useIdentity, useStorage } from "@fast-china/utils";
+import { configureInstallationIdentity, configureLogger, configureStorage, getOrCreateInstallationId } from "@fast-china/utils";
 import { registerComponents } from "@/components";
 import { loadFastAxios } from "./axios";
 import { loadElementPlus } from "./element-plus";
+import type { App, ComponentPublicInstance } from "vue";
 
 export function loadPlugins(app: App): void {
 	// 全局异常捕获
-	app.config.errorHandler = (err: any, instance: ComponentPublicInstance | null, info: string): void => {
+	app.config.errorHandler = (err, _instance: ComponentPublicInstance, _info: string): void => {
 		if (!err) return;
-		const errorMap: any = {
+		const errorMap: Record<string, string> = {
 			InternalError: "Javascript引擎内部错误",
 			ReferenceError: "未找到对象",
 			TypeError: "使用了错误的类型或对象",
@@ -25,19 +26,18 @@ export function loadPlugins(app: App): void {
 			SecurityError: "安全错误，可能涉及跨域或 CSP 限制",
 			EventError: "事件处理错误",
 		};
+		const errorName = err instanceof Error ? err.name : undefined;
 		if (err === "cancel") {
 			console.warn("操作已取消");
-		} else if (err?.name === "AxiosError") {
+		} else if (errorName === "AxiosError") {
 			return;
 		} else {
-			const errorName = errorMap[err?.name] || "未知错误";
+			const errorMessage = (errorName && errorMap[errorName]) || "未知错误";
 			console.error(err);
-			// instance && consoleError("Handler", instance);
-			// info && consoleError("Handler", info);
-			nextTick(() => {
+			void nextTick(() => {
 				ElNotification({
 					title: "系统错误",
-					message: errorName,
+					message: errorMessage,
 					duration: 3000,
 					position: "top-right",
 				});
@@ -45,13 +45,14 @@ export function loadPlugins(app: App): void {
 		}
 	};
 
-	const uStorage = useStorage();
-	// 缓存前缀
-	uStorage.setPrefix("fast__");
-	// 缓存是否加密
-	uStorage.setCrypto(import.meta.env.VITE_STORAGE_CRYPTO == "true");
+	configureLogger({
+		level: import.meta.env.DEV ? "debug" : "warn",
+	});
 
-	useIdentity().makeIdentity();
+	configureStorage({ prefix: "fast__", crypto: import.meta.env.VITE_STORAGE_CRYPTO === "true" });
+
+	configureInstallationIdentity();
+	getOrCreateInstallationId();
 
 	loadElementPlus(app);
 

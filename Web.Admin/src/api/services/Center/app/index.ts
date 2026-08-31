@@ -1,18 +1,18 @@
 import { axiosUtil } from "@fast-china/axios";
-import { LaunchOutput } from "./models/LaunchOutput";
+import type { LaunchOutput } from "./models/LaunchOutput";
 
 /**
- * Fast.Center.Service.App.AppService AppApi
+ * AppApi
  */
 export const appApi = {
-  /**
-   * Launch
-   */
-  launch() {
-    return axiosUtil.request<LaunchOutput>({
-      url: "/launch",
-      method: "post",
-      requestType: "auth",
-    });
-  },
+	/**
+	 * Launch
+	 */
+	launch(): Promise<LaunchOutput> {
+		return axiosUtil.request<LaunchOutput>({
+			url: "/launch",
+			method: "post",
+			requestType: "auth",
+		});
+	},
 };

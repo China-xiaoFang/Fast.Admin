@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable ref="fastTableRef" tableKey="1D1F6WM7DG" rowKey="serialRuleId" :requestApi="serialApi.querySerialRulePaged" hideSearchTime>
+		<FastTable ref="fastTableRef" table-key="1D1F6WM7DG" row-key="serialRuleId" :request-api="serialApi.querySerialRulePaged" hide-search-time>
 			<!-- 表格按钮操作区域 -->
 			<template #header>
 				<el-button v-auth="'Serial:Add'" type="primary" :icon="Plus" @click="editFormRef.add()">新增</el-button>
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { serialApi } from "@/api/services/Admin/serial";
 import SerialEdit from "./edit/index.vue";
@@ -28,6 +28,6 @@ defineOptions({
 	name: "SystemSerial",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof SerialEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof SerialEdit>>("editFormRef");
 </script>

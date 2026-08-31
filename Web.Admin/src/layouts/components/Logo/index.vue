@@ -1,5 +1,5 @@
 <template>
-	<div class="logo" :style="{ '--height': addUnit(configStore.layout.navBarHeight) }" title="首页" @click="router.push('/')">
+	<div class="logo" :style="{ '--height': addCssUnit(configStore.layout.navBarHeight) }" title="首页" @click="router.push('/')">
 		<img :src="logo" alt="Logo" @error="setFallBack" />
 		<span v-if="!configStore.layout.menuCollapse" :title="appStore.appName">
 			{{ userInfoStore.shortName || appStore.appName }}
@@ -9,8 +9,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
+import { addCssUnit } from "@fast-china/utils";
 import LogoImg from "@/assets/logo.png";
 import { useApp, useConfig, useUserInfo } from "@/stores";
 

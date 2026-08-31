@@ -1,12 +1,12 @@
 <template>
 	<FaSelectPage
 		v-bind="$attrs"
-		:requestApi="tenantApi.tenantSelector"
+		:request-api="tenantApi.tenantSelector"
 		v-model="modelValue"
 		v-model:label="tenantName"
 		placeholder="请选择租户"
 		clearable
-		moreDetail
+		more-detail
 		@change="handleChange"
 	>
 		<template #default="data">
@@ -16,7 +16,7 @@
 					<span>{{ data.label }}</span>
 					<span style="display: flex; justify-content: space-between; width: 100%">
 						<span style="font-size: var(--el-font-size-extra-small); padding-right: 8px">{{ data.data?.tenantNo }}</span>
-						<Tag name="EditionEnum" :value="data.data.edition" size="small" />
+						<Tag name="EditionEnum" :value="data.data?.edition" size="small" />
 					</span>
 				</div>
 			</div>
@@ -45,11 +45,11 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (value: number | string) => true,
-	"update:tenantName": (value: string) => true,
-	"update:tenantNo": (value: string) => true,
-	"update:tenantCode": (value: string) => true,
-	change: (value: ElSelectorOutput<number | string>) => true,
+	"update:modelValue": (_value: number | string) => true,
+	"update:tenantName": (_value: string) => true,
+	"update:tenantNo": (_value: string) => true,
+	"update:tenantCode": (_value: string) => true,
+	change: (_value: ElSelectorOutput) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });
@@ -57,11 +57,12 @@ const tenantName = useVModel(props, "tenantName", emit, { passive: false });
 const tenantNo = useVModel(props, "tenantNo", emit, { passive: true });
 const tenantCode = useVModel(props, "tenantCode", emit, { passive: true });
 
-const handleChange = (value: ElSelectorOutput<number | string>) => {
-	if (value) {
-		tenantNo.value = value.data.tenantNo;
-		tenantCode.value = value.data.tenantCode;
-		emit("change", value);
+const handleChange = (data: ElSelectorOutput | ElSelectorOutput[]) => {
+	if (Array.isArray(data)) return;
+	if (data) {
+		tenantNo.value = data.data?.tenantNo;
+		tenantCode.value = data.data?.tenantCode;
+		emit("change", data);
 	} else {
 		tenantNo.value = undefined;
 		tenantCode.value = undefined;

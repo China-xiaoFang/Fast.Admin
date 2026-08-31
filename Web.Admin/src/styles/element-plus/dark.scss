@@ -12,6 +12,10 @@ html.dark {
 		--el-table-fixed-right-column: inset -10px 0 10px -10px rgba(0, 0, 0, 0.72);
 	}
 
+	.el-divider__text {
+		background-color: var(--el-bg-color-overlay) !important;
+	}
+
 	.el-tree {
 		.el-tree-node {
 			&.is-current {

@@ -1,7 +1,7 @@
 <template>
 	<div class="el-card" v-loading="state.loading" element-loading-text="加载中...">
 		<el-scrollbar>
-			<el-divider contentPosition="left">账号信息</el-divider>
+			<el-divider content-position="left">账号信息</el-divider>
 			<FaForm ref="accountFaFormRef" :model="state.accountFormData" :rules="state.formRules" cols="3">
 				<FaFormItem prop="nickName" label="昵称">
 					<el-input v-model="state.accountFormData.nickName" maxlength="20" placeholder="请输入昵称" />
@@ -11,21 +11,6 @@
 				</FaFormItem>
 				<FaFormItem prop="email" label="邮箱">
 					<el-input v-model="state.accountFormData.email" maxlength="50" placeholder="请输入邮箱" />
-				</FaFormItem>
-				<FaFormItem prop="phone" label="电话">
-					<el-input v-model="state.accountFormData.phone" maxlength="11" placeholder="请输入电话" />
-				</FaFormItem>
-				<FaFormItem prop="sex" label="性别">
-					<RadioGroup name="GenderEnum" v-model="state.accountFormData.sex" />
-				</FaFormItem>
-				<FaFormItem prop="birthday" label="生日">
-					<el-date-picker
-						type="date"
-						v-model="state.accountFormData.birthday"
-						:disabledDate="dateUtil.getDisabledDate"
-						valueFormat="YYYY-MM-DD"
-						placeholder="请选择生日"
-					/>
 				</FaFormItem>
 				<FaFormItem prop="lastLoginIp" label="Ip">
 					<el-text type="success">{{ state.accountFormData.lastLoginIp }}</el-text>
@@ -37,12 +22,12 @@
 					<template v-else>-</template>
 				</FaFormItem>
 				<FaFormItem prop="avatar" label="头像">
-					<FaUploadImage v-model="state.accountFormData.avatar" :uploadApi="fileApi.uploadAvatar" />
+					<FaUploadImage v-model="state.accountFormData.avatar" :upload-api="fileApi.uploadAvatar" />
 				</FaFormItem>
 			</FaForm>
 
 			<template v-if="!userInfoStore.isSuperAdmin && !userInfoStore.isAdmin">
-				<el-divider contentPosition="left">职员信息</el-divider>
+				<el-divider content-position="left">职员信息</el-divider>
 				<FaForm ref="employeeFaFormRef" :model="state.employeeFormData" :rules="state.formRules" cols="3">
 					<FaFormItem prop="employeeName" label="职员名称">
 						<el-input v-model="state.employeeFormData.employeeName" maxlength="20" placeholder="请输入职员名称" />
@@ -56,91 +41,16 @@
 					<FaFormItem prop="sex" label="性别">
 						<RadioGroup name="GenderEnum" v-model="state.employeeFormData.sex" />
 					</FaFormItem>
-					<FaFormItem prop="birthday" label="生日">
-						<el-date-picker
-							type="date"
-							v-model="state.employeeFormData.birthday"
-							:disabledDate="dateUtil.getDisabledDate"
-							valueFormat="YYYY-MM-DD"
-							placeholder="请选择生日"
-						/>
-					</FaFormItem>
-					<FaFormItem prop="idType" label="证件类型">
-						<FaSelect
-							:data="appStore.getDictionary('IdTypeEnum')"
-							v-model="state.employeeFormData.idType"
-							placeholder="请选择证件类型"
-							clearable
-						/>
-					</FaFormItem>
-					<FaFormItem prop="idNumber" label="证件号码">
-						<el-input v-model="state.employeeFormData.idNumber" maxlength="50" placeholder="请输入证件号码" />
-					</FaFormItem>
 					<FaFormItem prop="idPhoto" label="证件照">
-						<FaUploadImage v-model="state.employeeFormData.idPhoto" :uploadApi="fileApi.uploadIdPhoto" />
+						<FaUploadImage v-model="state.employeeFormData.idPhoto" :upload-api="fileApi.uploadIdPhoto" />
 					</FaFormItem>
 
 					<FaLayoutGridItem span="3">
-						<el-divider contentPosition="left">人事档案</el-divider>
-					</FaLayoutGridItem>
-
-					<FaFormItem prop="nation" label="民族">
-						<FaSelect
-							:data="appStore.getDictionary('NationEnum')"
-							v-model="state.employeeFormData.nation"
-							placeholder="请选择民族"
-							clearable
-						/>
-					</FaFormItem>
-					<FaFormItem prop="nativePlace" label="籍贯">
-						<el-input v-model="state.employeeFormData.nativePlace" maxlength="50" placeholder="请输入籍贯" />
-					</FaFormItem>
-					<FaFormItem prop="familyPhone" label="家庭电话">
-						<el-input v-model="state.employeeFormData.familyPhone" maxlength="20" placeholder="请输入家庭电话" />
-					</FaFormItem>
-					<FaFormItem prop="officePhone" label="办公电话">
-						<el-input v-model="state.employeeFormData.officePhone" maxlength="20" placeholder="请输入办公电话" />
-					</FaFormItem>
-					<FaFormItem prop="familyAddress" label="家庭地址">
-						<el-input
-							type="textarea"
-							v-model="state.employeeFormData.familyAddress"
-							:rows="2"
-							maxlength="200"
-							placeholder="请输入家庭地址"
-						/>
-					</FaFormItem>
-					<FaFormItem prop="mailingAddress" label="通信地址">
-						<el-input
-							type="textarea"
-							v-model="state.employeeFormData.mailingAddress"
-							:rows="2"
-							maxlength="200"
-							placeholder="请输入通信地址"
-						/>
-					</FaFormItem>
-					<FaFormItem prop="emergencyContact" label="紧急联系人">
-						<el-input v-model="state.employeeFormData.emergencyContact" maxlength="20" placeholder="请输入紧急联系人" />
-					</FaFormItem>
-					<FaFormItem prop="emergencyPhone" label="紧急联系电话">
-						<el-input v-model="state.employeeFormData.emergencyPhone" maxlength="20" placeholder="请输入紧急联系电话" />
-					</FaFormItem>
-					<FaFormItem prop="emergencyAddress" label="紧急联系地址">
-						<el-input
-							type="textarea"
-							v-model="state.employeeFormData.emergencyAddress"
-							:rows="2"
-							maxlength="200"
-							placeholder="请输入紧急联系地址"
-						/>
-					</FaFormItem>
-
-					<FaLayoutGridItem span="3">
-						<el-divider contentPosition="left">机构信息</el-divider>
+						<el-divider content-position="left">机构信息</el-divider>
 					</FaLayoutGridItem>
 
 					<FaLayoutGridItem span="3" style="min-height: 300px; max-height: 500px">
-						<FaTable :data="state.employeeFormData.orgList" :pagination="false" :headerCard="false">
+						<FaTable :data="state.employeeFormData.orgList" :pagination="false" :header-card="false">
 							<FaTableColumn prop="orgName" label="机构" width="280" />
 							<FaTableColumn prop="departmentName" label="部门" width="280" />
 							<FaTableColumn prop="isPrimary" label="主部门" width="80" tag :enum="appStore.getDictionary('BooleanEnum')" />
@@ -160,18 +70,19 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, onMounted, reactive, ref } from "vue";
-import { ElMessage, type FormRules, dayjs } from "element-plus";
-import { dateUtil, withDefineType } from "@fast-china/utils";
+import { inject, onMounted, reactive, useTemplateRef } from "vue";
+import { ElMessage, dayjs } from "element-plus";
+import { withDefineType } from "@fast-china/utils";
 import { employeeApi } from "@/api/services/Admin/employee";
-import { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
 import { accountApi } from "@/api/services/Center/account";
-import { EditAccountInput } from "@/api/services/Center/account/models/EditAccountInput";
-import { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
-import { fileApi } from "@/api/services/File";
+import { fileApi } from "@/api/services/Center/file";
 import { changePasswordKey } from "@/layouts";
 import { useApp, useUserInfo } from "@/stores";
+import type { FormRules } from "element-plus";
 import type { FaFormInstance } from "fast-element-plus";
+import type { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
+import type { EditAccountInput } from "@/api/services/Center/account/models/EditAccountInput";
+import type { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
 
 defineOptions({
 	name: "SettingsAccount",
@@ -180,8 +91,8 @@ defineOptions({
 const appStore = useApp();
 const userInfoStore = useUserInfo();
 
-const accountFaFormRef = ref<FaFormInstance>();
-const employeeFaFormRef = ref<FaFormInstance>();
+const accountFaFormRef = useTemplateRef<FaFormInstance>("accountFaFormRef");
+const employeeFaFormRef = useTemplateRef<FaFormInstance>("employeeFaFormRef");
 const changePasswordRef = inject(changePasswordKey);
 
 const state = reactive({
@@ -189,20 +100,15 @@ const state = reactive({
 	accountFormData: withDefineType<EditAccountInput & QueryAccountDetailOutput>({}),
 	employeeFormData: withDefineType<EditEmployeeInput>({}),
 	formRules: withDefineType<FormRules>({
-		orgId: [{ required: true, message: "请选择机构", trigger: "change" }],
-		departmentId: [{ required: true, message: "请选择部门", trigger: "change" }],
-		positionId: [{ required: true, message: "请选择职位", trigger: "change" }],
-		jobLevelId: [{ required: true, message: "请选择职级", trigger: "change" }],
 		employeeName: [{ required: true, message: "请输入职员名称", trigger: "blur" }],
 		mobile: [{ required: true, message: "请输入手机", trigger: "blur" }],
 		email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
 		idPhoto: [{ required: true, message: "请上传证件照", trigger: "change" }],
-		firstWorkDate: [{ required: true, message: "请选择初次工作日期", trigger: "change" }],
 		entryDate: [{ required: true, message: "请选择入职日期", trigger: "change" }],
 	}),
 });
 
-const handleConfirm = async (event: MouseEvent, done: () => void) => {
+const handleConfirm = async (_event: MouseEvent, done: () => void) => {
 	state.loading = true;
 	try {
 		await accountFaFormRef.value.validateScrollToField();

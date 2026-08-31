@@ -2,12 +2,27 @@
 	<suspense>
 		<template #default>
 			<Watermark v-if="configStore.layout.watermark">
-				<component :is="layoutComponents[layoutMode]" class="layout" :class="{ 'is-mobile': isMobile }" />
+				<component
+					:is="layoutComponents[layoutMode]"
+					class="layout"
+					:class="{
+						'is-mobile': isMobile,
+						'is-tablet': isTablet,
+					}"
+				/>
 			</Watermark>
-			<component :is="layoutComponents[layoutMode]" v-else class="layout" :class="{ 'is-mobile': isMobile }" />
+			<component
+				:is="layoutComponents[layoutMode]"
+				v-else
+				class="layout"
+				:class="{
+					'is-mobile': isMobile,
+					'is-tablet': isTablet,
+				}"
+			/>
 		</template>
 		<template #fallback>
-			<Loading loadingText="系统初始化中..." />
+			<Loading loading-text="系统初始化中..." />
 		</template>
 	</suspense>
 	<LayoutConfig ref="layoutConfigRef" />
@@ -16,16 +31,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineAsyncComponent, provide, ref, watch } from "vue";
-import { withDefineType } from "@fast-china/utils";
 import { useWindowSize } from "@vueuse/core";
+import { computed, defineAsyncComponent, provide, useTemplateRef } from "vue";
+import { withDefineType } from "@fast-china/utils";
 import ChangePassword from "@/layouts/components/ChangePassword/index.vue";
 import LayoutConfig from "@/layouts/components/Config/index.vue";
 import MenuSearch from "@/layouts/components/MenuSearch/index.vue";
 import { useConfig } from "@/stores";
 import { changePasswordKey, layoutConfigKey, menuSearchKey } from "./index";
-import type { IModeName } from "@/stores";
 import type { Component } from "vue";
+import type { IModeName } from "@/stores";
 
 defineOptions({
 	name: "LayoutAsync",
@@ -34,27 +49,22 @@ defineOptions({
 const configStore = useConfig();
 const windowSize = useWindowSize();
 
-const layoutConfigRef = ref<InstanceType<typeof LayoutConfig>>();
-const menuSearchRef = ref<InstanceType<typeof MenuSearch>>();
-const changePasswordRef = ref<InstanceType<typeof ChangePassword>>();
+const layoutConfigRef = useTemplateRef<InstanceType<typeof LayoutConfig>>("layoutConfigRef");
+const menuSearchRef = useTemplateRef<InstanceType<typeof MenuSearch>>("menuSearchRef");
+const changePasswordRef = useTemplateRef<InstanceType<typeof ChangePassword>>("changePasswordRef");
 provide(layoutConfigKey, layoutConfigRef);
 provide(menuSearchKey, menuSearchRef);
 provide(changePasswordKey, changePasswordRef);
 
-/** 是否移动端（窗口宽度 <= 768） */
-const isMobile = computed(() => windowSize.width.value <= 768);
+/** 是否手机端。 */
+const isMobile = computed(() => windowSize.width.value < 768);
+/** 是否平板端。 */
+const isTablet = computed(() => windowSize.width.value >= 768 && windowSize.width.value < 1200);
 
-/** 实际使用的布局模式（移动端强制经典） */
+/** 实际使用的布局模式（手机、平板端使用经典布局，不覆盖用户的桌面端偏好） */
 const layoutMode = computed<IModeName>(() => {
-	if (isMobile.value) return "Classic";
+	if (isMobile.value || isTablet.value) return "Classic";
 	return configStore.layout.layoutMode;
-});
-
-/** 移动端时自动切换到经典布局 */
-watch(isMobile, (newValue) => {
-	if (newValue && configStore.layout.layoutMode !== "Classic") {
-		configStore.setLayoutMode("Classic");
-	}
 });
 
 const layoutComponents = withDefineType<Record<IModeName, Component>>({
@@ -68,6 +78,6 @@ const layoutComponents = withDefineType<Record<IModeName, Component>>({
 .layout {
 	width: 100%;
 	height: 100%;
-	min-width: 1024px;
+	min-width: 0;
 }
 </style>

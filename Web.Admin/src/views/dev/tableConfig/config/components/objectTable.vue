@@ -15,7 +15,6 @@
 					<el-radio :value="1">字符串</el-radio>
 					<el-radio :value="2">数字</el-radio>
 					<el-radio :value="4">Boolean</el-radio>
-					<el-radio :value="8">方法</el-radio>
 				</el-radio-group>
 			</template>
 		</FaTableColumn>
@@ -32,9 +31,9 @@
 </template>
 
 <script lang="ts" setup>
+import { useVModel } from "@vueuse/core";
 import { Plus } from "@element-plus/icons-vue";
 import { definePropType } from "@fast-china/utils";
-import { useVModel } from "@vueuse/core";
 import type { FaTableColumnAdvancedCtx } from "@/api/services/Center/table/models/FaTableColumnAdvancedCtx";
 
 defineOptions({

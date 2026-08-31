@@ -2,6 +2,7 @@
 @use "./common/animation.scss";
 @use "./common/nprogress.scss";
 @use "./element-plus/index.scss";
+@use "./modern.scss";
 
 @font-face {
 	font-family: Roboto;
@@ -172,6 +173,36 @@ body,
 		min-width: 0px;
 		width: auto;
 		height: auto;
+	}
+}
+
+@media (max-width: 1199px) {
+	.fa__display_lr-l,
+	.fa__display_lr-r {
+		--width: 100%;
+		flex-direction: column;
+		overflow: auto;
+
+		> :first-child,
+		> :last-child {
+			width: 100%;
+			max-width: none;
+			min-height: 0;
+		}
+	}
+
+	.el-dialog {
+		max-width: calc(100vw - 32px);
+	}
+}
+
+@media (max-width: 767px) {
+	.el-message-box {
+		max-width: calc(100vw - 24px);
+	}
+
+	.el-drawer {
+		max-width: min(86vw, 320px);
 	}
 }
 

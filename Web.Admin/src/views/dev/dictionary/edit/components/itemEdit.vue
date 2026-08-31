@@ -3,9 +3,9 @@
 		ref="faDialogRef"
 		width="800"
 		:title="state.dialogTitle"
-		:showConfirmButton="!state.formDisabled"
-		:showBeforeClose="!state.formDisabled"
-		confirmButtonText="保存"
+		:show-confirm-button="!state.formDisabled"
+		:show-before-close="!state.formDisabled"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
@@ -48,15 +48,15 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { type FormRules } from "element-plus";
+import { useVModel } from "@vueuse/core";
+import { reactive, useTemplateRef } from "vue";
 import { FaDialog } from "fast-element-plus";
 import { definePropType, withDefineType } from "@fast-china/utils";
-import { useVModel } from "@vueuse/core";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
-import type { EditDictionaryItemInput } from "@/api/services/Center/dictionary/models/EditDictionaryItemInput";
+import type { FormRules } from "element-plus";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { EditDictionaryItemInput } from "@/api/services/Center/dictionary/models/EditDictionaryItemInput";
 
 defineOptions({
 	name: "DevDictionaryEditItemEdit",
@@ -71,8 +71,8 @@ const emit = defineEmits(["update:modelValue"]);
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditDictionaryItemInput>({}),
@@ -123,7 +123,7 @@ const add = () => {
 };
 
 const edit = (row: EditDictionaryItemInput, index: number) => {
-	faDialogRef.value.open(async () => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		state.tableIndex = index;

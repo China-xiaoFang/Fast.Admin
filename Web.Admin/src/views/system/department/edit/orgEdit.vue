@@ -3,20 +3,20 @@
 		ref="faDialogRef"
 		width="500"
 		:title="state.dialogTitle"
-		:showConfirmButton="!state.formDisabled"
-		:showBeforeClose="!state.formDisabled"
-		confirmButtonText="保存"
+		:show-confirm-button="!state.formDisabled"
+		:show-before-close="!state.formDisabled"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled">
 			<FaFormItem prop="parentId" label="父级">
 				<FaTreeSelect
-					:requestApi="organizationApi.organizationSelector"
+					:request-api="organizationApi.organizationSelector"
 					v-model="state.formData.parentId"
 					v-model:label="state.formData.parentName"
 					placeholder="请选择父级机构"
-					checkStrictly
+					check-strictly
 					filterable
 					clearable
 				/>
@@ -50,13 +50,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
+import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { organizationApi } from "@/api/services/Admin/organization";
-import { AddOrganizationInput } from "@/api/services/Admin/organization/models/AddOrganizationInput";
-import { EditOrganizationInput } from "@/api/services/Admin/organization/models/EditOrganizationInput";
+import type { FormRules } from "element-plus";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { AddOrganizationInput } from "@/api/services/Admin/organization/models/AddOrganizationInput";
+import type { EditOrganizationInput } from "@/api/services/Admin/organization/models/EditOrganizationInput";
 
 defineOptions({
 	name: "SystemOrgEdit",
@@ -64,8 +65,8 @@ defineOptions({
 
 const emit = defineEmits(["ok"]);
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditOrganizationInput & AddOrganizationInput & { parentName?: string }>({}),
@@ -101,7 +102,7 @@ const detail = (orgId: number) => {
 	faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await organizationApi.queryOrganizationDetail(orgId);
-		if (apiRes.parentId == 0) {
+		if (apiRes.parentId === 0) {
 			apiRes.parentId = undefined;
 		}
 		state.formData = apiRes;
@@ -125,7 +126,7 @@ const edit = (orgId: number) => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		const apiRes = await organizationApi.queryOrganizationDetail(orgId);
-		if (apiRes.parentId == 0) {
+		if (apiRes.parentId === 0) {
 			apiRes.parentId = undefined;
 		}
 		state.formData = apiRes;

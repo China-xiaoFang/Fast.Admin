@@ -1,28 +1,28 @@
 <template>
 	<FaInputDialogPage
 		v-bind="$attrs"
-		rowKey="employeeId"
-		labelKey="employeeName"
-		:requestApi="employeeApi.queryEmployeePaged"
+		row-key="employeeId"
+		label-key="employeeName"
+		:request-api="employeeApi.queryEmployeePaged"
 		v-model="modelValue"
 		v-model:label="employeeName"
 		placeholder="请选择职员"
 		@change="handleChange"
 	>
-		<FaTableColumn prop="idPhoto" label="头像" fixed type="image" width="50" smallWidth="50" />
-		<FaTableColumn prop="employeeName" label="名称" fixed width="200" smallWidth="180" sortable />
-		<FaTableColumn prop="employeeNo" label="工号" width="150" smallWidth="130" sortable />
-		<FaTableColumn prop="mobile" label="手机" width="150" smallWidth="130" sortable />
-		<FaTableColumn prop="departmentName" label="部门" width="150" smallWidth="130" sortable />
-		<FaTableColumn prop="positionName" label="职位" width="150" smallWidth="130" sortable />
-		<FaTableColumn prop="jobLevelName" label="职级" width="150" smallWidth="130" sortable />
+		<FaTableColumn prop="idPhoto" label="头像" fixed type="image" width="50" small-width="50" />
+		<FaTableColumn prop="employeeName" label="名称" fixed width="200" small-width="180" sortable />
+		<FaTableColumn prop="employeeNo" label="工号" width="150" small-width="130" sortable />
+		<FaTableColumn prop="mobile" label="手机" width="150" small-width="130" sortable />
+		<FaTableColumn prop="departmentName" label="部门" width="150" small-width="130" sortable />
+		<FaTableColumn prop="positionName" label="职位" width="150" small-width="130" sortable />
+		<FaTableColumn prop="jobLevelName" label="职级" width="150" small-width="130" sortable />
 	</FaInputDialogPage>
 </template>
 
 <script lang="ts" setup>
 import { useVModel } from "@vueuse/core";
 import { employeeApi } from "@/api/services/Admin/employee";
-import { QueryEmployeePagedOutput } from "@/api/services/Admin/employee/models/QueryEmployeePagedOutput";
+import type { QueryEmployeePagedOutput } from "@/api/services/Admin/employee/models/QueryEmployeePagedOutput";
 
 defineOptions({
 	name: "EmployeeDialogSelect",
@@ -39,11 +39,11 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (value: number | string) => true,
-	"update:employeeName": (value: string) => true,
-	"update:employeeNo": (value: string) => true,
-	"update:mobile": (value: string) => true,
-	change: (data: QueryEmployeePagedOutput) => true,
+	"update:modelValue": (_value: number | string) => true,
+	"update:employeeName": (_value: string) => true,
+	"update:employeeNo": (_value: string) => true,
+	"update:mobile": (_value: string) => true,
+	change: (_data: QueryEmployeePagedOutput) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });

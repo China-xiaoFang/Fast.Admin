@@ -2,8 +2,8 @@
 	<el-menu
 		router
 		mode="horizontal"
-		:defaultActive="activeMenu"
-		:style="{ '--el-menu-horizontal-height': addUnit(configStore.layout.navBarHeight) }"
+		:default-active="activeMenu"
+		:style="{ '--el-menu-horizontal-height': addCssUnit(configStore.layout.navBarHeight) }"
 	>
 		<el-menu-item index="/dashboard" @click="router.push('/dashboard')">
 			<FaIcon name="fa-icon-Dashboard" />
@@ -27,8 +27,8 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
+import { addCssUnit } from "@fast-china/utils";
 import { MenuTypeEnum } from "@/api/enums/MenuTypeEnum";
 import { useConfig, useUserInfo } from "@/stores";
 import type { AuthMenuInfoDto } from "@/api/services/Auth/auth/models/AuthMenuInfoDto";
@@ -44,12 +44,11 @@ const userInfoStore = useUserInfo();
 const activeMenu = ref("/dashboard");
 
 const emit = defineEmits({
-	// eslint-disable-next-line no-unused-vars
-	menuChange: (menu: AuthMenuInfoDto) => true,
+	menuChange: (_menu: AuthMenuInfoDto) => true,
 });
 
 /** 查找第一个叶子菜单 */
-const findFirstLeaf = (menu: AuthMenuInfoDto): AuthMenuInfoDto | null => {
+const findFirstLeaf = (menu: AuthMenuInfoDto): AuthMenuInfoDto => {
 	if (!menu.children || menu.children.length === 0) {
 		return menu;
 	}
@@ -101,10 +100,10 @@ const handleMenuClick = (item: AuthMenuInfoDto & { firstChild: AuthMenuInfoDto }
 		case MenuTypeEnum.Catalog:
 			break;
 		case MenuTypeEnum.Menu:
-			router.push(item.firstChild.router);
+			void router.push(item.firstChild.router);
 			break;
 		case MenuTypeEnum.Internal:
-			router.push({
+			void router.push({
 				path: "/iframe",
 				query: { url: item.firstChild.link },
 			});

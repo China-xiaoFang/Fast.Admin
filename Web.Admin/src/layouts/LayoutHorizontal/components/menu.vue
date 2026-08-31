@@ -1,9 +1,9 @@
 <template>
 	<el-menu
-		uniqueOpened
+		unique-opened
 		mode="horizontal"
-		:defaultActive="activeMenu"
-		:style="{ '--el-menu-horizontal-height': addUnit(configStore.layout.navBarHeight) }"
+		:default-active="activeMenu"
+		:style="{ '--el-menu-horizontal-height': addCssUnit(configStore.layout.navBarHeight) }"
 	>
 		<el-menu-item index="/dashboard" @click="router.push('/dashboard')">
 			<FaIcon name="fa-icon-Dashboard" />
@@ -17,8 +17,8 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { addUnit } from "@fast-china/utils";
 import { useRouter } from "vue-router";
+import { addCssUnit } from "@fast-china/utils";
 import MenuItem from "@/layouts/components/MenuItem/index.vue";
 import { useConfig, useUserInfo } from "@/stores";
 

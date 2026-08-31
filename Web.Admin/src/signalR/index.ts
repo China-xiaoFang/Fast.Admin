@@ -1,11 +1,11 @@
 import { ElLoading, ElMessage, ElMessageBox, ElNotification, dayjs } from "element-plus";
 import { useFastAxios } from "@fast-china/axios";
-import { consoleError, consoleLog, consoleWarn, objectUtil, useIdentity, withDefineType } from "@fast-china/utils";
+import { installationIdentity, logger, toQueryString, withDefineType } from "@fast-china/utils";
 import { HttpTransportType, HubConnectionBuilder, HubConnectionState, LogLevel } from "@microsoft/signalr";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { useApp, useUserInfo } from "@/stores";
-import type { TenantOnlineUserModel } from "@/api/services/Center/tenantOnlineUser/models/TenantOnlineUserModel";
 import type { HubConnection } from "@microsoft/signalr";
+import type { TenantOnlineUserModel } from "@/api/services/Center/tenantOnlineUser/models/TenantOnlineUserModel";
 
 /**
  * SignalR 对象
@@ -26,13 +26,13 @@ const initWebSocket = async (): Promise<void> => {
 		const url = `${fastAxios.baseUrl}${appStore.webSocketUrl}`;
 		const params = {
 			"Fast-Origin": import.meta.env.DEV ? import.meta.env.VITE_APP_ORIGIN || window.location.host : window.location.host,
-			"Fast-Device-Type": Object.keys(AppEnvironmentEnum).find((f) => AppEnvironmentEnum[f] === AppEnvironmentEnum.Web),
-			"Fast-Device-Id": useIdentity().deviceId,
+			"Fast-Device-Type": Object.entries(AppEnvironmentEnum).find(([, value]) => value === AppEnvironmentEnum.Web)?.[0],
+			"Fast-Device-Id": installationIdentity.deviceId,
 		};
 		// 判断是否存在对象
 		if (!connection) {
 			connection = new HubConnectionBuilder()
-				.withUrl(`${url}?${objectUtil.objectToQueryString(params)}`, {
+				.withUrl(`${url}?${toQueryString(params)}`, {
 					// 跳过协商阶段
 					skipNegotiation: true,
 					// 传输方式
@@ -72,15 +72,13 @@ const initWebSocket = async (): Promise<void> => {
 						type: "error",
 						position: "top-right",
 					});
-					consoleWarn("WebSocket", "服务器已断线...");
-					if (!reLoadingInstance) {
-						reLoadingInstance = ElLoading.service({
-							fullscreen: true,
-							lock: true,
-							text: "断线重连中...",
-							background: "rgba(0, 0, 0, 0.7)",
-						});
-					}
+					logger.warn("WebSocket", "服务器已断线...");
+					reLoadingInstance ||= ElLoading.service({
+						fullscreen: true,
+						lock: true,
+						text: "断线重连中...",
+						background: "rgba(0, 0, 0, 0.7)",
+					});
 				});
 
 				/**
@@ -89,7 +87,7 @@ const initWebSocket = async (): Promise<void> => {
 				connection.onreconnected(() => {
 					reLoadingInstance?.close();
 					ElMessage.success("服务重连成功");
-					consoleWarn("WebSocket", "服务重连成功...");
+					logger.warn("WebSocket", "服务重连成功...");
 				});
 			}
 
@@ -108,7 +106,7 @@ const initWebSocket = async (): Promise<void> => {
 					type: "success",
 					duration: 1000,
 				});
-				consoleLog("WebSocket", "服务连接成功...", userInfoStore.employeeName);
+				logger.log("WebSocket", "服务连接成功...", userInfoStore.employeeName);
 
 				try {
 					loadingInstance = ElLoading.service({
@@ -124,9 +122,9 @@ const initWebSocket = async (): Promise<void> => {
 						type: "success",
 						duration: 1000,
 					});
-					consoleLog("WebSocket", "系统连接成功...");
+					logger.log("WebSocket", "系统连接成功...");
 				} catch (error) {
-					consoleError("WebSocket", error);
+					logger.error("WebSocket", "发生异常", error);
 					throw error;
 				} finally {
 					loadingInstance?.close();
@@ -134,16 +132,16 @@ const initWebSocket = async (): Promise<void> => {
 			});
 
 			// 登录失败监听
-			connection.on("LoginFail", async (message: string) => {
+			connection.on("LoginFail", (message: string) => {
 				userInfoStore.logoutClear();
-				ElMessageBox.alert(message, {
+				void ElMessageBox.alert(message, {
 					type: "warning",
 				});
 			});
 
 			// 其他地方登录监听
 			connection.on("ElsewhereLogin", async (data: TenantOnlineUserModel) => {
-				consoleWarn("WebSocket", "其他地方登录", data);
+				logger.warn("WebSocket", "其他地方登录", data);
 
 				const message = `账号于【${dayjs(data.lastLoginTime).format("YYYY-MM-DD HH:mm:ss")}】在【${data.lastLoginOS} ${data.lastLoginBrowser}(${
 					data.lastLoginIp
@@ -160,7 +158,7 @@ const initWebSocket = async (): Promise<void> => {
 			connection.on(
 				"ForceOffline",
 				async (data: { isAdmin: boolean; nickName: string; employeeNo: string; offlineTime: string; message: string }) => {
-					consoleWarn("WebSocket", "强制下线", data);
+					logger.warn("WebSocket", "强制下线", data);
 
 					let message = "您已被";
 
@@ -189,7 +187,7 @@ const initWebSocket = async (): Promise<void> => {
 			await connection.start();
 		}
 	} catch (error) {
-		consoleError("WebSocket", error);
+		logger.error("WebSocket", "发生异常", error);
 	}
 
 	return Promise.resolve();
@@ -204,7 +202,7 @@ const closeWebSocket = async (): Promise<void> => {
 			// WebSocket 退出登录
 			await connection.invoke("Logout");
 		} catch (error) {
-			consoleError("WebSocket", error);
+			logger.error("WebSocket", "发生异常", error);
 		}
 		await connection.stop();
 	}

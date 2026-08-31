@@ -1,17 +1,18 @@
 <template>
 	<component
-		:is="loginComponents[appStore.loginComponent]"
-		:background="getThemeGradient(appStore.themeColor, configStore.layout.isDark ? 'dark' : 'light')"
-		:footerHeight="configStore.layout.footerHeight"
-		:formRules="state.formRules"
+		:is="activeLoginComponent"
+		:background="getThemeGradient(configStore.layout.themeColor, configStore.layout.isDark ? 'dark' : 'light')"
+		:footer-height="configStore.layout.footerHeight"
+		:form-rules="state.formRules"
 	>
 		<template #help>
 			<el-dropdown ref="helpDropdownRef" class="help_dropdown" size="default" trigger="click" @command="handleDropdownClick">
-				<div>
-					<el-icon :size="20" title="主题">
-						<ChromeFilled />
+				<el-button class="help-trigger" text circle aria-label="打开显示设置">
+					<el-icon :size="18">
+						<Moon v-if="configStore.layout.isDark" />
+						<Sunny v-else />
 					</el-icon>
-				</div>
+				</el-button>
 				<template #dropdown>
 					<el-dropdown-menu>
 						<el-dropdown-item disabled>主题</el-dropdown-item>
@@ -25,8 +26,8 @@
 					</el-dropdown-menu>
 				</template>
 			</el-dropdown>
-			<el-tour v-model="state.helpTourValue" :showClose="false" :closeOnPressEscape="false">
-				<el-tour-step :target="helpDropdownRef?.$el" title="重新加载系统" placement="left-end">
+			<el-tour v-model="state.helpTourValue" :show-close="false">
+				<el-tour-step :target="helpDropdownRef?.$el" title="显示异常处理" placement="bottom-end">
 					<span>如果存在异常显示。</span>
 					<br />
 					<span>点击右侧图标可进行重置系统操作。</span>
@@ -37,39 +38,20 @@
 </template>
 
 <script lang="ts" setup>
-import { defineAsyncComponent, onMounted, provide, reactive, ref, toRef } from "vue";
+import { computed, defineAsyncComponent, onMounted, provide, reactive, toRef, useTemplateRef } from "vue";
+import { Moon, Operation, Refresh, Sunny } from "@element-plus/icons-vue";
 import { ElMessageBox } from "element-plus";
-import { ChromeFilled, Operation, Refresh } from "@element-plus/icons-vue";
 import { Dark, Light } from "@fast-element-plus/icons-vue";
-import { Local, Session, consoleError, useIdentity, withDefineType } from "@fast-china/utils";
-import { useApp, useConfig } from "@/stores";
-import type { LoginInput } from "@/api/services/Auth/login/models/LoginInput";
-import type { LoginTenantOutput } from "@/api/services/Auth/login/models/LoginTenantOutput";
-import type { TenantLoginInput } from "@/api/services/Auth/login/models/TenantLoginInput";
-import type { ILoginComponent } from "@/stores";
+import { Local, Session, getOrCreateInstallationId, installationIdentity, logger, withDefineType } from "@fast-china/utils";
+import { defaultThemeColor, useApp, useConfig } from "@/stores";
 import type { DropdownInstance, FormRules } from "element-plus";
 import type { Component } from "vue";
+import type { IFormData, IFormStep, ITenantData } from "./useLogin";
+import type { ILoginComponent } from "@/stores";
 
 defineOptions({
 	name: "Login",
 });
-
-export type IFormData = {
-	/** 记住密码 */
-	rememberMe?: boolean;
-	/** 加密密码 */
-	encryptPassword?: boolean;
-} & LoginInput &
-	TenantLoginInput;
-
-export type ITenantData = {
-	/** 租户 */
-	tenant: LoginTenantOutput;
-	/** 表单数据 */
-	formData: IFormData;
-};
-
-export type IFormStep = "Account" | "TenantAccount" | "SelectTenant" | "NewAccount";
 
 /** 登录组件 */
 const loginComponents = withDefineType<Record<ILoginComponent, Component>>({
@@ -82,7 +64,14 @@ const loginComponents = withDefineType<Record<ILoginComponent, Component>>({
 const appStore = useApp();
 const configStore = useConfig();
 
-const helpDropdownRef = ref<DropdownInstance>();
+const helpDropdownRef = useTemplateRef<DropdownInstance>("helpDropdownRef");
+
+/** 后端返回未知组件名时回退到经典登录页，避免出现空白页面。 */
+const activeLoginComponent = computed(() =>
+	Object.hasOwn(loginComponents, appStore.loginComponent)
+		? loginComponents[appStore.loginComponent as ILoginComponent]
+		: loginComponents.ClassicLogin
+);
 
 const state = reactive({
 	/** 帮助漫游式引导值 */
@@ -111,16 +100,15 @@ provide("cFormKey", state.cFormKey);
 onMounted(() => {
 	try {
 		const tenantList = Local.get<ITenantData[]>(state.cFormKey);
-		if (tenantList && tenantList.length > 0) {
+		if (tenantList?.length > 0) {
 			state.tenantList = tenantList;
 			const { formData, tenant } = tenantList[0];
 			state.formData = { ...formData, userKey: tenant.userKey };
-			state.formData.encryptPassword = formData.rememberMe;
 			state.formStep = "TenantAccount";
 		}
 	} catch (error) {
 		state.helpTourValue = true;
-		consoleError("Login", error);
+		logger.error("Login", "读取登录缓存失败", error);
 	}
 });
 
@@ -141,28 +129,25 @@ const handleDropdownClick = (command: string) => {
 			configStore.switchAutoThemMode();
 			break;
 		case "重置系统":
-			ElMessageBox.confirm(
+			void ElMessageBox.confirm(
 				`确定重置系统？<br/><span class="el-text el-text--danger">重置系统将清除所有缓存信息，系统将进行初始化处理，确定要继续执行吗？</span>`,
 				{
 					dangerouslyUseHTMLString: true,
 					type: "warning",
-					async beforeClose(_, instance) {
+					beforeClose(_, instance) {
 						instance.confirmButtonText = "重置中...";
-						await new Promise((resolve) => {
-							setTimeout(() => {
-								// 获取设备Id
-								const uIdentity = useIdentity();
-								// 清空 Local 缓存
-								Local.clear();
-								// 清空 Session 缓存
-								Session.clear();
-								// 重新设置设备Id
-								uIdentity.makeIdentity(uIdentity.deviceId);
-								// 刷新App
-								window.location.reload();
-								resolve(true);
-							}, 2000);
-						});
+						setTimeout(() => {
+							// 获取设备Id
+							const deviceId = installationIdentity.deviceId;
+							// 清空 Local 缓存
+							Local.clear();
+							// 清空 Session 缓存
+							Session.clear();
+							// 重新设置设备Id
+							getOrCreateInstallationId(deviceId);
+							// 刷新App
+							window.location.reload();
+						}, 2000);
 					},
 				}
 			);
@@ -187,6 +172,7 @@ const getThemeGradient = (baseColor: string, mode: "light" | "dark" = "light", a
 	 * HEX 转 HSL
 	 */
 	const hexToHsl = (hex: string) => {
+		if (!/^#[\da-f]{6}$/iu.test(hex)) hex = defaultThemeColor;
 		hex = hex.replace("#", "");
 		const r = parseInt(hex.substring(0, 2), 16) / 255;
 		const g = parseInt(hex.substring(2, 4), 16) / 255;
@@ -257,7 +243,9 @@ const getThemeGradient = (baseColor: string, mode: "light" | "dark" = "light", a
 		{ h: base.h + 45, s: base.s * 0.6 * tone.s, l: base.l * 1.4 * tone.l },
 	];
 
-	const colors = variations.map((v) => hslToHex(v.h % 360, Math.min(v.s, 100), Math.min(v.l, 100)));
+	const colors = variations.map((variation) =>
+		hslToHex(((variation.h % 360) + 360) % 360, Math.max(0, Math.min(variation.s, 100)), Math.max(0, Math.min(variation.l, 100)))
+	);
 
 	return `linear-gradient(${angleDeg}deg, ${colors.join(", ")})`;
 };
@@ -266,10 +254,45 @@ const getThemeGradient = (baseColor: string, mode: "light" | "dark" = "light", a
 <style scoped lang="scss">
 .help_dropdown {
 	position: fixed;
-	top: 5%;
-	right: 5%;
+	top: max(16px, env(safe-area-inset-top));
+	right: max(16px, env(safe-area-inset-right));
 	cursor: pointer;
-	color: var(--el-color-white);
 	z-index: 2001;
+
+	.help-trigger {
+		width: 40px;
+		height: 40px;
+		color: var(--el-text-color-primary);
+		border: 1px solid rgb(255 255 255 / 58%);
+		background-color: rgb(255 255 255 / 62%);
+		box-shadow: 0 8px 24px rgb(15 23 42 / 12%);
+		backdrop-filter: blur(14px) saturate(1.15);
+		transition:
+			color 180ms ease,
+			background-color 180ms ease,
+			box-shadow 180ms ease,
+			transform 180ms ease;
+
+		&:hover,
+		&:focus-visible {
+			color: var(--el-color-primary);
+			background-color: rgb(255 255 255 / 82%);
+			box-shadow: 0 12px 28px rgb(15 23 42 / 16%);
+			transform: translateY(-2px) rotate(8deg);
+		}
+	}
+}
+
+html.dark .help_dropdown .help-trigger {
+	color: rgb(226 232 240 / 86%);
+	border-color: rgb(255 255 255 / 10%);
+	background-color: rgb(12 20 35 / 66%);
+	box-shadow: 0 10px 28px rgb(0 0 0 / 32%);
+
+	&:hover,
+	&:focus-visible {
+		color: #fff;
+		background-color: rgb(20 31 51 / 86%);
+	}
 }
 </style>

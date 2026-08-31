@@ -1,25 +1,27 @@
 <template>
 	<template v-if="globalSize === 'small'">
-		<div>
-			<a href="http://fastdotnet.com" target="_blank">Copyright © {{ new Date().getFullYear() }} Fast All rights reserved.</a>
-			<el-text>v{{ state.appVersion }}</el-text>
-		</div>
-		<div v-if="state.publicSecurityCode">
-			<a :href="`https://beian.mps.gov.cn/#/query/webSearch?code=${state.publicSecurityCode?.replace(/\D+/g, '')}`" target="_blank">
-				<img src="https://www.beian.gov.cn/img/new/gongan.png" />
-				{{ state.publicSecurityCode }}
-			</a>
-			<a v-if="state.icpText" href="https://beian.miit.gov.cn/" target="_blank">{{ state.icpText }}</a>
+		<div class="footer-small">
+			<div class="footer-row">
+				<a href="http://fastdotnet.com" target="_blank">Copyright © 2018~{{ new Date().getFullYear() }} Fast All rights reserved.</a>
+				<el-text>v{{ state.appVersion }}</el-text>
+			</div>
+			<div v-if="state.publicSecurityCode" class="footer-row">
+				<a :href="`https://beian.mps.gov.cn/#/query/webSearch?code=${state.publicSecurityCode?.replace(/\D+/g, '')}`" target="_blank">
+					<img :src="gonganImage" />
+					{{ state.publicSecurityCode }}
+				</a>
+				<a v-if="state.icpText" href="https://beian.miit.gov.cn/" target="_blank">{{ state.icpText }}</a>
+			</div>
 		</div>
 	</template>
 	<template v-else>
-		<a href="http://fastdotnet.com" target="_blank">Copyright © {{ new Date().getFullYear() }} Fast All rights reserved.</a>
+		<a href="http://fastdotnet.com" target="_blank">Copyright © 2018~{{ new Date().getFullYear() }} Fast All rights reserved.</a>
 		<a
 			v-if="state.publicSecurityCode"
 			:href="`https://beian.mps.gov.cn/#/query/webSearch?code=${state.publicSecurityCode?.replace(/\D+/g, '')}`"
 			target="_blank"
 		>
-			<img src="https://www.beian.gov.cn/img/new/gongan.png" />
+			<img :src="gonganImage" />
 			{{ state.publicSecurityCode }}
 		</a>
 		<a v-if="state.icpText" href="https://beian.miit.gov.cn/" target="_blank">{{ state.icpText }}</a>
@@ -30,6 +32,7 @@
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { useGlobalSize } from "element-plus";
+import gonganImage from "@/assets/images/gongan.png";
 import { useApp } from "@/stores";
 
 defineOptions({
@@ -48,23 +51,45 @@ const state = reactive({
 </script>
 
 <style scoped lang="scss">
-div {
+.footer-small {
 	display: flex;
+	width: 100%;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	overflow: hidden;
+	gap: 6px;
+}
+
+.footer-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	row-gap: 2px;
 }
 a,
 .el-text {
 	display: flex;
 	align-items: center;
 	gap: 3px;
+	padding-inline: 5px;
 	color: var(--el-text-color-secondary);
+	text-align: center;
 	text-decoration: none;
 	letter-spacing: 0.5px;
-	padding-right: 10px;
 }
 a:hover {
 	color: var(--el-text-color-primary);
+}
+
+@media (max-width: 480px) {
+	.footer-small {
+		gap: 8px;
+	}
+
+	a,
+	.el-text {
+		letter-spacing: 0;
+	}
 }
 </style>

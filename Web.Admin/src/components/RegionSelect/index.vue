@@ -12,11 +12,11 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive } from "vue";
-import { CascaderValue } from "element-plus";
-import { withDefineType } from "@fast-china/utils";
 import { useVModel } from "@vueuse/core";
+import { onMounted, reactive } from "vue";
+import { withDefineType } from "@fast-china/utils";
 import { regionApi } from "@/api/services/Center/region";
+import type { CascaderValue } from "element-plus";
 import type { ElSelectorOutput } from "fast-element-plus";
 
 defineOptions({
@@ -34,11 +34,11 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (value: number | string) => true,
-	"update:provinceName": (value: string) => true,
-	"update:cityName": (value: string) => true,
-	"update:districtName": (value: string) => true,
-	change: (value: ElSelectorOutput<number | string>) => true,
+	"update:modelValue": (_value: number | string) => true,
+	"update:provinceName": (_value: string) => true,
+	"update:cityName": (_value: string) => true,
+	"update:districtName": (_value: string) => true,
+	change: (_value: ElSelectorOutput<number | string>) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit);
@@ -59,7 +59,7 @@ const handleChange = (val: CascaderValue) => {
 		cityName.value = cityInfo?.label;
 		const districtInfo = cityInfo?.children?.find((f) => f.value === value[2]);
 		districtName.value = districtInfo?.label;
-		emit("update:modelValue", val[2]);
+		emit("update:modelValue", value[2]);
 		emit("change", districtInfo);
 	} else {
 		provinceName.value = null;

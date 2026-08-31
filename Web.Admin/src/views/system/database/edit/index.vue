@@ -2,17 +2,17 @@
 	<FaDialog
 		ref="faDialogRef"
 		width="1000"
-		:fullHeight="state.dialogState !== 'add'"
+		:full-height="state.dialogState !== 'add'"
 		:title="state.dialogTitle"
-		:showConfirmButton="!state.formDisabled"
-		:showBeforeClose="!state.formDisabled"
-		confirmButtonText="保存"
+		:show-confirm-button="!state.formDisabled"
+		:show-before-close="!state.formDisabled"
+		confirm-button-text="保存"
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :disabled="state.formDisabled" cols="2">
 			<FaFormItem prop="tenantId" label="租户">
-				<TenantSelectPage v-model="state.formData.tenantId" v-model:tenantName="state.formData.tenantName" />
+				<TenantSelectPage v-model="state.formData.tenantId" v-model:tenant-name="state.formData.tenantName" />
 			</FaFormItem>
 			<FaFormItem prop="dbName" label="数据库名称">
 				<div style="display: flex; gap: 3px">
@@ -42,7 +42,7 @@
 				<el-input
 					type="password"
 					v-model="state.formData.dbPwd"
-					showPassword
+					show-password
 					maxlength="20"
 					placeholder="请输入数据库密码"
 					autocomplete="new-password"
@@ -75,7 +75,7 @@
 			</FaFormItem>
 
 			<FaLayoutGridItem v-if="state.dialogState !== 'add'" span="2" style="min-height: 300px; max-height: 500px">
-				<FaTable rowKey="buttonId" :data="state.formData.slaveDatabaseList" span="2">
+				<FaTable row-key="buttonId" :data="state.formData.slaveDatabaseList" span="2">
 					<!-- 表格按钮操作区域 -->
 					<template #header>
 						<el-button type="primary" :icon="Plus" @click="handleSlaveDatabaseAdd">新增</el-button>
@@ -149,7 +149,7 @@
 								<el-input
 									type="password"
 									v-model="row.dbPwd"
-									showPassword
+									show-password
 									maxlength="20"
 									placeholder="请输入数据库密码"
 									autocomplete="new-password"
@@ -181,18 +181,19 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage, type FormRules } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { DatabaseTypeEnum } from "@/api/enums/DatabaseTypeEnum";
 import { SugarDbType } from "@/api/enums/SugarDbType";
 import { databaseApi } from "@/api/services/Center/database";
-import { EditSlaveDatabaseInput } from "@/api/services/Center/database/models/EditSlaveDatabaseInput";
-import { QueryDatabaseDetailOutput } from "@/api/services/Center/database/models/QueryDatabaseDetailOutput";
+import type { FormRules } from "element-plus";
+import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import type { AddDatabaseInput } from "@/api/services/Center/database/models/AddDatabaseInput";
 import type { EditDatabaseInput } from "@/api/services/Center/database/models/EditDatabaseInput";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
+import type { EditSlaveDatabaseInput } from "@/api/services/Center/database/models/EditSlaveDatabaseInput";
+import type { QueryDatabaseDetailOutput } from "@/api/services/Center/database/models/QueryDatabaseDetailOutput";
 
 defineOptions({
 	name: "SystemDatabaseEdit",
@@ -200,8 +201,8 @@ defineOptions({
 
 const emit = defineEmits(["ok"]);
 
-const faDialogRef = ref<FaDialogInstance>();
-const faFormRef = ref<FaFormInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
+const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<EditDatabaseInput & AddDatabaseInput & QueryDatabaseDetailOutput>({}),

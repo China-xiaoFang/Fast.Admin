@@ -4,10 +4,10 @@
 			<ApplicationTree @change="handleApplicationChange" />
 			<FastTable
 				ref="fastTableRef"
-				tableKey="1D1FCQZ5KT"
-				rowKey="recordId"
-				:requestApi="applicationOpenIdApi.queryApplicationOpenIdPaged"
-				hideSearchTime
+				table-key="1D1FCQZ5KT"
+				row-key="recordId"
+				:request-api="applicationOpenIdApi.queryApplicationOpenIdPaged"
+				hide-search-time
 				@custom-cell-click="handleCustomCellClick"
 			>
 				<!-- 表格按钮操作区域 -->
@@ -28,42 +28,41 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
-import { ElSelectorOutput } from "fast-element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { applicationOpenIdApi } from "@/api/services/Center/applicationOpenId";
-import { QueryApplicationOpenIdPagedOutput } from "@/api/services/Center/applicationOpenId/models/QueryApplicationOpenIdPagedOutput";
 import ApplicationOpenIdEdit from "./edit/index.vue";
+import type { ElSelectorOutput } from "fast-element-plus";
+import type { QueryApplicationOpenIdPagedOutput } from "@/api/services/Center/applicationOpenId/models/QueryApplicationOpenIdPagedOutput";
 import type { FastTableInstance } from "@/components";
 
 defineOptions({
 	name: "SystemApplication",
 });
 
-const fastTableRef = ref<FastTableInstance>();
-const editFormRef = ref<InstanceType<typeof ApplicationOpenIdEdit>>();
+const fastTableRef = useTemplateRef<FastTableInstance>("fastTableRef");
+const editFormRef = useTemplateRef<InstanceType<typeof ApplicationOpenIdEdit>>("editFormRef");
 
-const handleCustomCellClick = (_, { row }: { row: QueryApplicationOpenIdPagedOutput }) => {
+const handleCustomCellClick = (_emitName: string, { row }: { row: QueryApplicationOpenIdPagedOutput }) => {
 	editFormRef.value.detail(row.recordId);
 };
 
 /** 应用更改 */
-const handleApplicationChange = (data: ElSelectorOutput) => {
+const handleApplicationChange = async (data: ElSelectorOutput) => {
 	fastTableRef.value.searchParam.appId = data.value;
-	fastTableRef.value.refresh();
+	await fastTableRef.value.refresh();
 };
 
 /** 处理删除 */
 const handleDelete = (row: QueryApplicationOpenIdPagedOutput) => {
 	const { recordId, rowVersion } = row;
-	ElMessageBox.confirm("确定要删除应用OpenId？", {
+	void ElMessageBox.confirm("确定要删除应用OpenId？", {
 		type: "warning",
-		async beforeClose() {
-			await applicationOpenIdApi.deleteApplicationOpenId({ recordId, rowVersion });
-			ElMessage.success("删除成功！");
-			fastTableRef.value?.refresh();
-		},
+	}).then(async () => {
+		await applicationOpenIdApi.deleteApplicationOpenId({ recordId, rowVersion });
+		ElMessage.success("删除成功！");
+		await fastTableRef.value?.refresh();
 	});
 };
 </script>

@@ -3,18 +3,18 @@
     "Name": "Fast.All",
     "Projects": [
       {
-        "Path": "src\\Api\\Fast.Api.csproj",
+        "Path": "src\\Fast.Api\\Fast.Api.csproj",
         "Action": "Start",
         "DebugTarget": "Fast.Api"
       },
       {
-        "Path": "src\\File\\Fast.File.csproj",
-        "Action": "Start",
+        "Path": "src\\Fast.File\\Fast.File.csproj",
+        "Action": "StartWithoutDebugging",
         "DebugTarget": "Fast.File"
       },
       {
-        "Path": "src\\Scheduler\\Fast.Scheduler.csproj",
-        "Action": "Start",
+        "Path": "src\\Fast.Scheduler\\Fast.Scheduler.csproj",
+        "Action": "StartWithoutDebugging",
         "DebugTarget": "Fast.Scheduler"
       }
     ]

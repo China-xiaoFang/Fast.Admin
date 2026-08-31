@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable tableKey="FRMY6974MU" rowKey="recordId" :requestApi="refundRecordApi.queryRefundRecordPaged" stripe>
+		<FastTable table-key="FRMY6974MU" row-key="recordId" :request-api="refundRecordApi.queryRefundRecordPaged" stripe>
 			<template #mobile="{ row }: { row?: RefundRecordModel }">
 				<span v-iconCopy="row.mobile">{{ row.mobile }}</span>
 				<br />
@@ -24,7 +24,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.createdTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small" class="ml5">
-					{{ dateUtil.dateTimeFix(String(row.createdTime)) }}
+					{{ formatChineseRelativeTime(String(row.createdTime)) }}
 				</el-tag>
 			</template>
 
@@ -36,7 +36,7 @@
 				<template v-if="row.refundTime">
 					<span>时间：{{ dayjs(row.refundTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 					<el-tag v-if="row.refundTime" type="info" round effect="light" size="small" class="ml5">
-						{{ dateUtil.dateTimeFix(String(row.refundTime)) }}
+						{{ formatChineseRelativeTime(String(row.refundTime)) }}
 					</el-tag>
 				</template>
 				<span v-else>--</span>
@@ -47,9 +47,9 @@
 
 <script lang="ts" setup>
 import { dayjs } from "element-plus";
-import { dateUtil } from "@fast-china/utils";
+import { formatChineseRelativeTime } from "@fast-china/utils";
 import { refundRecordApi } from "@/api/services/Center/refundRecord";
-import { RefundRecordModel } from "@/api/services/Center/refundRecord/models/RefundRecordModel";
+import type { RefundRecordModel } from "@/api/services/Center/refundRecord/models/RefundRecordModel";
 
 defineOptions({
 	name: "SystemRefundRecord",

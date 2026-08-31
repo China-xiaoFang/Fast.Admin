@@ -1,14 +1,14 @@
+import { defineStore } from "pinia";
 import { reactive, ref, toRefs } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { Local, consoleError } from "@fast-china/utils";
-import { defineStore } from "pinia";
+import { Local, logger } from "@fast-china/utils";
 import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 import { authApi } from "@/api/services/Auth/auth";
 import { loginApi } from "@/api/services/Auth/login";
 import router from "@/router";
 import { closeWebSocket } from "@/signalR";
-import type { GetLoginUserInfoOutput } from "@/api/services/Auth/auth/models/GetLoginUserInfoOutput";
 import type { AxiosResponse } from "axios";
+import type { GetLoginUserInfoOutput } from "@/api/services/Auth/auth/models/GetLoginUserInfoOutput";
 
 type IState = {
 	/** Token */
@@ -56,9 +56,7 @@ export const useUserInfo = defineStore(
 
 		/** 设置用户信息 */
 		const setUserInfo = (uInfo: GetLoginUserInfoOutput): void => {
-			Object.keys(uInfo).forEach((key) => {
-				state[key] = uInfo[key];
-			});
+			Object.assign(state, uInfo);
 		};
 
 		/** 删除 Token */
@@ -99,15 +97,22 @@ export const useUserInfo = defineStore(
 		 * @param token 可以传入，也可以直接获取 pinia 中的
 		 * @param refreshToken 可以传入，也可以直接获取 pinia 中的
 		 */
-		const resolveToken = (token: string = null, refreshToken: string = null): { token: string; refreshToken: string; tokenData: any } => {
+		const resolveToken = (
+			token: string = null,
+			refreshToken: string = null
+		): {
+			token: string;
+			refreshToken: string;
+			tokenData: unknown;
+		} => {
 			token ??= state.token;
 			refreshToken ??= state.refreshToken;
 			if (token) {
 				const jwtToken = decodeURIComponent(encodeURIComponent(window.atob(token.replace(/_/g, "/").replace(/-/g, "+").split(".")[1])));
-				const jwtTokenData = JSON.parse(jwtToken);
+				const jwtTokenData = JSON.parse(jwtToken) as { exp?: number };
 				// 获取 Token 的过期时间
-				const exp = new Date(jwtTokenData.exp * 1000);
-				if (new Date() >= exp) {
+				const expired = Date.now() >= jwtTokenData.exp * 1000;
+				if (expired) {
 					return { token: `Bearer ${token}`, refreshToken: `Bearer ${refreshToken}`, tokenData: jwtTokenData };
 				}
 				return { token: `Bearer ${token}`, refreshToken: null, tokenData: jwtTokenData };
@@ -121,7 +126,7 @@ export const useUserInfo = defineStore(
 			// 确保 getLoginUser 获取用户信息
 			asyncRouterGen.value = false;
 			// 进入系统
-			router.push("/");
+			void router.push("/");
 		};
 
 		const logoutClear = (): void => {
@@ -130,9 +135,9 @@ export const useUserInfo = defineStore(
 			Local.removeByPrefix("HTTP_CACHE_");
 			// 排除登录页面报错的问题
 			if (router.currentRoute.value.path === "/login") {
-				router.push({ path: "/login" });
+				void router.push({ path: "/login" });
 			} else {
-				router.push({ path: "/login", query: { redirect: encodeURIComponent(router.currentRoute.value.fullPath) } });
+				void router.push({ path: "/login", query: { redirect: router.currentRoute.value.fullPath } });
 			}
 		};
 
@@ -148,14 +153,14 @@ export const useUserInfo = defineStore(
 			} = null
 		): Promise<void> => {
 			if (data?.type === 2) {
-				ElMessageBox.alert(data?.message, {
+				void ElMessageBox.alert(data?.message, {
 					type: "warning",
 				});
 				try {
 					// 关闭 WebSocket 连接
 					await closeWebSocket();
 				} catch (error) {
-					consoleError("Logout", error);
+					logger.error("Logout", "发生异常", error);
 				}
 				logoutClear();
 			} else {
@@ -163,16 +168,16 @@ export const useUserInfo = defineStore(
 					// 关闭 WebSocket 连接
 					await closeWebSocket();
 				} catch (error) {
-					consoleError("Logout", error);
+					logger.error("Logout", "发生异常", error);
 				}
 				try {
 					await loginApi.logout();
 				} catch (error) {
-					consoleError("Logout", error);
+					logger.error("Logout", "发生异常", error);
 				} finally {
 					logoutClear();
 					if (data !== null) {
-						ElMessageBox.alert(data?.message, {
+						void ElMessageBox.alert(data?.message, {
 							type: "warning",
 						});
 					}

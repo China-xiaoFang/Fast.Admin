@@ -1,12 +1,12 @@
 <template>
 	<FaSelect
 		v-bind="$attrs"
-		:requestApi="regionApi.provinceSelector"
+		:request-api="regionApi.provinceSelector"
 		v-model="modelValue"
 		v-model:label="provinceName"
 		placeholder="请选择省份"
-		moreDetail
-		@change="(value) => emit('change', value)"
+		more-detail
+		@change="(data) => emit('change', data)"
 	/>
 </template>
 
@@ -28,9 +28,9 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (value: number | string) => true,
-	"update:provinceName": (value: string) => true,
-	change: (value: ElSelectorOutput<number | string>) => true,
+	"update:modelValue": (_value: number | string) => true,
+	"update:provinceName": (_value: string) => true,
+	change: (_value: ElSelectorOutput) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });

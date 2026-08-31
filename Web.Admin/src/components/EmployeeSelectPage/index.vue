@@ -1,17 +1,17 @@
 <template>
 	<FaSelectPage
 		v-bind="$attrs"
-		:requestApi="employeeApi.employeeSelector"
+		:request-api="employeeApi.employeeSelector"
 		v-model="modelValue"
 		v-model:label="employeeName"
 		placeholder="请选择职员"
 		clearable
-		moreDetail
+		more-detail
 		@change="handleChange"
 	>
 		<template #default="data">
 			<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%">
-				<FaAvatar :src="data.data.idPhoto" thumb size="small" />
+				<FaAvatar :src="data.data?.idPhoto" thumb size="small" />
 				<div style="flex: 1">
 					<span>{{ data.label }}</span>
 					<span style="display: flex; justify-content: space-between; width: 100%">
@@ -44,11 +44,11 @@ const props = withDefaults(
 );
 
 const emit = defineEmits({
-	"update:modelValue": (value: number | string) => true,
-	"update:employeeName": (value: string) => true,
-	"update:employeeNo": (value: string) => true,
-	"update:mobile": (value: string) => true,
-	change: (value: ElSelectorOutput<number | string>) => true,
+	"update:modelValue": (_value: number | string) => true,
+	"update:employeeName": (_value: string) => true,
+	"update:employeeNo": (_value: string) => true,
+	"update:mobile": (_value: string) => true,
+	change: (_value: ElSelectorOutput) => true,
 });
 
 const modelValue = useVModel(props, "modelValue", emit, { passive: false });
@@ -56,11 +56,12 @@ const employeeName = useVModel(props, "employeeName", emit, { passive: false });
 const employeeNo = useVModel(props, "employeeNo", emit, { passive: true });
 const mobile = useVModel(props, "mobile", emit, { passive: true });
 
-const handleChange = (value: ElSelectorOutput<number | string>) => {
-	if (value) {
-		employeeNo.value = value.data.email;
-		mobile.value = value.data.accountKey;
-		emit("change", value);
+const handleChange = (data: ElSelectorOutput | ElSelectorOutput[]) => {
+	if (Array.isArray(data)) return;
+	if (data) {
+		employeeNo.value = data.data?.employeeNo;
+		mobile.value = data.data?.mobile;
+		emit("change", data);
 	} else {
 		employeeNo.value = undefined;
 		mobile.value = undefined;

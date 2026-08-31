@@ -15,13 +15,13 @@
 						<el-text type="info">{{ dayjs(state.lastUpdateTime).format("YYYY-MM-DD HH:mm:ss") }}</el-text>
 					</div>
 
-					<el-form labelWidth="auto" labelSuffix="：">
+					<el-form label-width="auto" label-suffix="：">
 						<el-form-item label="版本">
 							<el-text tag="b" type="danger">v{{ state.schedulerDetail.quartzVersion }}</el-text>
 						</el-form-item>
-						<el-form-item label="状态">
+						<el-form-item label="实际状态">
 							<div>
-								<el-text tag="b">{{ state.schedulerDetail.schedulerStatus }}</el-text>
+								<el-text tag="b">{{ state.schedulerDetail.actualStatus }}</el-text>
 								<el-button
 									v-if="state.schedulerDetail.schedulerInStandbyMode"
 									v-auth="'Scheduler:Start'"
@@ -36,6 +36,16 @@
 								<el-button v-else v-auth="'Scheduler:Stop'" class="ml10" size="small" plain type="danger" @click="handleStop">
 									待机
 								</el-button>
+							</div>
+						</el-form-item>
+						<el-form-item label="期望状态">
+							<el-text tag="b">{{ state.schedulerDetail.desiredStatus }}</el-text>
+						</el-form-item>
+						<el-form-item label="执行宿主">
+							<div>
+								<el-tag :type="state.schedulerDetail.executionOnline ? 'success' : 'danger'">
+									{{ state.schedulerDetail.executionOnline ? "在线" : "离线" }}
+								</el-tag>
 							</div>
 						</el-form-item>
 						<el-form-item label="集群">
@@ -79,10 +89,10 @@
 			</el-card>
 		</el-aside>
 		<el-main>
-			<FaTable rowKey="jobName" :data="state.schedulerJobList" :toolBtn="false">
+			<FaTable row-key="jobName" :data="state.schedulerJobList" :tool-btn="false">
 				<!-- 表格顶部操作区域 -->
 				<template #topHeader>
-					<el-menu :defaultActive="`${state.activeJobGroup}`" mode="horizontal" :ellipsis="false">
+					<el-menu :default-active="`${state.activeJobGroup}`" mode="horizontal" :ellipsis="false">
 						<el-menu-item
 							v-for="(item, idx) in schedulerJobGroupEnum"
 							:key="idx"
@@ -101,12 +111,12 @@
 					</el-button>
 				</template>
 
-				<FaTableColumn prop="jobName" label="作业名称" fixed="left" width="300" smallWidth="280" />
+				<FaTableColumn prop="jobName" label="作业名称" fixed="left" width="300" small-width="280" />
 				<FaTableColumn
 					prop="triggerState"
 					label="状态"
 					width="100"
-					smallWidth="80"
+					small-width="80"
 					tag
 					:enum="[
 						{
@@ -135,16 +145,16 @@
 						},
 					]"
 				/>
-				<FaTableColumn prop="runNumber" label="触发次数" width="100" smallWidth="80" />
+				<FaTableColumn prop="runNumber" label="触发次数" width="100" small-width="80" />
 				<FaTableColumn
 					prop="jobType"
 					label="任务类型"
 					width="100"
-					smallWidth="80"
+					small-width="80"
 					tag
 					:enum="appStore.getDictionary('SchedulerJobTypeEnum')"
 				/>
-				<FaTableColumn prop="requestUrl" label="请求地址" width="300" smallWidth="280">
+				<FaTableColumn prop="requestUrl" label="请求地址" width="300" small-width="280">
 					<template #default="{ row }: { row?: SchedulerJobInfoDto }">
 						<Tag v-if="row.requestMethod" name="HttpRequestMethodEnum" :value="row.requestMethod" />
 						<br v-if="row.requestUrl" />
@@ -152,7 +162,7 @@
 						<span v-else>--</span>
 					</template>
 				</FaTableColumn>
-				<FaTableColumn prop="exception" label="异常信息" width="100" smallWidth="80">
+				<FaTableColumn prop="exception" label="异常信息" width="100" small-width="80">
 					<template #default="{ row }: { row?: SchedulerJobInfoDto }">
 						<el-tag
 							v-if="row.exception"
@@ -171,11 +181,11 @@
 					prop="triggerType"
 					label="触发器类型"
 					width="120"
-					smallWidth="100"
+					small-width="100"
 					tag
 					:enum="appStore.getDictionary('TriggerTypeEnum')"
 				/>
-				<FaTableColumn prop="fireTime" label="执行时间" width="180" smallWidth="160">
+				<FaTableColumn prop="fireTime" label="执行时间" width="180" small-width="160">
 					<template #default="{ row }: { row?: SchedulerJobInfoDto }">
 						<el-text v-if="row.previousFireTime" type="info">{{ row.previousFireTime }}</el-text>
 						<span v-else>- -</span>
@@ -184,7 +194,7 @@
 						<span v-else>- -</span>
 					</template>
 				</FaTableColumn>
-				<FaTableColumn prop="time" label="开始结束时间" width="180" smallWidth="160">
+				<FaTableColumn prop="time" label="开始结束时间" width="180" small-width="160">
 					<template #default="{ row }: { row?: SchedulerJobInfoDto }">
 						<el-text type="info">{{ row.beginTime }}</el-text>
 						<br />
@@ -192,8 +202,8 @@
 						<span v-else>- -</span>
 					</template>
 				</FaTableColumn>
-				<FaTableColumn prop="interval" label="执行计划" width="150" smallWidth="130" />
-				<FaTableColumn prop="description" label="描述" width="300" smallWidth="280" />
+				<FaTableColumn prop="interval" label="执行计划" width="150" small-width="130" />
+				<FaTableColumn prop="description" label="描述" width="300" small-width="280" />
 
 				<!-- 表格操作 -->
 				<template #operation="{ row }: { row: SchedulerJobInfoDto }">
@@ -229,11 +239,13 @@
 					<el-button v-auth="'Scheduler:Delete'" size="small" plain type="danger" @click="handleDelJob(row)">删除</el-button>
 				</template>
 			</FaTable>
-			<el-dialog v-model="state.exp.visible" :title="state.exp.title" width="1000px" alignCenter draggable destroyOnClose>
+			<el-dialog v-model="state.exp.visible" :title="state.exp.title" width="1000px" align-center draggable destroy-on-close>
+				<!-- eslint-disable-next-line vue/no-v-html -- 后端已对日志动态内容进行 HTML 编码 -->
 				<div class="log_content" v-html="state.exp.content" />
 			</el-dialog>
-			<el-dialog v-model="state.log.visible" :title="state.log.title" width="1000px" alignCenter draggable destroyOnClose>
+			<el-dialog v-model="state.log.visible" :title="state.log.title" width="1000px" align-center draggable destroy-on-close>
 				<el-scrollbar v-loading="state.log.loading" element-loading-text="加载中..." height="500px">
+					<!-- eslint-disable-next-line vue/no-v-html -- 后端已对日志动态内容进行 HTML 编码 -->
 					<div v-for="(item, index) in state.log.contents" :key="index" class="log_content" v-html="item" />
 				</el-scrollbar>
 			</el-dialog>
@@ -243,17 +255,17 @@
 </template>
 
 <script lang="ts" setup>
-import { onActivated, onDeactivated, onMounted, onUnmounted, reactive, ref } from "vue";
-import { ElMessage, ElMessageBox, dayjs } from "element-plus";
+import { onActivated, onDeactivated, onMounted, onUnmounted, reactive, useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
-import { withDefineType } from "@fast-china/utils";
-import { SchedulerJobGroupEnum } from "@/api/enums/Scheduler/SchedulerJobGroupEnum";
-import { TriggerState } from "@/api/enums/Scheduler/TriggerState";
-import { schedulerApi } from "@/api/services/Scheduler";
+import { ElMessage, ElMessageBox, dayjs } from "element-plus";
+import { logger, withDefineType } from "@fast-china/utils";
+import { SchedulerJobGroupEnum } from "@/api/enums/SchedulerJobGroupEnum";
+import { TriggerState } from "@/api/enums/TriggerState";
+import { schedulerApi } from "@/api/services/Scheduler/scheduler";
 import { useApp } from "@/stores";
 import SchedulerEdit from "./edit/index.vue";
-import type { QuerySchedulerDetailOutput } from "@/api/services/Scheduler/models/QuerySchedulerDetailOutput";
-import type { SchedulerJobInfoDto } from "@/api/services/Scheduler/models/SchedulerJobInfoDto";
+import type { QuerySchedulerDetailOutput } from "@/api/services/Scheduler/scheduler/models/QuerySchedulerDetailOutput";
+import type { SchedulerJobInfoDto } from "@/api/services/Scheduler/scheduler/models/SchedulerJobInfoDto";
 
 defineOptions({
 	name: "DevScheduler",
@@ -261,7 +273,7 @@ defineOptions({
 
 const appStore = useApp();
 
-const editFormRef = ref<InstanceType<typeof SchedulerEdit>>();
+const editFormRef = useTemplateRef<InstanceType<typeof SchedulerEdit>>("editFormRef");
 
 const schedulerJobGroupEnum = appStore.getDictionary("SchedulerJobGroupEnum");
 
@@ -329,45 +341,44 @@ const startInterval = () => {
 	state.polling = true;
 	const schedule = () => {
 		if (!state.polling) return;
-		state.interval = setTimeout(async () => {
-			try {
-				state.lastUpdateTime = new Date();
-				await fetchData();
-			} catch {}
-			schedule();
+		state.interval = setTimeout(() => {
+			state.lastUpdateTime = new Date();
+			fetchData()
+				.catch((error) => logger.error("Admin", "刷新调度器数据失败。", error))
+				.finally(schedule);
 		}, 5000);
 	};
 	schedule();
 };
 
 /** 作业分组改变 */
-const handleJobGroupChange = (value: SchedulerJobGroupEnum) => {
+const handleJobGroupChange = async (value: SchedulerJobGroupEnum) => {
 	if (value === state.activeJobGroup) return;
 	state.activeJobGroup = value;
-	handleTableRefresh();
+	await handleTableRefresh();
 };
 
 /** 调度程序启动 */
 const handleStart = () => {
-	ElMessageBox.confirm(`确定要启动【${state.schedulerDetail.schedulerName}】？`, {
+	void ElMessageBox.confirm(`确定要启动【${state.schedulerDetail.schedulerName}】？`, {
 		type: "warning",
-		async beforeClose() {
-			await schedulerApi.startScheduler(state.tenantId);
-			ElMessage.success("启动成功！");
-			state.schedulerDetail.schedulerInStandbyMode = false;
-		},
+	}).then(async () => {
+		await schedulerApi.startScheduler(state.tenantId);
+		ElMessage.success("启动成功！");
+		state.schedulerDetail.schedulerInStandbyMode = false;
+		state.schedulerDetail.desiredStatus = "Running (运行)";
 	});
 };
 
 /** 调度程序停止 */
 const handleStop = () => {
-	ElMessageBox.confirm(`确定要待机【${state.schedulerDetail.schedulerName}】？`, {
+	void ElMessageBox.confirm(`确定要待机【${state.schedulerDetail.schedulerName}】？`, {
 		type: "warning",
-		async beforeClose() {
-			await schedulerApi.stopScheduler(state.tenantId);
-			ElMessage.success("待机成功！");
-			state.schedulerDetail.schedulerInStandbyMode = true;
-		},
+	}).then(async () => {
+		await schedulerApi.stopScheduler(state.tenantId);
+		ElMessage.success("待机成功！");
+		state.schedulerDetail.schedulerInStandbyMode = true;
+		state.schedulerDetail.desiredStatus = "Standby (待机)";
 	});
 };
 
@@ -379,17 +390,16 @@ const handleShowException = (row: SchedulerJobInfoDto) => {
 };
 
 /** 异常删除 */
-const handleDelException = async (row: SchedulerJobInfoDto) => {
-	ElMessageBox.confirm(`确定要删除【${row.jobName}】的异常信息？`, {
+const handleDelException = (row: SchedulerJobInfoDto) => {
+	void ElMessageBox.confirm(`确定要删除【${row.jobName}】的异常信息？`, {
 		type: "warning",
-		async beforeClose() {
-			await schedulerApi.deleteSchedulerJobException(state.tenantId, {
-				jobName: row.jobName,
-				jobGroup: state.activeJobGroup,
-			});
-			ElMessage.success("删除成功！");
-			handleTableRefresh();
-		},
+	}).then(async () => {
+		await schedulerApi.deleteSchedulerJobException(state.tenantId, {
+			jobName: row.jobName,
+			jobGroup: state.activeJobGroup,
+		});
+		ElMessage.success("删除成功！");
+		await handleTableRefresh();
 	});
 };
 
@@ -410,62 +420,58 @@ const handleLogs = async (row: SchedulerJobInfoDto) => {
 };
 
 /** 暂停调度作业 */
-const handleStopJob = async (row: SchedulerJobInfoDto) => {
-	ElMessageBox.confirm(`确定要暂停【${row.jobName}】？`, {
+const handleStopJob = (row: SchedulerJobInfoDto) => {
+	void ElMessageBox.confirm(`确定要暂停【${row.jobName}】？`, {
 		type: "warning",
-		async beforeClose() {
-			await schedulerApi.stopSchedulerJob(state.tenantId, {
-				jobName: row.jobName,
-				jobGroup: state.activeJobGroup,
-			});
-			ElMessage.success("暂停成功！");
-			handleTableRefresh();
-		},
+	}).then(async () => {
+		await schedulerApi.stopSchedulerJob(state.tenantId, {
+			jobName: row.jobName,
+			jobGroup: state.activeJobGroup,
+		});
+		ElMessage.success("暂停成功！");
+		await handleTableRefresh();
 	});
 };
 
 /** 恢复调度作业 */
-const handleResumeJob = async (row: SchedulerJobInfoDto) => {
-	ElMessageBox.confirm(`确定要恢复【${row.jobName}】？`, {
+const handleResumeJob = (row: SchedulerJobInfoDto) => {
+	void ElMessageBox.confirm(`确定要恢复【${row.jobName}】？`, {
 		type: "warning",
-		async beforeClose() {
-			await schedulerApi.resumeSchedulerJob(state.tenantId, {
-				jobName: row.jobName,
-				jobGroup: state.activeJobGroup,
-			});
-			ElMessage.success("恢复成功！");
-			handleTableRefresh();
-		},
+	}).then(async () => {
+		await schedulerApi.resumeSchedulerJob(state.tenantId, {
+			jobName: row.jobName,
+			jobGroup: state.activeJobGroup,
+		});
+		ElMessage.success("恢复成功！");
+		await handleTableRefresh();
 	});
 };
 
 /** 执行调度作业 */
-const handleTriggerJob = async (row: SchedulerJobInfoDto) => {
-	ElMessageBox.confirm(`确定要立即执行【${row.jobName}】？`, {
+const handleTriggerJob = (row: SchedulerJobInfoDto) => {
+	void ElMessageBox.confirm(`确定要立即执行【${row.jobName}】？`, {
 		type: "warning",
-		async beforeClose() {
-			await schedulerApi.triggerSchedulerJob(state.tenantId, {
-				jobName: row.jobName,
-				jobGroup: state.activeJobGroup,
-			});
-			ElMessage.success("执行成功！");
-			handleTableRefresh();
-		},
+	}).then(async () => {
+		await schedulerApi.triggerSchedulerJob(state.tenantId, {
+			jobName: row.jobName,
+			jobGroup: state.activeJobGroup,
+		});
+		ElMessage.success("执行成功！");
+		await handleTableRefresh();
 	});
 };
 
 /** 删除调度作业 */
-const handleDelJob = async (row: SchedulerJobInfoDto) => {
-	ElMessageBox.confirm(`确定要删除【${row.jobName}】？`, {
+const handleDelJob = (row: SchedulerJobInfoDto) => {
+	void ElMessageBox.confirm(`确定要删除【${row.jobName}】？`, {
 		type: "warning",
-		async beforeClose() {
-			await schedulerApi.deleteSchedulerJob(state.tenantId, {
-				jobName: row.jobName,
-				jobGroup: state.activeJobGroup,
-			});
-			ElMessage.success("删除成功！");
-			handleTableRefresh();
-		},
+	}).then(async () => {
+		await schedulerApi.deleteSchedulerJob(state.tenantId, {
+			jobName: row.jobName,
+			jobGroup: state.activeJobGroup,
+		});
+		ElMessage.success("删除成功！");
+		await handleTableRefresh();
 	});
 };
 
@@ -476,7 +482,7 @@ const activate = (showLoading = false) => {
 	const session = ++activeSession;
 	if (showLoading) state.loading = true;
 	fetchData()
-		.catch(() => {})
+		.catch((error) => logger.error("Admin", "加载调度器数据失败。", error))
 		.finally(() => {
 			if (!isActive || session !== activeSession) return;
 			state.loading = false;

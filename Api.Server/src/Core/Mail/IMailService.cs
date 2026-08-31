@@ -43,6 +43,21 @@ public interface IMailService
     string GetEmailTemplate(string title, string msg, string type = null);
 
     /// <summary>
+    /// 发送验证码
+    /// </summary>
+    /// <param name="mailType">邮件类型</param>
+    /// <param name="email">邮箱</param>
+    Task SendVerificationCode(MailTypeEnum mailType, string email);
+
+    /// <summary>
+    /// 验证并一次性消费验证码
+    /// </summary>
+    /// <param name="mailType">邮件类型</param>
+    /// <param name="email">邮箱</param>
+    /// <param name="verificationCode">验证码</param>
+    Task SendVerificationCode(MailTypeEnum mailType, string email, string verificationCode);
+
+    /// <summary>
     /// 发送邮件
     /// </summary>
     Task SendEmail(string title, string content, string receiveEmails);

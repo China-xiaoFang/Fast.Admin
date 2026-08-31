@@ -1,9 +1,9 @@
 <template>
-	<FaDialog ref="faDialogRef" width="80vw" fullHeight title="高级配置" confirmButtonText="保存" @confirm-click="handleConfirm">
+	<FaDialog ref="faDialogRef" width="80vw" full-height title="高级配置" confirm-button-text="保存" @confirm-click="handleConfirm">
 		<el-tabs type="border-card" v-model="state.activeTab">
 			<el-tab-pane :name="1" label="基础配置">
 				<el-scrollbar>
-					<el-form class="fa-form" labelWidth="auto" labelSuffix="" :model="state.formData" labelPosition="top">
+					<el-form class="fa-form" label-width="auto" label-suffix="" :model="state.formData" label-position="top">
 						<el-row :gutter="24">
 							<el-col :span="6">
 								<el-form-item prop="prop" label="绑定字段">
@@ -21,7 +21,7 @@
 										v-model="state.formData.order"
 										:min="0"
 										:max="999"
-										stepStrictly
+										step-strictly
 										:controls="false"
 										placeholder="请输入顺序"
 									/>
@@ -44,7 +44,7 @@
 										v-model="state.formData.width"
 										:min="0"
 										:max="999"
-										stepStrictly
+										step-strictly
 										:controls="false"
 										placeholder="请输入宽度"
 									>
@@ -60,7 +60,7 @@
 										v-model="state.formData.smallWidth"
 										:min="0"
 										:max="999"
-										stepStrictly
+										step-strictly
 										:controls="false"
 										placeholder="请输入最小宽度"
 									>
@@ -233,7 +233,7 @@
 							</el-col>
 						</el-row>
 
-						<el-divider contentPosition="left">
+						<el-divider content-position="left">
 							<el-text type="info">
 								<el-icon>
 									<StarFilled />
@@ -292,7 +292,7 @@
 										v-model="state.formData.searchOrder"
 										:min="0"
 										:max="999"
-										stepStrictly
+										step-strictly
 										:controls="false"
 										placeholder="请输入搜索项排序"
 									/>
@@ -318,14 +318,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { ElMessage } from "element-plus";
+import { reactive, useTemplateRef } from "vue";
 import { StarFilled } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 import { FaDialog } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
 import DevTableConfigObjectTable from "./objectTable.vue";
-import type { FaTableColumnCtx } from "@/api/services/Center/table/models/FaTableColumnCtx";
 import type { FaDialogInstance } from "fast-element-plus";
+import type { FaTableColumnCtx } from "@/api/services/Center/table/models/FaTableColumnCtx";
 
 defineOptions({
 	name: "DevTableConfigAdvancedConfig",
@@ -333,7 +333,7 @@ defineOptions({
 
 const emit = defineEmits(["change"]);
 
-const faDialogRef = ref<FaDialogInstance>();
+const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 
 const state = reactive({
 	formData: withDefineType<FaTableColumnCtx & { authTagStr?: string }>({}),

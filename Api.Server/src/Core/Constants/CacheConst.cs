@@ -44,6 +44,18 @@ public static class CacheConst
     public const string AuthUser = "{0}:{1}:Auth:{2}:{3}:{4}";
 
     /// <summary>
+    /// 邮件
+    /// </summary>
+    /// <remarks>{0}类型，{1}邮箱</remarks>
+    public const string Mail = "Mail:{0}:{1}";
+
+    /// <summary>
+    /// 短信
+    /// </summary>
+    /// <remarks>{0}类型，{1}手机号</remarks>
+    public const string Sms = "SMS:{0}:{1}";
+
+    /// <summary>
     /// 管理后台
     /// </summary>
     public static class Center
