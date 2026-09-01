@@ -104,15 +104,18 @@ router.beforeEach(async (to, from) => {
 
 		// 判断是否存在重定向路径，如果有则跳转
 		const redirect = getLoginRedirect(from.query.redirect);
-		if (redirect && redirect !== to.fullPath) {
+		if (redirect) {
 			const redirectRoute = router.resolve(redirect);
-			// 设置 replace: true, 因此导航将不会留下历史记录
-			return {
-				path: redirectRoute.path,
-				query: redirectRoute.query,
-				hash: redirectRoute.hash,
-				replace: true,
-			};
+			const isCurrentRedirect = redirectRoute.fullPath === to.fullPath || redirectRoute.fullPath === to.redirectedFrom?.fullPath;
+			if (!isCurrentRedirect) {
+				// 设置 replace: true, 因此导航将不会留下历史记录
+				return {
+					path: redirectRoute.path,
+					query: redirectRoute.query,
+					hash: redirectRoute.hash,
+					replace: true,
+				};
+			}
 		}
 
 		// 判断登录后是否禁止查看该页面
