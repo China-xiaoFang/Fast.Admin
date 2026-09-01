@@ -1,11 +1,12 @@
 import fastChina from "@fast-china/eslint-config";
 import { createLodashConfigs, createMarkdownConfigs } from "@fast-china/eslint-config/configs";
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
 	...fastChina,
 	...createMarkdownConfigs(),
 	...createLodashConfigs("lodash"),
+	globalIgnores(["src/api/**"], "fast-admin/ignores"),
 	{
 		name: "fast-admin/linter-options",
 		linterOptions: {
