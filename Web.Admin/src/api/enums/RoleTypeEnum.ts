@@ -7,19 +7,19 @@ export enum RoleTypeEnum {
 	 */
 	Admin = 1,
 	/**
+	 * 默认
+	 */
+	Default = 2,
+	/**
 	 * 技术
 	 */
-	IT = 2,
+	IT = 4,
 	/**
 	 * 人事
 	 */
-	HR = 4,
+	HR = 8,
 	/**
 	 * 财务
 	 */
-	Finance = 8,
-	/**
-	 * 默认
-	 */
-	Default = 1073741824,
+	Finance = 16,
 }

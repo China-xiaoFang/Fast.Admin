@@ -9,6 +9,10 @@ export interface TenantOnlineUserModel {
 	 */
 	connectionId?: string;
 	/**
+	 * 会话Id
+	 */
+	sessionId?: string;
+	/**
 	 * 
 	 */
 	deviceType?: AppEnvironmentEnum;
