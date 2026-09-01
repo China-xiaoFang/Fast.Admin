@@ -81,7 +81,10 @@ const state = reactive({
 	/** 表单规则 */
 	formRules: withDefineType<FormRules>({
 		account: [{ required: true, message: "请输入账号", trigger: "blur" }],
-		password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+		password: [
+			{ required: true, message: "请输入密码", trigger: "blur" },
+			{ min: 6, max: 20, message: "密码长度必须为 6～20 个字符", trigger: "blur" },
+		],
 		userKey: [{ required: true, message: "请选择租户", trigger: "change" }],
 	}),
 	/** 租户集合 */

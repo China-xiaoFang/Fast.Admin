@@ -91,9 +91,6 @@
 							type="password"
 							autocomplete="current-password"
 							tabindex="2"
-							minlength="6"
-							maxlength="20"
-							show-word-limit
 							show-password
 							:prefix-icon="Lock"
 						/>
