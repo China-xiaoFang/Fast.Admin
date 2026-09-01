@@ -44,9 +44,9 @@ public class MainDatabaseModel : BaseTEntity, IUpdateVersion
     public DatabaseTypeEnum DatabaseType { get; set; }
 
     /// <summary>
-    /// 数据库类型，用于区分所使用的数据库引擎
+    /// 数据库类型
     /// </summary>
-    [SugarColumn(ColumnDescription = "数据库类型，用于区分所使用的数据库引擎")]
+    [SugarColumn(ColumnDescription = "数据库类型")]
     public SugarDbType DbType { get; set; }
 
     /// <summary>
@@ -74,25 +74,25 @@ public class MainDatabaseModel : BaseTEntity, IUpdateVersion
     /// </summary>
     /// <remarks>或 SQLite 文件路径</remarks>
     [Required]
-    [SugarColumn(ColumnDescription = "数据库名称", Length = 500)]
+    [SugarColumn(ColumnDescription = "数据库名称", Length = 50)]
     public string DbName { get; set; }
 
     /// <summary>
     /// 数据库用户
     /// </summary>
-    [SugarColumn(ColumnDescription = "数据库用户", Length = 128)]
+    [SugarColumn(ColumnDescription = "数据库用户", Length = 20)]
     public string DbUser { get; set; }
 
     /// <summary>
     /// 数据库密码
     /// </summary>
-    [SugarColumn(ColumnDescription = "数据库密码", Length = 512)]
+    [SugarColumn(ColumnDescription = "数据库密码", Length = 64)]
     public string DbPwd { get; set; }
 
     /// <summary>
     /// 自定义连接字符串
     /// </summary>
-    [SugarColumn(ColumnDescription = "自定义连接字符串", Length = 2000)]
+    [SugarColumn(ColumnDescription = "自定义连接字符串", Length = 200)]
     public string CustomConnectionStr { get; set; }
 
     /// <summary>
