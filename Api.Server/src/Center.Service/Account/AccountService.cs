@@ -363,7 +363,7 @@ public class AccountService : IDynamicApplication
             throw new UserFriendlyException("旧密码不正确！");
         }
 
-        // 查询最近5次密码修改记录
+        // 查询最近3次密码修改记录
         var passwordRecordList = await _repository.Queryable<PasswordRecordModel>()
             .Where(wh => wh.AccountId == accountModel.AccountId)
             .OrderByDescending(ob => ob.CreatedTime)
