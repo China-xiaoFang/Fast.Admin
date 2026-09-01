@@ -39,8 +39,9 @@ public class TenantLoginInput
     public string UserKey { get; set; }
 
     /// <summary>
-    /// 原始密码；生产环境必须通过 HTTPS 传输
+    /// 密码
     /// </summary>
-    [StringRequired(ErrorMessage = "密码不能为空"), MaxLength(512, ErrorMessage = "密码不能超过512位字符")]
+    [StringRequired(ErrorMessage = "密码不能为空"), MinLength(6, ErrorMessage = "密码不能少于6位字符"),
+     MaxLength(20, ErrorMessage = "密码不能超过20位字符")]
     public string Password { get; set; }
 }

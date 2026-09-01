@@ -30,20 +30,20 @@ public class ChangePasswordInput : UpdateVersionInput
     /// <summary>
     /// 旧密码
     /// </summary>
-    [StringRequired(ErrorMessage = "旧密码不能为空"), MaxLength(512, ErrorMessage = "旧密码不能超过512位字符")]
+    [StringRequired(ErrorMessage = "旧密码不能为空")]
     public string OldPassword { get; set; }
 
     /// <summary>
     /// 新密码
     /// </summary>
-    [StringRequired(ErrorMessage = "新密码不能为空"), MinLength(6, ErrorMessage = "新密码不能少于6位字符"),
+    [StringRequired(ErrorMessage = "新密码不能为空"), MinLength(8, ErrorMessage = "新密码不能少于8位字符"),
      MaxLength(20, ErrorMessage = "新密码不能超过20位字符")]
     public string NewPassword { get; set; }
 
     /// <summary>
     /// 确认密码
     /// </summary>
-    [StringRequired(ErrorMessage = "确认密码不能为空"), MinLength(6, ErrorMessage = "确认密码不能少于6位字符"),
+    [StringRequired(ErrorMessage = "确认密码不能为空"), MinLength(8, ErrorMessage = "确认密码不能少于8位字符"),
      MaxLength(20, ErrorMessage = "确认密码不能超过20位字符")]
     public string ConfirmPassword { get; set; }
 }
