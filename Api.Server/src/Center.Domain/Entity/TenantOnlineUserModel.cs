@@ -43,7 +43,7 @@ public class TenantOnlineUserModel : IBaseTEntity
     /// 会话Id
     /// </summary>
     [SugarColumn(ColumnDescription = "会话Id", Length = 36)]
-    public  string SessionId { get; set; }
+    public string SessionId { get; set; }
 
     /// <summary>
     /// 设备类型

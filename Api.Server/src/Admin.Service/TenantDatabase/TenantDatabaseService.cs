@@ -202,6 +202,18 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                     new()
                     {
                         RoleId = YitIdHelper.NextId(),
+                        RoleType = RoleTypeEnum.Default,
+                        IsSystemMenu = true,
+                        RoleName = "默认",
+                        RoleCode = "default_role",
+                        Sort = 5,
+                        DataScopeType = DataScopeTypeEnum.Self,
+                        AssignableRoleIds = [],
+                        Remark = null
+                    },
+                    new()
+                    {
+                        RoleId = YitIdHelper.NextId(),
                         RoleType = RoleTypeEnum.IT,
                         IsSystemMenu = true,
                         RoleName = "技术",
@@ -232,18 +244,6 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                         RoleCode = "finance_role",
                         Sort = 4,
                         DataScopeType = DataScopeTypeEnum.DeptWithChild,
-                        AssignableRoleIds = [],
-                        Remark = null
-                    },
-                    new()
-                    {
-                        RoleId = YitIdHelper.NextId(),
-                        RoleType = RoleTypeEnum.Default,
-                        IsSystemMenu = true,
-                        RoleName = "默认",
-                        RoleCode = "default_role",
-                        Sort = 5,
-                        DataScopeType = DataScopeTypeEnum.Self,
                         AssignableRoleIds = [],
                         Remark = null
                     }

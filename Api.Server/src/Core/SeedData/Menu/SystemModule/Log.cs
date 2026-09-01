@@ -76,7 +76,7 @@ internal static partial class MenuSeedData
             ParentId = logCLMenuModel.MenuId,
             ParentIds = [0, logCLMenuModel.MenuId],
             MenuType = MenuTypeEnum.Menu,
-            RoleType = RoleTypeEnum.Admin | RoleTypeEnum.IT | RoleTypeEnum.HR | RoleTypeEnum.Default,
+            RoleType = RoleTypeEnum.Admin | RoleTypeEnum.Default | RoleTypeEnum.IT | RoleTypeEnum.HR,
             HasDesktop = true,
             DesktopIcon = "menu",
             HasWeb = true,
@@ -105,7 +105,7 @@ internal static partial class MenuSeedData
                     MenuId = visitLogMenuModel.MenuId,
                     ButtonCode = PermissionConst.VisitLogPaged,
                     ButtonName = "列表",
-                    RoleType = RoleTypeEnum.Admin | RoleTypeEnum.IT | RoleTypeEnum.HR | RoleTypeEnum.Default,
+                    RoleType = RoleTypeEnum.Admin | RoleTypeEnum.Default | RoleTypeEnum.IT | RoleTypeEnum.HR,
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
@@ -131,7 +131,7 @@ internal static partial class MenuSeedData
             ParentId = logCLMenuModel.MenuId,
             ParentIds = [0, logCLMenuModel.MenuId],
             MenuType = MenuTypeEnum.Menu,
-            RoleType = RoleTypeEnum.Admin | RoleTypeEnum.IT | RoleTypeEnum.HR | RoleTypeEnum.Finance | RoleTypeEnum.Default,
+            RoleType = RoleTypeEnum.Admin | RoleTypeEnum.Default | RoleTypeEnum.IT | RoleTypeEnum.HR | RoleTypeEnum.Finance,
             HasDesktop = true,
             DesktopIcon = "menu",
             HasWeb = true,
@@ -162,10 +162,10 @@ internal static partial class MenuSeedData
                     ButtonName = "列表",
                     RoleType =
                         RoleTypeEnum.Admin
+                        | RoleTypeEnum.Default
                         | RoleTypeEnum.IT
                         | RoleTypeEnum.HR
-                        | RoleTypeEnum.Finance
-                        | RoleTypeEnum.Default,
+                        | RoleTypeEnum.Finance,
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,

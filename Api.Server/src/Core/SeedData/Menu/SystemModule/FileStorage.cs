@@ -44,7 +44,7 @@ internal static partial class MenuSeedData
             ParentId = 0,
             ParentIds = [0],
             MenuType = MenuTypeEnum.Menu,
-            RoleType = RoleTypeEnum.Admin | RoleTypeEnum.IT | RoleTypeEnum.HR | RoleTypeEnum.Finance | RoleTypeEnum.Default,
+            RoleType = RoleTypeEnum.Admin | RoleTypeEnum.Default | RoleTypeEnum.IT | RoleTypeEnum.HR | RoleTypeEnum.Finance,
             HasDesktop = true,
             DesktopIcon = "desktop",
             HasWeb = true,
@@ -75,10 +75,10 @@ internal static partial class MenuSeedData
                     ButtonName = "列表",
                     RoleType =
                         RoleTypeEnum.Admin
+                        | RoleTypeEnum.Default
                         | RoleTypeEnum.IT
                         | RoleTypeEnum.HR
-                        | RoleTypeEnum.Finance
-                        | RoleTypeEnum.Default,
+                        | RoleTypeEnum.Finance,
                     HasDesktop = true,
                     HasWeb = true,
                     HasMobile = true,
