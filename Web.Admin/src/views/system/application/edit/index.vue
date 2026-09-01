@@ -82,7 +82,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (appId: number) => {
+const detail = (appId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await applicationApi.queryApplicationDetail(appId);
@@ -102,7 +102,7 @@ const add = () => {
 	});
 };
 
-const edit = (appId: number) => {
+const edit = (appId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

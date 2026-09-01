@@ -399,7 +399,7 @@ const handleDelObj = (name: "requestHeaderObj" | "requestParamsObj", index: numb
 	state[name].splice(index, 1);
 };
 
-const add = (tenantId: number, jobGroup: SchedulerJobGroupEnum) => {
+const add = (tenantId: string, jobGroup: SchedulerJobGroupEnum) => {
 	state.dialogState = "add";
 	state.dialogTitle = "添加调度作业";
 	state.formData.tenantId = tenantId;
@@ -408,7 +408,7 @@ const add = (tenantId: number, jobGroup: SchedulerJobGroupEnum) => {
 	state.formData.oldJobGroup = undefined;
 };
 
-const edit = (tenantId: number, jobName: string, jobGroup: SchedulerJobGroupEnum) => {
+const edit = (tenantId: string, jobName: string, jobGroup: SchedulerJobGroupEnum) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		const apiRes = await schedulerApi.querySchedulerJob(tenantId, {
@@ -424,7 +424,7 @@ const edit = (tenantId: number, jobName: string, jobGroup: SchedulerJobGroupEnum
 	});
 };
 
-const copy = (tenantId: number, jobName: string, jobGroup: SchedulerJobGroupEnum) => {
+const copy = (tenantId: string, jobName: string, jobGroup: SchedulerJobGroupEnum) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "copy";
 		const apiRes = await schedulerApi.querySchedulerJob(tenantId, {

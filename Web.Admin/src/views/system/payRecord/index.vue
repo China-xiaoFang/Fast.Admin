@@ -24,7 +24,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.createdTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small" class="ml5">
-					{{ formatChineseRelativeTime(String(row.createdTime)) }}
+					{{ formatChineseRelativeTime(row.createdTime) }}
 				</el-tag>
 			</template>
 
@@ -36,7 +36,7 @@
 				<template v-if="row.paymentTime">
 					<span>时间：{{ dayjs(row.paymentTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 					<el-tag v-if="row.paymentTime" type="info" round effect="light" size="small" class="ml5">
-						{{ formatChineseRelativeTime(String(row.paymentTime)) }}
+						{{ formatChineseRelativeTime(row.paymentTime) }}
 					</el-tag>
 				</template>
 				<span v-else>--</span>
@@ -52,7 +52,7 @@
 					<template v-if="row.closeTime">
 						<span>时间：{{ dayjs(row.closeTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 						<el-tag v-if="row.closeTime" type="info" round effect="light" size="small" class="ml5">
-							{{ formatChineseRelativeTime(String(row.closeTime)) }}
+							{{ formatChineseRelativeTime(row.closeTime) }}
 						</el-tag>
 					</template>
 					<span v-else>--</span>

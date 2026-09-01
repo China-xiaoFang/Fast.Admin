@@ -92,7 +92,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (merchantId: number) => {
+const detail = (merchantId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await merchantApi.queryMerchantDetail(merchantId);
@@ -112,7 +112,7 @@ const add = () => {
 	});
 };
 
-const edit = (merchantId: number) => {
+const edit = (merchantId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

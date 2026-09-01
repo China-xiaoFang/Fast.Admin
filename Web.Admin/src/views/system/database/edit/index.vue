@@ -249,7 +249,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (mainId: number) => {
+const detail = (mainId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await databaseApi.queryDatabaseDetail(mainId);
@@ -278,7 +278,7 @@ const add = () => {
 	});
 };
 
-const edit = (mainId: number) => {
+const edit = (mainId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

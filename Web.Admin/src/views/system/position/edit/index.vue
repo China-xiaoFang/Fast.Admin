@@ -70,7 +70,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (positionId: number) => {
+const detail = (positionId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await positionApi.queryPositionDetail(positionId);
@@ -90,7 +90,7 @@ const add = () => {
 	});
 };
 
-const edit = (positionId: number) => {
+const edit = (positionId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

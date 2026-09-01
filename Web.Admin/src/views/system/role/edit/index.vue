@@ -88,7 +88,7 @@ const state = reactive({
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "角色",
-	roleList: withDefineType<ElSelectorOutput<number>[]>([]),
+	roleList: withDefineType<ElSelectorOutput<string>[]>([]),
 });
 
 const handleConfirm = () => {
@@ -108,7 +108,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (roleId: number) => {
+const detail = (roleId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await roleApi.queryRoleDetail(roleId);
@@ -135,7 +135,7 @@ const add = () => {
 	});
 };
 
-const edit = (roleId: number) => {
+const edit = (roleId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

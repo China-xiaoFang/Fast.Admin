@@ -23,7 +23,7 @@
 			</FaFormItem>
 			<FaFormItem prop="parentId" label="父级">
 				<FaTreeSelect
-					:request-api="(orgId) => departmentApi.departmentSelector(orgId as number)"
+					:request-api="(orgId) => departmentApi.departmentSelector(orgId as string)"
 					:init-param="state.formData.orgId"
 					v-model="state.formData.parentId"
 					v-model:label="state.formData.parentName"
@@ -112,7 +112,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (departmentId: number) => {
+const detail = (departmentId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await departmentApi.queryDepartmentDetail(departmentId);
@@ -137,7 +137,7 @@ const add = () => {
 	});
 };
 
-const edit = (departmentId: number) => {
+const edit = (departmentId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

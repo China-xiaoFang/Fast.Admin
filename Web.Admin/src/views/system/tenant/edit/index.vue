@@ -114,7 +114,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (tenantId: number) => {
+const detail = (tenantId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await tenantApi.queryTenantDetail(tenantId);
@@ -135,7 +135,7 @@ const add = () => {
 	});
 };
 
-const edit = (tenantId: number) => {
+const edit = (tenantId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

@@ -26,7 +26,7 @@
 			</FaFormItem>
 			<FaFormItem prop="departmentId" label="部门">
 				<FaTreeSelect
-					:request-api="(orgId) => departmentApi.departmentSelector(orgId as number)"
+					:request-api="(orgId) => departmentApi.departmentSelector(orgId as string)"
 					:disabled="state.formDisabled || !state.formData?.orgId"
 					:init-param="state.formData.orgId"
 					v-model="state.formData.departmentId"
@@ -133,7 +133,7 @@ const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
-	formData: withDefineType<EditEmployeeInput & AddEmployeeInput & { roleIds?: number[] }>({
+	formData: withDefineType<EditEmployeeInput & AddEmployeeInput & { roleIds?: string[] }>({
 		roleIds: [],
 	}),
 	formRules: withDefineType<FormRules>({
@@ -150,7 +150,7 @@ const state = reactive({
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "职员",
-	roleList: withDefineType<ElSelectorOutput<number>[]>([]),
+	roleList: withDefineType<ElSelectorOutput<string>[]>([]),
 });
 
 /** 从 API 详情响应中提取主部门信息，展平到 formData */
@@ -218,7 +218,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (employeeId: number) => {
+const detail = (employeeId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await employeeApi.queryEmployeeDetail(employeeId);
@@ -245,7 +245,7 @@ const add = () => {
 	});
 };
 
-const edit = (employeeId: number) => {
+const edit = (employeeId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

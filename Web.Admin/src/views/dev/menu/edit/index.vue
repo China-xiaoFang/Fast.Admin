@@ -174,7 +174,7 @@ const state = reactive({
 	formData: withDefineType<
 		EditMenuInput &
 			AddMenuInput & {
-				appId?: number;
+				appId?: string;
 				appName?: string;
 				roleTypes?: RoleTypeEnum[];
 			}
@@ -200,7 +200,7 @@ const state = reactive({
 	dialogTitle: "菜单",
 	componentList: withDefineType<ElSelectorOutput<string>[]>([]),
 	componentValue: [],
-	menuList: withDefineType<ElSelectorOutput<number>[]>([]),
+	menuList: withDefineType<ElSelectorOutput<string>[]>([]),
 });
 
 const handleComponentChange = (value: CascaderValue) => {
@@ -297,7 +297,7 @@ const add = () => {
 	});
 };
 
-const edit = (menuId: number) => {
+const edit = (menuId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

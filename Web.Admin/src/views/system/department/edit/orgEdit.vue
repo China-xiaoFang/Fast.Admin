@@ -98,7 +98,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (orgId: number) => {
+const detail = (orgId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await organizationApi.queryOrganizationDetail(orgId);
@@ -123,7 +123,7 @@ const add = () => {
 	});
 };
 
-const edit = (orgId: number) => {
+const edit = (orgId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

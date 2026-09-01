@@ -84,8 +84,8 @@ const state = reactive({
 			name: "edit",
 			label: "编辑机构",
 			icon: "el-icon-EditPen",
-			click: (_, { data }: { data?: ElTreeOutput<number> }) => {
-				if (!data || typeof data.value !== "number") return;
+			click: (_, { data }: { data?: ElTreeOutput }) => {
+				if (!data || typeof data.value !== "string") return;
 				orgEditFormRef.value.edit(data.value);
 			},
 		},
@@ -93,12 +93,13 @@ const state = reactive({
 			name: "delete",
 			label: "删除机构",
 			icon: "el-icon-Delete",
-			click: (_, { data }: { data?: ElTreeOutput<number> }) => {
-				if (!data || typeof data.value !== "number") return;
+			click: (_, { data }: { data?: ElTreeOutput }) => {
+				if (!data || typeof data.value !== "string") return;
+				const { value: orgId, data: orgData } = data;
 				void ElMessageBox.confirm("确定要删除机构？", {
 					type: "warning",
 				}).then(async () => {
-					await organizationApi.deleteOrganization({ orgId: data.value, rowVersion: data.data?.rowVersion });
+					await organizationApi.deleteOrganization({ orgId, rowVersion: orgData?.rowVersion });
 					ElMessage.success("删除成功！");
 					await orgTreeRef.value?.refresh();
 				});
@@ -113,7 +114,6 @@ const handleCustomCellClick = (_emitName: string, { row }: { row: QueryDepartmen
 
 /** 机构更改 */
 const handleOrgChange = async (data: ElTreeOutput) => {
-	if (typeof data.value !== "number") return;
 	fastTableRef.value.searchParam.orgId = data.value;
 	await fastTableRef.value.refresh();
 };

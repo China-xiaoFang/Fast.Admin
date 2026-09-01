@@ -47,7 +47,7 @@ const handleConfirm = () => {
 	});
 };
 
-const open = (employeeId: number) => {
+const open = (employeeId: string) => {
 	void faDialogRef.value.open(async () => {
 		const apiRes = await employeeApi.queryEmployeeDetail(employeeId);
 		state.formData = {
