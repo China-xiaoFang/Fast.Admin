@@ -40,7 +40,7 @@ internal static partial class MenuSeedData
             field++;
             return field;
         }
-        set => field = 0;
+        set;
     } = 1;
 
     /// <summary>
