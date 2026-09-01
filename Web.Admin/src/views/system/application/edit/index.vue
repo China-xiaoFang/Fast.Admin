@@ -38,7 +38,7 @@ import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { applicationApi } from "@/api/services/Center/application";
-import { fileApi } from "@/api/services/Center/file";
+import { fileApi } from "@/api/services/File";
 import type { FormRules } from "element-plus";
 import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import type { AddApplicationInput } from "@/api/services/Center/application/models/AddApplicationInput";

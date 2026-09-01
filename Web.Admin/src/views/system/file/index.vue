@@ -38,10 +38,10 @@
 
 <script lang="ts" setup>
 import { reactive, useTemplateRef } from "vue";
-import { fileApi } from "@/api/services/Center/file";
+import { fileApi } from "@/api/services/File";
 import { useUserInfo } from "@/stores";
 import type { ElSelectorOutput } from "fast-element-plus";
-import type { QueryFilePagedOutput } from "@/api/services/Center/file/models/QueryFilePagedOutput";
+import type { QueryFilePagedOutput } from "@/api/services/File/models/QueryFilePagedOutput";
 import type { FastTableInstance } from "@/components";
 
 defineOptions({

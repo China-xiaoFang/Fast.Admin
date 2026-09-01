@@ -20,7 +20,9 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-namespace Fast.Center.Service.File.Dto;
+using Fast.SqlSugar;
+
+namespace Fast.File.Applications.Dto;
 
 /// <summary>
 /// 获取文件分页列表输出
