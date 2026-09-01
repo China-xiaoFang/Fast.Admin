@@ -10,13 +10,29 @@
 	>
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules">
 			<FaFormItem label="旧密码" prop="oldPassword">
-				<el-input type="password" v-model.trim="state.formData.oldPassword" placeholder="请输入旧密码" />
+				<el-input type="password" v-model.trim="state.formData.oldPassword" show-word-limit placeholder="请输入旧密码" />
 			</FaFormItem>
 			<FaFormItem label="新密码" prop="newPassword">
-				<el-input type="password" v-model.trim="state.formData.newPassword" placeholder="请输入新密码" autocomplete="off" />
+				<el-input
+					type="password"
+					v-model.trim="state.formData.newPassword"
+					placeholder="请输入新密码"
+					minlength="8"
+					maxlength="20"
+					show-word-limit
+					autocomplete="new-password"
+				/>
 			</FaFormItem>
 			<FaFormItem label="确认密码" prop="confirmPassword">
-				<el-input v-model.trim="state.formData.confirmPassword" placeholder="请输入确认新密码" type="password" />
+				<el-input
+					type="password"
+					v-model.trim="state.formData.confirmPassword"
+					placeholder="请输入确认新密码"
+					minlength="8"
+					maxlength="20"
+					show-word-limit
+					autocomplete="new-password"
+				/>
 			</FaFormItem>
 		</FaForm>
 	</FaDialog>
