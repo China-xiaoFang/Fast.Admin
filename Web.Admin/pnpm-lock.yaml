@@ -100,8 +100,8 @@ importers:
         specifier: ^10.9.1
         version: 10.9.1(supports-color@7.2.0)
       fast-vite-plugins:
-        specifier: ^2.0.12
-        version: 2.0.12(vite@8.2.2(@types/node@24.13.3)(sass@1.103.1))
+        specifier: ^2.0.13
+        version: 2.0.13(vite@8.2.2(@types/node@24.13.3)(sass@1.103.1))
       prettier:
         specifier: ^3.9.6
         version: 3.9.6
@@ -1673,8 +1673,8 @@ packages:
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
 
-  fast-vite-plugins@2.0.12:
-    resolution: {integrity: sha512-EtdDiFoE/WtwCmBmJC8fBHi/OUNVEEY1aBWxnbgquU4OIUKUQj/Gz48FEc8M6sr2/KkvaGqkwD8x86epb1s62A==}
+  fast-vite-plugins@2.0.13:
+    resolution: {integrity: sha512-04ZErJ1VLcoNv61PNK9sg2HbYHvCgUbPJWonet1nUCtBbj0wHMdOm6GMrG8e8O2UbgXpZL15dFi5qvxKt6Y5PQ==}
     engines: {node: ^22.18.0 || ^24.18.0, pnpm: ^11.0.0}
     peerDependencies:
       vite: ^7.0.0 || ^8.0.0
@@ -4637,7 +4637,7 @@ snapshots:
 
   fast-levenshtein@2.0.6: {}
 
-  fast-vite-plugins@2.0.12(vite@8.2.2(@types/node@24.13.3)(sass@1.103.1)):
+  fast-vite-plugins@2.0.13(vite@8.2.2(@types/node@24.13.3)(sass@1.103.1)):
     dependencies:
       vite: 8.2.2(@types/node@24.13.3)(sass@1.103.1)
 
