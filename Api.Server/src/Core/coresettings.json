@@ -38,21 +38,6 @@
     // 统计窗口秒数
     "WindowSeconds": 60
   },
-  // 邮件配置
-  "MailSettingsOptions": {
-    "Smtp": "smtp.qq.com",
-    "Port": 465,
-    "Email": "",
-    "AuthCode": "",
-    "DisplayName": "FastDotNet",
-    "ReceiveEmails": []
-  },
-  // 短信配置
-  "SmsSettingsOptions": {
-    "AccessKeyId": "<LOCAL_ALIYUN_SMS_ACCESS_KEY_ID>",
-    "AccessKeySecret": "<LOCAL_ALIYUN_SMS_ACCESS_KEY_SECRET>",
-    "SignName": "<LOCAL_ALIYUN_SMS_SIGN_NAME>"
-  },
   // JWT Token 配置
   "JWTSettings": {
     // 启用

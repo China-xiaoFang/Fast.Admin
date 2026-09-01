@@ -68,6 +68,87 @@ internal static class ConfigSeedData
                 new()
                 {
                     ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.MailSmtp,
+                    ConfigName = "邮件服务器地址",
+                    ConfigValue = "smtp.qq.com",
+                    Remark = "QQ：smtp.qq.com，网易：smtp.qq.com；",
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.MailPort,
+                    ConfigName = "邮件服务器端口",
+                    ConfigValue = "465",
+                    Remark = "常规端口：25，加密端口：465/994；",
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.MailEmail,
+                    ConfigName = "发件邮箱",
+                    ConfigValue = "",
+                    Remark = "发送系统邮件的邮箱地址；",
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.MailAuthCode,
+                    ConfigName = "邮件授权码",
+                    ConfigValue = "",
+                    Remark = "发件邮箱的SMTP授权码；",
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.MailDisplayName,
+                    ConfigName = "发件人名称",
+                    ConfigValue = "FastDotNet",
+                    Remark = "系统邮件显示的发件人名称；",
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.MailReceiveEmails,
+                    ConfigName = "默认收件邮箱",
+                    ConfigValue = "[]",
+                    Remark = "默认收件邮箱列表，配置值使用JSON数组格式；",
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.SmsAccessKeyId,
+                    ConfigName = "阿里云短信AccessKeyId",
+                    ConfigValue = "",
+                    Remark = "",
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.SmsAccessKeySecret,
+                    ConfigName = "阿里云短信AccessKey密钥",
+                    ConfigValue = "",
+                    Remark = "",
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.SmsSignName,
+                    ConfigName = "阿里云短信签名",
+                    ConfigValue = "",
+                    Remark = "",
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
                     ConfigCode = ConfigConst.GaoDeMapKey,
                     ConfigName = "高德地图Key",
                     ConfigValue = "",
