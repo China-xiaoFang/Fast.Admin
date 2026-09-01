@@ -204,10 +204,9 @@ const handleRefreshSystem = () => {
 
 const handleTenantChange = async (data: ElSelectorOutput | ElSelectorOutput[]): Promise<void> => {
 	if (Array.isArray(data)) return;
-	const { accountKey, userKey } = userInfoStore;
+	const { userKey } = userInfoStore;
 	if (data.userKey !== userKey) {
-		await userInfoStore.logout();
-		const loginRes = await loginApi.tenantLogin({ accountKey, userKey: data.userKey });
+		const loginRes = await loginApi.tryLogin({ userKey: data.userKey });
 		if (loginRes.status === LoginStatusEnum.Success) {
 			ElMessage.success(`切换租户【${data.tenantName}】成功`);
 			userInfoStore.login();
