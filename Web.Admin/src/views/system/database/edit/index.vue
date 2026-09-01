@@ -43,7 +43,7 @@
 					type="password"
 					v-model="state.formData.dbPwd"
 					show-password
-					maxlength="512"
+					maxlength="64"
 					placeholder="请输入数据库密码"
 					autocomplete="new-password"
 				/>
@@ -53,7 +53,7 @@
 					type="textarea"
 					v-model="state.formData.customConnectionStr"
 					:rows="2"
-					maxlength="100"
+					maxlength="200"
 					placeholder="请输入自定义连接字符串"
 				/>
 			</FaFormItem>
@@ -150,7 +150,7 @@
 									type="password"
 									v-model="row.dbPwd"
 									show-password
-									maxlength="512"
+									maxlength="64"
 									placeholder="请输入数据库密码"
 									autocomplete="new-password"
 								/>
@@ -164,7 +164,7 @@
 									type="textarea"
 									v-model="row.customConnectionStr"
 									:rows="2"
-									maxlength="100"
+									maxlength="200"
 									placeholder="请输入自定义连接字符串"
 								/>
 							</el-form-item>
