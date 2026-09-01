@@ -44,7 +44,7 @@ internal static class ApplicationSeedData
             Edition = EditionEnum.None,
             AppNo = "App201801",
             AppName = "Fast.Admin",
-            LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+            LogoUrl = CommonConst.DefaultLogo,
             ThemeColor = "#409EFF",
             CreatedTime = dateTime
         };

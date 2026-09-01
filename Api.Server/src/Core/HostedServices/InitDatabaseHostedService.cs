@@ -122,7 +122,7 @@ public class InitDatabaseHostedService : IHostedService
                     AdminPhone = null,
                     RobotName = "机器人",
                     TenantType = TenantTypeEnum.System,
-                    LogoUrl = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+                    LogoUrl = CommonConst.DefaultLogo,
                     AllowDeleteData = true,
                     CreatedTime = dateTime
                 };
@@ -139,7 +139,7 @@ public class InitDatabaseHostedService : IHostedService
                     Email = "2875616188@qq.com",
                     Password = initialAdminPassword,
                     NickName = "小方",
-                    Avatar = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+                    Avatar = CommonConst.DefaultLogo,
                     Status = CommonStatusEnum.Enable,
                     CreatedTime = dateTime
                 };
@@ -157,7 +157,7 @@ public class InitDatabaseHostedService : IHostedService
                             AccountId = superAdminAccountModel.AccountId,
                             EmployeeNo = "SuperAdmin",
                             EmployeeName = "超级管理员",
-                            IdPhoto = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png",
+                            IdPhoto = CommonConst.DefaultLogo,
                             DepartmentId = null,
                             DepartmentName = null,
                             UserType = UserTypeEnum.SuperAdmin,

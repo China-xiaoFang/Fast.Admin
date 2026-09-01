@@ -70,6 +70,11 @@ public static class CommonConst
     }
 
     /// <summary>
+    /// 默认Logo
+    /// </summary>
+    public const string DefaultLogo = "https://gitee.com/FastDotnet/Fast.Admin/raw/master/Fast.png";
+
+    /// <summary>
     /// 默认头像
     /// </summary>
     public const string DefaultAvatar =
