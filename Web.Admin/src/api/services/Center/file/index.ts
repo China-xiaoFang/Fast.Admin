@@ -1,4 +1,5 @@
 import { axiosUtil } from "@fast-china/axios";
+import type { AxiosProgressEvent } from "axios";
 import type { PagedResult } from "fast-element-plus";
 import type { DownloadFileInput } from "./models/DownloadFileInput";
 import type { QueryFilePagedInput } from "./models/QueryFilePagedInput";
@@ -35,11 +36,12 @@ export const fileApi = {
 	/**
 	 * 上传Logo
 	 */
-	uploadLogo(data: FormData): Promise<string> {
+	uploadLogo(data: FormData, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void): Promise<string> {
 		return axiosUtil.request<string>({
 			url: "/file/uploadLogo",
 			method: "post",
 			data,
+			onUploadProgress,
 			cancelDuplicateRequest: false,
 			requestType: "upload",
 		});
@@ -47,11 +49,12 @@ export const fileApi = {
 	/**
 	 * 上传头像
 	 */
-	uploadAvatar(data: FormData): Promise<string> {
+	uploadAvatar(data: FormData, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void): Promise<string> {
 		return axiosUtil.request<string>({
 			url: "/file/uploadAvatar",
 			method: "post",
 			data,
+			onUploadProgress,
 			cancelDuplicateRequest: false,
 			requestType: "upload",
 		});
@@ -59,11 +62,12 @@ export const fileApi = {
 	/**
 	 * 上传证件照
 	 */
-	uploadIdPhoto(data: FormData): Promise<string> {
+	uploadIdPhoto(data: FormData, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void): Promise<string> {
 		return axiosUtil.request<string>({
 			url: "/file/uploadIdPhoto",
 			method: "post",
 			data,
+			onUploadProgress,
 			cancelDuplicateRequest: false,
 			requestType: "upload",
 		});
@@ -71,11 +75,12 @@ export const fileApi = {
 	/**
 	 * 上传富文本
 	 */
-	uploadEditor(data: FormData): Promise<string> {
+	uploadEditor(data: FormData, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void): Promise<string> {
 		return axiosUtil.request<string>({
 			url: "/file/uploadEditor",
 			method: "post",
 			data,
+			onUploadProgress,
 			cancelDuplicateRequest: false,
 			requestType: "upload",
 		});
@@ -83,11 +88,12 @@ export const fileApi = {
 	/**
 	 * 上传文件
 	 */
-	uploadFile(data: FormData): Promise<string> {
+	uploadFile(data: FormData, onUploadProgress?: (progressEvent: AxiosProgressEvent) => void): Promise<string> {
 		return axiosUtil.request<string>({
 			url: "/file/uploadFile",
 			method: "post",
 			data,
+			onUploadProgress,
 			cancelDuplicateRequest: false,
 			requestType: "upload",
 		});
