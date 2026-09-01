@@ -27,6 +27,12 @@
 				编号：<span v-iconCopy="row.employeeNo">{{ row.appNo }}</span>
 			</template>
 
+			<template #deviceId="{ row }: { row?: TenantOnlineUserModel }">
+				<span>{{ row.deviceId }}</span>
+				<br />
+				<span>{{ row.sessionId }}</span>
+			</template>
+
 			<template #lastLoginTime="{ row }: { row?: TenantOnlineUserModel }">
 				<span>地区：{{ row.lastLoginProvince }} - {{ row.lastLoginCity }}</span>
 				<br />
