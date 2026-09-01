@@ -144,7 +144,6 @@ public class ChatHub : Hub<IChatClient>
         var tenantOnlineUserModel = await _repository.Queryable<TenantOnlineUserModel>()
             .ClearFilter<IBaseTEntity>()
             .Where(wh => wh.ConnectionId == Context.ConnectionId)
-            .Where(wh => wh.TenantId == authUserInfo.TenantId)
             .SingleAsync();
 
         if (tenantOnlineUserModel != null)
@@ -307,14 +306,9 @@ public class ChatHub : Hub<IChatClient>
             return;
         }
 
-        var authUserInfo = await GetAuthUserInfo();
-
-        if (authUserInfo != null)
-        {
-            // 删除当前连接所在的在线信息
-            await _repository.Deleteable<TenantOnlineUserModel>()
-                .Where(wh => wh.ConnectionId == Context.ConnectionId)
-                .ExecuteCommandAsync();
-        }
+        // 删除当前连接所在的在线信息。退出接口可能已先清理授权缓存，不能再依赖缓存判断。
+        await _repository.Deleteable<TenantOnlineUserModel>()
+            .Where(wh => wh.ConnectionId == Context.ConnectionId)
+            .ExecuteCommandAsync();
     }
 }

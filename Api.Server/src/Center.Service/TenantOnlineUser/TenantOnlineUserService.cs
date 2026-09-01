@@ -20,6 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
+using Fast.Cache;
 using Fast.Center.Domain;
 using Fast.Center.Service.TenantOnlineUser.Dto;
 using Microsoft.AspNetCore.Authorization;
@@ -35,13 +36,15 @@ namespace Fast.Center.Service.TenantOnlineUser;
 public class TenantOnlineUserService : IDynamicApplication
 {
     private readonly IUser _user;
+    private readonly ICache<AuthCCL> _authCache;
     private readonly ISqlSugarRepository<TenantOnlineUserModel> _repository;
     private readonly IHubContext<ChatHub, IChatClient> _hubContext;
 
-    public TenantOnlineUserService(IUser user, ISqlSugarRepository<TenantOnlineUserModel> repository,
+    public TenantOnlineUserService(IUser user, ICache<AuthCCL> authCache, ISqlSugarRepository<TenantOnlineUserModel> repository,
         IHubContext<ChatHub, IChatClient> hubContext)
     {
         _user = user;
+        _authCache = authCache;
         _repository = repository;
         _hubContext = hubContext;
     }
@@ -70,13 +73,45 @@ public class TenantOnlineUserService : IDynamicApplication
     [Permission(PermissionConst.TenantOnlineUser.ForceOffline)]
     public async Task ForceOffline(ForceOfflineInput input)
     {
-        await _hubContext.Clients.Clients(input.ConnectionId)
+        var onlineUser = await _repository.Entities.Where(wh => wh.ConnectionId == input.ConnectionId)
+            .SingleAsync();
+        if (onlineUser == null)
+            throw new UserFriendlyException("在线会话不存在或已下线！");
+
+        // 同一次登录可能建立多个 SignalR 连接，按会话统一下线，不影响关闭单点登录后的其他独立会话。
+        var onlineUsers = await _repository.Entities.Where(wh => wh.IsOnline)
+            .WhereIF(!string.IsNullOrWhiteSpace(onlineUser.SessionId), wh => wh.SessionId == onlineUser.SessionId)
+            .WhereIF(string.IsNullOrWhiteSpace(onlineUser.SessionId), wh => wh.ConnectionId == input.ConnectionId)
+            .ToListAsync();
+        if (onlineUsers.Count == 0)
+            throw new UserFriendlyException("在线会话不存在或已下线！");
+
+        var offlineTime = DateTime.Now;
+        var connectionIds = onlineUsers.Select(sl => sl.ConnectionId)
+            .Distinct()
+            .ToList();
+        await _hubContext.Clients.Clients(connectionIds)
             .ForceOffline(new ForceOfflineOutput
             {
                 IsAdmin = _user.IsSuperAdmin || _user.IsAdmin,
                 NickName = _user.NickName,
                 EmployeeNo = _user.EmployeeNo,
-                OfflineTime = DateTime.Now
+                OfflineTime = offlineTime
             });
+
+        if (!string.IsNullOrWhiteSpace(onlineUser.SessionId))
+        {
+            var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, onlineUser.AppNo, _user.TenantNo, onlineUser.DeviceType,
+                onlineUser.EmployeeNo, onlineUser.SessionId);
+            await _authCache.DelAsync(cacheKey);
+        }
+
+        onlineUsers.ForEach(item =>
+        {
+            item.IsOnline = false;
+            item.OfflineTime = offlineTime;
+        });
+        await _repository.Updateable(onlineUsers)
+            .ExecuteCommandAsync();
     }
 }
