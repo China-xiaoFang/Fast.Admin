@@ -44,6 +44,11 @@ public static class ConfigConst
     public const string LoginCaptchaOpen = "LOGIN_CAPTCHA_OPEN";
 
     /// <summary>
+    /// 登录后身份验证开关
+    /// </summary>
+    public const string LoginIdentityVerificationOpen = "LOGIN_IDENTITY_VERIFICATION_OPEN";
+
+    /// <summary>
     /// 邮件服务器地址
     /// </summary>
     public const string MailSmtp = "MAIL_SMTP";

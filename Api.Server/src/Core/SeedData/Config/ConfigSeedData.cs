@@ -68,6 +68,15 @@ internal static class ConfigSeedData
                 new()
                 {
                     ConfigId = YitIdHelper.NextId(),
+                    ConfigCode = ConfigConst.LoginIdentityVerificationOpen,
+                    ConfigName = "登录后身份验证开关",
+                    ConfigValue = "False",
+                    Remark = "True：打开；False：关闭；",
+                    CreatedTime = dateTime
+                },
+                new()
+                {
+                    ConfigId = YitIdHelper.NextId(),
                     ConfigCode = ConfigConst.MailSmtp,
                     ConfigName = "邮件服务器地址",
                     ConfigValue = "smtp.qq.com",
