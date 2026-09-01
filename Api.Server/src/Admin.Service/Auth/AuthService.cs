@@ -146,7 +146,7 @@ public class AuthService : IDynamicApplication
                 .Where(wh => roleIds.Contains(wh.RoleId))
                 .Select(sl => sl.MenuId)
                 .ToListAsync();
-            menuQueryable = menuQueryable.Where(wh => roleMenuIds.Contains(wh.MenuId));
+            menuQueryable = menuQueryable.WhereIF(roleMenuIds.Count > 0, wh => roleMenuIds.Contains(wh.MenuId));
         }
 
         // 查询所有菜单
@@ -237,7 +237,7 @@ public class AuthService : IDynamicApplication
                     .Where(wh => roleIds.Contains(wh.RoleId))
                     .Select(sl => sl.ButtonId)
                     .ToListAsync();
-                buttonQueryable = buttonQueryable.Where(wh => roleButtonIds.Contains(wh.ButtonId));
+                buttonQueryable = buttonQueryable.WhereIF(roleButtonIds.Count > 0, wh => roleButtonIds.Contains(wh.ButtonId));
             }
 
             result.ButtonCodeList = await buttonQueryable.OrderBy(ob => ob.Sort)
