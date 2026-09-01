@@ -7,11 +7,11 @@ import { loadPinia, useApp } from "./stores";
 import { checkVersionUpdate } from "./updateVersion";
 import type { Component } from "vue";
 import "./styles/index.scss";
-import "vue-json-pretty/lib/styles.css";
 if (import.meta.env.DEV) {
 	await import("element-plus/dist/index.css");
 	await import("element-plus/theme-chalk/dark/css-vars.css");
 	await import("fast-element-plus/style.css");
+	await import("vue-json-pretty/lib/styles.css");
 }
 
 checkVersionUpdate(import.meta.env.VITE_APP_VERSION);
