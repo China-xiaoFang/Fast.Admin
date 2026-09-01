@@ -115,7 +115,7 @@ import { jobLevelApi } from "@/api/services/Admin/jobLevel";
 import { organizationApi } from "@/api/services/Admin/organization";
 import { positionApi } from "@/api/services/Admin/position";
 import { roleApi } from "@/api/services/Admin/role";
-import { fileApi } from "@/api/services/Center/file";
+import { fileApi } from "@/api/services/File";
 import type { CheckboxValueType, FormRules } from "element-plus";
 import type { ElSelectorOutput, FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import type { AddEmployeeInput } from "@/api/services/Admin/employee/models/AddEmployeeInput";

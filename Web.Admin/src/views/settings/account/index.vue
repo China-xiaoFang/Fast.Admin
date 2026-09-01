@@ -75,7 +75,7 @@ import { ElMessage, dayjs } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { accountApi } from "@/api/services/Center/account";
-import { fileApi } from "@/api/services/Center/file";
+import { fileApi } from "@/api/services/File";
 import { changePasswordKey } from "@/layouts";
 import { useApp, useUserInfo } from "@/stores";
 import type { FormRules } from "element-plus";
