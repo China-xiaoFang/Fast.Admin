@@ -38,7 +38,7 @@ import { inject, onBeforeUnmount, shallowRef, watch } from "vue";
 import { ElMessage, formContextKey } from "element-plus";
 import { addCssUnit, definePropType, logger } from "@fast-china/utils";
 import { Editor, Toolbar } from "@wangeditor-next/editor-for-vue";
-import { fileApi } from "@/api/services/Center/file";
+import { fileApi } from "@/api/services/File";
 import type { IDomEditor } from "@wangeditor-next/editor";
 import "@wangeditor-next/editor/dist/css/style.css";
 
