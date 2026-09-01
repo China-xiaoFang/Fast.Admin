@@ -19,13 +19,4 @@
         <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <Content Update="appsettings.json">
-            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-        </Content>
-        <Content Update="appsettings.Development.json">
-            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-
 </Project>

@@ -43,9 +43,5 @@
         "DbName": 3
       }
     ]
-  },
-  // 雪花Id
-  "SnowflakeSettings": {
-    "WorkerId": 1
   }
 }
