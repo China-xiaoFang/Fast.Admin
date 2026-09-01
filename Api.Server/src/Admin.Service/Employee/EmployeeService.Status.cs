@@ -23,7 +23,7 @@
 using System.Text.RegularExpressions;
 using Fast.Admin.Domain;
 using Fast.Admin.Service.Employee.Dto;
-using Fast.AdminLog.Domain.Enum;
+using Fast.AdminLog.Domain;
 using Fast.Center.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

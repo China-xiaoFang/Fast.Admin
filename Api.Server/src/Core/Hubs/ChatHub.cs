@@ -224,6 +224,7 @@ public class ChatHub : Hub<IChatClient>
             tenantOnlineUserModel = new TenantOnlineUserModel
             {
                 ConnectionId = Context.ConnectionId,
+                SessionId = authUserInfo.SessionId,
                 DeviceType = authUserInfo.DeviceType,
                 DeviceId = authUserInfo.DeviceId,
                 AppNo = authUserInfo.AppNo,

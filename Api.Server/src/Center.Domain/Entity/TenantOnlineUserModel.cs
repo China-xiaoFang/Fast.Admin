@@ -27,6 +27,7 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("TenantOnlineUser", "租户在线用户表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
+[SugarIndex($"IX_{{table}}_{nameof(SessionId)}", nameof(SessionId), OrderByType.Asc)]
 [SugarIndex($"IX_{{table}}_{nameof(DeviceId)}", nameof(DeviceId), OrderByType.Asc)]
 [SugarIndex($"IX_{{table}}_{nameof(AppNo)}", nameof(AppNo), OrderByType.Asc)]
 public class TenantOnlineUserModel : IBaseTEntity
@@ -37,6 +38,12 @@ public class TenantOnlineUserModel : IBaseTEntity
     [Required]
     [SugarColumn(ColumnDescription = "连接Id", Length = 32, IsPrimaryKey = true)]
     public string ConnectionId { get; set; }
+
+    /// <summary>
+    /// 会话Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "会话Id", Length = 36)]
+    public  string SessionId { get; set; }
 
     /// <summary>
     /// 设备类型
