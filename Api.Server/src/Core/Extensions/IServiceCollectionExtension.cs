@@ -80,34 +80,6 @@ public static class IServiceCollectionExtension
     }
 
     /// <summary>
-    /// 注册邮件服务
-    /// </summary>
-    /// <returns>用于继续链式配置的服务集合</returns>
-    public static IServiceCollection AddMailService(this IServiceCollection services)
-    {
-        // 邮件配置验证
-        services.AddConfigurableOptions<MailSettingsOptions>();
-
-        services.AddSingleton<IMailService, MailService>();
-
-        return services;
-    }
-
-    /// <summary>
-    /// 注册短信服务
-    /// </summary>
-    /// <returns>用于继续链式配置的服务集合</returns>
-    public static IServiceCollection AddSmsService(this IServiceCollection services)
-    {
-        // 短信配置验证
-        services.AddConfigurableOptions<SmsSettingsOptions>();
-
-        services.AddSingleton<ISmsService, SMSService>();
-
-        return services;
-    }
-
-    /// <summary>
     /// 注册 API 限流规则
     /// </summary>
     /// <returns>用于继续链式配置的服务集合</returns>

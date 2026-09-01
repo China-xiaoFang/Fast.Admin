@@ -25,7 +25,6 @@ using System.Text.RegularExpressions;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using MimeKit;
 
 namespace Fast.Core;
@@ -33,17 +32,12 @@ namespace Fast.Core;
 /// <summary>
 /// <see cref="IMailService"/> 默认实现
 /// </summary>
-public class MailService : IMailService
+public class MailService : IMailService, ISingletonDependency
 {
     /// <summary>
     /// 缓存
     /// </summary>
     private readonly ICache<CenterCCL> _centerCache;
-
-    /// <summary>
-    /// 邮件配置
-    /// </summary>
-    private readonly MailSettingsOptions _mailSettingsOptions;
 
     /// <summary>
     /// 日志
@@ -53,9 +47,8 @@ public class MailService : IMailService
     /// <summary>
     /// 初始化邮件服务
     /// </summary>
-    public MailService(IOptions<MailSettingsOptions> options, ICache<CenterCCL> centerCache, ILogger<IMailService> logger)
+    public MailService(ICache<CenterCCL> centerCache, ILogger<IMailService> logger)
     {
-        _mailSettingsOptions = options.Value;
         _centerCache = centerCache;
         _logger = logger;
     }
@@ -70,9 +63,7 @@ public class MailService : IMailService
                 "error" => ("#dc2626", "#fef2f2", "异常通知"),
                 _ => ("#2563eb", "#eff6ff", "系统通知")
             };
-        var displayName = string.IsNullOrWhiteSpace(_mailSettingsOptions.DisplayName)
-            ? "FastDotNet"
-            : _mailSettingsOptions.DisplayName;
+        var displayName = ConfigContext.GetConfigSync(ConfigConst.MailDisplayName);
         var encodedTitle = WebUtility.HtmlEncode(title);
         var encodedDisplayName = WebUtility.HtmlEncode(displayName);
         var sendTime = DateTime.Now;
@@ -299,10 +290,12 @@ public class MailService : IMailService
     /// <inheritdoc />
     public async Task SendEmail(string title, string content)
     {
-        if (_mailSettingsOptions.ReceiveEmails?.Count == 0)
+        var mailReceiveEmails = await ConfigContext.GetConfig(ConfigConst.MailReceiveEmails);
+        var receiveEmails = mailReceiveEmails.ToObject<List<string>>();
+        if (receiveEmails is not {Count: > 0})
             return;
 
-        await SendEmail(title, new BodyBuilder {HtmlBody = content}, _mailSettingsOptions.ReceiveEmails);
+        await SendEmail(title, new BodyBuilder {HtmlBody = content}, receiveEmails);
     }
 
     /// <inheritdoc />
@@ -314,10 +307,12 @@ public class MailService : IMailService
     /// <inheritdoc />
     public async Task SendEmail(string title, BodyBuilder content)
     {
-        if (_mailSettingsOptions.ReceiveEmails?.Count == 0)
+        var mailReceiveEmails = await ConfigContext.GetConfig(ConfigConst.MailReceiveEmails);
+        var receiveEmails = mailReceiveEmails.ToObject<List<string>>();
+        if (receiveEmails is not {Count: > 0})
             return;
 
-        await SendEmail(title, content, _mailSettingsOptions.ReceiveEmails);
+        await SendEmail(title, content, receiveEmails);
     }
 
     /// <inheritdoc />
@@ -331,28 +326,29 @@ public class MailService : IMailService
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(_mailSettingsOptions.Smtp))
+            var smtp = await ConfigContext.GetConfig(ConfigConst.MailSmtp);
+            var portValue = await ConfigContext.GetConfig(ConfigConst.MailPort);
+            var email = await ConfigContext.GetConfig(ConfigConst.MailEmail);
+            var authCode = await ConfigContext.GetConfig(ConfigConst.MailAuthCode);
+            var displayName = await ConfigContext.GetConfig(ConfigConst.MailDisplayName);
+
+            if (string.IsNullOrWhiteSpace(smtp))
                 throw new UserFriendlyException("发件服务器地址为空！");
 
-            if (_mailSettingsOptions.Port == null || _mailSettingsOptions.Port <= 0)
-                throw new ArgumentException("发件服务器端口为空！");
+            if (!int.TryParse(portValue, out var port) || port <= 0)
+                throw new ArgumentException("发件服务器端口不正确！");
 
-            if (string.IsNullOrWhiteSpace(_mailSettingsOptions.Email))
+            if (string.IsNullOrWhiteSpace(email))
                 throw new ArgumentException("发件邮箱为空！");
 
-            if (string.IsNullOrWhiteSpace(_mailSettingsOptions.AuthCode))
+            if (string.IsNullOrWhiteSpace(authCode))
                 throw new ArgumentException("发件邮箱授权码为空！");
-
-            // 显示名称
-            var displayName = string.IsNullOrWhiteSpace(_mailSettingsOptions.DisplayName)
-                ? "FastDotNet"
-                : _mailSettingsOptions.DisplayName;
 
             // 创建邮件内容
             var message = new MimeMessage();
 
             // 发件人
-            message.From.Add(new MailboxAddress(displayName, _mailSettingsOptions.Email));
+            message.From.Add(new MailboxAddress(displayName, email));
 
             // 收件人
             foreach (var receiveEmail in receiveEmails)
@@ -367,10 +363,9 @@ public class MailService : IMailService
             // 配置 Smtp 客户端
             using var smtpClient = new SmtpClient();
             // 连接发件邮箱服务器
-            await smtpClient.ConnectAsync(_mailSettingsOptions.Smtp, _mailSettingsOptions.Port.Value,
-                SecureSocketOptions.SslOnConnect);
+            await smtpClient.ConnectAsync(smtp, port, SecureSocketOptions.SslOnConnect);
             // 登录邮箱
-            await smtpClient.AuthenticateAsync(_mailSettingsOptions.Email, _mailSettingsOptions.AuthCode);
+            await smtpClient.AuthenticateAsync(email, authCode);
             // 发送邮件
             await smtpClient.SendAsync(message);
             // 关闭连接

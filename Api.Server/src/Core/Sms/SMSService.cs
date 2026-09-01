@@ -24,14 +24,13 @@ using System.Text.RegularExpressions;
 using AlibabaCloud.SDK.Dysmsapi20180501;
 using AlibabaCloud.SDK.Dysmsapi20180501.Models;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Fast.Core;
 
 /// <summary>
 /// <see cref="ISmsService"/> 默认实现
 /// </summary>
-public class SMSService : ISmsService
+public class SMSService : ISmsService, ISingletonDependency
 {
     /// <summary>
     /// 缓存
@@ -39,34 +38,17 @@ public class SMSService : ISmsService
     private readonly ICache<CenterCCL> _centerCache;
 
     /// <summary>
-    /// 短信配置
-    /// </summary>
-    private readonly SmsSettingsOptions _smsSettingsOptions;
-
-    /// <summary>
     /// 日志
     /// </summary>
     private readonly ILogger _logger;
 
     /// <summary>
-    /// 客户端
-    /// </summary>
-    private readonly Client _client;
-
-    /// <summary>
     /// 初始化短信服务
     /// </summary>
-    public SMSService(IOptions<SmsSettingsOptions> options, ICache<CenterCCL> centerCache, ILogger<ISmsService> logger)
+    public SMSService(ICache<CenterCCL> centerCache, ILogger<ISmsService> logger)
     {
-        _smsSettingsOptions = options.Value;
         _centerCache = centerCache;
         _logger = logger;
-        _client = new Client(new AlibabaCloud.OpenApiClient.Models.Config
-        {
-            AccessKeyId = _smsSettingsOptions.AccessKeyId,
-            AccessKeySecret = _smsSettingsOptions.AccessKeySecret,
-            Endpoint = "dysmsapi.aliyuncs.com"
-        });
     }
 
     /// <summary>
@@ -115,10 +97,17 @@ public class SMSService : ISmsService
         dto.SendTime = DateTime.Now;
         dto.ErrorCount = 0;
 
-        var response = await _client.SendMessageWithTemplateAsync(new SendMessageWithTemplateRequest
+        var accessKeyId = await ConfigContext.GetConfig(ConfigConst.SmsAccessKeyId);
+        var accessKeySecret = await ConfigContext.GetConfig(ConfigConst.SmsAccessKeySecret);
+        var signName = await ConfigContext.GetConfig(ConfigConst.SmsSignName);
+        var client = new Client(new AlibabaCloud.OpenApiClient.Models.Config
+        {
+            AccessKeyId = accessKeyId, AccessKeySecret = accessKeySecret, Endpoint = "dysmsapi.aliyuncs.com"
+        });
+        var response = await client.SendMessageWithTemplateAsync(new SendMessageWithTemplateRequest
         {
             To = $"86{mobile}",
-            From = _smsSettingsOptions.SignName,
+            From = signName,
             TemplateCode = "",
             TemplateParam = $$"""
                               { "code": "{{dto.VerificationCode}}" }

@@ -44,6 +44,52 @@ public static class ConfigConst
     public const string LoginCaptchaOpen = "LOGIN_CAPTCHA_OPEN";
 
     /// <summary>
+    /// 邮件服务器地址
+    /// </summary>
+    public const string MailSmtp = "MAIL_SMTP";
+
+    /// <summary>
+    /// 邮件服务器端口
+    /// </summary>
+    public const string MailPort = "MAIL_PORT";
+
+    /// <summary>
+    /// 发件邮箱
+    /// </summary>
+    public const string MailEmail = "MAIL_EMAIL";
+
+    /// <summary>
+    /// 邮件授权码
+    /// </summary>
+    public const string MailAuthCode = "MAIL_AUTH_CODE";
+
+    /// <summary>
+    /// 发件人名称
+    /// </summary>
+    public const string MailDisplayName = "MAIL_DISPLAY_NAME";
+
+    /// <summary>
+    /// 默认收件邮箱
+    /// </summary>
+    /// <remarks>配置值使用 JSON 数组格式。["", ""]</remarks>
+    public const string MailReceiveEmails = "MAIL_RECEIVE_EMAILS";
+
+    /// <summary>
+    /// 短信 AccessKeyId
+    /// </summary>
+    public const string SmsAccessKeyId = "SMS_ACCESS_KEY_ID";
+
+    /// <summary>
+    /// 短信 AccessKey密钥
+    /// </summary>
+    public const string SmsAccessKeySecret = "SMS_ACCESS_KEY_SECRET";
+
+    /// <summary>
+    /// 短信签名
+    /// </summary>
+    public const string SmsSignName = "SMS_SIGN_NAME";
+
+    /// <summary>
     /// 高德地图Key
     /// </summary>
     public const string GaoDeMapKey = "GAO_DE_MAP_KEY";
