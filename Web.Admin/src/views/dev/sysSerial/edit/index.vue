@@ -78,7 +78,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (serialRuleId: number) => {
+const detail = (serialRuleId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await sysSerialApi.querySysSerialRuleDetail(serialRuleId);
@@ -100,7 +100,7 @@ const add = () => {
 	});
 };
 
-const edit = (serialRuleId: number) => {
+const edit = (serialRuleId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

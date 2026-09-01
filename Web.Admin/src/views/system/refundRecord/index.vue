@@ -24,7 +24,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.createdTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.createdTime" type="info" round effect="light" size="small" class="ml5">
-					{{ formatChineseRelativeTime(String(row.createdTime)) }}
+					{{ formatChineseRelativeTime(row.createdTime) }}
 				</el-tag>
 			</template>
 
@@ -36,7 +36,7 @@
 				<template v-if="row.refundTime">
 					<span>时间：{{ dayjs(row.refundTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 					<el-tag v-if="row.refundTime" type="info" round effect="light" size="small" class="ml5">
-						{{ formatChineseRelativeTime(String(row.refundTime)) }}
+						{{ formatChineseRelativeTime(row.refundTime) }}
 					</el-tag>
 				</template>
 				<span v-else>--</span>

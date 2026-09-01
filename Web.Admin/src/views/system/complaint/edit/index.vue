@@ -47,7 +47,7 @@ const handleConfirm = () => {
 	});
 };
 
-const open = (complaintId: number) => {
+const open = (complaintId: string) => {
 	void faDialogRef.value.open(async () => {
 		const apiRes = await complaintApi.queryComplaintDetail(complaintId);
 		state.formData = {

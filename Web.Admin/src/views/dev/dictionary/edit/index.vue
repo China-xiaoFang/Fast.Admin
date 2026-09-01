@@ -91,7 +91,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (dictionaryId: number) => {
+const detail = (dictionaryId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await dictionaryApi.queryDictionaryDetail(dictionaryId);
@@ -113,7 +113,7 @@ const add = () => {
 	});
 };
 
-const edit = (dictionaryId: number) => {
+const edit = (dictionaryId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

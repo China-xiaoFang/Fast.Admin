@@ -285,7 +285,7 @@ const state = reactive({
 	/** 定时器 */
 	interval: withDefineType<NodeJS.Timeout>(),
 	/** 租户Id */
-	tenantId: withDefineType<number>(),
+	tenantId: withDefineType<string>(),
 	/** 租户名称 */
 	tenantName: "",
 	/** 激活作业分组 */

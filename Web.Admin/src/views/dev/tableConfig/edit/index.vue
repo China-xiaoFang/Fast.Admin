@@ -48,7 +48,7 @@ const state = reactive({
 	formDisabled: false,
 	dialogState: withDefineType<IPageStateType>("detail"),
 	dialogTitle: "表格",
-	copyTableId: withDefineType<number>(undefined),
+	copyTableId: withDefineType<string>(undefined),
 });
 
 const handleConfirm = () => {
@@ -75,7 +75,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (tableId: number) => {
+const detail = (tableId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await tableApi.queryTableConfigDetail(tableId);
@@ -93,7 +93,7 @@ const add = () => {
 	});
 };
 
-const edit = (tableId: number) => {
+const edit = (tableId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
@@ -103,7 +103,7 @@ const edit = (tableId: number) => {
 	});
 };
 
-const copy = (tableId: number) => {
+const copy = (tableId: string) => {
 	void faDialogRef.value.open(() => {
 		state.copyTableId = tableId;
 		state.dialogState = "copy";

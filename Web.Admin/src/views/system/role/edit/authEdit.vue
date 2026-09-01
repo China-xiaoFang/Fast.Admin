@@ -73,14 +73,14 @@ const state = reactive({
 		buttonIds: [],
 	}),
 	dialogTitle: "角色授权",
-	menuList: withDefineType<ElSelectorOutput<number>[]>([]),
+	menuList: withDefineType<ElSelectorOutput<string>[]>([]),
 });
 
-const isMenuChecked = (menuId: number) => {
+const isMenuChecked = (menuId: string) => {
 	return state.formData.menuIds.includes(menuId) || false;
 };
 
-const isButtonAllChecked = (menuId: number) => {
+const isButtonAllChecked = (menuId: string) => {
 	const menu = state.menuList.find((item) => item.value === menuId);
 	if (!menu || menu.children.length === 0) {
 		return false;
@@ -89,7 +89,7 @@ const isButtonAllChecked = (menuId: number) => {
 	return buttonIds.every((id) => state.formData.buttonIds?.includes(id));
 };
 
-const isButtonIndeterminate = (menuId: number) => {
+const isButtonIndeterminate = (menuId: string) => {
 	const menu = state.menuList.find((item) => item.value === menuId);
 	if (!menu || menu.children.length === 0) {
 		return false;
@@ -99,7 +99,7 @@ const isButtonIndeterminate = (menuId: number) => {
 	return checkedCount > 0 && checkedCount < buttonIds.length;
 };
 
-const getButtonCheckedCount = (menuId: number) => {
+const getButtonCheckedCount = (menuId: string) => {
 	const menu = state.menuList.find((item) => item.value === menuId);
 	if (!menu) {
 		return 0;
@@ -108,7 +108,7 @@ const getButtonCheckedCount = (menuId: number) => {
 	return buttonIds.filter((id) => state.formData.buttonIds?.includes(id)).length;
 };
 
-const handleMenuChange = (menuId: number, val: CheckboxValueType) => {
+const handleMenuChange = (menuId: string, val: CheckboxValueType) => {
 	if (val) {
 		// 选中菜单
 		if (!state.formData.menuIds?.includes(menuId)) {
@@ -120,7 +120,7 @@ const handleMenuChange = (menuId: number, val: CheckboxValueType) => {
 	}
 };
 
-const handleButtonAllChange = (menuId: number, val: CheckboxValueType) => {
+const handleButtonAllChange = (menuId: string, val: CheckboxValueType) => {
 	const menu = state.menuList.find((item) => item.value === menuId);
 	if (!menu) {
 		return;
@@ -154,7 +154,7 @@ const handleConfirm = () => {
 	});
 };
 
-const open = (roleId: number) => {
+const open = (roleId: string) => {
 	void faDialogRef.value.open(async () => {
 		const apiRes = await roleApi.queryRoleAuthMenu({ roleId });
 		state.formData = apiRes;

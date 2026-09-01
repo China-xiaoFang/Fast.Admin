@@ -16,7 +16,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.lastLoginTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.lastLoginTime" type="info" round effect="light" size="small" class="ml5">
-					{{ formatChineseRelativeTime(String(row.createdTime)) }}
+					{{ formatChineseRelativeTime(row.createdTime) }}
 				</el-tag>
 			</template>
 		</FastTable>

@@ -178,7 +178,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (recordId: number) => {
+const detail = (recordId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await applicationOpenIdApi.queryApplicationOpenIdDetail(recordId);
@@ -202,7 +202,7 @@ const add = () => {
 	});
 };
 
-const edit = (recordId: number) => {
+const edit = (recordId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

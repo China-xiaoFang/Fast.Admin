@@ -16,7 +16,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.firstLoginTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.firstLoginTime" type="info" round effect="light" size="small" class="ml5">
-					{{ formatChineseRelativeTime(String(row.firstLoginTime)) }}
+					{{ formatChineseRelativeTime(row.firstLoginTime) }}
 				</el-tag>
 			</template>
 
@@ -35,7 +35,7 @@
 				<br />
 				<span>时间：{{ dayjs(row.lastLoginTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
 				<el-tag v-if="row.lastLoginTime" type="info" round effect="light" size="small" class="ml5">
-					{{ formatChineseRelativeTime(String(row.lastLoginTime)) }}
+					{{ formatChineseRelativeTime(row.lastLoginTime) }}
 				</el-tag>
 			</template>
 

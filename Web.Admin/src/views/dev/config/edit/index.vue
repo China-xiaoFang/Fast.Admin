@@ -74,7 +74,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (configId: number) => {
+const detail = (configId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await configApi.queryConfigDetail(configId);
@@ -92,7 +92,7 @@ const add = () => {
 	});
 };
 
-const edit = (configId: number) => {
+const edit = (configId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

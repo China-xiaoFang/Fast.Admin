@@ -156,7 +156,7 @@ export default defineComponent({
 		/** 保存表格列配置 */
 		const saveColumnsCache = async (columns: FaTableColumnCtx[]): Promise<void> => {
 			if (props.columns) return Promise.resolve();
-			const findSourceColumn = (columnId?: number, sourceColumns = state.columns): FaTableColumnCtx | undefined => {
+			const findSourceColumn = (columnId?: number | string, sourceColumns = state.columns): FaTableColumnCtx | undefined => {
 				for (const column of sourceColumns) {
 					if (column.columnId === columnId) return column;
 					const childColumn = findSourceColumn(columnId, column._children);
@@ -171,7 +171,7 @@ export default defineComponent({
 						columns: columns.map((m) => {
 							const fixed = isSmallScreen.value ? (findSourceColumn(m.columnId)?.fixed ?? m.fixed) : m.fixed;
 							return {
-								columnId: m.columnId,
+								columnId: m.columnId?.toString(),
 								label: m.label,
 								fixed: isString(fixed) ? fixed : "",
 								autoWidth: m.autoWidth,

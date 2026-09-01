@@ -70,7 +70,7 @@ const handleConfirm = () => {
 	});
 };
 
-const detail = (jobLevelId: number) => {
+const detail = (jobLevelId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.formDisabled = true;
 		const apiRes = await jobLevelApi.queryJobLevelDetail(jobLevelId);
@@ -88,7 +88,7 @@ const add = () => {
 	});
 };
 
-const edit = (jobLevelId: number) => {
+const edit = (jobLevelId: string) => {
 	void faDialogRef.value.open(async () => {
 		state.dialogState = "edit";
 		state.formDisabled = false;

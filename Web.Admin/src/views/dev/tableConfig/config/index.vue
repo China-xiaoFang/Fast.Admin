@@ -130,11 +130,11 @@ const state = reactive({
 	/** 是否存在改变 */
 	change: false,
 	/** 表格Id */
-	tableId: withDefineType<number>(),
+	tableId: withDefineType<string>(),
 	/** 表格名称 */
 	tableName: "",
 	/** 行版本号 */
-	rowVersion: withDefineType<number>(),
+	rowVersion: withDefineType<string>(),
 	/** 表格数据 */
 	tableData: withDefineType<FaTableColumnCtx[]>([]),
 });
@@ -227,7 +227,7 @@ const handleSave = () => {
 	});
 };
 
-const edit = (tableId: number, tableName: string, rowVersion: number) => {
+const edit = (tableId: string, tableName: string, rowVersion: string) => {
 	state.tableId = tableId;
 	state.tableName = tableName;
 	state.rowVersion = rowVersion;
