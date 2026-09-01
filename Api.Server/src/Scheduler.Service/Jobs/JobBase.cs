@@ -255,7 +255,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
                 DeviceType = AppEnvironmentEnum.Api,
                 DeviceId = deviceId,
                 SessionId = Guid.NewGuid()
-                    .ToString("N"),
+                    .ToString("D"),
                 AppNo = "Scheduler",
                 AppName = "调度程序",
                 NickName = robotInfo.EmployeeName,

@@ -22,7 +22,7 @@
 
 using Fast.Admin.Domain;
 using Fast.Admin.Service.OperateLog.Dto;
-using Fast.AdminLog.Domain.Entity;
+using Fast.AdminLog.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -20,8 +20,7 @@
 // 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
 // ------------------------------------------------------------------------
 
-using Fast.AdminLog.Domain.Entity;
-using Fast.AdminLog.Domain.Enum;
+using Fast.AdminLog.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using Yitter.IdGenerator;
 

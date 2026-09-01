@@ -30,8 +30,6 @@ namespace Fast.Core;
 /// </summary>
 internal static partial class MenuSeedData
 {
-    private static int _menuSort = 1;
-
     /// <summary>
     /// 菜单顺序
     /// </summary>
@@ -39,11 +37,11 @@ internal static partial class MenuSeedData
     {
         get
         {
-            _menuSort++;
-            return _menuSort;
+            field++;
+            return field;
         }
-        set => _menuSort = 0;
-    }
+        set => field = 0;
+    } = 1;
 
     /// <summary>
     /// 默认菜单种子数据

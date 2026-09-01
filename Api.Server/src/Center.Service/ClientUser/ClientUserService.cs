@@ -105,6 +105,7 @@ public class ClientUserService : IDynamicApplication
                 Mobile = sl.Mobile,
                 OpenId = sl.OpenId,
                 UnionId = sl.UnionId,
+                HasPassword = !string.IsNullOrWhiteSpace(sl.Password),
                 NickName = sl.NickName,
                 Avatar = sl.Avatar,
                 Sex = sl.Sex,

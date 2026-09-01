@@ -55,6 +55,11 @@ public class QueryClientUserDetailOutput : UpdateVersionInput
     public string UnionId { get; set; }
 
     /// <summary>
+    /// 是否已设置密码
+    /// </summary>
+    public bool HasPassword { get; set; }
+
+    /// <summary>
     /// 昵称
     /// </summary>
     public string NickName { get; set; }

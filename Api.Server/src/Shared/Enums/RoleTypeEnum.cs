@@ -37,30 +37,30 @@ public enum RoleTypeEnum
     Admin = 1 << 0,
 
     /// <summary>
+    /// 默认
+    /// </summary>
+    [TagType(TagTypeEnum.Info)]
+    [Description("默认")]
+    Default = 1 << 1,
+
+    /// <summary>
     /// 技术
     /// </summary>
     [TagType(TagTypeEnum.Warning)]
     [Description("技术")]
-    IT = 1 << 1,
+    IT = 1 << 2,
 
     /// <summary>
     /// 人事
     /// </summary>
     [TagType(TagTypeEnum.Primary)]
     [Description("人事")]
-    HR = 1 << 2,
+    HR = 1 << 3,
 
     /// <summary>
     /// 财务
     /// </summary>
     [TagType(TagTypeEnum.Primary)]
     [Description("财务")]
-    Finance = 1 << 3,
-
-    /// <summary>
-    /// 默认
-    /// </summary>
-    [TagType(TagTypeEnum.Info)]
-    [Description("默认")]
-    Default = 1 << 30
+    Finance = 1 << 4
 }

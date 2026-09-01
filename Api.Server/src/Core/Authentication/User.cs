@@ -175,7 +175,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         {
             // 每次登录生成独立会话Id，用于区分同一用户的多个登录会话
             authUserInfo.SessionId = Guid.NewGuid()
-                .ToString("N");
+                .ToString("D");
 
             // 设置授权用户信息
             SetAuthUser(authUserInfo, true);
@@ -265,7 +265,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         {
             // 每次登录生成独立会话Id，用于区分同一用户的多个登录会话
             authUserInfo.SessionId = Guid.NewGuid()
-                .ToString("N");
+                .ToString("D");
 
             // 设置授权用户信息
             SetAuthUser(authUserInfo, true);
