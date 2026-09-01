@@ -404,8 +404,9 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 }
 
 .tenant-list {
-	flex: 1;
+	flex: 0 0 300px;
 	height: 300px;
+	min-height: 0;
 	margin-right: -8px;
 	padding-right: 8px;
 }
