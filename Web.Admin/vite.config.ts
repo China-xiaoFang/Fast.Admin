@@ -200,6 +200,12 @@ export default defineConfig(({ command, mode }): UserConfig => {
 						js: isBuild ? "dist/vue-router.global.prod.js" : "dist/vue-router.global.js",
 					},
 					{
+						name: "vue-json-pretty",
+						global: "VueJsonPretty",
+						js: "lib/vue-json-pretty.js",
+						css: "lib/styles.css",
+					},
+					{
 						name: "dayjs",
 						global: "dayjs",
 						js: ["dayjs.min.js", "locale/zh-cn.js"],
