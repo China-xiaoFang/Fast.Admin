@@ -44,7 +44,6 @@
 					v-model="state.formData.dbPwd"
 					show-password
 					maxlength="20"
-					show-word-limit
 					placeholder="请输入数据库密码"
 					autocomplete="new-password"
 				/>
@@ -151,7 +150,6 @@
 									type="password"
 									v-model="row.dbPwd"
 									show-password
-									show-word-limit
 									maxlength="20"
 									placeholder="请输入数据库密码"
 									autocomplete="new-password"
