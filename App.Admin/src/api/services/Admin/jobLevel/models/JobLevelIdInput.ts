@@ -1,14 +1,14 @@
 /**
- * Fast.Admin.Service.JobLevel.Dto.JobLevelIdInput 职级Id输入
+ * 职级Id输入
  */
 export interface JobLevelIdInput {
-  /**
-   * 职级Id
-   */
-  jobLevelId?: number;
-  /**
-   * 
-   */
-  rowVersion?: number;
+	/**
+	 * 职级Id
+	 */
+	jobLevelId?: string;
+	/**
+	 * 
+	 */
+	rowVersion?: string;
 }
 

@@ -1,104 +1,105 @@
-import { DiffLogTypeEnum } from "@/api/enums/DiffLogTypeEnum";
+import type { DiffLogColumnInfo } from "./DiffLogColumnInfo";
+import type { DiffLogTypeEnum } from "@/api/enums/DiffLogTypeEnum";
 
 /**
- * Fast.CenterLog.Entity.SqlDiffLogModel Sql差异日志Model类
+ * Sql差异日志表Model类
  */
 export interface SqlDiffLogModel {
-  /**
-   * 记录Id
-   */
-  recordId?: number;
-  /**
-   * 账号Id
-   */
-  accountId?: number;
-  /**
-   * 手机
-   */
-  mobile?: string;
-  /**
-   * 昵称
-   */
-  nickName?: string;
-  /**
-   * 
-   */
-  diffType?: DiffLogTypeEnum;
-  /**
-   * 表名称
-   */
-  tableName?: string;
-  /**
-   * 表描述
-   */
-  tableDescription?: string;
-  /**
-   * 旧的列信息
-   */
-  beforeColumnList?: Array<any>;
-  /**
-   * 新的列信息
-   */
-  afterColumnList?: Array<any>;
-  /**
-   * 执行秒数
-   */
-  executeSeconds?: number;
-  /**
-   * 纯Sql，参数化之后的Sql
-   */
-  pureSql?: string;
-  /**
-   * 差异时间
-   */
-  createdTime?: Date;
-  /**
-   * 租户Id
-   */
-  tenantId?: number;
-  /**
-   * 租户名称
-   */
-  tenantName?: string;
-  /**
-   * 
-   */
-  device?: string;
-  /**
-   * 
-   */
-  os?: string;
-  /**
-   * 
-   */
-  browser?: string;
-  /**
-   * 
-   */
-  province?: string;
-  /**
-   * 
-   */
-  city?: string;
-  /**
-   * 
-   */
-  ip?: string;
-  /**
-   * 
-   */
-  departmentId?: number;
-  /**
-   * 
-   */
-  departmentName?: string;
-  /**
-   * 
-   */
-  createdUserId?: number;
-  /**
-   * 
-   */
-  createdUserName?: string;
+	/**
+	 * 记录Id
+	 */
+	recordId?: string;
+	/**
+	 * 账号Id
+	 */
+	accountId?: string;
+	/**
+	 * 手机
+	 */
+	mobile?: string;
+	/**
+	 * 昵称
+	 */
+	nickName?: string;
+	/**
+	 * 
+	 */
+	diffType?: DiffLogTypeEnum;
+	/**
+	 * 表名称
+	 */
+	tableName?: string;
+	/**
+	 * 表描述
+	 */
+	tableDescription?: string;
+	/**
+	 * 旧的列信息
+	 */
+	beforeColumnList?: DiffLogColumnInfo[][];
+	/**
+	 * 新的列信息
+	 */
+	afterColumnList?: DiffLogColumnInfo[][];
+	/**
+	 * 执行秒数
+	 */
+	executeSeconds?: number;
+	/**
+	 * 纯SQL，参数化后的SQL
+	 */
+	pureSql?: string;
+	/**
+	 * 差异时间
+	 */
+	createdTime?: string;
+	/**
+	 * 租户Id
+	 */
+	tenantId?: string;
+	/**
+	 * 租户名称
+	 */
+	tenantName?: string;
+	/**
+	 * 
+	 */
+	device?: string;
+	/**
+	 * 
+	 */
+	os?: string;
+	/**
+	 * 
+	 */
+	browser?: string;
+	/**
+	 * 
+	 */
+	province?: string;
+	/**
+	 * 
+	 */
+	city?: string;
+	/**
+	 * 
+	 */
+	ip?: string;
+	/**
+	 * 
+	 */
+	departmentId?: string;
+	/**
+	 * 
+	 */
+	departmentName?: string;
+	/**
+	 * 
+	 */
+	createdUserId?: string;
+	/**
+	 * 
+	 */
+	createdUserName?: string;
 }
 

@@ -1,19 +1,19 @@
 import { axiosUtil } from "@fast-china/axios";
-import { InitDatabaseInput } from "./models/InitDatabaseInput";
+import type { InitDatabaseInput } from "./models/InitDatabaseInput";
 
 /**
- * Fast.Admin.Service.TenantDatabase.TenantDatabaseService 自定义 Database 服务Api
+ * 租户数据库自定义初始化逻辑Api
  */
 export const tenantDatabaseApi = {
-  /**
-   * 初始化数据库
-   */
-  initDatabase(data: InitDatabaseInput) {
-    return axiosUtil.request({
-      url: "/tenantDatabase/initDatabase",
-      method: "post",
-      data,
-      requestType: "submit",
-    });
-  },
+	/**
+	 * 初始化数据库
+	 */
+	initDatabase(data: InitDatabaseInput): Promise<unknown> {
+		return axiosUtil.request({
+			url: "/tenantDatabase/initDatabase",
+			method: "post",
+			data,
+			requestType: "submit",
+		});
+	},
 };
