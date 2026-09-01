@@ -47,6 +47,11 @@ namespace Fast.File.Applications;
 public class FileApplication : IDynamicApplication
 {
     /// <summary>
+    /// 应用根目录
+    /// </summary>
+    private readonly string _rootPath;
+
+    /// <summary>
     /// 单张图片允许的最大像素总数（宽 × 高），用于避免超大图片解码时占用过多服务器内存
     /// </summary>
     private const long MaxImagePixels = 40_000_000;
@@ -115,13 +120,15 @@ public class FileApplication : IDynamicApplication
     /// <summary>
     /// 文件服务
     /// </summary>
+    /// <param name="hostEnvironment">宿主环境</param>
     /// <param name="user">当前登录用户</param>
     /// <param name="repository">数据仓储</param>
     /// <param name="uploadFileSettingsOptions">文件上传配置</param>
     /// <param name="httpContextAccessor">HTTP 请求上下文访问器</param>
-    public FileApplication(IUser user, ISqlSugarRepository<FileModel> repository,
+    public FileApplication(IWebHostEnvironment hostEnvironment, IUser user, ISqlSugarRepository<FileModel> repository,
         IOptions<UploadFileSettingsOptions> uploadFileSettingsOptions, IHttpContextAccessor httpContextAccessor)
     {
+        _rootPath = hostEnvironment.ContentRootPath;
         _user = user;
         _repository = repository;
         _uploadFileSettingsOptions = uploadFileSettingsOptions.Value;
@@ -213,13 +220,13 @@ public class FileApplication : IDynamicApplication
     /// </summary>
     /// <param name="filePath">配置或数据库中的相对目录，兼容“/”和“\”</param>
     /// <param name="fileName">可选文件名</param>
-    /// <returns>绝对配置保持原位置；相对配置基于应用程序目录解析</returns>
-    private static string GetLocalPath(string filePath, string fileName = null)
+    /// <returns>绝对配置保持原位置；相对配置基于程序根目录解析</returns>
+    private string GetLocalPath(string filePath, string fileName = null)
     {
         if (string.IsNullOrWhiteSpace(filePath))
             throw new UserFriendlyException("文件存储路径不能为空！");
 
-        var rootPath = Path.GetFullPath(AppContext.BaseDirectory);
+        var rootPath = Path.GetFullPath(_rootPath);
         var localPath = filePath.Replace('\\', Path.DirectorySeparatorChar)
             .Replace('/', Path.DirectorySeparatorChar);
         var fullPath = string.IsNullOrEmpty(fileName)
