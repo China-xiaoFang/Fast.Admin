@@ -64,8 +64,21 @@ public class RequestActionFilter : IAsyncActionFilter
         var httpRequest = httpContext.Request;
         var _user = httpContext.RequestServices.GetService<IUser>();
 
+        UserAgentInfo userAgentInfo = null;
+        WanNetIPInfo wanInfo = null;
+
         var stopwatch = new Stopwatch();
         stopwatch.Start();
+        // 获取 UserAgent 和 Ip 信息
+        try
+        {
+            userAgentInfo = httpContext.RequestUserAgentInfo();
+            wanInfo = await httpContext.RemoteIpv4InfoAsync();
+        }
+        catch (OperationCanceledException)
+        {
+        }
+
         var actionContext = await next();
         stopwatch.Stop();
 
@@ -116,9 +129,15 @@ public class RequestActionFilter : IAsyncActionFilter
                 CreatedUserName = _user?.EmployeeName,
                 CreatedTime = dateTime,
                 TenantId = _user?.TenantId,
-                TenantName = _user?.TenantName
+                TenantName = _user?.TenantName,
+                // 可能为空
+                Device = userAgentInfo?.Device,
+                OS = userAgentInfo?.OS,
+                Browser = userAgentInfo?.Browser,
+                Province = wanInfo?.Province,
+                City = wanInfo?.City,
+                Ip = wanInfo?.Ip ?? "unknown"
             };
-            requestLogModel.RecordCreate(httpContext);
 
             // 独立客户端不加载 AOP，防止写审计日志再次触发审计；等待写入完成后才结束请求
             using var db = new SqlSugarClient(connectionConfig);
@@ -129,7 +148,6 @@ public class RequestActionFilter : IAsyncActionFilter
         catch (Exception ex)
         {
             _logger.LogError(ex, "保存请求审计日志失败。");
-            throw;
         }
     }
 }
