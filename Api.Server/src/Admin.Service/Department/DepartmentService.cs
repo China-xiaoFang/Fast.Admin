@@ -64,23 +64,20 @@ public class DepartmentService : IDynamicApplication
         // 本机构及以下数据
         else if (_user.DataScopeType == DataScopeTypeEnum.OrgWithChild)
         {
-            queryable = queryable.Where(wh => wh.DataPublic
-                                              || customDepartmentIds.Contains(wh.DepartmentId)
-                                              || wh.OrgId
+            queryable = queryable.Where(wh => wh.OrgId
                                               == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                                   // 主部门
                                                   .Where(e => e.EmployeeId == _user.EmployeeId && e.IsPrimary)
                                                   .Where(e => e.OrgId == wh.OrgId)
-                                                  .Select(e => e.OrgId));
+                                                  .Select(e => e.OrgId)
+                                              || customDepartmentIds.Contains(wh.DepartmentId));
         }
         // 本部门及以下数据
         else if (_user.DataScopeType == DataScopeTypeEnum.DeptWithChild)
         {
-            queryable = queryable.Where(wh =>
-                wh.DataPublic
-                || customDepartmentIds.Contains(wh.DepartmentId)
-                || wh.DepartmentId == _user.DepartmentId
-                || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0));
+            queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId
+                                              || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0)
+                                              || customDepartmentIds.Contains(wh.DepartmentId));
         }
         // 自定义部门数据
         else if (_user.DataScopeType == DataScopeTypeEnum.CustomDept)
@@ -152,23 +149,20 @@ public class DepartmentService : IDynamicApplication
         // 本机构及以下数据
         else if (_user.DataScopeType == DataScopeTypeEnum.OrgWithChild)
         {
-            queryable = queryable.Where(wh => wh.DataPublic
-                                              || customDepartmentIds.Contains(wh.DepartmentId)
-                                              || wh.OrgId
+            queryable = queryable.Where(wh => wh.OrgId
                                               == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                                   // 主部门
                                                   .Where(e => e.EmployeeId == _user.EmployeeId && e.IsPrimary)
                                                   .Where(e => e.OrgId == wh.OrgId)
-                                                  .Select(e => e.OrgId));
+                                                  .Select(e => e.OrgId)
+                                              || customDepartmentIds.Contains(wh.DepartmentId));
         }
         // 本部门及以下数据
         else if (_user.DataScopeType == DataScopeTypeEnum.DeptWithChild)
         {
-            queryable = queryable.Where(wh =>
-                wh.DataPublic
-                || customDepartmentIds.Contains(wh.DepartmentId)
-                || wh.DepartmentId == _user.DepartmentId
-                || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0));
+            queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId
+                                              || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0)
+                                              || customDepartmentIds.Contains(wh.DepartmentId));
         }
         // 自定义部门数据
         else if (_user.DataScopeType == DataScopeTypeEnum.CustomDept)

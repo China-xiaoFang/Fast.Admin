@@ -63,7 +63,7 @@ router.beforeEach(async (to, from) => {
 			else if (defaultRoutePath.includes(to.path)) {
 				return { path: "/login" };
 			} else {
-				return { path: "/login", query: { redirect: to.redirectedFrom?.fullPath ?? to.fullPath } };
+				return { path: "/login", query: { redirect: encodeURIComponent(to.redirectedFrom?.fullPath ?? to.fullPath) } };
 			}
 		}
 	} else {
@@ -104,18 +104,13 @@ router.beforeEach(async (to, from) => {
 
 		// 判断是否存在重定向路径，如果有则跳转
 		const redirect = getLoginRedirect(from.query.redirect);
-		if (redirect) {
-			const redirectRoute = router.resolve(redirect);
-			const isCurrentRedirect = redirectRoute.fullPath === to.fullPath || redirectRoute.fullPath === to.redirectedFrom?.fullPath;
-			if (!isCurrentRedirect) {
-				// 设置 replace: true, 因此导航将不会留下历史记录
-				return {
-					path: redirectRoute.path,
-					query: redirectRoute.query,
-					hash: redirectRoute.hash,
-					replace: true,
-				};
-			}
+		if (redirect && redirect !== to.fullPath) {
+			delete from.query.redirect;
+			// 设置 replace: true，因此导航将不会留下历史记录
+			return {
+				path: redirect,
+				replace: true,
+			};
 		}
 
 		// 判断登录后是否禁止查看该页面

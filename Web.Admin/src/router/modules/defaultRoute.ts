@@ -17,6 +17,7 @@ export const defaultRoute: RouteRecordRaw[] = [
 	},
 	{
 		path: "/403",
+		name: "Forbidden",
 		component: () => import("@/views/common/403/index.vue"),
 		meta: {
 			title: "无权限操作",
@@ -24,6 +25,7 @@ export const defaultRoute: RouteRecordRaw[] = [
 	},
 	{
 		path: "/404",
+		name: "NotFound",
 		component: () => import("@/views/common/404/index.vue"),
 		meta: {
 			title: "页面找不到了",
@@ -31,6 +33,7 @@ export const defaultRoute: RouteRecordRaw[] = [
 	},
 	{
 		path: "/empty",
+		name: "Empty",
 		component: () => import("@/views/common/empty/index.vue"),
 		meta: {
 			title: "空页面",
@@ -38,6 +41,7 @@ export const defaultRoute: RouteRecordRaw[] = [
 	},
 	{
 		path: "/redirect/:path(.*)",
+		name: "Redirect",
 		component: () => import("@/views/common/redirect/index.vue"),
 		meta: {
 			title: "重定向",
