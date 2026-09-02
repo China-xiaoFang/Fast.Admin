@@ -136,7 +136,7 @@ public static class MiniExcelUtil
         ExcelType excelType = ExcelType.XLSX) where T : class, new()
     {
         var memoryStream = ExportExcel(data, sheetName, excelType);
-        return new FileStreamResult(memoryStream, "application/octet-stream") {FileDownloadName = fileName.UrlEncode()};
+        return new FileStreamResult(memoryStream, "application/octet-stream") {FileDownloadName = fileName};
     }
 
     /// <summary>
@@ -154,7 +154,7 @@ public static class MiniExcelUtil
         where T : class, new()
     {
         var memoryStream = await ExportExcelAsync(data, sheetName, excelType, cancellationToken);
-        return new FileStreamResult(memoryStream, "application/octet-stream") {FileDownloadName = fileName.UrlEncode()};
+        return new FileStreamResult(memoryStream, "application/octet-stream") {FileDownloadName = fileName};
     }
 
     /// <summary>
