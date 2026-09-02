@@ -137,7 +137,7 @@ export const useUserInfo = defineStore(
 			if (router.currentRoute.value.path === "/login") {
 				void router.push({ path: "/login" });
 			} else {
-				void router.push({ path: "/login", query: { redirect: router.currentRoute.value.fullPath } });
+				void router.push({ path: "/login", query: { redirect: encodeURIComponent(router.currentRoute.value.fullPath) } });
 			}
 		};
 

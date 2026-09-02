@@ -270,6 +270,7 @@
 								<el-radio value="ApplicationSelect">应用</el-radio>
 								<el-radio value="TenantSelectPage">租户</el-radio>
 								<el-radio value="AccountSelectPage">账号</el-radio>
+								<el-radio value="DepartmentTreeSelect">部门</el-radio>
 								<el-radio value="EmployeeSelectPage">职员</el-radio>
 							</el-radio-group>
 							<el-input v-model="state.formData.searchEl" placeholder="请输入搜索项" style="width: auto" />
