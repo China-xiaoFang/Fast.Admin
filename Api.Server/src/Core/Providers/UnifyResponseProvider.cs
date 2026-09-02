@@ -23,6 +23,7 @@
 using Fast.UnifyResult;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using SqlSugar;
 
@@ -53,7 +54,7 @@ public class UnifyResponseProvider : IUnifyResponseProvider
         // 默认 500 错误
         var statusCode = StatusCodes.Status500InternalServerError;
 
-        var message = "服务器内部错误，请稍后重试！";
+        var message = context.Exception.Message;
 
         switch (context.Exception)
         {
@@ -81,9 +82,22 @@ public class UnifyResponseProvider : IUnifyResponseProvider
                 break;
             }
             // SqlSugar 并发处理
-            case VersionExceptions versionExceptions:
+            case VersionExceptions:
                 statusCode = StatusCodes.Status400BadRequest;
                 message = "数据已更改，请刷新后重试！";
+                break;
+            // 操作异常
+            case InvalidOperationException invalidOperationException:
+                statusCode = StatusCodes.Status500InternalServerError;
+                if (invalidOperationException.InnerException is SqlException sqlException)
+                {
+                    message = sqlException.Message;
+                }
+                else
+                {
+                    message = invalidOperationException.Message;
+                }
+
                 break;
         }
 
