@@ -68,7 +68,7 @@ internal static partial class MenuSeedData
         var merchantMenuModel = new MenuModel
         {
             MenuId = YitIdHelper.NextId(),
-            Edition = EditionEnum.Professional,
+            Edition = EditionEnum.Internal,
             AppId = applicationModel.AppId,
             MenuCode = PermissionConst.Merchant.Paged,
             MenuName = "商户号",
@@ -100,7 +100,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Professional,
+                    Edition = EditionEnum.Internal,
                     AppId = applicationModel.AppId,
                     MenuId = merchantMenuModel.MenuId,
                     ButtonCode = PermissionConst.Merchant.Paged,
@@ -116,7 +116,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Professional,
+                    Edition = EditionEnum.Internal,
                     AppId = applicationModel.AppId,
                     MenuId = merchantMenuModel.MenuId,
                     ButtonCode = PermissionConst.Merchant.Detail,
@@ -132,7 +132,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Professional,
+                    Edition = EditionEnum.Internal,
                     AppId = applicationModel.AppId,
                     MenuId = merchantMenuModel.MenuId,
                     ButtonCode = PermissionConst.Merchant.Add,
@@ -148,7 +148,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Professional,
+                    Edition = EditionEnum.Internal,
                     AppId = applicationModel.AppId,
                     MenuId = merchantMenuModel.MenuId,
                     ButtonCode = PermissionConst.Merchant.Edit,
@@ -164,7 +164,7 @@ internal static partial class MenuSeedData
                 new()
                 {
                     ButtonId = YitIdHelper.NextId(),
-                    Edition = EditionEnum.Professional,
+                    Edition = EditionEnum.Internal,
                     AppId = applicationModel.AppId,
                     MenuId = merchantMenuModel.MenuId,
                     ButtonCode = PermissionConst.Merchant.Delete,

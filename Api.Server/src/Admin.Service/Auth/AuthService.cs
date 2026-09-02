@@ -106,11 +106,18 @@ public class AuthService : IDynamicApplication
                 t1.RoleId,
                 t1.RoleName,
                 t2.RoleType,
+                t2.IsSystemMenu,
                 t2.DataScopeType,
                 t2.DataScopeDepartmentIds
             })
             .ToListAsync();
-        var roleIds = roleList.Select(sl => sl.RoleId)
+        // 系统菜单角色类型
+        var systemMenuRoleType = roleList.Where(wh => wh.IsSystemMenu)
+            .Select(sl => sl.RoleType)
+            .Aggregate(default(RoleTypeEnum), (acc, item) => acc | item);
+        // 自定义菜单角色
+        var customMenuRoleIds = roleList.Where(wh => !wh.IsSystemMenu)
+            .Select(sl => sl.RoleId)
             .ToList();
         result.RoleNameList = roleList.Select(sl => sl.RoleName)
             .ToList();
@@ -143,10 +150,10 @@ public class AuthService : IDynamicApplication
 
             // 查询当前用户角色对应的菜单Id
             var roleMenuIds = await _empRepository.Queryable<RoleMenuModel>()
-                .Where(wh => roleIds.Contains(wh.RoleId))
+                .Where(wh => customMenuRoleIds.Contains(wh.RoleId))
                 .Select(sl => sl.MenuId)
                 .ToListAsync();
-            menuQueryable = menuQueryable.WhereIF(roleMenuIds.Count > 0, wh => roleMenuIds.Contains(wh.MenuId));
+            menuQueryable = menuQueryable.Where(wh => (wh.RoleType & systemMenuRoleType) != 0 || roleMenuIds.Contains(wh.MenuId));
         }
 
         // 查询所有菜单
@@ -234,10 +241,11 @@ public class AuthService : IDynamicApplication
             {
                 // 查询当前用户角色对应的按钮Id
                 var roleButtonIds = await _empRepository.Queryable<RoleButtonModel>()
-                    .Where(wh => roleIds.Contains(wh.RoleId))
+                    .Where(wh => customMenuRoleIds.Contains(wh.RoleId))
                     .Select(sl => sl.ButtonId)
                     .ToListAsync();
-                buttonQueryable = buttonQueryable.WhereIF(roleButtonIds.Count > 0, wh => roleButtonIds.Contains(wh.ButtonId));
+                buttonQueryable = buttonQueryable.Where(wh =>
+                    (wh.RoleType & systemMenuRoleType) != 0 || roleButtonIds.Contains(wh.ButtonId));
             }
 
             result.ButtonCodeList = await buttonQueryable.OrderBy(ob => ob.Sort)

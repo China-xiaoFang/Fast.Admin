@@ -58,8 +58,8 @@ public partial class EmployeeService : IDynamicApplication
             {
                 EmployeeId = t1.EmployeeId, DepartmentId = t2.DepartmentId
             })
-            .DataScope(e => e.DepartmentId, e => e.EmployeeId)
-            .AnyAsync(a => a.EmployeeId == employeeId);
+            .DataScope(e => e.DepartmentId, e => e.EmployeeId, allowPublicData: false)
+            .AnyAsync(e => e.EmployeeId == employeeId);
         if (!hasAccess)
         {
             throw new UserFriendlyException("数据不存在或无权操作！");

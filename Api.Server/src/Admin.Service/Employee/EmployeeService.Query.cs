@@ -54,7 +54,7 @@ public partial class EmployeeService
                 IdPhoto = t1.IdPhoto
             })
             .OrderBy(ob => ob.EmployeeName)
-            .DataScope(e => e.DepartmentId, e => e.EmployeeId)
+            .DataScope(e => e.DepartmentId, e => e.EmployeeId, allowPublicData: false)
             .ToPagedListAsync(input);
 
         return data.ToPagedData(sl => new ElSelectorOutput<long>
@@ -107,7 +107,7 @@ public partial class EmployeeService
                 IsPrincipal = t2.IsPrincipal
             })
             .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
-            .DataScope(e => e.DepartmentId, e => e.EmployeeId)
+            .DataScope(e => e.DepartmentId, e => e.EmployeeId, allowPublicData: false)
             .ToPagedListAsync(input);
 
         var employeeIds = result.Rows.Select(sl => sl.EmployeeId)

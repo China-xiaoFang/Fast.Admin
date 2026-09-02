@@ -22,15 +22,11 @@
 				/>
 			</FaFormItem>
 			<FaFormItem prop="parentId" label="父级">
-				<FaTreeSelect
-					:request-api="(orgId) => departmentApi.departmentSelector(orgId as string)"
-					:init-param="state.formData.orgId"
+				<DepartmentTreeSelect
+					:org-id="state.formData.orgId"
 					v-model="state.formData.parentId"
-					v-model:label="state.formData.parentName"
+					v-model:department-name="state.formData.parentName"
 					placeholder="请选择父级部门"
-					check-strictly
-					filterable
-					clearable
 				/>
 			</FaFormItem>
 			<FaFormItem prop="departmentName" label="部门名称">

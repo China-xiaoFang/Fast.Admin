@@ -76,29 +76,28 @@ public class OperateLogService : IDynamicApplication
             queryable = queryable.Where(wh => wh.DepartmentId == _user.DepartmentId
                                               || customDepartmentIds.Contains(wh.DepartmentId ?? 0));
         }
+        // 本部门及以下数据
+        else if (_user.DataScopeType == DataScopeTypeEnum.DeptWithChild)
+        {
+            var departmentIds = await _adminRepository.Queryable<DepartmentModel>()
+                .Where(wh => wh.DepartmentId == _user.DepartmentId
+                             || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0)
+                             || customDepartmentIds.Contains(wh.DepartmentId))
+                .Select(sl => sl.DepartmentId)
+                .ToListAsync();
+            queryable = queryable.Where(wh => departmentIds.Contains(wh.DepartmentId ?? 0));
+        }
         // 本机构及以下数据
         else if (_user.DataScopeType == DataScopeTypeEnum.OrgWithChild)
         {
             var departmentIds = await _adminRepository.Queryable<DepartmentModel>()
-                .Where(wh => wh.DataPublic
-                             || customDepartmentIds.Contains(wh.DepartmentId)
-                             || wh.OrgId
+                .Where(wh => wh.OrgId
                              == SqlFunc.Subqueryable<EmployeeOrgModel>()
                                  // 主部门
                                  .Where(e => e.EmployeeId == _user.EmployeeId && e.IsPrimary)
                                  .Where(e => e.OrgId == wh.OrgId)
-                                 .Select(e => e.OrgId))
-                .Select(sl => sl.DepartmentId)
-                .ToListAsync();
-            queryable = queryable.Where(wh => departmentIds.Contains(wh.DepartmentId ?? 0));
-        } // 本部门及以下数据
-        else if (_user.DataScopeType == DataScopeTypeEnum.DeptWithChild)
-        {
-            var departmentIds = await _adminRepository.Queryable<DepartmentModel>()
-                .Where(wh => wh.DataPublic
-                             || customDepartmentIds.Contains(wh.DepartmentId)
-                             || wh.DepartmentId == _user.DepartmentId
-                             || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0))
+                                 .Select(e => e.OrgId)
+                             || customDepartmentIds.Contains(wh.DepartmentId))
                 .Select(sl => sl.DepartmentId)
                 .ToListAsync();
             queryable = queryable.Where(wh => departmentIds.Contains(wh.DepartmentId ?? 0));
