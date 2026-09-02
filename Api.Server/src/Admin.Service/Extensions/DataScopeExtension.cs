@@ -40,10 +40,12 @@ public static class DataScopeExtension
     /// <param name="departmentIdFieldSelector">部门Id过滤字段</param>
     /// <param name="userIdFieldSelector">用户Id过滤字段</param>
     /// <param name="menuCode">菜单编码</param>
+    /// <param name="allowPublicData">允许公开数据</param>
     /// <returns>应用数据权限过滤后的查询对象</returns>
     public static ISugarQueryable<TEntity> DataScope<TEntity>(this ISugarQueryable<TEntity> queryable,
         Expression<Func<TEntity, long?>> departmentIdFieldSelector = null,
-        Expression<Func<TEntity, long?>> userIdFieldSelector = null, string menuCode = null) where TEntity : class, new()
+        Expression<Func<TEntity, long?>> userIdFieldSelector = null, string menuCode = null, bool allowPublicData = true)
+        where TEntity : class, new()
     {
         var _user = FastContext.GetService<IUser>();
 
@@ -65,6 +67,7 @@ public static class DataScopeExtension
             return queryable;
         }
 
+        // 全部数据
         if (_user.DataScopeType == DataScopeTypeEnum.All)
         {
             return queryable;
@@ -115,63 +118,29 @@ public static class DataScopeExtension
         // 仅本人数据
         if (_user.DataScopeType == DataScopeTypeEnum.Self)
         {
-            // 构造“用户字段 = 当前职员Id”的本人数据条件
-            var parameter = userIdFieldSelector.Parameters[0];
-            var unaryOperand = userIdFieldSelector.Body is UnaryExpression unary ? unary.Operand : userIdFieldSelector.Body;
-            var equal = Expression.Equal(Expression.Convert(unaryOperand, typeof(long?)),
-                Expression.Constant(employeeId, typeof(long?)));
-            var expression = Expression.Lambda<Func<TEntity, bool>>(equal, parameter);
-            if (departmentIds.Count == 0)
-            {
-                return queryable.Where(expression);
-            }
-
-            // 构造“部门字段 IN 自定义部门”的补充条件
-            var departmentParameter = departmentIdFieldSelector.Parameters[0];
-            var departmentUnaryOperand = departmentIdFieldSelector.Body is UnaryExpression departmentUnary
-                ? departmentUnary.Operand
-                : departmentIdFieldSelector.Body;
-            var nullableDepartmentIds = departmentIds.Select(id => (long?) id)
-                .ToList();
-            var contains = Expression.Call(typeof(Enumerable), nameof(Enumerable.Contains), [typeof(long?)],
-                Expression.Constant(nullableDepartmentIds), Expression.Convert(departmentUnaryOperand, typeof(long?)));
-            var departmentExpression = Expression.Lambda<Func<TEntity, bool>>(contains, departmentParameter);
-
+            // 本人数据条件
+            var expression = BuildEqualExpression(userIdFieldSelector, employeeId);
+            // 自定义部门补充条件
+            var departmentExpression = BuildContainsExpression(departmentIdFieldSelector, departmentIds);
             // 本人范围与各角色配置的自定义部门范围取并集
-            var expressionist = Expressionable.Create<TEntity>();
-            expressionist.Or(expression);
-            expressionist.Or(departmentExpression);
-            return queryable.Where(expressionist.ToExpression());
+            return queryable.Where(Expressionable.Create<TEntity>()
+                .Or(expression)
+                .Or(departmentExpression)
+                .ToExpression());
         }
 
         // 本部门数据
         if (_user.DataScopeType == DataScopeTypeEnum.Dept)
         {
-            // 构造“部门字段 = 当前部门Id”的本部门数据条件
-            var parameter = departmentIdFieldSelector.Parameters[0];
-            var unaryOperand = departmentIdFieldSelector.Body is UnaryExpression unary
-                ? unary.Operand
-                : departmentIdFieldSelector.Body;
-            var equal = Expression.Equal(Expression.Convert(unaryOperand, typeof(long?)),
-                Expression.Constant(departmentId, typeof(long?)));
-            var expression = Expression.Lambda<Func<TEntity, bool>>(equal, parameter);
-            if (departmentIds.Count == 0)
-            {
-                return queryable.Where(expression);
-            }
-
-            // 构造“部门字段 IN 自定义部门”的补充条件
-            var nullableDepartmentIds = departmentIds.Select(id => (long?) id)
-                .ToList();
-            var contains = Expression.Call(typeof(Enumerable), nameof(Enumerable.Contains), [typeof(long?)],
-                Expression.Constant(nullableDepartmentIds), Expression.Convert(unaryOperand, typeof(long?)));
-            var departmentExpression = Expression.Lambda<Func<TEntity, bool>>(contains, parameter);
-
+            // 当前部门条件
+            var expression = BuildEqualExpression(departmentIdFieldSelector, departmentId);
+            // 自定义部门补充条件
+            var departmentExpression = BuildContainsExpression(departmentIdFieldSelector, departmentIds);
             // 当前部门范围与各角色配置的自定义部门范围取并集
-            var expressionist = Expressionable.Create<TEntity>();
-            expressionist.Or(expression);
-            expressionist.Or(departmentExpression);
-            return queryable.Where(expressionist.ToExpression());
+            return queryable.Where(Expressionable.Create<TEntity>()
+                .Or(expression)
+                .Or(departmentExpression)
+                .ToExpression());
         }
 
         // 本机构及以下数据
@@ -179,14 +148,16 @@ public static class DataScopeExtension
         {
             // 公开部门、当前职员主机构下部门及自定义部门共同组成可访问部门范围
             var dataScopeQueryable = queryable.Context.Queryable<DepartmentModel>()
-                .Where(wh => wh.DataPublic
-                             || departmentIds.Contains(wh.DepartmentId)
-                             || wh.OrgId
-                             == SqlFunc.Subqueryable<EmployeeOrgModel>()
-                                 // 主部门
-                                 .Where(e => e.EmployeeId == employeeId && e.IsPrimary)
-                                 .Where(e => e.OrgId == wh.OrgId)
-                                 .Select(e => e.OrgId))
+                .Where(Expressionable.Create<DepartmentModel>()
+                    .OrIF(allowPublicData, e => e.DataPublic)
+                    .Or(wh => wh.OrgId
+                              == SqlFunc.Subqueryable<EmployeeOrgModel>()
+                                  // 主部门
+                                  .Where(e => e.EmployeeId == employeeId && e.IsPrimary)
+                                  .Where(e => e.OrgId == wh.OrgId)
+                                  .Select(e => e.OrgId))
+                    .Or(wh => departmentIds.Contains(wh.DepartmentId))
+                    .ToExpression())
                 .Select(sl => new DepartmentModel {DepartmentId = sl.DepartmentId});
 
             return BuildInnerJoin(queryable, departmentIdFieldSelector, dataScopeQueryable);
@@ -197,33 +168,59 @@ public static class DataScopeExtension
         {
             // 公开部门、当前部门及其子部门、自定义部门共同组成可访问部门范围
             var dataScopeQueryable = queryable.Context.Queryable<DepartmentModel>()
-                .Where(wh => wh.DataPublic
-                             || departmentIds.Contains(wh.DepartmentId)
-                             || wh.DepartmentId == departmentId
-                             || SqlFunc.JsonArrayAny(wh.ParentIds, departmentId))
+                .Where(Expressionable.Create<DepartmentModel>()
+                    .OrIF(allowPublicData, e => e.DataPublic)
+                    .Or(wh => wh.DepartmentId == departmentId)
+                    .Or(wh => SqlFunc.JsonArrayAny(wh.ParentIds, departmentId))
+                    .Or(wh => departmentIds.Contains(wh.DepartmentId))
+                    .ToExpression())
                 .Select(sl => new DepartmentModel {DepartmentId = sl.DepartmentId});
 
             return BuildInnerJoin(queryable, departmentIdFieldSelector, dataScopeQueryable);
         }
 
         // 自定义部门数据
-        if (_user.DataScopeType == DataScopeTypeEnum.CustomDept && departmentIds.Count > 0)
+        if (_user.DataScopeType == DataScopeTypeEnum.CustomDept)
         {
-            // 构造“部门字段 IN 自定义部门”的数据条件
-            var parameter = departmentIdFieldSelector.Parameters[0];
-            var unaryOperand = departmentIdFieldSelector.Body is UnaryExpression unary
-                ? unary.Operand
-                : departmentIdFieldSelector.Body;
-            var nullableDepartmentIds = departmentIds.Select(id => (long?) id)
-                .ToList();
-            var contains = Expression.Call(typeof(Enumerable), nameof(Enumerable.Contains), [typeof(long?)],
-                Expression.Constant(nullableDepartmentIds), Expression.Convert(unaryOperand, typeof(long?)));
-            var expression = Expression.Lambda<Func<TEntity, bool>>(contains, parameter);
+            var expression = BuildContainsExpression(departmentIdFieldSelector, departmentIds);
+
             return queryable.Where(expression);
         }
 
         // 未配置或未知的数据范围一律不返回数据，避免错误配置扩大权限
         return queryable.Where(_ => false);
+    }
+
+    /// <summary>
+    /// 构造字段等于指定Id的条件
+    /// </summary>
+    private static Expression<Func<TEntity, bool>> BuildEqualExpression<TEntity>(Expression<Func<TEntity, long?>> fieldSelector,
+        long? value)
+    {
+        var parameter = fieldSelector.Parameters[0];
+        var operand = fieldSelector.Body is UnaryExpression unary ? unary.Operand : fieldSelector.Body;
+
+        var equal = Expression.Equal(Expression.Convert(operand, typeof(long?)), Expression.Constant(value, typeof(long?)));
+
+        return Expression.Lambda<Func<TEntity, bool>>(equal, parameter);
+    }
+
+    /// <summary>
+    /// 构造字段 IN 指定Id集合的条件
+    /// </summary>
+    private static Expression<Func<TEntity, bool>> BuildContainsExpression<TEntity>(
+        Expression<Func<TEntity, long?>> fieldSelector, IEnumerable<long> ids)
+    {
+        var parameter = fieldSelector.Parameters[0];
+        var operand = fieldSelector.Body is UnaryExpression unary ? unary.Operand : fieldSelector.Body;
+
+        var nullableIds = ids.Select(id => (long?) id)
+            .ToList();
+
+        var contains = Expression.Call(typeof(Enumerable), nameof(Enumerable.Contains), [typeof(long?)],
+            Expression.Constant(nullableIds), Expression.Convert(operand, typeof(long?)));
+
+        return Expression.Lambda<Func<TEntity, bool>>(contains, parameter);
     }
 
     /// <summary>

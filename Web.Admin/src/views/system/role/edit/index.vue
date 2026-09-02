@@ -29,17 +29,7 @@
 				<RadioGroup name="DataScopeTypeEnum" v-model="state.formData.dataScopeType" />
 			</FaFormItem>
 			<FaFormItem v-if="state.formData.dataScopeType === DataScopeTypeEnum.CustomDept" prop="dataScopeDepartmentIds" label="自定义部门">
-				<FaTreeSelect
-					:request-api="() => departmentApi.departmentSelector(null)"
-					v-model="state.formData.dataScopeDepartmentIds"
-					placeholder="请选择部门"
-					multiple
-					check-strictly
-					filterable
-					clearable
-					collapse-tags
-					collapse-tags-tooltip
-				/>
+				<DepartmentTreeSelect v-model="state.formData.dataScopeDepartmentIds" multiple collapse-tags collapse-tags-tooltip />
 			</FaFormItem>
 			<FaFormItem prop="assignableRoleIds" label="可分配角色" tips="为空则代表可分配所有角色，有值则只能分配勾选的角色">
 				<el-checkbox-group v-model="state.formData.assignableRoleIds">
@@ -61,7 +51,6 @@ import { ElMessage } from "element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { DataScopeTypeEnum } from "@/api/enums/DataScopeTypeEnum";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
-import { departmentApi } from "@/api/services/Admin/department";
 import { roleApi } from "@/api/services/Admin/role";
 import type { FormRules } from "element-plus";
 import type { ElSelectorOutput, FaDialogInstance, FaFormInstance } from "fast-element-plus";

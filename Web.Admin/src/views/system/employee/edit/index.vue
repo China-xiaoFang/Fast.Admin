@@ -25,16 +25,11 @@
 				/>
 			</FaFormItem>
 			<FaFormItem prop="departmentId" label="部门">
-				<FaTreeSelect
-					:request-api="(orgId) => departmentApi.departmentSelector(orgId as string)"
+				<DepartmentTreeSelect
 					:disabled="state.formDisabled || !state.formData?.orgId"
-					:init-param="state.formData.orgId"
+					:org-id="state.formData.orgId"
 					v-model="state.formData.departmentId"
-					v-model:label="state.formData.departmentName"
-					placeholder="请选择部门"
-					check-strictly
-					filterable
-					clearable
+					v-model:department-name="state.formData.departmentName"
 				/>
 			</FaFormItem>
 			<FaFormItem prop="sex" label="部门负责人">
@@ -109,7 +104,6 @@ import { reactive, useTemplateRef } from "vue";
 import { ElMessage, dayjs } from "element-plus";
 import { isDateAfterNow, withDefineType } from "@fast-china/utils";
 import { GenderEnum } from "@/api/enums/GenderEnum";
-import { departmentApi } from "@/api/services/Admin/department";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { jobLevelApi } from "@/api/services/Admin/jobLevel";
 import { organizationApi } from "@/api/services/Admin/organization";
@@ -239,6 +233,7 @@ const add = () => {
 			isPrincipal: false,
 			sex: GenderEnum.Unknown,
 			entryDate: dayjs().format("YYYY-MM-DD"),
+			idPhoto: "https://cdn.fastdotnet.com/his/file/764670271123525.png",
 			roleList: [],
 		};
 		state.roleList = await roleApi.roleSelector();
