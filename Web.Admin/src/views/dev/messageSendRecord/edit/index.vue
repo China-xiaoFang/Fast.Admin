@@ -1,11 +1,11 @@
 <template>
-	<FaDialog ref="faDialogRef" width="1000" full-height :title="state.dialogTitle" :show-confirm-button="false">
+	<FaDialog ref="faDialogRef" width="1000" :title="state.dialogTitle" :show-confirm-button="false">
 		<FaForm :model="state.formData" detail-form cols="2">
 			<FaFormItem prop="channel" label="渠道">
 				<Text name="MessageSendChannelEnum" :value="state.formData.channel" />
 			</FaFormItem>
 			<FaFormItem prop="isSuccess" label="状态">
-				<el-tag :type="state.formData.isSuccess ? 'success' : 'danger'">
+				<el-tag style="width: auto" :type="state.formData.isSuccess ? 'success' : 'danger'">
 					{{ state.formData.isSuccess ? "成功" : "失败" }}
 				</el-tag>
 			</FaFormItem>
@@ -24,28 +24,24 @@
 			</FaLayoutGridItem>
 		</FaForm>
 		<el-divider content-position="left">内容</el-divider>
-		<el-scrollbar>
-			<div style="max-height: 500px; padding-bottom: 20px; padding-right: 10px">
-				<iframe
-					v-if="state.formData.channel === MessageSendChannelEnum.Email"
-					class="message-send-record-detail__email"
-					:srcdoc="state.formData.recordValue"
-					:sandbox="''"
-				/>
-				<VueJsonPretty
-					v-else-if="jsonContent !== undefined"
-					:data="jsonContent"
-					:deep="3"
-					show-length
-					show-line-number
-					show-icon
-					:theme="configStore.layout.isDark ? 'dark' : 'light'"
-				/>
-				<pre v-else class="message-send-record-detail__text">
+		<iframe
+			v-if="state.formData.channel === MessageSendChannelEnum.Email"
+			class="message-send-record-detail__email"
+			:srcdoc="state.formData.recordValue"
+			:sandbox="''"
+		/>
+		<VueJsonPretty
+			v-else-if="jsonContent !== undefined"
+			:data="jsonContent"
+			:deep="3"
+			show-length
+			show-line-number
+			show-icon
+			:theme="configStore.layout.isDark ? 'dark' : 'light'"
+		/>
+		<pre v-else class="message-send-record-detail__text">
 					{{ state.formData.recordValue || "-" }}
 				</pre>
-			</div>
-		</el-scrollbar>
 	</FaDialog>
 </template>
 
@@ -99,14 +95,14 @@ defineExpose({
 <style lang="scss" scoped>
 .message-send-record-detail__email {
 	width: 100%;
-	height: 560px;
+	height: 500px;
 	border: var(--el-border);
 	border-radius: var(--el-border-radius-base);
 	background: #fff;
 }
 
 .message-send-record-detail__text {
-	max-height: 560px;
+	max-height: 500px;
 	margin: 0;
 	padding: 16px;
 	overflow: auto;
