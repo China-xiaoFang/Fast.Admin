@@ -9,7 +9,7 @@
 		@confirm-click="handleConfirm"
 		@close="faFormRef.resetFields()"
 	>
-		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :cols="1">
+		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" cols="1">
 			<FaFormItem label="旧密码" prop="oldPassword">
 				<el-input
 					type="password"
@@ -49,11 +49,11 @@
 <script lang="ts" setup>
 import { reactive, useTemplateRef, watch } from "vue";
 import { ElMessageBox } from "element-plus";
+import { type FaDialogInstance, type FaFormInstance, RegExps } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { accountApi } from "@/api/services/Center/account";
 import { useUserInfo } from "@/stores";
 import type { FormRules } from "element-plus";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import type { ChangePasswordInput } from "@/api/services/Center/account/models/ChangePasswordInput";
 
 defineOptions({
@@ -71,7 +71,7 @@ const state = reactive({
 		oldPassword: [{ required: true, message: "请输入旧密码", trigger: "blur" }],
 		newPassword: [
 			{ required: true, message: "请输入新密码", trigger: "blur" },
-			{ pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S{8,20}$/, message: "新密码长度必须为8~20位，且必须包含大小写字母、数字", trigger: "blur" },
+			{ pattern: RegExps.MediumPassword, message: "新密码长度必须为8~20位，且必须包含大小写字母、数字", trigger: "blur" },
 		],
 		confirmPassword: [
 			{ required: true, message: "请输入确认新密码", trigger: "blur" },

@@ -13,7 +13,7 @@
 		@confirm-click="handleConfirm"
 		@close="faFormRef?.resetFields()"
 	>
-		<FaForm ref="faFormRef" label-position="top" :model="state.formData" :rules="state.formRules" :cols="1">
+		<FaForm ref="faFormRef" label-position="top" :model="state.formData" :rules="state.formRules" cols="1">
 			<el-divider content-position="left">账号校验，可修改手机号</el-divider>
 			<FaFormItem label="手机号" prop="mobile">
 				<el-input
@@ -91,6 +91,10 @@
 				/>
 			</FaFormItem>
 		</FaForm>
+
+		<template #footer>
+			<el-button @click="userInfoStore.logout()">退出登录</el-button>
+		</template>
 	</FaDialog>
 </template>
 
@@ -135,7 +139,7 @@ const state = reactive({
 		],
 		mobileVerificationCode: [
 			{ required: true, message: "请输入短信验证码", trigger: "blur" },
-			{ pattern: /^\d{6}$/, message: "短信验证码必须为 6 位数字", trigger: "blur" },
+			{ pattern: RegExps.VerificationCode, message: "请输入正确的短信验证码", trigger: "blur" },
 		],
 		email: [
 			{ required: true, message: "请输入邮箱", trigger: "blur" },
@@ -144,7 +148,7 @@ const state = reactive({
 		],
 		emailVerificationCode: [
 			{ required: true, message: "请输入邮箱验证码", trigger: "blur" },
-			{ pattern: /^\d{6}$/, message: "邮箱验证码必须为 6 位数字", trigger: "blur" },
+			{ pattern: RegExps.VerificationCode, message: "请输入正确的邮箱验证码", trigger: "blur" },
 		],
 	}),
 });
