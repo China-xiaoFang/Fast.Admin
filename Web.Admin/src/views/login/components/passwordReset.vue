@@ -9,7 +9,7 @@
 		@confirm-click="handleConfirm"
 		@close="handleClose"
 	>
-		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" :cols="1">
+		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" cols="1">
 			<FaFormItem label="找回方式" prop="channel">
 				<el-radio-group v-model="state.formData.channel" @change="handleChannelChange">
 					<el-radio value="mobile">手机号</el-radio>
@@ -167,11 +167,11 @@ const state = reactive({
 	formRules: withDefineType<FormRules<IPasswordResetForm>>({
 		verificationCode: [
 			{ required: true, message: "请输入验证码", trigger: "blur" },
-			{ pattern: /^\d{6}$/, message: "验证码必须为 6 位数字", trigger: "blur" },
+			{ pattern: RegExps.VerificationCode, message: "请输入正确的邮箱验证码", trigger: "blur" },
 		],
 		newPassword: [
 			{ required: true, message: "请输入新密码", trigger: "blur" },
-			{ pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S{8,20}$/, message: "新密码长度必须为8~20位，且必须包含大小写字母、数字", trigger: "blur" },
+			{ pattern: RegExps.MediumPassword, message: "新密码长度必须为8~20位，且必须包含大小写字母、数字", trigger: "blur" },
 		],
 		confirmPassword: [
 			{ required: true, message: "请输入确认新密码", trigger: "blur" },

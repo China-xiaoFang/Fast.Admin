@@ -5,7 +5,7 @@
 		:prop="props.prop"
 		:rules="[
 			{ required: true, message: '请输入图形验证码', trigger: 'blur' },
-			{ pattern: /^[A-Za-z0-9]{4}$/, message: '图形验证码必须为4位字母或数字', trigger: 'blur' },
+			{ pattern: RegExps.ImageCaptchaCode, message: '图形验证码必须为4位字母或数字', trigger: 'blur' },
 		]"
 	>
 		<div class="image-captcha">
@@ -39,6 +39,7 @@
 import { useVModel } from "@vueuse/core";
 import { onMounted, reactive } from "vue";
 import { PictureRounded } from "@element-plus/icons-vue";
+import { RegExps } from "fast-element-plus";
 import { loginApi } from "@/api/services/Auth/login";
 
 defineOptions({
