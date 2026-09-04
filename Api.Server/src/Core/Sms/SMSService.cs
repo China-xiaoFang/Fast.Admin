@@ -252,15 +252,26 @@ public class SMSService : ISmsService, ISingletonDependency
             {
                 // 独立客户端不加载 AOP，避免记录写入再次触发 SQL 审计
                 using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
-                await db.Insertable(new MessageSendRecordModel
-                    {
-                        Channel = MessageSendChannelEnum.Sms,
-                        Receiver = mobile.Trim(),
-                        Title = templateCode,
-                        RecordValue = templateParam?.ToJsonString(),
-                        IsSuccess = isSuccess,
-                        CreatedTime = sendTime
-                    })
+                var messageSendRecordModel = new MessageSendRecordModel
+                {
+                    Channel = MessageSendChannelEnum.Sms,
+                    Receiver = mobile.Trim(),
+                    Title = templateCode,
+                    RecordValue = templateParam?.ToJsonString(),
+                    IsSuccess = isSuccess,
+                    CreatedTime = sendTime
+                };
+                // 部分情况下这里可能获取不到请求
+                try
+                {
+                    messageSendRecordModel.RecordCreate(FastContext.HttpContext);
+                }
+                catch
+                {
+                    // ignored
+                }
+
+                await db.Insertable(messageSendRecordModel)
                     .ExecuteCommandAsync();
             }
             catch (Exception ex)
