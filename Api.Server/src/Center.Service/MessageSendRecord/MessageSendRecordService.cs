@@ -59,6 +59,12 @@ public class MessageSendRecordService : IDynamicApplication
                 Receiver = sl.Receiver,
                 Title = sl.Title,
                 IsSuccess = sl.IsSuccess,
+                Device = sl.Device,
+                OS = sl.OS,
+                Browser = sl.Browser,
+                Province = sl.Province,
+                City = sl.City,
+                Ip = sl.Ip,
                 CreatedTime = sl.CreatedTime
             })
             .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
@@ -83,6 +89,12 @@ public class MessageSendRecordService : IDynamicApplication
                 Title = sl.Title,
                 RecordValue = sl.RecordValue,
                 IsSuccess = sl.IsSuccess,
+                Device = sl.Device,
+                OS = sl.OS,
+                Browser = sl.Browser,
+                Province = sl.Province,
+                City = sl.City,
+                Ip = sl.Ip,
                 CreatedTime = sl.CreatedTime
             })
             .SingleAsync();
