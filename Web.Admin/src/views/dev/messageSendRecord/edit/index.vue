@@ -1,5 +1,5 @@
 <template>
-	<FaDialog ref="faDialogRef" width="1000" :title="state.dialogTitle" :show-confirm-button="false">
+	<FaDialog ref="faDialogRef" width="1000" full-height :title="state.dialogTitle" :show-confirm-button="false">
 		<FaForm :model="state.formData" detail-form cols="2">
 			<FaFormItem prop="channel" label="渠道">
 				<Text name="MessageSendChannelEnum" :value="state.formData.channel" />
