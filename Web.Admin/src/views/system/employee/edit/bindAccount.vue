@@ -14,10 +14,10 @@
 <script lang="ts" setup>
 import { reactive, useTemplateRef } from "vue";
 import { ElMessage } from "element-plus";
+import { type FaDialogInstance, type FaFormInstance, RegExps } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { employeeApi } from "@/api/services/Admin/employee";
 import type { FormRules } from "element-plus";
-import type { FaDialogInstance, FaFormInstance } from "fast-element-plus";
 import type { BindLoginAccountInput } from "@/api/services/Admin/employee/models/BindLoginAccountInput";
 
 defineOptions({
@@ -31,9 +31,16 @@ const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");
 
 const state = reactive({
 	formData: withDefineType<BindLoginAccountInput>({}),
-	formRules: withDefineType<FormRules>({
-		mobile: [{ required: true, message: "请输入手机", trigger: "blur" }],
-		email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
+	formRules: withDefineType<FormRules<BindLoginAccountInput>>({
+		mobile: [
+			{ required: true, message: "请输入手机", trigger: "blur" },
+			{ pattern: RegExps.Mobile, message: "请输入正确的手机号", trigger: "blur" },
+		],
+		email: [
+			{ required: true, message: "请输入邮箱", trigger: "blur" },
+			{ pattern: RegExps.Email, message: "请输入正确的邮箱", trigger: "blur" },
+			{ max: 50, message: "邮箱不能超过50位字符", trigger: "blur" },
+		],
 	}),
 	dialogTitle: "绑定登录账号",
 });
@@ -60,7 +67,6 @@ const open = (employeeId: string) => {
 	});
 };
 
-// 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
 	element: faDialogRef,
 	open,
