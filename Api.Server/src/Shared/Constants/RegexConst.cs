@@ -63,5 +63,20 @@ public static class RegexConst
     /// <summary>
     /// 手机号码判断
     /// </summary>
-    public const string Mobile = @"^1[3456789]\d{9}$";
+    public const string Mobile = @"^1[3-9]\d{9}$";
+
+    /// <summary>
+    /// 密码判断，8~20位，且必须包含大小写字母、数字
+    /// </summary>
+    public const string Password = @"\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S{8,20}\z";
+
+    /// <summary>
+    /// 验证码6位
+    /// </summary>
+    public const string VerificationCode = "^[0-9]{6}$";
+
+    /// <summary>
+    /// 图片验证码4位
+    /// </summary>
+    public const string ImageCaptchaCode = "^[A-Za-z0-9]{4}$";
 }

@@ -72,6 +72,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, reactive, useTemplateRef } from "vue";
 import { ElMessage, dayjs } from "element-plus";
+import { type FaFormInstance, RegExps } from "fast-element-plus";
 import { withDefineType } from "@fast-china/utils";
 import { employeeApi } from "@/api/services/Admin/employee";
 import { accountApi } from "@/api/services/Center/account";
@@ -79,7 +80,6 @@ import { fileApi } from "@/api/services/File";
 import { changePasswordKey } from "@/layouts";
 import { useApp, useUserInfo } from "@/stores";
 import type { FormRules } from "element-plus";
-import type { FaFormInstance } from "fast-element-plus";
 import type { EditEmployeeInput } from "@/api/services/Admin/employee/models/EditEmployeeInput";
 import type { EditAccountInput } from "@/api/services/Center/account/models/EditAccountInput";
 import type { QueryAccountDetailOutput } from "@/api/services/Center/account/models/QueryAccountDetailOutput";
@@ -99,10 +99,17 @@ const state = reactive({
 	loading: false,
 	accountFormData: withDefineType<EditAccountInput & QueryAccountDetailOutput>({}),
 	employeeFormData: withDefineType<EditEmployeeInput>({}),
-	formRules: withDefineType<FormRules>({
+	formRules: withDefineType<FormRules<EditAccountInput & QueryAccountDetailOutput & EditEmployeeInput>>({
 		employeeName: [{ required: true, message: "请输入职员名称", trigger: "blur" }],
-		mobile: [{ required: true, message: "请输入手机", trigger: "blur" }],
-		email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
+		mobile: [
+			{ required: true, message: "请输入手机", trigger: "blur" },
+			{ pattern: RegExps.Mobile, message: "请输入正确的手机号", trigger: "blur" },
+		],
+		email: [
+			{ required: true, message: "请输入邮箱", trigger: "blur" },
+			{ pattern: RegExps.Email, message: "请输入正确的邮箱", trigger: "blur" },
+			{ max: 50, message: "邮箱不能超过50位字符", trigger: "blur" },
+		],
 		idPhoto: [{ required: true, message: "请上传证件照", trigger: "change" }],
 		entryDate: [{ required: true, message: "请选择入职日期", trigger: "change" }],
 	}),
