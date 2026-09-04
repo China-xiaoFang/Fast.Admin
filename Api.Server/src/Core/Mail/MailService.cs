@@ -441,16 +441,31 @@ public class MailService : IMailService, ISingletonDependency
             {
                 // 独立客户端不加载 AOP，避免记录写入再次触发 SQL 审计
                 using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
-                await db.Insertable(receiveEmails.Select(receiver => new MessageSendRecordModel
-                        {
-                            Channel = MessageSendChannelEnum.Email,
-                            Receiver = receiver,
-                            Title = title,
-                            RecordValue = content.HtmlBody ?? content.TextBody ?? string.Empty,
-                            IsSuccess = isSuccess,
-                            CreatedTime = sendTime
-                        })
-                        .ToList())
+                var messageSendRecordList = receiveEmails.Select(receiver => new MessageSendRecordModel
+                    {
+                        Channel = MessageSendChannelEnum.Email,
+                        Receiver = receiver,
+                        Title = title,
+                        RecordValue = content.HtmlBody ?? content.TextBody ?? string.Empty,
+                        IsSuccess = isSuccess,
+                        CreatedTime = sendTime
+                    })
+                    .ToList();
+                var httpContext = FastContext.HttpContext;
+                // 部分情况下这里可能获取不到请求
+                foreach (var item in messageSendRecordList)
+                {
+                    try
+                    {
+                        item.RecordCreate(httpContext);
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                }
+
+                await db.Insertable(messageSendRecordList)
                     .ExecuteCommandAsync();
             }
             catch (Exception ex)
