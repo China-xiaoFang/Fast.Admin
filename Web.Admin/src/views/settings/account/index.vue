@@ -6,7 +6,15 @@
 					<el-divider content-position="left">手机号</el-divider>
 				</FaLayoutGridItem>
 				<FaFormItem prop="mobile" label="手机" row style="max-width: 450px">
-					<el-input v-model.trim="state.accountFormData.mobile" maxlength="11" placeholder="请输入手机">
+					<el-input
+						v-model.trim="state.accountFormData.mobile"
+						maxlength="11"
+						placeholder="请输入手机"
+						autocapitalize="off"
+						autocomplete="tel"
+						inputmode="tel"
+						spellcheck="false"
+					>
 						<template #append>
 							<FaButton
 								ref="mobileButtonRef"
@@ -101,7 +109,15 @@
 						<el-input v-model="state.employeeFormData.employeeName" maxlength="20" placeholder="请输入职员名称" />
 					</FaFormItem>
 					<FaFormItem prop="mobile" label="手机">
-						<el-input v-model="state.employeeFormData.mobile" maxlength="11" placeholder="请输入手机" />
+						<el-input
+							v-model="state.employeeFormData.mobile"
+							maxlength="11"
+							placeholder="请输入手机"
+							autocapitalize="off"
+							autocomplete="tel"
+							inputmode="tel"
+							spellcheck="false"
+						/>
 					</FaFormItem>
 					<FaFormItem prop="email" label="邮箱">
 						<el-input v-model="state.employeeFormData.email" maxlength="50" placeholder="请输入邮箱" />

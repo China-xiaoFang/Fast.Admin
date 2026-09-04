@@ -25,7 +25,6 @@
 					autocomplete="tel"
 					inputmode="tel"
 					spellcheck="false"
-					disabled
 				>
 					<template #append>
 						<el-button :disabled="mobileCountdown > 0" @click="handleSend('mobile')">

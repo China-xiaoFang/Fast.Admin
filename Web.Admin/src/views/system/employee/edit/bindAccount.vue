@@ -2,10 +2,26 @@
 	<FaDialog ref="faDialogRef" width="500" :title="state.dialogTitle" @confirm-click="handleConfirm" @close="faFormRef.resetFields()">
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules">
 			<FaFormItem prop="mobile" label="手机">
-				<el-input v-model="state.formData.mobile" maxlength="11" placeholder="请输入手机" />
+				<el-input
+					v-model="state.formData.mobile"
+					maxlength="11"
+					placeholder="请输入手机"
+					autocapitalize="off"
+					autocomplete="tel"
+					inputmode="tel"
+					spellcheck="false"
+				/>
 			</FaFormItem>
 			<FaFormItem prop="email" label="邮箱">
-				<el-input v-model="state.formData.email" maxlength="50" placeholder="请输入邮箱" />
+				<el-input
+					v-model="state.formData.email"
+					maxlength="50"
+					placeholder="请输入邮箱"
+					autocapitalize="off"
+					autocomplete="email"
+					inputmode="email"
+					spellcheck="false"
+				/>
 			</FaFormItem>
 		</FaForm>
 	</FaDialog>

@@ -61,10 +61,26 @@
 				<el-input v-model="state.formData.employeeName" maxlength="20" placeholder="请输入职员名称" />
 			</FaFormItem>
 			<FaFormItem prop="mobile" label="手机">
-				<el-input v-model="state.formData.mobile" maxlength="11" placeholder="请输入手机" />
+				<el-input
+					v-model="state.formData.mobile"
+					maxlength="11"
+					placeholder="请输入手机"
+					autocapitalize="off"
+					autocomplete="tel"
+					inputmode="tel"
+					spellcheck="false"
+				/>
 			</FaFormItem>
 			<FaFormItem prop="email" label="邮箱">
-				<el-input v-model="state.formData.email" maxlength="50" placeholder="请输入邮箱" />
+				<el-input
+					v-model="state.formData.email"
+					maxlength="50"
+					placeholder="请输入邮箱"
+					autocapitalize="off"
+					autocomplete="email"
+					inputmode="email"
+					spellcheck="false"
+				/>
 			</FaFormItem>
 			<FaFormItem prop="sex" label="性别">
 				<RadioGroup name="GenderEnum" v-model="state.formData.sex" />
