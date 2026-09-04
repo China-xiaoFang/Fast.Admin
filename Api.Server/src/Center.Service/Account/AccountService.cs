@@ -350,67 +350,73 @@ public partial class AccountService : IDynamicApplication
             throw new UserFriendlyException("邮箱已存在账号信息！");
         }
 
+        var mobileChange = accountModel.Mobile != mobile;
+        var emailChange = !string.Equals(accountModel.Email, email, StringComparison.OrdinalIgnoreCase);
         // 获取缓存Key
         var cacheKey = CacheConst.GetCacheKey(CacheConst.EditAccountVerification, accountModel.AccountKey,
             GlobalContext.ClientIdentity);
-        using var codeLock = _centerCache.Client.TryLock($"{cacheKey}:Lock", 120);
-        if (codeLock == null)
-        {
-            throw new UserFriendlyException("操作过于频繁，请稍后重试！");
-        }
 
-        var dto = await _centerCache.GetAsync<AccountVerificationCacheDto>(cacheKey);
-        if (dto == null || dto.AccountId != accountModel.AccountId || dto.ClientIdentity != GlobalContext.ClientIdentity)
+        // 只有手机号或邮箱发生变化的时候才判断
+        if (mobileChange || emailChange)
         {
-            throw new UserFriendlyException("验证码无效或已过期！");
-        }
-
-        if (!string.Equals(Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(accountModel.Password))), dto.PasswordHash))
-        {
-            throw new UserFriendlyException("验证码无效或已过期！");
-        }
-
-        var mobileChange = accountModel.Mobile != mobile;
-        if (mobileChange)
-        {
-            if (string.IsNullOrWhiteSpace(input.MobileVerificationCode))
+            using var codeLock = _centerCache.Client.TryLock($"{cacheKey}:Lock", 120);
+            if (codeLock == null)
             {
-                throw new UserFriendlyException("请输入短信验证码！");
+                throw new UserFriendlyException("操作过于频繁，请稍后重试！");
             }
 
-            if (dto.Mobile != mobile || dto.MobileExpiresTime <= DateTime.Now)
+            var dto = await _centerCache.GetAsync<AccountVerificationCacheDto>(cacheKey);
+            if (dto == null || dto.AccountId != accountModel.AccountId || dto.ClientIdentity != GlobalContext.ClientIdentity)
             {
-                throw new UserFriendlyException("短信验证码无效或已过期！");
+                throw new UserFriendlyException("验证码无效或已过期！");
             }
 
-            if (!dto.MobileVerified)
+            if (!string.Equals(Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(accountModel.Password))),
+                    dto.PasswordHash))
             {
-                await _smsService.VerifyVerificationCode(SmsTypeEnum.Validity, mobile, input.MobileVerificationCode);
-                dto.Mobile = mobile;
-                dto.MobileVerified = true;
-                await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
-            }
-        }
-
-        var emailChange = !string.Equals(accountModel.Email, email, StringComparison.OrdinalIgnoreCase);
-        if (emailChange)
-        {
-            if (string.IsNullOrWhiteSpace(input.EmailVerificationCode))
-            {
-                throw new UserFriendlyException("请输入邮件验证码！");
+                throw new UserFriendlyException("验证码无效或已过期！");
             }
 
-            if (dto.Email != email || dto.EmailExpiresTime <= DateTime.Now)
+            if (mobileChange)
             {
-                throw new UserFriendlyException("邮件验证码无效或已过期！");
+                if (string.IsNullOrWhiteSpace(input.MobileVerificationCode))
+                {
+                    throw new UserFriendlyException("请输入短信验证码！");
+                }
+
+                if (dto.Mobile != mobile || dto.MobileExpiresTime <= DateTime.Now)
+                {
+                    throw new UserFriendlyException("短信验证码无效或已过期！");
+                }
+
+                if (!dto.MobileVerified)
+                {
+                    await _smsService.VerifyVerificationCode(SmsTypeEnum.Validity, mobile, input.MobileVerificationCode);
+                    dto.Mobile = mobile;
+                    dto.MobileVerified = true;
+                    await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+                }
             }
 
-            if (!dto.EmailVerified)
+            if (emailChange)
             {
-                await _mailService.VerifyVerificationCode(MailTypeEnum.Validity, email, input.MobileVerificationCode);
-                dto.Email = mobile;
-                dto.EmailVerified = true;
-                await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+                if (string.IsNullOrWhiteSpace(input.EmailVerificationCode))
+                {
+                    throw new UserFriendlyException("请输入邮件验证码！");
+                }
+
+                if (dto.Email != email || dto.EmailExpiresTime <= DateTime.Now)
+                {
+                    throw new UserFriendlyException("邮件验证码无效或已过期！");
+                }
+
+                if (!dto.EmailVerified)
+                {
+                    await _mailService.VerifyVerificationCode(MailTypeEnum.Validity, email, input.MobileVerificationCode);
+                    dto.Email = mobile;
+                    dto.EmailVerified = true;
+                    await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+                }
             }
         }
 

@@ -44,7 +44,7 @@ public class PasswordResetInput
     /// 新密码
     /// </summary>
     [StringRequired(ErrorMessage = "新密码不能为空")]
-    [StringLength(20, MinimumLength = 8, ErrorMessage = "新密码长度必须为 8~20 位字符")]
+    [RegularExpression(RegexConst.MediumPassword, ErrorMessage = "新密码长度必须为8~20位，且必须包含大小写字母、数字")]
     public string NewPassword { get; set; }
 
     /// <summary>
