@@ -55,6 +55,36 @@ public class QueryMessageSendRecordPagedOutput
     public bool IsSuccess { get; set; }
 
     /// <summary>
+    /// 设备
+    /// </summary>
+    public virtual string Device { get; set; }
+
+    /// <summary>
+    /// 操作系统（版本）
+    /// </summary>
+    public virtual string OS { get; set; }
+
+    /// <summary>
+    /// 浏览器（版本）
+    /// </summary>
+    public virtual string Browser { get; set; }
+
+    /// <summary>
+    /// 省份
+    /// </summary>
+    public virtual string Province { get; set; }
+
+    /// <summary>
+    /// 城市
+    /// </summary>
+    public virtual string City { get; set; }
+
+    /// <summary>
+    /// Ip
+    /// </summary>
+    public virtual string Ip { get; set; }
+
+    /// <summary>
     /// 创建时间
     /// </summary>
     [SugarSearchTime]
