@@ -11,8 +11,11 @@
 	>
 		<FaForm ref="faFormRef" :model="state.formData" :rules="state.formRules" cols="1">
 			<FaFormItem label="找回方式" prop="channel">
+				<template #label>
+					<FaFormItemTip label="找回方式" tips="没买短信服务，暂且不支持手机号重置密码" />
+				</template>
 				<el-radio-group v-model="state.formData.channel" @change="handleChannelChange">
-					<el-radio value="mobile">手机号</el-radio>
+					<el-radio disabled value="mobile">手机号</el-radio>
 					<el-radio value="email">邮箱</el-radio>
 				</el-radio-group>
 			</FaFormItem>

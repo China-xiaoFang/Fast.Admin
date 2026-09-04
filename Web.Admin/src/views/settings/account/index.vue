@@ -6,6 +6,9 @@
 					<el-divider content-position="left">手机号</el-divider>
 				</FaLayoutGridItem>
 				<FaFormItem prop="mobile" label="手机" row style="max-width: 450px">
+					<template #label>
+						<FaFormItemTip label="手机号" tips="没买短信服务，默认验证码为 123456" />
+					</template>
 					<el-input
 						v-model.trim="state.accountFormData.mobile"
 						maxlength="11"
@@ -14,6 +17,7 @@
 						autocomplete="tel"
 						inputmode="tel"
 						spellcheck="false"
+						disabled
 					>
 						<template #append>
 							<FaButton
@@ -33,6 +37,7 @@
 					v-model="state.accountFormData.mobileCaptchaCode"
 					v-model:captcha-key="state.accountFormData.mobileCaptchaKey"
 					is-force
+					disabled
 					@keyup.enter="mobileButtonRef.doLoading(() => handleSendVerificationCode('mobile'))"
 				/>
 				<FaFormItem v-if="mobileChanged" prop="mobileVerificationCode" label="验证码" row style="max-width: 450px">
