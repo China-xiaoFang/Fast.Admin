@@ -16,6 +16,9 @@
 		<FaForm ref="faFormRef" label-position="top" :model="state.formData" :rules="state.formRules" cols="1">
 			<el-divider content-position="left">账号校验，可修改手机号</el-divider>
 			<FaFormItem label="手机号" prop="mobile">
+				<template #label>
+					<FaFormItemTip label="手机号" tips="没买短信服务，默认验证码为 123456" />
+				</template>
 				<el-input
 					v-model.trim="state.formData.mobile"
 					placeholder="请输入账号绑定的手机号"
@@ -25,9 +28,10 @@
 					autocomplete="tel"
 					inputmode="tel"
 					spellcheck="false"
+					disabled
 				>
 					<template #append>
-						<el-button :disabled="mobileCountdown > 0" @click="handleSend('mobile')">
+						<el-button :disabled="true || mobileCountdown > 0" @click="handleSend('mobile')">
 							{{ mobileCountdown > 0 ? mobileCountdown + " 秒后重发" : "发送验证码" }}
 						</el-button>
 					</template>
@@ -39,6 +43,7 @@
 				v-model="state.formData.mobileCaptchaCode"
 				v-model:captcha-key="state.formData.mobileCaptchaKey"
 				is-force
+				disabled
 				@keyup.enter="handleSend('mobile')"
 			/>
 			<FaFormItem label="短信验证码" prop="mobileVerificationCode">
