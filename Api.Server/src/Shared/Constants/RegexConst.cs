@@ -57,8 +57,7 @@ public static class RegexConst
     /// <summary>
     /// 邮箱地址判断
     /// </summary>
-    public const string EmailAddress =
-        "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+    public const string EmailAddress = @"^[A-Za-z0-9._%+-]+@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z]{2,}$";
 
     /// <summary>
     /// 手机号码判断
@@ -66,9 +65,19 @@ public static class RegexConst
     public const string Mobile = @"^1[3-9]\d{9}$";
 
     /// <summary>
-    /// 密码判断，8~20位，且必须包含大小写字母、数字
+    /// 弱密码（6~18位，仅包含字母和数字）
     /// </summary>
-    public const string Password = @"\A(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S{8,20}\z";
+    public const string Password = @"^[A-Z0-9]{6,18}$";
+
+    /// <summary>
+    /// 中密码（8~20位，必须包含大小写字母、数字）
+    /// </summary>
+    public const string MediumPassword = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)\S{8,20}$";
+
+    /// <summary>
+    /// 强密码（8~20位，必须包含大小写字母、数字及特殊字符）
+    /// </summary>
+    public const string StrongPassword = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])\S{8,20}$";
 
     /// <summary>
     /// 验证码6位

@@ -85,7 +85,7 @@ public partial class AccountService
         }
 
         // 客户端提交原始密码后，服务端可以直接校验真实复杂度
-        if (string.IsNullOrEmpty(newPassword) || !Regex.IsMatch(newPassword, RegexConst.Password))
+        if (string.IsNullOrEmpty(newPassword) || !Regex.IsMatch(newPassword, RegexConst.MediumPassword))
         {
             throw new UserFriendlyException("新密码长度必须为8~20位，且必须包含大小写字母、数字！");
         }

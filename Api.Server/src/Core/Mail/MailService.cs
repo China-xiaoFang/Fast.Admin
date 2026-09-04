@@ -419,6 +419,15 @@ public class MailService : IMailService, ISingletonDependency
             // 发送成功
             isSuccess = true;
         }
+        catch (SmtpCommandException ex) when (ex.ErrorCode == SmtpErrorCode.RecipientNotAccepted
+                                              && ex.StatusCode == SmtpStatusCode.MailboxUnavailable)
+        {
+            throw new UserFriendlyException("收件邮箱不存在或不可用，请检查邮箱地址！");
+        }
+        catch (SmtpProtocolException)
+        {
+            throw new UserFriendlyException("邮件服务器通信异常，请稍后重试！");
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex,
