@@ -49,7 +49,7 @@ internal static partial class MenuSeedData
             HasDesktop = true,
             DesktopIcon = "message",
             HasWeb = true,
-            WebIcon = "fa-icon-Message",
+            WebIcon = "el-icon-Message",
             WebRouter = "/dev/messageSendRecord",
             WebComponent = "dev/messageSendRecord/index",
             WebTab = true,
