@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable table-key="1D115PF8PK" row-key="recordId" :request-api="sqlExceptionLogApi.querySqlExceptionLogPaged" stripe>
+		<FastTable table-key="1D115PF8PK" row-key="recordId" :request-api="sqlExceptionLogApi.querySqlExceptionLogPaged">
 			<template #mobile="{ row }: { row?: SqlExceptionLogModel }">
 				{{ row.nickName }}
 				<br />
@@ -34,7 +34,7 @@
 					@click="
 						() => {
 							state.title = '堆栈信息';
-							state.content = row.stackTrace || '';
+							state.content = row.stackTrace;
 							state.visible = true;
 						}
 					"
@@ -52,7 +52,7 @@
 					@click="
 						() => {
 							state.title = '纯Sql';
-							state.content = row.pureSql || '';
+							state.content = row.pureSql;
 							state.visible = true;
 						}
 					"

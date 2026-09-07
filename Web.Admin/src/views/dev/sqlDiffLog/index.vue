@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<FastTable table-key="1D11BD21TV" row-key="recordId" :request-api="sqlDiffLogApi.querySqlDiffLogPaged" stripe>
+		<FastTable table-key="1D11BD21TV" row-key="recordId" :request-api="sqlDiffLogApi.querySqlDiffLogPaged">
 			<template #mobile="{ row }: { row?: SqlDiffLogModel }">
 				{{ row.nickName }}
 				<br />
@@ -34,7 +34,7 @@
 					@click="
 						() => {
 							state.title = '旧的列信息';
-							state.content = JSON.stringify(row.beforeColumnList) || '';
+							state.content = JSON.stringify(row.beforeColumnList);
 							state.visible = true;
 						}
 					"
@@ -52,7 +52,7 @@
 					@click="
 						() => {
 							state.title = '新的列信息';
-							state.content = JSON.stringify(row.afterColumnList) || '';
+							state.content = JSON.stringify(row.afterColumnList);
 							state.visible = true;
 						}
 					"
@@ -70,7 +70,7 @@
 					@click="
 						() => {
 							state.title = '纯Sql';
-							state.content = row.pureSql || '';
+							state.content = row.pureSql;
 							state.visible = true;
 						}
 					"

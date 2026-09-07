@@ -324,7 +324,7 @@ export default defineComponent({
 				hideImage={configStore.tableLayout.hideImage}
 				collapsedSearch={configStore.tableLayout.defaultCollapsedSearch}
 				advancedSearchDrawer={configStore.tableLayout.advancedSearchDrawer}
-				dataSearchRange={configStore.tableLayout.dataSearchRange}
+				dataSearchRange={props.dataSearchRange || configStore.tableLayout.dataSearchRange}
 				columnSettingBtn={props.columnSettingBtn && !props.columns}
 				columnsChange={saveColumnsCache}
 			/>
