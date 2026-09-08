@@ -43,7 +43,9 @@ server {
     listen [::]:443 ssl;
     server_name admin.example.com;
 
+	charset utf-8;
     server_tokens off;
+
     access_log /var/log/nginx/fast-admin.access.log;
     error_log /var/log/nginx/fast-admin.error.log warn;
 
@@ -63,20 +65,22 @@ server {
     gzip_static on;
 
     # 公共反向代理请求头。
-    proxy_http_version 1.1;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-    proxy_set_header X-Forwarded-Host $host;
+	proxy_http_version 1.1;
+	proxy_set_header Host $host;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-Host $host;
+	proxy_set_header X-Forwarded-Proto $scheme;
 
     # SignalR/WebSocket，必须放在通用 /api/ 规则之前。
     location ^~ /api/hubs/ {
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection $connection_upgrade;
-        proxy_cache_bypass $http_upgrade;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection $connection_upgrade;
+
+		proxy_cache_bypass $http_upgrade;
         proxy_read_timeout 3600s;
         proxy_send_timeout 3600s;
+
         proxy_pass http://127.0.0.1:38081/hubs/;
     }
 
