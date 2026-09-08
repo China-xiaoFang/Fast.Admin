@@ -82,18 +82,18 @@ Fast.Admin 是一个面向企业管理场景的前后端分离开源项目，以
 
 <table>
   <tr>
-    <td align="center"><a href="docs/images/web-admin-login.png"><img src="docs/images/web-admin-login.png" width="140" alt="Web.Admin 登录" /></a><br />登录</td>
-    <td align="center"><a href="docs/images/web-admin-data-dashboard.png"><img src="docs/images/web-admin-data-dashboard.png" width="140" alt="Web.Admin 数据大屏" /></a><br />数据大屏</td>
-    <td align="center"><a href="docs/images/web-admin-dashboard.png"><img src="docs/images/web-admin-dashboard.png" width="140" alt="Web.Admin 工作台" /></a><br />工作台</td>
-    <td align="center"><a href="docs/images/web-admin-system-monitor.png"><img src="docs/images/web-admin-system-monitor.png" width="140" alt="Web.Admin 系统监控" /></a><br />系统监控</td>
-    <td align="center"><a href="docs/images/web-admin-data-dictionary.png"><img src="docs/images/web-admin-data-dictionary.png" width="140" alt="Web.Admin 数据字典" /></a><br />数据字典</td>
+    <td align="center"><img src="docs/images/web-admin-login.png" width="140" alt="Web.Admin 登录" /><br />登录</td>
+    <td align="center"><img src="docs/images/web-admin-data-dashboard.png" width="140" alt="Web.Admin 数据大屏" /><br />数据大屏</td>
+    <td align="center"><img src="docs/images/web-admin-dashboard.png" width="140" alt="Web.Admin 工作台" /><br />工作台</td>
+    <td align="center"><img src="docs/images/web-admin-system-monitor.png" width="140" alt="Web.Admin 系统监控" /><br />系统监控</td>
+    <td align="center"><img src="docs/images/web-admin-data-dictionary.png" width="140" alt="Web.Admin 数据字典" /><br />数据字典</td>
   </tr>
   <tr>
-    <td align="center"><a href="docs/images/web-admin-table-configuration.png"><img src="docs/images/web-admin-table-configuration.png" width="140" alt="Web.Admin 表格配置" /></a><br />表格配置</td>
-    <td align="center"><a href="docs/images/web-admin-menu-management.png"><img src="docs/images/web-admin-menu-management.png" width="140" alt="Web.Admin 菜单管理" /></a><br />菜单管理</td>
-    <td align="center"><a href="docs/images/web-admin-scheduled-jobs.png"><img src="docs/images/web-admin-scheduled-jobs.png" width="140" alt="Web.Admin 调度任务" /></a><br />调度任务</td>
-    <td align="center"><a href="docs/images/web-admin-role-management.png"><img src="docs/images/web-admin-role-management.png" width="140" alt="Web.Admin 角色管理" /></a><br />角色管理</td>
-    <td align="center"><a href="docs/images/web-admin-department-management.png"><img src="docs/images/web-admin-department-management.png" width="140" alt="Web.Admin 部门管理" /></a><br />部门管理</td>
+    <td align="center"><img src="docs/images/web-admin-table-configuration.png" width="140" alt="Web.Admin 表格配置" /><br />表格配置</td>
+    <td align="center"><img src="docs/images/web-admin-menu-management.png" width="140" alt="Web.Admin 菜单管理" /><br />菜单管理</td>
+    <td align="center"><img src="docs/images/web-admin-scheduled-jobs.png" width="140" alt="Web.Admin 调度任务" /><br />调度任务</td>
+    <td align="center"><img src="docs/images/web-admin-role-management.png" width="140" alt="Web.Admin 角色管理" /><br />角色管理</td>
+    <td align="center"><img src="docs/images/web-admin-department-management.png" width="140" alt="Web.Admin 部门管理" /><br />部门管理</td>
   </tr>
 </table>
 
