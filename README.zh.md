@@ -87,6 +87,8 @@ Fast.Admin 是一个面向企业管理场景的前后端分离开源项目，以
     <td align="center"><a href="docs/images/web-admin-dashboard.png"><img src="docs/images/web-admin-dashboard.png" width="140" alt="Web.Admin 工作台" /></a><br />工作台</td>
     <td align="center"><a href="docs/images/web-admin-system-monitor.png"><img src="docs/images/web-admin-system-monitor.png" width="140" alt="Web.Admin 系统监控" /></a><br />系统监控</td>
     <td align="center"><a href="docs/images/web-admin-data-dictionary.png"><img src="docs/images/web-admin-data-dictionary.png" width="140" alt="Web.Admin 数据字典" /></a><br />数据字典</td>
+  </tr>
+  <tr>
     <td align="center"><a href="docs/images/web-admin-table-configuration.png"><img src="docs/images/web-admin-table-configuration.png" width="140" alt="Web.Admin 表格配置" /></a><br />表格配置</td>
     <td align="center"><a href="docs/images/web-admin-menu-management.png"><img src="docs/images/web-admin-menu-management.png" width="140" alt="Web.Admin 菜单管理" /></a><br />菜单管理</td>
     <td align="center"><a href="docs/images/web-admin-scheduled-jobs.png"><img src="docs/images/web-admin-scheduled-jobs.png" width="140" alt="Web.Admin 调度任务" /></a><br />调度任务</td>
