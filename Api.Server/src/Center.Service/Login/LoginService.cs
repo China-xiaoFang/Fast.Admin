@@ -42,17 +42,17 @@ namespace Fast.Center.Service.Login;
 public partial class LoginService : IDynamicApplication
 {
     private readonly IUser _user;
-    private readonly ICache<AuthCCL> _authCache;
+    private readonly ICache _cache;
     private readonly ICaptchaService _captchaService;
     private readonly HttpContext _httpContext;
     private readonly ISqlSugarClient _repository;
 
-    public LoginService(IUser user, IHttpContextAccessor httpContextAccessor, ICache<AuthCCL> centerCache,
+    public LoginService(IUser user, IHttpContextAccessor httpContextAccessor, ICache cache,
         ICaptchaService captchaService, ISqlSugarClient repository)
     {
         _user = user;
         _httpContext = httpContextAccessor.HttpContext;
-        _authCache = centerCache;
+        _cache = cache;
         _captchaService = captchaService;
         _repository = repository;
     }
@@ -112,7 +112,7 @@ public partial class LoginService : IDynamicApplication
         var loginTicket = Guid.NewGuid()
             .ToString("N");
         var cacheKey = CacheConst.GetCacheKey(CacheConst.TenantLoginTicket, loginTicket);
-        await _authCache.SetAsync(cacheKey,
+        await _cache.SetAsync(cacheKey,
             new TenantLoginTicketCacheDto
             {
                 AccountId = accountModel.AccountId,
@@ -152,13 +152,13 @@ public partial class LoginService : IDynamicApplication
         }
 
         var cacheKey = CacheConst.GetCacheKey(CacheConst.TenantLoginTicket, loginTicket);
-        using var codeLock = _authCache.Client.TryLock($"{cacheKey}:Lock", 30);
+        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 30);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
-        var cacheDto = await _authCache.GetAsync<TenantLoginTicketCacheDto>(cacheKey);
+        var cacheDto = await _cache.GetAsync<TenantLoginTicketCacheDto>(cacheKey);
         if (cacheDto == null
             || cacheDto.AccountId != account.AccountId
             || cacheDto.Mobile != account.Mobile
@@ -169,7 +169,7 @@ public partial class LoginService : IDynamicApplication
             throw new UserFriendlyException("登录凭据已失效，请返回重新登录！");
         }
 
-        await _authCache.DelAsync(cacheKey);
+        await _cache.DelAsync(cacheKey);
     }
 
     /// <summary>
