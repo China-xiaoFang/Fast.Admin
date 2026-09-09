@@ -38,19 +38,19 @@ namespace Fast.Center.Service.Account;
 public partial class AccountService : IDynamicApplication
 {
     private readonly IUser _user;
-    private readonly ICache<CenterCCL> _centerCache;
+    private readonly ICache<AuthCCL> _authCache;
     private readonly ISqlSugarRepository<AccountModel> _repository;
     private readonly IHubContext<ChatHub, IChatClient> _hubContext;
     private readonly ICaptchaService _captchaService;
     private readonly IMailService _mailService;
     private readonly ISmsService _smsService;
 
-    public AccountService(IUser user, ICache<CenterCCL> centerCache, ISqlSugarRepository<AccountModel> repository,
+    public AccountService(IUser user, ICache<AuthCCL> authCache, ISqlSugarRepository<AccountModel> repository,
         IHubContext<ChatHub, IChatClient> hubContext, ICaptchaService captchaService, IMailService mailService,
         ISmsService smsService)
     {
         _user = user;
-        _centerCache = centerCache;
+        _authCache = authCache;
         _repository = repository;
         _hubContext = hubContext;
         _captchaService = captchaService;
@@ -99,7 +99,7 @@ public partial class AccountService : IDynamicApplication
         foreach (var (limit, windowSeconds) in quotas)
         {
             // 已被前一个窗口拒绝时，后续窗口只检查等待时间，不再扣除配额。
-            var result = await _centerCache.Client.EvalAsync(script, $"Login:SendQuota:{identityHash}:{windowSeconds}",
+            var result = await _authCache.Client.EvalAsync(script, $"Login:SendQuota:{identityHash}:{windowSeconds}",
                 windowSeconds, limit, retryAfterSeconds == 0 ? 1 : 0);
             retryAfterSeconds = Math.Max(retryAfterSeconds, Convert.ToInt32(result));
         }
@@ -359,13 +359,13 @@ public partial class AccountService : IDynamicApplication
         // 只有手机号或邮箱发生变化的时候才判断
         if (mobileChange || emailChange)
         {
-            using var codeLock = _centerCache.Client.TryLock($"{cacheKey}:Lock", 120);
+            using var codeLock = _authCache.Client.TryLock($"{cacheKey}:Lock", 120);
             if (codeLock == null)
             {
                 throw new UserFriendlyException("操作过于频繁，请稍后重试！");
             }
 
-            var dto = await _centerCache.GetAsync<AccountVerificationCacheDto>(cacheKey);
+            var dto = await _authCache.GetAsync<AccountVerificationCacheDto>(cacheKey);
             if (dto == null || dto.AccountId != accountModel.AccountId || dto.ClientIdentity != GlobalContext.ClientIdentity)
             {
                 throw new UserFriendlyException("验证码无效或已过期！");
@@ -394,7 +394,7 @@ public partial class AccountService : IDynamicApplication
                     await _smsService.VerifyVerificationCode(SmsTypeEnum.Validity, mobile, input.MobileVerificationCode);
                     dto.Mobile = mobile;
                     dto.MobileVerified = true;
-                    await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+                    await _authCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
                 }
             }
 
@@ -415,7 +415,7 @@ public partial class AccountService : IDynamicApplication
                     await _mailService.VerifyVerificationCode(MailTypeEnum.Validity, email, input.MobileVerificationCode);
                     dto.Email = mobile;
                     dto.EmailVerified = true;
-                    await _centerCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
+                    await _authCache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
                 }
             }
         }
@@ -456,7 +456,7 @@ public partial class AccountService : IDynamicApplication
             await _repository.UpdateAsync(accountModel);
         }, ex => throw ex);
 
-        await _centerCache.DelAsync(cacheKey);
+        await _authCache.DelAsync(cacheKey);
 
         if (mobileChange || emailChange)
         {
