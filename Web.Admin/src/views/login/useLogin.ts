@@ -1,6 +1,6 @@
 import { computed, inject, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { type FaButtonInstance, formUtil } from "fast-element-plus";
+import { type FaButtonInstance, formUtil, useOverlay } from "fast-element-plus";
 import { Local } from "@fast-china/utils";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
@@ -169,7 +169,12 @@ export const useLogin = (elFormRef: Ref<FormInstance>, faButtonRef: Ref<FaButton
 
 	/** 回车键摁下 */
 	const handleKeyupEnter = (): void => {
-		void faButtonRef.value.doLoading(() => handleFormLogin(null));
+		useOverlay.show();
+		faButtonRef.value.loading = true;
+		handleFormLogin(null, () => {
+			useOverlay.hide();
+			faButtonRef.value.loading = false;
+		});
 	};
 
 	return {
