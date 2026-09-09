@@ -37,8 +37,6 @@ public static class CacheConst
         return string.Format(cacheKey, args);
     }
 
-    #region Auth
-
     /// <summary>
     /// 授权用户
     /// </summary>
@@ -68,8 +66,6 @@ public static class CacheConst
     /// </summary>
     /// <remarks>{0}账号Key，{1}客户端标识</remarks>
     public const string EditAccountVerification = "Account:EditVerification:{0}:{1}";
-
-    #endregion
 
     /// <summary>
     /// 媒体资源播放票据
