@@ -37,8 +37,8 @@ export const databaseApi = {
 	/**
 	 * 添加数据库
 	 */
-	addDatabase(data: AddDatabaseInput): Promise<unknown> {
-		return axiosUtil.request({
+	addDatabase(data: AddDatabaseInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/database/addDatabase",
 			method: "post",
 			data,
@@ -48,8 +48,8 @@ export const databaseApi = {
 	/**
 	 * 编辑数据库
 	 */
-	editDatabase(data: EditDatabaseInput): Promise<unknown> {
-		return axiosUtil.request({
+	editDatabase(data: EditDatabaseInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/database/editDatabase",
 			method: "post",
 			data,
@@ -59,8 +59,8 @@ export const databaseApi = {
 	/**
 	 * 删除数据库
 	 */
-	deleteDatabase(data: MainIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteDatabase(data: MainIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/database/deleteDatabase",
 			method: "post",
 			data,

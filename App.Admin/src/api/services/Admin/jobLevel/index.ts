@@ -46,8 +46,8 @@ export const jobLevelApi = {
 	/**
 	 * 添加职级
 	 */
-	addJobLevel(data: AddJobLevelInput): Promise<unknown> {
-		return axiosUtil.request({
+	addJobLevel(data: AddJobLevelInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/jobLevel/addJobLevel",
 			method: "post",
 			data,
@@ -57,8 +57,8 @@ export const jobLevelApi = {
 	/**
 	 * 编辑职级
 	 */
-	editJobLevel(data: EditJobLevelInput): Promise<unknown> {
-		return axiosUtil.request({
+	editJobLevel(data: EditJobLevelInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/jobLevel/editJobLevel",
 			method: "post",
 			data,
@@ -68,8 +68,8 @@ export const jobLevelApi = {
 	/**
 	 * 删除职级
 	 */
-	deleteJobLevel(data: JobLevelIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteJobLevel(data: JobLevelIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/jobLevel/deleteJobLevel",
 			method: "post",
 			data,
