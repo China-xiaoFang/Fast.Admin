@@ -43,9 +43,9 @@ const userInfoStore = useUserInfo();
 
 const activeMenu = ref("/dashboard");
 
-const emit = defineEmits({
-	menuChange: (_menu: AuthMenuInfoDto) => true,
-});
+const emit = defineEmits<{
+	menuChange: [menu: AuthMenuInfoDto];
+}>();
 
 /** 查找第一个叶子菜单 */
 const findFirstLeaf = (menu: AuthMenuInfoDto): AuthMenuInfoDto => {

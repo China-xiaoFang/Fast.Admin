@@ -36,7 +36,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { onMounted, reactive } from "vue";
 import { PictureRounded } from "@element-plus/icons-vue";
 import { RegExps } from "fast-element-plus";
@@ -48,9 +47,6 @@ defineOptions({
 
 const props = withDefaults(
 	defineProps<{
-		modelValue?: string;
-		/** 图形验证码Key */
-		captchaKey?: string;
 		/** 绑定的属性名称 @default 'captchaCode' */
 		prop?: string;
 		/** 是否强制启用；false 时由后端登录验证码开关决定。 */
@@ -59,21 +55,15 @@ const props = withDefaults(
 		disabled?: boolean;
 	}>(),
 	{
-		modelValue: undefined,
-		captchaKey: undefined,
 		prop: "captchaCode",
 		isForce: false,
 		disabled: false,
 	}
 );
 
-const emit = defineEmits({
-	"update:modelValue": (_value: string) => true,
-	"update:captchaKey": (_value: string) => true,
-});
-
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const captchaKey = useVModel(props, "captchaKey", emit, { passive: false });
+const modelValue = defineModel<string>();
+/** 图形验证码Key */
+const captchaKey = defineModel<string>("captchaKey");
 
 const state = reactive({
 	enabled: true,

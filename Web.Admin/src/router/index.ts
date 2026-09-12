@@ -65,11 +65,10 @@ router.beforeEach(async (to, from) => {
 				return { path: "/login", query: from.query };
 			}
 			// 如果是默认路由，则不处理重定向
-			else if (defaultRoutePath.includes(to.path)) {
+			if (defaultRoutePath.includes(to.path)) {
 				return { path: "/login" };
-			} else {
-				return { path: "/login", query: { redirect: encodeURIComponent(to.redirectedFrom?.fullPath ?? to.fullPath) } };
 			}
+			return { path: "/login", query: { redirect: to.redirectedFrom?.fullPath ?? to.fullPath } };
 		}
 	} else {
 		// 判断 pinia 中的动态路由生成的状态，必须存在Token才加载
@@ -110,7 +109,6 @@ router.beforeEach(async (to, from) => {
 		// 判断是否存在重定向路径，如果有则跳转
 		const redirect = getLoginRedirect(from.query.redirect);
 		if (redirect && redirect !== to.fullPath) {
-			delete from.query.redirect;
 			// 设置 replace: true，因此导航将不会留下历史记录
 			return {
 				path: redirect,

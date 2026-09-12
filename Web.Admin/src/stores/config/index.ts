@@ -158,15 +158,14 @@ export const useConfig = defineStore(
 
 		/** 切换跟随系统变化自动设置浅色/深色模式 */
 		const switchAutoThemMode = (): void => {
-			if (layout.autoThemMode) {
-				// 判断是否启用深色模式
-				if (darkModeMediaQuery.matches) {
-					layout.isDark = true;
-				} else {
-					layout.isDark = false;
-				}
-				switchDark();
+			if (!layout.autoThemMode) return;
+			// 判断是否启用深色模式
+			if (darkModeMediaQuery.matches) {
+				layout.isDark = true;
+			} else {
+				layout.isDark = false;
 			}
+			switchDark();
 		};
 
 		/** 切换置灰或色弱模式 */
@@ -178,16 +177,8 @@ export const useConfig = defineStore(
 				weak: "filter: invert(80%)",
 			};
 			body.setAttribute("style", styles[type]);
-			switch (type) {
-				case "grey":
-					layout.isGrey = true;
-					layout.isWeak = false;
-					break;
-				case "weak":
-					layout.isGrey = false;
-					layout.isWeak = true;
-					break;
-			}
+			layout.isGrey = type === "grey";
+			layout.isWeak = type === "weak";
 		};
 
 		/** 初始化主题 */
