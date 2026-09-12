@@ -1,15 +1,17 @@
-import fastChina from "@fast-china/eslint-config";
+import { vueConfig } from "@fast-china/eslint-config";
 import { createLodashConfigs, createMarkdownConfigs } from "@fast-china/eslint-config/configs";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-	...fastChina,
+	...vueConfig,
 	...createMarkdownConfigs(),
 	...createLodashConfigs("lodash"),
 	globalIgnores(["src/api/**"], "fast-admin/ignores"),
 	{
 		name: "fast-admin/linter-options",
 		linterOptions: {
+			// 检查未实际禁用任何问题的 ESLint 禁用指令。
+			reportUnusedDisableDirectives: "error",
 			// 检查没有改变规则状态的内联 ESLint 配置。
 			reportUnusedInlineConfigs: "error",
 		},
@@ -18,14 +20,16 @@ export default defineConfig([
 		name: "fast-admin/web",
 		files: ["**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue}"],
 		rules: {
-			// 禁止动态执行字符串代码。
-			"no-eval": "error",
 			// 禁止使用 javascript: URL。
 			"no-script-url": "error",
-			// Promise executor 的返回值不会被使用。
-			"no-promise-executor-return": "error",
 			// 检查使用普通字符串引号书写的模板表达式。
 			"no-template-curly-in-string": "error",
+			// 禁止在使用 target="_blank" 时缺少安全的 rel 属性。
+			"vue/no-template-target-blank": "error",
+			// 要求原生 button 元素显式指定 type 属性。
+			"vue/html-button-has-type": "error",
+			// 检查已声明但未使用的模板 ref。
+			"vue/no-unused-refs": "warn",
 		},
 	},
 	{
@@ -44,36 +48,6 @@ export default defineConfig([
 			"@typescript-eslint/no-unsafe-member-access": "off",
 			// 允许函数返回 any 类型的值。
 			"@typescript-eslint/no-unsafe-return": "off",
-			// 允许 Vue 模板和 TSX 属性使用异步事件处理函数。
-			"@typescript-eslint/no-misused-promises": [
-				"error",
-				{
-					checksVoidReturn: {
-						attributes: false,
-					},
-				},
-			],
-			// 公共模块边界必须显式声明返回类型。
-			"@typescript-eslint/explicit-module-boundary-types": ["error", { allowArgumentsExplicitlyTypedAsAny: false }],
-			// 非 Vue 文件中的函数必须显式声明返回类型。
-			"@typescript-eslint/explicit-function-return-type": "error",
-			// 类型导出统一使用 export type。
-			"@typescript-eslint/consistent-type-exports": "error",
-			// 类型导入统一生成独立的 import type 语句。
-			"@typescript-eslint/no-import-type-side-effects": "error",
-			// 可以使用可选链时统一使用可选链。
-			"@typescript-eslint/prefer-optional-chain": "error",
-		},
-	},
-	{
-		name: "fast-admin/vue",
-		files: ["**/*.vue"],
-		rules: {
-			// Vue 组件内部方法允许使用 TypeScript 返回类型推断。
-			"@typescript-eslint/explicit-module-boundary-types": "off",
-			"@typescript-eslint/explicit-function-return-type": "off",
-			// 禁止在 setup 中以丢失响应性的方式使用 Props。
-			"vue/no-setup-props-reactivity-loss": "error",
 		},
 	},
 ]);
