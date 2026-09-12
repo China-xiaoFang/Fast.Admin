@@ -48,10 +48,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { reactive, useTemplateRef } from "vue";
 import { FaDialog } from "fast-element-plus";
-import { definePropType, withDefineType } from "@fast-china/utils";
+import { withDefineType } from "@fast-china/utils";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { TagTypeEnum } from "@/api/enums/TagTypeEnum";
 import type { FormRules } from "element-plus";
@@ -62,14 +61,8 @@ defineOptions({
 	name: "DevDictionaryEditItemEdit",
 });
 
-const props = defineProps({
-	/** @description v-model绑定值 */
-	modelValue: definePropType<EditDictionaryItemInput[]>([Array]),
-});
-
-const emit = defineEmits(["update:modelValue"]);
-
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
+/** @description v-model绑定值 */
+const modelValue = defineModel<EditDictionaryItemInput[]>({ required: true });
 
 const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");

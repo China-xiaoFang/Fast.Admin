@@ -55,11 +55,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { useTemplateRef } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessageBox } from "element-plus";
-import { definePropType } from "@fast-china/utils";
 import DictionaryEditItemEdit from "./itemEdit.vue";
 import type { EditDictionaryItemInput } from "@/api/services/Center/dictionary/models/EditDictionaryItemInput";
 
@@ -70,13 +68,10 @@ defineOptions({
 const props = defineProps({
 	/** @description 是否禁用 */
 	disabled: Boolean,
-	/** @description v-model绑定值 */
-	modelValue: definePropType<EditDictionaryItemInput[]>([Array]),
 });
 
-const emit = defineEmits(["update:modelValue"]);
-
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
+/** @description v-model绑定值 */
+const modelValue = defineModel<EditDictionaryItemInput[]>({ required: true });
 
 const editFormRef = useTemplateRef<InstanceType<typeof DictionaryEditItemEdit>>("editFormRef");
 

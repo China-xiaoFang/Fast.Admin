@@ -33,7 +33,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { inject, onBeforeUnmount, shallowRef, watch } from "vue";
 import { ElMessage, formContextKey } from "element-plus";
 import { addCssUnit, definePropType, logger } from "@fast-china/utils";
@@ -47,11 +46,6 @@ defineOptions({
 });
 
 const props = defineProps({
-	/** @description v-model绑定值 */
-	modelValue: {
-		type: String,
-		default: undefined,
-	},
 	/** @description 模式 */
 	mode: {
 		type: definePropType<"default" | "simple">(String),
@@ -70,15 +64,11 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits({
-	/** @description v-model 回调 */
-	"update:modelValue": (_value: string) => true,
-});
-
 // 编辑器实例，必须用 shallowRef，重要！
 const editorRef = shallowRef<IDomEditor>();
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
+/** @description v-model绑定值 */
+const modelValue = defineModel<string>();
 
 // 获取 el-form 组件上下文
 const formContext = inject(formContextKey, undefined);

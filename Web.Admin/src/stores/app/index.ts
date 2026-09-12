@@ -105,8 +105,7 @@ export const useApp = defineStore(
 					const title = useTitle();
 					title.value = state.appName;
 
-					const fastAxios = useFastAxios();
-					fastAxios.setOptions({
+					useFastAxios().setOptions({
 						timeout: state.requestTimeout,
 						requestCipher: state.requestEncipher,
 					});

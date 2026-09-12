@@ -44,10 +44,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { reactive, useTemplateRef } from "vue";
 import { FaDialog } from "fast-element-plus";
-import { definePropType, withDefineType } from "@fast-china/utils";
+import { withDefineType } from "@fast-china/utils";
 import { CommonStatusEnum } from "@/api/enums/CommonStatusEnum";
 import { EditionEnum } from "@/api/enums/EditionEnum";
 import { RoleTypeEnum } from "@/api/enums/RoleTypeEnum";
@@ -60,17 +59,11 @@ defineOptions({
 	name: "DevMenuEditButtonEdit",
 });
 
-const props = defineProps({
-	/** @description v-model绑定值 */
-	modelValue: definePropType<EditMenuButtonInput[]>([Array]),
-});
-
-const emit = defineEmits(["update:modelValue"]);
-
 const appStore = useApp();
 const roleTypeEnum = appStore.getDictionary("RoleTypeEnum");
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
+/** @description v-model绑定值 */
+const modelValue = defineModel<EditMenuButtonInput[]>({ required: true });
 
 const faDialogRef = useTemplateRef<FaDialogInstance>("faDialogRef");
 const faFormRef = useTemplateRef<FaFormInstance>("faFormRef");

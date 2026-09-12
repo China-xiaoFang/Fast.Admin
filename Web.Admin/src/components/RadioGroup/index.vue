@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import { useVModel } from "@vueuse/core";
 import { computed } from "vue";
 import { radioGroupEmits, radioGroupProps } from "element-plus";
 import { useProps } from "@fast-china/utils";
@@ -48,11 +47,6 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
-	/** @description v-model绑定值 */
-	modelValue: {
-		type: [String, Number, Boolean],
-		default: CommonStatusEnum.Enable,
-	},
 });
 
 const elRadioGroupProps = useProps(props, radioGroupProps, ["modelValue"]);
@@ -61,7 +55,8 @@ const emit = defineEmits({
 	...radioGroupEmits,
 });
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
+/** @description v-model绑定值 */
+const modelValue = defineModel<string | number | boolean>({ default: CommonStatusEnum.Enable });
 
 const appStore = useApp();
 /** 字典 */
