@@ -19,13 +19,13 @@ const loadingInstance = {
 let loginCallBack = false;
 
 /** 处理重新登录 */
-const handleReloadLogin = (response: AxiosResponse): boolean => {
+const handleReloadLogin = (response: AxiosResponse) => {
 	// 尝试获取 Restful 风格返回Code，或者获取响应状态码
 	const code = response?.data?.code || response?.status;
 	if (code !== 401) return false;
 	if (!loginCallBack) {
 		loginCallBack = true;
-		void ElMessageBox.alert("登录已失效，请重新登录！", {
+		ElMessageBox.alert("登录已失效，请重新登录！", {
 			title: "温馨提示",
 			type: "warning",
 			confirmButtonText: "重新登录",

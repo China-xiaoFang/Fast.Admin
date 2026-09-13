@@ -81,7 +81,7 @@ const state = reactive({
 });
 
 const handleConfirm = () => {
-	void faDialogRef.value.close(async () => {
+	faDialogRef.value.close(async () => {
 		await faFormRef.value.validateScrollToField();
 		switch (state.dialogState) {
 			case "add":
@@ -95,7 +95,7 @@ const handleConfirm = () => {
 };
 
 const detail = (row: EditDictionaryItemInput) => {
-	void faDialogRef.value.open(() => {
+	faDialogRef.value.open(() => {
 		state.formDisabled = true;
 		state.formData = { ...row };
 		state.dialogTitle = `数据字典项详情 - ${row.label}`;
@@ -103,7 +103,7 @@ const detail = (row: EditDictionaryItemInput) => {
 };
 
 const add = () => {
-	void faDialogRef.value.open(() => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "add";
 		state.dialogTitle = "添加数据字典项";
 		state.formDisabled = false;
@@ -116,7 +116,7 @@ const add = () => {
 };
 
 const edit = (row: EditDictionaryItemInput, index: number) => {
-	void faDialogRef.value.open(() => {
+	faDialogRef.value.open(() => {
 		state.dialogState = "edit";
 		state.formDisabled = false;
 		state.tableIndex = index;

@@ -47,11 +47,11 @@ defineOptions({
 
 const props = withDefaults(
 	defineProps<{
-		/** 绑定的属性名称 @default 'captchaCode' */
+		/** 表单校验字段名。 @default "captchaCode" */
 		prop?: string;
-		/** 是否强制启用；false 时由后端登录验证码开关决定。 */
+		/** 是否强制启用；false 时由后端登录验证码开关决定 */
 		isForce?: boolean;
-		/** 业务请求期间禁用输入与手动刷新。 */
+		/** 业务请求期间禁用输入与手动刷新 */
 		disabled?: boolean;
 	}>(),
 	{
@@ -61,18 +61,23 @@ const props = withDefaults(
 	}
 );
 
+/** 用户输入的图形验证码 */
 const modelValue = defineModel<string>();
-/** 图形验证码Key */
+/** 当前图形验证码的服务端标识 */
 const captchaKey = defineModel<string>("captchaKey");
 
 const state = reactive({
+	/** 是否显示图形验证码 */
 	enabled: true,
+	/** 是否正在获取验证码 */
 	loading: false,
+	/** 最近一次验证码请求是否失败 */
 	loadFailed: false,
+	/** 图形验证码图片地址或 Data URL */
 	captchaImage: undefined,
 });
 
-/** 重新获取图形验证码并清空旧答案。 */
+/** 重新获取图形验证码并清空旧答案 */
 const refresh = async () => {
 	state.loading = true;
 	state.loadFailed = false;
@@ -93,10 +98,11 @@ const refresh = async () => {
 };
 
 onMounted(() => {
-	void refresh();
+	refresh();
 });
 
 defineExpose({
+	/** 重新获取图形验证码 */
 	refresh,
 });
 </script>
