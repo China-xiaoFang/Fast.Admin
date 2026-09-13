@@ -53,7 +53,7 @@ const modelValue = defineModel<EditMenuButtonInput[]>({ required: true });
 const editFormRef = useTemplateRef<InstanceType<typeof DevMenuEditButtonEdit>>("editFormRef");
 
 const handleDelete = (_row: EditMenuButtonInput, index: number) => {
-	void ElMessageBox.confirm("确定要删除按钮？", {
+	ElMessageBox.confirm("确定要删除按钮？", {
 		type: "warning",
 	}).then(() => {
 		modelValue.value.splice(index, 1);

@@ -100,10 +100,10 @@ const handleMenuClick = (item: AuthMenuInfoDto & { firstChild: AuthMenuInfoDto }
 		case MenuTypeEnum.Catalog:
 			break;
 		case MenuTypeEnum.Menu:
-			void router.push(item.firstChild.router);
+			router.push(item.firstChild.router);
 			break;
 		case MenuTypeEnum.Internal:
-			void router.push({
+			router.push({
 				path: "/iframe",
 				query: { url: item.firstChild.link },
 			});

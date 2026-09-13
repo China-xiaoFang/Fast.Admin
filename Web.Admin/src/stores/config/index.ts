@@ -118,13 +118,13 @@ export const useConfig = defineStore(
 		});
 
 		/** 设置布局方式 */
-		const setLayoutMode = (mode: IModeName): void => {
+		const setLayoutMode = (mode: IModeName) => {
 			// 暂且这里只赋值
 			layout.layoutMode = mode;
 		};
 
 		/** 设置主题色 */
-		const setTheme = (color: string): void => {
+		const setTheme = (color: string) => {
 			if (!color) {
 				color = useApp().themeColor;
 				ElMessage({ type: "success", message: `主题颜色已重置为 ${color}` });
@@ -146,7 +146,7 @@ export const useConfig = defineStore(
 		let themeMediaListening = false;
 
 		/** 切换深色模式 */
-		const switchDark = (): void => {
+		const switchDark = () => {
 			const html = document.documentElement;
 			if (layout.isDark) {
 				html.classList.add("dark");
@@ -157,7 +157,7 @@ export const useConfig = defineStore(
 		};
 
 		/** 切换跟随系统变化自动设置浅色/深色模式 */
-		const switchAutoThemMode = (): void => {
+		const switchAutoThemMode = () => {
 			if (!layout.autoThemMode) return;
 			// 判断是否启用深色模式
 			if (darkModeMediaQuery.matches) {
@@ -169,9 +169,12 @@ export const useConfig = defineStore(
 		};
 
 		/** 切换置灰或色弱模式 */
-		const switchGreyOrWeak = (type: "grey" | "weak", value: boolean): void => {
+		const switchGreyOrWeak = (type: "grey" | "weak", value: boolean) => {
 			const body = document.body;
-			if (!value) return body.removeAttribute("style");
+			if (!value) {
+				body.removeAttribute("style");
+				return;
+			}
 			const styles: Record<"grey" | "weak", string> = {
 				grey: "filter: grayscale(1)",
 				weak: "filter: invert(80%)",
@@ -182,7 +185,7 @@ export const useConfig = defineStore(
 		};
 
 		/** 初始化主题 */
-		const initTheme = (): void => {
+		const initTheme = () => {
 			switchAutoThemMode();
 			if (!themeMediaListening) {
 				darkModeMediaQuery.addEventListener("change", switchAutoThemMode);
@@ -194,17 +197,17 @@ export const useConfig = defineStore(
 		};
 
 		/** 设置默认布局大小 */
-		const setDefaultLayoutSize = (): void => {
+		const setDefaultLayoutSize = () => {
 			Object.assign(layout, defaultLayoutSize);
 		};
 
 		/** 设置小的布局大小 */
-		const setSmallLayoutSize = (): void => {
+		const setSmallLayoutSize = () => {
 			Object.assign(layout, smallLayoutSize);
 		};
 
 		/** 重置 */
-		const reset = (): void => {
+		const reset = () => {
 			layout.autoSize = true;
 			layout.layoutSize = defaultSize;
 			layout.menuCollapse = false;

@@ -1,11 +1,11 @@
 import { vueConfig } from "@fast-china/eslint-config";
-import { createLodashConfigs, createMarkdownConfigs } from "@fast-china/eslint-config/configs";
+import { createMarkdownConfigs } from "@fast-china/eslint-config/configs";
+import { GLOBS_CODE, GLOBS_TYPESCRIPT, GLOB_VUE } from "@fast-china/eslint-config/constants";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
 	...vueConfig,
 	...createMarkdownConfigs(),
-	...createLodashConfigs("lodash"),
 	globalIgnores(["src/api/**"], "fast-admin/ignores"),
 	{
 		name: "fast-admin/linter-options",
@@ -17,13 +17,19 @@ export default defineConfig([
 		},
 	},
 	{
-		name: "fast-admin/web",
-		files: ["**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,vue}"],
+		name: "fast-admin/common",
+		files: GLOBS_CODE,
 		rules: {
 			// 禁止使用 javascript: URL。
 			"no-script-url": "error",
 			// 检查使用普通字符串引号书写的模板表达式。
 			"no-template-curly-in-string": "error",
+		},
+	},
+	{
+		name: "fast-admin/vue",
+		files: [GLOB_VUE],
+		rules: {
 			// 禁止在使用 target="_blank" 时缺少安全的 rel 属性。
 			"vue/no-template-target-blank": "error",
 			// 要求原生 button 元素显式指定 type 属性。
@@ -34,8 +40,14 @@ export default defineConfig([
 	},
 	{
 		name: "fast-admin/typescript",
-		files: ["**/*.{ts,mts,cts,tsx,vue}"],
+		files: [...GLOBS_TYPESCRIPT, GLOB_VUE],
 		rules: {
+			// 允许使用 ||，不强制优先使用 ?? 处理 null 和 undefined。
+			"@typescript-eslint/prefer-nullish-coalescing": "off",
+			// 允许与 true 或 false 进行显式比较。
+			"@typescript-eslint/no-unnecessary-boolean-literal-compare": "off",
+			// 允许保留可能冗余的默认值赋值。
+			"@typescript-eslint/no-useless-default-assignment": "off",
 			// 禁止显式声明 any。
 			"@typescript-eslint/no-explicit-any": "error",
 			// 允许将 any 类型的值赋值给其他变量。

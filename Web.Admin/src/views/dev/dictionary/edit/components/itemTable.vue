@@ -76,7 +76,7 @@ const modelValue = defineModel<EditDictionaryItemInput[]>({ required: true });
 const editFormRef = useTemplateRef<InstanceType<typeof DictionaryEditItemEdit>>("editFormRef");
 
 const handleDelete = (_row: EditDictionaryItemInput, index: number) => {
-	void ElMessageBox.confirm("确定要删除数据字典项？", {
+	ElMessageBox.confirm("确定要删除数据字典项？", {
 		type: "warning",
 	}).then(() => {
 		modelValue.value.splice(index, 1);
