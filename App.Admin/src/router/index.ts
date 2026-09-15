@@ -1,44 +1,36 @@
 /// <reference types="@uni-helper/vite-plugin-uni-pages/client" />
-import { consoleError, dateUtil, stringUtil } from "@fast-china/utils";
+import { getLocalTimeGreeting, logger } from "@fast-china/utils";
 import { createRouter } from "uni-mini-router";
 import { pages, subPackages } from "virtual:uni-pages";
 import { CommonRoute, TabBarRoute } from "@/common";
 import { useToast } from "@/hooks";
 import { initWebSocket } from "@/signalR";
 import { useUserInfo } from "@/stores";
-import type { PageMetaDatum } from "@uni-helper/vite-plugin-uni-pages";
 
-const generateRoutes = (): PageMetaDatum[] => {
-	const routes = pages.map((page) => {
-		const newPath = `/${page.path}`;
-		return { ...page, path: newPath };
-	});
-	if (subPackages && subPackages.length > 0) {
-		subPackages.forEach((subPackage) => {
-			const subRoutes = subPackage.pages.map((page: any) => {
-				const newPath = `/${subPackage.root}/${page.path}`;
-				return { ...page, path: newPath };
-			});
-			routes.push(...subRoutes);
-		});
-	}
-	return routes;
+const generateRoutes = () => {
+	const mainRoutes = pages.map((page) => ({ ...page, path: `/${page.path}` }));
+	const packageRoutes = (subPackages ?? []).flatMap((subPackage) =>
+		subPackage.pages.map((page) => ({ ...page, path: `/${subPackage.root}/${page.path}` }))
+	);
+	return [...mainRoutes, ...packageRoutes];
 };
 
-const router = createRouter({
-	routes: generateRoutes(),
-});
+const router = createRouter({ routes: generateRoutes() });
 
-const defaultRoutePath = [CommonRoute.Launcher, CommonRoute.WebView, CommonRoute.Login];
+const defaultRoutePath = new Set([CommonRoute.Launcher, CommonRoute.Login, CommonRoute.WebView]);
+
+/** 获取登录后的站内重定向地址 */
+const getLoginRedirect = (value: unknown) => {
+	const redirect = Array.isArray(value) ? value[0] : value;
+	return typeof redirect === "string" && redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : "";
+};
 
 /** 路由加载前 */
 router.beforeEach(async (to, from, next) => {
 	const userInfoStore = useUserInfo();
 
 	// 判断进入的页面是否为 TabBar 页面
-	if (TabBarRoute.some((item) => to.path.startsWith(item))) {
-		userInfoStore.activeTabBar = to.path;
-	}
+	if (TabBarRoute.includes(to.path)) userInfoStore.activeTabBar = to.path;
 
 	// 判断是否存在Token
 	if (!userInfoStore.token) {
@@ -48,13 +40,14 @@ router.beforeEach(async (to, from, next) => {
 			// 如果去的路由和来的路由一致，则携带来的路由的参数
 			if (from.path === to.path) {
 				next({ path: CommonRoute.Login, navType: "replaceAll", query: from.query });
+				return;
 			}
 			// 如果是默认路由，则不处理重定向
-			else if (defaultRoutePath.includes(to.path)) {
+			if (defaultRoutePath.has(to.path)) {
 				next({ path: CommonRoute.Login, navType: "replaceAll" });
-			} else {
-				next({ path: CommonRoute.Login, navType: "replaceAll", query: { redirect: encodeURIComponent(to.fullPath) } });
+				return;
 			}
+			next({ path: CommonRoute.Login, navType: "replaceAll", query: { redirect: encodeURIComponent(to.fullPath) } });
 			return;
 		}
 	} else {
@@ -63,6 +56,7 @@ router.beforeEach(async (to, from, next) => {
 			try {
 				// 刷新用户信息
 				await userInfoStore.refreshUserInfo();
+
 				// 确保用户添加完成
 				userInfoStore.hasUserInfo = true;
 
@@ -72,15 +66,15 @@ router.beforeEach(async (to, from, next) => {
 				// 延迟 0.5 秒显示欢迎信息
 				setTimeout(() => {
 					useToast.show({
-						msg: `${dateUtil.getGreet()}${userInfoStore.employeeName}`,
+						msg: `${getLocalTimeGreeting()}${userInfoStore.employeeName}`,
 						duration: 1500,
 					});
 				}, 500);
 			} catch (error) {
-				next(false);
-				consoleError("InitRoute", error);
+				logger.error("InitRoute", error);
 				// 退出登录
 				userInfoStore.logout();
+				next(false);
 				return;
 			}
 		}
@@ -95,16 +89,16 @@ router.beforeEach(async (to, from, next) => {
 		}
 
 		// 判断是否存在重定向路径，如果有则跳转
-		const redirect = stringUtil.deepDecodeURIComponent((from.query.redirect as string) || "");
-		if (redirect && redirect != to.fullPath) {
-			const _query = stringUtil.getUrlParams(redirect);
+		const redirect = getLoginRedirect(decodeURIComponent(from.query.redirect));
+		if (redirect && redirect !== to.fullPath) {
 			// 判断是否为 TabBar 页面
 			if (TabBarRoute.some((item) => redirect.startsWith(item))) {
-				next({ path: redirect, navType: "pushTab", query: _query });
+				next({ path: redirect, navType: "pushTab" });
+				return;
 			} else {
-				next({ path: redirect, navType: "replace", query: _query });
+				next({ path: redirect, navType: "replace" });
+				return;
 			}
-			return;
 		}
 
 		// 判断登录后是否禁止查看该页面
@@ -117,9 +111,5 @@ router.beforeEach(async (to, from, next) => {
 
 	next();
 });
-
-/** 路由加载后 */
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-router.afterEach(() => {});
 
 export default router;

@@ -1,154 +1,70 @@
-.wot-theme-light {
+@mixin fa-light-theme-vars {
 	/* 成功色 */
-	--wot-color-success: #67c23a;
-	--wot-color-success-light-1: #76c84e;
-	--wot-color-success-light-2: #85ce61;
-	--wot-color-success-light-3: #95d475;
-	--wot-color-success-light-4: #a4da89;
-	--wot-color-success-light-5: #b3e19d;
-	--wot-color-success-light-6: #c2e7b0;
-	--wot-color-success-light-7: #d1edc4;
-	--wot-color-success-light-8: #e1f3d8;
-	--wot-color-success-light-9: #f0f9eb;
-	--wot-color-success-dark-1: #76c84e;
-	--wot-color-success-dark-2: #85ce61;
-	--wot-color-success-dark-3: #95d475;
-	--wot-color-success-dark-4: #a4da89;
-	--wot-color-success-dark-5: #b3e19d;
-	--wot-color-success-dark-6: #c2e7b0;
-	--wot-color-success-dark-7: #d1edc4;
-	--wot-color-success-dark-8: #e1f3d8;
-	--wot-color-success-dark-9: #f0f9eb;
+	--wot-success-main: #67c23a;
+	--wot-success-hover: #76c84e;
+	--wot-success-clicked: #76c84e;
+	--wot-success-disabled: #b3e19d;
+	--wot-success-particular: #d1edc4;
+	--wot-success-surface: #f0f9eb;
 
 	/* 警告色 */
-	--wot-color-warning: #e6a23c;
-	--wot-color-warning-light-1: #e9ab50;
-	--wot-color-warning-light-2: #ebb563;
-	--wot-color-warning-light-3: #eebe77;
-	--wot-color-warning-light-4: #f0c78a;
-	--wot-color-warning-light-5: #f3d19e;
-	--wot-color-warning-light-6: #f5dab1;
-	--wot-color-warning-light-7: #f8e3c5;
-	--wot-color-warning-light-8: #faecd8;
-	--wot-color-warning-light-9: #fdf6ec;
-	--wot-color-warning-dark-1: #e9ab50;
-	--wot-color-warning-dark-2: #ebb563;
-	--wot-color-warning-dark-3: #eebe77;
-	--wot-color-warning-dark-4: #f0c78a;
-	--wot-color-warning-dark-5: #f3d19e;
-	--wot-color-warning-dark-6: #f5dab1;
-	--wot-color-warning-dark-7: #f8e3c5;
-	--wot-color-warning-dark-8: #faecd8;
-	--wot-color-warning-dark-9: #fdf6ec;
+	--wot-warning-main: #e6a23c;
+	--wot-warning-hover: #e9ab50;
+	--wot-warning-clicked: #e9ab50;
+	--wot-warning-disabled: #f3d19e;
+	--wot-warning-particular: #f8e3c5;
+	--wot-warning-surface: #fdf6ec;
 
 	/* 危险色 */
-	--wot-color-danger: #f56c6c;
-	--wot-color-danger-light-1: #f67b7b;
-	--wot-color-danger-light-2: #f78989;
-	--wot-color-danger-light-3: #f89898;
-	--wot-color-danger-light-4: #f9a7a7;
-	--wot-color-danger-light-5: #fab6b6;
-	--wot-color-danger-light-6: #fbc4c4;
-	--wot-color-danger-light-7: #fcd3d3;
-	--wot-color-danger-light-8: #fde2e2;
-	--wot-color-danger-light-9: #fef0f0;
-	--wot-color-danger-dark-1: #f67b7b;
-	--wot-color-danger-dark-2: #f78989;
-	--wot-color-danger-dark-3: #f89898;
-	--wot-color-danger-dark-4: #f9a7a7;
-	--wot-color-danger-dark-5: #fab6b6;
-	--wot-color-danger-dark-6: #fbc4c4;
-	--wot-color-danger-dark-7: #fcd3d3;
-	--wot-color-danger-dark-8: #fde2e2;
-	--wot-color-danger-dark-9: #fef0f0;
+	--wot-danger-main: #f56c6c;
+	--wot-danger-hover: #f67b7b;
+	--wot-danger-clicked: #f67b7b;
+	--wot-danger-disabled: #fab6b6;
+	--wot-danger-particular: #fcd3d3;
+	--wot-danger-surface: #fef0f0;
 
-	/* 错误色 */
-	--wot-color-error: #f56c6c;
-	--wot-color-error-light-1: #f67b7b;
-	--wot-color-error-light-2: #f78989;
-	--wot-color-error-light-3: #f89898;
-	--wot-color-error-light-4: #f9a7a7;
-	--wot-color-error-light-5: #fab6b6;
-	--wot-color-error-light-6: #fbc4c4;
-	--wot-color-error-light-7: #fcd3d3;
-	--wot-color-error-light-8: #fde2e2;
-	--wot-color-error-light-9: #fef0f0;
-	--wot-color-error-dark-1: #f67b7b;
-	--wot-color-error-dark-2: #f78989;
-	--wot-color-error-dark-3: #f89898;
-	--wot-color-error-dark-4: #f9a7a7;
-	--wot-color-error-dark-5: #fab6b6;
-	--wot-color-error-dark-6: #fbc4c4;
-	--wot-color-error-dark-7: #fcd3d3;
-	--wot-color-error-dark-8: #fde2e2;
-	--wot-color-error-dark-9: #fef0f0;
+	/* 浅色中性色 */
+	--wot-text-main: #303133;
+	--wot-text-secondary: #606266;
+	--wot-text-auxiliary: #909399;
+	--wot-text-placeholder: #a8abb2;
+	--wot-text-disabled: #c0c4cc;
+	--wot-text-white: #ffffff;
+	--wot-icon-main: #303133;
+	--wot-icon-secondary: #606266;
+	--wot-icon-auxiliary: #909399;
+	--wot-icon-placeholder: #a8abb2;
+	--wot-icon-disabled: #c0c4cc;
+	--wot-icon-white: #ffffff;
+	--wot-border-extra-strong: #cdd0d6;
+	--wot-border-strong: #d4d7de;
+	--wot-border-main: #dcdfe6;
+	--wot-border-light: #e4e7ed;
+	--wot-border-white: #ffffff;
+	--wot-border-zero: transparent;
+	--wot-filled-extra-strong: #e6e8eb;
+	--wot-filled-strong: #ebedf0;
+	--wot-filled-content: #f5f7fa;
+	--wot-filled-bottom: #f2f3f5;
+	--wot-filled-oppo: #ffffff;
+	--wot-filled-zero: transparent;
+	--wot-divider-main: #ebeef5;
+	--wot-divider-light: #f2f6fc;
+	--wot-divider-strong: #e4e7ed;
+	--wot-divider-white: #ffffff;
+	--wot-feedback-hover: rgba(0, 0, 0, 0.04);
+	--wot-feedback-active: rgba(0, 0, 0, 0.08);
+	--wot-opacfilled-tooltip-toast-cover: rgba(0, 0, 0, 0.8);
+	--wot-opacfilled-main-cover: rgba(0, 0, 0, 0.7);
+	--wot-opacfilled-light-cover: rgba(0, 0, 0, 0.5);
+	--wot-picker-view-mask-start-color: rgba(255, 255, 255, 0.9);
+	--wot-picker-view-mask-end-color: rgba(255, 255, 255, 0.3);
 
-	/* 信息色 */
-	--wot-color-info: #909399;
-	--wot-color-info-light-1: #9b9ea3;
-	--wot-color-info-light-2: #a6a9ad;
-	--wot-color-info-light-3: #b1b3b8;
-	--wot-color-info-light-4: #bcbec2;
-	--wot-color-info-light-5: #c8c9cc;
-	--wot-color-info-light-6: #d3d4d6;
-	--wot-color-info-light-7: #dedfe0;
-	--wot-color-info-light-8: #e9e9eb;
-	--wot-color-info-light-9: #f4f4f5;
-	--wot-color-info-dark-1: #9b9ea3;
-	--wot-color-info-dark-2: #a6a9ad;
-	--wot-color-info-dark-3: #b1b3b8;
-	--wot-color-info-dark-4: #bcbec2;
-	--wot-color-info-dark-5: #c8c9cc;
-	--wot-color-info-dark-6: #d3d4d6;
-	--wot-color-info-dark-7: #dedfe0;
-	--wot-color-info-dark-8: #e9e9eb;
-	--wot-color-info-dark-9: #f4f4f5;
-
-	--wot-box-shadow: 0rpx 24rpx 64rpx 8rpx rgba(0, 0, 0, 0.04), 0rpx 16rpx 40rpx rgba(0, 0, 0, 0.08);
-	--wot-box-shadow-light: 0rpx 0rpx 24rpx rgba(0, 0, 0, 0.12);
-	--wot-box-shadow-lighter: 0rpx 0rpx 12rpx rgba(0, 0, 0, 0.12);
-	--wot-box-shadow-dark:
-		0rpx 32rpx 96rpx 32rpx rgba(0, 0, 0, 0.08), 0rpx 24rpx 64rpx rgba(0, 0, 0, 0.12), 0rpx 16rpx 32rpx -16rpx rgba(0, 0, 0, 0.16);
-
-	/* 背景色 */
-	--wot-bg-color: #ffffff;
-	--wot-bg-color-page: #f2f3f5;
-	--wot-bg-color-overlay: #ffffff;
-
-	/* 重要正文文字颜色 */
-	--wot-text-color-primary: #303133;
-	/* 普通正文文字颜色 */
-	--wot-text-color-regular: #606266;
-	/* 次要信息文字颜色 */
-	--wot-text-color-secondary: #909399;
-	/* 占位符文字颜色 */
-	--wot-text-color-placeholder: #a8abb2;
-	/* 禁用文字颜色 */
-	--wot-text-color-disabled: #c0c4cc;
-
-	/* 边框色 */
-	--wot-border-color: #dcdfe6;
-	--wot-border-color-light: #e4e7ed;
-	--wot-border-color-lighter: #ebeef5;
-	--wot-border-color-extra-light: #f2f6fc;
-	--wot-border-color-dark: #d4d7de;
-	--wot-border-color-darker: #cdd0d6;
-
-	/* 填充色 */
-	--wot-fill-color: #f0f2f5;
-	--wot-fill-color-light: #f5f7fa;
-	--wot-fill-color-lighter: #fafafa;
-	--wot-fill-color-extra-light: #fafcff;
-	--wot-fill-color-dark: #ebedf0;
-	--wot-fill-color-darker: #e6e8eb;
-	--wot-fill-color-blank: #ffffff;
-
-	/* 蒙版层颜色 */
-	--wot-mask-color: rgba(255, 255, 255, 0.9);
-	--wot-mask-color-extra-light: rgba(255, 255, 255, 0.3);
-
-	/* 遮罩层颜色 */
-	--wot-overlay-color: rgba(0, 0, 0, 0.8);
-	--wot-overlay-color-light: rgba(0, 0, 0, 0.7);
-	--wot-overlay-color-lighter: rgba(0, 0, 0, 0.5);
+	/* 页面遮罩和阴影 */
+	--fa-mask-color: rgba(255, 255, 255, 0.9);
+	--fa-mask-color-extra-light: rgba(255, 255, 255, 0.3);
+	--fa-box-shadow: 0rpx 24rpx 64rpx 8rpx rgba(0, 0, 0, 0.04), 0rpx 16rpx 40rpx rgba(0, 0, 0, 0.08);
+	--fa-box-shadow-light: 0rpx 0rpx 24rpx rgba(0, 0, 0, 0.12);
+	--fa-box-shadow-lighter: 0rpx 0rpx 12rpx rgba(0, 0, 0, 0.12);
+	--fa-tabbar-box-shadow: 0 -8rpx 28rpx rgba(0, 0, 0, 0.04);
 }

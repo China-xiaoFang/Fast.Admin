@@ -1,5 +1,5 @@
 /* 文本换行溢出样式 */
-@for $i from 0 through 5 {
+@for $i from 1 through 5 {
 	.fa-text__overflow#{$i} {
 		text-overflow: ellipsis;
 		white-space: normal;

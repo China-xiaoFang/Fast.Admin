@@ -1,8 +1,8 @@
 declare global {
-	/** Vite 环境 */
+	/** Vite 运行环境。 */
 	type ViteEnv = "production" | "development" | "test" | "staging";
 
-	/** 网络类型 */
+	/** uni-app 支持的网络类型。 */
 	type INetworkType = "wifi" | "2g" | "3g" | "4g" | "5g" | "ethernet" | "unknown" | "none";
 
 	/** TabBar */
@@ -13,10 +13,6 @@ declare global {
 		icon: string;
 		/** 标题 */
 		title: string;
-		/** 凸起 */
-		bulge?: boolean;
-		/** 禁用，锁定 */
-		disable?: boolean;
 	};
 
 	/** FaTable 默认时间搜索支持的快捷日期范围。 */
@@ -52,13 +48,13 @@ declare global {
 		 * Tag的类型，默认 "primary"
 		 */
 		type?: "primary" | "success" | "info" | "warning" | "danger";
-
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- 枚举项允许携带业务接口定义的附加字段。
 		[key: string]: any;
 	}
 
 	/** FaTable 统一分页返回结果。 */
-
-	export interface PagedResult<Output = Record<string, any>> {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- 默认分页行字段由业务接口定义。
+	interface PagedResult<Output = Record<string, any>> {
 		/**
 		 * 当前页
 		 */
@@ -206,12 +202,12 @@ declare global {
 		 */
 		enablePaged?: boolean;
 		/** 业务接口附加的查询字段。 */
-
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- 分页查询允许携带业务接口定义的扩展字段。
 		[key: string]: any;
 	}
 
 	/** 选择器标准化后的选项数据。 */
-
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- 选择项原始数据由业务接口定义。
 	interface ElSelectorOutput<T = ElSelectorValue, Data = any> {
 		/**
 		 * 显示
@@ -237,12 +233,12 @@ declare global {
 		 * 子节点
 		 */
 		children?: ElSelectorOutput<T, Data>[];
-
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- 选择项允许携带业务接口返回的附加字段。
 		[key: string]: any;
 	}
 
 	/** 树组件标准化后的节点数据。 */
-
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- 树节点原始数据由业务接口定义。
 	interface ElTreeOutput<T = ElTreeValue, Data = any> {
 		/**
 		 * 显示
@@ -276,7 +272,7 @@ declare global {
 		 * 数量
 		 */
 		quantity?: number;
-
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any -- 树节点允许携带业务接口返回的附加字段。
 		[key: string]: any;
 	}
 }

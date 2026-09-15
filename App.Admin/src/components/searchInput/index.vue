@@ -6,25 +6,24 @@
 				v-model="modelValue"
 				:placeholder="props.placeholder ? props.placeholder : props.scan ? '请输入或扫描您想要搜索的内容' : '请输入您想要搜索的内容'"
 				clearable
-				noBorder
 				@input="handleInput"
-				@focus="(detail) => emit('focus', detail)"
-				@blur="(detail) => emit('blur', detail)"
-				@confirm="(detail) => emit('confirm', detail)"
+				@focus="(detail: UniHelper.InputOnFocusDetail) => emit('focus', detail)"
+				@blur="(detail: UniHelper.InputOnBlurDetail) => emit('blur', detail)"
+				@confirm="(detail: UniHelper.InputOnConfirmDetail) => emit('confirm', detail)"
 				@clear="handleClear"
 			>
 				<template #prefix>
 					<view style="display: flex">
-						<FaIcon v-if="props.scan" customClass="wd-input__icon" name="scan" @click="handleScanClick" />
-						<wd-icon v-else customClass="wd-input__icon" name="search" />
+						<FaIcon v-if="props.scan" custom-class="wd-input__icon" name="scan" @click="handleScanClick" />
+						<wd-icon v-else custom-class="wd-input__icon" name="search" />
 					</view>
 				</template>
 				<template #suffix v-if="props.search">
-					<wd-button size="small" type="primary" @click="(event) => emit('search')">搜素</wd-button>
+					<wd-button size="small" type="primary" @click="() => emit('search')">搜素</wd-button>
 				</template>
 			</wd-input>
 			<view v-if="props.filter" class="fa-search-input__filter" @click="state.filterVisible = true">
-				<FaIcon customClass="wd-input__icon" name="filter" />
+				<FaIcon custom-class="wd-input__icon" name="filter" />
 				<text class="fa-search-input__filter-text">筛选</text>
 			</view>
 			<slot name="suffix" />
@@ -34,24 +33,23 @@
 		</view>
 		<wd-popup
 			v-if="props.filter"
-			customClass="fa-search-popup"
+			custom-class="fa-search-popup"
 			v-model="state.filterVisible"
 			closable
 			position="bottom"
 			transition="fade-up"
-			safeAreaInsetBottom
+			safe-area-inset-bottom
 		>
 			<text class="fa-search-popup__title">高级筛选</text>
 			<view class="fa-search-popup__warp">
 				<template v-if="!props.hideSearchTime">
 					<wd-datetime-picker
-						customClass="fa-search-input__date-picker"
 						:disable="state.dataSearchRange !== 'custom'"
 						type="date"
 						label="时间"
 						v-model="state.searchTimeList"
-						:defaultValue="dateUtil.getDefaultTime(props.futureSearchTime).map((m) => m.getTime())"
-						alignRight
+						:default-value="createOneMonthRangeFromToday(props.futureSearchTime).map((date) => date.getTime())"
+						align-right
 						@confirm="handleDateTimeConfirm"
 					/>
 					<wd-radio-group
@@ -80,8 +78,8 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, useModel, watch } from "vue";
-import { dateUtil, definePropType, withDefineType } from "@fast-china/utils";
+import { computed, onMounted, reactive, watch } from "vue";
+import { createOneMonthRangeFromToday, withDefineType } from "@fast-china/utils";
 import dayjs from "dayjs";
 import { useConfig } from "@/stores";
 
@@ -95,13 +93,6 @@ defineOptions({
 });
 
 const props = defineProps({
-	/** @description v-model绑定值 */
-	modelValue: String,
-	/** @description 搜索参数 */
-	searchParam: {
-		type: definePropType<any>(Object),
-		default: {},
-	},
 	/** @description 占位文本 */
 	placeholder: String,
 	/** @description 显示扫描图标 */
@@ -125,26 +116,37 @@ const props = defineProps({
 	futureSearchTime: Boolean,
 });
 
-const emit = defineEmits({
-	/** @description v-model 回调 */
-	"update:modelValue": (value: string): boolean => true,
-	/** @description v-model:searchParam 回调 */
-	"update:searchParam": (value: any): boolean => true,
+const emit = defineEmits<{
 	/** @description 监听输入框input事件 */
-	input: (detail: UniHelper.InputOnInputDetail): boolean => true,
+	input: [detail: UniHelper.InputOnInputDetail];
 	/** @description 监听输入框focus事件 */
-	focus: (detail: UniHelper.InputOnFocusDetail): boolean => true,
+	focus: [detail: UniHelper.InputOnFocusDetail];
 	/** @description 监听输入框blur事件 */
-	blur: (detail: UniHelper.InputOnBlurDetail): boolean => true,
+	blur: [detail: UniHelper.InputOnBlurDetail];
 	/** @description 点击完成时， 触发 confirm 事件 */
-	confirm: (detail: UniHelper.InputOnConfirmDetail): boolean => true,
+	confirm: [detail: UniHelper.InputOnConfirmDetail];
 	/** @description 监听输入框清空按钮事件 */
-	clear: (): boolean => true,
+	clear: [];
 	/** @description 弹窗筛选按钮点击事件 */
-	search: (): boolean => true,
+	search: [];
+}>();
+
+const configStore = useConfig();
+
+/** @description v-model绑定值 */
+const modelValue = defineModel<string>();
+/** @description 搜索参数 */
+const searchParam = defineModel<PagedInput>("searchParam", {
+	default: () => ({}),
 });
 
-const dataSearchRangeList: ElSelectorOutput<FaTableDataRange>[] = [
+const state = reactive({
+	filterVisible: false,
+	searchTimeList: withDefineType<number[]>([]),
+	dataSearchRange: withDefineType<FaTableDataRange | "custom">(),
+});
+
+const dataSearchRangeList = computed<ElSelectorOutput<FaTableDataRange>[]>(() => [
 	{
 		label: props.futureSearchTime ? "后1天" : "近1天",
 		value: "Past1D",
@@ -173,18 +175,7 @@ const dataSearchRangeList: ElSelectorOutput<FaTableDataRange>[] = [
 		label: props.futureSearchTime ? "后1年" : "近1年",
 		value: "Past1Y",
 	},
-];
-
-const configStore = useConfig();
-
-const modelValue = useModel(props, "modelValue");
-const searchParam = useModel(props, "searchParam");
-
-const state = reactive({
-	filterVisible: false,
-	searchTimeList: withDefineType<number[]>([]),
-	dataSearchRange: withDefineType<FaTableDataRange | "custom">(),
-});
+]);
 
 const handleScanClick = () => {
 	uni.scanCode({
@@ -329,5 +320,5 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-@import "./index.scss";
+@use "./index.scss";
 </style>

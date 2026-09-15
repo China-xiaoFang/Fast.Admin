@@ -6,8 +6,6 @@ export const CommonRoute = {
 	Launcher: "/pages/launcher/index",
 	/** WebView页面 */
 	WebView: "/pages/webView/index",
-	/** 用户协议 */
-	UserAgreement: "/pages/agreement/user/index",
 	/** 隐私协议 */
 	PrivacyAgreement: "/pages/agreement/privacy/index",
 	/** 服务协议 */
@@ -18,6 +16,8 @@ export const CommonRoute = {
 	ComplaintSubmit: "/pages/complaint/submit/index",
 	/** 登录页 */
 	Login: "/pages/login/index",
+	/** 重置密码页 */
+	PasswordReset: "/pages/passwordReset/index",
 	/** 选择租户 */
 	SelectTenant: "/pages/selectTenant/index",
 	/** 首页 */

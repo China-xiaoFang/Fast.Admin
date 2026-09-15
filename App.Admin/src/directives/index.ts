@@ -1,8 +1,8 @@
-import { type App } from "vue";
+import type { App, Directive } from "vue";
 
 /** 挂载自定义指令 */
 export function loadDirectives(app: App): void {
-	const directivesList: any = {};
+	const directivesList: Record<string, Directive> = {};
 
 	Object.keys(directivesList).forEach((key) => {
 		// 注册所有自定义指令
