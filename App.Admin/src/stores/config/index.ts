@@ -1,11 +1,10 @@
-import { reactive } from "vue";
-import { addUnit, colorUtil, consoleLog, styleToString, withDefineType } from "@fast-china/utils";
 import { defineStore } from "pinia";
+import { reactive } from "vue";
+import { addCssUnit, formatHexColor, mixHexColors, parseHexColor, pickHigherContrastColor, serializeStyle, withDefineType } from "@fast-china/utils";
 import { CommonUniApp } from "@/common";
 import { useToast } from "@/hooks";
 import { useApp } from "../app";
-
-export const defaultThemeColor = "#409EFF";
+import type { ConfigProviderThemeVars } from "@wot-ui/ui/components/wd-config-provider/types";
 
 export const useConfig = defineStore(
 	"config",
@@ -19,9 +18,11 @@ export const useConfig = defineStore(
 			/** 页脚高度 */
 			footerHeight: 40,
 			/** 主题颜色 */
-			themeColor: defaultThemeColor,
+			themeColor: "",
 			/** 主题样式 */
 			themeStyle: "",
+			/** Wot UI 主题变量 */
+			themeVars: withDefineType<ConfigProviderThemeVars>({}),
 			/** 导航栏是否跟随主题色自动切换 */
 			autoThemeNavBar: false,
 			/** 跟随系统设置，自动切换浅色/深色模式 */
@@ -34,8 +35,6 @@ export const useConfig = defineStore(
 			isWeak: false,
 			/** 是否显示页脚 */
 			footer: true,
-			/** 是否显示水印 */
-			watermark: true,
 		});
 
 		/** 表格配置 */
@@ -47,73 +46,83 @@ export const useConfig = defineStore(
 		});
 
 		/** 设置主题色 */
-		const setTheme = (color: string): void => {
+		const setTheme = (color?: string) => {
 			if (!color) {
-				color = defaultThemeColor;
-				useToast.success(`主题颜色已重置为 ${defaultThemeColor}`);
+				color = useApp().themeColor;
+				useToast.success(`主题颜色已重置为 ${color}`);
 			}
-			let navbarBgColor;
+			let navbarBgColor = "#f8f8f8";
+			let navbarFrontColor = "#000000";
+			let pageBackgroundColor = "#f2f3f5";
 			if (layout.isDark) {
 				navbarBgColor = "#141414";
-				uni.setNavigationBarColor({
-					frontColor: "#ffffff",
-					backgroundColor: navbarBgColor,
-				});
-			} else {
-				navbarBgColor = layout.autoThemeNavBar ? color : "#f8f8f8";
-				uni.setNavigationBarColor({
-					frontColor: layout.autoThemeNavBar ? "#ffffff" : "#000000",
-					backgroundColor: navbarBgColor,
-				});
+				navbarFrontColor = "#ffffff";
+				pageBackgroundColor = "#0a0a0a";
+			} else if (layout.autoThemeNavBar) {
+				navbarBgColor = color;
+				navbarFrontColor = pickHigherContrastColor(color) === "#ffffff" ? "#ffffff" : "#000000";
 			}
+
+			uni.setNavigationBarColor({ frontColor: navbarFrontColor, backgroundColor: navbarBgColor });
+			uni.setBackgroundColor({
+				backgroundColor: pageBackgroundColor,
+				backgroundColorTop: pageBackgroundColor,
+				backgroundColorBottom: pageBackgroundColor,
+			});
+			uni.setBackgroundTextStyle({ textStyle: layout.isDark ? "light" : "dark" });
+
+			// #ifdef APP-PLUS
+			plus.navigator.setStatusBarStyle(navbarFrontColor === "#ffffff" ? "light" : "dark");
+			// #endif
 
 			const appStore = useApp();
 			// 头部胶囊padding
+			// eslint-disable-next-line no-useless-assignment
 			let navbarCapsulePadding = CommonUniApp.navbarCapsuleMenuButtonPadding;
 			// #ifdef MP-WEIXIN
 			navbarCapsulePadding = appStore.windowInfo.windowWidth - (appStore.menuButton?.right ?? 0);
 			// #endif
 
-			const styles = {
-				"--wot-color-theme": color,
-				"--wot-color-primary": color,
-				"--wot-window-width": `${appStore.windowInfo.windowWidth}px`,
+			const styles: Record<string, string> = {
+				"--fa-window-width": `${appStore.windowInfo.windowWidth}px`,
 				// 如果存在安全距离，页面 100vh 会导致失效，所以这里通过动态计算计算页面剩余高度
-				"--wot-window-height": `calc(100vh - ${appStore.windowInfo.safeAreaInsets.bottom}px)`,
+				"--fa-window-height": `calc(100vh - ${appStore.windowInfo.safeAreaInsets.bottom}px)`,
 				// 状态栏高度
-				"--wot-status-bar-height": `${appStore.windowInfo.statusBarHeight}px`,
-				// 头部 navbar 背景颜色
-				"--wot-navbar-bg-color": navbarBgColor,
-				// 头部 navbar 高度
-				"--wot-navbar-height": addUnit(layout.navBarHeight),
+				"--fa-status-bar-height": `${appStore.windowInfo.statusBarHeight}px`,
 				// 头部胶囊按钮边距
-				"--wot-navbar-capsule-padding": `${navbarCapsulePadding}px`,
+				"--fa-navbar-capsule-padding": `${navbarCapsulePadding}px`,
+				// 页脚高度，如果不存在底部安全区域，则默认 + 10px
+				"--fa-footer-height": `calc(${addCssUnit(layout.footerHeight)} + ${appStore.windowInfo.safeAreaInsets.bottom > 0 ? "0px" : "10px"})`,
+				// 安全距离
+				"--fa-area-inset-left": `${appStore.windowInfo.safeAreaInsets.left}px`,
+				"--fa-area-inset-right": `${appStore.windowInfo.safeAreaInsets.right}px`,
+				"--fa-area-inset-top": `${appStore.windowInfo.safeAreaInsets.top}px`,
+				"--fa-area-inset-bottom": `${appStore.windowInfo.safeAreaInsets.bottom}px`,
+				// 头部 navbar 背景颜色
+				"--wot-navbar-bg": navbarBgColor,
+				// 头部 navbar 高度
+				"--wot-navbar-height": addCssUnit(layout.navBarHeight),
 				// 头部胶囊按钮宽度
 				"--wot-navbar-capsule-width": `${appStore.menuButton?.width ?? 0}px`,
 				// 头部胶囊按钮高度，-2 边框
 				"--wot-navbar-capsule-height": `${appStore.menuButton.height - 2}px`,
 				/* 导航栏文字颜色 */
-				"--wot-navbar-color": "#ffffff",
+				"--wot-navbar-color": navbarFrontColor,
 				// 底部 tabbar 高度
-				"--wot-tabbar-height": addUnit(layout.tabBarHeight),
-				// 页脚高度，如果不存在底部安全区域，则默认 + 10px
-				"--wot-footer-height": `calc(${addUnit(layout.footerHeight)} + ${appStore.windowInfo.safeAreaInsets.bottom > 0 ? "0px" : "10px"})`,
-				// 安全距离
-				"--wot-area-inset-left": `${appStore.windowInfo.safeAreaInsets.left}px`,
-				"--wot-area-inset-right": `${appStore.windowInfo.safeAreaInsets.right}px`,
-				"--wot-area-inset-top": `${appStore.windowInfo.safeAreaInsets.top}px`,
-				"--wot-area-inset-bottom": `${appStore.windowInfo.safeAreaInsets.bottom}px`,
+				"--wot-tabbar-height": addCssUnit(layout.tabBarHeight),
 			};
 
-			// 计算主题颜色变化
-			for (let i = 1; i <= 9; i++) {
-				const primaryColor = layout.isDark ? `${colorUtil.getDarkColor(color, i / 10)}` : `${colorUtil.getLightColor(color, i / 10)}`;
-				styles[`--wot-color-primary-light-${i}`] = primaryColor;
+			const themeVars: ConfigProviderThemeVars = {
+				primary6: color,
+				feedbackAccent: formatHexColor({ ...parseHexColor(color), alpha: 0.08 }),
+			};
+			for (let i = 1; i <= 10; i++) {
+				if (i === 6) continue;
+				let mixColor = i < 6 ? "#ffffff" : "#000000";
+				if (layout.isDark) mixColor = i < 6 ? "#000000" : "#ffffff";
+				Object.assign(themeVars, { [`primary${i}`]: mixHexColors(color, mixColor, Math.abs(6 - i) / 6) });
 			}
-			for (let i = 1; i <= 9; i++) {
-				const primaryColor = layout.isDark ? `${colorUtil.getDarkColor(color, i / 10)}` : `${colorUtil.getLightColor(color, i / 10)}`;
-				styles[`--wot-color-primary-dark-${i}`] = primaryColor;
-			}
+			layout.themeVars = themeVars;
 
 			// 判断是否为置灰模式
 			if (layout.isGrey) {
@@ -126,70 +135,48 @@ export const useConfig = defineStore(
 			}
 
 			layout.themeColor = color;
-			layout.themeStyle = styleToString(styles);
+			layout.themeStyle = serializeStyle(styles);
 		};
 
 		/** 切换深色模式 */
-		const switchDark = (): void => {
+		const switchDark = () => {
 			if (layout.isDark) {
 				// #ifdef APP-PLUS
 				plus.nativeUI.setUIStyle("dark");
-				plus.navigator.setStatusBarStyle("dark");
 				// #endif
 			} else {
 				// #ifdef APP-PLUS
 				plus.nativeUI.setUIStyle("light");
-				plus.navigator.setStatusBarStyle("light");
 				// #endif
 			}
 			setTheme(layout.themeColor);
 		};
 
 		/** 切换跟随系统变化自动设置浅色/深色模式 */
-		const switchAutoThemMode = (): void => {
-			if (layout.autoThemMode) {
-				// #ifdef APP-PLUS
-				plus.nativeUI.setUIStyle("auto");
-				// #endif
+		const switchAutoThemMode = () => {
+			if (!layout.autoThemMode) return;
+			// #ifdef APP-PLUS
+			plus.nativeUI.setUIStyle("auto");
+			// #endif
 
-				// 判断是否启用深色模式
-				if (uni.getAppBaseInfo().theme === "dark") {
-					layout.isDark = true;
-					// #ifdef APP-PLUS
-					plus.navigator.setStatusBarStyle("dark");
-					// #endif
-				} else {
-					layout.isDark = false;
-					// #ifdef APP-PLUS
-					plus.navigator.setStatusBarStyle("light");
-					// #endif
-				}
-				setTheme(layout.themeColor);
-			}
-		};
-
-		/** 切换置灰或色弱模式 */
-		const switchGreyOrWeak = (type: "grey" | "weak", value: boolean): void => {
-			if (value) {
-				switch (type) {
-					case "grey":
-						layout.isGrey = true;
-						layout.isWeak = false;
-						break;
-					case "weak":
-						layout.isGrey = false;
-						layout.isWeak = true;
-						break;
-				}
+			// 判断是否启用深色模式
+			if (uni.getAppBaseInfo().theme === "dark") {
+				layout.isDark = true;
 			} else {
-				layout.isGrey = false;
-				layout.isWeak = false;
+				layout.isDark = false;
 			}
 			setTheme(layout.themeColor);
 		};
 
+		/** 切换置灰或色弱模式 */
+		const switchGreyOrWeak = (type: "grey" | "weak", value: boolean) => {
+			layout.isGrey = type === "grey" && value;
+			layout.isWeak = type === "weak" && value;
+			setTheme(layout.themeColor);
+		};
+
 		/** 初始化主题 */
-		const initTheme = (): void => {
+		const initTheme = () => {
 			const appStore = useApp();
 			if (appStore.isIphone) {
 				layout.navBarHeight = CommonUniApp.iosNavBarHeight;
@@ -197,27 +184,23 @@ export const useConfig = defineStore(
 				layout.navBarHeight = CommonUniApp.androidNavBarHeight;
 			}
 			switchAutoThemMode();
-			uni.onThemeChange((res) => {
-				consoleLog("useConfig", "监听到主题改变", res);
-				switchAutoThemMode();
-			});
+			uni.onThemeChange(switchAutoThemMode);
 			switchDark();
 			if (layout.isGrey) switchGreyOrWeak("grey", true);
 			if (layout.isWeak) switchGreyOrWeak("weak", true);
 		};
 
 		/** 重置 */
-		const reset = (): void => {
+		const reset = () => {
 			layout.tabBarHeight = 55;
 			layout.footerHeight = 40;
-			layout.themeColor = defaultThemeColor;
+			layout.themeColor = useApp().themeColor;
 			layout.autoThemeNavBar = false;
 			layout.autoThemMode = true;
 			layout.isDark = false;
 			layout.isGrey = false;
 			layout.isWeak = false;
 			layout.footer = true;
-			layout.watermark = true;
 			initTheme();
 			tableLayout.hideImage = true;
 			tableLayout.dataSearchRange = "Past3D";
@@ -226,7 +209,6 @@ export const useConfig = defineStore(
 		return {
 			layout,
 			tableLayout,
-			screen,
 			setTheme,
 			switchAutoThemMode,
 			switchDark,

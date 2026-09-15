@@ -1,4 +1,3 @@
-import { isNil, isString } from "lodash-unified";
 import { wdHookState } from "../index";
 
 export const useLoading = {
@@ -7,7 +6,7 @@ export const useLoading = {
 	 * @param options 选项
 	 */
 	show(options?: { text?: string; fullscreen?: boolean } | string): void {
-		if (!isNil(options) && isString(options)) {
+		if (typeof options === "string") {
 			wdHookState.loading = {
 				state: true,
 				text: options,

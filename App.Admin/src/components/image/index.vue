@@ -1,17 +1,17 @@
 <template>
 	<wd-img
 		v-bind="wdImgProps"
-		:customClass="`fa-image ${!state.src || state.hideImage ? 'is-small' : ''} ${props.customClass}`"
-		:customStyle="`--height:${addUnit(props.height)};--width:${addUnit(props.width)};`"
+		:custom-class="`fa-image ${!state.src || state.hideImage ? 'is-small' : ''} ${props.customClass}`"
+		:custom-style="`--height:${addCssUnit(props.height)};--width:${addCssUnit(props.width)};`"
 		:src="state.hideImage ? artwork : (state.src ?? notImage)"
-		:previewSrc="state.previewSrc"
-		:enablePreview="props.enablePreview && !!state.src"
-		@click.stop="(event) => emit('click', event)"
-		@load="(event) => emit('load', event)"
-		@error="(event) => emit('error', event)"
+		:preview-src="state.previewSrc"
+		:enable-preview="props.enablePreview && !!state.src"
+		@click.stop="(event: MouseEvent) => emit('click', event)"
+		@load="(event: Event) => emit('load', event)"
+		@error="(event: Event) => emit('error', event)"
 	>
 		<template #loading>
-			<wd-icon customClass="fa-image__loading" classPrefix="iconfont" name="loadingImage" />
+			<wd-icon custom-class="fa-image__loading" class-prefix="iconfont" name="loadingImage" />
 		</template>
 		<template #error>
 			<image class="fa-image__error" :src="notImage" mode="scaleToFill" />
@@ -21,9 +21,8 @@
 
 <script setup lang="ts">
 import { computed, reactive } from "vue";
-import { addUnit, useProps } from "@fast-china/utils";
-import { isNil } from "lodash-unified";
-import { imgProps } from "wot-design-uni/components/wd-img/types";
+import { addCssUnit, useProps } from "@fast-china/utils";
+import { imgProps } from "@wot-ui/ui/components/wd-img/types";
 import { useConfig } from "@/stores";
 import artwork from "./images/artwork.png";
 import notImage from "./images/notImage.png";
@@ -74,20 +73,20 @@ const props = defineProps({
 
 const wdImgProps = useProps(props, imgProps, ["customClass", "customStyle", "src", "previewSrc", "enablePreview"]);
 
-const emit = defineEmits({
+const emit = defineEmits<{
 	/** @description 点击事件 */
-	click: (event: MouseEvent): boolean => true,
+	click: [event: MouseEvent];
 	/** @description 当图片载入完毕时触发 */
-	load: (event: Event): boolean => true,
+	load: [event: Event];
 	/** @description 当错误发生时触发 */
-	error: (event: Event): boolean => true,
-});
+	error: [event: Event];
+}>();
 
 const configStore = useConfig();
 
 const state = reactive({
 	/** 隐藏图片 */
-	hideImage: computed(() => (isNil(props.hideImage) ? configStore.tableLayout.hideImage : props.hideImage)),
+	hideImage: computed(() => (props.hideImage == null ? configStore.tableLayout.hideImage : props.hideImage)),
 	/** 预览地址 */
 	previewSrc: computed(() => {
 		if (props.src) {
@@ -129,7 +128,6 @@ defineExpose({
 <style scoped lang="scss">
 .is-small {
 	padding: calc(var(--height) * 0.1);
-	box-sizing: border-box;
 }
 :deep() {
 	.fa-image__loading {
@@ -138,8 +136,8 @@ defineExpose({
 		text-align: center;
 		line-height: var(--height);
 		font-size: calc(var(--width) * 0.8);
-		background-color: var(--wot-bg-color);
-		color: var(--wot-text-color-placeholder);
+		background-color: var(--wot-filled-oppo);
+		color: var(--wot-text-placeholder);
 	}
 	.fa-image__error {
 		width: calc(var(--width) * 0.8);

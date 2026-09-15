@@ -1,13 +1,13 @@
-import { createSSRApp } from "vue";
 import * as Pinia from "pinia";
-import App from "./App.vue";
+import { type App, createSSRApp } from "vue";
+import AppVue from "./App.vue";
 import { loadPlugins } from "./plugins";
 import router from "./router";
 import { loadPinia } from "./stores";
 import "./styles/index.scss";
 
-export function createApp(): any {
-	const app = createSSRApp(App);
+export function createApp(): { app: App; Pinia: typeof Pinia } {
+	const app = createSSRApp(AppVue);
 
 	// 注册持久化存储
 	loadPinia(app);

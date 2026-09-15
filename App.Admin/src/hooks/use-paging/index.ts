@@ -3,13 +3,13 @@ import useZPaging from "z-paging/components/z-paging/js/hooks/useZPaging.js";
 import type { Reactive, Ref, ShallowRef } from "vue";
 import type { ZPagingProps } from "z-paging/types/comps/z-paging";
 
-type usePagingType<TResult, TInput> = {
+type UsePagingResult<TResult, TInput> = {
 	/** @description ZPaging 组件实例 */
 	paging: Ref<ZPagingRef<TResult>>;
 	/** @description 搜索参数 */
 	searchParam: Reactive<PagedInput & TInput>;
 	/** @description 分页数据集合 */
-	pagedList: ShallowRef<(TResult & { zp_index?: number })[]>;
+	pagedList: ShallowRef<TResult[]>;
 	/** @description 分页查询 */
 	pagingQuery: ZPagingProps["onQuery"];
 	/** @description 虚拟列表数据改变回调 */
@@ -21,11 +21,10 @@ type usePagingType<TResult, TInput> = {
 	};
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export const usePaging = <TResult, TInput extends Record<string, any> = {}>(
+export const usePaging = <TResult, TInput extends Record<string, unknown> = Record<string, never>>(
 	requestApi: (params?: PagedInput & TInput) => Promise<PagedResult<TResult>>,
 	pageScroll?: boolean
-): usePagingType<TResult, TInput> => {
+): UsePagingResult<TResult, TInput> => {
 	/** @description ZPaging 组件实例 */
 	const zPagingRef = ref<ZPagingRef<TResult>>();
 
@@ -36,17 +35,14 @@ export const usePaging = <TResult, TInput extends Record<string, any> = {}>(
 	const pagedList = shallowRef<TResult[]>([]);
 
 	/** @description 分页查询 */
-	const pagingQuery: ZPagingProps["onQuery"] = async (pageNo, pageSize, from) => {
-		try {
-			const apiRes = await requestApi({
-				pageIndex: pageNo,
-				pageSize,
-				...(searchParam as TInput),
-			});
-			zPagingRef.value.complete(apiRes.rows);
-		} catch {
-			zPagingRef.value.complete(false);
-		}
+	const pagingQuery: ZPagingProps["onQuery"] = (pageNo, pageSize) => {
+		requestApi({
+			pageIndex: pageNo,
+			pageSize,
+			...(searchParam as TInput),
+		})
+			.then((apiRes) => zPagingRef.value.complete(apiRes.rows))
+			.catch(() => zPagingRef.value.complete(false));
 	};
 
 	/** @description 虚拟列表数据改变回调 */
@@ -56,7 +52,7 @@ export const usePaging = <TResult, TInput extends Record<string, any> = {}>(
 
 	/** @description 刷新列表 */
 	function pagingRefresh(): void;
-	function pagingRefresh(pageIndex?: number): void {
+	function pagingRefresh(pageIndex?: number) {
 		if (pageIndex) {
 			zPagingRef.value?.refreshToPage(pageIndex);
 		} else {

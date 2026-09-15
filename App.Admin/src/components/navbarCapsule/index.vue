@@ -34,12 +34,12 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits({
+const emit = defineEmits<{
 	/** @description 返回点击回调 */
-	backClick: (): boolean => true,
+	backClick: [];
 	/** @description 首页点击回调 */
-	homeClick: (): boolean => true,
-});
+	homeClick: [];
+}>();
 
 const handleBackClick = () => {
 	emit("backClick");
@@ -54,13 +54,12 @@ const handleHomeClick = () => {
 .fa-navbar-capsule {
 	position: relative;
 	top: -2px;
-	box-sizing: border-box;
 	height: var(--wot-navbar-capsule-height, 30px);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	gap: 5px;
-	color: var(--wot-navbar-color);
+	color: var(--wot-navbar-color, var(--wot-text-main));
 
 	.fa-navbar-capsule__icon {
 		height: 100%;
@@ -71,10 +70,10 @@ const handleHomeClick = () => {
 		align-items: center;
 		justify-content: center;
 		.wd-icon,
-		.g-icon {
+		.fa-icon {
 			width: 42px;
 			font-size: 20px;
-			color: var(--wot-navbar-font-color);
+			color: var(--wot-navbar-color, var(--wot-text-main));
 			cursor: pointer;
 			&:nth-of-type(n + 2)::after {
 				content: "";
@@ -84,7 +83,7 @@ const handleHomeClick = () => {
 				transform: translateY(-50%);
 				width: 1px;
 				height: 58%;
-				background: var(--wot-border-color);
+				background: var(--wot-border-main);
 			}
 		}
 	}

@@ -1,6 +1,5 @@
-import { isString } from "lodash-unified";
 import { wdHookState } from "../index";
-import type { MessageOptions, MessageResult } from "wot-design-uni/components/wd-message-box/types";
+import type { DialogOptions, DialogResult } from "@wot-ui/ui/components/wd-dialog/types";
 
 const defaultTitle = "温馨提示";
 
@@ -9,13 +8,13 @@ export const useMessageBox = {
 	 * 显示弹框
 	 * @param options 选项
 	 */
-	show(options: MessageOptions | string): Promise<MessageResult> {
-		return new Promise((resolve, reject) => {
+	show(options: DialogOptions | string): Promise<DialogResult> {
+		return new Promise<DialogResult>((resolve, reject) => {
 			wdHookState.wdMessageBox = {
 				type: "show",
-				options: isString(options) ? { title: defaultTitle, msg: options } : { ...options, title: options.title ?? defaultTitle },
-				then: (res): void => resolve(res),
-				catch: (error): void => reject(error),
+				options: typeof options === "string" ? { title: defaultTitle, msg: options } : { ...options, title: options.title ?? defaultTitle },
+				then: (res) => resolve(res),
+				catch: (error) => reject(error),
 			};
 		});
 	},
@@ -23,13 +22,13 @@ export const useMessageBox = {
 	 * Alert 弹框
 	 * @param options 选项
 	 */
-	alert(options: MessageOptions | string): Promise<MessageResult> {
-		return new Promise((resolve, reject) => {
+	alert(options: DialogOptions | string): Promise<DialogResult> {
+		return new Promise<DialogResult>((resolve, reject) => {
 			wdHookState.wdMessageBox = {
 				type: "alert",
-				options: isString(options) ? { title: defaultTitle, msg: options } : { ...options, title: options.title ?? defaultTitle },
-				then: (res): void => resolve(res),
-				catch: (error): void => reject(error),
+				options: typeof options === "string" ? { title: defaultTitle, msg: options } : { ...options, title: options.title ?? defaultTitle },
+				then: (res) => resolve(res),
+				catch: (error) => reject(error),
 			};
 		});
 	},
@@ -37,13 +36,13 @@ export const useMessageBox = {
 	 * Confirm 弹框
 	 * @param options 选项
 	 */
-	confirm(options: MessageOptions | string): Promise<MessageResult> {
-		return new Promise((resolve, reject) => {
+	confirm(options: DialogOptions | string): Promise<DialogResult> {
+		return new Promise<DialogResult>((resolve, reject) => {
 			wdHookState.wdMessageBox = {
 				type: "confirm",
-				options: isString(options) ? { title: defaultTitle, msg: options } : { ...options, title: options.title ?? defaultTitle },
-				then: (res): void => resolve(res),
-				catch: (error): void => reject(error),
+				options: typeof options === "string" ? { title: defaultTitle, msg: options } : { ...options, title: options.title ?? defaultTitle },
+				then: (res) => resolve(res),
+				catch: (error) => reject(error),
 			};
 		});
 	},
@@ -51,13 +50,13 @@ export const useMessageBox = {
 	 * Prompt 弹框
 	 * @param options 选项
 	 */
-	prompt(options: MessageOptions | string): Promise<MessageResult> {
-		return new Promise((resolve, reject) => {
+	prompt(options: DialogOptions | string): Promise<DialogResult> {
+		return new Promise<DialogResult>((resolve, reject) => {
 			wdHookState.wdMessageBox = {
 				type: "prompt",
-				options: isString(options) ? { title: defaultTitle, msg: options } : { ...options, title: options.title ?? defaultTitle },
-				then: (res): void => resolve(res),
-				catch: (error): void => reject(error),
+				options: typeof options === "string" ? { title: defaultTitle, msg: options } : { ...options, title: options.title ?? defaultTitle },
+				then: (res) => resolve(res),
+				catch: (error) => reject(error),
 			};
 		});
 	},
