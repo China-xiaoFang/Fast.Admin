@@ -1,11 +1,11 @@
 <template>
 	<wd-popup
 		v-bind="wdPopupProps"
-		:customClass="`fa-popup ${props.customClass}`"
-		:customStyle="`${state.style} ${props.customStyle}`"
+		:custom-class="`fa-popup ${props.customClass}`"
+		:custom-style="`${state.style} ${props.customStyle}`"
 		v-model="state.visible"
 		:transition="state.transition"
-		safeAreaInsetBottom
+		safe-area-inset-bottom
 		@before-enter="() => emit('beforeEnter')"
 		@enter="() => emit('enter')"
 		@after-enter="() => emit('afterEnter')"
@@ -22,8 +22,8 @@
 
 <script setup lang="ts">
 import { computed, nextTick, reactive } from "vue";
-import { addUnit, consoleError, definePropType, execFunction, useProps } from "@fast-china/utils";
-import { popupProps } from "wot-design-uni/components/wd-popup/types";
+import { addCssUnit, callOptionalFunction, definePropType, logger, useProps } from "@fast-china/utils";
+import { popupProps } from "@wot-ui/ui/components/wd-popup/types";
 import FaLoading from "../loading/index.vue";
 
 defineOptions({
@@ -51,26 +51,26 @@ const props = defineProps({
 
 const wdPopupProps = useProps(props, popupProps);
 
-const emit = defineEmits({
+const emit = defineEmits<{
 	/** @description 进入前触发 */
-	beforeEnter: (): boolean => true,
+	beforeEnter: [];
 	/** @description 进入时触发 */
-	enter: (): boolean => true,
+	enter: [];
 	/** @description 进入后触发 */
-	afterEnter: (): boolean => true,
+	afterEnter: [];
 	/** @description 离开前触发 */
-	beforeLeave: (): boolean => true,
+	beforeLeave: [];
 	/** @description 离开时触发 */
-	leave: (): boolean => true,
+	leave: [];
 	/** @description 离开后触发 */
-	afterLeave: (): boolean => true,
+	afterLeave: [];
 	/** @description 点击遮罩时触发 */
-	clickModal: (): boolean => true,
+	clickModal: [];
 	/** @description 弹出层打开时触发 */
-	open: (): boolean => true,
+	open: [];
 	/** @description 弹出层关闭时触发 */
-	close: (): boolean => true,
-});
+	close: [];
+}>();
 
 const state = reactive({
 	loading: false,
@@ -78,10 +78,10 @@ const state = reactive({
 	style: computed(() => {
 		let result = "";
 		if (props.width) {
-			result += `width: ${addUnit(props.width)};`;
+			result += `width: ${addCssUnit(props.width)};`;
 		}
 		if (props.height) {
-			result += `height: ${addUnit(props.height)};`;
+			result += `height: ${addCssUnit(props.height)};`;
 		}
 
 		return result;
@@ -104,16 +104,16 @@ const state = reactive({
 	}),
 });
 
-const handleOpen = (openFunction?: () => void | Promise<void>): void => {
+const handleOpen = (openFunction?: () => void | Promise<void>) => {
 	state.visible = true;
 	nextTick(() => {
 		state.loading = true;
-		execFunction(props.afterOpen ?? openFunction)
+		callOptionalFunction(props.afterOpen ?? openFunction)
 			.then(() => {
 				emit("open");
 			})
-			.catch((error) => {
-				consoleError("FaPopup", error);
+			.catch((error: unknown) => {
+				logger.error("FaPopup", error);
 				// 自动关闭
 				state.visible = false;
 			})
@@ -123,27 +123,27 @@ const handleOpen = (openFunction?: () => void | Promise<void>): void => {
 	});
 };
 
-const handleClose = (closeFunction?: () => void | Promise<void>): void => {
+const handleClose = (closeFunction?: () => void | Promise<void>) => {
 	state.loading = true;
-	execFunction(closeFunction)
+	callOptionalFunction(closeFunction)
 		.then(() => {
 			emit("close");
 			state.visible = false;
 		})
-		.catch((error) => {
-			consoleError("FaPopup", error);
+		.catch((error: unknown) => {
+			logger.error("FaPopup", error);
 		})
 		.finally(() => {
 			state.loading = false;
 		});
 };
 
-const handleLoading = (loadingFunction: () => void | Promise<void>): void => {
+const handleLoading = (loadingFunction: () => void | Promise<void>) => {
 	state.loading = true;
-	execFunction(loadingFunction)
+	callOptionalFunction(loadingFunction)
 		.then()
-		.catch((error) => {
-			consoleError("FaPopup", error);
+		.catch((error: unknown) => {
+			logger.error("FaPopup", error);
 		})
 		.finally(() => {
 			state.loading = false;

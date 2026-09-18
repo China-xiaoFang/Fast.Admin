@@ -21,7 +21,7 @@ defineOptions({
 const appStore = useApp();
 
 let domain = "";
-const host = import.meta.env.VITE_AXIOS_REQUEST_URL.replace(/^https?:\/\//, "").split(/[/:]/)[0];
+const host = import.meta.env.VITE_API_REQUEST_URL.replace(/^https?:\/\//, "").split(/[/:]/)[0];
 // ip 或者 localhost
 if (/^\d{1,3}(?:\.\d{1,3}){3}$/.test(host) || host === "localhost") {
 	domain = host;
@@ -36,18 +36,15 @@ if (/^\d{1,3}(?:\.\d{1,3}){3}$/.test(host) || host === "localhost") {
 
 <style scoped lang="scss">
 .fa-footer {
-	box-sizing: border-box;
-	height: var(--wot-footer-height, 40px);
-	font-size: var(--wot-font-size-small);
-	color: var(--wot-text-color-secondary);
-	text-decoration: none;
+	height: var(--fa-footer-height, 40px);
+	font-size: var(--wot-typography-label-size-large);
+	color: var(--wot-text-auxiliary);
 	letter-spacing: 0.5px;
-	padding: 0;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	transition: height var(--wot-transition-duration);
+	transition: height var(--fa-transition-duration);
 	overflow: hidden;
 }
 </style>

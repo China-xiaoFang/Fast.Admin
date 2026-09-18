@@ -1,80 +1,90 @@
 <template>
 	<view class="page">
-		<image v-if="appStore.logoUrl" class="img_logo" :src="appStore.logoUrl" @error="state.logoUrl = defaultLogo" />
-		<image v-else class="img_logo" :src="defaultLogo" />
-		<view class="app-info">{{ appStore.appName }}是一款帮助企业实现智能化管理的移动互联网应用，需要登陆后方可进入系统进行管理</view>
-		<wd-form ref="formRef" :model="state.formData" :rules="state.formRule" errorType="toast">
-			<view v-if="state.hasUserInfo" class="tenant-info">
-				<wd-icon name="user" />
-				<view class="user-info">
-					<text class="tenant-name">{{ userInfoStore.tenantName }}</text>
-					<text class="nick-name">{{ userInfoStore.employeeName }}</text>
-				</view>
-			</view>
-			<wd-input
-				v-else
-				prefixIcon="user"
-				prop="account"
-				v-model="state.formData.account"
-				clearable
-				placeholder="请输入账号"
-				:maxlength="20"
-				showWordLimit
-			/>
-			<wd-input
-				prefixIcon="lock-off"
-				prop="password"
-				showPassword
-				v-model="state.formData.password"
-				clearable
-				placeholder="请输入密码"
-				@confirm="handleLogin"
-			/>
-			<wd-button type="info" plain block :round="false" @click="handleLogin">账号登录</wd-button>
-			<!-- #ifdef MP-WEIXIN -->
-			<wd-button openType="getUserInfo" type="primary" block :round="false" icon="mobile" @getuserinfo="handleWeChatLogin">快捷登陆</wd-button>
-			<!-- #endif -->
-			<view class="agreement">
-				<wd-checkbox v-model="state.formData.agreementSelect" shape="square">我已阅读并同意</wd-checkbox>
-				<text @click="router.push(CommonRoute.UserAgreement)">《用户协议》</text>
-				<text @click="router.push(CommonRoute.PrivacyAgreement)">《隐私协议》</text>
-				<text @click="router.push(CommonRoute.ServiceAgreement)">《服务协议》</text>
-			</view>
-			<!-- <view class="find-password" @click="router.push('/pages/setting/account/changePasswordByVerifyCode/index')">找回密码</view> -->
-		</wd-form>
-		<FaFooter />
-	</view>
-	<wd-message-box selector="confirm-agreement-box">
-		<view class="agreement__warp">
-			我已阅读并同意
-			<text @click="router.push(CommonRoute.UserAgreement)">《用户协议》</text>
-			<text @click="router.push(CommonRoute.PrivacyAgreement)">《隐私协议》</text>
-			<text @click="router.push(CommonRoute.ServiceAgreement)">《服务协议》</text>
+		<view class="page__brand">
+			<view class="page__logo-wrap"><image class="page__logo" :src="appStore.logoUrl || defaultLogo" mode="aspectFit" /></view>
+			<view class="page__title">{{ appStore.appName }}</view>
+			<view class="page__subtitle"> 统一、安全、便捷的移动管理平台。随时掌握业务动态，高效处理日常工作，让组织协作与数据管理触手可及。 </view>
 		</view>
-	</wd-message-box>
-	<!-- #ifdef MP-WEIXIN -->
-	<FaPopup ref="authLoginPopupRef" width="80%" :closeOnClickModal="false">
-		<view class="pop__auth-warp">
-			<view class="auth-body">
-				<view class="auth-title">
-					<image v-if="appStore.logoUrl" class="auth-logo" :src="appStore.logoUrl" @error="state.logoUrl = defaultLogo" />
-					<image v-else class="auth-logo" :src="defaultLogo" />
-					<view>您尚未登录</view>
-				</view>
-				<view class="auth-content">
-					<text>为了完整体验，需要您的授权登录</text>
-					<text>您可使用手机号一键登录</text>
-					<view class="agreement">
-						登录即表示您已阅读并同意
-						<text @click="router.push(CommonRoute.UserAgreement)">《用户协议》</text>
-						<text @click="router.push(CommonRoute.PrivacyAgreement)">《隐私协议》</text>
-						<text @click="router.push(CommonRoute.ServiceAgreement)">《服务协议》</text>
-					</view>
+
+		<wd-form ref="formRef" :model="state.formData" :schema="state.formSchema" error-type="toast">
+			<view v-if="userInfoStore.userKey" class="page__user-info">
+				<FaIcon name="tenant" size="40rpx" />
+				<view class="page__user-info-content">
+					<text class="page__tenant-name">{{ userInfoStore.tenantName }}</text>
+					<text class="page__employee-name">{{ userInfoStore.employeeName || userInfoStore.nickName }}</text>
 				</view>
 			</view>
-			<view class="auth-actions">
-				<wd-button type="info" plain block @click="authLoginPopupRef.close()">暂不登录</wd-button>
-				<wd-button openType="getPhoneNumber" type="primary" block @getphonenumber="handlePhoneLogin">手机号一键登录</wd-button>
+			<wd-form-item v-else custom-class="page__field" prop="account">
+				<wd-input
+					v-model="state.formData.account"
+					clearable
+					:compact="false"
+					prefix-icon="user"
+					:show-word-limit="false"
+					:maxlength="50"
+					placeholder="请输入登录账号"
+				/>
+			</wd-form-item>
+			<wd-form-item custom-class="page__field" prop="password">
+				<wd-input
+					v-model="state.formData.password"
+					clearable
+					:compact="false"
+					prefix-icon="lock"
+					:show-word-limit="false"
+					show-password
+					:maxlength="20"
+					placeholder="请输入登录密码"
+				/>
+			</wd-form-item>
+
+			<FaImageCaptcha ref="captchaRef" v-model="state.formData.captchaCode" v-model:captcha-key="state.formData.captchaKey" />
+
+			<view class="page__assist" @click="router.push(CommonRoute.PasswordReset)">
+				<wd-icon name="question-circle" size="28rpx" />
+				<text>忘记密码</text>
+			</view>
+			<view class="page__agreement">
+				<wd-checkbox v-model="state.formData.agreed" type="square" />
+				<view class="page__agreement-text" @click="state.formData.agreed = !state.formData.agreed">
+					我已阅读并同意
+					<text @click.stop="router.push(CommonRoute.ServiceAgreement)">《服务协议》</text>
+					和
+					<text @click.stop="router.push(CommonRoute.PrivacyAgreement)">《隐私政策》</text>
+				</view>
+			</view>
+			<wd-button custom-class="page__submit" type="primary" block @click="handleLogin">账号登录</wd-button>
+		</wd-form>
+
+		<!-- #ifdef MP-WEIXIN -->
+		<view class="page__other">
+			<wd-divider>其他登录方式</wd-divider>
+			<wd-button open-type="getUserInfo" custom-class="page__wechat" @getuserinfo="handleWeChatLogin">
+				<image class="page__wechat-icon" :src="weChatLogo" mode="aspectFit" />
+			</wd-button>
+		</view>
+		<!-- #endif -->
+	</view>
+
+	<wd-dialog selector="confirm_agreement_dialog">
+		<view class="page__agreement-text">
+			我已阅读并同意
+			<text @click.stop="router.push(CommonRoute.ServiceAgreement)">《服务协议》</text>
+			和
+			<text @click.stop="router.push(CommonRoute.PrivacyAgreement)">《隐私政策》</text>
+		</view>
+	</wd-dialog>
+
+	<!-- #ifdef MP-WEIXIN -->
+	<FaPopup ref="authLoginPopupRef" width="80%" :close-on-click-modal="false">
+		<view class="page__auth-popup">
+			<image class="page__auth-logo" :src="appStore.logoUrl || defaultLogo" mode="aspectFit" />
+			<view class="page__auth-title">绑定手机号</view>
+			<view class="page__auth-description">该微信尚未绑定手机号。授权手机号后，将自动匹配对应管理账号并继续登录。</view>
+			<view class="page__auth-agreement">授权即表示您已阅读并同意《服务协议》和《隐私政策》</view>
+			<view class="page__auth-actions">
+				<wd-button type="info" block variant="plain" @click="authLoginPopupRef?.close()">暂不登录</wd-button>
+				<wd-button open-type="getPhoneNumber" type="primary" block @getphonenumber="handlePhoneLogin"> 授权手机号 </wd-button>
 			</view>
 		</view>
 	</FaPopup>
@@ -83,185 +93,158 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import { clickUtil, consoleLog, cryptoUtil, withDefineType } from "@fast-china/utils";
+import { logger, throttle, withDefineType } from "@fast-china/utils";
+import { useDialog } from "@wot-ui/ui";
 import { useRouter } from "uni-mini-router";
-import { useMessage } from "wot-design-uni";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
 import { CommonRoute } from "@/common";
+import FaPopup from "@/components/popup/index.vue";
 import { useMessageBox, useToast } from "@/hooks";
+import weChatLogo from "@/static/images/wechat.png";
 import defaultLogo from "@/static/logo.png";
 import { useApp, useUserInfo } from "@/stores";
+import type { FormInstance, FormSchema } from "@wot-ui/ui/components/wd-form/types";
+import type { LoginInput } from "@/api/services/Auth/login/models/LoginInput";
 import type { LoginOutput } from "@/api/services/Auth/login/models/LoginOutput";
-import type { FaPopupInstance } from "@/components";
-import type { FormInstance, FormRules } from "wot-design-uni/components/wd-form/types";
+import type { FaImageCaptchaInstance, FaPopupInstance } from "@/components";
 
 definePage({
 	name: "Login",
 	layout: "layout",
-	backgroundColor: "var(--wot-bg-color)",
-	footer: false,
-	watermark: false,
-	pageScroll: false,
-	authForbidView: true,
 	noLogin: true,
-	style: {
-		navigationBarTitleText: "登录",
-	},
+	authForbidView: true,
+	watermark: false,
+	style: { navigationBarTitleText: "登录" },
 });
 
 const appStore = useApp();
 const userInfoStore = useUserInfo();
 const router = useRouter();
 
-const confirmAgreementBox = useMessage("confirm-agreement-box");
-
 const formRef = ref<FormInstance>();
+const captchaRef = ref<FaImageCaptchaInstance>();
 const authLoginPopupRef = ref<FaPopupInstance>();
 
+const confirmAgreementDialog = useDialog("confirm_agreement_dialog");
+
 const state = reactive({
-	/** Logo 图片 */
-	logoUrl: appStore.logoUrl,
-	/** 存在用户信息 */
-	hasUserInfo: false,
-	formRule: withDefineType<FormRules>({
-		account: [{ required: true, message: "请输入账号" }],
-		password: [{ required: true, message: "请输入密码" }],
+	formData: withDefineType<LoginInput & { agreed?: boolean }>({}),
+	formSchema: withDefineType<FormSchema>({
+		validate(formModel: LoginInput) {
+			return [
+				...(!formModel.account ? [{ path: ["account"], message: "请输入账号" }] : []),
+				...(formModel.account?.length > 50 ? [{ path: ["account"], message: "账号长度必须为 1~50 个字符" }] : []),
+				...(!formModel.password ? [{ path: ["password"], message: "请输入密码" }] : []),
+				...(formModel.password?.length < 6 || formModel.password?.length > 20
+					? [{ path: ["password"], message: "密码长度必须为 6~20 个字符" }]
+					: []),
+				...(!/^[A-Za-z0-9]{4}$/.test(formModel.captchaCode) ? [{ path: ["captchaCode"], message: "图形验证码必须为4位字母或数字" }] : []),
+			];
+		},
 	}),
-	formData: {
-		account: "",
-		password: "",
-		agreementSelect: false,
-	},
 });
 
 /** 协议检查 */
 const agreementCheck = async () => {
-	// 判断是否同意了协议
-	if (state.formData.agreementSelect) {
-		return true;
-	} else {
-		try {
-			await confirmAgreementBox.confirm({
-				confirmButtonText: "同意",
-				cancelButtonText: "取消",
-				closeOnClickModal: false,
-			});
-			// 弹窗同意
-			state.formData.agreementSelect = true;
-			return true;
-		} catch {
-			useToast.warning(`登录前需确认您已阅读并同意《用户协议》、《隐私协议》、《服务协议》，以便为您提供更优质的服务。`);
-			return false;
-		}
+	if (state.formData.agreed) return true;
+	try {
+		await confirmAgreementDialog.confirm({
+			confirmButtonText: "同意",
+			cancelButtonText: "取消",
+			closeOnClickModal: false,
+		});
+		state.formData.agreed = true;
+	} catch {
+		useToast.warning(`登录前需确认您已阅读并同意《服务协议》和《隐私协议》，以便为您提供更优质的服务。`);
 	}
+	return state.formData.agreed;
 };
 
 /** 登录成功 */
 const loginSuccess = (loginRes: LoginOutput) => {
-	consoleLog("Login", "LoginRes", loginRes);
-	userInfoStore.fakeLogin(loginRes);
 	switch (loginRes.status) {
 		case LoginStatusEnum.Success:
 			userInfoStore.login(loginRes);
 			break;
 		case LoginStatusEnum.SelectTenant:
-			router.push(CommonRoute.SelectTenant);
-			break;
-		case LoginStatusEnum.AuthExpired:
-			useMessageBox.alert(loginRes.message);
+			uni.navigateTo({
+				url: CommonRoute.SelectTenant,
+				success({ eventChannel }) {
+					eventChannel.emit("selectTenantLogin", {
+						nickName: loginRes.nickName,
+						loginTicket: loginRes.loginTicket,
+						tenantList: loginRes.tenantList,
+					});
+				},
+			});
 			break;
 		case LoginStatusEnum.NotAccount:
 			// #ifdef MP-WEIXIN
-			authLoginPopupRef.value.open();
+			authLoginPopupRef.value?.open();
 			// #endif
 			// #ifndef MP-WEIXIN
-			useMessageBox.alert(loginRes.message);
+			useMessageBox.alert(loginRes.message || "未找到可登录的账号");
 			// #endif
 			break;
+		default:
+			useMessageBox.alert(loginRes.message || "登录失败");
 	}
 };
 
 /** 登录 */
-const handleLogin = async () => {
-	await clickUtil.throttleAsync(async () => {
-		const { valid } = await formRef.value.validate();
-		if (valid) {
-			if (await agreementCheck()) {
-				const { account, password } = state.formData;
-				let loginRes: LoginOutput = null;
-				if (state.hasUserInfo) {
-					const { userKey } = userInfoStore;
-					// 租户登录
-					loginRes = await loginApi.tenantLogin({
-						userKey,
-						password: cryptoUtil.sha1.encrypt(password),
-					});
-				} else {
-					// 账号密码登录
-					loginRes = await loginApi.login({
-						account,
-						password: cryptoUtil.sha1.encrypt(password),
-					});
-				}
-				loginSuccess(loginRes);
-			}
+const handleLogin = throttle(async () => {
+	const { valid } = await formRef.value.validate();
+	if (!valid) return;
+	if (!(await agreementCheck())) return;
+	const { userKey } = userInfoStore;
+	const { account, password, captchaKey, captchaCode } = state.formData;
+	try {
+		let apiRes: LoginOutput;
+		// 判断是否存在用户Key，如果存在直接租户登录
+		if (userKey) {
+			apiRes = await loginApi.tenantLogin({ userKey, password, captchaKey, captchaCode });
+		} else {
+			apiRes = await loginApi.login({ account, password, captchaKey, captchaCode });
 		}
-	});
-};
+		loginSuccess(apiRes);
+	} catch {
+		captchaRef.value?.refresh();
+	}
+});
 
 /** 微信登录 */
-const handleWeChatLogin = async (detail: UniNamespace.GetUserInfoRes) => {
-	await clickUtil.throttleAsync(async () => {
-		if (await agreementCheck()) {
-			const { iv, encryptedData, userInfo } = detail;
-			if (userInfo) {
-				consoleLog("Login", "GetUserInfo", userInfo);
-				const weChatCode = await userInfoStore.getWeChatCode();
-				if (weChatCode) {
-					const loginRes = await loginApi.weChatLogin({
-						weChatCode,
-						iv,
-						encryptedData,
-					});
-					loginSuccess(loginRes);
-				} else {
-					useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
-				}
-			} else {
-				useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
-			}
+const handleWeChatLogin = throttle(async ({ detail }: { detail: UniNamespace.GetUserInfoRes }) => {
+	if (!(await agreementCheck())) return;
+	const { iv, encryptedData, userInfo } = detail;
+	if (userInfo) {
+		logger.log("Login", "GetUserInfo", userInfo);
+		const weChatCode = await userInfoStore.getWeChatCode();
+		if (weChatCode) {
+			const loginRes = await loginApi.weChatLogin({ weChatCode, iv, encryptedData });
+			loginSuccess(loginRes);
+			return;
 		}
-	});
-};
+	}
+	useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
+});
 
 /** 手机登录 */
-const handlePhoneLogin = async (detail: UniHelper.ButtonOnGetphonenumberDetail) => {
-	await clickUtil.throttleAsync(async () => {
-		authLoginPopupRef.value.close(async () => {
-			consoleLog("Login", "GetPhoneNumber", detail);
-			const { code } = detail;
-			if (code) {
-				// 手动同意
-				state.formData.agreementSelect = true;
-				const weChatCode = await userInfoStore.getWeChatCode();
-				if (weChatCode) {
-					const loginRes = await loginApi.weChatAuthLogin({
-						weChatCode,
-						code,
-					});
-					loginSuccess(loginRes);
-				} else {
-					useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
-				}
-			} else {
-				useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
-			}
-		});
+const handlePhoneLogin = throttle(({ detail }: { detail: UniHelper.ButtonOnGetphonenumberDetail }) => {
+	authLoginPopupRef.value.close(async () => {
+		logger.log("Login", "GetPhoneNumber", detail);
+		const { code } = detail;
+		const weChatCode = await userInfoStore.getWeChatCode();
+		if (code && weChatCode) {
+			const loginRes = await loginApi.weChatAuthLogin({ weChatCode, code });
+			loginSuccess(loginRes);
+			return;
+		}
+		useToast.warning("授权失败，无法获取您的信息。请重新授权以继续使用我们的服务。");
 	});
-};
+});
 </script>
 
 <style scoped lang="scss">
-@import "./index.scss";
+@use "./index.scss";
 </style>

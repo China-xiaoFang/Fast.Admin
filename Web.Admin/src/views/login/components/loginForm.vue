@@ -205,19 +205,21 @@ const {
 
 const variantEyebrow = computed(() => {
 	switch (props.variant) {
+		case "classic":
+			return "ENTERPRISE MANAGEMENT";
 		case "modern":
 			return "SECURE DIGITAL WORKSPACE";
 		case "split":
 			return "UNIFIED MANAGEMENT ACCESS";
 		case "simple":
 			return "FOCUS · CREATE · DELIVER";
-		default:
-			return "ENTERPRISE MANAGEMENT";
 	}
 });
 
 const stepContent = computed(() => {
 	switch (formStep.value) {
+		case "Account":
+			return { title: "欢迎登录", description: `进入 ${appStore.appName}，开启高效工作` };
 		case "TenantAccount":
 			return {
 				title: "欢迎回来",
@@ -229,8 +231,6 @@ const stepContent = computed(() => {
 			return { title: "绑定新账号", description: "使用新的租户账号进入工作空间" };
 		case "SelectTenant":
 			return { title: "选择工作空间", description: "此账号关联了多个租户，请选择本次登录入口" };
-		default:
-			return { title: "欢迎登录", description: `进入 ${appStore.appName}，开启高效工作` };
 	}
 });
 
@@ -427,7 +427,6 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 .tenant-list {
 	flex: 0 0 400px;
 	height: 400px;
-	min-height: 0;
 	margin-right: -8px;
 	padding-right: 8px;
 }
@@ -463,7 +462,6 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 
 	.tenant-card__body {
 		display: flex;
-		min-width: 0;
 		flex-direction: column;
 		gap: 4px;
 
@@ -540,7 +538,6 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 
 :global(.login-tenant-popper .tenant-option__content) {
 	display: flex;
-	min-width: 0;
 	flex-direction: column;
 	gap: 2px;
 }

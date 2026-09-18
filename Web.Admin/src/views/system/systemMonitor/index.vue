@@ -1,7 +1,7 @@
 <template>
 	<div v-loading="state.loading" element-loading-text="加载中...">
-		<el-row class="w100 mb10" :gutter="10">
-			<el-col :span="12">
+		<el-row class="monitor-overview w100 mb10" :gutter="10">
+			<el-col :span="12" :xs="24" :sm="24" :md="12">
 				<el-card shadow="hover" header="系统信息">
 					<el-progress :width="150" type="dashboard" :percentage="state.machineDetail.ramRate" :color="state.colors">
 						<template #default="{ percentage }">
@@ -34,10 +34,10 @@
 					</el-form>
 				</el-card>
 			</el-col>
-			<el-col :span="12">
+			<el-col :span="12" :xs="24" :sm="24" :md="12">
 				<el-card shadow="hover" header="应用信息">
 					<el-row>
-						<el-col :span="10" :offset="2">
+						<el-col :span="10" :offset="2" :xs="24" :sm="10">
 							<el-progress :width="150" type="dashboard" :percentage="state.programDetail.cpuUsage" :color="state.colors">
 								<template #default="{ percentage }">
 									<span class="percentage_value">{{ percentage }}%</span>
@@ -45,7 +45,7 @@
 								</template>
 							</el-progress>
 						</el-col>
-						<el-col :span="10">
+						<el-col :span="10" :xs="24" :sm="10">
 							<el-progress :width="150" type="dashboard" :percentage="state.programDetail.workingMemoryRate" :color="state.colors">
 								<template #default="{ percentage }">
 									<span class="percentage_value">{{ percentage }}%</span>
@@ -294,7 +294,7 @@ const startInterval = () => {
 		if (!state.polling) return;
 		state.interval = setTimeout(() => {
 			fetchData()
-				.catch((error) => logger.error("Admin", "刷新系统监控数据失败。", error))
+				.catch((error: unknown) => logger.error("Admin", "刷新系统监控数据失败。", error))
 				.finally(schedule);
 		}, 5 * 1000);
 	};
@@ -308,7 +308,7 @@ const activate = (showLoading = false) => {
 	const session = ++activeSession;
 	if (showLoading) state.loading = true;
 	fetchData()
-		.catch((error) => logger.error("Admin", "加载系统监控数据失败。", error))
+		.catch((error: unknown) => logger.error("Admin", "加载系统监控数据失败。", error))
 		.finally(() => {
 			if (!isActive || session !== activeSession) return;
 			state.loading = false;
@@ -382,11 +382,29 @@ onUnmounted(deactivate);
 }
 .diskInfo {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-evenly;
+	gap: 10px;
+}
+.monitor-overview {
+	row-gap: 10px;
 }
 .assemblys {
+	max-width: 100%;
 	margin-right: 20px;
 	margin-bottom: 10px;
+}
+
+@media (max-width: 767px) {
+	.el-card {
+		:deep(.el-card__body) {
+			--el-card-padding: 14px 6px;
+		}
+	}
+
+	.assemblys {
+		margin-right: 8px;
+	}
 }
 </style>

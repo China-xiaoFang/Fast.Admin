@@ -14,8 +14,8 @@ export const roleApi = {
 	/**
 	 * 角色授权
 	 */
-	roleAuth(data: RoleAuthInput): Promise<unknown> {
-		return axiosUtil.request({
+	roleAuth(data: RoleAuthInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/role/roleAuth",
 			method: "post",
 			data,
@@ -46,8 +46,8 @@ export const roleApi = {
 	/**
 	 * 添加角色
 	 */
-	addRole(data: AddRoleInput): Promise<unknown> {
-		return axiosUtil.request({
+	addRole(data: AddRoleInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/role/addRole",
 			method: "post",
 			data,
@@ -57,8 +57,8 @@ export const roleApi = {
 	/**
 	 * 编辑角色
 	 */
-	editRole(data: EditRoleInput): Promise<unknown> {
-		return axiosUtil.request({
+	editRole(data: EditRoleInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/role/editRole",
 			method: "post",
 			data,
@@ -68,8 +68,8 @@ export const roleApi = {
 	/**
 	 * 删除角色
 	 */
-	deleteRole(data: RoleIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteRole(data: RoleIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/role/deleteRole",
 			method: "post",
 			data,

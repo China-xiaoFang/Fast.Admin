@@ -32,9 +32,7 @@
 }
 
 .el-card {
-	box-sizing: border-box;
 	padding: 10px;
-	overflow-x: hidden;
 	.el-card__header {
 		border-bottom: 1px solid var(--el-border-color-extra-light);
 	}
@@ -42,13 +40,6 @@
 
 .el-tabs {
 	height: inherit;
-	&.el-tabs--top {
-		.el-tabs__content {
-			flex: 1;
-			display: flex;
-			flex-direction: column;
-		}
-	}
 	.el-tabs__content {
 		padding: 10px;
 		height: 100%;
@@ -62,6 +53,12 @@
 			}
 		}
 	}
+}
+
+.el-tabs.el-tabs--top .el-tabs__content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 }
 
 .el-textarea__inner {
@@ -78,7 +75,7 @@
 			margin-bottom: 0;
 		}
 	}
-	&:not(.g-form-detail) {
+	&:not(.fa-form-detail) {
 		.el-form-item {
 			// 表单组件宽度100%
 			.el-form-item__content {

@@ -1,34 +1,71 @@
-import { type App } from "vue";
-import { consoleLog, useIdentity, useStorage } from "@fast-china/utils";
-import { dayjs } from "wot-design-uni";
+import { type App, type ComponentPublicInstance, nextTick } from "vue";
+import { configureInstallationIdentity, configureLogger, configureStorage, getOrCreateInstallationId, logger } from "@fast-china/utils";
+import dayjs from "dayjs";
+import "dayjs/locale/zh-cn";
 import { AppEnvironmentEnum } from "@/api/enums/AppEnvironmentEnum";
 import { CommonUniApp } from "@/common";
 import { RegExps } from "@/constants";
+import { useMessageBox } from "@/hooks";
 import { useApp } from "@/stores";
 import { loadFastAxios } from "./axios";
-import { loadWotDesign } from "./wot-design-uni";
+import { loadWotUi } from "./wot-ui";
 import { loadZPaging } from "./z-paging";
-import "dayjs/locale/zh-cn";
 
 export function loadPlugins(app: App): void {
+	// 全局异常捕获
+	app.config.errorHandler = (err, _instance: ComponentPublicInstance, _info: string) => {
+		if (!err) return;
+		const errorMap: Record<string, string> = {
+			InternalError: "Javascript引擎内部错误",
+			ReferenceError: "未找到对象",
+			TypeError: "使用了错误的类型或对象",
+			RangeError: "使用内置对象时，参数超范围",
+			SyntaxError: "语法错误",
+			EvalError: "错误的使用了Eval",
+			URIError: "URI错误",
+			AggregateError: "未知的多个错误",
+			TimeoutError: "操作超时",
+			NetworkError: "网络错误",
+			OutOfMemoryError: "内存溢出",
+			DOMException: "DOM 操作异常",
+			SecurityError: "安全错误，可能涉及跨域或 CSP 限制",
+			EventError: "事件处理错误",
+		};
+		const errorName = err instanceof Error ? err.name : undefined;
+		if (err === "cancel") {
+			console.warn("操作已取消");
+		} else if (errorName === "AxiosError") {
+			return;
+		} else {
+			const errorMessage = (errorName && errorMap[errorName]) || "未知错误";
+			console.error(err);
+			nextTick(() => {
+				useMessageBox.alert({
+					title: "系统错误",
+					msg: errorMessage,
+				});
+			});
+		}
+	};
+
+	configureLogger({
+		level: import.meta.env.DEV ? "debug" : "warn",
+	});
+
+	configureStorage({ prefix: "fast__", crypto: import.meta.env.VITE_STORAGE_CRYPTO === "true" });
+
+	configureInstallationIdentity();
+	const deviceId = getOrCreateInstallationId();
+	logger.debug("App", "Env", import.meta.env);
+	logger.debug("App", "DeviceId", deviceId);
+
 	const appStore = useApp();
-
-	const uStorage = useStorage();
-	// 缓存前缀
-	uStorage.setPrefix("fast__");
-	// 缓存是否加密
-	uStorage.setCrypto(import.meta.env.VITE_STORAGE_CRYPTO == "true");
-
-	consoleLog("App", "Env", import.meta.env);
-
-	const deviceId = useIdentity().makeIdentity();
-	consoleLog("App", "DeviceId", deviceId);
 
 	// 获取网络信息
 	uni.getNetworkType({
 		success: ({ networkType }) => {
 			const _networkType = networkType as INetworkType;
-			consoleLog("App", "NetworkType", _networkType);
+			logger.debug("App", "NetworkType", _networkType);
 			appStore.network = {
 				onLine: _networkType !== "none",
 				networkType: _networkType,
@@ -38,7 +75,7 @@ export function loadPlugins(app: App): void {
 
 	// 监听网络变化
 	uni.onNetworkStatusChange((res) => {
-		consoleLog("App", "监听到网络改变", res);
+		logger.debug("App", "监听到网络改变", res);
 		appStore.network = {
 			onLine: res.isConnected,
 			networkType: res.networkType as INetworkType,
@@ -154,20 +191,20 @@ export function loadPlugins(app: App): void {
 		appStore.deviceInfo.platform === "windows" || appStore.deviceInfo.platform === "mac" || appStore.deviceInfo.platform === "devtools";
 	appStore.isClient = isClient;
 
-	consoleLog("App", "AppBaseInfo", appStore.appBaseInfo);
-	consoleLog("App", "DeviceInfo", appStore.deviceInfo);
-	consoleLog("App", "WindowInfo", appStore.windowInfo);
-	consoleLog("App", "AppId", appStore.appId);
-	consoleLog("App", "AppVersion", appStore.appVersion);
-	consoleLog("App", "MenuButton", appStore.menuButton);
-	consoleLog("App", "IsIphone", isIphone);
-	consoleLog("App", "IsClient", isClient);
+	logger.debug("App", "AppBaseInfo", appStore.appBaseInfo);
+	logger.debug("App", "DeviceInfo", appStore.deviceInfo);
+	logger.debug("App", "WindowInfo", appStore.windowInfo);
+	logger.debug("App", "AppId", appStore.appId);
+	logger.debug("App", "AppVersion", appStore.appVersion);
+	logger.debug("App", "MenuButton", appStore.menuButton);
+	logger.debug("App", "IsIphone", isIphone);
+	logger.debug("App", "IsClient", isClient);
 
 	dayjs.locale("zh-cn");
 
 	loadFastAxios();
 
-	loadWotDesign();
+	loadWotUi();
 
 	loadZPaging();
 }

@@ -1,9 +1,9 @@
 import { URL, fileURLToPath } from "node:url";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
+import { defineConfig, loadEnv } from "vite";
 import { buildInfo, cdnImport, componentRegistry, envGuard, routerMeta, svgIcons } from "fast-vite-plugins";
 import visualizer from "rollup-plugin-visualizer";
-import { defineConfig, loadEnv } from "vite";
 import viteCompression from "vite-plugin-compression";
 import vueDevTools from "vite-plugin-vue-devtools";
 import type { UserConfig } from "vite";
@@ -185,16 +185,6 @@ export default defineConfig(({ command, mode }): UserConfig => {
 						js: isBuild ? "dist/vue.runtime.global.prod.js" : "dist/vue.runtime.global.js",
 					},
 					{
-						name: "@vueuse/shared",
-						global: "VueUse",
-						js: "dist/index.iife.min.js",
-					},
-					{
-						name: "@vueuse/core",
-						global: "VueUse",
-						js: "dist/index.iife.min.js",
-					},
-					{
 						name: "vue-router",
 						global: "VueRouter",
 						js: isBuild ? "dist/vue-router.global.prod.js" : "dist/vue-router.global.js",
@@ -266,11 +256,6 @@ export default defineConfig(({ command, mode }): UserConfig => {
 						name: "pinyin-pro",
 						global: "pinyinPro",
 						js: "dist/index.js",
-					},
-					{
-						name: "lodash",
-						global: "_",
-						js: "lodash.min.js",
 					},
 					{
 						name: "@fast-element-plus/icons-vue",

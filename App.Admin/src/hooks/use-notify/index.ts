@@ -1,5 +1,5 @@
 import { wdHookState } from "../index";
-import type { NotifyProps } from "wot-design-uni/components/wd-notify/types";
+import type { NotifyProps } from "@wot-ui/ui/components/wd-notify/types";
 
 export const useNotify = {
 	/**

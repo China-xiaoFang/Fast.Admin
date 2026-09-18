@@ -36,7 +36,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useVModel } from "@vueuse/core";
 import { onMounted, reactive } from "vue";
 import { PictureRounded } from "@element-plus/icons-vue";
 import { RegExps } from "fast-element-plus";
@@ -46,43 +45,35 @@ defineOptions({
 	name: "ImageCaptcha",
 });
 
-const props = withDefaults(
-	defineProps<{
-		modelValue?: string;
-		/** 图形验证码Key */
-		captchaKey?: string;
-		/** 绑定的属性名称 @default 'captchaCode' */
-		prop?: string;
-		/** 是否强制启用；false 时由后端登录验证码开关决定。 */
-		isForce?: boolean;
-		/** 业务请求期间禁用输入与手动刷新。 */
-		disabled?: boolean;
-	}>(),
-	{
-		modelValue: undefined,
-		captchaKey: undefined,
-		prop: "captchaCode",
-		isForce: false,
-		disabled: false,
-	}
-);
-
-const emit = defineEmits({
-	"update:modelValue": (_value: string) => true,
-	"update:captchaKey": (_value: string) => true,
+const props = defineProps({
+	/** @description 表单校验字段名 @default "captchaCode" */
+	prop: {
+		type: String,
+		default: "captchaCode",
+	},
+	/** 是否强制启用；false 时由后端登录验证码开关决定 */
+	isForce: Boolean,
+	/** 业务请求期间禁用输入与手动刷新 */
+	disabled: Boolean,
 });
 
-const modelValue = useVModel(props, "modelValue", emit, { passive: false });
-const captchaKey = useVModel(props, "captchaKey", emit, { passive: false });
+/** 用户输入的图形验证码 */
+const modelValue = defineModel<string>();
+/** 当前图形验证码的服务端标识 */
+const captchaKey = defineModel<string>("captchaKey");
 
 const state = reactive({
-	enabled: true,
+	/** 是否显示图形验证码 */
+	enabled: false,
+	/** 是否正在获取验证码 */
 	loading: false,
+	/** 最近一次验证码请求是否失败 */
 	loadFailed: false,
+	/** 图形验证码图片地址或 Data URL */
 	captchaImage: undefined,
 });
 
-/** 重新获取图形验证码并清空旧答案。 */
+/** 重新获取图形验证码并清空旧答案 */
 const refresh = async () => {
 	state.loading = true;
 	state.loadFailed = false;
@@ -97,16 +88,17 @@ const refresh = async () => {
 		captchaKey.value = apiRes.captchaKey;
 		state.captchaImage = apiRes.captchaImage;
 	} catch {
-		state.enabled = true;
+		state.enabled = false;
 		state.loadFailed = true;
 	}
 };
 
 onMounted(() => {
-	void refresh();
+	refresh();
 });
 
 defineExpose({
+	/** 重新获取图形验证码 */
 	refresh,
 });
 </script>
@@ -115,29 +107,27 @@ defineExpose({
 .image-captcha {
 	display: grid;
 	width: 100%;
-	min-width: 0;
 	grid-template-columns: minmax(0, 1fr) 132px;
 	align-items: center;
 	gap: 8px;
-	&__image {
-		height: 46px;
-		min-width: 0;
-		padding: 0;
-		cursor: pointer;
-		color: var(--el-text-color-secondary);
-		border: 1px solid var(--el-border-color-lighter);
-		border-radius: 8px;
-		background: var(--el-fill-color-light);
-		overflow: hidden;
-		&:disabled {
-			cursor: not-allowed;
-		}
-		img {
-			display: block;
-			width: 100%;
-			height: 100%;
-		}
+}
+.image-captcha__image {
+	height: 46px;
+	padding: 0;
+	cursor: pointer;
+	color: var(--el-text-color-secondary);
+	border: 1px solid var(--el-border-color-lighter);
+	border-radius: 8px;
+	background: var(--el-fill-color-light);
+	overflow: hidden;
+	img {
+		display: block;
+		width: 100%;
+		height: 100%;
 	}
+}
+.image-captcha__image:disabled {
+	cursor: not-allowed;
 }
 :deep(.el-form-item__label-wrap) {
 	align-items: center;

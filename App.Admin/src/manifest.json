@@ -1,7 +1,7 @@
 {
 	"name": "Fast.App",
 	"appid": "__UNI__9D0B9F8",
-	"description": "细节优化",
+	"description": "Fast.Admin 移动管理端",
 	"versionName": "1.0.0",
 	"versionCode": "100000",
 	"app-plus": {
@@ -36,9 +36,9 @@
 			"Barcode": {},
 			"Bluetooth": {},
 			"Camera": {},
-			"Contacts": {},
 			"VideoPlayer": {},
-			"UIWebview": {}
+			"Geolocation": {},
+			"Maps": {}
 		},
 		"distribute": {
 			"android": {
@@ -46,16 +46,25 @@
 					"<uses-permission android:name=\"android.permission.INTERNET\" />",
 					"<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
 					"<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />",
+
+					"<uses-permission android:name=\"android.permission.WAKE_LOCK\" />",
+					"<uses-permission android:name=\"android.permission.VIBRATE\" />",
+					"<uses-permission android:name=\"android.permission.FLASHLIGHT\" />",
+					"<uses-permission android:name=\"android.permission.CAMERA\" />",
+
 					"<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\" />",
 					"<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\" />",
-					"<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />",
-					"<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-					"<uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />",
-					"<uses-permission android:name=\"android.permission.WAKE_LOCK\" />",
-					"<uses-permission android:name=\"android.permission.GET_ACCOUNTS\" />",
-					"<uses-permission android:name=\"android.permission.VIBRATE\" />",
-					"<uses-permission android:name=\"android.permission.CAMERA\" />",
-					"<uses-permission android:name=\"android.permission.FLASHLIGHT\" />"
+					"<uses-permission android:name=\"android.permission.NEARBY_WIFI_DEVICES\" />",
+
+					"<uses-permission android:name=\"android.permission.BLUETOOTH\" android:maxSdkVersion=\"30\" />",
+					"<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\" android:maxSdkVersion=\"30\" />",
+					"<uses-permission android:name=\"android.permission.BLUETOOTH_SCAN\" />",
+					"<uses-permission android:name=\"android.permission.BLUETOOTH_CONNECT\" />",
+
+					"<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
+					"<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
+
+					"<uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />"
 				],
 				"permissionExternalStorage": {
 					"request": "none"
@@ -64,15 +73,27 @@
 					"request": "none"
 				},
 				"minSdkVersion": 24,
-				"targetSdkVersion": 24,
-				"abiFilters": ["armeabi-v7a", "arm64-v8a", "x86"]
+				"targetSdkVersion": 36,
+				"abiFilters": ["armeabi-v7a", "arm64-v8a"]
 			},
 			"ios": {
 				"dSYMs": false,
 				"idfa": false,
-				"UIBackgroundModes": ["audio", "location"]
+				"UIBackgroundModes": ["audio"],
+				"privacyDescription": {
+					"NSCameraUsageDescription": "用于拍照和扫描二维码。",
+					"NSPhotoLibraryUsageDescription": "用于选择并上传图片。",
+					"NSPhotoLibraryAddUsageDescription": "用于保存图片到系统相册。",
+					"NSLocationWhenInUseUsageDescription": "用于获取您的位置信息。",
+					"NSBluetoothAlwaysUsageDescription": "用于发现并连接附近的蓝牙设备。"
+				}
 			},
 			"sdkConfigs": {
+				"geolocation": {
+					"system": {
+						"__platform__": ["ios", "android"]
+					}
+				},
 				"maps": {},
 				"push": {}
 			},
@@ -134,8 +155,8 @@
 				"desc": "用于获取您的位置信息。"
 			}
 		},
-		"requiredPrivateInfos": ["getLocation", "onLocationChange", "startLocationUpdateBackground", "chooseLocation", "chooseAddress"],
-		"requiredBackgroundModes": ["audio", "location"],
+		"requiredPrivateInfos": ["getLocation", "chooseLocation"],
+		"requiredBackgroundModes": ["audio"],
 		"optimization": {
 			"subPackages": true
 		}
