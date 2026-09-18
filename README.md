@@ -82,18 +82,18 @@ These labels describe the current maintenance and validation scope only. They do
 
 <table>
   <tr>
-    <td align="center"><a href="docs/images/web-admin-login.png"><img src="docs/images/web-admin-login.png" width="140" alt="Web.Admin login" /></a><br />Login</td>
-    <td align="center"><a href="docs/images/web-admin-data-dashboard.png"><img src="docs/images/web-admin-data-dashboard.png" width="140" alt="Web.Admin data dashboard" /></a><br />Data Dashboard</td>
-    <td align="center"><a href="docs/images/web-admin-dashboard.png"><img src="docs/images/web-admin-dashboard.png" width="140" alt="Web.Admin dashboard" /></a><br />Dashboard</td>
-    <td align="center"><a href="docs/images/web-admin-system-monitor.png"><img src="docs/images/web-admin-system-monitor.png" width="140" alt="Web.Admin system monitor" /></a><br />System Monitor</td>
-    <td align="center"><a href="docs/images/web-admin-data-dictionary.png"><img src="docs/images/web-admin-data-dictionary.png" width="140" alt="Web.Admin data dictionary" /></a><br />Data Dictionary</td>
+    <td align="center"><img src="docs/images/web-admin-login.png" width="140" alt="Web.Admin login" /><br />Login</td>
+    <td align="center"><img src="docs/images/web-admin-data-dashboard.png" width="140" alt="Web.Admin data dashboard" /><br />Data Dashboard</td>
+    <td align="center"><img src="docs/images/web-admin-dashboard.png" width="140" alt="Web.Admin dashboard" /><br />Dashboard</td>
+    <td align="center"><img src="docs/images/web-admin-system-monitor.png" width="140" alt="Web.Admin system monitor" /><br />System Monitor</td>
+    <td align="center"><img src="docs/images/web-admin-data-dictionary.png" width="140" alt="Web.Admin data dictionary" /><br />Data Dictionary</td>
   </tr>
   <tr>
-    <td align="center"><a href="docs/images/web-admin-table-configuration.png"><img src="docs/images/web-admin-table-configuration.png" width="140" alt="Web.Admin table configuration" /></a><br />Table Configuration</td>
-    <td align="center"><a href="docs/images/web-admin-menu-management.png"><img src="docs/images/web-admin-menu-management.png" width="140" alt="Web.Admin menu management" /></a><br />Menu Management</td>
-    <td align="center"><a href="docs/images/web-admin-scheduled-jobs.png"><img src="docs/images/web-admin-scheduled-jobs.png" width="140" alt="Web.Admin scheduled jobs" /></a><br />Scheduled Jobs</td>
-    <td align="center"><a href="docs/images/web-admin-role-management.png"><img src="docs/images/web-admin-role-management.png" width="140" alt="Web.Admin role management" /></a><br />Role Management</td>
-    <td align="center"><a href="docs/images/web-admin-department-management.png"><img src="docs/images/web-admin-department-management.png" width="140" alt="Web.Admin department management" /></a><br />Department Management</td>
+    <td align="center"><img src="docs/images/web-admin-table-configuration.png" width="140" alt="Web.Admin table configuration" /><br />Table Configuration</td>
+    <td align="center"><img src="docs/images/web-admin-menu-management.png" width="140" alt="Web.Admin menu management" /><br />Menu Management</td>
+    <td align="center"><img src="docs/images/web-admin-scheduled-jobs.png" width="140" alt="Web.Admin scheduled jobs" /><br />Scheduled Jobs</td>
+    <td align="center"><img src="docs/images/web-admin-role-management.png" width="140" alt="Web.Admin role management" /><br />Role Management</td>
+    <td align="center"><img src="docs/images/web-admin-department-management.png" width="140" alt="Web.Admin department management" /><br />Department Management</td>
   </tr>
 </table>
 

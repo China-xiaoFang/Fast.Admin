@@ -50,8 +50,8 @@ export const departmentApi = {
 	/**
 	 * 添加部门
 	 */
-	addDepartment(data: AddDepartmentInput): Promise<unknown> {
-		return axiosUtil.request({
+	addDepartment(data: AddDepartmentInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/department/addDepartment",
 			method: "post",
 			data,
@@ -61,8 +61,8 @@ export const departmentApi = {
 	/**
 	 * 编辑部门
 	 */
-	editDepartment(data: EditDepartmentInput): Promise<unknown> {
-		return axiosUtil.request({
+	editDepartment(data: EditDepartmentInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/department/editDepartment",
 			method: "post",
 			data,
@@ -72,8 +72,8 @@ export const departmentApi = {
 	/**
 	 * 删除部门
 	 */
-	deleteDepartment(data: DepartmentIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteDepartment(data: DepartmentIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/department/deleteDepartment",
 			method: "post",
 			data,

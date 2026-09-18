@@ -36,8 +36,8 @@ export const configApi = {
 	/**
 	 * 添加配置
 	 */
-	addConfig(data: AddConfigInput): Promise<unknown> {
-		return axiosUtil.request({
+	addConfig(data: AddConfigInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/config/addConfig",
 			method: "post",
 			data,
@@ -47,8 +47,8 @@ export const configApi = {
 	/**
 	 * 编辑配置
 	 */
-	editConfig(data: EditConfigInput): Promise<unknown> {
-		return axiosUtil.request({
+	editConfig(data: EditConfigInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/config/editConfig",
 			method: "post",
 			data,
@@ -58,8 +58,8 @@ export const configApi = {
 	/**
 	 * 删除配置缓存
 	 */
-	deleteConfigCache(data: DeleteConfigCacheInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteConfigCache(data: DeleteConfigCacheInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/config/deleteConfigCache",
 			method: "post",
 			data,
@@ -69,8 +69,8 @@ export const configApi = {
 	/**
 	 * 删除所有配置缓存
 	 */
-	deleteAllConfigCache(): Promise<unknown> {
-		return axiosUtil.request({
+	deleteAllConfigCache(): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/config/deleteAllConfigCache",
 			method: "post",
 			requestType: "delete",

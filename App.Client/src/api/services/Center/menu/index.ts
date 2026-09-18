@@ -47,8 +47,8 @@ export const menuApi = {
 	/**
 	 * 添加菜单
 	 */
-	addMenu(data: AddMenuInput): Promise<unknown> {
-		return axiosUtil.request({
+	addMenu(data: AddMenuInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/menu/addMenu",
 			method: "post",
 			data,
@@ -58,8 +58,8 @@ export const menuApi = {
 	/**
 	 * 编辑菜单
 	 */
-	editMenu(data: EditMenuInput): Promise<unknown> {
-		return axiosUtil.request({
+	editMenu(data: EditMenuInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/menu/editMenu",
 			method: "post",
 			data,
@@ -69,8 +69,8 @@ export const menuApi = {
 	/**
 	 * 删除菜单
 	 */
-	deleteMenu(data: MenuIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	deleteMenu(data: MenuIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/menu/deleteMenu",
 			method: "post",
 			data,
@@ -80,8 +80,8 @@ export const menuApi = {
 	/**
 	 * 菜单更改状态
 	 */
-	changeStatus(data: MenuIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	changeStatus(data: MenuIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/menu/changeStatus",
 			method: "post",
 			data,

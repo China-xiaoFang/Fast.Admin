@@ -1,12 +1,31 @@
 <template>
 	<view class="page">
-		<view class="logo">
-			<image v-if="appStore.logoUrl" class="img_logo" :src="appStore.logoUrl" @error="state.logoUrl = defaultLogo" />
-			<image v-else class="img_logo" :src="defaultLogo" />
-			<text class="app_name">{{ appStore.appName }}</text>
+		<view class="page__glow page__glow--top" />
+		<view class="page__glow page__glow--bottom" />
+
+		<view class="page__brand">
+			<view class="page__logo-wrap">
+				<view class="page__logo-ring" />
+				<image class="page__logo" :src="appStore.logoUrl || defaultLogo" mode="aspectFit" />
+			</view>
+			<text class="page__title">{{ appStore.appName }}</text>
+			<text class="page__subtitle">让管理更简单、更高效</text>
 		</view>
-		<view v-if="state.loading" class="btn_text">{{ state.btnText }}</view>
-		<wd-button v-else type="primary" :round="false" @tap="appLaunch">进入</wd-button>
+
+		<view class="page__action">
+			<view class="page__status">
+				<view v-if="state.loading" class="page__loading">
+					<view class="page__loading-dot" />
+					<view class="page__loading-dot" />
+					<view class="page__loading-dot" />
+				</view>
+				<text>{{ state.statusText }}</text>
+			</view>
+			<wd-button v-if="state.retryType" custom-class="page__retry" block type="primary" @click="handleRetry">
+				{{ state.retryType === "update" ? "重新检测" : "重新连接" }}
+			</wd-button>
+		</view>
+
 		<FaFooter />
 	</view>
 </template>
@@ -14,27 +33,23 @@
 <script setup lang="ts">
 import { onLoad } from "@dcloudio/uni-app";
 import { reactive } from "vue";
-import { consoleError, consoleLog, consoleWarn } from "@fast-china/utils";
+import { logger, withDefineType } from "@fast-china/utils";
 import { useRouter } from "uni-mini-router";
 import { LoginStatusEnum } from "@/api/enums/LoginStatusEnum";
 import { loginApi } from "@/api/services/Auth/login";
 import { CommonRoute } from "@/common";
-import { useLoading, useMessageBox } from "@/hooks";
+import { useUpdate } from "@/hooks";
 import defaultLogo from "@/static/logo.png";
 import { useApp, useUserInfo } from "@/stores";
 
 definePage({
 	name: "Launcher",
 	layout: "layout",
-	lightBackgroundImage: "/static/images/launcher_bg.png",
-	darkBackgroundImage: "/static/images/launcher_bg_dark.png",
 	footer: false,
 	watermark: false,
 	pageScroll: false,
 	noLogin: true,
-	style: {
-		navigationBarTitleText: "Fast.App",
-	},
+	style: { navigationStyle: "custom" },
 });
 
 const appStore = useApp();
@@ -44,299 +59,155 @@ const router = useRouter();
 const state = reactive({
 	/** 加载中 */
 	loading: true,
-	/** 按钮文字 */
-	btnText: "",
+	/** 状态文字 */
+	statusText: "正在初始化应用",
 	// launch 接口异常，则跳过更新
 	skipUpdateCheck: false,
-	/** Logo 图片 */
-	logoUrl: appStore.logoUrl,
+	/** 重试类型 */
+	retryType: withDefineType<"launch" | "update">(null),
 });
 
 const openStartPage = async () => {
-	state.btnText = "进入页面";
-	state.loading = false;
+	state.statusText = "正在验证登录状态";
 	// 判断是否存在 token, userKey
 	const { token, userKey } = userInfoStore;
 	if (token && userKey) {
-		useLoading.show("尝试自动登录中...");
 		try {
 			// 验证登录
-			const loginRes = await loginApi.tryLogin({
-				userKey,
-			});
+			const loginRes = await loginApi.tryLogin({ userKey });
 			if (loginRes.status === LoginStatusEnum.Success) {
 				userInfoStore.login(loginRes);
 				return;
-			} else {
-				consoleWarn("Launcher", "尝试缓存登录失败", loginRes);
 			}
+			logger.warn("Launcher", "缓存登录已失效", loginRes);
 		} catch (error) {
-			consoleError("Launcher", "尝试缓存登录失败");
-			consoleError("Launcher", error);
-		} finally {
-			useLoading.hide();
+			logger.error("Launcher", "尝试缓存登录失败", error);
 		}
 
 		// 尝试微信自动登录
 		// #ifdef MP-WEIXIN
+		state.statusText = "正在进行微信授权登录";
 		const weChatCode = await userInfoStore.getWeChatCode();
 		if (weChatCode) {
-			useLoading.show("微信授权自动登录中...");
-			const loginRes = await loginApi
-				.weChatLogin({
-					weChatCode,
-				})
-				.finally(() => useLoading.hide());
-			if (loginRes.status === LoginStatusEnum.Success) {
-				userInfoStore.login(loginRes);
-				return;
-			} else {
-				useMessageBox.alert(loginRes.message).then(() => {
-					router.replaceAll({
-						path: CommonRoute.Login,
-					});
-				});
-				return;
+			try {
+				const loginRes = await loginApi.weChatLogin({ weChatCode });
+				if (loginRes.status === LoginStatusEnum.Success) {
+					userInfoStore.login(loginRes);
+					return;
+				}
+				logger.warn("Launcher", "微信自动登录失败", loginRes);
+			} catch (error) {
+				logger.error("Launcher", "微信自动登录失败", error);
 			}
 		} else {
-			consoleWarn("Launcher", "授权失败，无法获取您的信息。请手动授权以继续使用我们的服务。");
-			router.replaceAll({
-				path: CommonRoute.Login,
-			});
-			return;
+			logger.warn("Launcher", "微信授权失败，转入手动登录");
 		}
-
 		// #endif
 	}
 
-	router.replaceAll({
-		path: CommonRoute.Login,
-	});
+	state.statusText = "正在进入应用";
+	router.replaceAll(CommonRoute.Login);
 };
 
-/** 检查小程序版本 */
-const checkMiniAppVersion = () => {
-	state.btnText = "检查更新";
-	const updateManager = uni.getUpdateManager();
-	if (!updateManager) {
-		state.btnText = "更新检测异常";
-	}
-	// 检查小程序是否有新版本
-	updateManager.onCheckForUpdate((res) => {
-		if (res.hasUpdate) {
-			state.btnText = "下载更新";
-			updateManager.onUpdateReady(() => {
-				consoleLog("Launcher", "小程序存在新版本");
-				useMessageBox
-					.alert({
-						title: "更新提示",
-						msg: "新版本已经准备好，需要重启后才能正常使用应用。",
-					})
-					.then(() => {
-						updateManager.applyUpdate(); //调用 applyUpdate 应用新版本并重启
-					});
-			});
-			updateManager.onUpdateFailed(() => {
-				consoleError("Launcher", "小程序更新检测异常");
-				useMessageBox
-					.alert({
-						msg: "系统异常，无法更新新版本，是否重启应用？",
-						confirmButtonText: "重启应用",
-					})
-					.then(() => {
-						updateManager.applyUpdate(); //调用 applyUpdate 应用新版本并重启
-					});
-			});
-		} else {
-			consoleLog("Launcher", "小程序已是最新");
-			state.btnText = "已是最新";
-			openStartPage();
-		}
-	});
-};
-
-// /** 热更新 */
-// const plusUpdate = (url: string) => {
-// 	consoleLog("Launcher", `热更新：${url}`);
-// 	axiosUtil
-// 		.request<string>({
-// 			url,
-// 			method: "download",
-// 			timeout: 5000,
-// 			requestType: "download",
-// 			simpleDataFormat: false,
-// 			requestCipher: false,
-// 			loading: true,
-// 			loadingText: "下载资源文件中...",
-// 		})
-// 		.then((res) => {
-// 			plus.runtime.install(
-// 				res,
-// 				{},
-// 				() => {
-// 					consoleLog("Launcher", "APP存在新版本");
-// 					useMessageBox
-// 						.alert({
-// 							title: "更新提示",
-// 							msg: "新版本已经准备好，需要重启后才能正常使用应用。",
-// 						})
-// 						.then(() => {
-// 							plus.runtime.restart();
-// 						});
-// 				},
-// 				(e) => {
-// 					consoleError("Launcher", "APP更新检测异常");
-// 					useMessageBox
-// 						.alert({
-// 							title: "资源文件更新失败",
-// 							msg: e.message,
-// 						})
-// 						.then(() => {
-// 							openStartPage();
-// 						});
-// 				}
-// 			);
-// 		})
-// 		.catch((error) => {
-// 			useToast.error("资源文件下载失败");
-// 			consoleError("Launcher", "热更新文件下载失败");
-// 			consoleError("Launcher", error);
-// 			openStartPage();
-// 		});
-// };
-
-// /** 整包更新 */
-// const fullUpdate = (url: string) => {
-// 	consoleLog("Launcher", `整包更新：${url}`);
-// 	useMessageBox
-// 		.alert({
-// 			title: "更新提示",
-// 			msg: "开始整包更新",
-// 		})
-// 		.then(() => {
-// 			plus.runtime.openURL(url);
-// 			openStartPage();
-// 		});
-// };
-
-/** 检查App版本 */
-const checkAppVersion = () => {
-	state.btnText = "检查更新";
-	// plus.runtime.getProperty(plus.runtime.appid, (widgetInfo) => {
-	// 	type appCheckUpdateResult = {
-	// 		Detail: {
-	// 			Status: number;
-	// 			Version: string;
-	// 			Note: string;
-	// 			WgtUrl: string;
-	// 			PkgUrl: string;
-	// 		};
-	// 		IsSuccess: boolean;
-	// 		Value: boolean;
-	// 	};
-	// 	axiosUtil
-	// 		.request<appCheckUpdateResult>({
-	// 			url: `${configStore.launchData.apiUrl}/client/app/checkupdate`,
-	// 			method: "post",
-	// 			timeout: 5000,
-	// 			data: {
-	// 				version: widgetInfo.version,
-	// 				appid: GejiaApp.appId,
-	// 			},
-	// 			requestType: "query",
-	// 			simpleDataFormat: false,
-	// 			requestCipher: false,
-	// 			loading: true,
-	// 			loadingText: "获取App更新信息中...",
-	// 		})
-	// 		.then((res) => {
-	// 			consoleLog("Launcher", "更新检测", res);
-	// 			switch (res.Detail.Status) {
-	// 				case 1:
-	// 					{
-	// 						const downloadUrl = `${configStore.launchData.apiUrl}/${res.Detail.WgtUrl}`;
-	// 						plusUpdate(downloadUrl);
-	// 					}
-	// 					break;
-	// 				case 2:
-	// 					{
-	// 						const downloadUrl = `${configStore.launchData.apiUrl}/${res.Detail.PkgUrl}`;
-	// 						fullUpdate(downloadUrl);
-	// 					}
-	// 					break;
-	// 				default:
-	// 					openStartPage();
-	// 					break;
-	// 			}
-	// 		})
-	// 		.catch((error) => {
-	// 			openStartPage();
-	// 			consoleError("Launcher", "更新检查失败");
-	// 			consoleError("Launcher", error);
-	// 		});
-	// });
-};
-
-const appCheckUpdate = () => {
+const checkUpdate = () => {
 	if (state.skipUpdateCheck) {
 		openStartPage();
 	} else {
-		// #ifdef MP-WEIXIN
-		checkMiniAppVersion();
+		// #ifdef H5
+		openStartPage();
+		// #endif
+
+		// #ifdef MP
+		state.statusText = "正在检查版本更新";
+		useUpdate
+			.checkMiniProgramUpdate()
+			.then((hasUpdate) => {
+				if (hasUpdate) {
+					state.statusText = "新版本已准备好，请完成更新";
+				} else {
+					openStartPage();
+				}
+			})
+			.catch((error: unknown) => {
+				logger.error("Launcher", "小程序更新检测失败", error);
+				state.loading = false;
+				state.statusText = "更新检测失败";
+				state.retryType = "update";
+			});
 		// #endif
 
 		// #ifdef APP-PLUS
-		checkAppVersion();
-		// #endif
-
-		// #ifdef H5
-		openStartPage();
+		state.statusText = "正在检查版本更新";
+		useUpdate
+			.checkAppUpdate(() => {
+				return null;
+			})
+			.then((hasUpdate) => {
+				if (hasUpdate) {
+					state.statusText = "新版本已准备好，请完成更新";
+				} else {
+					openStartPage();
+				}
+			})
+			.catch((error: unknown) => {
+				logger.error("Launcher", "App更新检测失败", error);
+				state.loading = false;
+				state.statusText = "更新检测失败";
+				state.retryType = "update";
+			});
 		// #endif
 	}
 };
 
 const appLaunch = () => {
 	state.loading = true;
-	state.btnText = "正在加载";
+	state.retryType = null;
+	state.skipUpdateCheck = false;
+	state.statusText = "正在连接服务";
 
 	appStore
 		.launch()
 		.then(() => {
-			state.btnText = "成功进入";
-			appCheckUpdate();
+			state.statusText = "服务连接成功";
+			checkUpdate();
 		})
-		.catch((error) => {
-			consoleError("Launcher", "launch接口异常");
-			consoleError("Launcher", error);
+		.catch((error: unknown) => {
+			logger.error("Launcher", "应用初始化失败", error);
 
 			// launch 接口异常，则跳过更新
 			state.skipUpdateCheck = true;
 
 			// 判断是否存在缓存数据
 			if (appStore.hasLaunch) {
-				state.btnText = "尝试进入";
-				consoleWarn("Launcher", `尝试缓存数据加载应用`);
+				state.statusText = "正在使用缓存配置进入应用";
+				logger.warn("Launcher", "尝试缓存数据加载应用");
 				// 等待3秒进入应用
 				setTimeout(() => {
-					state.btnText = "成功进入";
-					appCheckUpdate();
+					checkUpdate();
 				}, 3000);
-			}
-		})
-		.finally(() => {
-			// 不管成功与否，3秒后，确保能再次点击调用，并且直接跳过更新
-			setTimeout(() => {
+			} else {
 				state.loading = false;
-				state.skipUpdateCheck = true;
-			}, 3000);
+				state.statusText = appStore.network.networkType === "none" ? "网络连接不可用，请检查网络设置" : "服务暂时无法连接，请稍后重试";
+				state.retryType = "launch";
+			}
 		});
 };
 
-onLoad(() => {
-	appLaunch();
-});
+const handleRetry = () => {
+	const retryType = state.retryType;
+	state.loading = true;
+	state.retryType = null;
+
+	if (retryType === "update") {
+		checkUpdate();
+	} else {
+		appLaunch();
+	}
+};
+
+onLoad(appLaunch);
 </script>
 
 <style scoped lang="scss">
-@import "./index.scss";
+@use "./index.scss";
 </style>

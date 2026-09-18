@@ -34,10 +34,10 @@
 			"@dcloudio/types",
 			/* 汇总 uni-app、uni-cloud 和 uni-ui 的组件类型。 */
 			"@uni-helper/uni-types",
-			/* 提供跨平台 uni-app 组件与 API 类型。 */
-			"@uni-helper/uni-app-types",
-			/** 注册 wot-design-uni 全局组件类型，供 Volar 提示和模板类型检查。 */
-			"wot-design-uni/global",
+			/** 提供 uni-app 页面路由与 pages.json 生成相关类型。 */
+			"@uni-helper/vite-plugin-uni-pages",
+			/** 注册 wot-ui 全局组件类型，供 Volar 提示和模板类型检查。 */
+			"@wot-ui/ui/global",
 			/** 注册 z-paging 全局组件类型，供 Volar 提示和模板类型检查。 */
 			"z-paging/types"
 		],
@@ -87,7 +87,7 @@
 	},
 	"vueCompilerOptions": {
 		/* 为 Vue 语言服务补充 Uni-app 组件、页面和平台 API 类型。 */
-		"plugins": ["@uni-helper/uni-types/volar-plugin", "@uni-helper/uni-app-types/volar-plugin"]
+		"plugins": ["@uni-helper/uni-types/volar-plugin"]
 	},
 	/* 覆盖源码、公共声明及常见的 uni-app、Vite 配置文件。 */
 	"include": ["src", "types", "vite.config.*", "pages.config.*", "manifest.config.*"],

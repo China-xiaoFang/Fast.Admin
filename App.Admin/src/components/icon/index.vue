@@ -1,14 +1,14 @@
 <template>
 	<wd-icon
 		v-bind="props"
-		:customClass="`fa-icon fa-icon-${props.name} ${props.customClass}`"
-		classPrefix="iconfont"
-		@click="(event) => emit('click', event)"
+		:custom-class="`fa-icon fa-icon-${props.name} ${props.customClass}`"
+		class-prefix="iconfont"
+		@click="(event: MouseEvent) => emit('click', event)"
 	/>
 </template>
 
 <script setup lang="ts">
-import { baseProps } from "wot-design-uni/components/common/props";
+import { baseProps } from "@wot-ui/ui/common/props";
 import "./iconfont.css";
 
 defineOptions({
@@ -35,8 +35,8 @@ const props = defineProps({
 	color: String,
 });
 
-const emit = defineEmits({
+const emit = defineEmits<{
 	/** @description 点击事件 */
-	click: (event: MouseEvent): boolean => true,
-});
+	click: [event: MouseEvent];
+}>();
 </script>

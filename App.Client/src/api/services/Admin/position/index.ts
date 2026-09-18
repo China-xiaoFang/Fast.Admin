@@ -46,8 +46,8 @@ export const positionApi = {
 	/**
 	 * 添加职位
 	 */
-	addPosition(data: AddPositionInput): Promise<unknown> {
-		return axiosUtil.request({
+	addPosition(data: AddPositionInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/position/addPosition",
 			method: "post",
 			data,
@@ -57,8 +57,8 @@ export const positionApi = {
 	/**
 	 * 编辑职位
 	 */
-	editPosition(data: EditPositionInput): Promise<unknown> {
-		return axiosUtil.request({
+	editPosition(data: EditPositionInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/position/editPosition",
 			method: "post",
 			data,
@@ -68,8 +68,8 @@ export const positionApi = {
 	/**
 	 * 删除职位
 	 */
-	deletePosition(data: PositionIdInput): Promise<unknown> {
-		return axiosUtil.request({
+	deletePosition(data: PositionIdInput): Promise<void> {
+		return axiosUtil.request<void>({
 			url: "/position/deletePosition",
 			method: "post",
 			data,

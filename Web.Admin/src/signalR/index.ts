@@ -124,7 +124,7 @@ const initWebSocket = async (): Promise<void> => {
 					});
 					logger.log("WebSocket", "系统连接成功...");
 				} catch (error) {
-					logger.error("WebSocket", "发生异常", error);
+					logger.error("WebSocket", error);
 					throw error;
 				} finally {
 					loadingInstance?.close();
@@ -134,7 +134,7 @@ const initWebSocket = async (): Promise<void> => {
 			// 登录失败监听
 			connection.on("LoginFail", (message: string) => {
 				userInfoStore.logoutClear();
-				void ElMessageBox.alert(message, {
+				ElMessageBox.alert(message, {
 					type: "warning",
 				});
 			});
@@ -187,10 +187,8 @@ const initWebSocket = async (): Promise<void> => {
 			await connection.start();
 		}
 	} catch (error) {
-		logger.error("WebSocket", "发生异常", error);
+		logger.error("WebSocket", error);
 	}
-
-	return Promise.resolve();
 };
 
 /**
@@ -202,11 +200,10 @@ const closeWebSocket = async (): Promise<void> => {
 			// WebSocket 退出登录
 			await connection.invoke("Logout");
 		} catch (error) {
-			logger.error("WebSocket", "发生异常", error);
+			logger.error("WebSocket", error);
 		}
 		await connection.stop();
 	}
-	return Promise.resolve();
 };
 
 export { connection as signalR, initWebSocket, closeWebSocket };

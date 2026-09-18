@@ -1,12 +1,10 @@
 .fa-loading-page {
-	background-color: var(--wot-bg-color);
+	background-color: var(--wot-filled-oppo);
 	bottom: 0;
 	left: 0;
-	margin: 0;
 	position: fixed;
 	right: 0;
 	top: 0;
-	transition: opacity var(--wot-transition-duration);
 	z-index: 2002;
 	@keyframes loading {
 		0% {
@@ -53,16 +51,16 @@
 		.box-icon {
 			width: 40px;
 			aspect-ratio: 1;
-			--g1: conic-gradient(from 90deg at 2px 2px, #0000 90deg, var(--wot-color-primary) 0);
-			--g2: conic-gradient(from -90deg at 16px 16px, #0000 90deg, var(--wot-color-primary) 0);
+			--g1: conic-gradient(from 90deg at 2px 2px, #0000 90deg, var(--wot-primary-6) 0);
+			--g2: conic-gradient(from -90deg at 16px 16px, #0000 90deg, var(--wot-primary-6) 0);
 			background: var(--g1), var(--g1), var(--g1), var(--g2), var(--g2), var(--g2);
 			background-size: 18px 18px;
 			background-repeat: no-repeat;
 			animation: loading 1.2s infinite;
 		}
 		.box-text {
-			color: var(--wot-color-primary);
-			font-size: var(--wot-font-size-base);
+			color: var(--wot-primary-6);
+			font-size: var(--wot-typography-body-size-main);
 			margin: 3px 0;
 		}
 	}

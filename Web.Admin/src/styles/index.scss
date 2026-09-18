@@ -65,7 +65,7 @@
 *::-webkit-scrollbar-thumb {
 	background-color: #0003;
 	border-radius: 10px;
-	transition: all 0.2s ease-in-out;
+	transition: background-color 0.2s ease-in-out;
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -85,8 +85,6 @@ html,
 body,
 #app,
 #watermark {
-	margin: 0;
-	padding: 0;
 	width: 100%;
 	height: 100%;
 	background-color: var(--el-bg-color);
@@ -124,9 +122,9 @@ body,
 	justify-content: center;
 	align-items: center;
 	.icon {
-		width: 400px;
-		height: 400px;
-		margin-bottom: 50px;
+		width: min(400px, calc(100vw - 32px));
+		aspect-ratio: 1;
+		margin-bottom: clamp(20px, 5vh, 50px);
 		svg {
 			width: 100%;
 			height: 100%;

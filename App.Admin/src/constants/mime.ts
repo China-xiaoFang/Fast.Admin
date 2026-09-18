@@ -1,6 +1,4 @@
-/**
- * @description MIME 类型
- */
+/** 上传与文件选择使用的常用 MIME 类型集合。 */
 export const FaMimeType = {
 	/**
 	 * PDF

@@ -1,5 +1,5 @@
 import { wdHookState } from "../index";
-import type { ToastOptions } from "wot-design-uni/components/wd-toast/types";
+import type { ToastOptions } from "@wot-ui/ui/components/wd-toast/types";
 
 export const useToast = {
 	/**

@@ -22,6 +22,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
+using Fast.Cache;
 using Fast.Center.Domain;
 using Fast.Core;
 using Fast.DynamicApplication;
@@ -60,57 +61,6 @@ public class FileApplication : IDynamicApplication
     private readonly ISqlSugarRepository<FileModel> _repository;
     private readonly UploadFileSettingsOptions _uploadFileSettingsOptions;
     private readonly HttpContext _httpContext;
-
-    /// <summary>
-    /// 图片
-    /// </summary>
-    private readonly HashSet<string> Images = ["image/jpg", "image/jpeg", "image/png", "image/gif", "image/bmp"];
-
-    /// <summary>
-    /// 视频
-    /// </summary>
-    private readonly HashSet<string> Videos =
-        ["video/mp4", "video/mpeg", "video/quicktime", "video/x-msvideo", "video/x-ms-wmv", "video/webm", "video/ogg"];
-
-    /// <summary>
-    /// 音频
-    /// </summary>
-    private readonly HashSet<string> Audios = ["audio/mpeg", "audio/wav", "audio/ogg", "audio/mp4", "audio/flac"];
-
-    /// <summary>
-    /// 文本
-    /// </summary>
-    private readonly HashSet<string> Texts =
-    [
-        "text/plain",
-        "text/csv",
-        "text/html",
-        "text/markdown"
-    ];
-
-    /// <summary>
-    /// 文档
-    /// </summary>
-    private readonly HashSet<string> Documents =
-    [
-        // PDF
-        "application/pdf",
-        // Word
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        // Excel
-        "application/vnd.ms-excel",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        // PowerPoint
-        "application/vnd.ms-powerpoint",
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-    ];
-
-    /// <summary>
-    /// 压缩包
-    /// </summary>
-    private readonly HashSet<string> Archives =
-        ["application/zip", "application/x-rar-compressed", "application/x-7z-compressed", "application/gzip"];
 
     /// <summary>
     /// 图片尺寸
@@ -182,13 +132,12 @@ public class FileApplication : IDynamicApplication
             .ToPagedListAsync(input);
     }
 
-
     /// <summary>
-    /// 预览文件
+    /// 预览图片
     /// </summary>
     [ApiDescriptionSettings(false)]
     [HttpGet("/file/{fileName}")]
-    [ApiInfo("预览文件", HttpRequestActionEnum.Download)]
+    [ApiInfo("预览图片", HttpRequestActionEnum.Download)]
     [AllowAnonymous, DisabledRequestLog, DisableRateLimiting]
     public async Task<IActionResult> Preview([FromRoute, Required(ErrorMessage = "文件名称不能为空")] string fileName)
     {
@@ -196,7 +145,7 @@ public class FileApplication : IDynamicApplication
     }
 
     /// <summary>
-    /// 预览文件
+    /// 预览图片
     /// </summary>
     /// <param name="fileName">文件名称</param>
     /// <param name="size">
@@ -207,47 +156,12 @@ public class FileApplication : IDynamicApplication
     /// </param>
     [ApiDescriptionSettings(false)]
     [HttpGet("/file/{fileName}@!{size}")]
-    [ApiInfo("预览文件", HttpRequestActionEnum.Download)]
+    [ApiInfo("预览图片", HttpRequestActionEnum.Download)]
     [AllowAnonymous, DisabledRequestLog, DisableRateLimiting]
     public async Task<IActionResult> Preview([FromRoute, Required(ErrorMessage = "文件名称不能为空")] string fileName,
         [FromRoute, Required(ErrorMessage = "文件大小不能为空")] string size)
     {
         return await LocalPreview(fileName, size);
-    }
-
-    /// <summary>
-    /// 将配置或数据库中的跨平台路径转换为当前操作系统使用的本地路径
-    /// </summary>
-    /// <param name="filePath">配置或数据库中的相对目录，兼容“/”和“\”</param>
-    /// <param name="fileName">可选文件名</param>
-    /// <returns>绝对配置保持原位置；相对配置基于程序根目录解析</returns>
-    private string GetLocalPath(string filePath, string fileName = null)
-    {
-        if (string.IsNullOrWhiteSpace(filePath))
-            throw new UserFriendlyException("文件存储路径不能为空！");
-
-        var rootPath = Path.GetFullPath(_rootPath);
-        var localPath = filePath.Replace('\\', Path.DirectorySeparatorChar)
-            .Replace('/', Path.DirectorySeparatorChar);
-        var fullPath = string.IsNullOrEmpty(fileName)
-            ? Path.GetFullPath(Path.Combine(rootPath, localPath))
-            : Path.GetFullPath(Path.Combine(rootPath, localPath, fileName));
-
-        return fullPath;
-    }
-
-    /// <summary>
-    /// 获取文件访问地址
-    /// </summary>
-    private string GetFileLocation(string fileObjectName)
-    {
-        var publicDomain = _uploadFileSettingsOptions.PublicDomain;
-        if (string.IsNullOrWhiteSpace(publicDomain))
-        {
-            publicDomain = $"{_httpContext.Request.Scheme}://{_httpContext.Request.Host}";
-        }
-
-        return $"{publicDomain}/file/{fileObjectName}";
     }
 
     /// <summary>
@@ -263,11 +177,17 @@ public class FileApplication : IDynamicApplication
     /// <returns>文件预览响应</returns>
     private async Task<IActionResult> LocalPreview(string fileName, string size = null)
     {
+        if (string.IsNullOrWhiteSpace(fileName))
+        {
+            return new NotFoundResult();
+        }
+
         if (!string.IsNullOrWhiteSpace(size))
         {
             if (!ImageSizes.ContainsKey(size))
             {
-                throw new UserFriendlyException("不支持的图片尺寸！");
+                // 不支持的图片尺寸
+                return new NotFoundResult();
             }
 
             size = $"@{size}";
@@ -281,33 +201,100 @@ public class FileApplication : IDynamicApplication
         var fileSuffix = Path.GetExtension(fileName);
         var fileIdStr = fileName[..^fileSuffix.Length];
         if (!long.TryParse(fileIdStr, out var fileId))
-            throw new UserFriendlyException("文件不存在！");
+        {
+            // 文件不存在
+            return new NotFoundResult();
+        }
 
         // 这里作为预览文件，必须禁用 AOP，所以直接使用 NEW 的方式
         using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
         var fileInfoModel = await db.Queryable<FileModel>()
             .InSingleAsync(fileId);
         if (fileInfoModel == null)
-            throw new UserFriendlyException("文件不存在！");
+        {
+            // 文件不存在
+            return new NotFoundResult();
+        }
 
         // 匿名预览仅允许图片。文档、压缩包和 HTML 等文件必须通过租户鉴权下载
         // 防止通过可猜测的 FileId 越权读取或在同源下执行活动内容
-        if (!Images.Contains(fileInfoModel.FileMimeType.ToLowerInvariant()))
+        if (!FileContext.Images.Contains(fileInfoModel.FileMimeType.ToLowerInvariant()))
         {
-            throw new UserFriendlyException("该文件不支持公开预览，请登录后下载！");
+            // 该文件不支持公开预览，请登录后下载
+            return new NotFoundResult();
         }
 
-        _httpContext.Response.Headers.CacheControl = "public,max-age=31536000";
+        _httpContext.Response.Headers.CacheControl = "public, max-age=31536000, immutable";
         _httpContext.Response.Headers.XContentTypeOptions = "nosniff";
 
         var localFileName = $"{fileInfoModel.FileId}{size}.{fileInfoModel.FileSuffix}";
 
-        var localFilePath = GetLocalPath(fileInfoModel.FilePath, localFileName);
+        var localFilePath = FileContext.GetLocalPath(_rootPath, fileInfoModel.FilePath, localFileName);
         if (!System.IO.File.Exists(localFilePath))
-            throw new UserFriendlyException("文件丢失或已被删除！");
+        {
+            // 文件丢失或已被删除
+            return new NotFoundResult();
+        }
 
         var stream = new FileStream(localFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
         return new FileStreamResult(stream, fileInfoModel.FileMimeType);
+    }
+
+    /// <summary>
+    /// 播放媒体资源
+    /// </summary>
+    [ApiDescriptionSettings(false)]
+    [HttpGet("/file/media/{token}")]
+    [ApiInfo("播放媒体资源", HttpRequestActionEnum.Download)]
+    [AllowAnonymous, DisabledRequestLog, DisableRateLimiting]
+    public async Task<IActionResult> PreviewMedia([FromRoute, Required(ErrorMessage = "Token不能为空")] string token)
+    {
+        if (!FileContext.TryValidateMediaAssetToken(token, out var tokenPayload))
+        {
+            // Token 格式、签名或有效期无效
+            return new NotFoundResult();
+        }
+
+        var _authCache = _httpContext.RequestServices.GetService<ICache<AuthCCL>>();
+        var sessionCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, tokenPayload.AppNo, tokenPayload.TenantNo,
+            tokenPayload.DeviceType.ToString(), tokenPayload.EmployeeNo, tokenPayload.SessionId);
+        if (!await _authCache.ExistsAsync(sessionCacheKey))
+        {
+            // 这里是401
+            return new UnauthorizedResult();
+        }
+
+        // 这里作为预览文件，必须禁用 AOP，所以直接使用 NEW 的方式
+        using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
+        var fileInfoModel = await db.Queryable<FileModel>()
+            .InSingleAsync(tokenPayload.FileId);
+        if (fileInfoModel == null)
+        {
+            // 文件不存在
+            return new NotFoundResult();
+        }
+
+        // 仅允许音频、视频
+        if (!FileContext.Audios.Contains(fileInfoModel.FileMimeType.ToLowerInvariant())
+            && !FileContext.Videos.Contains(fileInfoModel.FileMimeType.ToLowerInvariant()))
+        {
+            // 文件不存在
+            return new NotFoundResult();
+        }
+
+        _httpContext.Response.Headers.CacheControl = "private, no-store";
+        _httpContext.Response.Headers.XContentTypeOptions = "nosniff";
+
+        var localFilePath = FileContext.GetLocalPath(_rootPath, fileInfoModel.FilePath, fileInfoModel.FileObjectName);
+        if (!System.IO.File.Exists(localFilePath))
+        {
+            // 文件丢失或已被删除
+            return new NotFoundResult();
+        }
+
+        var stream = new FileStream(localFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, 81920,
+            FileOptions.Asynchronous);
+        return new FileStreamResult(stream, fileInfoModel.FileMimeType) {EnableRangeProcessing = true};
     }
 
     /// <summary>
@@ -321,7 +308,7 @@ public class FileApplication : IDynamicApplication
         if (fileInfoModel == null)
             throw new UserFriendlyException("文件不存在！");
 
-        var filePath = GetLocalPath(fileInfoModel.FilePath, fileInfoModel.FileObjectName);
+        var filePath = FileContext.GetLocalPath(_rootPath, fileInfoModel.FilePath, fileInfoModel.FileObjectName);
         if (!System.IO.File.Exists(filePath))
             throw new UserFriendlyException("文件丢失或已被删除！");
 
@@ -462,7 +449,7 @@ public class FileApplication : IDynamicApplication
         if (!isFileExtensionCompatible)
             throw new UserFriendlyException("文件后缀与声明的文件类型不一致！");
 
-        if (Images.Contains(normalizedContentType))
+        if (FileContext.Images.Contains(normalizedContentType))
         {
             try
             {
@@ -499,7 +486,8 @@ public class FileApplication : IDynamicApplication
         var existFileModel = await _repository.SingleOrDefaultAsync(s => s.FileHash == fileHash);
         if (existFileModel != null)
         {
-            if (!System.IO.File.Exists(GetLocalPath(existFileModel.FilePath, existFileModel.FileObjectName)))
+            if (!System.IO.File.Exists(
+                    FileContext.GetLocalPath(_rootPath, existFileModel.FilePath, existFileModel.FileObjectName)))
                 throw new UserFriendlyException("相同文件的存储记录存在，但物理文件已丢失，请联系管理员处理！");
             return existFileModel.FileLocation;
         }
@@ -519,17 +507,17 @@ public class FileApplication : IDynamicApplication
         // 判断是否启用类型文件夹
         if (fileInfoSettings.UseTypeFolder)
         {
-            if (Images.Contains(normalizedContentType))
+            if (FileContext.Images.Contains(normalizedContentType))
                 filePath = Path.Combine(filePath, "image");
-            else if (Videos.Contains(normalizedContentType))
+            else if (FileContext.Videos.Contains(normalizedContentType))
                 filePath = Path.Combine(filePath, "video");
-            else if (Audios.Contains(normalizedContentType))
+            else if (FileContext.Audios.Contains(normalizedContentType))
                 filePath = Path.Combine(filePath, "audio");
-            else if (Texts.Contains(normalizedContentType))
+            else if (FileContext.Texts.Contains(normalizedContentType))
                 filePath = Path.Combine(filePath, "text");
-            else if (Documents.Contains(normalizedContentType))
+            else if (FileContext.Documents.Contains(normalizedContentType))
                 filePath = Path.Combine(filePath, "document");
-            else if (Archives.Contains(normalizedContentType))
+            else if (FileContext.Archives.Contains(normalizedContentType))
                 filePath = Path.Combine(filePath, "archive");
             else
                 filePath = Path.Combine(filePath, "other");
@@ -544,6 +532,13 @@ public class FileApplication : IDynamicApplication
         // 数据库存储统一使用“/”，保证路径记录可以在 Windows、Linux 和 macOS 之间迁移
         filePath = filePath.Replace('\\', '/');
 
+        // 获取文件访问地址
+        var publicDomain = _uploadFileSettingsOptions.PublicDomain;
+        if (string.IsNullOrWhiteSpace(publicDomain))
+        {
+            publicDomain = $"{_httpContext.Request.Scheme}://{_httpContext.Request.Host}";
+        }
+
         var fileInfoModel = new FileModel
         {
             FileId = fileId,
@@ -553,7 +548,7 @@ public class FileApplication : IDynamicApplication
             FileMimeType = normalizedContentType,
             FileSizeKb = fileSizeKb,
             FilePath = filePath,
-            FileLocation = GetFileLocation(fileObjectName),
+            FileLocation = $"{publicDomain}/file/{fileObjectName}",
             FileHash = fileHash
         };
         // 获取设备信息
@@ -571,7 +566,7 @@ public class FileApplication : IDynamicApplication
         fileInfoModel.CreatedTime = dateTime;
 
         // 本地存储
-        var localFilePath = GetLocalPath(filePath);
+        var localFilePath = FileContext.GetLocalPath(_rootPath, filePath);
         Directory.CreateDirectory(localFilePath);
         var localFullPath = Path.Combine(localFilePath, fileObjectName);
         await using (var fileStream = new FileStream(localFullPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 81920,
@@ -581,7 +576,7 @@ public class FileApplication : IDynamicApplication
         }
 
         // 判断是否为图片
-        if (Images.Contains(normalizedContentType))
+        if (FileContext.Images.Contains(normalizedContentType))
         {
             // 异步读取原始图片
             using var image = await Image.LoadAsync(localFullPath);
