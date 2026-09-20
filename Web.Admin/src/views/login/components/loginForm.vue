@@ -41,7 +41,7 @@
 								:value="item.tenant.userKey"
 							>
 								<div class="tenant-option">
-									<img :src="item.tenant.logoUrl" :alt="item.tenant.tenantName" />
+									<img class="tenant-option__logo" :src="item.tenant.logoUrl" :alt="item.tenant.tenantName" />
 									<div class="tenant-option__content">
 										<strong>{{ item.tenant.tenantName }}</strong>
 										<span>{{ item.tenant.departmentName || "无部门" }} · {{ item.tenant.employeeName }}</span>
@@ -502,44 +502,82 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 }
 
 :global(.login-tenant-popper) {
+	max-width: min(430px, calc(100vw - 24px));
 	border: 1px solid var(--el-border-color-lighter);
 	border-radius: 14px;
 	box-shadow: 0 18px 50px rgb(15 23 42 / 18%);
+	overflow: hidden;
+}
+
+:global(.login-tenant-popper .el-select-dropdown__list) {
+	padding: 0;
 }
 
 :global(.login-tenant-popper .el-select-dropdown__item) {
 	height: auto;
-	padding: 8px 12px;
+	min-height: 72px;
+	margin: 0;
+	padding: 12px 14px;
 	line-height: 1.4;
+	border-bottom: 1px solid var(--el-border-color-lighter);
+	border-radius: 0;
+	background: transparent;
+	transition:
+		color 180ms ease,
+		background-color 180ms ease;
+}
+
+:global(.login-tenant-popper .el-select-dropdown__item:last-child) {
+	border-bottom: 0;
+}
+
+:global(.login-tenant-popper .el-select-dropdown__item.is-hovering) {
+	background: var(--el-color-primary-light-9);
+}
+
+:global(.login-tenant-popper .el-select-dropdown__item.is-selected) {
+	background: color-mix(in srgb, var(--el-color-primary) 12%, var(--el-bg-color));
+}
+
+:global(.login-tenant-popper .el-select-dropdown__item.is-selected .tenant-option__content strong) {
+	color: var(--el-color-primary);
 }
 
 :global(.login-tenant-popper .el-select-dropdown__footer) {
-	padding: 6px;
+	padding: 0;
+	border-top: 1px solid var(--el-border-color-lighter);
 }
 
 :global(.login-tenant-popper .el-select-dropdown__footer .el-button) {
 	width: 100%;
+	height: 52px;
+	margin: 0;
+	border-radius: 0;
 }
 
 :global(.login-tenant-popper .tenant-option) {
 	display: grid;
 	width: 100%;
-	grid-template-columns: 36px minmax(0, 1fr) auto 32px;
+	min-width: 0;
+	grid-template-columns: 42px minmax(0, 1fr) auto 32px;
 	align-items: center;
-	gap: 10px;
+	gap: 12px;
 }
 
-:global(.login-tenant-popper .tenant-option > img) {
-	width: 36px;
-	height: 36px;
+:global(.login-tenant-popper .tenant-option__logo) {
+	width: 42px;
+	height: 42px;
 	object-fit: cover;
-	border-radius: 10px;
+	border: 1px solid var(--el-border-color-lighter);
+	border-radius: 11px;
+	box-shadow: 0 3px 8px rgb(15 23 42 / 10%);
 }
 
 :global(.login-tenant-popper .tenant-option__content) {
 	display: flex;
+	min-width: 0;
 	flex-direction: column;
-	gap: 2px;
+	gap: 4px;
 }
 
 :global(.login-tenant-popper .tenant-option__content strong),
@@ -547,6 +585,11 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+}
+
+:global(.login-tenant-popper .tenant-option__content strong) {
+	color: var(--el-text-color-primary);
+	font-size: 14px;
 }
 
 :global(.login-tenant-popper .tenant-option__content span) {
