@@ -70,7 +70,7 @@ public class MailService : IMailService, ISingletonDependency
 
         displayName ??= await ConfigContext.GetConfig(ConfigConst.MailDisplayName);
         if (string.IsNullOrWhiteSpace(displayName))
-            displayName = "FastDotNet";
+            displayName = "FastDotnet";
 
         var encodedTitle = WebUtility.HtmlEncode(title);
         var encodedDisplayName = WebUtility.HtmlEncode(displayName);
@@ -180,7 +180,7 @@ public class MailService : IMailService, ISingletonDependency
                  								{{encodedDisplayName}}
                  							</a>
                  							<br />
-                 							Copyright © 2018 ~ {{sendTime:yyyy}} FastDotNet. All rights reserved.
+                            Copyright © 2018 ~ {{sendTime:yyyy}} Fast All rights reserved.
                  						</td>
                  					</tr>
                  				</table>
@@ -386,7 +386,7 @@ public class MailService : IMailService, ISingletonDependency
                 throw new ArgumentException("发件邮箱授权码为空！");
 
             if (string.IsNullOrWhiteSpace(displayName))
-                displayName = "FastDotNet";
+                displayName = "FastDotnet";
 
             // 创建邮件内容
             var message = new MimeMessage();

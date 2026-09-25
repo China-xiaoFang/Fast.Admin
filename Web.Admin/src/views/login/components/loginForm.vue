@@ -150,7 +150,7 @@
 
 		<footer class="login-form__footer">
 			<span></span>
-			Powered by FastDotNet
+			Powered by FastDotnet
 		</footer>
 
 		<PasswordReset ref="passwordResetRef" />

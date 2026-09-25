@@ -150,7 +150,7 @@ public class ApplicationLifecycleHostedService : IHostedLifecycleService
                 ?.ConfigValue;
             var displayName = configList.SingleOrDefault(s => s.ConfigCode == ConfigConst.MailDisplayName)
                                   ?.ConfigValue
-                              ?? "FastDotNet";
+                              ?? "FastDotnet";
             // 配置为空直接退出，避免报错
             if (string.IsNullOrWhiteSpace(smtp)
                 || !int.TryParse(portValue, out var port)

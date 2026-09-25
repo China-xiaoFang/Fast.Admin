@@ -107,7 +107,7 @@ public class InitDatabaseHostedService : IHostedService
                     TenantNo = CommonConst.Default.TenantNo,
                     TenantCode = "Fa",
                     Status = CommonStatusEnum.Enable,
-                    TenantName = "FastDotNet工作室",
+                    TenantName = "FastDotnet工作室",
                     ShortName = "Fast",
                     SpellName = "fast dotnet gong zuo shi",
                     Edition = EditionEnum.Internal,

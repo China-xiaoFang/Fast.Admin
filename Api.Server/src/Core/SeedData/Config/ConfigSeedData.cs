@@ -115,7 +115,7 @@ internal static class ConfigSeedData
                     ConfigId = YitIdHelper.NextId(),
                     ConfigCode = ConfigConst.MailDisplayName,
                     ConfigName = "发件人名称",
-                    ConfigValue = "FastDotNet",
+                    ConfigValue = "FastDotnet",
                     Remark = "系统邮件显示的发件人名称；",
                     CreatedTime = dateTime
                 },
