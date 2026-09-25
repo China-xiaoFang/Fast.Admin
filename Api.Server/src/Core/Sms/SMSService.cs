@@ -1,29 +1,15 @@
-﻿// ------------------------------------------------------------------------
-// Apache开源许可证
+﻿// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using AlibabaCloud.SDK.Dysmsapi20180501;
 using AlibabaCloud.SDK.Dysmsapi20180501.Models;
+using CSRedis;
 using Fast.Center.Domain;
 using Fast.SqlSugar;
 using Microsoft.Extensions.Logging;
@@ -85,9 +71,12 @@ public class SMSService : ISmsService, ISingletonDependency
     /// <inheritdoc/>
     public async Task<int> GetVerificationCodeRetryAfterSeconds(SmsTypeEnum smsType, string mobile)
     {
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Sms, smsType.ToString(), mobile.Trim()
-            .ToLowerInvariant());
-        return (int) Math.Max(0, await _cache.Client.TtlAsync($"{cacheKey}:SendCooldown"));
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Sms,
+            smsType.ToString(),
+            mobile
+                .Trim()
+                .ToLowerInvariant());
+        return (int)Math.Max(0, await _cache.Client.TtlAsync($"{cacheKey}:SendCooldown"));
     }
 
     /// <inheritdoc />
@@ -101,35 +90,36 @@ public class SMSService : ISmsService, ISingletonDependency
         mobile = mobile.Trim();
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Sms, smsType.ToString(), mobile);
-        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Sms, smsType.ToString(), mobile);
+        using CSRedisClientLock codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
         if (codeLock == null)
         {
             // 仅抢锁失败时读取锁剩余时间，毫秒向上取整，避免不足1秒被显示为0。
-            var lockMilliseconds = await _cache.Client.PTtlAsync($"CSRedisClientLock:{cacheKey}:Lock");
-            var lockSeconds = (int) Math.Ceiling(lockMilliseconds / 1000d);
+            long lockMilliseconds = await _cache.Client.PTtlAsync($"CSRedisClientLock:{cacheKey}:Lock");
+            int lockSeconds = (int)Math.Ceiling(lockMilliseconds / 1000d);
             throw new UserFriendlyException(lockSeconds > 0
                 ? $"操作过于频繁，请在 {TimeSpan.FromSeconds(lockSeconds).ToDescription()} 后重试！"
                 : "操作过于频繁，请稍后重试！");
         }
 
-        var retryAfterSeconds = await GetVerificationCodeRetryAfterSeconds(smsType, mobile);
+        int retryAfterSeconds = await GetVerificationCodeRetryAfterSeconds(smsType, mobile);
         if (retryAfterSeconds > 0)
             throw new UserFriendlyException($"操作过于频繁，请在 {TimeSpan.FromSeconds(retryAfterSeconds).ToDescription()} 后重试！");
         // 发送前占用冷却，失败时保留重试限制，成功后重新计时。
         await _cache.Client.SetAsync($"{cacheKey}:SendCooldown", "1", 60);
-        var dto = await _cache.GetAsync<VerificationCodeCacheDto>(cacheKey);
+        VerificationCodeCacheDto dto = await _cache.GetAsync<VerificationCodeCacheDto>(cacheKey);
 
         // 生成验证码
         dto ??= new VerificationCodeCacheDto();
-        dto.VerificationCode = RandomNumberGenerator.GetInt32(1000000)
+        dto.VerificationCode = RandomNumberGenerator
+            .GetInt32(1000000)
             .ToString("D6");
         dto.ClientIdentity = GlobalContext.ClientIdentity;
         dto.SendTime = DateTime.Now;
         dto.ErrorCount = 0;
 
         // 获取模板Code
-        var templateCode = await ConfigContext.GetConfig(ConfigConst.SmsVerificationTemplateCode);
+        string templateCode = await ConfigContext.GetConfig(ConfigConst.SmsVerificationTemplateCode);
         await SendSms(mobile, templateCode, new {Code = dto.VerificationCode});
         await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
         await _cache.Client.SetAsync($"{cacheKey}:SendCooldown", "1", 60);
@@ -148,14 +138,14 @@ public class SMSService : ISmsService, ISingletonDependency
         mobile = mobile.Trim();
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Sms, smsType.ToString(), mobile);
-        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 30);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Sms, smsType.ToString(), mobile);
+        using CSRedisClientLock codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 30);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
-        var dto = await _cache.GetAsync<VerificationCodeCacheDto>(cacheKey);
+        VerificationCodeCacheDto dto = await _cache.GetAsync<VerificationCodeCacheDto>(cacheKey);
         if (dto is not {ErrorCount: < 5}
             || dto.ClientIdentity != GlobalContext.ClientIdentity
             || dto.SendTime.AddMinutes(5) <= DateTime.Now)
@@ -184,8 +174,12 @@ public class SMSService : ISmsService, ISingletonDependency
     }
 
     /// <inheritdoc />
-    public async Task SendSms(string mobile, string templateCode, object templateParam, string accessKeyId = null,
-        string accessKeySecret = null, string signName = null)
+    public async Task SendSms(string mobile,
+        string templateCode,
+        object templateParam,
+        string accessKeyId = null,
+        string accessKeySecret = null,
+        string signName = null)
     {
         ArgumentNullException.ThrowIfNull(templateCode);
 
@@ -196,8 +190,8 @@ public class SMSService : ISmsService, ISingletonDependency
 
         mobile = mobile.Trim();
 
-        var sendTime = DateTime.Now;
-        var isSuccess = false;
+        DateTime sendTime = DateTime.Now;
+        bool isSuccess = false;
         try
         {
             accessKeyId ??= await ConfigContext.GetConfig(ConfigConst.SmsAccessKeyId);
@@ -221,13 +215,14 @@ public class SMSService : ISmsService, ISingletonDependency
                 ReadTimeout = 10000
             });
             // 沿用SDK默认不自动重试的行为，避免超时后重复发送计费短信。
-            var response = await client.SendMessageWithTemplateAsync(new SendMessageWithTemplateRequest
-            {
-                To = $"86{mobile}",
-                From = signName,
-                TemplateCode = templateCode,
-                TemplateParam = templateParam?.ToJsonString()
-            });
+            SendMessageWithTemplateResponse response = await client.SendMessageWithTemplateAsync(
+                new SendMessageWithTemplateRequest
+                {
+                    To = $"86{mobile}",
+                    From = signName,
+                    TemplateCode = templateCode,
+                    TemplateParam = templateParam?.ToJsonString()
+                });
 
             if (!string.Equals(response.Body.ResponseCode, "OK", StringComparison.OrdinalIgnoreCase))
             {
@@ -263,7 +258,8 @@ public class SMSService : ISmsService, ISingletonDependency
                 };
                 messageSendRecordModel.RecordCreate(FastContext.HttpContext);
 
-                await db.Insertable(messageSendRecordModel)
+                await db
+                    .Insertable(messageSendRecordModel)
                     .ExecuteCommandAsync();
             }
             catch (Exception ex)

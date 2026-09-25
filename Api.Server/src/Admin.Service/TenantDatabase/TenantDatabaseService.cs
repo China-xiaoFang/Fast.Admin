@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using Fast.Admin.Domain;
 using Fast.Admin.Service.TenantDatabase.Dto;
@@ -50,7 +35,8 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
     {
         using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
-        var tenantModel = await db.Queryable<TenantModel>()
+        TenantModel tenantModel = await db
+            .Queryable<TenantModel>()
             .Where(wh => wh.TenantId == tenantId)
             .SingleAsync();
 
@@ -59,7 +45,8 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
             throw new UserFriendlyException("租户不存在！");
         }
 
-        var databaseModel = await db.Queryable<MainDatabaseModel>()
+        MainDatabaseModel databaseModel = await db
+            .Queryable<MainDatabaseModel>()
             .Includes(e => e.SlaveDatabaseList)
             .Where(wh => wh.TenantId == tenantId && wh.DatabaseType == databaseType)
             .SingleAsync();
@@ -92,7 +79,8 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
             SugarSqlExecMaxSeconds = databaseModel.SugarSqlExecMaxSeconds,
             DiffLog = databaseModel.DiffLog,
             DisableAop = databaseModel.DisableAop,
-            SlaveConnectionList = databaseModel.SlaveDatabaseList.Select(dSl => new SlaveConnectionInfo
+            SlaveConnectionList = databaseModel
+                .SlaveDatabaseList.Select(dSl => new SlaveConnectionInfo
                 {
                     ServiceIp = FastContext.HostEnvironment.IsDevelopment()
                         // 开发环境使用公网地址
@@ -129,31 +117,36 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
         SugarEntityFilter.LoadSugarAop(FastContext.HostEnvironment.IsDevelopment(), newDb);
 
         // 获取所有不分表的Model类型
-        var tableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => !wh.IsSplitTable)
-            .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == databaseType)
+        Type[] tableTypes = SqlSugarContext
+            .SqlSugarEntityList.Where(wh => !wh.IsSplitTable)
+            .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum)wh.SugarDbType == databaseType)
             .Select(sl => sl.EntityType)
             .ToArray();
         // 获取所有分表的Model类型
-        var splitTableTypes = SqlSugarContext.SqlSugarEntityList.Where(wh => wh.IsSplitTable)
-            .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum) wh.SugarDbType == databaseType)
+        Type[] splitTableTypes = SqlSugarContext
+            .SqlSugarEntityList.Where(wh => wh.IsSplitTable)
+            .Where(wh => wh.SugarDbType == null || (DatabaseTypeEnum)wh.SugarDbType == databaseType)
             .Select(sl => sl.EntityType)
             .ToArray();
 
         // 创建表
         newDb.CodeFirst.InitTables(tableTypes);
-        newDb.CodeFirst.SplitTables()
+        newDb
+            .CodeFirst.SplitTables()
             .InitTables(splitTableTypes);
 
         if (databaseType == DatabaseTypeEnum.Admin)
         {
             // 查询所有系统规则序号
-            var serialRuleList = await newDb.Queryable<SerialRuleModel>()
+            List<SerialRuleModel> serialRuleList = await newDb
+                .Queryable<SerialRuleModel>()
                 .ToListAsync();
 
             // 初始化工号序号
             if (serialRuleList.All(a => a.RuleType != SerialRuleTypeEnum.EmployeeNo))
             {
-                await newDb.Insertable(new SerialRuleModel
+                await newDb
+                    .Insertable(new SerialRuleModel
                     {
                         SerialRuleId = YitIdHelper.NextId(),
                         RuleType = SerialRuleTypeEnum.EmployeeNo,
@@ -166,7 +159,8 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
             }
 
             // 初始化公司（组织架构）
-            await newDb.Insertable(new OrganizationModel
+            await newDb
+                .Insertable(new OrganizationModel
                 {
                     OrgId = YitIdHelper.NextId(),
                     ParentId = 0,
@@ -181,7 +175,8 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                 .ExecuteCommandAsync();
 
             // 初始化租户默认角色
-            await newDb.Insertable(new List<RoleModel>
+            await newDb
+                .Insertable(new List<RoleModel>
                 {
                     new()
                     {
@@ -249,13 +244,14 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
             // 判断是否为普通租户
             if (tenantModel.TenantType == TenantTypeEnum.Common)
             {
-                var accountModel = await db.Queryable<AccountModel>()
+                AccountModel accountModel = await db
+                    .Queryable<AccountModel>()
                     .Where(wh => wh.Mobile == tenantModel.AdminMobile)
                     .SingleAsync();
                 if (accountModel == null)
                 {
-                    var passwordHash = CryptoUtil.HashPasswordPBKDF2SHA256(CommonConst.Default.Password);
-                    var accountId = YitIdHelper.NextId();
+                    string passwordHash = CryptoUtil.HashPasswordPBKDF2SHA256(CommonConst.Default.Password);
+                    long accountId = YitIdHelper.NextId();
                     accountModel = new AccountModel
                     {
                         AccountId = accountId,
@@ -267,13 +263,15 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                         Avatar = tenantModel.LogoUrl,
                         Status = CommonStatusEnum.Enable
                     };
-                    accountModel = await db.Insertable(accountModel)
+                    accountModel = await db
+                        .Insertable(accountModel)
                         .ExecuteReturnEntityAsync();
 
                     #region PasswordRecordModel
 
                     // 初始化密码记录表
-                    await db.Insertable(new List<PasswordRecordModel>
+                    await db
+                        .Insertable(new List<PasswordRecordModel>
                         {
                             new()
                             {
@@ -292,9 +290,10 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                 tenantModel.AdminAccountId = accountModel.AccountId;
 
                 // 初始化租户管理员用户
-                var employeeId = YitIdHelper.NextId();
-                var robotEmployeeId = YitIdHelper.NextId();
-                await db.Insertable(new List<TenantUserModel>
+                long employeeId = YitIdHelper.NextId();
+                long robotEmployeeId = YitIdHelper.NextId();
+                await db
+                    .Insertable(new List<TenantUserModel>
                     {
                         new()
                         {
@@ -325,14 +324,16 @@ public partial class TenantDatabaseService : ITenantDatabaseService, ITransientD
                     .ExecuteCommandAsync();
             }
 
-            await db.Updateable(tenantModel)
+            await db
+                .Updateable(tenantModel)
                 .ExecuteCommandAsync();
         }
 
         await InitCustomDatabase(tenantModel, databaseType, db, newDb);
 
         databaseModel.IsInitialized = true;
-        await db.Updateable(databaseModel)
+        await db
+            .Updateable(databaseModel)
             .ExecuteCommandAsync();
 
         MAppContext.ConsoleWrite(console =>

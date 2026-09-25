@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Text.RegularExpressions;
 using Fast.Admin.Domain;
@@ -46,7 +31,7 @@ public partial class EmployeeService
             throw new UserFriendlyException("禁止直接修改为离职状态！");
         }
 
-        var employeeModel = await GetEmployeeWithinDataScope(input.EmployeeId);
+        EmployeeModel employeeModel = await GetEmployeeWithinDataScope(input.EmployeeId);
 
         if (employeeModel.ResignDate != null)
         {
@@ -78,7 +63,7 @@ public partial class EmployeeService
     [Permission(PermissionConst.Employee.Status)]
     public async Task EmployeeResigned(EmployeeResignedInput input)
     {
-        var employeeModel = await GetEmployeeWithinDataScope(input.EmployeeId);
+        EmployeeModel employeeModel = await GetEmployeeWithinDataScope(input.EmployeeId);
 
         if (employeeModel.EmployeeId == _user.EmployeeId)
         {
@@ -95,12 +80,14 @@ public partial class EmployeeService
         await _centerRepository.Ado.BeginTranAsync();
         try
         {
-            var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
+            TenantUserModel tenantUserModel = await _centerRepository
+                .Queryable<TenantUserModel>()
                 .InSingleAsync(employeeModel.EmployeeId);
             if (tenantUserModel != null)
             {
                 tenantUserModel.Status = CommonStatusEnum.Disable;
-                await _centerRepository.Updateable(tenantUserModel)
+                await _centerRepository
+                    .Updateable(tenantUserModel)
                     .ExecuteCommandAsync();
             }
 
@@ -150,20 +137,22 @@ public partial class EmployeeService
             throw new UserFriendlyException("手机号码不正确！");
         }
 
-        var employeeModel = await GetEmployeeWithinDataScope(input.EmployeeId);
+        EmployeeModel employeeModel = await GetEmployeeWithinDataScope(input.EmployeeId);
 
         if (employeeModel.Status == EmployeeStatusEnum.Resigned)
         {
             throw new UserFriendlyException("禁止为已离职的职员绑定登录账号！");
         }
 
-        if (await _centerRepository.Queryable<TenantUserModel>()
+        if (await _centerRepository
+                .Queryable<TenantUserModel>()
                 .AnyAsync(a => a.EmployeeId == employeeModel.EmployeeId))
         {
             throw new UserFriendlyException("已存在登录账号！");
         }
 
-        var employeeOrgModel = await _repository.Queryable<EmployeeOrgModel>()
+        EmployeeOrgModel employeeOrgModel = await _repository
+            .Queryable<EmployeeOrgModel>()
             .SingleAsync(s => s.EmployeeId == employeeModel.EmployeeId && s.IsPrimary);
 
         if (string.IsNullOrWhiteSpace(employeeModel.Email))
@@ -178,19 +167,21 @@ public partial class EmployeeService
         await _centerRepository.Ado.BeginTranAsync();
         try
         {
-            var accountModel = await _centerRepository.Queryable<AccountModel>()
+            AccountModel accountModel = await _centerRepository
+                .Queryable<AccountModel>()
                 .Where(wh => wh.Mobile == input.Mobile)
                 .SingleAsync();
             if (accountModel == null)
             {
-                if (await _centerRepository.Queryable<AccountModel>()
+                if (await _centerRepository
+                        .Queryable<AccountModel>()
                         .AnyAsync(a => a.Email == input.Email))
                 {
                     throw new UserFriendlyException("邮箱已存在账号信息！");
                 }
 
-                var passwordHash = CryptoUtil.HashPasswordPBKDF2SHA256(CommonConst.Default.Password);
-                var accountId = YitIdHelper.NextId();
+                string passwordHash = CryptoUtil.HashPasswordPBKDF2SHA256(CommonConst.Default.Password);
+                long accountId = YitIdHelper.NextId();
                 accountModel = new AccountModel
                 {
                     AccountId = accountId,
@@ -202,13 +193,15 @@ public partial class EmployeeService
                     NickName = employeeModel.EmployeeName,
                     Avatar = employeeModel.IdPhoto
                 };
-                await _centerRepository.Insertable(accountModel)
+                await _centerRepository
+                    .Insertable(accountModel)
                     .ExecuteCommandAsync();
 
                 #region PasswordRecordModel
 
                 // 初始化密码记录表
-                await _centerRepository.Insertable(new List<PasswordRecordModel>
+                await _centerRepository
+                    .Insertable(new List<PasswordRecordModel>
                     {
                         new()
                         {
@@ -236,7 +229,8 @@ public partial class EmployeeService
                 UserType = UserTypeEnum.None,
                 Status = CommonStatusEnum.Enable
             };
-            await _centerRepository.Insertable(tenantUserModel)
+            await _centerRepository
+                .Insertable(tenantUserModel)
                 .ExecuteCommandAsync();
 
             await _repository.UpdateAsync(employeeModel);
@@ -272,7 +266,7 @@ public partial class EmployeeService
     [Permission(PermissionConst.Employee.Status)]
     public async Task ChangeLoginStatus(EmployeeIdInput input)
     {
-        var employeeModel = await GetEmployeeWithinDataScope(input.EmployeeId);
+        EmployeeModel employeeModel = await GetEmployeeWithinDataScope(input.EmployeeId);
 
         if (employeeModel.RowVersion != input.RowVersion)
         {
@@ -284,7 +278,8 @@ public partial class EmployeeService
             throw new UserFriendlyException("禁止操作已离职的职员！");
         }
 
-        var tenantUserModel = await _centerRepository.Queryable<TenantUserModel>()
+        TenantUserModel tenantUserModel = await _centerRepository
+            .Queryable<TenantUserModel>()
             .InSingleAsync(employeeModel.EmployeeId);
         if (tenantUserModel == null)
         {
@@ -308,7 +303,8 @@ public partial class EmployeeService
             _ => tenantUserModel.Status
         };
 
-        await _centerRepository.Updateable(tenantUserModel)
+        await _centerRepository
+            .Updateable(tenantUserModel)
             .ExecuteCommandAsync();
 
         if (tenantUserModel.Status == CommonStatusEnum.Disable)
@@ -333,7 +329,8 @@ public partial class EmployeeService
     /// </summary>
     private async Task ForceEmployeeOffline(long employeeId, string message)
     {
-        var connectionIds = await _centerRepository.Queryable<TenantOnlineUserModel>()
+        List<string> connectionIds = await _centerRepository
+            .Queryable<TenantOnlineUserModel>()
             .Where(wh => wh.IsOnline)
             .Where(wh => wh.TenantId == _user.TenantId)
             .Where(wh => wh.EmployeeId == employeeId)
@@ -342,7 +339,8 @@ public partial class EmployeeService
         if (connectionIds.Count == 0)
             return;
 
-        await _hubContext.Clients.Clients(connectionIds)
+        await _hubContext
+            .Clients.Clients(connectionIds)
             .ForceOffline(new ForceOfflineOutput
             {
                 IsAdmin = _user.IsSuperAdmin || _user.IsAdmin,

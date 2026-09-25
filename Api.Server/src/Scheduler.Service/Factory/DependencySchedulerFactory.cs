@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -62,8 +47,10 @@ internal sealed class DependencySchedulerFactory : StdSchedulerFactory, IDepende
     /// </summary>
     private static readonly SemaphoreSlim semaphoreSlim = new(1, 1);
 
-    public DependencySchedulerFactory(IServiceProvider serviceProvider, ContainerConfigurationProcessor processor,
-        ISchedulerRepository schedulerRepository, ILogger<IDependencySchedulerFactory> logger)
+    public DependencySchedulerFactory(IServiceProvider serviceProvider,
+        ContainerConfigurationProcessor processor,
+        ISchedulerRepository schedulerRepository,
+        ILogger<IDependencySchedulerFactory> logger)
     {
         _serviceProvider = serviceProvider;
         _processor = processor;
@@ -75,16 +62,17 @@ internal sealed class DependencySchedulerFactory : StdSchedulerFactory, IDepende
     public async Task<IScheduler> GetScheduler(long? tenantId = null, CancellationToken cancellationToken = new())
     {
         // 获取锁
-        await semaphoreSlim.WaitAsync(cancellationToken)
+        await semaphoreSlim
+            .WaitAsync(cancellationToken)
             .ConfigureAwait(false);
 
         try
         {
             // 调度器名称
-            var schedulerName = tenantId != null ? $"TenantScheduler_{tenantId}" : "CoreScheduler";
+            string schedulerName = tenantId != null ? $"TenantScheduler_{tenantId}" : "CoreScheduler";
 
             // 判断是否已经存在调度器
-            var scheduler = _schedulerRepository.Lookup(schedulerName);
+            IScheduler scheduler = _schedulerRepository.Lookup(schedulerName);
 
             if (scheduler != null)
             {
@@ -92,7 +80,7 @@ internal sealed class DependencySchedulerFactory : StdSchedulerFactory, IDepende
             }
 
             // 获取选项
-            var options = _serviceProvider.GetService<IOptions<QuartzOptions>>();
+            IOptions<QuartzOptions> options = _serviceProvider.GetService<IOptions<QuartzOptions>>();
 
             // 放入选项
             options.Value[PropertySchedulerInstanceName] = schedulerName;
@@ -131,13 +119,14 @@ internal sealed class DependencySchedulerFactory : StdSchedulerFactory, IDepende
     public override async Task<IScheduler> GetScheduler(string schedulerName, CancellationToken cancellationToken = new())
     {
         // 获取锁
-        await semaphoreSlim.WaitAsync(cancellationToken)
+        await semaphoreSlim
+            .WaitAsync(cancellationToken)
             .ConfigureAwait(false);
 
         try
         {
             // 判断是否已经存在调度器
-            var scheduler = _schedulerRepository.Lookup(schedulerName);
+            IScheduler scheduler = _schedulerRepository.Lookup(schedulerName);
 
             if (scheduler != null)
             {
@@ -145,7 +134,7 @@ internal sealed class DependencySchedulerFactory : StdSchedulerFactory, IDepende
             }
 
             // 获取选项
-            var options = _serviceProvider.GetService<IOptions<QuartzOptions>>();
+            IOptions<QuartzOptions> options = _serviceProvider.GetService<IOptions<QuartzOptions>>();
 
             // 放入选项
             options.Value[PropertySchedulerInstanceName] = schedulerName;
@@ -194,7 +183,8 @@ internal sealed class DependencySchedulerFactory : StdSchedulerFactory, IDepende
     public override async Task<IScheduler> GetScheduler(CancellationToken cancellationToken = default)
     {
         // 获取调度器，这里需要注意的是：如果原来的调度器被停止了，则调用 GetScheduler 会返回一个新的调度器
-        var scheduler = await base.GetScheduler(cancellationToken)
+        IScheduler scheduler = await base
+            .GetScheduler(cancellationToken)
             .ConfigureAwait(false);
 
         // 初始化调度器
@@ -211,38 +201,47 @@ internal sealed class DependencySchedulerFactory : StdSchedulerFactory, IDepende
     /// <param name="cancellationToken">用于取消异步操作的令牌</param>
     private async Task InitializeScheduler(IScheduler scheduler, CancellationToken cancellationToken)
     {
-        foreach (var listener in _serviceProvider.GetServices<ISchedulerListener>())
+        foreach (ISchedulerListener listener in _serviceProvider.GetServices<ISchedulerListener>())
         {
             scheduler.ListenerManager.AddSchedulerListener(listener);
         }
 
-        var jobListeners = _serviceProvider.GetServices<IJobListener>();
-        var jobListenerConfigurations = _serviceProvider.GetServices<JobListenerConfiguration>()
+        IEnumerable<IJobListener> jobListeners = _serviceProvider.GetServices<IJobListener>();
+        JobListenerConfiguration[] jobListenerConfigurations = _serviceProvider
+            .GetServices<JobListenerConfiguration>()
             .ToArray();
-        foreach (var listener in jobListeners)
+        foreach (IJobListener listener in jobListeners)
         {
-            var configuration = jobListenerConfigurations.SingleOrDefault(x => x.ListenerType == listener.GetType());
+            JobListenerConfiguration configuration =
+                jobListenerConfigurations.SingleOrDefault(x => x.ListenerType == listener.GetType());
             scheduler.ListenerManager.AddJobListener(listener, configuration?.Matchers ?? []);
         }
 
-        var triggerListeners = _serviceProvider.GetServices<ITriggerListener>();
-        var triggerListenerConfigurations = _serviceProvider.GetServices<TriggerListenerConfiguration>()
+        IEnumerable<ITriggerListener> triggerListeners = _serviceProvider.GetServices<ITriggerListener>();
+        TriggerListenerConfiguration[] triggerListenerConfigurations = _serviceProvider
+            .GetServices<TriggerListenerConfiguration>()
             .ToArray();
-        foreach (var listener in triggerListeners)
+        foreach (ITriggerListener listener in triggerListeners)
         {
-            var configuration = triggerListenerConfigurations.SingleOrDefault(x => x.ListenerType == listener.GetType());
+            TriggerListenerConfiguration configuration =
+                triggerListenerConfigurations.SingleOrDefault(x => x.ListenerType == listener.GetType());
             scheduler.ListenerManager.AddTriggerListener(listener, configuration?.Matchers ?? []);
         }
 
-        var calendars = _serviceProvider.GetServices<CalendarConfiguration>();
-        foreach (var configuration in calendars)
+        IEnumerable<CalendarConfiguration> calendars = _serviceProvider.GetServices<CalendarConfiguration>();
+        foreach (CalendarConfiguration configuration in calendars)
         {
-            await scheduler.AddCalendar(configuration.Name, configuration.Calendar, configuration.Replace,
-                    configuration.UpdateTriggers, cancellationToken)
+            await scheduler
+                .AddCalendar(configuration.Name,
+                    configuration.Calendar,
+                    configuration.Replace,
+                    configuration.UpdateTriggers,
+                    cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        await _processor.ScheduleJobs(scheduler, cancellationToken)
+        await _processor
+            .ScheduleJobs(scheduler, cancellationToken)
             .ConfigureAwait(false);
     }
 
@@ -261,8 +260,8 @@ internal sealed class DependencySchedulerFactory : StdSchedulerFactory, IDepende
     /// <inheritdoc />
     protected override string GetNamedConnectionString(string connectionStringName)
     {
-        var configuration = _serviceProvider.GetService<IConfiguration>();
-        var connectionString = configuration?.GetConnectionString(connectionStringName);
+        IConfiguration configuration = _serviceProvider.GetService<IConfiguration>();
+        string connectionString = configuration?.GetConnectionString(connectionStringName);
         if (!string.IsNullOrWhiteSpace(connectionString))
         {
             return connectionString;
@@ -274,7 +273,7 @@ internal sealed class DependencySchedulerFactory : StdSchedulerFactory, IDepende
     /// <inheritdoc />
     protected override T InstantiateType<T>(Type implementationType)
     {
-        var service = _serviceProvider.GetService<T>();
+        T service = _serviceProvider.GetService<T>();
         if (service is null)
         {
             service = ObjectUtils.InstantiateType<T>(implementationType);

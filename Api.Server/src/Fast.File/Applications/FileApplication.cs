@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
@@ -35,6 +20,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
 using SqlSugar;
 using Yitter.IdGenerator;
@@ -75,8 +61,11 @@ public class FileApplication : IDynamicApplication
     /// <param name="repository">数据仓储</param>
     /// <param name="uploadFileSettingsOptions">文件上传配置</param>
     /// <param name="httpContextAccessor">HTTP 请求上下文访问器</param>
-    public FileApplication(IWebHostEnvironment hostEnvironment, IUser user, ISqlSugarRepository<FileModel> repository,
-        IOptions<UploadFileSettingsOptions> uploadFileSettingsOptions, IHttpContextAccessor httpContextAccessor)
+    public FileApplication(IWebHostEnvironment hostEnvironment,
+        IUser user,
+        ISqlSugarRepository<FileModel> repository,
+        IOptions<UploadFileSettingsOptions> uploadFileSettingsOptions,
+        IHttpContextAccessor httpContextAccessor)
     {
         _rootPath = hostEnvironment.ContentRootPath;
         _user = user;
@@ -93,13 +82,15 @@ public class FileApplication : IDynamicApplication
     [Permission(PermissionConst.FilePaged)]
     public async Task<PagedResult<QueryFilePagedOutput>> QueryFilePaged(QueryFilePagedInput input)
     {
-        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
+        TenantModel tenantModel = await TenantContext.GetTenant(_user.TenantNo);
 
-        var queryable = _repository.Entities.LeftJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId);
+        ISugarQueryable<FileModel, TenantModel> queryable =
+            _repository.Entities.LeftJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId);
 
         if (tenantModel.TenantType == TenantTypeEnum.System)
         {
-            queryable = queryable.ClearFilter<IBaseTEntity>()
+            queryable = queryable
+                .ClearFilter<IBaseTEntity>()
                 .WhereIF(input.TenantId != null, t1 => t1.TenantId == input.TenantId);
         }
         else if (!_user.IsAdmin)
@@ -107,7 +98,8 @@ public class FileApplication : IDynamicApplication
             queryable = queryable.Where(t1 => t1.CreatedUserId == _user.EmployeeId);
         }
 
-        return await queryable.SelectMergeTable((t1, t2) => new QueryFilePagedOutput
+        return await queryable
+            .SelectMergeTable((t1, t2) => new QueryFilePagedOutput
             {
                 FileId = t1.FileId,
                 FileObjectName = t1.FileObjectName,
@@ -198,9 +190,9 @@ public class FileApplication : IDynamicApplication
         }
 
         // 获取文件后缀
-        var fileSuffix = Path.GetExtension(fileName);
-        var fileIdStr = fileName[..^fileSuffix.Length];
-        if (!long.TryParse(fileIdStr, out var fileId))
+        string fileSuffix = Path.GetExtension(fileName);
+        string fileIdStr = fileName[..^fileSuffix.Length];
+        if (!long.TryParse(fileIdStr, out long fileId))
         {
             // 文件不存在
             return new NotFoundResult();
@@ -208,7 +200,8 @@ public class FileApplication : IDynamicApplication
 
         // 这里作为预览文件，必须禁用 AOP，所以直接使用 NEW 的方式
         using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
-        var fileInfoModel = await db.Queryable<FileModel>()
+        FileModel fileInfoModel = await db
+            .Queryable<FileModel>()
             .InSingleAsync(fileId);
         if (fileInfoModel == null)
         {
@@ -227,9 +220,9 @@ public class FileApplication : IDynamicApplication
         _httpContext.Response.Headers.CacheControl = "public, max-age=31536000, immutable";
         _httpContext.Response.Headers.XContentTypeOptions = "nosniff";
 
-        var localFileName = $"{fileInfoModel.FileId}{size}.{fileInfoModel.FileSuffix}";
+        string localFileName = $"{fileInfoModel.FileId}{size}.{fileInfoModel.FileSuffix}";
 
-        var localFilePath = FileContext.GetLocalPath(_rootPath, fileInfoModel.FilePath, localFileName);
+        string localFilePath = FileContext.GetLocalPath(_rootPath, fileInfoModel.FilePath, localFileName);
         if (!System.IO.File.Exists(localFilePath))
         {
             // 文件丢失或已被删除
@@ -249,15 +242,19 @@ public class FileApplication : IDynamicApplication
     [AllowAnonymous, DisabledRequestLog, DisableRateLimiting]
     public async Task<IActionResult> PreviewMedia([FromRoute, Required(ErrorMessage = "Token不能为空")] string token)
     {
-        if (!FileContext.TryValidateMediaAssetToken(token, out var tokenPayload))
+        if (!FileContext.TryValidateMediaAssetToken(token, out MediaAssetTokenPayload tokenPayload))
         {
             // Token 格式、签名或有效期无效
             return new NotFoundResult();
         }
 
-        var _authCache = _httpContext.RequestServices.GetService<ICache<AuthCCL>>();
-        var sessionCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, tokenPayload.AppNo, tokenPayload.TenantNo,
-            tokenPayload.DeviceType.ToString(), tokenPayload.EmployeeNo, tokenPayload.SessionId);
+        ICache<AuthCCL> _authCache = _httpContext.RequestServices.GetService<ICache<AuthCCL>>();
+        string sessionCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser,
+            tokenPayload.AppNo,
+            tokenPayload.TenantNo,
+            tokenPayload.DeviceType.ToString(),
+            tokenPayload.EmployeeNo,
+            tokenPayload.SessionId);
         if (!await _authCache.ExistsAsync(sessionCacheKey))
         {
             // 这里是401
@@ -266,7 +263,8 @@ public class FileApplication : IDynamicApplication
 
         // 这里作为预览文件，必须禁用 AOP，所以直接使用 NEW 的方式
         using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
-        var fileInfoModel = await db.Queryable<FileModel>()
+        FileModel fileInfoModel = await db
+            .Queryable<FileModel>()
             .InSingleAsync(tokenPayload.FileId);
         if (fileInfoModel == null)
         {
@@ -285,14 +283,18 @@ public class FileApplication : IDynamicApplication
         _httpContext.Response.Headers.CacheControl = "private, no-store";
         _httpContext.Response.Headers.XContentTypeOptions = "nosniff";
 
-        var localFilePath = FileContext.GetLocalPath(_rootPath, fileInfoModel.FilePath, fileInfoModel.FileObjectName);
+        string localFilePath = FileContext.GetLocalPath(_rootPath, fileInfoModel.FilePath, fileInfoModel.FileObjectName);
         if (!System.IO.File.Exists(localFilePath))
         {
             // 文件丢失或已被删除
             return new NotFoundResult();
         }
 
-        var stream = new FileStream(localFilePath, FileMode.Open, FileAccess.Read, FileShare.Read, 81920,
+        var stream = new FileStream(localFilePath,
+            FileMode.Open,
+            FileAccess.Read,
+            FileShare.Read,
+            81920,
             FileOptions.Asynchronous);
         return new FileStreamResult(stream, fileInfoModel.FileMimeType) {EnableRangeProcessing = true};
     }
@@ -304,11 +306,11 @@ public class FileApplication : IDynamicApplication
     [ApiInfo("下载文件", HttpRequestActionEnum.Download)]
     public async Task<IActionResult> Download(DownloadFileInput input)
     {
-        var fileInfoModel = await _repository.Entities.InSingleAsync(input.FileId);
+        FileModel fileInfoModel = await _repository.Entities.InSingleAsync(input.FileId);
         if (fileInfoModel == null)
             throw new UserFriendlyException("文件不存在！");
 
-        var filePath = FileContext.GetLocalPath(_rootPath, fileInfoModel.FilePath, fileInfoModel.FileObjectName);
+        string filePath = FileContext.GetLocalPath(_rootPath, fileInfoModel.FilePath, fileInfoModel.FileObjectName);
         if (!System.IO.File.Exists(filePath))
             throw new UserFriendlyException("文件丢失或已被删除！");
 
@@ -383,23 +385,25 @@ public class FileApplication : IDynamicApplication
 
         fileInfoSettings ??= _uploadFileSettingsOptions.Default;
 
-        var dateTime = DateTime.Now;
+        DateTime dateTime = DateTime.Now;
 
         // 文件大小
-        var fileSizeKb = (file.Length + 1023L) / 1024L;
+        long fileSizeKb = (file.Length + 1023L) / 1024L;
         if (fileInfoSettings.MaxSize > 0 && fileSizeKb > fileInfoSettings.MaxSize)
             throw new UserFriendlyException($"文件大小超出限制，最大允许{fileInfoSettings.MaxSize / 1024}MB。");
 
         // 浏览器可能提交带 Windows 或 Unix 路径的文件名，存储前只保留最后一段名称
-        var fileOriginName = Path.GetFileName(file.FileName.Replace('\\', '/'));
-        var fileSuffix = Path.GetExtension(fileOriginName)
+        string fileOriginName = Path.GetFileName(file.FileName.Replace('\\', '/'));
+        string fileSuffix = Path
+            .GetExtension(fileOriginName)
             .ToLowerInvariant();
         if (string.IsNullOrWhiteSpace(fileSuffix))
             throw new UserFriendlyException("文件没有有效后缀名!");
         if (fileSuffix.Length > 17)
             throw new UserFriendlyException("文件后缀名过长！");
 
-        var normalizedContentType = file.ContentType?.Trim()
+        string normalizedContentType = file
+            .ContentType?.Trim()
             .ToLowerInvariant();
         if (string.IsNullOrWhiteSpace(normalizedContentType))
             throw new UserFriendlyException("文件内容类型不能为空！");
@@ -411,7 +415,7 @@ public class FileApplication : IDynamicApplication
         }
 
         // 根据当前已支持的 MIME 类型校验文件后缀，防止客户端声明的类型与文件名不一致
-        var isFileExtensionCompatible = normalizedContentType switch
+        bool isFileExtensionCompatible = normalizedContentType switch
         {
             "image/jpg" or "image/jpeg" => fileSuffix is ".jpg" or ".jpeg",
             "image/png" => fileSuffix == ".png",
@@ -453,18 +457,18 @@ public class FileApplication : IDynamicApplication
         {
             try
             {
-                await using var formatStream = file.OpenReadStream();
-                var imageFormat = await Image.DetectFormatAsync(formatStream);
-                var expectedMimeType = normalizedContentType == "image/jpg" ? "image/jpeg" : normalizedContentType;
+                await using Stream formatStream = file.OpenReadStream();
+                IImageFormat imageFormat = await Image.DetectFormatAsync(formatStream);
+                string expectedMimeType = normalizedContentType == "image/jpg" ? "image/jpeg" : normalizedContentType;
                 if (imageFormat == null
                     || !string.Equals(imageFormat.DefaultMimeType, expectedMimeType, StringComparison.OrdinalIgnoreCase))
                 {
                     throw new UserFriendlyException("图片内容与声明的文件类型不一致！");
                 }
 
-                await using var identifyStream = file.OpenReadStream();
-                var imageInfo = await Image.IdentifyAsync(identifyStream);
-                if (imageInfo == null || (long) imageInfo.Width * imageInfo.Height > MaxImagePixels)
+                await using Stream identifyStream = file.OpenReadStream();
+                ImageInfo imageInfo = await Image.IdentifyAsync(identifyStream);
+                if (imageInfo == null || (long)imageInfo.Width * imageInfo.Height > MaxImagePixels)
                     throw new UserFriendlyException("图片像素尺寸超出限制！");
             }
             catch (UnknownImageFormatException)
@@ -478,12 +482,12 @@ public class FileApplication : IDynamicApplication
         }
 
         // 计算文件哈希
-        await using var stream = file.OpenReadStream();
-        var hashBytes = await SHA256.HashDataAsync(stream);
-        var fileHash = Convert.ToHexStringLower(hashBytes);
+        await using Stream stream = file.OpenReadStream();
+        byte[] hashBytes = await SHA256.HashDataAsync(stream);
+        string fileHash = Convert.ToHexStringLower(hashBytes);
 
         // 判断是否存在重复文件
-        var existFileModel = await _repository.SingleOrDefaultAsync(s => s.FileHash == fileHash);
+        FileModel existFileModel = await _repository.SingleOrDefaultAsync(s => s.FileHash == fileHash);
         if (existFileModel != null)
         {
             if (!System.IO.File.Exists(
@@ -492,12 +496,12 @@ public class FileApplication : IDynamicApplication
             return existFileModel.FileLocation;
         }
 
-        var fileId = YitIdHelper.NextId();
+        long fileId = YitIdHelper.NextId();
         // 本地文件名称
-        var fileObjectName = $"{fileId}{fileSuffix}";
+        string fileObjectName = $"{fileId}{fileSuffix}";
 
         // 本地文件路径
-        var filePath = fileInfoSettings.Path;
+        string filePath = fileInfoSettings.Path;
 
         if (!string.IsNullOrWhiteSpace(_user?.TenantNo))
         {
@@ -533,7 +537,7 @@ public class FileApplication : IDynamicApplication
         filePath = filePath.Replace('\\', '/');
 
         // 获取文件访问地址
-        var publicDomain = _uploadFileSettingsOptions.PublicDomain;
+        string publicDomain = _uploadFileSettingsOptions.PublicDomain;
         if (string.IsNullOrWhiteSpace(publicDomain))
         {
             publicDomain = $"{_httpContext.Request.Scheme}://{_httpContext.Request.Host}";
@@ -552,9 +556,9 @@ public class FileApplication : IDynamicApplication
             FileHash = fileHash
         };
         // 获取设备信息
-        var userAgentInfo = _httpContext.RequestUserAgentInfo();
+        UserAgentInfo userAgentInfo = _httpContext.RequestUserAgentInfo();
         // 获取万网信息
-        var wanNetIpInfo = await _httpContext.RemoteIpv4InfoAsync();
+        WanNetIPInfo wanNetIpInfo = await _httpContext.RemoteIpv4InfoAsync();
         fileInfoModel.UploadDevice = userAgentInfo.Device;
         fileInfoModel.UploadOS = userAgentInfo.OS;
         fileInfoModel.UploadBrowser = userAgentInfo.Browser;
@@ -566,10 +570,14 @@ public class FileApplication : IDynamicApplication
         fileInfoModel.CreatedTime = dateTime;
 
         // 本地存储
-        var localFilePath = FileContext.GetLocalPath(_rootPath, filePath);
+        string localFilePath = FileContext.GetLocalPath(_rootPath, filePath);
         Directory.CreateDirectory(localFilePath);
-        var localFullPath = Path.Combine(localFilePath, fileObjectName);
-        await using (var fileStream = new FileStream(localFullPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 81920,
+        string localFullPath = Path.Combine(localFilePath, fileObjectName);
+        await using (var fileStream = new FileStream(localFullPath,
+                         FileMode.CreateNew,
+                         FileAccess.Write,
+                         FileShare.None,
+                         81920,
                          FileOptions.Asynchronous | FileOptions.SequentialScan))
         {
             await file.CopyToAsync(fileStream, _httpContext.RequestAborted);
@@ -579,20 +587,20 @@ public class FileApplication : IDynamicApplication
         if (FileContext.Images.Contains(normalizedContentType))
         {
             // 异步读取原始图片
-            using var image = await Image.LoadAsync(localFullPath);
+            using Image image = await Image.LoadAsync(localFullPath);
 
-            foreach (var item in ImageSizes)
+            foreach (KeyValuePair<string, int> item in ImageSizes)
             {
-                var width = Math.Min(item.Value, image.Width);
+                int width = Math.Min(item.Value, image.Width);
                 // 按原图比例计算高度
-                var ratio = (float) width / image.Width;
-                var height = Math.Max(1, (int) (image.Height * ratio));
+                float ratio = (float)width / image.Width;
+                int height = Math.Max(1, (int)(image.Height * ratio));
 
                 // 创建图片副本并调整大小
-                using var clone = image.Clone(ctx => ctx.Resize(width, height));
+                using Image clone = image.Clone(ctx => ctx.Resize(width, height));
                 // 拼接缩略图文件名
-                var thumbnailName = $"{fileId}@{item.Key}{fileSuffix}";
-                var thumbnailPath = Path.Combine(localFilePath, thumbnailName);
+                string thumbnailName = $"{fileId}@{item.Key}{fileSuffix}";
+                string thumbnailPath = Path.Combine(localFilePath, thumbnailName);
 
                 // 保存图片到本地，格式自动根据后缀判断
                 await clone.SaveAsync(thumbnailPath);

@@ -1,13 +1,14 @@
 import { readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
-import Uni from "@uni-helper/plugin-uni";
+const { default: Uni } = createRequire(import.meta.url)("@dcloudio/vite-plugin-uni") as { default: typeof UniPlugin };
 import UniHelperComponents from "@uni-helper/vite-plugin-uni-components";
 import UniHelperLayouts from "@uni-helper/vite-plugin-uni-layouts";
 import UniHelperPages from "@uni-helper/vite-plugin-uni-pages";
 import { FastResolver } from "./resolver.fast";
 import { WotResolver } from "./resolver.wot-ui";
 import { ZPagingResolver } from "./resolver.z-paging";
+import type UniPlugin from "@dcloudio/vite-plugin-uni";
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
@@ -16,6 +17,7 @@ export default defineConfig({
 		/* 配置源码目录别名。 */
 		alias: {
 			"@": fileURLToPath(new URL("./src", import.meta.url)),
+			static: fileURLToPath(new URL("./src/static", import.meta.url)),
 		},
 	},
 	css: {

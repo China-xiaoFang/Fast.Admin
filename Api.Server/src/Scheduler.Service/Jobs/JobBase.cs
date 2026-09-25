@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Diagnostics;
 using System.Reflection;
@@ -94,8 +79,11 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
     /// </summary>
     protected MailMessageEnum MailMessage { get; private set; }
 
-    protected JobBase(IServiceProvider serviceProvider, IMailService mailService, IOptions<MvcNewtonsoftJsonOptions> jsonOptions,
-        ILogger<IJob> logger, T logInfo)
+    protected JobBase(IServiceProvider serviceProvider,
+        IMailService mailService,
+        IOptions<MvcNewtonsoftJsonOptions> jsonOptions,
+        ILogger<IJob> logger,
+        T logInfo)
     {
         _serviceProvider = serviceProvider;
         _jsonSerializerSettings = jsonOptions.Value.SerializerSettings;
@@ -122,7 +110,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
         if ((MailMessage & MailMessageEnum.Info) != 0)
         {
             title = $"【信息】调度作业-{title}";
-            var emailContent = await _mailService.GetEmailTemplate(title, msg, "info");
+            string emailContent = await _mailService.GetEmailTemplate(title, msg, "info");
             await _mailService.SendEmail(title, emailContent);
         }
     }
@@ -138,7 +126,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
         if ((MailMessage & MailMessageEnum.Warn) != 0)
         {
             title = $"【警告】调度作业-{title}";
-            var emailContent = await _mailService.GetEmailTemplate(title, msg, "warn");
+            string emailContent = await _mailService.GetEmailTemplate(title, msg, "warn");
             await _mailService.SendEmail(title, emailContent);
         }
     }
@@ -163,7 +151,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
                        <p class='error'>错误提示：</p>
                        {msg}
                        """;
-                var emailContent = await _mailService.GetEmailTemplate(title, msg, "error");
+                string emailContent = await _mailService.GetEmailTemplate(title, msg, "error");
                 await _mailService.SendEmail(title, emailContent);
             }
         }
@@ -181,7 +169,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
                        <p class='error'>异常信息：</p>
                        <pre class='error'>{JsonConvert.SerializeObject(exception, _jsonSerializerSettings)}</pre>
                        """;
-                var emailContent = await _mailService.GetEmailTemplate(title, msg, "error");
+                string emailContent = await _mailService.GetEmailTemplate(title, msg, "error");
                 await _mailService.SendEmail(title, emailContent);
             }
         }
@@ -191,7 +179,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
     public async Task Execute(IJobExecutionContext context)
     {
         // 结束时间
-        var endTime = context.JobDetail.JobDataMap.GetNullableDateTime(nameof(SchedulerJobInfo.EndTime));
+        DateTime? endTime = context.JobDetail.JobDataMap.GetNullableDateTime(nameof(SchedulerJobInfo.EndTime));
         // 如果结束时间超过当前时间，则暂停当前作业
         if (endTime != null && endTime <= DateTime.Now)
         {
@@ -201,7 +189,7 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
         }
 
         // 创建请求作用域
-        using var scope = _serviceProvider.CreateScope();
+        using IServiceScope scope = _serviceProvider.CreateScope();
 
         using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
         // 加载Aop
@@ -220,41 +208,44 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
         // 数据库连接字符串处理
         if (_logInfo.TenantId != null)
         {
-            var (tenantName, tenantNo, tenantCode, deviceId) =
+            (string tenantName, string tenantNo, string tenantCode, string deviceId) =
                 SchedulerContext.SchedulerTenantList.GetValueOrDefault(_logInfo.TenantId.Value);
             _logInfo.TenantName = tenantName;
             _logInfo.TenantNo = tenantNo;
             _logInfo.TenantCode = tenantCode;
 
             // 解析服务
-            var centerCache = scope.ServiceProvider.GetService<ICache<CenterCCL>>();
+            ICache<CenterCCL> centerCache = scope.ServiceProvider.GetService<ICache<CenterCCL>>();
 
             // 获取机器人信息
-            var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Rabot, tenantNo);
-            var robotInfo = await centerCache.GetAndSetAsync(cacheKey, async () =>
-            {
-                var result = await db.Queryable<TenantUserModel>()
-                    .Where(wh => wh.TenantId == _logInfo.TenantId.Value)
-                    .Where(wh => wh.UserType == UserTypeEnum.Robot)
-                    .SingleAsync();
-
-                if (result == null)
+            string cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Rabot, tenantNo);
+            TenantUserModel robotInfo = await centerCache.GetAndSetAsync(cacheKey,
+                async () =>
                 {
-                    await ErrorLog(_logInfo.JobName, null, $"<pre class='error'>未能找到对应租户【{tenantNo}】机器人信息！</pre>");
-                }
+                    TenantUserModel result = await db
+                        .Queryable<TenantUserModel>()
+                        .Where(wh => wh.TenantId == _logInfo.TenantId.Value)
+                        .Where(wh => wh.UserType == UserTypeEnum.Robot)
+                        .SingleAsync();
 
-                return result;
-            });
+                    if (result == null)
+                    {
+                        await ErrorLog(_logInfo.JobName, null, $"<pre class='error'>未能找到对应租户【{tenantNo}】机器人信息！</pre>");
+                    }
+
+                    return result;
+                });
             _logInfo.RobotInfo = robotInfo;
 
             // 注入 IUser
-            var _user = scope.ServiceProvider.GetService<IUser>();
+            IUser _user = scope.ServiceProvider.GetService<IUser>();
             // 设置授权用户
             _user.SetAuthUser(new AuthUserInfo
             {
                 DeviceType = AppEnvironmentEnum.Api,
                 DeviceId = deviceId,
-                SessionId = Guid.NewGuid()
+                SessionId = Guid
+                    .NewGuid()
                     .ToString("D"),
                 AppNo = "Scheduler",
                 AppName = "调度程序",
@@ -277,18 +268,18 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
             });
 
             // 判断是否是全部租户的，如果是则随机等待 500 ~ 5000 毫秒
-            var isAllTenant = context.JobDetail.JobDataMap.GetNullableBoolean(nameof(SchedulerJobInfo.IsAllTenant)) ?? false;
+            bool isAllTenant = context.JobDetail.JobDataMap.GetNullableBoolean(nameof(SchedulerJobInfo.IsAllTenant)) ?? false;
             if (isAllTenant)
             {
                 // 尝试获取本地调度作业的实现类
-                var localSchedulerJobType =
+                Type localSchedulerJobType =
                     SchedulerContext.LocalSchedulerJobTypes.GetValueOrDefault(
                         new JobKey(context.JobDetail.Key.Name, context.JobDetail.Key.Group).ToString());
 
                 if (localSchedulerJobType?.GetCustomAttribute<DisableWaitAttribute>() == null)
                 {
                     var random = new Random();
-                    var delay = random.Next(500, 5001);
+                    int delay = random.Next(500, 5001);
 
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"All tenant job randomly wait {delay} milliseconds.");
@@ -300,23 +291,23 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
         }
 
         // 警告秒数
-        var warnTime = context.JobDetail.JobDataMap.GetNullableInt(nameof(SchedulerJobInfo.WarnTime)) ?? _warnTime;
+        int warnTime = context.JobDetail.JobDataMap.GetNullableInt(nameof(SchedulerJobInfo.WarnTime)) ?? _warnTime;
         warnTime = Math.Abs(warnTime);
 
         // 运行次数
-        var runNumber = context.JobDetail.JobDataMap.GetLong(nameof(SchedulerJobInfo.RunNumber));
+        long runNumber = context.JobDetail.JobDataMap.GetLong(nameof(SchedulerJobInfo.RunNumber));
         runNumber = Math.Abs(runNumber);
 
         // 重试次数
-        var retryTimes = context.JobDetail.JobDataMap.GetNullableInt(nameof(SchedulerJobInfo.RetryTimes)) ?? 0;
+        int retryTimes = context.JobDetail.JobDataMap.GetNullableInt(nameof(SchedulerJobInfo.RetryTimes)) ?? 0;
         retryTimes = Math.Abs(retryTimes);
         // 重试间隔
-        var retryMillisecond = context.JobDetail.JobDataMap.GetNullableInt(nameof(SchedulerJobInfo.RetryMillisecond))
+        int retryMillisecond = context.JobDetail.JobDataMap.GetNullableInt(nameof(SchedulerJobInfo.RetryMillisecond))
                                ?? _retryMillisecond;
         retryMillisecond = Math.Abs(retryMillisecond);
 
         // 日志
-        var logs = context.JobDetail.JobDataMap[nameof(SchedulerJobInfo.Logs)] as List<string> ?? [];
+        List<string> logs = context.JobDetail.JobDataMap[nameof(SchedulerJobInfo.Logs)] as List<string> ?? [];
 
         // 运行次数增加
         runNumber++;
@@ -329,8 +320,11 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
         try
         {
             // 重试策略
-            await RetryUtil.InvokeAsync(async () => await JobExecute(scope.ServiceProvider, db, context), retryTimes,
-                retryMillisecond, exceptionTypes: [typeof(UserFriendlyException)], retryAction: async (total, times) =>
+            await RetryUtil.InvokeAsync(async () => await JobExecute(scope.ServiceProvider, db, context),
+                retryTimes,
+                retryMillisecond,
+                exceptionTypes: [typeof(UserFriendlyException)],
+                retryAction: async (total, times) =>
                 {
                     // 输出重试警告日志
                     await WarnLog(_logInfo.JobName,
@@ -360,7 +354,8 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
             }
             else
             {
-                await ErrorLog(_logInfo.JobName, ex,
+                await ErrorLog(_logInfo.JobName,
+                    ex,
                     $"<pre class='error'>{JsonConvert.SerializeObject(_logInfo, _jsonSerializerSettings)}</pre>");
             }
         }
@@ -369,9 +364,9 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
             // 停止监听
             _stopwatch.Stop();
             // 获取执行总秒数
-            var seconds = _stopwatch.Elapsed.TotalSeconds;
+            double seconds = _stopwatch.Elapsed.TotalSeconds;
             // 获取执行总毫秒数
-            var milliseconds = _stopwatch.Elapsed.TotalMilliseconds;
+            double milliseconds = _stopwatch.Elapsed.TotalMilliseconds;
             // 作业耗时
             _logInfo.ExecuteTime = milliseconds;
             // 作业结束时间
@@ -380,9 +375,9 @@ internal abstract class JobBase<T> : IJob where T : SchedulerJobLogInfo, new()
             // 记录执行次数
             context.JobDetail.JobDataMap[nameof(SchedulerJobInfo.RunNumber)] = runNumber;
 
-            var executeTime = seconds >= 1 ? $"{seconds}秒" : $"{milliseconds}毫秒";
+            string executeTime = seconds >= 1 ? $"{seconds}秒" : $"{milliseconds}毫秒";
 
-            var className = string.IsNullOrWhiteSpace(_logInfo.ErrorMsg) ? "" : "error";
+            string className = string.IsNullOrWhiteSpace(_logInfo.ErrorMsg) ? "" : "error";
 
             // 添加日志
             logs.Add(

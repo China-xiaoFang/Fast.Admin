@@ -1,28 +1,15 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using CSRedis;
+using Fast.Center.Domain;
 using Fast.Center.Service.Account.Dto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -91,7 +78,7 @@ public partial class AccountService
         await EnsureApplication();
         await _captchaService.VerifyImageCaptcha(input.CaptchaKey, input.CaptchaCode);
 
-        var accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
+        AccountModel accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
         if (accountModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
@@ -111,7 +98,8 @@ public partial class AccountService
             throw new UserFriendlyException("账号已校验完成，请刷新用户信息！");
         }
 
-        var account = input.Account.Trim()
+        string account = input
+            .Account.Trim()
             .ToLowerInvariant();
 
         MessageSendChannelEnum sendChannel;
@@ -139,22 +127,23 @@ public partial class AccountService
         // 同一个IP地址，1小时内最多允许20次
         await EnforceSendQuota($"Ip:{FastContext.HttpContext.Connection.RemoteIpAddress?.MapToIPv6()
                                          .ToString()
-                                     ?? "unknown"}", (20, 3600));
-        var recipient = $"Recipient:{sendChannel}:{accountModel.AccountKey}";
+                                     ?? "unknown"}",
+            (20, 3600));
+        string recipient = $"Recipient:{sendChannel}:{accountModel.AccountKey}";
         // 1小时5次，24小时10次
         await EnforceSendQuota(recipient, (5, 3600), (10, 86400));
 
         // 不同客户端独立保存校验进度，发送与提交共用锁，避免覆盖已验证的结果。
-        var clientIdentity = GlobalContext.ClientIdentity;
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AccountIdentityVerification, accountModel.AccountKey, clientIdentity);
-        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
+        string clientIdentity = GlobalContext.ClientIdentity;
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.AccountIdentityVerification, accountModel.AccountKey, clientIdentity);
+        using CSRedisClientLock codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
-        var passwordHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(accountModel.Password)));
-        var dto = await _cache.GetAsync<AccountVerificationCacheDto>(cacheKey);
+        string passwordHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(accountModel.Password)));
+        AccountVerificationCacheDto dto = await _cache.GetAsync<AccountVerificationCacheDto>(cacheKey);
         if (dto == null
             || dto.AccountId != accountModel.AccountId
             || dto.ClientIdentity != clientIdentity
@@ -166,7 +155,7 @@ public partial class AccountService
             };
         }
 
-        var expiresTime = DateTime.Now.AddMinutes(5);
+        DateTime expiresTime = DateTime.Now.AddMinutes(5);
         switch (sendChannel)
         {
             case MessageSendChannelEnum.Email:
@@ -196,10 +185,11 @@ public partial class AccountService
     {
         await EnsureApplication();
 
-        var mobile = input.Mobile.Trim();
-        var email = input.Email.Trim()
+        string mobile = input.Mobile.Trim();
+        string email = input
+            .Email.Trim()
             .ToLowerInvariant();
-        var accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
+        AccountModel accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
         if (accountModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
@@ -228,15 +218,16 @@ public partial class AccountService
         }
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AccountIdentityVerification, accountModel.AccountKey,
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.AccountIdentityVerification,
+            accountModel.AccountKey,
             GlobalContext.ClientIdentity);
-        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
+        using CSRedisClientLock codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
-        var dto = await _cache.GetAsync<AccountVerificationCacheDto>(cacheKey);
+        AccountVerificationCacheDto dto = await _cache.GetAsync<AccountVerificationCacheDto>(cacheKey);
         if (dto == null || dto.AccountId != accountModel.AccountId || dto.ClientIdentity != GlobalContext.ClientIdentity)
         {
             throw new UserFriendlyException("验证码无效或已过期！");
@@ -275,7 +266,8 @@ public partial class AccountService
         accountModel.Email = email;
         accountModel.IdentityVerification = true;
 
-        await _repository.Updateable(accountModel)
+        await _repository
+            .Updateable(accountModel)
             .UpdateColumns(e => new {e.Mobile, e.Email, e.IdentityVerification})
             .ExecuteCommandWithOptLockAsync(true);
 
@@ -297,7 +289,7 @@ public partial class AccountService
         await EnsureApplication();
         await _captchaService.VerifyImageCaptcha(input.CaptchaKey, input.CaptchaCode);
 
-        var accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
+        AccountModel accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
         if (accountModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
@@ -309,7 +301,8 @@ public partial class AccountService
             throw new UserFriendlyException("账号已被平台禁用！");
         }
 
-        var account = input.Account.Trim()
+        string account = input
+            .Account.Trim()
             .ToLowerInvariant();
         MessageSendChannelEnum sendChannel;
         if (Regex.IsMatch(account, RegexConst.Mobile))
@@ -346,22 +339,23 @@ public partial class AccountService
         // 同一个IP地址，1小时内最多允许20次
         await EnforceSendQuota($"Ip:{FastContext.HttpContext.Connection.RemoteIpAddress?.MapToIPv6()
                                          .ToString()
-                                     ?? "unknown"}", (20, 3600));
-        var recipient = $"EditAccount:{sendChannel}:{accountModel.AccountKey}";
+                                     ?? "unknown"}",
+            (20, 3600));
+        string recipient = $"EditAccount:{sendChannel}:{accountModel.AccountKey}";
         // 1小时5次，24小时10次
         await EnforceSendQuota(recipient, (5, 3600), (10, 86400));
 
         // 不同客户端独立保存校验进度，发送与提交共用锁，避免覆盖已验证的结果。
-        var clientIdentity = GlobalContext.ClientIdentity;
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AccountIdentityVerification, accountModel.AccountKey, clientIdentity);
-        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
+        string clientIdentity = GlobalContext.ClientIdentity;
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.AccountIdentityVerification, accountModel.AccountKey, clientIdentity);
+        using CSRedisClientLock codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
-        var passwordHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(accountModel.Password)));
-        var dto = await _cache.GetAsync<AccountVerificationCacheDto>(cacheKey);
+        string passwordHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(accountModel.Password)));
+        AccountVerificationCacheDto dto = await _cache.GetAsync<AccountVerificationCacheDto>(cacheKey);
         if (dto == null
             || dto.AccountId != accountModel.AccountId
             || dto.ClientIdentity != clientIdentity
@@ -373,7 +367,7 @@ public partial class AccountService
             };
         }
 
-        var expiresTime = DateTime.Now.AddMinutes(5);
+        DateTime expiresTime = DateTime.Now.AddMinutes(5);
         switch (sendChannel)
         {
             case MessageSendChannelEnum.Email:

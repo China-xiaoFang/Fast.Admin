@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using Fast.Admin.Domain;
 using Fast.Admin.Service.OperateLog.Dto;
@@ -38,7 +23,8 @@ public class OperateLogService : IDynamicApplication
     private readonly ISqlSugarRepository<DepartmentModel> _adminRepository;
     private readonly ISqlSugarRepository<OperateLogModel> _repository;
 
-    public OperateLogService(IUser user, ISqlSugarRepository<DepartmentModel> adminRepository,
+    public OperateLogService(IUser user,
+        ISqlSugarRepository<DepartmentModel> adminRepository,
         ISqlSugarRepository<OperateLogModel> repository)
     {
         _user = user;
@@ -59,10 +45,11 @@ public class OperateLogService : IDynamicApplication
             throw new UserFriendlyException("请选择具体的时间范围！");
         }
 
-        var queryable = _repository.Entities.WhereIF(input.OperateType != null, wh => wh.OperateType == input.OperateType)
+        ISugarQueryable<OperateLogModel> queryable = _repository
+            .Entities.WhereIF(input.OperateType != null, wh => wh.OperateType == input.OperateType)
             .WhereIF(input.EmployeeId != null, wh => wh.CreatedUserId == input.EmployeeId)
             .WhereIF(input.BizId != null, wh => wh.BizId == input.BizId);
-        var customDepartmentIds = _user.DataScopeDepartmentIdList ?? [];
+        List<long> customDepartmentIds = _user.DataScopeDepartmentIdList ?? [];
 
         // 仅本人数据
         if (_user.DataScopeType == DataScopeTypeEnum.Self)
@@ -79,7 +66,8 @@ public class OperateLogService : IDynamicApplication
         // 本部门及以下数据
         else if (_user.DataScopeType == DataScopeTypeEnum.DeptWithChild)
         {
-            var departmentIds = await _adminRepository.Queryable<DepartmentModel>()
+            List<long> departmentIds = await _adminRepository
+                .Queryable<DepartmentModel>()
                 .Where(wh => wh.DepartmentId == _user.DepartmentId
                              || SqlFunc.JsonArrayAny(wh.ParentIds, _user.DepartmentId ?? 0)
                              || customDepartmentIds.Contains(wh.DepartmentId))
@@ -90,9 +78,11 @@ public class OperateLogService : IDynamicApplication
         // 本机构及以下数据
         else if (_user.DataScopeType == DataScopeTypeEnum.OrgWithChild)
         {
-            var departmentIds = await _adminRepository.Queryable<DepartmentModel>()
+            List<long> departmentIds = await _adminRepository
+                .Queryable<DepartmentModel>()
                 .Where(wh => wh.OrgId
-                             == SqlFunc.Subqueryable<EmployeeOrgModel>()
+                             == SqlFunc
+                                 .Subqueryable<EmployeeOrgModel>()
                                  // 主部门
                                  .Where(e => e.EmployeeId == _user.EmployeeId && e.IsPrimary)
                                  .Where(e => e.OrgId == wh.OrgId)
@@ -112,7 +102,8 @@ public class OperateLogService : IDynamicApplication
             queryable = queryable.Where(_ => false);
         }
 
-        return await queryable.SplitTable()
+        return await queryable
+            .SplitTable()
             .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .ToPagedListAsync(input);
     }

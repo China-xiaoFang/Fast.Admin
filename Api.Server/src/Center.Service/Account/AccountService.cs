@@ -1,27 +1,13 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Security.Cryptography;
 using System.Text;
+using CSRedis;
 using Fast.Cache;
 using Fast.Center.Domain;
 using Fast.Center.Service.Account.Dto;
@@ -45,8 +31,12 @@ public partial class AccountService : IDynamicApplication
     private readonly IMailService _mailService;
     private readonly ISmsService _smsService;
 
-    public AccountService(IUser user, ICache cache, ISqlSugarRepository<AccountModel> repository,
-        IHubContext<ChatHub, IChatClient> hubContext, ICaptchaService captchaService, IMailService mailService,
+    public AccountService(IUser user,
+        ICache cache,
+        ISqlSugarRepository<AccountModel> repository,
+        IHubContext<ChatHub, IChatClient> hubContext,
+        ICaptchaService captchaService,
+        IMailService mailService,
         ISmsService smsService)
     {
         _user = user;
@@ -64,7 +54,7 @@ public partial class AccountService : IDynamicApplication
     private async Task<ApplicationOpenIdModel> EnsureApplication()
     {
         // 查询应用信息
-        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+        ApplicationOpenIdModel applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
 
         if (applicationModel.AppType != GlobalContext.DeviceType)
         {
@@ -94,13 +84,16 @@ public partial class AccountService : IDynamicApplication
                               end
                               return math.ceil(redis.call('PTTL', KEYS[1]) / 1000)
                               """;
-        var identityHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(identity)));
-        var retryAfterSeconds = 0;
-        foreach (var (limit, windowSeconds) in quotas)
+        string identityHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(identity)));
+        int retryAfterSeconds = 0;
+        foreach ((int limit, int windowSeconds) in quotas)
         {
             // 已被前一个窗口拒绝时，后续窗口只检查等待时间，不再扣除配额。
-            var result = await _cache.Client.EvalAsync(script, $"Login:SendQuota:{identityHash}:{windowSeconds}", windowSeconds,
-                limit, retryAfterSeconds == 0 ? 1 : 0);
+            object result = await _cache.Client.EvalAsync(script,
+                $"Login:SendQuota:{identityHash}:{windowSeconds}",
+                windowSeconds,
+                limit,
+                retryAfterSeconds == 0 ? 1 : 0);
             retryAfterSeconds = Math.Max(retryAfterSeconds, Convert.ToInt32(result));
         }
 
@@ -118,10 +111,11 @@ public partial class AccountService : IDynamicApplication
     [ApiInfo("账号选择器", HttpRequestActionEnum.Query)]
     public async Task<PagedResult<ElSelectorOutput<long>>> AccountSelector(PagedInput input)
     {
-        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
+        TenantModel tenantModel = await TenantContext.GetTenant(_user.TenantNo);
         if (tenantModel.TenantType == TenantTypeEnum.System)
         {
-            var data = await _repository.Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
+            PagedResult<AccountModel> data = await _repository
+                .Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
                     wh => wh.Mobile.Contains(input.SearchValue)
                           || wh.Email.Contains(input.SearchValue)
                           || wh.NickName.Contains(input.SearchValue))
@@ -145,7 +139,8 @@ public partial class AccountService : IDynamicApplication
         }
         else
         {
-            var data = await _repository.Queryable<TenantUserModel>()
+            PagedResult<AccountModel> data = await _repository
+                .Queryable<TenantUserModel>()
                 .InnerJoin<AccountModel>((t1, t2) => t1.AccountId == t2.AccountId)
                 .WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
                     (t1, t2) => t2.Mobile.Contains(input.SearchValue)
@@ -180,9 +175,10 @@ public partial class AccountService : IDynamicApplication
     [PlatformOnly]
     public async Task<PagedResult<QueryAccountPagedOutput>> QueryAccountPaged(QueryAccountPagedInput input)
     {
-        var dateTime = DateTime.Now;
+        DateTime dateTime = DateTime.Now;
 
-        var queryable = _repository.Queryable<AccountModel>()
+        ISugarQueryable<AccountModel, TenantModel, TenantModel> queryable = _repository
+            .Queryable<AccountModel>()
             .LeftJoin<TenantModel>((t1, t2) => t1.FirstLoginTenantId == t2.TenantId)
             .LeftJoin<TenantModel>((t1, t2, t3) => t1.LastLoginTenantId == t3.TenantId)
             .WhereIF(!string.IsNullOrWhiteSpace(input.Mobile), t1 => t1.Mobile.Contains(input.Mobile))
@@ -195,7 +191,8 @@ public partial class AccountService : IDynamicApplication
             .WhereIF(input.IsLock == true, t1 => t1.LockEndTime != null && t1.LockEndTime >= dateTime)
             .WhereIF(input.IsLock == false, t1 => t1.LockEndTime == null || t1.LockEndTime < dateTime);
 
-        return await queryable.SelectMergeTable((t1, t2, t3) => new QueryAccountPagedOutput
+        return await queryable
+            .SelectMergeTable((t1, t2, t3) => new QueryAccountPagedOutput
             {
                 AccountId = t1.AccountId,
                 Mobile = t1.Mobile,
@@ -223,7 +220,8 @@ public partial class AccountService : IDynamicApplication
                 PasswordErrorTime = t1.PasswordErrorTime,
                 LockStartTime = t1.LockStartTime,
                 LockEndTime = t1.LockEndTime,
-                IsLock = SqlFunc.IF(t1.LockEndTime != null && t1.LockEndTime >= dateTime)
+                IsLock = SqlFunc
+                    .IF(t1.LockEndTime != null && t1.LockEndTime >= dateTime)
                     .Return(true)
                     .End(false),
                 CreatedTime = t1.CreatedTime,
@@ -243,7 +241,8 @@ public partial class AccountService : IDynamicApplication
     [PlatformOnly]
     public async Task<QueryAccountDetailOutput> QueryAccountDetail([Required(ErrorMessage = "账号Id不能为空")] long? accountId)
     {
-        var result = await _repository.Queryable<AccountModel>()
+        QueryAccountDetailOutput result = await _repository
+            .Queryable<AccountModel>()
             .LeftJoin<TenantModel>((t1, t2) => t1.FirstLoginTenantId == t2.TenantId)
             .LeftJoin<TenantModel>((t1, t2, t3) => t1.LastLoginTenantId == t3.TenantId)
             .Where(t1 => t1.AccountId == accountId)
@@ -296,7 +295,8 @@ public partial class AccountService : IDynamicApplication
     [ApiInfo("获取编辑账号详情", HttpRequestActionEnum.Query)]
     public async Task<EditAccountInput> QueryEditAccountDetail()
     {
-        var result = await _repository.Queryable<AccountModel>()
+        EditAccountInput result = await _repository
+            .Queryable<AccountModel>()
             .Where(wh => wh.AccountId == _user.AccountId)
             .Select(sl => new EditAccountInput
             {
@@ -325,10 +325,11 @@ public partial class AccountService : IDynamicApplication
     {
         await EnsureApplication();
 
-        var mobile = input.Mobile.Trim();
-        var email = input.Email.Trim()
+        string mobile = input.Mobile.Trim();
+        string email = input
+            .Email.Trim()
             .ToLowerInvariant();
-        var accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
+        AccountModel accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
         if (accountModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
@@ -350,22 +351,23 @@ public partial class AccountService : IDynamicApplication
             throw new UserFriendlyException("邮箱已存在账号信息！");
         }
 
-        var mobileChange = accountModel.Mobile != mobile;
-        var emailChange = !string.Equals(accountModel.Email, email, StringComparison.OrdinalIgnoreCase);
+        bool mobileChange = accountModel.Mobile != mobile;
+        bool emailChange = !string.Equals(accountModel.Email, email, StringComparison.OrdinalIgnoreCase);
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.EditAccountVerification, accountModel.AccountKey,
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.EditAccountVerification,
+            accountModel.AccountKey,
             GlobalContext.ClientIdentity);
 
         // 只有手机号或邮箱发生变化的时候才判断
         if (mobileChange || emailChange)
         {
-            using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
+            using CSRedisClientLock codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
             if (codeLock == null)
             {
                 throw new UserFriendlyException("操作过于频繁，请稍后重试！");
             }
 
-            var dto = await _cache.GetAsync<AccountVerificationCacheDto>(cacheKey);
+            AccountVerificationCacheDto dto = await _cache.GetAsync<AccountVerificationCacheDto>(cacheKey);
             if (dto == null || dto.AccountId != accountModel.AccountId || dto.ClientIdentity != GlobalContext.ClientIdentity)
             {
                 throw new UserFriendlyException("验证码无效或已过期！");
@@ -430,7 +432,8 @@ public partial class AccountService : IDynamicApplication
         ClientUserModel clientUserModel = null;
         if (accountModel.ClientUserId != null)
         {
-            clientUserModel = await _repository.Queryable<ClientUserModel>()
+            clientUserModel = await _repository
+                .Queryable<ClientUserModel>()
                 .InSingleAsync(accountModel.ClientUserId);
 
             if (clientUserModel == null)
@@ -446,15 +449,17 @@ public partial class AccountService : IDynamicApplication
         }
 
         await _repository.Ado.UseTranAsync(async () =>
-        {
-            if (clientUserModel != null)
             {
-                await _repository.Updateable(clientUserModel)
-                    .ExecuteCommandAsync();
-            }
+                if (clientUserModel != null)
+                {
+                    await _repository
+                        .Updateable(clientUserModel)
+                        .ExecuteCommandAsync();
+                }
 
-            await _repository.UpdateAsync(accountModel);
-        }, ex => throw ex);
+                await _repository.UpdateAsync(accountModel);
+            },
+            ex => throw ex);
 
         await _cache.DelAsync(cacheKey);
 
@@ -485,7 +490,8 @@ public partial class AccountService : IDynamicApplication
     /// </summary>
     private async Task AccountForceOffline(long accountId, string message)
     {
-        var connectionIds = await _repository.Queryable<TenantOnlineUserModel>()
+        List<string> connectionIds = await _repository
+            .Queryable<TenantOnlineUserModel>()
             .ClearFilter<IBaseTEntity>()
             .Where(wh => wh.IsOnline)
             .Where(wh => wh.AccountId == accountId)
@@ -495,7 +501,8 @@ public partial class AccountService : IDynamicApplication
             return;
 
         // 强制下线当前账号所有在线用户
-        await _hubContext.Clients.Clients(connectionIds)
+        await _hubContext
+            .Clients.Clients(connectionIds)
             .ForceOffline(new ForceOfflineOutput
             {
                 IsAdmin = _user.IsSuperAdmin || _user.IsAdmin,

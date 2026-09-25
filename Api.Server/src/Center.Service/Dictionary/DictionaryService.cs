@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using Fast.Cache;
 using Fast.Center.Domain;
@@ -39,7 +24,8 @@ public class DictionaryService : IDynamicApplication
     private readonly ISqlSugarRepository<DictionaryTypeModel> _typeRepository;
     private readonly ISqlSugarRepository<DictionaryItemModel> _itemRepository;
 
-    public DictionaryService(ICache<CenterCCL> centerCache, ISqlSugarRepository<DictionaryTypeModel> typeRepository,
+    public DictionaryService(ICache<CenterCCL> centerCache,
+        ISqlSugarRepository<DictionaryTypeModel> typeRepository,
         ISqlSugarRepository<DictionaryItemModel> itemRepository)
     {
         _centerCache = centerCache;
@@ -55,51 +41,56 @@ public class DictionaryService : IDynamicApplication
     [AllowAnonymous, DisabledRequestLog]
     public async Task<Dictionary<string, List<FaTableEnumColumnCtx>>> QueryDictionary()
     {
-        var dictionaryTypeList = await _centerCache.GetAndSetAsync(CacheConst.Center.Dictionary, async () =>
-        {
-            return await _typeRepository.Entities.Includes(e => e.DictionaryItemList)
-                .Where(wh => wh.Status == CommonStatusEnum.Enable)
-                .Select(sl => new
-                {
-                    sl.DictionaryKey,
-                    sl.ValueType,
-                    DictionaryItemList = sl.DictionaryItemList.OrderBy(ob => ob.Order)
-                        .Select(iSl => new
-                        {
-                            iSl.Label,
-                            iSl.Value,
-                            iSl.Type,
-                            iSl.Order,
-                            iSl.Tips,
-                            iSl.Visible,
-                            iSl.Status
-                        })
-                        .ToList()
-                })
-                .ToListAsync();
-        });
-
-        return dictionaryTypeList.ToDictionary(sl => sl.DictionaryKey, sl => sl.DictionaryItemList.Select(iSl =>
+        var dictionaryTypeList = await _centerCache.GetAndSetAsync(CacheConst.Center.Dictionary,
+            async () =>
             {
-                object localValue = sl.ValueType switch
-                {
-                    DictionaryValueTypeEnum.Int => int.Parse(iSl.Value),
-                    DictionaryValueTypeEnum.Long => long.Parse(iSl.Value),
-                    DictionaryValueTypeEnum.Boolean => iSl.Value.Equals("true", StringComparison.OrdinalIgnoreCase),
-                    _ => iSl.Value
-                };
+                return await _typeRepository
+                    .Entities.Includes(e => e.DictionaryItemList)
+                    .Where(wh => wh.Status == CommonStatusEnum.Enable)
+                    .Select(sl => new
+                    {
+                        sl.DictionaryKey,
+                        sl.ValueType,
+                        DictionaryItemList = sl
+                            .DictionaryItemList.OrderBy(ob => ob.Order)
+                            .Select(iSl => new
+                            {
+                                iSl.Label,
+                                iSl.Value,
+                                iSl.Type,
+                                iSl.Order,
+                                iSl.Tips,
+                                iSl.Visible,
+                                iSl.Status
+                            })
+                            .ToList()
+                    })
+                    .ToListAsync();
+            });
 
-                return new FaTableEnumColumnCtx
+        return dictionaryTypeList.ToDictionary(sl => sl.DictionaryKey,
+            sl => sl
+                .DictionaryItemList.Select(iSl =>
                 {
-                    Label = iSl.Label,
-                    Value = localValue,
-                    Show = iSl.Visible,
-                    Disabled = iSl.Status == CommonStatusEnum.Disable,
-                    Tips = iSl.Tips,
-                    Type = iSl.Type.GetDescription()
-                };
-            })
-            .ToList());
+                    object localValue = sl.ValueType switch
+                    {
+                        DictionaryValueTypeEnum.Int => int.Parse(iSl.Value),
+                        DictionaryValueTypeEnum.Long => long.Parse(iSl.Value),
+                        DictionaryValueTypeEnum.Boolean => iSl.Value.Equals("true", StringComparison.OrdinalIgnoreCase),
+                        _ => iSl.Value
+                    };
+
+                    return new FaTableEnumColumnCtx
+                    {
+                        Label = iSl.Label,
+                        Value = localValue,
+                        Show = iSl.Visible,
+                        Disabled = iSl.Status == CommonStatusEnum.Disable,
+                        Tips = iSl.Tips,
+                        Type = iSl.Type.GetDescription()
+                    };
+                })
+                .ToList());
     }
 
     /// <summary>
@@ -111,8 +102,8 @@ public class DictionaryService : IDynamicApplication
     [PlatformOnly]
     public async Task<PagedResult<ElSelectorOutput<long>>> SelectorPaged(PagedInput input)
     {
-        var pagedData = await _typeRepository.Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
-                wh => wh.DictionaryName.Contains(input.SearchValue))
+        var pagedData = await _typeRepository
+            .Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue), wh => wh.DictionaryName.Contains(input.SearchValue))
             .OrderBy(ob => ob.DictionaryName)
             .Select(sl => new {sl.DictionaryName, sl.DictionaryId, sl.ValueType})
             .ToPagedListAsync(input);
@@ -132,7 +123,8 @@ public class DictionaryService : IDynamicApplication
     [PlatformOnly]
     public async Task<PagedResult<QueryDictionaryPagedOutput>> QueryDictionaryPaged(PagedInput input)
     {
-        return await _typeRepository.Entities.OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
+        return await _typeRepository
+            .Entities.OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
             .Select(sl => new QueryDictionaryPagedOutput
             {
                 DictionaryId = sl.DictionaryId,
@@ -161,7 +153,8 @@ public class DictionaryService : IDynamicApplication
     [PlatformOnly]
     public async Task<QueryDictionaryDetailOutput> QueryDictionaryDetail([Required(ErrorMessage = "字典Id不能为空")] long? dictionaryId)
     {
-        var result = await _typeRepository.Entities.Includes(e => e.DictionaryItemList)
+        QueryDictionaryDetailOutput result = await _typeRepository
+            .Entities.Includes(e => e.DictionaryItemList)
             .Where(wh => wh.DictionaryId == dictionaryId)
             .Select(sl => new QueryDictionaryDetailOutput
             {
@@ -178,7 +171,8 @@ public class DictionaryService : IDynamicApplication
                 UpdatedUserName = sl.UpdatedUserName,
                 UpdatedTime = sl.UpdatedTime,
                 RowVersion = sl.RowVersion,
-                DictionaryItemList = sl.DictionaryItemList.OrderBy(ob => ob.Order)
+                DictionaryItemList = sl
+                    .DictionaryItemList.OrderBy(ob => ob.Order)
                     .Select(iSl => new EditDictionaryItemInput
                     {
                         DictionaryItemId = iSl.DictionaryItemId,
@@ -229,7 +223,7 @@ public class DictionaryService : IDynamicApplication
         };
 
         var dictionaryItemList = new List<DictionaryItemModel>();
-        foreach (var item in input.DictionaryItemList)
+        foreach (AddDictionaryInput.AddDictionaryItemInput item in input.DictionaryItemList)
         {
             dictionaryItemList.Add(new DictionaryItemModel
             {
@@ -245,10 +239,11 @@ public class DictionaryService : IDynamicApplication
         }
 
         await _typeRepository.Ado.UseTranAsync(async () =>
-        {
-            await _typeRepository.InsertAsync(dictionaryTypeModel);
-            await _itemRepository.InsertAsync(dictionaryItemList);
-        }, ex => throw ex);
+            {
+                await _typeRepository.InsertAsync(dictionaryTypeModel);
+                await _itemRepository.InsertAsync(dictionaryItemList);
+            },
+            ex => throw ex);
 
         // 删除缓存
         await _centerCache.DelAsync(CacheConst.Center.Dictionary);
@@ -263,7 +258,8 @@ public class DictionaryService : IDynamicApplication
     [PlatformOnly]
     public async Task EditDictionary(EditDictionaryInput input)
     {
-        var dictionaryTypeModel = await _typeRepository.Entities.Includes(e => e.DictionaryItemList)
+        DictionaryTypeModel dictionaryTypeModel = await _typeRepository
+            .Entities.Includes(e => e.DictionaryItemList)
             .InSingleAsync(input.DictionaryId);
         if (dictionaryTypeModel == null)
         {
@@ -276,11 +272,12 @@ public class DictionaryService : IDynamicApplication
         dictionaryTypeModel.Remark = input.Remark;
         dictionaryTypeModel.RowVersion = input.RowVersion;
 
-        var oldDictionaryItemList = dictionaryTypeModel.DictionaryItemList ?? [];
-        var newDictionaryItemList = input.DictionaryItemList ?? [];
+        List<DictionaryItemModel> oldDictionaryItemList = dictionaryTypeModel.DictionaryItemList ?? [];
+        List<EditDictionaryItemInput> newDictionaryItemList = input.DictionaryItemList ?? [];
 
         // 新增的项
-        var addDictionaryItemList = newDictionaryItemList.Where(wh => wh.DictionaryItemId == null)
+        var addDictionaryItemList = newDictionaryItemList
+            .Where(wh => wh.DictionaryItemId == null)
             .Select(sl => new DictionaryItemModel
             {
                 DictionaryId = dictionaryTypeModel.DictionaryId,
@@ -299,7 +296,8 @@ public class DictionaryService : IDynamicApplication
             .Where(wh => oldDictionaryItemList.Any(a => a.DictionaryItemId == wh.DictionaryItemId))
             .Select(sl =>
             {
-                var dictionaryItemModel = oldDictionaryItemList.First(f => f.DictionaryItemId == sl.DictionaryItemId);
+                DictionaryItemModel dictionaryItemModel =
+                    oldDictionaryItemList.First(f => f.DictionaryItemId == sl.DictionaryItemId);
                 dictionaryItemModel.Label = sl.Label;
                 dictionaryItemModel.Value = sl.Value;
                 dictionaryItemModel.Type = sl.Type;
@@ -317,12 +315,13 @@ public class DictionaryService : IDynamicApplication
             .ToList();
 
         await _typeRepository.Ado.UseTranAsync(async () =>
-        {
-            await _typeRepository.UpdateAsync(dictionaryTypeModel);
-            await _itemRepository.DeleteAsync(deleteDictionaryItemList);
-            await _itemRepository.UpdateAsync(updateDictionaryItemList);
-            await _itemRepository.InsertAsync(addDictionaryItemList);
-        }, ex => throw ex);
+            {
+                await _typeRepository.UpdateAsync(dictionaryTypeModel);
+                await _itemRepository.DeleteAsync(deleteDictionaryItemList);
+                await _itemRepository.UpdateAsync(updateDictionaryItemList);
+                await _itemRepository.InsertAsync(addDictionaryItemList);
+            },
+            ex => throw ex);
 
         // 删除缓存
         await _centerCache.DelAsync(CacheConst.Center.Dictionary);
@@ -337,7 +336,8 @@ public class DictionaryService : IDynamicApplication
     [PlatformOnly]
     public async Task DeleteDictionary(DictionaryIdInput input)
     {
-        var dictionaryTypeModel = await _typeRepository.Entities.Includes(e => e.DictionaryItemList)
+        DictionaryTypeModel dictionaryTypeModel = await _typeRepository
+            .Entities.Includes(e => e.DictionaryItemList)
             .InSingleAsync(input.DictionaryId);
         if (dictionaryTypeModel == null)
         {
@@ -345,10 +345,11 @@ public class DictionaryService : IDynamicApplication
         }
 
         await _typeRepository.Ado.UseTranAsync(async () =>
-        {
-            await _itemRepository.DeleteAsync(dictionaryTypeModel.DictionaryItemList);
-            await _typeRepository.DeleteAsync(dictionaryTypeModel);
-        }, ex => throw ex);
+            {
+                await _itemRepository.DeleteAsync(dictionaryTypeModel.DictionaryItemList);
+                await _typeRepository.DeleteAsync(dictionaryTypeModel);
+            },
+            ex => throw ex);
 
         // 删除缓存
         await _centerCache.DelAsync(CacheConst.Center.Dictionary);

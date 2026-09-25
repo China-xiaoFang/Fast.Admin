@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Collections;
 using System.Collections.Concurrent;
@@ -59,25 +44,26 @@ public static class MiniExcelUtil
     /// </summary>
     /// <typeparam name="T">数据模型类型</typeparam>
     /// <returns>导出内容的内存流</returns>
-    public static MemoryStream ExportExcel<T>(IEnumerable<T> data, string sheetName = "Sheet1",
+    public static MemoryStream ExportExcel<T>(IEnumerable<T> data,
+        string sheetName = "Sheet1",
         ExcelType excelType = ExcelType.XLSX) where T : class, new()
     {
         // 从缓存获取属性元信息（含列名、排序、类型标记等）
-        var propertyInfos = GetPropertyInfos<T>();
+        List<ExcelPropertyInfo> propertyInfos = GetPropertyInfos<T>();
 
         // 根据属性元信息将Dto数据转换为 Dictionary 列表（适配 MiniExcel 的动态列导出）
-        var exportData = ConvertExportData(data, propertyInfos);
+        List<Dictionary<string, object>> exportData = ConvertExportData(data, propertyInfos);
 
         // 构建 MiniExcel 的动态列配置（列名、宽度、格式等）
         var config = new OpenXmlConfiguration();
-        var dynamicColumns = BuildDynamicColumns(propertyInfos);
+        List<DynamicExcelColumn> dynamicColumns = BuildDynamicColumns(propertyInfos);
         if (dynamicColumns.Count > 0)
         {
             config.DynamicColumns = dynamicColumns.ToArray();
         }
 
         // 当数据为空时，使用 DataTable 确保仍然导出表头（MiniExcel 对空字典列表不会生成表头）
-        var dataToExport = GetExportDataObject(exportData, propertyInfos);
+        object dataToExport = GetExportDataObject(exportData, propertyInfos);
 
         // 使用 MiniExcel 写入 Excel 到流
         var memoryStream = new MemoryStream();
@@ -97,29 +83,34 @@ public static class MiniExcelUtil
     /// <param name="excelType">Excel类型</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>导出内容的内存流</returns>
-    public static async Task<MemoryStream> ExportExcelAsync<T>(IEnumerable<T> data, string sheetName = "Sheet1",
-        ExcelType excelType = ExcelType.XLSX, CancellationToken cancellationToken = default) where T : class, new()
+    public static async Task<MemoryStream> ExportExcelAsync<T>(IEnumerable<T> data,
+        string sheetName = "Sheet1",
+        ExcelType excelType = ExcelType.XLSX,
+        CancellationToken cancellationToken = default) where T : class, new()
     {
         // 从缓存获取属性元信息（含列名、排序、类型标记等）
-        var propertyInfos = GetPropertyInfos<T>();
+        List<ExcelPropertyInfo> propertyInfos = GetPropertyInfos<T>();
 
         // 根据属性元信息将Dto数据转换为 Dictionary 列表（适配 MiniExcel 的动态列导出）
-        var exportData = ConvertExportData(data, propertyInfos);
+        List<Dictionary<string, object>> exportData = ConvertExportData(data, propertyInfos);
 
         // 构建 MiniExcel 的动态列配置（列名、宽度、格式等）
         var config = new OpenXmlConfiguration();
-        var dynamicColumns = BuildDynamicColumns(propertyInfos);
+        List<DynamicExcelColumn> dynamicColumns = BuildDynamicColumns(propertyInfos);
         if (dynamicColumns.Count > 0)
         {
             config.DynamicColumns = dynamicColumns.ToArray();
         }
 
         // 当数据为空时，使用 DataTable 确保仍然导出表头（MiniExcel 对空字典列表不会生成表头）
-        var dataToExport = GetExportDataObject(exportData, propertyInfos);
+        object dataToExport = GetExportDataObject(exportData, propertyInfos);
 
         // 使用 MiniExcel 写入 Excel 到流
         var memoryStream = new MemoryStream();
-        await memoryStream.SaveAsAsync(dataToExport, sheetName: sheetName, excelType: excelType, configuration: config,
+        await memoryStream.SaveAsAsync(dataToExport,
+            sheetName: sheetName,
+            excelType: excelType,
+            configuration: config,
             cancellationToken: cancellationToken);
 
         // 重置流位置到开头，以便调用方可以直接读取
@@ -132,10 +123,12 @@ public static class MiniExcelUtil
     /// </summary>
     /// <typeparam name="T">数据模型类型</typeparam>
     /// <returns>导出文件响应</returns>
-    public static FileStreamResult ExportExcelResult<T>(IEnumerable<T> data, string fileName, string sheetName = "Sheet1",
+    public static FileStreamResult ExportExcelResult<T>(IEnumerable<T> data,
+        string fileName,
+        string sheetName = "Sheet1",
         ExcelType excelType = ExcelType.XLSX) where T : class, new()
     {
-        var memoryStream = ExportExcel(data, sheetName, excelType);
+        MemoryStream memoryStream = ExportExcel(data, sheetName, excelType);
         return new FileStreamResult(memoryStream, "application/octet-stream") {FileDownloadName = fileName};
     }
 
@@ -149,11 +142,13 @@ public static class MiniExcelUtil
     /// <param name="excelType">Excel类型</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>导出文件响应</returns>
-    public static async Task<FileStreamResult> ExportExcelResultAsync<T>(IEnumerable<T> data, string fileName,
-        string sheetName = "Sheet1", ExcelType excelType = ExcelType.XLSX, CancellationToken cancellationToken = default)
-        where T : class, new()
+    public static async Task<FileStreamResult> ExportExcelResultAsync<T>(IEnumerable<T> data,
+        string fileName,
+        string sheetName = "Sheet1",
+        ExcelType excelType = ExcelType.XLSX,
+        CancellationToken cancellationToken = default) where T : class, new()
     {
-        var memoryStream = await ExportExcelAsync(data, sheetName, excelType, cancellationToken);
+        MemoryStream memoryStream = await ExportExcelAsync(data, sheetName, excelType, cancellationToken);
         return new FileStreamResult(memoryStream, "application/octet-stream") {FileDownloadName = fileName};
     }
 
@@ -161,25 +156,27 @@ public static class MiniExcelUtil
     /// 导出 Excel 数据到文件
     /// </summary>
     /// <typeparam name="T">数据模型类型</typeparam>
-    public static void ExportToFile<T>(string filePath, IEnumerable<T> data, string sheetName = "Sheet1",
+    public static void ExportToFile<T>(string filePath,
+        IEnumerable<T> data,
+        string sheetName = "Sheet1",
         ExcelType excelType = ExcelType.XLSX) where T : class, new()
     {
         // 从缓存获取属性元信息
-        var propertyInfos = GetPropertyInfos<T>();
+        List<ExcelPropertyInfo> propertyInfos = GetPropertyInfos<T>();
 
         // 转换数据为 MiniExcel 可写入的字典格式
-        var exportData = ConvertExportData(data, propertyInfos);
+        List<Dictionary<string, object>> exportData = ConvertExportData(data, propertyInfos);
 
         // 构建 MiniExcel 的动态列配置（列名、宽度、格式等）
         var config = new OpenXmlConfiguration();
-        var dynamicColumns = BuildDynamicColumns(propertyInfos);
+        List<DynamicExcelColumn> dynamicColumns = BuildDynamicColumns(propertyInfos);
         if (dynamicColumns.Count > 0)
         {
             config.DynamicColumns = dynamicColumns.ToArray();
         }
 
         // 当数据为空时，使用 DataTable 确保仍然导出表头（MiniExcel 对空字典列表不会生成表头）
-        var dataToExport = GetExportDataObject(exportData, propertyInfos);
+        object dataToExport = GetExportDataObject(exportData, propertyInfos);
 
         // 使用 MiniExcel 写入文件
         MiniExcel.SaveAs(filePath, dataToExport, sheetName: sheetName, excelType: excelType, configuration: config);
@@ -194,28 +191,35 @@ public static class MiniExcelUtil
     /// <param name="sheetName">Sheet名称</param>
     /// <param name="excelType">Excel类型</param>
     /// <param name="cancellationToken">取消令牌</param>
-    public static async Task ExportToFileAsync<T>(string filePath, IEnumerable<T> data, string sheetName = "Sheet1",
-        ExcelType excelType = ExcelType.XLSX, CancellationToken cancellationToken = default) where T : class, new()
+    public static async Task ExportToFileAsync<T>(string filePath,
+        IEnumerable<T> data,
+        string sheetName = "Sheet1",
+        ExcelType excelType = ExcelType.XLSX,
+        CancellationToken cancellationToken = default) where T : class, new()
     {
         // 从缓存获取属性元信息
-        var propertyInfos = GetPropertyInfos<T>();
+        List<ExcelPropertyInfo> propertyInfos = GetPropertyInfos<T>();
 
         // 转换数据为 MiniExcel 可写入的字典格式
-        var exportData = ConvertExportData(data, propertyInfos);
+        List<Dictionary<string, object>> exportData = ConvertExportData(data, propertyInfos);
 
         // 构建 MiniExcel 的动态列配置（列名、宽度、格式等）
         var config = new OpenXmlConfiguration();
-        var dynamicColumns = BuildDynamicColumns(propertyInfos);
+        List<DynamicExcelColumn> dynamicColumns = BuildDynamicColumns(propertyInfos);
         if (dynamicColumns.Count > 0)
         {
             config.DynamicColumns = dynamicColumns.ToArray();
         }
 
         // 当数据为空时，使用 DataTable 确保仍然导出表头（MiniExcel 对空字典列表不会生成表头）
-        var dataToExport = GetExportDataObject(exportData, propertyInfos);
+        object dataToExport = GetExportDataObject(exportData, propertyInfos);
 
         // 使用 MiniExcel 写入文件
-        await MiniExcel.SaveAsAsync(filePath, dataToExport, sheetName: sheetName, excelType: excelType, configuration: config,
+        await MiniExcel.SaveAsAsync(filePath,
+            dataToExport,
+            sheetName: sheetName,
+            excelType: excelType,
+            configuration: config,
             cancellationToken: cancellationToken);
     }
 
@@ -232,11 +236,14 @@ public static class MiniExcelUtil
     /// <param name="excelType">Excel类型</param>
     /// <param name="startCell">起始单元格，如 "A1"、"B2"，默认从 A1 开始读取</param>
     /// <returns>导入结果</returns>
-    public static ExcelImportResult<T> ImportExcel<T>(Stream stream, string sheetName = null,
-        ExcelType excelType = ExcelType.XLSX, string startCell = "A1") where T : class, new()
+    public static ExcelImportResult<T> ImportExcel<T>(Stream stream,
+        string sheetName = null,
+        ExcelType excelType = ExcelType.XLSX,
+        string startCell = "A1") where T : class, new()
     {
         // 使用 MiniExcel 读取 Excel 数据（启用 useHeaderRow 以列头名称作为 Key）
-        var rows = stream.Query(sheetName: sheetName, useHeaderRow: true, excelType: excelType, startCell: startCell)
+        var rows = stream
+            .Query(sheetName: sheetName, useHeaderRow: true, excelType: excelType, startCell: startCell)
             .Cast<IDictionary<string, object>>()
             .ToList();
 
@@ -254,15 +261,19 @@ public static class MiniExcelUtil
     /// <param name="startCell">起始单元格，如 "A1"、"B2"，默认从 A1 开始读取</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>导入结果</returns>
-    public static async Task<ExcelImportResult<T>> ImportExcelAsync<T>(Stream stream, string sheetName = null,
-        ExcelType excelType = ExcelType.XLSX, string startCell = "A1", CancellationToken cancellationToken = default)
-        where T : class, new()
+    public static async Task<ExcelImportResult<T>> ImportExcelAsync<T>(Stream stream,
+        string sheetName = null,
+        ExcelType excelType = ExcelType.XLSX,
+        string startCell = "A1",
+        CancellationToken cancellationToken = default) where T : class, new()
     {
         // 使用 MiniExcel 读取 Excel 数据（启用 useHeaderRow 以列头名称作为 Key）
-        var rows = await stream.QueryAsync(true, sheetName, excelType, startCell, cancellationToken: cancellationToken);
+        IEnumerable<dynamic> rows =
+            await stream.QueryAsync(true, sheetName, excelType, startCell, cancellationToken: cancellationToken);
 
         // 将动态行数据转换为字典列表
-        var rowList = rows.Cast<IDictionary<string, object>>()
+        var rowList = rows
+            .Cast<IDictionary<string, object>>()
             .ToList();
 
         // 将原始行数据解析为强类型Dto列表，并进行验证
@@ -278,11 +289,14 @@ public static class MiniExcelUtil
     /// <param name="excelType">Excel类型</param>
     /// <param name="startCell">起始单元格，如 "A1"、"B2"，默认从 A1 开始读取</param>
     /// <returns>导入结果</returns>
-    public static ExcelImportResult<T> ImportExcel<T>(string filePath, string sheetName = null,
-        ExcelType excelType = ExcelType.XLSX, string startCell = "A1") where T : class, new()
+    public static ExcelImportResult<T> ImportExcel<T>(string filePath,
+        string sheetName = null,
+        ExcelType excelType = ExcelType.XLSX,
+        string startCell = "A1") where T : class, new()
     {
         // 使用 MiniExcel 从文件读取数据
-        var rows = MiniExcel.Query(filePath, sheetName: sheetName, useHeaderRow: true, excelType: excelType, startCell: startCell)
+        var rows = MiniExcel
+            .Query(filePath, sheetName: sheetName, useHeaderRow: true, excelType: excelType, startCell: startCell)
             .Cast<IDictionary<string, object>>()
             .ToList();
 
@@ -300,16 +314,23 @@ public static class MiniExcelUtil
     /// <param name="startCell">起始单元格，如 "A1"、"B2"，默认从 A1 开始读取</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>导入结果</returns>
-    public static async Task<ExcelImportResult<T>> ImportExcelAsync<T>(string filePath, string sheetName = null,
-        ExcelType excelType = ExcelType.XLSX, string startCell = "A1", CancellationToken cancellationToken = default)
-        where T : class, new()
+    public static async Task<ExcelImportResult<T>> ImportExcelAsync<T>(string filePath,
+        string sheetName = null,
+        ExcelType excelType = ExcelType.XLSX,
+        string startCell = "A1",
+        CancellationToken cancellationToken = default) where T : class, new()
     {
         // 使用 MiniExcel 异步从文件读取数据
-        var rows = await MiniExcel.QueryAsync(filePath, true, sheetName, excelType, startCell,
+        IEnumerable<dynamic> rows = await MiniExcel.QueryAsync(filePath,
+            true,
+            sheetName,
+            excelType,
+            startCell,
             cancellationToken: cancellationToken);
 
         // 将动态行数据转换为字典列表
-        var rowList = rows.Cast<IDictionary<string, object>>()
+        var rowList = rows
+            .Cast<IDictionary<string, object>>()
             .ToList();
 
         // 将原始行数据解析为强类型Dto列表，并进行验证
@@ -331,88 +352,93 @@ public static class MiniExcelUtil
     /// <returns>Dto类型的属性元信息列表（带缓存）</returns>
     private static List<ExcelPropertyInfo> GetPropertyInfos<T>() where T : class, new()
     {
-        return _propertyInfoCache.GetOrAdd(typeof(T), type =>
-        {
-            // 获取所有属性
-            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            var result = new List<ExcelPropertyInfo>();
-
-            foreach (var prop in properties)
+        return _propertyInfoCache.GetOrAdd(typeof(T),
+            type =>
             {
-                var columnAttr = prop.GetCustomAttribute<ExcelColumnAttribute>();
+                // 获取所有属性
+                PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                var result = new List<ExcelPropertyInfo>();
 
-                // 跳过没有标记 [ExcelColumn] 特性的属性（未标记的属性默认忽略，不参与导入导出）
-                if (columnAttr == null)
-                    continue;
-
-                // 跳过标记了 Ignore = true 的属性
-                if (columnAttr.Ignore)
-                    continue;
-
-                // 解析属性类型信息
-                var propertyType = prop.PropertyType;
-                var underlyingType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
-
-                // 构建属性元信息，一次性计算所有类型标记
-                var info = new ExcelPropertyInfo
+                foreach (PropertyInfo prop in properties)
                 {
-                    // 基础信息
-                    Property = prop,
-                    ColumnAttribute = columnAttr,
-                    ColumnName = columnAttr?.Name ?? prop.Name,
-                    Order = columnAttr?.Order ?? int.MaxValue,
+                    ExcelColumnAttribute columnAttr = prop.GetCustomAttribute<ExcelColumnAttribute>();
 
-                    // 验证特性
-                    RequiredAttribute = prop.GetCustomAttribute<ExcelRequiredAttribute>(),
-                    RegexAttributes = prop.GetCustomAttributes<ExcelRegexAttribute>()
-                        .ToList(),
+                    // 跳过没有标记 [ExcelColumn] 特性的属性（未标记的属性默认忽略，不参与导入导出）
+                    if (columnAttr == null)
+                        continue;
 
-                    // 缓存的类型信息（避免每行数据都重复判断类型）
-                    PropertyType = propertyType,
-                    UnderlyingType = underlyingType,
-                    IsNullable = Nullable.GetUnderlyingType(propertyType) != null,
-                    IsBool = underlyingType == typeof(bool),
-                    IsEnum = underlyingType.IsEnum,
-                    IsDateTime = underlyingType == typeof(DateTime),
-                    IsDateTimeOffset = underlyingType == typeof(DateTimeOffset),
-                    IsGuid = underlyingType == typeof(Guid),
-                    IsValueTypeCollection = CheckIsValueTypeCollection(propertyType),
-                    IsComplexCollection = CheckIsComplexCollection(propertyType)
-                };
+                    // 跳过标记了 Ignore = true 的属性
+                    if (columnAttr.Ignore)
+                        continue;
 
-                // 如果是值类型集合，缓存元素类型（避免每次 GetGenericArguments / GetElementType）
-                if (info.IsValueTypeCollection)
-                {
-                    if (propertyType.IsArray)
+                    // 解析属性类型信息
+                    Type propertyType = prop.PropertyType;
+                    Type underlyingType = Nullable.GetUnderlyingType(propertyType) ?? propertyType;
+
+                    // 构建属性元信息，一次性计算所有类型标记
+                    var info = new ExcelPropertyInfo
                     {
-                        info.CollectionElementType = propertyType.GetElementType();
-                    }
-                    else if (propertyType.IsGenericType)
+                        // 基础信息
+                        Property = prop,
+                        ColumnAttribute = columnAttr,
+                        ColumnName = columnAttr?.Name ?? prop.Name,
+                        Order = columnAttr?.Order ?? int.MaxValue,
+
+                        // 验证特性
+                        RequiredAttribute = prop.GetCustomAttribute<ExcelRequiredAttribute>(),
+                        RegexAttributes = prop
+                            .GetCustomAttributes<ExcelRegexAttribute>()
+                            .ToList(),
+
+                        // 缓存的类型信息（避免每行数据都重复判断类型）
+                        PropertyType = propertyType,
+                        UnderlyingType = underlyingType,
+                        IsNullable = Nullable.GetUnderlyingType(propertyType) != null,
+                        IsBool = underlyingType == typeof(bool),
+                        IsEnum = underlyingType.IsEnum,
+                        IsDateTime = underlyingType == typeof(DateTime),
+                        IsDateTimeOffset = underlyingType == typeof(DateTimeOffset),
+                        IsGuid = underlyingType == typeof(Guid),
+                        IsValueTypeCollection = CheckIsValueTypeCollection(propertyType),
+                        IsComplexCollection = CheckIsComplexCollection(propertyType)
+                    };
+
+                    // 如果是值类型集合，缓存元素类型（避免每次 GetGenericArguments / GetElementType）
+                    if (info.IsValueTypeCollection)
                     {
-                        info.CollectionElementType = propertyType.GetGenericArguments()[0];
+                        if (propertyType.IsArray)
+                        {
+                            info.CollectionElementType = propertyType.GetElementType();
+                        }
+                        else if (propertyType.IsGenericType)
+                        {
+                            info.CollectionElementType = propertyType
+                                .GetGenericArguments()[0];
+                        }
                     }
+
+                    // 如果是枚举类型，预先构建枚举映射缓存
+                    if (info.IsEnum)
+                    {
+                        GetOrBuildEnumMapping(underlyingType);
+                    }
+
+                    // 预编译正则表达式（避免每行数据都重新编译正则）
+                    foreach (ExcelRegexAttribute regexAttr in info.RegexAttributes)
+                    {
+                        info.CompiledRegexPatterns.Add((new Regex(regexAttr.Pattern, RegexOptions.Compiled),
+                            regexAttr.ErrorMessage));
+                    }
+
+                    result.Add(info);
                 }
 
-                // 如果是枚举类型，预先构建枚举映射缓存
-                if (info.IsEnum)
-                {
-                    GetOrBuildEnumMapping(underlyingType);
-                }
-
-                // 预编译正则表达式（避免每行数据都重新编译正则）
-                foreach (var regexAttr in info.RegexAttributes)
-                {
-                    info.CompiledRegexPatterns.Add((new Regex(regexAttr.Pattern, RegexOptions.Compiled), regexAttr.ErrorMessage));
-                }
-
-                result.Add(info);
-            }
-
-            // 按 Order 排序，Order 相同则按列名排序
-            return result.OrderBy(p => p.Order)
-                .ThenBy(p => p.ColumnName)
-                .ToList();
-        });
+                // 按 Order 排序，Order 相同则按列名排序
+                return result
+                    .OrderBy(p => p.Order)
+                    .ThenBy(p => p.ColumnName)
+                    .ToList();
+            });
     }
 
     /// <summary>
@@ -426,39 +452,40 @@ public static class MiniExcelUtil
     /// <returns>枚举值映射</returns>
     private static ExcelEnumMapping GetOrBuildEnumMapping(Type enumType)
     {
-        return _enumMappingCache.GetOrAdd(enumType, type =>
-        {
-            var mapping = new ExcelEnumMapping();
-
-            foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
+        return _enumMappingCache.GetOrAdd(enumType,
+            type =>
             {
-                var value = field.GetValue(null);
-                var name = field.Name;
+                var mapping = new ExcelEnumMapping();
 
-                // 获取 [Description] 特性的描述文本，如果没有则使用枚举名称
-                var descAttr = field.GetCustomAttribute<DescriptionAttribute>();
-                var description = descAttr?.Description ?? name;
+                foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
+                {
+                    object value = field.GetValue(null);
+                    string name = field.Name;
 
-                // 导出映射：枚举值 → 描述文本
-                mapping.ValueToDescription[value] = description;
+                    // 获取 [Description] 特性的描述文本，如果没有则使用枚举名称
+                    DescriptionAttribute descAttr = field.GetCustomAttribute<DescriptionAttribute>();
+                    string description = descAttr?.Description ?? name;
 
-                /*
-                 * 导入映射：描述文本 → 枚举值（忽略大小写）
-                 * 注意：当多个枚举值共享相同 Description 时，TryAdd 只保留第一个映射，
-                 * 这是预期行为（导入时同名描述只能映射到一个值）
-                 */
-                mapping.TextToValue.TryAdd(description, value);
+                    // 导出映射：枚举值 → 描述文本
+                    mapping.ValueToDescription[value] = description;
 
-                // 导入映射：枚举名称 → 枚举值
-                mapping.TextToValue.TryAdd(name, value);
+                    /*
+                     * 导入映射：描述文本 → 枚举值（忽略大小写）
+                     * 注意：当多个枚举值共享相同 Description 时，TryAdd 只保留第一个映射，
+                     * 这是预期行为（导入时同名描述只能映射到一个值）
+                     */
+                    mapping.TextToValue.TryAdd(description, value);
 
-                // 导入映射：数值字符串 → 枚举值（如 "1" → SomeEnum.Value1）
-                var numericValue = Convert.ChangeType(value, Enum.GetUnderlyingType(type));
-                mapping.TextToValue.TryAdd(numericValue.ToString(), value);
-            }
+                    // 导入映射：枚举名称 → 枚举值
+                    mapping.TextToValue.TryAdd(name, value);
 
-            return mapping;
-        });
+                    // 导入映射：数值字符串 → 枚举值（如 "1" → SomeEnum.Value1）
+                    object numericValue = Convert.ChangeType(value, Enum.GetUnderlyingType(type));
+                    mapping.TextToValue.TryAdd(numericValue.ToString(), value);
+                }
+
+                return mapping;
+            });
     }
 
     #endregion
@@ -474,9 +501,9 @@ public static class MiniExcelUtil
     {
         var columns = new List<DynamicExcelColumn>();
 
-        for (var i = 0; i < propertyInfos.Count; i++)
+        for (int i = 0; i < propertyInfos.Count; i++)
         {
-            var info = propertyInfos[i];
+            ExcelPropertyInfo info = propertyInfos[i];
 
             // 创建动态列：设置列名和索引
             var column = new DynamicExcelColumn(info.ColumnName) {Index = i, Width = info.ColumnAttribute?.Width ?? 10};
@@ -512,7 +539,7 @@ public static class MiniExcelUtil
 
         // 当数据为空时，构建仅含列定义的 DataTable，确保导出文件包含表头
         var table = new DataTable();
-        foreach (var info in propertyInfos)
+        foreach (ExcelPropertyInfo info in propertyInfos)
         {
             table.Columns.Add(info.ColumnName);
         }
@@ -534,7 +561,7 @@ public static class MiniExcelUtil
         if (info.IsDateTime || info.IsDateTimeOffset)
             return "yyyy-MM-dd HH:mm:ss";
 
-        var type = info.UnderlyingType;
+        Type type = info.UnderlyingType;
         if (type == typeof(decimal) || type == typeof(double) || type == typeof(float))
             return "0.00";
 
@@ -552,14 +579,14 @@ public static class MiniExcelUtil
     {
         var result = new List<Dictionary<string, object>>();
 
-        foreach (var item in data)
+        foreach (T item in data)
         {
             var dict = new Dictionary<string, object>();
 
-            foreach (var info in propertyInfos)
+            foreach (ExcelPropertyInfo info in propertyInfos)
             {
                 // 读取属性值并转换为导出格式
-                var value = info.Property.GetValue(item);
+                object value = info.Property.GetValue(item);
                 dict[info.ColumnName] = ConvertExportValue(value, info);
             }
 
@@ -589,7 +616,7 @@ public static class MiniExcelUtil
         if (value == null)
             return null;
 
-        var columnAttr = info.ColumnAttribute;
+        ExcelColumnAttribute columnAttr = info.ColumnAttribute;
 
         // JSON 序列化：标记了 IsJson 的属性直接序列化为 JSON 字符串
         if (columnAttr?.IsJson == true)
@@ -600,23 +627,23 @@ public static class MiniExcelUtil
         // Bool 类型：转换为配置的 TrueText/FalseText（默认 "是"/"否"）
         if (info.IsBool)
         {
-            var boolValue = (bool) value;
-            var trueText = columnAttr?.TrueText ?? "是";
-            var falseText = columnAttr?.FalseText ?? "否";
+            bool boolValue = (bool)value;
+            string trueText = columnAttr?.TrueText ?? "是";
+            string falseText = columnAttr?.FalseText ?? "否";
             return boolValue ? trueText : falseText;
         }
 
         // 枚举类型：从缓存的映射表中查找 Description 描述文本
         if (info.IsEnum)
         {
-            var mapping = GetOrBuildEnumMapping(info.UnderlyingType);
-            return mapping.ValueToDescription.TryGetValue(value, out var desc) ? desc : value.ToString();
+            ExcelEnumMapping mapping = GetOrBuildEnumMapping(info.UnderlyingType);
+            return mapping.ValueToDescription.TryGetValue(value, out string desc) ? desc : value.ToString();
         }
 
         // DateTime 类型：按 Format 格式化输出
         if (info.IsDateTime)
         {
-            var dateValue = (DateTime) value;
+            var dateValue = (DateTime)value;
             if (!string.IsNullOrEmpty(columnAttr?.Format))
             {
                 return dateValue.ToString(columnAttr.Format);
@@ -628,7 +655,7 @@ public static class MiniExcelUtil
         // DateTimeOffset 类型：按 Format 格式化输出
         if (info.IsDateTimeOffset)
         {
-            var dateValue = (DateTimeOffset) value;
+            var dateValue = (DateTimeOffset)value;
             if (!string.IsNullOrEmpty(columnAttr?.Format))
             {
                 return dateValue.ToString(columnAttr.Format);
@@ -640,7 +667,7 @@ public static class MiniExcelUtil
         // 值类型集合（如 List<int>、List<string>）：使用分隔符连接为字符串
         if (info.IsValueTypeCollection)
         {
-            var separator = columnAttr?.Separator ?? ",";
+            string separator = columnAttr?.Separator ?? ",";
             return JoinCollection(value, separator);
         }
 
@@ -675,25 +702,25 @@ public static class MiniExcelUtil
         var result = new ExcelImportResult<T>();
 
         // 从缓存获取属性元信息
-        var propertyInfos = GetPropertyInfos<T>();
+        List<ExcelPropertyInfo> propertyInfos = GetPropertyInfos<T>();
 
         // 逐行解析数据
-        for (var rowIndex = 0; rowIndex < rows.Count; rowIndex++)
+        for (int rowIndex = 0; rowIndex < rows.Count; rowIndex++)
         {
-            var row = rows[rowIndex];
+            IDictionary<string, object> row = rows[rowIndex];
             var item = new T();
             var rowErrors = new List<ExcelImportError>();
             // 行号从 1 开始（不含表头行）
-            var rowNumber = rowIndex + 1;
+            int rowNumber = rowIndex + 1;
 
             // 遍历每个属性，尝试从行数据中提取并转换值
-            foreach (var info in propertyInfos)
+            foreach (ExcelPropertyInfo info in propertyInfos)
             {
                 // --- 第一步：从行数据中查找对应列的值 ---
-                var columnFound = false;
+                bool columnFound = false;
 
                 // 优先按 ExcelColumn.Name 匹配列
-                if (row.TryGetValue(info.ColumnName, out var cellValue))
+                if (row.TryGetValue(info.ColumnName, out object cellValue))
                 {
                     columnFound = true;
                 }
@@ -727,7 +754,8 @@ public static class MiniExcelUtil
                 if (!columnFound || cellValue == null)
                     continue;
 
-                var cellString = cellValue.ToString()
+                string cellString = cellValue
+                    .ToString()
                     ?.Trim();
 
                 /*
@@ -737,8 +765,8 @@ public static class MiniExcelUtil
                  */
                 if (!string.IsNullOrEmpty(cellString))
                 {
-                    var hasRegexError = false;
-                    foreach (var (compiledRegex, errorMessage) in info.CompiledRegexPatterns)
+                    bool hasRegexError = false;
+                    foreach ((Regex compiledRegex, string errorMessage) in info.CompiledRegexPatterns)
                     {
                         if (!compiledRegex.IsMatch(cellString))
                         {
@@ -762,7 +790,7 @@ public static class MiniExcelUtil
                 // --- 第四步：类型转换并赋值 ---
                 try
                 {
-                    var convertedValue = ConvertImportValue(cellValue, info);
+                    object convertedValue = ConvertImportValue(cellValue, info);
                     if (convertedValue != null)
                     {
                         info.Property.SetValue(item, convertedValue);
@@ -811,8 +839,9 @@ public static class MiniExcelUtil
         if (cellValue == null)
             return null;
 
-        var columnAttr = info.ColumnAttribute;
-        var cellString = cellValue.ToString()
+        ExcelColumnAttribute columnAttr = info.ColumnAttribute;
+        string cellString = cellValue
+            .ToString()
             ?.Trim();
 
         // 空字符串处理：可空类型返回 null，值类型返回默认值
@@ -830,8 +859,8 @@ public static class MiniExcelUtil
         // Bool 类型：支持 是/否、true/false、1/0 多种格式
         if (info.IsBool)
         {
-            var trueText = columnAttr?.TrueText ?? "是";
-            var falseText = columnAttr?.FalseText ?? "否";
+            string trueText = columnAttr?.TrueText ?? "是";
+            string falseText = columnAttr?.FalseText ?? "否";
 
             if (string.Equals(cellString, trueText, StringComparison.OrdinalIgnoreCase)
                 || string.Equals(cellString, "true", StringComparison.OrdinalIgnoreCase)
@@ -853,16 +882,16 @@ public static class MiniExcelUtil
         // 枚举类型：从缓存的映射表中快速查找（支持描述文本、枚举名称、数值字符串）
         if (info.IsEnum)
         {
-            var mapping = GetOrBuildEnumMapping(info.UnderlyingType);
+            ExcelEnumMapping mapping = GetOrBuildEnumMapping(info.UnderlyingType);
 
             // 从缓存映射中查找（已包含 Description、Name、数值字符串的映射）
-            if (mapping.TextToValue.TryGetValue(cellString, out var enumValue))
+            if (mapping.TextToValue.TryGetValue(cellString, out object enumValue))
             {
                 return enumValue;
             }
 
             // 回退：尝试 Enum.TryParse（处理映射中未覆盖的情况）
-            if (Enum.TryParse(info.UnderlyingType, cellString, true, out var parsedEnum))
+            if (Enum.TryParse(info.UnderlyingType, cellString, true, out object parsedEnum))
             {
                 return parsedEnum;
             }
@@ -907,7 +936,7 @@ public static class MiniExcelUtil
         // 值类型集合（如 List<int>、List<string>）：按分隔符拆分并转换每个元素
         if (info.IsValueTypeCollection)
         {
-            var separator = columnAttr?.Separator ?? ",";
+            string separator = columnAttr?.Separator ?? ",";
             return ParseValueTypeCollection(cellString, info.PropertyType, info.CollectionElementType, separator);
         }
 
@@ -942,7 +971,7 @@ public static class MiniExcelUtil
         // 数组类型：检查元素类型是否为值类型或常用简单类型
         if (type.IsArray)
         {
-            var arrayElementType = type.GetElementType();
+            Type arrayElementType = type.GetElementType();
             return arrayElementType != null
                    && (arrayElementType.IsPrimitive
                        || arrayElementType == typeof(string)
@@ -955,7 +984,7 @@ public static class MiniExcelUtil
             return false;
 
         // 检查是否为常见的集合泛型定义
-        var genericDef = type.GetGenericTypeDefinition();
+        Type genericDef = type.GetGenericTypeDefinition();
         if (genericDef != typeof(List<>)
             && genericDef != typeof(IList<>)
             && genericDef != typeof(IEnumerable<>)
@@ -963,7 +992,8 @@ public static class MiniExcelUtil
             return false;
 
         // 检查元素类型是否为值类型或常用简单类型
-        var elementType = type.GetGenericArguments()[0];
+        Type elementType = type
+            .GetGenericArguments()[0];
         return elementType.IsPrimitive
                || elementType == typeof(string)
                || elementType == typeof(decimal)
@@ -1014,7 +1044,7 @@ public static class MiniExcelUtil
             return value?.ToString();
 
         var items = new List<string>();
-        foreach (var item in enumerable)
+        foreach (object item in enumerable)
         {
             items.Add(item?.ToString() ?? string.Empty);
         }
@@ -1037,18 +1067,21 @@ public static class MiniExcelUtil
          * 防御性编程：正常情况下 elementType 在 ExcelPropertyInfo 初始化时已缓存，
          * 此处兜底处理仅用于方法被独立调用时的安全保障
          */
-        elementType ??= collectionType.IsArray ? collectionType.GetElementType() : collectionType.GetGenericArguments()[0];
+        elementType ??= collectionType.IsArray
+            ? collectionType.GetElementType()
+            : collectionType
+                .GetGenericArguments()[0];
 
         // 按分隔符拆分并去除空项
-        var parts = text.Split([separator], StringSplitOptions.RemoveEmptyEntries);
+        string[] parts = text.Split([separator], StringSplitOptions.RemoveEmptyEntries);
 
         // 数组类型：直接创建对应类型的数组
         if (collectionType.IsArray)
         {
             var convertedParts = new List<object>(parts.Length);
-            foreach (var part in parts)
+            foreach (string part in parts)
             {
-                var trimmed = part.Trim();
+                string trimmed = part.Trim();
                 if (!string.IsNullOrEmpty(trimmed))
                 {
                     convertedParts.Add(Convert.ChangeType(trimmed, elementType));
@@ -1056,7 +1089,7 @@ public static class MiniExcelUtil
             }
 
             var array = Array.CreateInstance(elementType, convertedParts.Count);
-            for (var i = 0; i < convertedParts.Count; i++)
+            for (int i = 0; i < convertedParts.Count; i++)
             {
                 array.SetValue(convertedParts[i], i);
             }
@@ -1065,13 +1098,13 @@ public static class MiniExcelUtil
         }
 
         // 泛型集合类型：创建对应类型的 List<T> 实例
-        var listType = typeof(List<>).MakeGenericType(elementType);
-        var list = (IList) Activator.CreateInstance(listType);
+        Type listType = typeof(List<>).MakeGenericType(elementType);
+        var list = (IList)Activator.CreateInstance(listType);
 
         // 逐项转换并添加到列表
-        foreach (var part in parts)
+        foreach (string part in parts)
         {
-            var trimmed = part.Trim();
+            string trimmed = part.Trim();
             if (!string.IsNullOrEmpty(trimmed))
             {
                 list?.Add(Convert.ChangeType(trimmed, elementType));

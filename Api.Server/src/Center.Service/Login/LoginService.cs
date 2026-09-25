@@ -1,27 +1,13 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Security.Cryptography;
 using System.Text;
+using CSRedis;
 using Fast.Cache;
 using Fast.Center.Domain;
 using Fast.Center.Service.Login.Dto;
@@ -47,8 +33,11 @@ public partial class LoginService : IDynamicApplication
     private readonly HttpContext _httpContext;
     private readonly ISqlSugarClient _repository;
 
-    public LoginService(IUser user, IHttpContextAccessor httpContextAccessor, ICache cache,
-        ICaptchaService captchaService, ISqlSugarClient repository)
+    public LoginService(IUser user,
+        IHttpContextAccessor httpContextAccessor,
+        ICache cache,
+        ICaptchaService captchaService,
+        ISqlSugarClient repository)
     {
         _user = user;
         _httpContext = httpContextAccessor.HttpContext;
@@ -109,9 +98,10 @@ public partial class LoginService : IDynamicApplication
     /// </summary>
     private async Task<string> GetTenantLoginTicket(AccountModel accountModel)
     {
-        var loginTicket = Guid.NewGuid()
+        string loginTicket = Guid
+            .NewGuid()
             .ToString("N");
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.TenantLoginTicket, loginTicket);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.TenantLoginTicket, loginTicket);
         await _cache.SetAsync(cacheKey,
             new TenantLoginTicketCacheDto
             {
@@ -120,7 +110,8 @@ public partial class LoginService : IDynamicApplication
                 Email = accountModel.Email,
                 ClientIdentity = GlobalContext.ClientIdentity,
                 PasswordHash = GenerateHashCode(accountModel.Password)
-            }, TimeSpan.FromMinutes(5));
+            },
+            TimeSpan.FromMinutes(5));
 
         return loginTicket;
     }
@@ -131,7 +122,7 @@ public partial class LoginService : IDynamicApplication
     private async Task<ApplicationOpenIdModel> EnsureApplication()
     {
         // 查询应用信息
-        var applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
+        ApplicationOpenIdModel applicationModel = await ApplicationContext.GetApplication(GlobalContext.Origin);
 
         if (applicationModel.AppType != GlobalContext.DeviceType)
         {
@@ -151,14 +142,14 @@ public partial class LoginService : IDynamicApplication
             throw new UserFriendlyException("登录凭据已失效，请返回重新登录！");
         }
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.TenantLoginTicket, loginTicket);
-        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 30);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.TenantLoginTicket, loginTicket);
+        using CSRedisClientLock codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 30);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
-        var cacheDto = await _cache.GetAsync<TenantLoginTicketCacheDto>(cacheKey);
+        TenantLoginTicketCacheDto cacheDto = await _cache.GetAsync<TenantLoginTicketCacheDto>(cacheKey);
         if (cacheDto == null
             || cacheDto.AccountId != account.AccountId
             || cacheDto.Mobile != account.Mobile
@@ -190,7 +181,7 @@ public partial class LoginService : IDynamicApplication
 
         if (accountModel.LockEndTime != null && accountModel.LockEndTime > dateTime)
         {
-            var unLockTimeSpan = accountModel.LockEndTime.Value - dateTime;
+            TimeSpan unLockTimeSpan = accountModel.LockEndTime.Value - dateTime;
             throw new UserFriendlyException($"账号已被锁定，请 {unLockTimeSpan.ToDescription()} 后再重试！");
         }
 
@@ -226,7 +217,8 @@ public partial class LoginService : IDynamicApplication
             }
 
             // 采用条件更新，避免并发问题
-            await _repository.Updateable(accountModel)
+            await _repository
+                .Updateable(accountModel)
                 .UpdateColumns(e => new {e.PasswordErrorTime, e.LockStartTime, e.LockEndTime, e.Status})
                 .ExecuteCommandAsync();
             if (accountModel.Status == CommonStatusEnum.Disable)
@@ -245,7 +237,8 @@ public partial class LoginService : IDynamicApplication
             accountModel.LockStartTime = null;
             accountModel.LockEndTime = null;
             // 采用条件更新，避免并发问题
-            await _repository.Updateable(accountModel)
+            await _repository
+                .Updateable(accountModel)
                 .UpdateColumns(e => new {e.PasswordErrorTime, e.LockStartTime, e.LockEndTime})
                 .ExecuteCommandAsync();
         }
@@ -255,8 +248,10 @@ public partial class LoginService : IDynamicApplication
     /// 处理登录
     /// </summary>
     /// <returns>登录结果</returns>
-    private async Task<LoginOutput> HandleLogin(ApplicationModel applicationModel, AccountModel accountModel,
-        TenantUserModel tenantUserModel, DateTime dateTime)
+    private async Task<LoginOutput> HandleLogin(ApplicationModel applicationModel,
+        AccountModel accountModel,
+        TenantUserModel tenantUserModel,
+        DateTime dateTime)
     {
         // 验证账号状态
         if (accountModel.Status == CommonStatusEnum.Disable)
@@ -282,7 +277,8 @@ public partial class LoginService : IDynamicApplication
         }
 
         // 查询租户
-        var tenantModel = await _repository.Queryable<TenantModel>()
+        TenantModel tenantModel = await _repository
+            .Queryable<TenantModel>()
             .Where(wh => wh.TenantId == tenantUserModel.TenantId)
             .SingleAsync();
 
@@ -304,9 +300,9 @@ public partial class LoginService : IDynamicApplication
         }
 
         // 获取设备信息
-        var userAgentInfo = _httpContext.RequestUserAgentInfo();
+        UserAgentInfo userAgentInfo = _httpContext.RequestUserAgentInfo();
         // 获取万网信息
-        var wanNetIpInfo = await _httpContext.RemoteIpv4InfoAsync();
+        WanNetIPInfo wanNetIpInfo = await _httpContext.RemoteIpv4InfoAsync();
 
         if (accountModel.FirstLoginTime == null)
         {
@@ -329,12 +325,13 @@ public partial class LoginService : IDynamicApplication
         accountModel.LastLoginIp = wanNetIpInfo.Ip;
         accountModel.LastLoginTime = dateTime;
         // 登录不更新错误密码信息，并且启用版本标识
-        await _repository.Updateable(accountModel)
+        await _repository
+            .Updateable(accountModel)
             .IgnoreColumns(it => new {it.PasswordErrorTime, it.LockStartTime, it.LockEndTime, it.Status})
             .ExecuteCommandWithOptLockAsync(true);
 
         // 登录后身份验证开关
-        var loginIdentityVerificationOpen = bool.Parse(await ConfigContext.GetConfig(ConfigConst.LoginIdentityVerificationOpen));
+        bool loginIdentityVerificationOpen = bool.Parse(await ConfigContext.GetConfig(ConfigConst.LoginIdentityVerificationOpen));
 
         // 登录
         await _user.Login(new AuthUserInfo
@@ -389,7 +386,8 @@ public partial class LoginService : IDynamicApplication
             TenantName = _user.TenantName
         };
         visitLogModel.RecordCreate(_httpContext);
-        await _httpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>()
+        await _httpContext
+            .RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>()
             .InsertAsync(visitLogModel);
 
         return new LoginOutput
@@ -440,7 +438,7 @@ public partial class LoginService : IDynamicApplication
             return new LoginCaptchaOutput {Enabled = false};
         }
 
-        var (captchaKey, captchaImage) = await _captchaService.GetImageCaptcha();
+        (string captchaKey, string captchaImage) = await _captchaService.GetImageCaptcha();
         return new LoginCaptchaOutput {Enabled = true, CaptchaKey = captchaKey, CaptchaImage = captchaImage};
     }
 }

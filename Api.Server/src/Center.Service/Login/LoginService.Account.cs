@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Text.RegularExpressions;
 using Fast.Center.Domain;
@@ -42,7 +27,7 @@ public partial class LoginService
     public async Task<LoginOutput> Login(LoginInput input)
     {
         // 查询应用信息
-        var applicationModel = await EnsureApplication();
+        ApplicationOpenIdModel applicationModel = await EnsureApplication();
 
         // 目前只有 Web 端启用了图片验证码
         if (GlobalContext.IsWeb && await IsLoginCaptchaEnabled())
@@ -51,7 +36,7 @@ public partial class LoginService
         }
 
         // 判断账号是否为手机号
-        var isMobile = new Regex(RegexConst.Mobile).IsMatch(input.Account);
+        bool isMobile = new Regex(RegexConst.Mobile).IsMatch(input.Account);
 
         AccountModel accountModel = null;
         List<TenantUserModel> tenantUserList = [];
@@ -59,13 +44,15 @@ public partial class LoginService
         if (isMobile)
         {
             // 根据手机号，查询账号
-            accountModel = await _repository.Queryable<AccountModel>()
+            accountModel = await _repository
+                .Queryable<AccountModel>()
                 .Where(wh => wh.Mobile == input.Account)
                 .SingleAsync();
 
             if (accountModel != null)
             {
-                tenantUserList = await _repository.Queryable<TenantUserModel>()
+                tenantUserList = await _repository
+                    .Queryable<TenantUserModel>()
                     .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
                     .ClearFilter<IBaseTEntity>()
                     .Where(t1 => t1.AccountId == accountModel.AccountId)
@@ -76,7 +63,8 @@ public partial class LoginService
         else
         {
             // 根据账号或登录工号查询租户用户信息
-            var tenantUserModel = await _repository.Queryable<TenantUserModel>()
+            TenantUserModel tenantUserModel = await _repository
+                .Queryable<TenantUserModel>()
                 .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
                 .ClearFilter<IBaseTEntity>()
                 .Where(t1 => t1.EmployeeNo == input.Account)
@@ -86,7 +74,8 @@ public partial class LoginService
             if (tenantUserModel != null)
             {
                 // 查询账号
-                accountModel = await _repository.Queryable<AccountModel>()
+                accountModel = await _repository
+                    .Queryable<AccountModel>()
                     .Where(wh => wh.AccountId == tenantUserModel.AccountId)
                     .SingleAsync();
                 tenantUserList.Add(tenantUserModel);
@@ -98,7 +87,7 @@ public partial class LoginService
             throw new UserFriendlyException("账号不存在！");
         }
 
-        var dateTime = DateTime.Now;
+        DateTime dateTime = DateTime.Now;
 
         // 验证密码
         await VerifyPassword(accountModel, input.Password, dateTime);
@@ -109,7 +98,7 @@ public partial class LoginService
         }
 
         // 单租户自动登录
-        var autoLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleTenantWhenAutoLogin));
+        bool autoLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleTenantWhenAutoLogin));
 
         // 单租户自动登录
         if (tenantUserList.Count == 1 && autoLogin)
@@ -118,18 +107,20 @@ public partial class LoginService
             return await HandleLogin(applicationModel.Application, accountModel, tenantUserList.Single(), dateTime);
         }
 
-        var tenantIds = tenantUserList.Select(sl => sl.TenantId)
+        var tenantIds = tenantUserList
+            .Select(sl => sl.TenantId)
             .Distinct()
             .ToList();
-        var tenantList = await _repository.Queryable<TenantModel>()
+        List<TenantModel> tenantList = await _repository
+            .Queryable<TenantModel>()
             .Where(wh => tenantIds.Contains(wh.TenantId))
             .ToListAsync();
 
         var resultTenantList = new List<LoginTenantOutput>();
 
-        foreach (var tenantUserModel in tenantUserList)
+        foreach (TenantUserModel tenantUserModel in tenantUserList)
         {
-            var tenantModel = tenantList.Single(s => s.TenantId == tenantUserModel.TenantId);
+            TenantModel tenantModel = tenantList.Single(s => s.TenantId == tenantUserModel.TenantId);
             resultTenantList.Add(new LoginTenantOutput
             {
                 UserKey = tenantUserModel.UserKey,
@@ -170,7 +161,8 @@ public partial class LoginService
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public async Task<List<LoginTenantOutput>> QueryLoginUser()
     {
-        return await _repository.Queryable<AccountModel>()
+        return await _repository
+            .Queryable<AccountModel>()
             .InnerJoin<TenantUserModel>((t1, t2) => t1.AccountId == t2.AccountId)
             .InnerJoin<TenantModel>((t1, t2, t3) => t2.TenantId == t3.TenantId)
             .ClearFilter<IBaseTEntity>()
@@ -209,7 +201,7 @@ public partial class LoginService
             throw new UserFriendlyException("密码不能为空！");
 
         // 查询应用信息
-        var applicationModel = await EnsureApplication();
+        ApplicationOpenIdModel applicationModel = await EnsureApplication();
 
         // 目前只有 Web 端启用了图片验证码，这里登录凭证为空的情况下是存在租户直接登录的
         if (string.IsNullOrWhiteSpace(input.LoginTicket) && GlobalContext.IsWeb && await IsLoginCaptchaEnabled())
@@ -218,7 +210,8 @@ public partial class LoginService
         }
 
         // 查询租户用户
-        var tenantUserModel = await _repository.Queryable<TenantUserModel>()
+        TenantUserModel tenantUserModel = await _repository
+            .Queryable<TenantUserModel>()
             .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
             .ClearFilter<IBaseTEntity>()
             .Where(t1 => t1.UserKey == input.UserKey)
@@ -231,7 +224,8 @@ public partial class LoginService
         }
 
         // 查询账号
-        var accountModel = await _repository.Queryable<AccountModel>()
+        AccountModel accountModel = await _repository
+            .Queryable<AccountModel>()
             .Where(wh => wh.AccountId == tenantUserModel.AccountId)
             .SingleAsync();
 
@@ -240,7 +234,7 @@ public partial class LoginService
             throw new UserFriendlyException("账号不存在！");
         }
 
-        var dateTime = DateTime.Now;
+        DateTime dateTime = DateTime.Now;
 
         if (!string.IsNullOrWhiteSpace(input.LoginTicket))
         {

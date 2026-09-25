@@ -1,32 +1,19 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using CSRedis;
 using Fast.Center.Domain;
 using Fast.Center.Service.Account.Dto;
 using Fast.CenterLog.Domain;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Yitter.IdGenerator;
@@ -45,11 +32,11 @@ public partial class AccountService
         try
         {
             const string title = "账号密码变更通知";
-            var content = $"""
-                           <p>您的账号已完成：{operation}。</p>
-                           <p>操作时间：{DateTimeOffset.Now:yyyy-MM-dd HH:mm:ss zzz}。</p>
-                           <p>如非本人或授权管理员操作，请及时联系管理员处理。</p>
-                           """;
+            string content = $"""
+                              <p>您的账号已完成：{operation}。</p>
+                              <p>操作时间：{DateTimeOffset.Now:yyyy-MM-dd HH:mm:ss zzz}。</p>
+                              <p>如非本人或授权管理员操作，请及时联系管理员处理。</p>
+                              """;
             await _mailService.SendEmail(title, await _mailService.GetEmailTemplate(title, content, "warn"), [account.Email]);
         }
         catch
@@ -64,7 +51,8 @@ public partial class AccountService
     private async Task EnsurePasswordNotReused(long accountId, string newPassword)
     {
         // 查询最近3次密码修改记录
-        var passwordRecordList = await _repository.Queryable<PasswordRecordModel>()
+        List<string> passwordRecordList = await _repository
+            .Queryable<PasswordRecordModel>()
             .Where(wh => wh.AccountId == accountId)
             .OrderByDescending(ob => ob.CreatedTime)
             .Take(3)
@@ -100,13 +88,13 @@ public partial class AccountService
     [PlatformOnly]
     public async Task Unlock(AccountIdInput input)
     {
-        var accountModel = await _repository.SingleOrDefaultAsync(input.AccountId);
+        AccountModel accountModel = await _repository.SingleOrDefaultAsync(input.AccountId);
         if (accountModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
         }
 
-        var dateTime = DateTime.Now;
+        DateTime dateTime = DateTime.Now;
 
         // 判断是否存在锁定
         if (accountModel.LockEndTime == null || accountModel.LockEndTime < dateTime)
@@ -136,7 +124,7 @@ public partial class AccountService
             throw new UserFriendlyException("禁止更改当前登录账号状态！");
         }
 
-        var accountModel = await _repository.SingleOrDefaultAsync(input.AccountId);
+        AccountModel accountModel = await _repository.SingleOrDefaultAsync(input.AccountId);
         if (accountModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
@@ -169,7 +157,7 @@ public partial class AccountService
     {
         VerifyPasswordComplexity(input.NewPassword, input.ConfirmPassword);
 
-        var accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
+        AccountModel accountModel = await _repository.SingleOrDefaultAsync(_user.AccountId);
         if (accountModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
@@ -186,8 +174,9 @@ public partial class AccountService
         accountModel.Password = CryptoUtil.HashPasswordPBKDF2SHA256(input.NewPassword);
         accountModel.RowVersion = input.RowVersion;
 
-        var httpContext = FastContext.HttpContext;
-        var _visitLogRepository = httpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>();
+        HttpContext httpContext = FastContext.HttpContext;
+        ISqlSugarRepository<VisitLogModel> _visitLogRepository =
+            httpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>();
 
         // 添加访问日志
         var visitLogModel = new VisitLogModel
@@ -208,18 +197,20 @@ public partial class AccountService
         visitLogModel.RecordCreate(httpContext);
 
         await _repository.Ado.UseTranAsync(async () =>
-        {
-            await _repository.UpdateAsync(accountModel);
-            await _repository.Insertable(new PasswordRecordModel
-                {
-                    AccountId = accountModel.AccountId,
-                    OperationType = PasswordOperationTypeEnum.Change,
-                    Type = PasswordTypeEnum.PBKDF2_SHA256,
-                    Password = accountModel.Password
-                })
-                .ExecuteCommandAsync();
-            await _visitLogRepository.InsertAsync(visitLogModel);
-        }, ex => throw ex);
+            {
+                await _repository.UpdateAsync(accountModel);
+                await _repository
+                    .Insertable(new PasswordRecordModel
+                    {
+                        AccountId = accountModel.AccountId,
+                        OperationType = PasswordOperationTypeEnum.Change,
+                        Type = PasswordTypeEnum.PBKDF2_SHA256,
+                        Password = accountModel.Password
+                    })
+                    .ExecuteCommandAsync();
+                await _visitLogRepository.InsertAsync(visitLogModel);
+            },
+            ex => throw ex);
 
         // 退出登录
         await _user.Logout();
@@ -244,7 +235,7 @@ public partial class AccountService
             throw new UserFriendlyException("禁止重置当前登录账号密码！");
         }
 
-        var accountModel = await _repository.SingleOrDefaultAsync(input.AccountId);
+        AccountModel accountModel = await _repository.SingleOrDefaultAsync(input.AccountId);
         if (accountModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
@@ -255,17 +246,19 @@ public partial class AccountService
         accountModel.RowVersion = input.RowVersion;
 
         await _repository.Ado.UseTranAsync(async () =>
-        {
-            await _repository.UpdateAsync(accountModel);
-            await _repository.Insertable(new PasswordRecordModel
-                {
-                    AccountId = accountModel.AccountId,
-                    OperationType = PasswordOperationTypeEnum.Reset,
-                    Type = PasswordTypeEnum.PBKDF2_SHA256,
-                    Password = accountModel.Password
-                })
-                .ExecuteCommandAsync();
-        }, ex => throw ex);
+            {
+                await _repository.UpdateAsync(accountModel);
+                await _repository
+                    .Insertable(new PasswordRecordModel
+                    {
+                        AccountId = accountModel.AccountId,
+                        OperationType = PasswordOperationTypeEnum.Reset,
+                        Type = PasswordTypeEnum.PBKDF2_SHA256,
+                        Password = accountModel.Password
+                    })
+                    .ExecuteCommandAsync();
+            },
+            ex => throw ex);
 
         await _user.RevokeAccount(accountModel.AccountId);
         await AccountForceOffline(accountModel.AccountId, "密码已重置，请重新登录");
@@ -321,7 +314,8 @@ public partial class AccountService
         await EnsureApplication();
         await _captchaService.VerifyImageCaptcha(input.CaptchaKey, input.CaptchaCode);
 
-        var account = input.Account.Trim()
+        string account = input
+            .Account.Trim()
             .ToLowerInvariant();
 
         MessageSendChannelEnum sendChannel;
@@ -341,19 +335,21 @@ public partial class AccountService
         // 同一个IP地址，1小时内最多允许20次
         await EnforceSendQuota($"Ip:{FastContext.HttpContext.Connection.RemoteIpAddress?.MapToIPv6()
                                          .ToString()
-                                     ?? "unknown"}", (20, 3600));
+                                     ?? "unknown"}",
+            (20, 3600));
 
         // 冷却和公开配额只依赖输入目标，账号不存在、被禁用或发送失败时也执行相同限制。
-        var recipient = $"PasswordResetRecipient:{sendChannel}:{account}";
+        string recipient = $"PasswordResetRecipient:{sendChannel}:{account}";
         // 60秒1次，1小时5次，24小时10次
         await EnforceSendQuota(recipient, (1, 60), (5, 3600), (10, 86400));
 
         // 生成验证Key
-        var verificationKey = Guid.NewGuid()
+        string verificationKey = Guid
+            .NewGuid()
             .ToString("N");
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.PasswordReset, verificationKey);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.PasswordReset, verificationKey);
         // 所有合法格式的账号均返回同样的凭据；未实际发送的凭据不能用于重置密码。
         var dto = new PasswordResetCacheDto {Channel = sendChannel, ClientIdentity = GlobalContext.ClientIdentity};
         await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
@@ -363,7 +359,8 @@ public partial class AccountService
             VerificationKey = verificationKey, Message = "如账号存在且验证通道可用，验证码将发送至账号绑定的联系方式。"
         };
 
-        var accountModel = await _repository.Queryable<AccountModel>()
+        AccountModel accountModel = await _repository
+            .Queryable<AccountModel>()
             .WhereIF(sendChannel == MessageSendChannelEnum.Sms, wh => wh.Mobile == account)
             .WhereIF(sendChannel == MessageSendChannelEnum.Email, wh => wh.Email == account)
             .SingleAsync();
@@ -415,20 +412,20 @@ public partial class AccountService
         VerifyPasswordComplexity(input.NewPassword, input.ConfirmPassword);
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.PasswordReset, input.VerificationKey);
-        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 30);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.PasswordReset, input.VerificationKey);
+        using CSRedisClientLock codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 30);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
-        var dto = await _cache.GetAsync<PasswordResetCacheDto>(cacheKey);
+        PasswordResetCacheDto dto = await _cache.GetAsync<PasswordResetCacheDto>(cacheKey);
         if (dto == null || dto.AccountId == null || dto.ClientIdentity != GlobalContext.ClientIdentity)
         {
             throw new UserFriendlyException("验证码无效或已过期！");
         }
 
-        var accountModel = await _repository.SingleOrDefaultAsync(dto.AccountId);
+        AccountModel accountModel = await _repository.SingleOrDefaultAsync(dto.AccountId);
         if (accountModel == null || accountModel.Status == CommonStatusEnum.Disable)
         {
             throw new UserFriendlyException("验证码无效或已过期！");
@@ -445,7 +442,8 @@ public partial class AccountService
         switch (dto.Channel)
         {
             case MessageSendChannelEnum.Email:
-                await _mailService.VerifyVerificationCode(MailTypeEnum.ChangePassword, accountModel.Email,
+                await _mailService.VerifyVerificationCode(MailTypeEnum.ChangePassword,
+                    accountModel.Email,
                     input.VerificationCode);
                 break;
             case MessageSendChannelEnum.Sms:
@@ -465,8 +463,9 @@ public partial class AccountService
             throw new UserFriendlyException("新密码不能与当前密码相同！");
         }
 
-        var httpContext = FastContext.HttpContext;
-        var _visitLogRepository = httpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>();
+        HttpContext httpContext = FastContext.HttpContext;
+        ISqlSugarRepository<VisitLogModel> _visitLogRepository =
+            httpContext.RequestServices.GetService<ISqlSugarRepository<VisitLogModel>>();
 
         // 添加访问日志
         var visitLogModel = new VisitLogModel
@@ -487,20 +486,23 @@ public partial class AccountService
         accountModel.LockEndTime = null;
 
         await _repository.Ado.UseTranAsync(async () =>
-        {
-            await _repository.Updateable(accountModel)
-                .UpdateColumns(e => new {e.Password, e.PasswordErrorTime, e.LockStartTime, e.LockEndTime})
-                .ExecuteCommandWithOptLockAsync(true);
-            await _repository.Insertable(new PasswordRecordModel
-                {
-                    AccountId = accountModel.AccountId,
-                    OperationType = PasswordOperationTypeEnum.Change,
-                    Type = PasswordTypeEnum.PBKDF2_SHA256,
-                    Password = accountModel.Password
-                })
-                .ExecuteCommandAsync();
-            await _visitLogRepository.InsertAsync(visitLogModel);
-        }, ex => throw ex);
+            {
+                await _repository
+                    .Updateable(accountModel)
+                    .UpdateColumns(e => new {e.Password, e.PasswordErrorTime, e.LockStartTime, e.LockEndTime})
+                    .ExecuteCommandWithOptLockAsync(true);
+                await _repository
+                    .Insertable(new PasswordRecordModel
+                    {
+                        AccountId = accountModel.AccountId,
+                        OperationType = PasswordOperationTypeEnum.Change,
+                        Type = PasswordTypeEnum.PBKDF2_SHA256,
+                        Password = accountModel.Password
+                    })
+                    .ExecuteCommandAsync();
+                await _visitLogRepository.InsertAsync(visitLogModel);
+            },
+            ex => throw ex);
 
         await _user.RevokeAccount(accountModel.AccountId);
         await AccountForceOffline(accountModel.AccountId, "密码已重置，请重新登录");

@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Net.Sockets;
 using System.Text;
@@ -27,6 +12,7 @@ using Fast.CenterLog.Domain;
 using Fast.SqlSugar;
 using Fast.UnifyResult;
 using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -66,7 +52,7 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
         if (context.Exception is VersionExceptions)
             return;
 
-        var httpContext = context.HttpContext;
+        HttpContext httpContext = context.HttpContext;
         var message = new StringBuilder();
 
         try
@@ -75,16 +61,18 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
             message.AppendLine($"Host：{httpContext.Request.Scheme}://{httpContext.Request.Host}");
             message.AppendLine($"Url：{httpContext.Request.Method}, {httpContext.Request.Path}");
 
-            var deviceType = httpContext.Request.Headers[HttpHeaderConst.DeviceType]
+            string deviceType = httpContext
+                .Request.Headers[HttpHeaderConst.DeviceType]
                 .ToString()
                 .UrlDecode();
-            var deviceId = httpContext.Request.Headers[HttpHeaderConst.DeviceId]
+            string deviceId = httpContext
+                .Request.Headers[HttpHeaderConst.DeviceId]
                 .ToString()
                 .UrlDecode()
                 .Trim();
 
             message.AppendLine($"device: {deviceType}, {deviceId}");
-            if (httpContext.Items.TryGetValue($"{nameof(Fast)}.RequestParams", out var requestParams))
+            if (httpContext.Items.TryGetValue($"{nameof(Fast)}.RequestParams", out object requestParams))
             {
                 message.AppendLine($"请求参数: {requestParams?.ToString()}");
             }
@@ -137,7 +125,8 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
         if (isUserFriendlyException)
         {
             // 只写入最深的一条堆栈信息
-            var firstLine = context.Exception.StackTrace?.Split([Environment.NewLine], StringSplitOptions.RemoveEmptyEntries)
+            string firstLine = context
+                .Exception.StackTrace?.Split([Environment.NewLine], StringSplitOptions.RemoveEmptyEntries)
                 .FirstOrDefault();
 
             // 如果有匹配的堆栈信息，选择第一条（最深的那一条）
@@ -161,9 +150,9 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
         }
         else
         {
-            var className = context.Exception.TargetSite?.DeclaringType?.FullName;
-            var methodName = "";
-            var groupCollection = Regex.Match(className, "<(.*?)>")
+            string className = context.Exception.TargetSite?.DeclaringType?.FullName;
+            string methodName = "";
+            GroupCollection groupCollection = Regex.Match(className, "<(.*?)>")
                 .Groups;
             if (groupCollection.Count > 1)
                 methodName = groupCollection[1].Value;
@@ -171,11 +160,13 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
             try
             {
                 // 获取 CenterLog 库的连接字符串配置
-                var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-                    CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-                var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+                ConnectionSettingsOptions connectionSetting =
+                    await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
+                        CommonConst.Default.TenantNo,
+                        DatabaseTypeEnum.CenterLog);
+                ConnectionConfig connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
-                var _user = httpContext.RequestServices.GetService<IUser>();
+                IUser _user = httpContext.RequestServices.GetService<IUser>();
                 var exceptionLogModel = new ExceptionLogModel
                 {
                     RecordId = YitIdHelper.NextId(),
@@ -187,7 +178,8 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
                     Message = context.Exception.Message,
                     Source = context.Exception.Source,
                     StackTrace = context.Exception.StackTrace,
-                    ParamsObj = context.Exception.TargetSite?.GetParameters()
+                    ParamsObj = context
+                        .Exception.TargetSite?.GetParameters()
                         .Select(sl => new
                         {
                             PropertyName = sl.Name, TypeName = sl.ParameterType.Name, TypeFullName = sl.ParameterType.FullName
@@ -206,7 +198,8 @@ public class GlobalExceptionHandler : IGlobalExceptionHandler
 
                 // 独立客户端不加载 AOP，避免异常审计失败后递归生成新异常审计；主异常返回前等待持久化完成
                 using var db = new SqlSugarClient(connectionConfig);
-                await db.Insertable(exceptionLogModel)
+                await db
+                    .Insertable(exceptionLogModel)
                     .ExecuteCommandAsync();
             }
             catch (Exception ex)

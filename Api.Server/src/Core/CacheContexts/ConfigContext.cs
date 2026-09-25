@@ -1,27 +1,13 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using Fast.Center.Domain;
 using Fast.SqlSugar;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Fast.Core;
@@ -53,32 +39,35 @@ public class ConfigContext
             throw new UserFriendlyException("配置编码不能为空！");
         }
 
-        var httpContext = FastContext.HttpContext;
+        HttpContext httpContext = FastContext.HttpContext;
         // 优先从 HttpContext.Items 中获取
-        var configValue = httpContext?.Items[$"{nameof(Fast)}.{nameof(ConfigModel.ConfigCode)}.{configCode}"]
+        string configValue = httpContext
+            ?.Items[$"{nameof(Fast)}.{nameof(ConfigModel.ConfigCode)}.{configCode}"]
             ?.ToString();
 
         if (!string.IsNullOrWhiteSpace(configValue))
             return configValue;
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, configCode);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, configCode);
 
-        var configModel = centerCache.GetAndSet(cacheKey, () =>
-        {
-            var repository = FastContext.GetService<ISqlSugarRepository<ConfigModel>>();
-
-            var result = repository.Entities.Where(wh => wh.ConfigCode == configCode)
-                .Single();
-
-            if (result == null)
+        ConfigModel configModel = centerCache.GetAndSet(cacheKey,
+            () =>
             {
-                var message = $"未能找到对应配置【{configCode}】信息！";
-                logger.LogError($"ConfigCode：{configCode}；{message}");
-                throw new UserFriendlyException(message);
-            }
+                ISqlSugarRepository<ConfigModel> repository = FastContext.GetService<ISqlSugarRepository<ConfigModel>>();
 
-            return result;
-        });
+                ConfigModel result = repository
+                    .Entities.Where(wh => wh.ConfigCode == configCode)
+                    .Single();
+
+                if (result == null)
+                {
+                    string message = $"未能找到对应配置【{configCode}】信息！";
+                    logger.LogError($"ConfigCode：{configCode}；{message}");
+                    throw new UserFriendlyException(message);
+                }
+
+                return result;
+            });
 
         if (httpContext != null)
         {
@@ -88,7 +77,7 @@ public class ConfigContext
 
         if (string.IsNullOrWhiteSpace(configModel.ConfigValue))
         {
-            var message = $"配置【{configCode}】信息值为空！";
+            string message = $"配置【{configCode}】信息值为空！";
             logger.LogError($"ConfigCode：{configCode}；{message}");
             throw new UserFriendlyException(message);
         }
@@ -107,32 +96,35 @@ public class ConfigContext
             throw new UserFriendlyException("配置编码不能为空！");
         }
 
-        var httpContext = FastContext.HttpContext;
+        HttpContext httpContext = FastContext.HttpContext;
         // 优先从 HttpContext.Items 中获取
-        var configValue = httpContext?.Items[$"{nameof(Fast)}.{nameof(ConfigModel.ConfigCode)}.{configCode}"]
+        string configValue = httpContext
+            ?.Items[$"{nameof(Fast)}.{nameof(ConfigModel.ConfigCode)}.{configCode}"]
             ?.ToString();
 
         if (!string.IsNullOrWhiteSpace(configValue))
             return configValue;
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, configCode);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, configCode);
 
-        var configModel = await centerCache.GetAndSetAsync(cacheKey, async () =>
-        {
-            var repository = FastContext.GetService<ISqlSugarRepository<ConfigModel>>();
-
-            var result = await repository.Entities.Where(wh => wh.ConfigCode == configCode)
-                .SingleAsync();
-
-            if (result == null)
+        ConfigModel configModel = await centerCache.GetAndSetAsync(cacheKey,
+            async () =>
             {
-                var message = $"未能找到对应配置【{configCode}】信息！";
-                logger.LogError($"ConfigCode：{configCode}；{message}");
-                throw new UserFriendlyException(message);
-            }
+                ISqlSugarRepository<ConfigModel> repository = FastContext.GetService<ISqlSugarRepository<ConfigModel>>();
 
-            return result;
-        });
+                ConfigModel result = await repository
+                    .Entities.Where(wh => wh.ConfigCode == configCode)
+                    .SingleAsync();
+
+                if (result == null)
+                {
+                    string message = $"未能找到对应配置【{configCode}】信息！";
+                    logger.LogError($"ConfigCode：{configCode}；{message}");
+                    throw new UserFriendlyException(message);
+                }
+
+                return result;
+            });
 
         if (httpContext != null)
         {
@@ -142,7 +134,7 @@ public class ConfigContext
 
         if (string.IsNullOrWhiteSpace(configModel.ConfigValue))
         {
-            var message = $"配置【{configCode}】信息值为空！";
+            string message = $"配置【{configCode}】信息值为空！";
             logger.LogError($"ConfigCode：{configCode}；{message}");
             throw new UserFriendlyException(message);
         }
@@ -160,7 +152,7 @@ public class ConfigContext
             throw new UserFriendlyException("配置编码不能为空！");
         }
 
-        var httpContext = FastContext.HttpContext;
+        HttpContext httpContext = FastContext.HttpContext;
         if (httpContext != null)
         {
             // 删除 HttpContext.Items 中的
@@ -170,7 +162,7 @@ public class ConfigContext
             }
         }
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, configCode);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, configCode);
 
         await centerCache.DelAsync(cacheKey);
     }
@@ -180,20 +172,20 @@ public class ConfigContext
     /// </summary>
     public static async Task DeleteAllConfig()
     {
-        var httpContext = FastContext.HttpContext;
+        HttpContext httpContext = FastContext.HttpContext;
         if (httpContext != null)
         {
             // 清空 HttpContext.Items 中的
-            var keys = httpContext.Items.Keys.Where(wh =>
-                    wh is string key && key.StartsWith($"{nameof(Fast)}.{nameof(ConfigModel.ConfigCode)}."))
+            var keys = httpContext
+                .Items.Keys.Where(wh => wh is string key && key.StartsWith($"{nameof(Fast)}.{nameof(ConfigModel.ConfigCode)}."))
                 .ToList();
-            foreach (var key in keys)
+            foreach (object key in keys)
             {
                 httpContext.Items.Remove(key);
             }
         }
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, "*");
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Config, "*");
         await centerCache.DelByPatternAsync(cacheKey);
     }
 }

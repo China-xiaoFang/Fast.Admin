@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using Fast.Admin.Domain;
 using Fast.Admin.Service.Department.Dto;
@@ -39,7 +24,8 @@ public class DepartmentService : IDynamicApplication
     private readonly ISqlSugarRepository<DepartmentModel> _repository;
     private readonly ISqlSugarRepository<TenantUserModel> _tenantUserRepository;
 
-    public DepartmentService(IUser user, ISqlSugarRepository<DepartmentModel> repository,
+    public DepartmentService(IUser user,
+        ISqlSugarRepository<DepartmentModel> repository,
         ISqlSugarRepository<TenantUserModel> tenantUserRepository)
     {
         _user = user;
@@ -54,8 +40,8 @@ public class DepartmentService : IDynamicApplication
     [ApiInfo("部门选择器", HttpRequestActionEnum.Query)]
     public async Task<List<ElSelectorOutput<long>>> DepartmentSelector(long? orgId)
     {
-        var queryable = _repository.Entities.WhereIF(orgId != null, wh => wh.OrgId == orgId);
-        var customDepartmentIds = _user.DataScopeDepartmentIdList ?? [];
+        ISugarQueryable<DepartmentModel> queryable = _repository.Entities.WhereIF(orgId != null, wh => wh.OrgId == orgId);
+        List<long> customDepartmentIds = _user.DataScopeDepartmentIdList ?? [];
 
         // 管理员，全部权限
         if (_user.IsSuperAdmin || _user.IsAdmin || _user.DataScopeType == DataScopeTypeEnum.All)
@@ -65,7 +51,8 @@ public class DepartmentService : IDynamicApplication
         else if (_user.DataScopeType == DataScopeTypeEnum.OrgWithChild)
         {
             queryable = queryable.Where(wh => wh.OrgId
-                                              == SqlFunc.Subqueryable<EmployeeOrgModel>()
+                                              == SqlFunc
+                                                  .Subqueryable<EmployeeOrgModel>()
                                                   // 主部门
                                                   .Where(e => e.EmployeeId == _user.EmployeeId && e.IsPrimary)
                                                   .Where(e => e.OrgId == wh.OrgId)
@@ -91,7 +78,8 @@ public class DepartmentService : IDynamicApplication
                                               || customDepartmentIds.Contains(wh.DepartmentId));
         }
 
-        var data = await queryable.OrderBy(ob => ob.Sort)
+        var data = await queryable
+            .OrderBy(ob => ob.Sort)
             .Select(sl => new
             {
                 sl.DepartmentId,
@@ -108,7 +96,8 @@ public class DepartmentService : IDynamicApplication
             })
             .ToListAsync();
 
-        return data.Select(sl => new ElSelectorOutput<long>
+        return data
+            .Select(sl => new ElSelectorOutput<long>
             {
                 Value = sl.DepartmentId,
                 Label = sl.DepartmentName,
@@ -137,10 +126,11 @@ public class DepartmentService : IDynamicApplication
     [Permission(PermissionConst.Department.Paged)]
     public async Task<List<QueryDepartmentPagedOutput>> QueryDepartmentPaged(QueryDepartmentPagedInput input)
     {
-        var queryable = _repository.Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
+        ISugarQueryable<DepartmentModel> queryable = _repository
+            .Entities.WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
                 wh => wh.DepartmentName.Contains(input.SearchValue) || wh.DepartmentCode.Contains(input.SearchValue))
             .WhereIF(input.OrgId != null, wh => wh.OrgId == input.OrgId);
-        var customDepartmentIds = _user.DataScopeDepartmentIdList ?? [];
+        List<long> customDepartmentIds = _user.DataScopeDepartmentIdList ?? [];
 
         // 管理员，全部权限
         if (_user.IsSuperAdmin || _user.IsAdmin || _user.DataScopeType == DataScopeTypeEnum.All)
@@ -150,7 +140,8 @@ public class DepartmentService : IDynamicApplication
         else if (_user.DataScopeType == DataScopeTypeEnum.OrgWithChild)
         {
             queryable = queryable.Where(wh => wh.OrgId
-                                              == SqlFunc.Subqueryable<EmployeeOrgModel>()
+                                              == SqlFunc
+                                                  .Subqueryable<EmployeeOrgModel>()
                                                   // 主部门
                                                   .Where(e => e.EmployeeId == _user.EmployeeId && e.IsPrimary)
                                                   .Where(e => e.OrgId == wh.OrgId)
@@ -176,7 +167,8 @@ public class DepartmentService : IDynamicApplication
                                               || customDepartmentIds.Contains(wh.DepartmentId));
         }
 
-        var data = await queryable.OrderByIF(input.IsOrderBy, ob => ob.Sort)
+        List<QueryDepartmentPagedOutput> data = await queryable
+            .OrderByIF(input.IsOrderBy, ob => ob.Sort)
             .Select(sl => new QueryDepartmentPagedOutput
             {
                 DepartmentId = sl.DepartmentId,
@@ -214,7 +206,8 @@ public class DepartmentService : IDynamicApplication
     [Permission(PermissionConst.Department.Detail)]
     public async Task<QueryDepartmentDetailOutput> QueryDepartmentDetail([Required(ErrorMessage = "部门Id不能为空")] long? departmentId)
     {
-        var result = await _repository.Entities.Where(wh => wh.DepartmentId == departmentId)
+        QueryDepartmentDetailOutput result = await _repository
+            .Entities.Where(wh => wh.DepartmentId == departmentId)
             .Select(sl => new QueryDepartmentDetailOutput
             {
                 DepartmentId = sl.DepartmentId,
@@ -266,7 +259,8 @@ public class DepartmentService : IDynamicApplication
             throw new UserFriendlyException("部门编码重复！");
         }
 
-        var organizationModel = await _repository.Queryable<OrganizationModel>()
+        OrganizationModel organizationModel = await _repository
+            .Queryable<OrganizationModel>()
             .SingleAsync(s => s.OrgId == input.OrgId);
 
         if (organizationModel == null)
@@ -290,7 +284,7 @@ public class DepartmentService : IDynamicApplication
 
         if (input.ParentId > 0)
         {
-            var parentDepartment = await _repository.SingleOrDefaultAsync(s => s.DepartmentId == input.ParentId);
+            DepartmentModel parentDepartment = await _repository.SingleOrDefaultAsync(s => s.DepartmentId == input.ParentId);
             if (parentDepartment == null)
             {
                 throw new UserFriendlyException("数据不存在！");
@@ -345,13 +339,14 @@ public class DepartmentService : IDynamicApplication
             throw new UserFriendlyException("部门编码重复！");
         }
 
-        var departmentModel = await _repository.SingleOrDefaultAsync(input.DepartmentId);
+        DepartmentModel departmentModel = await _repository.SingleOrDefaultAsync(input.DepartmentId);
         if (departmentModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
         }
 
-        var organizationModel = await _repository.Queryable<OrganizationModel>()
+        OrganizationModel organizationModel = await _repository
+            .Queryable<OrganizationModel>()
             .SingleAsync(s => s.OrgId == input.OrgId);
 
         if (organizationModel == null)
@@ -359,7 +354,7 @@ public class DepartmentService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        var description = $"编辑部门：{input.DepartmentName}";
+        string description = $"编辑部门：{input.DepartmentName}";
 
         departmentModel.OrgId = organizationModel.OrgId;
         departmentModel.OrgName = organizationModel.OrgName;
@@ -375,7 +370,7 @@ public class DepartmentService : IDynamicApplication
 
         if (input.ParentId > 0)
         {
-            var parentDepartment = await _repository.SingleOrDefaultAsync(s => s.DepartmentId == input.ParentId);
+            DepartmentModel parentDepartment = await _repository.SingleOrDefaultAsync(s => s.DepartmentId == input.ParentId);
             if (parentDepartment == null)
             {
                 throw new UserFriendlyException("数据不存在！");
@@ -407,14 +402,14 @@ public class DepartmentService : IDynamicApplication
         await _repository.UpdateAsync(departmentModel);
 
         // 更新所有子级
-        var childrenList = await _repository.Entities
-            .Where(wh => SqlFunc.JsonArrayAny(wh.ParentIds, departmentModel.DepartmentId))
+        List<DepartmentModel> childrenList = await _repository
+            .Entities.Where(wh => SqlFunc.JsonArrayAny(wh.ParentIds, departmentModel.DepartmentId))
             .ToListAsync();
 
         void updateChildrenName(long parentId)
         {
-            var parentModel = childrenList.Single(s => s.DepartmentId == parentId);
-            foreach (var item in childrenList.Where(wh => wh.ParentId == parentId))
+            DepartmentModel parentModel = childrenList.Single(s => s.DepartmentId == parentId);
+            foreach (DepartmentModel item in childrenList.Where(wh => wh.ParentId == parentId))
             {
                 item.ParentIds = [.. parentModel.ParentIds, parentModel.DepartmentId];
                 item.ParentNames = [.. parentModel.ParentNames, parentModel.DepartmentName];
@@ -423,7 +418,7 @@ public class DepartmentService : IDynamicApplication
         }
 
         // 处理顶层
-        foreach (var item in childrenList.Where(wh => wh.ParentId == departmentModel.DepartmentId))
+        foreach (DepartmentModel item in childrenList.Where(wh => wh.ParentId == departmentModel.DepartmentId))
         {
             item.ParentName = departmentModel.DepartmentName;
             item.ParentIds = [.. departmentModel.ParentIds, departmentModel.DepartmentId];
@@ -432,11 +427,13 @@ public class DepartmentService : IDynamicApplication
             updateChildrenName(item.DepartmentId);
         }
 
-        await _repository.Updateable(childrenList)
+        await _repository
+            .Updateable(childrenList)
             .UpdateColumns(e => new {e.ParentName, e.ParentIds, e.ParentNames})
             .ExecuteCommandAsync();
 
-        await _repository.Updateable<EmployeeOrgModel>()
+        await _repository
+            .Updateable<EmployeeOrgModel>()
             .SetColumns(_ => new EmployeeOrgModel
             {
                 DepartmentName = departmentModel.DepartmentName,
@@ -445,7 +442,8 @@ public class DepartmentService : IDynamicApplication
             .Where(wh => wh.DepartmentId == departmentModel.DepartmentId)
             .ExecuteCommandAsync();
 
-        await _tenantUserRepository.Updateable<TenantUserModel>()
+        await _tenantUserRepository
+            .Updateable<TenantUserModel>()
             .SetColumns(_ => new TenantUserModel {DepartmentName = departmentModel.DepartmentName})
             .Where(wh => wh.DepartmentId == departmentModel.DepartmentId)
             .ExecuteCommandAsync();
@@ -475,13 +473,14 @@ public class DepartmentService : IDynamicApplication
         }
 
         // 检查是否有员工关联
-        if (await _repository.Queryable<EmployeeOrgModel>()
+        if (await _repository
+                .Queryable<EmployeeOrgModel>()
                 .AnyAsync(a => a.DepartmentId == input.DepartmentId))
         {
             throw new UserFriendlyException("部门存在员工关联，无法删除！");
         }
 
-        var departmentModel = await _repository.SingleOrDefaultAsync(input.DepartmentId);
+        DepartmentModel departmentModel = await _repository.SingleOrDefaultAsync(input.DepartmentId);
         if (departmentModel == null)
         {
             throw new UserFriendlyException("数据不存在！");

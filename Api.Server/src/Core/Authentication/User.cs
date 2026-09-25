@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using Fast.Center.Domain;
 using Fast.CenterLog.Domain;
@@ -27,6 +12,7 @@ using Fast.SqlSugar;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.JsonWebTokens;
 using SqlSugar;
 using Yitter.IdGenerator;
 
@@ -134,13 +120,17 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     }
 
     /// <inheritdoc />
-    public async Task<AuthUserInfo> GetAuthUserInfo(AppEnvironmentEnum deviceType, string appNo, string tenantNo,
-        string employeeNo, string sessionId)
+    public async Task<AuthUserInfo> GetAuthUserInfo(AppEnvironmentEnum deviceType,
+        string appNo,
+        string tenantNo,
+        string employeeNo,
+        string sessionId)
     {
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType.ToString(), employeeNo, sessionId);
+        string cacheKey =
+            CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType.ToString(), employeeNo, sessionId);
 
-        var authUserInfo = await _authCache.GetAsync<AuthUserInfo>(cacheKey);
+        AuthUserInfo authUserInfo = await _authCache.GetAsync<AuthUserInfo>(cacheKey);
         return authUserInfo?.SessionId == sessionId ? authUserInfo : null;
     }
 
@@ -175,18 +165,23 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         try
         {
             // 每次登录生成独立会话Id，用于区分同一用户的多个登录会话
-            authUserInfo.SessionId = Guid.NewGuid()
+            authUserInfo.SessionId = Guid
+                .NewGuid()
                 .ToString("D");
 
             // 设置授权用户信息
             SetAuthUser(authUserInfo, true);
 
             // 单点登录时撤销同一应用、租户和用户在其他设备上的授权缓存
-            var singleLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleLogin));
+            bool singleLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleLogin));
             if (singleLogin)
             {
-                var delCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo, "*",
-                    authUserInfo.EmployeeNo, "*");
+                string delCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser,
+                    authUserInfo.AppNo,
+                    authUserInfo.TenantNo,
+                    "*",
+                    authUserInfo.EmployeeNo,
+                    "*");
                 await _authCache.DelByPatternAsync(delCacheKey);
             }
 
@@ -202,18 +197,23 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                 {nameof(LastLoginTime), authUserInfo.LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")}
             };
 
-            var data = payload.ToJsonString()
+            string data = payload
+                .ToJsonString()
                 .ToBase64();
 
             // 生成 AccessToken
-            var accessToken = JwtBearerUtil.GenerateToken(new Dictionary<string, object> {{"Data", data}});
+            string accessToken = JwtBearerUtil.GenerateToken(new Dictionary<string, object> {{"Data", data}});
 
             // 生成 RefreshToken
-            var refreshToken = JwtBearerUtil.GenerateRefreshToken(accessToken);
+            string refreshToken = JwtBearerUtil.GenerateRefreshToken(accessToken);
 
             // 获取缓存Key
-            var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
-                authUserInfo.DeviceType.ToString(), authUserInfo.EmployeeNo, authUserInfo.SessionId);
+            string cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser,
+                authUserInfo.AppNo,
+                authUserInfo.TenantNo,
+                authUserInfo.DeviceType.ToString(),
+                authUserInfo.EmployeeNo,
+                authUserInfo.SessionId);
 
             // 设置缓存信息
             await _authCache.SetAsync(cacheKey, authUserInfo);
@@ -265,18 +265,23 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         try
         {
             // 每次登录生成独立会话Id，用于区分同一用户的多个登录会话
-            authUserInfo.SessionId = Guid.NewGuid()
+            authUserInfo.SessionId = Guid
+                .NewGuid()
                 .ToString("D");
 
             // 设置授权用户信息
             SetAuthUser(authUserInfo, true);
 
             // 单点登录时撤销同一应用、租户和用户在其他设备上的授权缓存
-            var singleLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleLogin));
+            bool singleLogin = bool.Parse(await ConfigContext.GetConfig(ConfigConst.SingleLogin));
             if (singleLogin)
             {
-                var delCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo, "*",
-                    authUserInfo.ClientUserOpenId, "*");
+                string delCacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser,
+                    authUserInfo.AppNo,
+                    authUserInfo.TenantNo,
+                    "*",
+                    authUserInfo.ClientUserOpenId,
+                    "*");
                 await _authCache.DelByPatternAsync(delCacheKey);
             }
 
@@ -292,18 +297,23 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                 {nameof(LastLoginTime), authUserInfo.LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")}
             };
 
-            var data = payload.ToJsonString()
+            string data = payload
+                .ToJsonString()
                 .ToBase64();
 
             // 生成 AccessToken
-            var accessToken = JwtBearerUtil.GenerateToken(new Dictionary<string, object> {{"Data", data}});
+            string accessToken = JwtBearerUtil.GenerateToken(new Dictionary<string, object> {{"Data", data}});
 
             // 生成 RefreshToken
-            var refreshToken = JwtBearerUtil.GenerateRefreshToken(accessToken);
+            string refreshToken = JwtBearerUtil.GenerateRefreshToken(accessToken);
 
             // 获取缓存Key
-            var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, authUserInfo.AppNo, authUserInfo.TenantNo,
-                authUserInfo.DeviceType.ToString(), authUserInfo.ClientUserOpenId, authUserInfo.SessionId);
+            string cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser,
+                authUserInfo.AppNo,
+                authUserInfo.TenantNo,
+                authUserInfo.DeviceType.ToString(),
+                authUserInfo.ClientUserOpenId,
+                authUserInfo.SessionId);
 
             // 设置缓存信息
             await _authCache.SetAsync(cacheKey, authUserInfo);
@@ -339,14 +349,16 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             {nameof(LastLoginTime), LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")}
         };
 
-        var data = payload.ToJsonString()
+        string data = payload
+            .ToJsonString()
             .ToBase64();
 
         // 生成 AccessToken，机器人使用默认1分钟过期
-        var accessToken = JwtBearerUtil.GenerateToken(new Dictionary<string, object> {{"Data", data}}, 1);
+        string accessToken = JwtBearerUtil.GenerateToken(new Dictionary<string, object> {{"Data", data}}, 1);
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, AppNo, TenantNo, DeviceType.ToString(), EmployeeNo, SessionId);
+        string cacheKey =
+            CacheConst.GetCacheKey(CacheConst.AuthUser, AppNo, TenantNo, DeviceType.ToString(), EmployeeNo, SessionId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -382,8 +394,12 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         ButtonCodeList = input.ButtonCodeList;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.EmployeeNo, SessionId);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser,
+            input.AppNo,
+            input.TenantNo,
+            input.DeviceType.ToString(),
+            input.EmployeeNo,
+            SessionId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -418,8 +434,12 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         Avatar = input.Avatar;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.EmployeeNo, SessionId);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser,
+            input.AppNo,
+            input.TenantNo,
+            input.DeviceType.ToString(),
+            input.EmployeeNo,
+            SessionId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -449,8 +469,12 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         Avatar = input.Avatar;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.ClientUserOpenId, SessionId);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser,
+            input.AppNo,
+            input.TenantNo,
+            input.DeviceType.ToString(),
+            input.ClientUserOpenId,
+            SessionId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -485,8 +509,12 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         DataScopeDepartmentIdList = input.DataScopeDepartmentIdList;
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, input.AppNo, input.TenantNo, input.DeviceType.ToString(),
-            input.EmployeeNo, SessionId);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser,
+            input.AppNo,
+            input.TenantNo,
+            input.DeviceType.ToString(),
+            input.EmployeeNo,
+            SessionId);
 
         // 设置缓存信息
         await _authCache.SetAsync(cacheKey, this);
@@ -495,15 +523,16 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
     /// <inheritdoc />
     public async Task RevokeAccount(long accountId)
     {
-        var _repository = _httpContext.RequestServices.GetRequiredService<ISqlSugarClient>();
-        var tenantUserList = await _repository.Queryable<TenantUserModel>()
+        ISqlSugarClient _repository = _httpContext.RequestServices.GetRequiredService<ISqlSugarClient>();
+        var tenantUserList = await _repository
+            .Queryable<TenantUserModel>()
             .InnerJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
             .ClearFilter<IBaseTEntity>()
             .Where((t1, t2) => t1.AccountId == accountId)
             .Select((t1, t2) => new {t1.EmployeeNo, t2.TenantNo})
             .ToListAsync();
 
-        foreach (var cacheKey in tenantUserList.Select(tenantUser =>
+        foreach (string cacheKey in tenantUserList.Select(tenantUser =>
                      CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantUser.TenantNo, "*", tenantUser.EmployeeNo, "*")))
         {
             await _authCache.DelByPatternAsync(cacheKey);
@@ -516,7 +545,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         if (string.IsNullOrWhiteSpace(tenantNo))
             return;
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantNo, "*", "*", "*");
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantNo, "*", "*", "*");
         await _authCache.DelByPatternAsync(cacheKey);
     }
 
@@ -526,7 +555,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
         if (string.IsNullOrWhiteSpace(tenantNo) || string.IsNullOrWhiteSpace(employeeNo))
             return;
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantNo, "*", employeeNo, "*");
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantNo, "*", employeeNo, "*");
         await _authCache.DelByPatternAsync(cacheKey);
     }
 
@@ -540,7 +569,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
          */
 
         // 这里直接从请求头中获取 AccessToken
-        var accessToken = JwtBearerUtil.GetJwtBearerToken(_httpContext);
+        string accessToken = JwtBearerUtil.GetJwtBearerToken(_httpContext);
 
         if (!string.IsNullOrWhiteSpace(accessToken))
         {
@@ -550,23 +579,24 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             try
             {
                 // 读取 AccessToken，不验证
-                var accessTokenIdentity = JwtBearerUtil.ReadJwtToken(accessToken);
+                JsonWebToken accessTokenIdentity = JwtBearerUtil.ReadJwtToken(accessToken);
                 // 从 AccessToken 中读取 Data
-                var data = accessTokenIdentity.Claims.FirstOrDefault(f => f.Type == "Data")!.Value;
-                var payload = data.Base64ToString()
+                string data = accessTokenIdentity.Claims.FirstOrDefault(f => f.Type == "Data")!.Value;
+                Dictionary<string, string> payload = data
+                    .Base64ToString()
                     .ToObject<Dictionary<string, string>>();
                 // 从 payload 中读取 DeviceType,DeviceId,SessionId,AppNo,TenantNo,EmployeeNo
-                if (payload.TryGetValue(nameof(DeviceType), out var deviceType)
-                    && payload.TryGetValue(nameof(DeviceId), out var deviceId)
-                    && payload.TryGetValue(nameof(SessionId), out var sessionId)
-                    && payload.TryGetValue(nameof(AppNo), out var appNo)
-                    && payload.TryGetValue(nameof(TenantNo), out var tenantNo)
-                    && payload.TryGetValue(nameof(EmployeeNo), out var employeeNo))
+                if (payload.TryGetValue(nameof(DeviceType), out string deviceType)
+                    && payload.TryGetValue(nameof(DeviceId), out string deviceId)
+                    && payload.TryGetValue(nameof(SessionId), out string sessionId)
+                    && payload.TryGetValue(nameof(AppNo), out string appNo)
+                    && payload.TryGetValue(nameof(TenantNo), out string tenantNo)
+                    && payload.TryGetValue(nameof(EmployeeNo), out string employeeNo))
                 {
                     // 尝试获取缓存
-                    var cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType, employeeNo,
-                        sessionId);
-                    var authUserInfo = await _authCache.GetAsync<AuthUserInfo>(cacheKey);
+                    string cacheKey =
+                        CacheConst.GetCacheKey(CacheConst.AuthUser, appNo, tenantNo, deviceType, employeeNo, sessionId);
+                    AuthUserInfo authUserInfo = await _authCache.GetAsync<AuthUserInfo>(cacheKey);
                     if (authUserInfo != null)
                     {
                         // 添加登出日志
@@ -588,16 +618,19 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                         visitLogModel.RecordCreate(_httpContext);
 
                         // 获取 CenterLog 库的连接字符串配置
-                        var connectionSetting = await _httpContext.RequestServices.GetService<ISqlSugarEntityService>()
-                            .GetConnectionSetting(CommonConst.Default.TenantId, CommonConst.Default.TenantNo,
+                        ConnectionSettingsOptions connectionSetting = await _httpContext
+                            .RequestServices.GetService<ISqlSugarEntityService>()
+                            .GetConnectionSetting(CommonConst.Default.TenantId,
+                                CommonConst.Default.TenantNo,
                                 DatabaseTypeEnum.CenterLog);
-                        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+                        ConnectionConfig connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
                         // 这里不能使用Aop
                         using var db = new SqlSugarClient(connectionConfig);
 
                         // 异步不等待
-                        await db.Insertable(visitLogModel)
+                        await db
+                            .Insertable(visitLogModel)
                             .SplitTable()
                             .ExecuteCommandAsync();
 

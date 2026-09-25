@@ -1,27 +1,13 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using Fast.Center.Domain;
 using Fast.SqlSugar;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SqlSugar;
@@ -51,7 +37,8 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
     /// <summary>
     /// SqlSugar 实体服务
     /// </summary>
-    public SqlSugarEntityService(ICache<CenterCCL> centerCache, IHostEnvironment hostEnvironment,
+    public SqlSugarEntityService(ICache<CenterCCL> centerCache,
+        IHostEnvironment hostEnvironment,
         ILogger<ISqlSugarEntityService> logger)
     {
         _centerCache = centerCache;
@@ -60,7 +47,8 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
     }
 
     /// <inheritdoc />
-    public async Task<ConnectionSettingsOptions> GetConnectionSetting(long tenantId, string tenantNo,
+    public async Task<ConnectionSettingsOptions> GetConnectionSetting(long tenantId,
+        string tenantNo,
         DatabaseTypeEnum databaseType)
     {
         if (string.IsNullOrWhiteSpace(tenantNo))
@@ -68,69 +56,72 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
             throw new UserFriendlyException("租户编号不能为空！");
         }
 
-        var httpContext = FastContext.HttpContext;
+        HttpContext httpContext = FastContext.HttpContext;
         // 优先从 HttpContext.Items 中获取
-        var connectionSettingsObj =
+        object connectionSettingsObj =
             httpContext?.Items[
                 $"{nameof(Fast)}.{nameof(SqlSugar)}.{nameof(ConnectionSettingsOptions)}.{databaseType.ToString()}"];
 
         if (connectionSettingsObj is ConnectionSettingsOptions connectionSettings)
             return connectionSettings;
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Database, tenantNo, databaseType.ToString());
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Database, tenantNo, databaseType.ToString());
 
-        var result = await _centerCache.GetAndSetAsync(cacheKey, async () =>
-        {
-            using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
-
-            var data = await db.Queryable<MainDatabaseModel>()
-                .Includes(e => e.SlaveDatabaseList)
-                .Where(wh => wh.TenantId == tenantId && wh.DatabaseType == databaseType)
-                .SingleAsync();
-
-            if (data == null)
+        ConnectionSettingsOptions result = await _centerCache.GetAndSetAsync(cacheKey,
+            async () =>
             {
-                var message = $"未能找到对应类型【{databaseType.ToString()}】所存在的 Database 信息！";
-                _logger.LogError($"TenantId：{tenantId}；TenantNo：{tenantNo}；{message}");
-                throw new UserFriendlyException(message);
-            }
+                using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
 
-            return new ConnectionSettingsOptions
-            {
-                ConnectionId = data.MainId.ToString(),
-                DbType = data.DbType.ToDbType(),
-                ServiceIp = _hostEnvironment.IsDevelopment()
-                    // 开发环境使用公网地址
-                    ? data.PublicIp
-                    // 生产环境使用内网地址
-                    : data.IntranetIp,
-                Port = data.Port,
-                DbName = data.DbName,
-                DbUser = data.DbUser,
-                DbPwd = data.DbPwd,
-                CustomConnectionStr = data.CustomConnectionStr,
-                CommandTimeOut = data.CommandTimeOut,
-                SugarSqlExecMaxSeconds = data.SugarSqlExecMaxSeconds,
-                DiffLog = data.DiffLog,
-                DisableAop = data.DisableAop,
-                SlaveConnectionList = data.SlaveDatabaseList.Select(dSl => new SlaveConnectionInfo
-                    {
-                        ServiceIp = _hostEnvironment.IsDevelopment()
-                            // 开发环境使用公网地址
-                            ? string.IsNullOrWhiteSpace(dSl.PublicIp) ? data.PublicIp : dSl.PublicIp
-                            // 生产环境使用内网地址
-                            :
-                            string.IsNullOrWhiteSpace(dSl.IntranetIp) ? data.IntranetIp : dSl.IntranetIp,
-                        Port = dSl.Port ?? data.Port,
-                        DbName = string.IsNullOrWhiteSpace(dSl.DbName) ? data.DbName : dSl.DbName,
-                        DbUser = string.IsNullOrWhiteSpace(dSl.DbUser) ? data.DbUser : dSl.DbUser,
-                        DbPwd = string.IsNullOrWhiteSpace(dSl.DbPwd) ? data.DbPwd : dSl.DbPwd,
-                        CustomConnectionStr = data.CustomConnectionStr,
-                        HitRate = dSl.HitRate
-                    })
-                    .ToList()
-            };
-        });
+                MainDatabaseModel data = await db
+                    .Queryable<MainDatabaseModel>()
+                    .Includes(e => e.SlaveDatabaseList)
+                    .Where(wh => wh.TenantId == tenantId && wh.DatabaseType == databaseType)
+                    .SingleAsync();
+
+                if (data == null)
+                {
+                    string message = $"未能找到对应类型【{databaseType.ToString()}】所存在的 Database 信息！";
+                    _logger.LogError($"TenantId：{tenantId}；TenantNo：{tenantNo}；{message}");
+                    throw new UserFriendlyException(message);
+                }
+
+                return new ConnectionSettingsOptions
+                {
+                    ConnectionId = data.MainId.ToString(),
+                    DbType = data.DbType.ToDbType(),
+                    ServiceIp = _hostEnvironment.IsDevelopment()
+                        // 开发环境使用公网地址
+                        ? data.PublicIp
+                        // 生产环境使用内网地址
+                        : data.IntranetIp,
+                    Port = data.Port,
+                    DbName = data.DbName,
+                    DbUser = data.DbUser,
+                    DbPwd = data.DbPwd,
+                    CustomConnectionStr = data.CustomConnectionStr,
+                    CommandTimeOut = data.CommandTimeOut,
+                    SugarSqlExecMaxSeconds = data.SugarSqlExecMaxSeconds,
+                    DiffLog = data.DiffLog,
+                    DisableAop = data.DisableAop,
+                    SlaveConnectionList = data
+                        .SlaveDatabaseList.Select(dSl => new SlaveConnectionInfo
+                        {
+                            ServiceIp = _hostEnvironment.IsDevelopment()
+                                // 开发环境使用公网地址
+                                ? string.IsNullOrWhiteSpace(dSl.PublicIp) ? data.PublicIp : dSl.PublicIp
+                                // 生产环境使用内网地址
+                                :
+                                string.IsNullOrWhiteSpace(dSl.IntranetIp) ? data.IntranetIp : dSl.IntranetIp,
+                            Port = dSl.Port ?? data.Port,
+                            DbName = string.IsNullOrWhiteSpace(dSl.DbName) ? data.DbName : dSl.DbName,
+                            DbUser = string.IsNullOrWhiteSpace(dSl.DbUser) ? data.DbUser : dSl.DbUser,
+                            DbPwd = string.IsNullOrWhiteSpace(dSl.DbPwd) ? data.DbPwd : dSl.DbPwd,
+                            CustomConnectionStr = data.CustomConnectionStr,
+                            HitRate = dSl.HitRate
+                        })
+                        .ToList()
+                };
+            });
 
         if (httpContext != null)
         {
@@ -150,7 +141,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
             throw new UserFriendlyException("租户编号不能为空！");
         }
 
-        var httpContext = FastContext.HttpContext;
+        HttpContext httpContext = FastContext.HttpContext;
         if (httpContext != null)
         {
             // 删除 HttpContext.Items 中的
@@ -163,7 +154,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
         }
 
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Database, tenantNo, databaseType.ToString());
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Database, tenantNo, databaseType.ToString());
 
         await _centerCache.DelAsync(cacheKey);
     }
@@ -176,7 +167,7 @@ public class SqlSugarEntityService : ISqlSugarEntityService, ISingletonDependenc
             throw new UserFriendlyException("租户编号不能为空！");
         }
 
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Database, tenantNo, "*");
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Center.Database, tenantNo, "*");
         await _centerCache.DelByPatternAsync(cacheKey);
     }
 }

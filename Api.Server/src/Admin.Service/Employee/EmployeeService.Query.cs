@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using Fast.Admin.Domain;
 using Fast.Admin.Service.Employee.Dto;
@@ -37,8 +22,8 @@ public partial class EmployeeService
     [ApiInfo("职员选择器", HttpRequestActionEnum.Query)]
     public async Task<PagedResult<ElSelectorOutput<long>>> EmployeeSelector(PagedInput input)
     {
-        var data = await _repository.Entities
-            .LeftJoin<EmployeeOrgModel>((t1, t2) => t1.EmployeeId == t2.EmployeeId && t2.IsPrimary)
+        PagedResult<QueryEmployeeSelectorDto> data = await _repository
+            .Entities.LeftJoin<EmployeeOrgModel>((t1, t2) => t1.EmployeeId == t2.EmployeeId && t2.IsPrimary)
             .WhereIF(!string.IsNullOrWhiteSpace(input.SearchValue),
                 t1 => t1.EmployeeNo.Contains(input.SearchValue)
                       || t1.EmployeeName.Contains(input.SearchValue)
@@ -71,8 +56,8 @@ public partial class EmployeeService
     [Permission(PermissionConst.Employee.Paged)]
     public async Task<PagedResult<QueryEmployeePagedOutput>> QueryEmployeePaged(QueryEmployeePagedInput input)
     {
-        var result = await _repository.Entities
-            .LeftJoin<EmployeeOrgModel>((t1, t2) => t1.EmployeeId == t2.EmployeeId && t2.IsPrimary)
+        PagedResult<QueryEmployeePagedOutput> result = await _repository
+            .Entities.LeftJoin<EmployeeOrgModel>((t1, t2) => t1.EmployeeId == t2.EmployeeId && t2.IsPrimary)
             .WhereIF(input.Status != null, t1 => t1.Status == input.Status)
             .WhereIF(input.Sex != null, t1 => t1.Sex == input.Sex)
             .WhereIF(input.DepartmentId != null, (t1, t2) => t2.DepartmentId == input.DepartmentId)
@@ -110,10 +95,12 @@ public partial class EmployeeService
             .DataScope(e => e.DepartmentId, e => e.EmployeeId, allowPublicData: false)
             .ToPagedListAsync(input);
 
-        var employeeIds = result.Rows.Select(sl => sl.EmployeeId)
+        var employeeIds = result
+            .Rows.Select(sl => sl.EmployeeId)
             .ToList();
 
-        var userList = await _centerRepository.Queryable<TenantUserModel>()
+        var userList = await _centerRepository
+            .Queryable<TenantUserModel>()
             .LeftJoin<AccountModel>((t1, t2) => t1.AccountId == t2.AccountId)
             .Where(t1 => employeeIds.Contains(t1.EmployeeId))
             .Select((t1, t2) => new
@@ -127,11 +114,12 @@ public partial class EmployeeService
             })
             .ToListAsync();
 
-        var roleList = await _repository.Queryable<EmployeeRoleModel>()
+        List<EmployeeRoleModel> roleList = await _repository
+            .Queryable<EmployeeRoleModel>()
             .Where(wh => employeeIds.Contains(wh.EmployeeId))
             .ToListAsync();
 
-        foreach (var item in result.Rows)
+        foreach (QueryEmployeePagedOutput item in result.Rows)
         {
             var userInfo = userList.SingleOrDefault(s => s.EmployeeId == item.EmployeeId);
             if (userInfo != null)
@@ -143,10 +131,12 @@ public partial class EmployeeService
                 item.LastLoginTime = userInfo.LastLoginTime;
             }
 
-            item.RoleNames = string.Join(",", roleList.Where(wh => wh.EmployeeId == item.EmployeeId)
-                .OrderBy(ob => ob.RoleName)
-                .Select(sl => sl.RoleName)
-                .ToList());
+            item.RoleNames = string.Join(",",
+                roleList
+                    .Where(wh => wh.EmployeeId == item.EmployeeId)
+                    .OrderBy(ob => ob.RoleName)
+                    .Select(sl => sl.RoleName)
+                    .ToList());
         }
 
         return result;
@@ -162,7 +152,8 @@ public partial class EmployeeService
     {
         await GetEmployeeWithinDataScope(employeeId!.Value);
 
-        var result = await _repository.Entities.Where(wh => wh.EmployeeId == employeeId)
+        QueryEmployeeDetailOutput result = await _repository
+            .Entities.Where(wh => wh.EmployeeId == employeeId)
             .Select(sl => new QueryEmployeeDetailOutput
             {
                 EmployeeId = sl.EmployeeId,
@@ -190,11 +181,13 @@ public partial class EmployeeService
             throw new UserFriendlyException("数据不存在或无权操作！");
         }
 
-        result.OrgList = await _repository.Queryable<EmployeeOrgModel>()
+        result.OrgList = await _repository
+            .Queryable<EmployeeOrgModel>()
             .Where(wh => wh.EmployeeId == employeeId)
             .ToListAsync();
 
-        result.RoleList = await _repository.Queryable<EmployeeRoleModel>()
+        result.RoleList = await _repository
+            .Queryable<EmployeeRoleModel>()
             .Where(wh => wh.EmployeeId == employeeId)
             .ToListAsync();
 

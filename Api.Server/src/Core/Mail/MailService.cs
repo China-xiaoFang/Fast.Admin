@@ -1,32 +1,19 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Net;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using CSRedis;
 using Fast.Center.Domain;
 using Fast.SqlSugar;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using MimeKit;
 using SqlSugar;
@@ -60,7 +47,8 @@ public class MailService : IMailService, ISingletonDependency
     /// <inheritdoc />
     public async Task<string> GetEmailTemplate(string title, string msg, string type = null, string displayName = null)
     {
-        var (accentColor, badgeBackgroundColor, badgeText) = type?.Trim()
+        (string accentColor, string badgeBackgroundColor, string badgeText) = type
+                ?.Trim()
                 .ToLowerInvariant() switch
             {
                 "warn" => ("#d97706", "#fff7ed", "重要提醒"),
@@ -72,9 +60,9 @@ public class MailService : IMailService, ISingletonDependency
         if (string.IsNullOrWhiteSpace(displayName))
             displayName = "FastDotnet";
 
-        var encodedTitle = WebUtility.HtmlEncode(title);
-        var encodedDisplayName = WebUtility.HtmlEncode(displayName);
-        var sendTime = DateTime.Now;
+        string encodedTitle = WebUtility.HtmlEncode(title);
+        string encodedDisplayName = WebUtility.HtmlEncode(displayName);
+        DateTime sendTime = DateTime.Now;
 
         return $$"""
                  <!doctype html>
@@ -223,9 +211,12 @@ public class MailService : IMailService, ISingletonDependency
     /// <inheritdoc />
     public async Task<int> GetVerificationCodeRetryAfterSeconds(MailTypeEnum mailType, string email)
     {
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Mail, mailType.ToString(), email.Trim()
-            .ToLowerInvariant());
-        return (int) Math.Max(0, await _cache.Client.TtlAsync($"{cacheKey}:SendCooldown"));
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Mail,
+            mailType.ToString(),
+            email
+                .Trim()
+                .ToLowerInvariant());
+        return (int)Math.Max(0, await _cache.Client.TtlAsync($"{cacheKey}:SendCooldown"));
     }
 
     /// <inheritdoc />
@@ -236,52 +227,54 @@ public class MailService : IMailService, ISingletonDependency
             throw new UserFriendlyException("邮箱地址不正确！");
         }
 
-        email = email.Trim()
+        email = email
+            .Trim()
             .ToLowerInvariant();
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Mail, mailType.ToString(), email);
-        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Mail, mailType.ToString(), email);
+        using CSRedisClientLock codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 120);
         if (codeLock == null)
         {
             // 仅抢锁失败时读取锁剩余时间，毫秒向上取整，避免不足1秒被显示为0。
-            var lockMilliseconds = await _cache.Client.PTtlAsync($"CSRedisClientLock:{cacheKey}:Lock");
-            var lockSeconds = (int) Math.Ceiling(lockMilliseconds / 1000d);
+            long lockMilliseconds = await _cache.Client.PTtlAsync($"CSRedisClientLock:{cacheKey}:Lock");
+            int lockSeconds = (int)Math.Ceiling(lockMilliseconds / 1000d);
             throw new UserFriendlyException(lockSeconds > 0
                 ? $"操作过于频繁，请在 {TimeSpan.FromSeconds(lockSeconds).ToDescription()} 后重试！"
                 : "操作过于频繁，请稍后重试！");
         }
 
-        var retryAfterSeconds = await GetVerificationCodeRetryAfterSeconds(mailType, email);
+        int retryAfterSeconds = await GetVerificationCodeRetryAfterSeconds(mailType, email);
         if (retryAfterSeconds > 0)
             throw new UserFriendlyException($"操作过于频繁，请在 {TimeSpan.FromSeconds(retryAfterSeconds).ToDescription()} 后重试！");
 
         // 发送前占用冷却，失败时保留重试限制，成功后重新计时。
         await _cache.Client.SetAsync($"{cacheKey}:SendCooldown", "1", 60);
-        var dto = await _cache.GetAsync<VerificationCodeCacheDto>(cacheKey);
+        VerificationCodeCacheDto dto = await _cache.GetAsync<VerificationCodeCacheDto>(cacheKey);
 
         // 生成验证码
         dto ??= new VerificationCodeCacheDto();
-        dto.VerificationCode = RandomNumberGenerator.GetInt32(1000000)
+        dto.VerificationCode = RandomNumberGenerator
+            .GetInt32(1000000)
             .ToString("D6");
         dto.ClientIdentity = GlobalContext.ClientIdentity;
         dto.SendTime = DateTime.Now;
         dto.ErrorCount = 0;
 
-        var mailTypeDescription = mailType.GetDescription();
-        var title = $"【{mailTypeDescription}】邮箱验证码";
-        var content = $$"""
-                        <p>您好：</p>
-                        <p>您正在进行<strong>{{mailTypeDescription}}</strong>操作，请使用以下验证码完成身份校验。</p>
-                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin: 24px 0;">
-                          <tr>
-                            <td align="center" style="padding: 22px 16px; border: 1px solid #bfdbfe; border-radius: 10px; color: #1d4ed8; background-color: #eff6ff; font-size: 32px; font-weight: 700; letter-spacing: 10px; line-height: 1;">
-                              {{WebUtility.HtmlEncode(dto.VerificationCode)}}
-                            </td>
-                          </tr>
-                        </table>
-                        <p style="color: #64748b;">验证码 5 分钟内有效，请勿向任何人泄露。如非本人操作，请忽略此邮件。</p>
-                        """;
+        string mailTypeDescription = mailType.GetDescription();
+        string title = $"【{mailTypeDescription}】邮箱验证码";
+        string content = $$"""
+                           <p>您好：</p>
+                           <p>您正在进行<strong>{{mailTypeDescription}}</strong>操作，请使用以下验证码完成身份校验。</p>
+                           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin: 24px 0;">
+                             <tr>
+                               <td align="center" style="padding: 22px 16px; border: 1px solid #bfdbfe; border-radius: 10px; color: #1d4ed8; background-color: #eff6ff; font-size: 32px; font-weight: 700; letter-spacing: 10px; line-height: 1;">
+                                 {{WebUtility.HtmlEncode(dto.VerificationCode)}}
+                               </td>
+                             </tr>
+                           </table>
+                           <p style="color: #64748b;">验证码 5 分钟内有效，请勿向任何人泄露。如非本人操作，请忽略此邮件。</p>
+                           """;
 
         await SendEmail(title, await GetEmailTemplate(title, content), [email]);
         await _cache.SetAsync(cacheKey, dto, TimeSpan.FromMinutes(5));
@@ -298,18 +291,19 @@ public class MailService : IMailService, ISingletonDependency
             throw new UserFriendlyException("邮箱地址不正确！");
         }
 
-        email = email.Trim()
+        email = email
+            .Trim()
             .ToLowerInvariant();
 
         // 获取缓存Key
-        var cacheKey = CacheConst.GetCacheKey(CacheConst.Mail, mailType.ToString(), email);
-        using var codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 30);
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.Mail, mailType.ToString(), email);
+        using CSRedisClientLock codeLock = _cache.Client.TryLock($"{cacheKey}:Lock", 30);
         if (codeLock == null)
         {
             throw new UserFriendlyException("操作过于频繁，请稍后重试！");
         }
 
-        var dto = await _cache.GetAsync<VerificationCodeCacheDto>(cacheKey);
+        VerificationCodeCacheDto dto = await _cache.GetAsync<VerificationCodeCacheDto>(cacheKey);
         if (dto is not {ErrorCount: < 5}
             || dto.ClientIdentity != GlobalContext.ClientIdentity
             || dto.SendTime.AddMinutes(5) <= DateTime.Now)
@@ -338,29 +332,41 @@ public class MailService : IMailService, ISingletonDependency
     }
 
     /// <inheritdoc />
-    public async Task SendEmail(string title, string content, List<string> receiveEmails = null, string smtp = null,
-        int? port = null, string email = null, string authCode = null, string displayName = null)
+    public async Task SendEmail(string title,
+        string content,
+        List<string> receiveEmails = null,
+        string smtp = null,
+        int? port = null,
+        string email = null,
+        string authCode = null,
+        string displayName = null)
     {
         await SendEmail(title, new BodyBuilder {HtmlBody = content}, receiveEmails, smtp, port, email, authCode, displayName);
     }
 
     /// <inheritdoc />
-    public async Task SendEmail(string title, BodyBuilder content, List<string> receiveEmails = null, string smtp = null,
-        int? port = null, string email = null, string authCode = null, string displayName = null)
+    public async Task SendEmail(string title,
+        BodyBuilder content,
+        List<string> receiveEmails = null,
+        string smtp = null,
+        int? port = null,
+        string email = null,
+        string authCode = null,
+        string displayName = null)
     {
         ArgumentNullException.ThrowIfNull(content);
 
         if (receiveEmails == null)
         {
-            var mailReceiveEmails = await ConfigContext.GetConfig(ConfigConst.MailReceiveEmails);
+            string mailReceiveEmails = await ConfigContext.GetConfig(ConfigConst.MailReceiveEmails);
             receiveEmails = mailReceiveEmails.ToObject<List<string>>();
         }
 
         if (receiveEmails is not {Count: > 0})
             return;
 
-        var sendTime = DateTime.Now;
-        var isSuccess = false;
+        DateTime sendTime = DateTime.Now;
+        bool isSuccess = false;
         try
         {
             smtp ??= await ConfigContext.GetConfig(ConfigConst.MailSmtp);
@@ -373,8 +379,8 @@ public class MailService : IMailService, ISingletonDependency
 
             if (port is null or <= 0)
             {
-                var portValue = await ConfigContext.GetConfig(ConfigConst.MailPort);
-                if (!int.TryParse(portValue, out var _port) || _port <= 0)
+                string portValue = await ConfigContext.GetConfig(ConfigConst.MailPort);
+                if (!int.TryParse(portValue, out int _port) || _port <= 0)
                     throw new ArgumentException("发件服务器端口不正确！");
                 port = _port;
             }
@@ -395,7 +401,7 @@ public class MailService : IMailService, ISingletonDependency
             message.From.Add(new MailboxAddress(displayName, email));
 
             // 收件人
-            foreach (var receiveEmail in receiveEmails)
+            foreach (string receiveEmail in receiveEmails)
                 message.To.Add(new MailboxAddress(null, receiveEmail));
 
             // 标题
@@ -441,7 +447,8 @@ public class MailService : IMailService, ISingletonDependency
             {
                 // 独立客户端不加载 AOP，避免记录写入再次触发 SQL 审计
                 using var db = new SqlSugarClient(SqlSugarContext.GetConnectionConfig(SqlSugarContext.ConnectionSettings));
-                var messageSendRecordList = receiveEmails.Select(receiver => new MessageSendRecordModel
+                var messageSendRecordList = receiveEmails
+                    .Select(receiver => new MessageSendRecordModel
                     {
                         Channel = MessageSendChannelEnum.Email,
                         Receiver = receiver,
@@ -451,13 +458,14 @@ public class MailService : IMailService, ISingletonDependency
                         CreatedTime = sendTime
                     })
                     .ToList();
-                var httpContext = FastContext.HttpContext;
-                foreach (var item in messageSendRecordList)
+                HttpContext httpContext = FastContext.HttpContext;
+                foreach (MessageSendRecordModel item in messageSendRecordList)
                 {
                     item.RecordCreate(httpContext);
                 }
 
-                await db.Insertable(messageSendRecordList)
+                await db
+                    .Insertable(messageSendRecordList)
                     .ExecuteCommandAsync();
             }
             catch (Exception ex)

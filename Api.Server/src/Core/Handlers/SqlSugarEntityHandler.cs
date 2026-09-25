@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using Fast.CenterLog.Domain;
 using Fast.SqlSugar;
@@ -56,8 +41,10 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     /// <summary>
     /// 初始化 SqlSugar 实体处理器
     /// </summary>
-    public SqlSugarEntityHandler(IUser user, ISqlSugarEntityService sqlSugarEntityService,
-        IHttpContextAccessor httpContextAccessor, SqlSugarLogChannel sqlSugarLogChannel)
+    public SqlSugarEntityHandler(IUser user,
+        ISqlSugarEntityService sqlSugarEntityService,
+        IHttpContextAccessor httpContextAccessor,
+        SqlSugarLogChannel sqlSugarLogChannel)
     {
         _user = user;
         _sqlSugarEntityService = sqlSugarEntityService;
@@ -67,13 +54,14 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
 
     /// <inheritdoc />
     public async Task<ConnectionSettingsOptions> GetConnectionSettings<TEntity>(ISqlSugarClient sqlSugarClient,
-        SugarDbTypeAttribute sugarDbType, Type entityType)
+        SugarDbTypeAttribute sugarDbType,
+        Type entityType)
     {
-        var databaseTypeStr = sugarDbType.Type?.ToString();
+        string databaseTypeStr = sugarDbType.Type?.ToString();
         if (string.IsNullOrWhiteSpace(databaseTypeStr))
             return null;
 
-        var databaseType = Enum.Parse<DatabaseTypeEnum>(databaseTypeStr, true);
+        DatabaseTypeEnum databaseType = Enum.Parse<DatabaseTypeEnum>(databaseTypeStr, true);
 
         switch (databaseType)
         {
@@ -83,7 +71,8 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
             case DatabaseTypeEnum.Gateway:
             case DatabaseTypeEnum.Deploy:
                 return await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-                    CommonConst.Default.TenantNo, databaseType);
+                    CommonConst.Default.TenantNo,
+                    databaseType);
             case DatabaseTypeEnum.Admin:
             case DatabaseTypeEnum.AdminLog:
                 return await _sqlSugarEntityService.GetConnectionSetting(_user.TenantId, _user.TenantNo, databaseType);
@@ -96,9 +85,11 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     public async Task ExecuteAsync(string rawSql, SugarParameter[] parameters, TimeSpan executeTime, string handlerSql)
     {
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-            CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+        ConnectionSettingsOptions connectionSetting =
+            await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
+                CommonConst.Default.TenantNo,
+                DatabaseTypeEnum.CenterLog);
+        ConnectionConfig connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
         // 组装数据
         var sqlExecutionLogModel = new SqlExecutionLogModel
@@ -124,13 +115,21 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     }
 
     /// <inheritdoc />
-    public async Task ExecuteTimeoutAsync(string fileName, int fileLine, string methodName, string rawSql,
-        SugarParameter[] parameters, TimeSpan executeTime, string handlerSql, string message)
+    public async Task ExecuteTimeoutAsync(string fileName,
+        int fileLine,
+        string methodName,
+        string rawSql,
+        SugarParameter[] parameters,
+        TimeSpan executeTime,
+        string handlerSql,
+        string message)
     {
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-            CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+        ConnectionSettingsOptions connectionSetting =
+            await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
+                CommonConst.Default.TenantNo,
+                DatabaseTypeEnum.CenterLog);
+        ConnectionConfig connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
         // 组装数据
         var sqlTimeoutLogModel = new SqlTimeoutLogModel
@@ -159,16 +158,25 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     }
 
     /// <inheritdoc />
-    public async Task ExecuteDiffLogAsync(DiffType diffType, string tableName, string tableDescription, object businessData,
-        List<List<DiffLogColumnInfo>> beforeColumnList, List<List<DiffLogColumnInfo>> afterColumnList, string rawSql,
-        SugarParameter[] parameters, TimeSpan? executeTime, string handlerSql)
+    public async Task ExecuteDiffLogAsync(DiffType diffType,
+        string tableName,
+        string tableDescription,
+        object businessData,
+        List<List<DiffLogColumnInfo>> beforeColumnList,
+        List<List<DiffLogColumnInfo>> afterColumnList,
+        string rawSql,
+        SugarParameter[] parameters,
+        TimeSpan? executeTime,
+        string handlerSql)
     {
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-            CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+        ConnectionSettingsOptions connectionSetting =
+            await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
+                CommonConst.Default.TenantNo,
+                DatabaseTypeEnum.CenterLog);
+        ConnectionConfig connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
-        var diffLogType = diffType switch
+        DiffLogTypeEnum diffLogType = diffType switch
         {
             DiffType.insert => DiffLogTypeEnum.Insert,
             DiffType.update => DiffLogTypeEnum.Update,
@@ -205,13 +213,20 @@ public class SqlSugarEntityHandler : ISqlSugarEntityHandler
     }
 
     /// <inheritdoc />
-    public async Task ExecuteErrorAsync(string fileName, int fileLine, string methodName, string rawSql,
-        SugarParameter[] parameters, string handlerSql, SqlSugarException exception)
+    public async Task ExecuteErrorAsync(string fileName,
+        int fileLine,
+        string methodName,
+        string rawSql,
+        SugarParameter[] parameters,
+        string handlerSql,
+        SqlSugarException exception)
     {
         // 获取 CenterLog 库的连接字符串配置
-        var connectionSetting = await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
-            CommonConst.Default.TenantNo, DatabaseTypeEnum.CenterLog);
-        var connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
+        ConnectionSettingsOptions connectionSetting =
+            await _sqlSugarEntityService.GetConnectionSetting(CommonConst.Default.TenantId,
+                CommonConst.Default.TenantNo,
+                DatabaseTypeEnum.CenterLog);
+        ConnectionConfig connectionConfig = SqlSugarContext.GetConnectionConfig(connectionSetting);
 
         // 组装数据
         var sqlExceptionLogModel = new SqlExceptionLogModel

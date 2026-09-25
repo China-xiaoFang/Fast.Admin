@@ -1,29 +1,15 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Text;
 using Fast.UnifyResult;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 
 namespace Fast.Core;
 
@@ -57,7 +43,7 @@ public class RequestMiddleware
     /// </summary>
     public async Task InvokeAsync(HttpContext httpContext)
     {
-        var httpRequest = httpContext.Request;
+        HttpRequest httpRequest = httpContext.Request;
 
         // 排除 WebSocket
         if (httpContext.WebSockets.IsWebSocketRequest)
@@ -76,14 +62,14 @@ public class RequestMiddleware
             return;
         }
 
-        var isReadBody = !(httpRequest.Method == HttpMethod.Get.Method || httpRequest.Method == HttpMethod.Delete.Method);
+        bool isReadBody = !(httpRequest.Method == HttpMethod.Get.Method || httpRequest.Method == HttpMethod.Delete.Method);
 
         // Url请求参数
         IDictionary<string, string> queryParamDic = null;
         // Body请求参数
-        var bodyParam = "";
+        string bodyParam = "";
         // 解密数据
-        var decryptedData = "";
+        string decryptedData = "";
 
         if (!isReadBody)
         {
@@ -101,10 +87,10 @@ public class RequestMiddleware
 
         // 请求加密只用于兼容客户端的数据封装，密钥可由请求时间戳推导，不能替代 HTTPS、身份认证和防重放校验
         // 登录密码等敏感字段在生产环境仍必须通过 HTTPS 传输；此开关开启时仅在 HTTPS 之上增加一层协议加密
-        var requestEncipher = false;
+        bool requestEncipher = false;
 
         // 判断是否存在加密头部标识
-        if (httpRequest.Headers.TryGetValue($"{nameof(Fast)}-request-Encipher", out var requestEncipherStr))
+        if (httpRequest.Headers.TryGetValue($"{nameof(Fast)}-request-Encipher", out StringValues requestEncipherStr))
         {
             bool.TryParse(requestEncipherStr, out requestEncipher);
         }
@@ -116,11 +102,12 @@ public class RequestMiddleware
                 if (!isReadBody && queryParamDic?.Count > 0)
                 {
                     // 解密数据
-                    decryptedData = CryptoUtil.AESDecrypt(queryParamDic["data"], queryParamDic["timestamp"],
+                    decryptedData = CryptoUtil.AESDecrypt(queryParamDic["data"],
+                        queryParamDic["timestamp"],
                         $"FIV{queryParamDic["timestamp"]}");
 
                     // 反序列化成键值对
-                    var model = decryptedData.ToObject<Dictionary<string, string>>();
+                    Dictionary<string, string> model = decryptedData.ToObject<Dictionary<string, string>>();
 
                     // 替换 QueryString
                     httpRequest.QueryString = QueryString.Create(model);
@@ -128,10 +115,11 @@ public class RequestMiddleware
                 else if (isReadBody && !string.IsNullOrWhiteSpace(bodyParam))
                 {
                     // 解析Json，取出 data 和 timestamp 字段
-                    var encryptedData = bodyParam.ToObject<RestfulResult<string>>();
+                    RestfulResult<string> encryptedData = bodyParam.ToObject<RestfulResult<string>>();
 
                     // 解密数据
-                    decryptedData = CryptoUtil.AESDecrypt(encryptedData.Data, encryptedData.Timestamp.ToString(),
+                    decryptedData = CryptoUtil.AESDecrypt(encryptedData.Data,
+                        encryptedData.Timestamp.ToString(),
                         $"FIV{encryptedData.Timestamp}");
 
                     // 写入 Body

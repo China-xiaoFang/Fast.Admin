@@ -73,13 +73,13 @@
 					"request": "none"
 				},
 				"minSdkVersion": 24,
-				"targetSdkVersion": 36,
-				"abiFilters": ["armeabi-v7a", "arm64-v8a"]
+				"targetSdkVersion": 24,
+				"abiFilters": ["armeabi-v7a", "arm64-v8a", "x86"]
 			},
 			"ios": {
 				"dSYMs": false,
 				"idfa": false,
-				"UIBackgroundModes": ["audio"],
+				"UIBackgroundModes": ["audio", "location"],
 				"privacyDescription": {
 					"NSCameraUsageDescription": "用于拍照和扫描二维码。",
 					"NSPhotoLibraryUsageDescription": "用于选择并上传图片。",
@@ -156,7 +156,7 @@
 			}
 		},
 		"requiredPrivateInfos": ["getLocation", "chooseLocation"],
-		"requiredBackgroundModes": ["audio"],
+		"requiredBackgroundModes": ["audio", "location"],
 		"optimization": {
 			"subPackages": true
 		}

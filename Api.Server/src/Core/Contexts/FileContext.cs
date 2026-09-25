@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Security.Cryptography;
 using System.Text;
@@ -103,9 +88,10 @@ public class FileContext
             throw new UserFriendlyException("文件存储路径不能为空！");
 
         rootPath = Path.GetFullPath(rootPath);
-        var localPath = filePath.Replace('\\', Path.DirectorySeparatorChar)
+        string localPath = filePath
+            .Replace('\\', Path.DirectorySeparatorChar)
             .Replace('/', Path.DirectorySeparatorChar);
-        var fullPath = string.IsNullOrEmpty(fileName)
+        string fullPath = string.IsNullOrEmpty(fileName)
             ? Path.GetFullPath(Path.Combine(rootPath, localPath))
             : Path.GetFullPath(Path.Combine(rootPath, localPath, fileName));
 
@@ -134,27 +120,27 @@ public class FileContext
         lifetimeMinutes = Math.Clamp(lifetimeMinutes, 15L, 120L);
 
         // 提取文件路径，仅支持完整的地址
-        if (!Uri.TryCreate(fileUrl, UriKind.Absolute, out var uri))
+        if (!Uri.TryCreate(fileUrl, UriKind.Absolute, out Uri uri))
         {
             throw new UserFriendlyException("文件地址格式不正确！");
         }
 
         // 获取文件Id
-        var fileName = Path.GetFileNameWithoutExtension(uri.AbsolutePath.TrimEnd('/'));
-        if (!long.TryParse(fileName, out var fileId))
+        string fileName = Path.GetFileNameWithoutExtension(uri.AbsolutePath.TrimEnd('/'));
+        if (!long.TryParse(fileName, out long fileId))
         {
             throw new UserFriendlyException("文件地址不受支持！");
         }
 
-        var repository = FastContext.GetService<ISqlSugarRepository<FileModel>>();
-        var fileExists = await repository.Entities.AnyAsync(wh =>
+        ISqlSugarRepository<FileModel> repository = FastContext.GetService<ISqlSugarRepository<FileModel>>();
+        bool fileExists = await repository.Entities.AnyAsync(wh =>
             wh.FileId == fileId && (wh.FileMimeType.StartsWith("audio/") || wh.FileMimeType.StartsWith("video/")));
         if (!fileExists)
         {
             throw new UserFriendlyException("文件不存在或存储地址不受支持！");
         }
 
-        var _user = FastContext.GetService<IUser>();
+        IUser _user = FastContext.GetService<IUser>();
         var payload = new MediaAssetTokenPayload
         {
             FileId = fileId,
@@ -163,10 +149,11 @@ public class FileContext
             DeviceType = _user.DeviceType,
             EmployeeNo = _user.EmployeeNo,
             SessionId = _user.SessionId,
-            ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(lifetimeMinutes)
+            ExpiresAt = DateTimeOffset
+                .UtcNow.AddMinutes(lifetimeMinutes)
                 .ToUnixTimeSeconds()
         };
-        var token = EncryptMediaAssetToken(payload);
+        string token = EncryptMediaAssetToken(payload);
 
         return $"{uri.GetLeftPart(UriPartial.Authority)}/file/media/{token}";
     }
@@ -187,18 +174,18 @@ public class FileContext
 
         try
         {
-            var tokenBytes = WebEncoders.Base64UrlDecode(token);
+            byte[] tokenBytes = WebEncoders.Base64UrlDecode(token);
             if (tokenBytes.Length < MediaAssetTokenNonceLength + MediaAssetTokenTagLength)
             {
                 return false;
             }
 
-            var ciphertextLength = tokenBytes.Length - MediaAssetTokenNonceLength - MediaAssetTokenTagLength;
-            var nonce = tokenBytes.AsSpan(0, MediaAssetTokenNonceLength);
-            var ciphertext = tokenBytes.AsSpan(MediaAssetTokenNonceLength, ciphertextLength);
-            var tag = tokenBytes.AsSpan(tokenBytes.Length - MediaAssetTokenTagLength, MediaAssetTokenTagLength);
-            var plaintext = new byte[ciphertextLength];
-            var encryptionKey = GetMediaAssetEncryptionKey();
+            int ciphertextLength = tokenBytes.Length - MediaAssetTokenNonceLength - MediaAssetTokenTagLength;
+            Span<byte> nonce = tokenBytes.AsSpan(0, MediaAssetTokenNonceLength);
+            Span<byte> ciphertext = tokenBytes.AsSpan(MediaAssetTokenNonceLength, ciphertextLength);
+            Span<byte> tag = tokenBytes.AsSpan(tokenBytes.Length - MediaAssetTokenTagLength, MediaAssetTokenTagLength);
+            byte[] plaintext = new byte[ciphertextLength];
+            byte[] encryptionKey = GetMediaAssetEncryptionKey();
             try
             {
                 using var aesGcm = new AesGcm(encryptionKey, MediaAssetTokenTagLength);
@@ -233,11 +220,11 @@ public class FileContext
     /// </summary>
     private static string EncryptMediaAssetToken(MediaAssetTokenPayload payload)
     {
-        var plaintext = SerializeMediaAssetTokenPayload(payload);
-        var encryptionKey = GetMediaAssetEncryptionKey();
-        var nonce = RandomNumberGenerator.GetBytes(MediaAssetTokenNonceLength);
-        var ciphertext = new byte[plaintext.Length];
-        var tag = new byte[MediaAssetTokenTagLength];
+        byte[] plaintext = SerializeMediaAssetTokenPayload(payload);
+        byte[] encryptionKey = GetMediaAssetEncryptionKey();
+        byte[] nonce = RandomNumberGenerator.GetBytes(MediaAssetTokenNonceLength);
+        byte[] ciphertext = new byte[plaintext.Length];
+        byte[] tag = new byte[MediaAssetTokenTagLength];
         try
         {
             using var aesGcm = new AesGcm(encryptionKey, MediaAssetTokenTagLength);
@@ -250,7 +237,7 @@ public class FileContext
         }
 
         // 格式：[12 字节随机 Nonce][密文][16 字节认证标签]
-        var tokenBytes = new byte[nonce.Length + ciphertext.Length + tag.Length];
+        byte[] tokenBytes = new byte[nonce.Length + ciphertext.Length + tag.Length];
         Buffer.BlockCopy(nonce, 0, tokenBytes, 0, nonce.Length);
         Buffer.BlockCopy(ciphertext, 0, tokenBytes, nonce.Length, ciphertext.Length);
         Buffer.BlockCopy(tag, 0, tokenBytes, nonce.Length + ciphertext.Length, tag.Length);
@@ -266,7 +253,7 @@ public class FileContext
         using var writer = new BinaryWriter(stream, Encoding.UTF8, true);
         writer.Write(payload.FileId);
         writer.Write(payload.ExpiresAt);
-        writer.Write((long) payload.DeviceType);
+        writer.Write((long)payload.DeviceType);
         writer.Write(payload.AppNo);
         writer.Write(payload.TenantNo);
         writer.Write(payload.EmployeeNo);
@@ -286,7 +273,7 @@ public class FileContext
         {
             FileId = reader.ReadInt64(),
             ExpiresAt = reader.ReadInt64(),
-            DeviceType = (AppEnvironmentEnum) reader.ReadInt64(),
+            DeviceType = (AppEnvironmentEnum)reader.ReadInt64(),
             AppNo = reader.ReadString(),
             TenantNo = reader.ReadString(),
             EmployeeNo = reader.ReadString(),
@@ -313,8 +300,8 @@ public class FileContext
     /// </summary>
     private static byte[] GetMediaAssetEncryptionKey()
     {
-        var configuration = FastContext.GetService<IConfiguration>();
-        var issuerSigningKey = configuration["JWTSettings:IssuerSigningKey"];
+        IConfiguration configuration = FastContext.GetService<IConfiguration>();
+        string issuerSigningKey = configuration["JWTSettings:IssuerSigningKey"];
         if (string.IsNullOrWhiteSpace(issuerSigningKey))
         {
             throw new InvalidOperationException("JWT签名密钥未配置，无法签发或验证媒体资源访问 Token。");

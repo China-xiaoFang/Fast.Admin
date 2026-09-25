@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using Fast.Center.Domain;
 using Fast.Center.Service.ApplicationOpenId.Dto;
@@ -54,14 +39,15 @@ public class ApplicationOpenIdService : IDynamicApplication
     public async Task<PagedResult<QueryApplicationOpenIdPagedOutput>> QueryApplicationOpenIdPaged(
         QueryApplicationOpenIdPagedInput input)
     {
-        var queryable = _repository.Entities.Includes(e => e.Application);
-        var tenantModel = await TenantContext.GetTenant(_user.TenantNo);
+        ISugarQueryable<ApplicationOpenIdModel> queryable = _repository.Entities.Includes(e => e.Application);
+        TenantModel tenantModel = await TenantContext.GetTenant(_user.TenantNo);
         if (!_user.IsSuperAdmin && tenantModel.TenantType != TenantTypeEnum.System)
         {
             queryable = queryable.Where(wh => wh.Application.TenantId == _user.TenantId);
         }
 
-        return await queryable.WhereIF(input.AppId != null, wh => wh.AppId == input.AppId)
+        return await queryable
+            .WhereIF(input.AppId != null, wh => wh.AppId == input.AppId)
             .WhereIF(input.AppType != null, wh => wh.AppType == input.AppType)
             .WhereIF(input.EnvironmentType != null, wh => wh.EnvironmentType == input.EnvironmentType)
             .OrderByIF(input.IsOrderBy, ob => ob.CreatedTime, OrderByType.Desc)
@@ -97,7 +83,8 @@ public class ApplicationOpenIdService : IDynamicApplication
     public async Task<QueryApplicationOpenIdDetailOutput> QueryApplicationOpenIdDetail(
         [Required(ErrorMessage = "记录Id不能为空")] long? recordId)
     {
-        var result = await _repository.Entities.Includes(e => e.Application)
+        QueryApplicationOpenIdDetailOutput result = await _repository
+            .Entities.Includes(e => e.Application)
             .Where(wh => wh.RecordId == recordId)
             .Select(sl => new QueryApplicationOpenIdDetailOutput
             {
@@ -133,7 +120,8 @@ public class ApplicationOpenIdService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        result.TemplateIdList = await _repository.Queryable<ApplicationTemplateIdModel>()
+        result.TemplateIdList = await _repository
+            .Queryable<ApplicationTemplateIdModel>()
             .Where(wh => wh.OpenId == result.OpenId)
             .Select(sl => new EditApplicationTemplateIdInput
             {
@@ -157,7 +145,8 @@ public class ApplicationOpenIdService : IDynamicApplication
             throw new UserFriendlyException("应用标识重复！");
         }
 
-        var applicationModel = await _repository.Queryable<ApplicationModel>()
+        ApplicationModel applicationModel = await _repository
+            .Queryable<ApplicationModel>()
             .InSingleAsync(input.AppId);
         if (applicationModel == null)
         {
@@ -184,10 +173,10 @@ public class ApplicationOpenIdService : IDynamicApplication
 
         if (!string.IsNullOrWhiteSpace(input.OpenSecret))
         {
-            var apiClient = WechatApiClientBuilder
+            WechatApiClient apiClient = WechatApiClientBuilder
                 .Create(new WechatApiClientOptions {AppId = input.OpenId, AppSecret = input.OpenSecret})
                 .Build();
-            var response = await apiClient.ExecuteCgibinStableTokenAsync(new CgibinStableTokenRequest());
+            CgibinStableTokenResponse response = await apiClient.ExecuteCgibinStableTokenAsync(new CgibinStableTokenRequest());
             if (!response.IsSuccessful())
             {
                 throw new UserFriendlyException(
@@ -200,10 +189,9 @@ public class ApplicationOpenIdService : IDynamicApplication
 
             if (input.AppType == AppEnvironmentEnum.WeChatServiceAccount)
             {
-                var ticketResponse = await apiClient.ExecuteCgibinTicketGetTicketAsync(new CgibinTicketGetTicketRequest
-                {
-                    AccessToken = response.AccessToken
-                });
+                CgibinTicketGetTicketResponse ticketResponse =
+                    await apiClient.ExecuteCgibinTicketGetTicketAsync(
+                        new CgibinTicketGetTicketRequest {AccessToken = response.AccessToken});
                 if (!ticketResponse.IsSuccessful())
                 {
                     throw new UserFriendlyException(
@@ -234,7 +222,8 @@ public class ApplicationOpenIdService : IDynamicApplication
             throw new UserFriendlyException("应用标识重复！");
         }
 
-        var templateIds = input.TemplateIdList.Select(sl => sl.TemplateId)
+        var templateIds = input
+            .TemplateIdList.Select(sl => sl.TemplateId)
             .Distinct()
             .ToList();
         if (templateIds.Count != input.TemplateIdList.Count)
@@ -242,7 +231,8 @@ public class ApplicationOpenIdService : IDynamicApplication
             throw new UserFriendlyException("模板Id重复！");
         }
 
-        var templateTypes = input.TemplateIdList.Select(sl => sl.TemplateType)
+        var templateTypes = input
+            .TemplateIdList.Select(sl => sl.TemplateType)
             .Distinct()
             .ToList();
         if (templateTypes.Count != input.TemplateIdList.Count)
@@ -250,26 +240,29 @@ public class ApplicationOpenIdService : IDynamicApplication
             throw new UserFriendlyException("模板类型重复！");
         }
 
-        if (await _repository.Queryable<ApplicationTemplateIdModel>()
+        if (await _repository
+                .Queryable<ApplicationTemplateIdModel>()
                 .AnyAsync(a => templateIds.Contains(a.TemplateId) && a.OpenId != input.OpenId))
         {
             throw new UserFriendlyException("模板Id重复！");
         }
 
-        var applicationModel = await _repository.Queryable<ApplicationModel>()
+        ApplicationModel applicationModel = await _repository
+            .Queryable<ApplicationModel>()
             .InSingleAsync(input.AppId);
         if (applicationModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
         }
 
-        var applicationOpenIdModel = await _repository.SingleOrDefaultAsync(input.RecordId);
+        ApplicationOpenIdModel applicationOpenIdModel = await _repository.SingleOrDefaultAsync(input.RecordId);
         if (applicationOpenIdModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
         }
 
-        var templateIdList = await _repository.Queryable<ApplicationTemplateIdModel>()
+        List<ApplicationTemplateIdModel> templateIdList = await _repository
+            .Queryable<ApplicationTemplateIdModel>()
             .Where(wh => wh.OpenId == input.OpenId)
             .ToListAsync();
 
@@ -291,10 +284,10 @@ public class ApplicationOpenIdService : IDynamicApplication
 
         if (!string.IsNullOrWhiteSpace(input.OpenSecret))
         {
-            var apiClient = WechatApiClientBuilder
+            WechatApiClient apiClient = WechatApiClientBuilder
                 .Create(new WechatApiClientOptions {AppId = input.OpenId, AppSecret = input.OpenSecret})
                 .Build();
-            var response = await apiClient.ExecuteCgibinStableTokenAsync(new CgibinStableTokenRequest());
+            CgibinStableTokenResponse response = await apiClient.ExecuteCgibinStableTokenAsync(new CgibinStableTokenRequest());
             if (!response.IsSuccessful())
             {
                 throw new UserFriendlyException(
@@ -307,10 +300,9 @@ public class ApplicationOpenIdService : IDynamicApplication
 
             if (input.AppType == AppEnvironmentEnum.WeChatServiceAccount)
             {
-                var ticketResponse = await apiClient.ExecuteCgibinTicketGetTicketAsync(new CgibinTicketGetTicketRequest
-                {
-                    AccessToken = response.AccessToken
-                });
+                CgibinTicketGetTicketResponse ticketResponse =
+                    await apiClient.ExecuteCgibinTicketGetTicketAsync(
+                        new CgibinTicketGetTicketRequest {AccessToken = response.AccessToken});
                 if (!ticketResponse.IsSuccessful())
                 {
                     throw new UserFriendlyException(
@@ -325,7 +317,7 @@ public class ApplicationOpenIdService : IDynamicApplication
 
         var addApplicationTemplateIdList = new List<ApplicationTemplateIdModel>();
         var updateApplicationTemplateIdList = new List<ApplicationTemplateIdModel>();
-        foreach (var item in input.TemplateIdList)
+        foreach (EditApplicationTemplateIdInput item in input.TemplateIdList)
         {
             ApplicationTemplateIdModel applicationTemplateIdModel;
             if (item.RecordId == null)
@@ -356,19 +348,24 @@ public class ApplicationOpenIdService : IDynamicApplication
         }
 
         // 删除的
-        var deleteApplicationTemplateIdList = templateIdList.Where(wh => input.TemplateIdList.All(a => a.RecordId != wh.RecordId))
+        var deleteApplicationTemplateIdList = templateIdList
+            .Where(wh => input.TemplateIdList.All(a => a.RecordId != wh.RecordId))
             .ToList();
 
         await _repository.Ado.UseTranAsync(async () =>
-        {
-            await _repository.UpdateAsync(applicationOpenIdModel);
-            await _repository.Deleteable(deleteApplicationTemplateIdList)
-                .ExecuteCommandAsync();
-            await _repository.Updateable(updateApplicationTemplateIdList)
-                .ExecuteCommandAsync();
-            await _repository.Insertable(addApplicationTemplateIdList)
-                .ExecuteCommandAsync();
-        }, ex => throw ex);
+            {
+                await _repository.UpdateAsync(applicationOpenIdModel);
+                await _repository
+                    .Deleteable(deleteApplicationTemplateIdList)
+                    .ExecuteCommandAsync();
+                await _repository
+                    .Updateable(updateApplicationTemplateIdList)
+                    .ExecuteCommandAsync();
+                await _repository
+                    .Insertable(addApplicationTemplateIdList)
+                    .ExecuteCommandAsync();
+            },
+            ex => throw ex);
 
         // 删除缓存
         await ApplicationContext.DeleteApplication(applicationOpenIdModel.OpenId);
@@ -382,7 +379,7 @@ public class ApplicationOpenIdService : IDynamicApplication
     [Permission(PermissionConst.AppOpenId.Delete)]
     public async Task DeleteApplicationOpenId(RecordIdInput input)
     {
-        var applicationOpenIdModel = await _repository.SingleOrDefaultAsync(input.RecordId);
+        ApplicationOpenIdModel applicationOpenIdModel = await _repository.SingleOrDefaultAsync(input.RecordId);
         if (applicationOpenIdModel == null)
         {
             throw new UserFriendlyException("数据不存在！");

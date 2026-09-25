@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using System.Net;
 using Fast.Center.Domain;
@@ -52,7 +37,9 @@ public class ApplicationLifecycleHostedService : IHostedLifecycleService
     /// <summary>
     /// 应用程序生命周期托管服务
     /// </summary>
-    public ApplicationLifecycleHostedService(IMailService mailService, IHostEnvironment hostEnvironment, IServer server,
+    public ApplicationLifecycleHostedService(IMailService mailService,
+        IHostEnvironment hostEnvironment,
+        IServer server,
         ILogger<ApplicationLifecycleHostedService> logger)
     {
         _mailService = mailService;
@@ -78,19 +65,20 @@ public class ApplicationLifecycleHostedService : IHostedLifecycleService
     {
         _started = true;
 
-        var addresses = _server.Features.Get<IServerAddressesFeature>()
+        ICollection<string> addresses = _server.Features.Get<IServerAddressesFeature>()
             ?.Addresses;
-        var address = addresses is {Count: > 0}
-            ? string.Join("，", addresses.Select(item =>
-            {
-                if (item.Contains("://[::]", StringComparison.OrdinalIgnoreCase))
-                    return item.Replace("://[::]", "://127.0.0.1", StringComparison.OrdinalIgnoreCase);
-                if (item.Contains("://0.0.0.0", StringComparison.OrdinalIgnoreCase))
-                    return item.Replace("://0.0.0.0", "://127.0.0.1", StringComparison.OrdinalIgnoreCase);
-                if (item.Contains("://*", StringComparison.OrdinalIgnoreCase))
-                    return item.Replace("://*", "://127.0.0.1", StringComparison.OrdinalIgnoreCase);
-                return item;
-            }))
+        string address = addresses is {Count: > 0}
+            ? string.Join("，",
+                addresses.Select(item =>
+                {
+                    if (item.Contains("://[::]", StringComparison.OrdinalIgnoreCase))
+                        return item.Replace("://[::]", "://127.0.0.1", StringComparison.OrdinalIgnoreCase);
+                    if (item.Contains("://0.0.0.0", StringComparison.OrdinalIgnoreCase))
+                        return item.Replace("://0.0.0.0", "://127.0.0.1", StringComparison.OrdinalIgnoreCase);
+                    if (item.Contains("://*", StringComparison.OrdinalIgnoreCase))
+                        return item.Replace("://*", "://127.0.0.1", StringComparison.OrdinalIgnoreCase);
+                    return item;
+                }))
             : "未知";
         await SendNotification("程序启动通知", $"{_hostEnvironment.ApplicationName} 已启动", address);
     }
@@ -136,24 +124,25 @@ public class ApplicationLifecycleHostedService : IHostedLifecycleService
             };
 
             // 直接读取数据库
-            var configList = await db.Queryable<ConfigModel>()
+            List<ConfigModel> configList = await db
+                .Queryable<ConfigModel>()
                 .Where(wh => configCodes.Contains(wh.ConfigCode))
                 .ToListAsync();
 
-            var smtp = configList.SingleOrDefault(s => s.ConfigCode == ConfigConst.MailSmtp)
+            string smtp = configList.SingleOrDefault(s => s.ConfigCode == ConfigConst.MailSmtp)
                 ?.ConfigValue;
-            var portValue = configList.SingleOrDefault(s => s.ConfigCode == ConfigConst.MailPort)
+            string portValue = configList.SingleOrDefault(s => s.ConfigCode == ConfigConst.MailPort)
                 ?.ConfigValue;
-            var email = configList.SingleOrDefault(s => s.ConfigCode == ConfigConst.MailEmail)
+            string email = configList.SingleOrDefault(s => s.ConfigCode == ConfigConst.MailEmail)
                 ?.ConfigValue;
-            var authCode = configList.SingleOrDefault(s => s.ConfigCode == ConfigConst.MailAuthCode)
+            string authCode = configList.SingleOrDefault(s => s.ConfigCode == ConfigConst.MailAuthCode)
                 ?.ConfigValue;
-            var displayName = configList.SingleOrDefault(s => s.ConfigCode == ConfigConst.MailDisplayName)
-                                  ?.ConfigValue
-                              ?? "FastDotnet";
+            string displayName = configList.SingleOrDefault(s => s.ConfigCode == ConfigConst.MailDisplayName)
+                                     ?.ConfigValue
+                                 ?? "FastDotnet";
             // 配置为空直接退出，避免报错
             if (string.IsNullOrWhiteSpace(smtp)
-                || !int.TryParse(portValue, out var port)
+                || !int.TryParse(portValue, out int port)
                 || port <= 0
                 || string.IsNullOrWhiteSpace(email)
                 || string.IsNullOrWhiteSpace(authCode))
@@ -161,15 +150,21 @@ public class ApplicationLifecycleHostedService : IHostedLifecycleService
                 return;
             }
 
-            var content = $"""
-                           <p>{WebUtility.HtmlEncode(status)}</p>
-                           <p>环境：{WebUtility.HtmlEncode(_hostEnvironment.EnvironmentName)}</p>
-                           <p>主机：{WebUtility.HtmlEncode(Environment.MachineName)}</p>
-                           {(address != null ? $"<p>地址：{address}</p>" : string.Empty)}
-                           <p>时间：{DateTime.Now:yyyy-MM-dd HH:mm:ss zzz}</p>
-                           """;
-            await _mailService.SendEmail(title, await _mailService.GetEmailTemplate(title, content, displayName: displayName),
-                [ReceiveEmail], smtp, port, email, authCode, displayName);
+            string content = $"""
+                              <p>{WebUtility.HtmlEncode(status)}</p>
+                              <p>环境：{WebUtility.HtmlEncode(_hostEnvironment.EnvironmentName)}</p>
+                              <p>主机：{WebUtility.HtmlEncode(Environment.MachineName)}</p>
+                              {(address != null ? $"<p>地址：{address}</p>" : string.Empty)}
+                              <p>时间：{DateTime.Now:yyyy-MM-dd HH:mm:ss zzz}</p>
+                              """;
+            await _mailService.SendEmail(title,
+                await _mailService.GetEmailTemplate(title, content, displayName: displayName),
+                [ReceiveEmail],
+                smtp,
+                port,
+                email,
+                authCode,
+                displayName);
         }
         catch (Exception ex)
         {

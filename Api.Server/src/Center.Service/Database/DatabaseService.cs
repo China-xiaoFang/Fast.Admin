@@ -1,24 +1,9 @@
-// ------------------------------------------------------------------------
-// Apache开源许可证
+// Copyright © 2018-Present 小方
+// SPDX-License-Identifier: Apache-2.0
 // 
-// 版权所有 © 2018-Now 小方
-// 
-// 许可授权：
-// 本协议授予任何获得本软件及其相关文档（以下简称“软件”）副本的个人或组织。
-// 在遵守本协议条款的前提下，享有使用、复制、修改、合并、发布、分发、再许可、销售软件副本的权利：
-// 1.所有软件副本或主要部分必须保留本版权声明及本许可协议。
-// 2.软件的使用、复制、修改或分发不得违反适用法律或侵犯他人合法权益。
-// 3.修改或衍生作品须明确标注原作者及原软件出处。
-// 
-// 特别声明：
-// - 本软件按“原样”提供，不提供任何形式的明示或暗示的保证，包括但不限于对适销性、适用性和非侵权的保证。
-// - 在任何情况下，作者或版权持有人均不对因使用或无法使用本软件导致的任何直接或间接损失的责任。
-// - 包括但不限于数据丢失、业务中断等情况。
-// 
-// 免责条款：
-// 禁止利用本软件从事危害国家安全、扰乱社会秩序或侵犯他人合法权益等违法活动。
-// 对于基于本软件二次开发所引发的任何法律纠纷及责任，作者不承担任何责任。
-// ------------------------------------------------------------------------
+// 本文件依据 Apache License 2.0 授权，完整条款见仓库根目录 LICENSE。
+// 本软件按“原样”提供，相关免责声明及责任限制以许可证及适用法律为准。
+// 版权来源、合法使用与二次开发责任说明见仓库根目录 README.md。
 
 using Fast.Center.Domain;
 using Fast.Center.Service.Database.Dto;
@@ -52,7 +37,8 @@ public class DatabaseService : IDynamicApplication
     [Permission(PermissionConst.Database.Paged)]
     public async Task<PagedResult<QueryDatabasePagedOutput>> QueryDatabasePaged(QueryDatabasePagedInput input)
     {
-        return await _repository.Entities.Includes(e => e.SlaveDatabaseList)
+        return await _repository
+            .Entities.Includes(e => e.SlaveDatabaseList)
             .LeftJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
             .WhereIF(input.DatabaseType != null, t1 => t1.DatabaseType == input.DatabaseType)
             .WhereIF(input.DbType != null, t1 => t1.DbType == input.DbType)
@@ -94,7 +80,8 @@ public class DatabaseService : IDynamicApplication
     [Permission(PermissionConst.Database.Detail)]
     public async Task<QueryDatabaseDetailOutput> QueryDatabaseDetail([Required(ErrorMessage = "主库Id不能为空")] long? mainId)
     {
-        var result = await _repository.Entities.Includes(e => e.SlaveDatabaseList)
+        QueryDatabaseDetailOutput result = await _repository
+            .Entities.Includes(e => e.SlaveDatabaseList)
             .LeftJoin<TenantModel>((t1, t2) => t1.TenantId == t2.TenantId)
             .Where(t1 => t1.MainId == mainId)
             .Select((t1, t2) => new QueryDatabaseDetailOutput
@@ -122,7 +109,8 @@ public class DatabaseService : IDynamicApplication
                 UpdatedUserName = t1.UpdatedUserName,
                 UpdatedTime = t1.UpdatedTime,
                 RowVersion = t1.RowVersion,
-                SlaveDatabaseList = t1.SlaveDatabaseList.Select(dSl => new EditSlaveDatabaseInput
+                SlaveDatabaseList = t1
+                    .SlaveDatabaseList.Select(dSl => new EditSlaveDatabaseInput
                     {
                         SlaveId = dSl.SlaveId,
                         PublicIp = dSl.PublicIp,
@@ -154,7 +142,8 @@ public class DatabaseService : IDynamicApplication
     [Permission(PermissionConst.Database.Add)]
     public async Task AddDatabase(AddDatabaseInput input)
     {
-        if (await _repository.Entities.ClearFilter<IBaseTEntity>()
+        if (await _repository
+                .Entities.ClearFilter<IBaseTEntity>()
                 .AnyAsync(a => a.TenantId == input.TenantId && a.DatabaseType == input.DatabaseType))
         {
             throw new UserFriendlyException("当前数据库类型已经存在主库信息！");
@@ -182,7 +171,8 @@ public class DatabaseService : IDynamicApplication
             }
         }
 
-        var tenantModel = await _repository.Queryable<TenantModel>()
+        TenantModel tenantModel = await _repository
+            .Queryable<TenantModel>()
             .Where(wh => wh.TenantId == input.TenantId)
             .SingleAsync();
         if (tenantModel == null)
@@ -198,7 +188,7 @@ public class DatabaseService : IDynamicApplication
 
         db.Close();
 
-        var isLog = (input.DatabaseType & (DatabaseTypeEnum.CenterLog | DatabaseTypeEnum.AdminLog)) != 0;
+        bool isLog = (input.DatabaseType & (DatabaseTypeEnum.CenterLog | DatabaseTypeEnum.AdminLog)) != 0;
 
         var mainDatabaseModel = new MainDatabaseModel
         {
@@ -235,7 +225,7 @@ public class DatabaseService : IDynamicApplication
     {
         if (input.SlaveDatabaseList.Count > 0)
         {
-            var totalHitRate = input.SlaveDatabaseList.Sum(s => s.HitRate);
+            int totalHitRate = input.SlaveDatabaseList.Sum(s => s.HitRate);
             if (totalHitRate != 100)
             {
                 throw new UserFriendlyException("从库命中率相加必须等于100");
@@ -264,7 +254,8 @@ public class DatabaseService : IDynamicApplication
             }
         }
 
-        var mainDatabaseModel = await _repository.Queryable<MainDatabaseModel>()
+        MainDatabaseModel mainDatabaseModel = await _repository
+            .Queryable<MainDatabaseModel>()
             .Includes(e => e.SlaveDatabaseList)
             .Where(wh => wh.MainId == input.MainId)
             .SingleAsync();
@@ -274,7 +265,8 @@ public class DatabaseService : IDynamicApplication
             throw new UserFriendlyException("数据不存在！");
         }
 
-        var tenantModel = await _repository.Queryable<TenantModel>()
+        TenantModel tenantModel = await _repository
+            .Queryable<TenantModel>()
             .Where(wh => wh.TenantId == mainDatabaseModel.TenantId)
             .SingleAsync();
         if (tenantModel == null)
@@ -290,7 +282,7 @@ public class DatabaseService : IDynamicApplication
 
         db.Close();
 
-        var isLog = (mainDatabaseModel.DatabaseType & (DatabaseTypeEnum.CenterLog | DatabaseTypeEnum.AdminLog)) != 0;
+        bool isLog = (mainDatabaseModel.DatabaseType & (DatabaseTypeEnum.CenterLog | DatabaseTypeEnum.AdminLog)) != 0;
 
         mainDatabaseModel.DbType = input.DbType;
         mainDatabaseModel.PublicIp = input.PublicIp;
@@ -308,7 +300,7 @@ public class DatabaseService : IDynamicApplication
 
         var addSlaveDatabaseList = new List<SlaveDatabaseModel>();
         var updateSlaveDatabaseList = new List<SlaveDatabaseModel>();
-        foreach (var item in input.SlaveDatabaseList)
+        foreach (EditSlaveDatabaseInput item in input.SlaveDatabaseList)
         {
             SlaveDatabaseModel slaveDatabaseModel;
             if (item.SlaveId == null)
@@ -350,20 +342,24 @@ public class DatabaseService : IDynamicApplication
         }
 
         // 删除的
-        var deleteSlaveDatabaseList = mainDatabaseModel.SlaveDatabaseList
-            .Where(wh => input.SlaveDatabaseList.All(a => a.SlaveId != wh.SlaveId))
+        var deleteSlaveDatabaseList = mainDatabaseModel
+            .SlaveDatabaseList.Where(wh => input.SlaveDatabaseList.All(a => a.SlaveId != wh.SlaveId))
             .ToList();
 
         await _repository.Ado.UseTranAsync(async () =>
-        {
-            await _repository.UpdateAsync(mainDatabaseModel);
-            await _repository.Deleteable(deleteSlaveDatabaseList)
-                .ExecuteCommandAsync();
-            await _repository.Updateable(updateSlaveDatabaseList)
-                .ExecuteCommandAsync();
-            await _repository.Insertable(addSlaveDatabaseList)
-                .ExecuteCommandAsync();
-        }, ex => throw ex);
+            {
+                await _repository.UpdateAsync(mainDatabaseModel);
+                await _repository
+                    .Deleteable(deleteSlaveDatabaseList)
+                    .ExecuteCommandAsync();
+                await _repository
+                    .Updateable(updateSlaveDatabaseList)
+                    .ExecuteCommandAsync();
+                await _repository
+                    .Insertable(addSlaveDatabaseList)
+                    .ExecuteCommandAsync();
+            },
+            ex => throw ex);
 
         // 删除缓存
         await _sqlSugarEntityService.DeleteCache(tenantModel.TenantNo, mainDatabaseModel.DatabaseType);
@@ -377,20 +373,22 @@ public class DatabaseService : IDynamicApplication
     [Permission(PermissionConst.Database.Delete)]
     public async Task DeleteDatabase(MainIdInput input)
     {
-        var mainDatabaseModel = await _repository.SingleOrDefaultAsync(input.MainId);
+        MainDatabaseModel mainDatabaseModel = await _repository.SingleOrDefaultAsync(input.MainId);
 
         if (mainDatabaseModel == null)
         {
             throw new UserFriendlyException("数据不存在！");
         }
 
-        if (await _repository.Queryable<SlaveDatabaseModel>()
+        if (await _repository
+                .Queryable<SlaveDatabaseModel>()
                 .AnyAsync(a => a.MainId == mainDatabaseModel.MainId))
         {
             throw new UserFriendlyException("还存在从库信息，无法删除！");
         }
 
-        var tenantModel = await _repository.Queryable<TenantModel>()
+        TenantModel tenantModel = await _repository
+            .Queryable<TenantModel>()
             .Where(wh => wh.TenantId == mainDatabaseModel.TenantId)
             .SingleAsync();
         if (tenantModel == null)
