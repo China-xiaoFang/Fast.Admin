@@ -12,7 +12,7 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("Merchant", "商户号表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(MerchantNo)}", nameof(MerchantNo), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(MerchantNo)}", nameof(MerchantNo), OrderByType.Asc, true)]
 public class MerchantModel : BaseTEntity, IUpdateVersion
 {
     /// <summary>

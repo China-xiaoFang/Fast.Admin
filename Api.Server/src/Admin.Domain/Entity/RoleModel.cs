@@ -12,8 +12,8 @@ namespace Fast.Admin.Domain;
 /// </summary>
 [SugarTable("Role", "角色表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
-[SugarIndex($"IX_{{table}}_{nameof(RoleName)}", nameof(RoleName), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(RoleCode)}", nameof(RoleCode), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(RoleName)}", nameof(RoleName), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(RoleCode)}", nameof(RoleCode), OrderByType.Asc, true)]
 public class RoleModel : BaseEntity, IUpdateVersion
 {
     /// <summary>

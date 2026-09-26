@@ -12,8 +12,8 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("Button", "按钮表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(ButtonCode)}", nameof(ButtonCode), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(ButtonName)}", nameof(MenuId), OrderByType.Asc, nameof(ButtonName), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(ButtonCode)}", nameof(ButtonCode), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(ButtonName)}", nameof(MenuId), OrderByType.Asc, nameof(ButtonName), OrderByType.Asc, true)]
 public class ButtonModel : BaseEntity
 {
     /// <summary>

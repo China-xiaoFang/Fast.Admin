@@ -15,7 +15,7 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("PayRecord", "支付记录表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(BizOrderNo)}",
+[SugarIndex($"UX_{{table}}_{nameof(BizOrderNo)}",
     nameof(BizOrderId),
     OrderByType.Desc,
     nameof(BizOrderNo),

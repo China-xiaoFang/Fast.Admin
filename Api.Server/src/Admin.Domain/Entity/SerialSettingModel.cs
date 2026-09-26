@@ -12,7 +12,7 @@ namespace Fast.Admin.Domain;
 /// </summary>
 [SugarTable("SerialSetting", "序号配置表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
-[SugarIndex($"IX_{{table}}_{nameof(RuleType)}", nameof(RuleType), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(RuleType)}", nameof(RuleType), OrderByType.Asc, true)]
 public class SerialSettingModel : IDatabaseEntity
 {
     /// <summary>

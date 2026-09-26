@@ -12,7 +12,7 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("DatabaseMain", "主数据库表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(DatabaseType)}",
+[SugarIndex($"UX_{{table}}_{nameof(DatabaseType)}",
     nameof(DatabaseType),
     OrderByType.Asc,
     nameof(TenantId),

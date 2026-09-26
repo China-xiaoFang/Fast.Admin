@@ -12,8 +12,8 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("Application", "应用表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(AppNo)}", nameof(AppNo), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(AppName)}", nameof(AppName), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(AppNo)}", nameof(AppNo), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(AppName)}", nameof(AppName), OrderByType.Asc, true)]
 public class ApplicationModel : BaseEntity, IUpdateVersion
 {
     /// <summary>

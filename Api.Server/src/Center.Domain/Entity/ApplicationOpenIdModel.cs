@@ -12,7 +12,7 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("ApplicationOpenId", "应用标识表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(OpenId), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(OpenId)}", nameof(OpenId), OrderByType.Asc, true)]
 public class ApplicationOpenIdModel : BaseEntity, IUpdateVersion
 {
     /// <summary>

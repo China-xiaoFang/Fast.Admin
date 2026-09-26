@@ -12,7 +12,7 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("SysSerialSetting", "系统序号配置表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(RuleType)}", nameof(RuleType), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(RuleType)}", nameof(RuleType), OrderByType.Asc, true)]
 public class SysSerialSettingModel : IDatabaseEntity
 {
     /// <summary>

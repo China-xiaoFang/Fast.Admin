@@ -13,7 +13,7 @@ namespace Fast.Center.Domain;
 [SugarTable("ApplicationTemplateId", "应用模板Id表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
 [SugarIndex($"IX_{{table}}_{nameof(OpenId)}", nameof(OpenId), OrderByType.Asc)]
-[SugarIndex($"IX_{{table}}_{nameof(TemplateId)}", nameof(TemplateId), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(TemplateId)}", nameof(TemplateId), OrderByType.Asc, true)]
 public class ApplicationTemplateIdModel : BaseEntity
 {
     /// <summary>

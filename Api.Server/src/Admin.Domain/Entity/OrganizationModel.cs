@@ -12,8 +12,8 @@ namespace Fast.Admin.Domain;
 /// </summary>
 [SugarTable("Organization", "机构表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
-[SugarIndex($"IX_{{table}}_{nameof(OrgName)}", nameof(OrgName), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(OrgCode)}", nameof(OrgCode), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(OrgName)}", nameof(OrgName), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(OrgCode)}", nameof(OrgCode), OrderByType.Asc, true)]
 public class OrganizationModel : BaseEntity, IUpdateVersion
 {
     /// <summary>

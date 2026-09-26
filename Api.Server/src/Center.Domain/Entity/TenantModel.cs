@@ -12,8 +12,8 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("Tenant", "租户信息表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(TenantNo)}", nameof(TenantNo), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(TenantName)}", nameof(TenantName), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(TenantNo)}", nameof(TenantNo), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(TenantName)}", nameof(TenantName), OrderByType.Asc, true)]
 public class TenantModel : BaseEntity, IUpdateVersion
 {
     /// <summary>

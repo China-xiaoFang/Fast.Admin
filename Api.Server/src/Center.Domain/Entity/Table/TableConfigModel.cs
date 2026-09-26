@@ -12,7 +12,7 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("TableConfig", "表格配置表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(TableKey)}", nameof(TableKey), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(TableKey)}", nameof(TableKey), OrderByType.Asc, true)]
 public class TableConfigModel : BaseEntity, IUpdateVersion
 {
     /// <summary>

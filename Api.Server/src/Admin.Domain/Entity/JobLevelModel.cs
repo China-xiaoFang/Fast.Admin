@@ -12,7 +12,7 @@ namespace Fast.Admin.Domain;
 /// </summary>
 [SugarTable("JobLevel", "职级表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
-[SugarIndex($"IX_{{table}}_{nameof(JobLevelName)}", nameof(JobLevelName), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(JobLevelName)}", nameof(JobLevelName), OrderByType.Asc, true)]
 public class JobLevelModel : BaseEntity, IUpdateVersion
 {
     /// <summary>

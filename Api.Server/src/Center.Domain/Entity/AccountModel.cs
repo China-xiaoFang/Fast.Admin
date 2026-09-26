@@ -12,8 +12,8 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("Account", "账号信息表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(Mobile)}", nameof(Mobile), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(Email)}", nameof(Email), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(Mobile)}", nameof(Mobile), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(Email)}", nameof(Email), OrderByType.Asc, true)]
 public class AccountModel : IUpdateVersion
 {
     /// <summary>

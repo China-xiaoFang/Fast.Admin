@@ -12,7 +12,7 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("DictionaryType", "字典类型表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(DictionaryKey)}", nameof(DictionaryKey), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(DictionaryKey)}", nameof(DictionaryKey), OrderByType.Asc, true)]
 public class DictionaryTypeModel : BaseEntity, IUpdateVersion
 {
     /// <summary>

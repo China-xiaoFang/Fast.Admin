@@ -12,7 +12,7 @@ namespace Fast.Admin.Domain;
 /// </summary>
 [SugarTable("Position", "职位表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
-[SugarIndex($"IX_{{table}}_{nameof(PositionName)}", nameof(PositionName), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(PositionName)}", nameof(PositionName), OrderByType.Asc, true)]
 public class PositionModel : BaseEntity, IUpdateVersion
 {
     /// <summary>

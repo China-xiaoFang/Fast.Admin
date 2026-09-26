@@ -12,7 +12,7 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("Region", "地区表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(RegionCode)}", nameof(RegionCode), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(RegionCode)}", nameof(RegionCode), OrderByType.Asc, true)]
 [SugarIndex($"IX_{{table}}_{nameof(RegionName)}", nameof(RegionName), OrderByType.Asc)]
 public class RegionModel : BaseEntity, IUpdateVersion
 {

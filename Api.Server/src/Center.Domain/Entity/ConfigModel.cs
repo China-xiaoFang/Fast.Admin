@@ -12,8 +12,8 @@ namespace Fast.Center.Domain;
 /// </summary>
 [SugarTable("Config", "配置表")]
 [SugarDbType(DatabaseTypeEnum.Center)]
-[SugarIndex($"IX_{{table}}_{nameof(ConfigCode)}", nameof(ConfigCode), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(ConfigName)}", nameof(ConfigName), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(ConfigCode)}", nameof(ConfigCode), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(ConfigName)}", nameof(ConfigName), OrderByType.Asc, true)]
 public class ConfigModel : BaseEntity, IUpdateVersion
 {
     /// <summary>

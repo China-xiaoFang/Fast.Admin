@@ -12,8 +12,8 @@ namespace Fast.Admin.Domain;
 /// </summary>
 [SugarTable("Department", "部门表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
-[SugarIndex($"IX_{{table}}_{nameof(DepartmentName)}", nameof(DepartmentName), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(DepartmentCode)}", nameof(DepartmentCode), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(DepartmentName)}", nameof(DepartmentName), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(DepartmentCode)}", nameof(DepartmentCode), OrderByType.Asc, true)]
 public class DepartmentModel : IUpdateVersion
 {
     /// <summary>

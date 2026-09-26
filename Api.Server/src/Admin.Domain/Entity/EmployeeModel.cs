@@ -13,8 +13,8 @@ namespace Fast.Admin.Domain;
 /// <remarks>这里的主键Id 和 Center 库 TenantUser 表主键Id 一致</remarks>
 [SugarTable("Employee", "职员表")]
 [SugarDbType(DatabaseTypeEnum.Admin)]
-[SugarIndex($"IX_{{table}}_{nameof(EmployeeNo)}", nameof(EmployeeNo), OrderByType.Asc, true)]
-[SugarIndex($"IX_{{table}}_{nameof(Mobile)}", nameof(Mobile), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(EmployeeNo)}", nameof(EmployeeNo), OrderByType.Asc, true)]
+[SugarIndex($"UX_{{table}}_{nameof(Mobile)}", nameof(Mobile), OrderByType.Asc, true)]
 public class EmployeeModel : IUpdateVersion
 {
     /// <summary>
