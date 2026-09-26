@@ -257,10 +257,13 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(authUserInfo.ClientUserOpenId))
+        if (authUserInfo.ClientUserId <= 0)
         {
             throw new UnauthorizedAccessException("用户信息不存在！");
         }
+
+        // 三端共享同一主体
+        authUserInfo.EmployeeNo = $"client:{authUserInfo.ClientUserId}";
 
         try
         {
@@ -280,7 +283,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                     authUserInfo.AppNo,
                     authUserInfo.TenantNo,
                     "*",
-                    authUserInfo.ClientUserOpenId,
+                    authUserInfo.EmployeeNo,
                     "*");
                 await _authCache.DelByPatternAsync(delCacheKey);
             }
@@ -292,7 +295,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                 {nameof(SessionId), authUserInfo.SessionId},
                 {nameof(AppNo), authUserInfo.AppNo},
                 {nameof(TenantNo), authUserInfo.TenantNo},
-                {nameof(EmployeeNo), authUserInfo.ClientUserOpenId},
+                {nameof(EmployeeNo), authUserInfo.EmployeeNo},
                 {nameof(LastLoginIp), authUserInfo.LastLoginIp},
                 {nameof(LastLoginTime), authUserInfo.LastLoginTime.ToString("yyyy-MM-dd HH:mm:ss")}
             };
@@ -312,7 +315,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
                 authUserInfo.AppNo,
                 authUserInfo.TenantNo,
                 authUserInfo.DeviceType.ToString(),
-                authUserInfo.ClientUserOpenId,
+                authUserInfo.EmployeeNo,
                 authUserInfo.SessionId);
 
             // 设置缓存信息
@@ -458,11 +461,6 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             throw new UnauthorizedAccessException("租户信息不存在！");
         }
 
-        if (string.IsNullOrWhiteSpace(input.ClientUserOpenId))
-        {
-            throw new UnauthorizedAccessException("用户信息不存在！");
-        }
-
         // 设置授权用户信息
         Mobile = input.Mobile;
         NickName = input.NickName;
@@ -473,7 +471,7 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             input.AppNo,
             input.TenantNo,
             input.DeviceType.ToString(),
-            input.ClientUserOpenId,
+            EmployeeNo,
             SessionId);
 
         // 设置缓存信息
@@ -556,6 +554,16 @@ public sealed class User : AuthUserInfo, IUser, IScopedDependency
             return;
 
         string cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, "*", tenantNo, "*", employeeNo, "*");
+        await _authCache.DelByPatternAsync(cacheKey);
+    }
+
+    /// <inheritdoc />
+    public async Task RevokeClientUser(long userId)
+    {
+        if (userId <= 0)
+            return;
+
+        string cacheKey = CacheConst.GetCacheKey(CacheConst.AuthUser, "*", "*", "*", $"client:{userId}", "*");
         await _authCache.DelByPatternAsync(cacheKey);
     }
 

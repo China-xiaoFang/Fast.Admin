@@ -41,9 +41,4 @@ public class RefreshClientUserDto
     /// 租户编号
     /// </summary>
     public string TenantNo { get; set; }
-
-    /// <summary>
-    /// 客户端唯一用户标识
-    /// </summary>
-    public string ClientUserOpenId { get; set; }
 }

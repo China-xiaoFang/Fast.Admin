@@ -301,6 +301,11 @@ public interface IUser
     Task RevokeEmployee(string tenantNo, string employeeNo);
 
     /// <summary>
+    /// 撤销统一主体在三端的会话，不操作管理账号
+    /// </summary>
+    Task RevokeClientUser(long userId);
+
+    /// <summary>
     /// 统一退出登录
     /// </summary>
     Task Logout();
