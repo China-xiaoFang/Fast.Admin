@@ -62,7 +62,7 @@
 				flex: 1;
 				.employeeName {
 					font-size: var(--wot-font-size-medium);
-					font-weight: var(--wot-font-weight-primary);
+					font-weight: var(--wot-typography-body-font-weight-strong);
 					color: var(--wot-text-color-primary);
 				}
 				.nickName {
@@ -89,7 +89,7 @@
 				justify-content: center;
 				.txt__1 {
 					color: var(--wot-text-color-primary);
-					font-weight: var(--wot-font-weight-primary);
+					font-weight: var(--wot-typography-body-font-weight-strong);
 				}
 				.txt__2 {
 					color: var(--wot-text-color-placeholder);

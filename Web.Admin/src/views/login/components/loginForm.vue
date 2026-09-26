@@ -258,7 +258,7 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 		h2 {
 			margin: 10px 0 8px;
 			font-size: clamp(28px, 3vw, 36px);
-			font-weight: 720;
+			font-weight: 700;
 			line-height: 1.16;
 			letter-spacing: -1.2px;
 			color: var(--login-heading, #101828);
@@ -396,7 +396,7 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 		border: 0;
 		border-radius: 13px;
 		font-size: 15px;
-		font-weight: 650;
+		font-weight: 600;
 		letter-spacing: 0.8px;
 		background: linear-gradient(110deg, var(--el-color-primary), color-mix(in srgb, var(--el-color-primary) 68%, #7259ff));
 		box-shadow: 0 12px 24px color-mix(in srgb, var(--el-color-primary) 25%, transparent);
@@ -590,6 +590,7 @@ const handleTenantLogin = async (tenant: LoginTenantOutput) => {
 :global(.login-tenant-popper .tenant-option__content strong) {
 	color: var(--el-text-color-primary);
 	font-size: 14px;
+	font-weight: 700;
 }
 
 :global(.login-tenant-popper .tenant-option__content span) {
